@@ -2,12 +2,12 @@
   "metric": "C-body byte coverage; full-game completion is not yet measurable",
   "resident_elf": {
     "catalogued_functions": 11610,
-    "c_functions": 8486,
+    "c_functions": 8487,
     "catalogued_function_bytes": 2071124,
-    "c_function_bytes": 664724,
-    "coverage_percent": 32.0948431865982,
+    "c_function_bytes": 664840,
+    "coverage_percent": 32.10044401011238,
     "policy_assembly_bytes": 422772,
-    "decompilable_coverage_percent": 40.32658073032945
+    "decompilable_coverage_percent": 40.33361806216148
   },
   "ee_overlays": {
     "containers": 584,
@@ -19,10 +19,10 @@
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 687244,
+    "c_or_matched_bytes": 687360,
     "estimated_total_bytes": 17190360,
-    "coverage_percent": 3.9978453039959607,
-    "span_scenario_percent": 3.506966025635138,
+    "coverage_percent": 3.998520100800681,
+    "span_scenario_percent": 3.5075579668655794,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus detected overlay instructions, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [

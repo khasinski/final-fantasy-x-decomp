@@ -800,4 +800,14 @@ typedef struct T6AttributeOutput {
     u16 channels[16];
 } T6AttributeOutput;
 
+/* ---- func_0025D750 ---- */
+typedef struct T6_AbmDrawWork {
+    Vec4 v[3];
+    u8 pad30[0x1B0];
+    int abe;
+    int z;
+    int w1E8;
+    int w1EC;
+} T6_AbmDrawWork;
+
 #endif

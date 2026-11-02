@@ -172,7 +172,17 @@ INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025CD18);
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025D050);
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025D750);
+T6_AbmDrawWork *func_0025D750(int abe, int z)
+{
+    T6_AbmDrawWork *w = (T6_AbmDrawWork *)func_002B3888(sizeof(T6_AbmDrawWork));
+
+    func_002565C8();
+    w->abe = abe;
+    w->z = z;
+    w->v[0].z = w->v[1].z = w->v[2].z = 0.0f;
+    w->v[0].w = w->v[1].w = w->v[2].w = 1.0f;
+    return w;
+}
 
 void func_0025D7C8(void) {
     func_00256608();
