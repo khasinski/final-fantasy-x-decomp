@@ -1,6 +1,6 @@
-# EE Battle-Effect Overlays (`group 0x11`)
+# Battle-Effect Overlays (`group 0x11`)
 
-Byte-matching C89 decompilations of PlayStation 2 Emotion Engine (EE) battle-effect overlays loaded at `0x01B00000` (`baserom/Final Fantasy X (Europe, Australia).iso`, PAL `SCES_504.90`).
+Byte-matching C89 decompilations of battle-effect overlays loaded at `0x01B00000` (`baserom/Final Fantasy X (Europe, Australia).iso`, PAL `SCES_504.90`).
 
 ## Verification
 
