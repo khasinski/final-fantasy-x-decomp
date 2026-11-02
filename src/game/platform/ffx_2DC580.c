@@ -1,0 +1,103 @@
+/* tu_350 0x2dc580-0x2dce38: medium; ~FFXVu0ApplyMatrix (config/tu_map.tsv) */
+#include "common.h"
+#include "ffx/r7.h"
+#include "ffx/q7.h"
+#include "ffx/w11.h"
+#include "ffx/v7.h"
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC580);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC5B0);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC5F0);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC638);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC650);
+INCLUDE_RODATA("build/ee_asm/game/platform/ffx_2DC580/rodata", jtbl_005769F0);
+
+int func_002DC6B0(void)
+{
+    int r = 0;
+    int n = func_002DC780();
+
+    if (n < 4) {
+        if (n > 0) {
+            r = 1;
+            func_002DC7C8(func_002DC7D8());
+        }
+    }
+    return r;
+}
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC700);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC730);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC760);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC770);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC780);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC7C8);
+
+int func_002DC7D8(void)
+{
+    return func_002DC5F0(0x43A).h[0];
+}
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC800);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC990);
+
+void func_002DCAD8(void)
+{
+    /* VIF1 FBRST and ERR hardware registers. */
+    *(volatile u32 *)0x10003810 = 1;
+    *(volatile u32 *)0x10003820 = 6;
+}
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCB00);
+
+int func_002DCB68(void)
+{
+    if (func_002DCBD8() != 1) {
+        return 0;
+    }
+    *(volatile u32 *)0x10003810 = 8;
+    return 1;
+}
+
+u32 func_002DCBA8(u32 a, u32 b, u32 c)
+{
+    /* VIF1 ERR mask: MII, ME0 and ME1. */
+    u32 value = a | (b << 1) | (c << 2);
+
+    *(volatile u32 *)0x10003820 = value;
+    return value;
+}
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCBC8);
+
+int func_002DCBD8(void)
+{
+    u32 s = *(volatile u32 *)0x10003800;
+
+    if ((s & 3) == 0) {
+        return 0;
+    }
+    if (s & 0x700) {
+        return 1;
+    }
+    if (s & 0xC) {
+        return 2;
+    }
+    return (s & 0x3000) ? 3 : 4;
+}
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCC28);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCDA8);
+
+INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCE08);

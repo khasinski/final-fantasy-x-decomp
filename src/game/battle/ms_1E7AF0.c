@@ -1,0 +1,689 @@
+/* tu_214 0x1e7af0-0x1ea000: low; ~Ms (config/tu_map.tsv) */
+#include "common.h"
+#include "ffx/g3.h"
+#include "ffx/s3.h"
+#include "ffx/q4.h"
+#include "ffx/r3.h"
+#include "ffx/u2.h"
+#include "ffx/v3.h"
+
+int func_001E7AF0(Actor *a) {
+    int id = *func_00144158(a);
+    BtlChr *c = MsGetChr(id);
+    if (id != 0xFF) {
+        MsDeathTerminate(id, c);
+    }
+    return 0;
+}
+
+int func_001E7B40(Actor *a) {
+    u8 id = *func_00144158(a);
+    if (id != 0xFF) {
+        MsGetChr(id);
+        if ((s8)D_003172F0.f213D > 0) { /* DEBT(TYPE): f213D is signed here, u8 elsewhere */
+            D_003172F0.f213D--;
+        }
+    }
+    return (s8)D_003172F0.f213D;
+}
+
+int func_001E7B98(Actor *a) {
+    int id = *func_00144158(a);
+    BtlChr *c = MsGetChr(id);
+    if (id != 0xFF) {
+        c->fF2 = 1;
+    }
+    return 0;
+}
+
+int ms_motion_trans(BtlChr *c, int v) {
+    int r = v;
+    int sel = c->fC8;
+    int sel2 = c->fC9;
+
+    switch (v) {
+    case 1:
+        r = c->fB1;
+        break;
+    case 2:
+        switch (sel) {
+        case 1:
+            r = -1;
+            break;
+        case 2:
+            r = 0xB0;
+            break;
+        case 3:
+            r = 0xB8;
+            break;
+        case 4:
+            r = 0xC0;
+            break;
+        case 5:
+            r = 0xC8;
+            break;
+        default:
+            r = 0x58;
+            break;
+        }
+        break;
+    case 3:
+        switch (sel) {
+        case 1:
+            r = 0x5C;
+            break;
+        case 2:
+            r = 0xB1;
+            break;
+        case 3:
+            r = 0xB9;
+            break;
+        case 4:
+            r = 0xC1;
+            break;
+        case 5:
+            r = 0xC9;
+            break;
+        default:
+            r = 0x59;
+            break;
+        }
+        break;
+    case 12:
+        sel = sel2;
+    case 4:
+        switch (sel) {
+        case 2:
+            r = 0xB2;
+            break;
+        case 3:
+            r = 0xBA;
+            break;
+        case 4:
+            r = 0xC2;
+            break;
+        case 5:
+            r = 0xCA;
+            break;
+        case 1:
+        default:
+            r = 0x5A;
+            break;
+        }
+        break;
+    case 13:
+        sel = sel2;
+    case 5:
+        switch (sel) {
+        case 2:
+            r = 0xB3;
+            break;
+        case 3:
+            r = 0xBB;
+            break;
+        case 4:
+            r = 0xC3;
+            break;
+        case 5:
+            r = 0xCB;
+            break;
+        case 1:
+        default:
+            r = 0x5B;
+            break;
+        }
+        break;
+    case 6:
+        r = 0x5D;
+        break;
+    }
+    return r;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E7D80);
+
+int func_001E7F58(Actor *a, void *u, ScriptCtx *c) {
+    return func_001E7D80(a, u, c, 0);
+}
+
+int func_001E7F78(Actor *a, void *u, ScriptCtx *c) {
+    return func_001E7D80(a, u, c, 1);
+}
+
+int func_001E7F98(Actor *a, void *unused, ScriptCtx *ctx) {
+    BtlChr *c = MsGetChr(*func_00144158(a));
+    s8 old = c->f38;
+    c->f38 = 1;
+    func_001E7D80(a, unused, ctx, 0);
+    c->f38 = old;
+    if (c->fF4 != 0) {
+        c->fB3 = 1;
+    }
+    return old;
+}
+
+int func_001E8028(Chr *w, BtlChr *c, int r) {
+    if (Ch_GetWaitMotion(w) != 0) {
+        if (c->fF4 == 0) {
+            r = 0;
+        }
+    }
+    return r;
+}
+
+int func_001E8070(Actor *ctx)
+{
+    int r = 5;
+    u8 id = *func_00144158(ctx);
+    BtlChr *c;
+    Chr *w;
+
+    if (id != 0xFF) {
+        c = MsGetChr(id);
+        w = c->chr;
+        if (c->fB3 != 0) {
+            r = 0;
+        } else if (w != 0) {
+            r = func_001E8028(w, c, 5);
+        }
+    }
+    return r;
+}
+
+int func_001E80E0(Actor *a) {
+    int r = 5;
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        if (MsGetChr(id)->fE5 != 0) {
+            r = 0;
+        }
+    }
+    return r;
+}
+
+int func_001E8128(Actor *ctx)
+{
+    u8 id = *func_00144158(ctx);
+    Chr *w;
+
+    if (id != 0xFF) {
+        w = MsGetChr(id)->chr;
+        if (w != 0) {
+            if (Ch_GetWaitMotion(w) != 0) {
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
+
+int func_001E8180(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int a = AtelPopStackInteger(ctx, arg);
+    int b = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    MsSetChrDirTarget(id, 2, 0, -1, b, a);
+    return 0;
+}
+
+int func_001E81F8(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int id = *func_00144158(a);
+    if (MsGetChr(id)->fDD != 0) {
+        MsSetChrDirTarget(id, 1, 0, -1, y, x);
+    }
+    return 0;
+}
+
+int func_001E8288(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int id = *func_00144158(a);
+    if (MsGetChr(id)->fDD != 0) {
+        MsSetChrDirTarget(id, 1, 1, -1, y, x);
+    }
+    return 0;
+}
+
+int func_001E8318(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int z;
+    AtelPopStackFloat(a, ctx);
+    z = AtelPopStackInteger(a, ctx);
+    MsSetChrDirTarget(*func_00144158(a), z, 0, -1, y, x);
+    return 0;
+}
+
+int func_001E83B8(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int z;
+    AtelPopStackFloat(a, ctx);
+    z = AtelPopStackInteger(a, ctx);
+    MsSetChrDirTarget(*func_00144158(a), z, 1, -1, y, x);
+    return 0;
+}
+
+int func_001E8458(Actor *a) {
+    func_001B72A0(*func_00144158(a));
+    return 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8480);
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8550);
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8620);
+
+float func_001E86B8(BtlChr *c) {
+    float f = c->f194;
+    if (c->f0C == 0x1D) {
+        if (MsGetChr(c->f14)->fBB != 0) {
+            f += f;
+        }
+    }
+    return f;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8700);
+
+int func_001E8838(Actor *a, void *unused, ScriptCtx *ctx) {
+    int id = *func_00144158(a);
+    BtlChr *c = MsGetChr(id);
+    int h = func_001B8198(id, AtelPopStackInteger(a, ctx), 0, 1);
+    float d = func_001E86B8(c);
+    return (int)(func_001D3B10(h, 12) / d);
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E88E0);
+
+int func_001E89C8(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    if (id != 0xFF) {
+        func_001C5E90(id, v, 0);
+    }
+    return 0;
+}
+
+int func_001E8A20(Actor *a, int unused, ScriptCtx *ctx) {
+    float f = AtelPopStackFloat(a, ctx);
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        BtlChr *c = MsGetChr(id);
+        if (c->chr != 0) {
+            Ch_SetSp(c->chr, f);
+        }
+    }
+    return 0;
+}
+
+int func_001E8A90(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    if (id != 0xFF) {
+        MsGetChr(id)->fE0 = v;
+    }
+    return 0;
+}
+
+int func_001E8AF0(Actor *a) {
+    int r = 0;
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        r = MsGetChr(id)->fE0;
+    }
+    return r;
+}
+
+int func_001E8B38(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    if (id != 0xFF) {
+        MsGetChr(id)->f10F = v;
+    }
+    return 0;
+}
+
+int func_001E8B98(Actor *a) {
+    int r = 0;
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        r = MsGetChr(id)->f10F;
+    }
+    return r;
+}
+
+int func_001E8BE0(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    if (id != 0xFF) {
+        MsGetChr(id)->fB1 = v;
+    }
+    return 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", MsGetDirDivide);
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8DF0);
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8F58);
+
+int func_001E9050(Actor *a, int unused, ScriptCtx *ctx) {
+    int v = AtelPopStackInteger(a, ctx);
+    return func_001E8DF0(*func_00144158(a), v, 1);
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E90A0);
+
+int func_001E9138(Actor *a, void *unused, ScriptCtx *ctx) {
+    float x = AtelPopStackFloat(a, ctx);
+    float y = AtelPopStackFloat(a, ctx);
+    float z = AtelPopStackFloat(a, ctx);
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        BtlChr *c = MsGetChr(id);
+        c->f60 = z;
+        c->f64 = y;
+        c->f68 = x;
+        if (c->chr != 0) {
+            Ch_SetScale(c->chr, 7, z, y, x);
+        }
+    }
+    return 0;
+}
+
+int func_001E91F8(Actor *a, int unused, ScriptCtx *ctx) {
+    float f = AtelPopStackFloat(a, ctx);
+    int id = *func_00144158(a);
+    if (id != 0xFF) {
+        BtlChr *c = MsGetChr(id);
+        c->f6C = f;
+        if (c->chr != 0) {
+            Ch_BindSetScale(c->chr, f);
+        }
+    }
+    return 0;
+}
+
+int func_001E9268(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+
+    return MsGetChrBtlPosHeight(func_001B8198(id, v, 0, 1));
+}
+
+float func_001E92C0(Actor *a, void *u, ScriptCtx *c) {
+    int v = AtelPopStackInteger(a, c);
+    u8 id = *func_00144158(a);
+    if (id != 0xFF) {
+        return MsGetMoveTargetDist(id, v, 0);
+    }
+    return 0.0f;
+}
+
+float func_001E9320(Actor *a, void *u, ScriptCtx *c) {
+    int v = AtelPopStackInteger(a, c);
+    u8 id = *func_00144158(a);
+    if (id != 0xFF) {
+        return MsGetMoveTargetDist(id, v, 1);
+    }
+    return 0.0f;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E9380);
+
+int func_001E9470(Actor *a, void *unused, ScriptCtx *ctx) {
+    int id = *func_00144158(a);
+    int x = AtelPopStackInteger(a, ctx);
+    float f1 = AtelPopStackFloat(a, ctx);
+    float f2 = AtelPopStackFloat(a, ctx);
+    if (id != 0xFF) {
+        MsSetChrTransparentVisible(id, f2, f1, x, 1);
+    }
+    return 0;
+}
+
+s32 func_001E9510(Actor *arg0, int unused1, ScriptCtx *arg2)
+{
+    float value;
+    float other;
+    s32 mode;
+    u8 id;
+
+    id = *func_00144158(arg0);
+    mode = AtelPopStackInteger(arg0, arg2);
+    other = AtelPopStackFloat(arg0, arg2);
+    value = AtelPopStackFloat(arg0, arg2);
+    if (id != 0xFF)
+    {
+        MsSetChrTransparentVisible((s32) id, value, other, mode, (s32) MsGetChr((s32) id)->fE3);
+    }
+    return 0;
+}
+
+int func_001E95C0(Actor *a, void *u, ScriptCtx *ctx) {
+    float v = AtelPopStackInteger(a, ctx);
+    u8 id = *func_00144158(a);
+    if (id != 0xFF) {
+        MsGetChr(id)->fBC = v;
+    }
+    return 0;
+}
+
+int func_001E9628(void) {
+    return 0;
+}
+
+int func_001E9630(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    u8 id = *func_00144158(ctx);
+    int v = AtelPopStackInteger(ctx, arg);
+    BtlChr *c;
+
+    if (id != 0xFF) {
+        c = MsGetChr(id);
+        c->fB5 = v;
+        c->fB6 = v;
+    }
+    return 0;
+}
+
+void func_001E96A0(Actor *a, int *out, ScriptCtx *ctx) {
+    u8 id = *func_00144158(a);
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int mask = MsGetChrBit(id, AtelPopStackInteger(a, ctx), 0, 1);
+    int r = 0;
+    int i;
+    int res;
+
+    for (i = 0; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            MsSetMotion(i, y, x, 0, 1, a, &res);
+            if (res) {
+                r = 1;
+            }
+        }
+    }
+    *out = r;
+}
+
+int func_001E97B0(int a, int *b) {
+    return func_001E6148(b);
+}
+
+void func_001E97D0(Actor *a, int *out, ScriptCtx *ctx) {
+    u8 id = *func_00144158(a);
+    int x;
+    int y;
+    int mask;
+    int r = 0;
+    int i;
+    int res;
+    BtlChr *o;
+
+    MsGetChr(id);
+    x = AtelPopStackInteger(a, ctx);
+    y = AtelPopStackInteger(a, ctx);
+    mask = MsGetChrBit(id, AtelPopStackInteger(a, ctx), 0, 1);
+    for (i = 0; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            o = MsGetWeaponSpecial(i, 0);
+            if (o != 0) {
+                MsSetMotion(o->f0C, y, x, 0, 1, a, &res);
+                if (res) {
+                    r = 1;
+                }
+            }
+        }
+    }
+    *out = r;
+}
+
+int func_001E98F8(int a, int *b) {
+    return func_001E6148(b);
+}
+
+int func_001E9918(int mask)
+{
+    int r = 0;
+    int i;
+
+    for (i = 0; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            if (MsGetChr(i)->fF2 != 0) {
+                r = 1;
+            }
+        }
+    }
+    return r;
+}
+
+void func_001E9998(Actor *ctx, int *out, ScriptCtx *arg)
+{
+    u8 id = *func_00144158(ctx);
+
+    *out = MsGetChrBit(id, AtelPopStackInteger(ctx, arg), 0, 1);
+}
+
+int func_001E9A08(Actor *ctx, int *p)
+{
+    int r = 5;
+
+    if (func_001E9918(*p)) {
+        r = 0;
+    }
+    return r;
+}
+
+int func_001E9A38(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    u8 id = *func_00144158(ctx);
+
+    return func_001E9918(MsGetChrBit(id, AtelPopStackInteger(ctx, arg), 0, 1));
+}
+
+int func_001E9AA0(Actor *a, void *unused, ScriptCtx *ctx) {
+    u8 id = *func_00144158(a);
+    int v = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int x = AtelPopStackInteger(a, ctx);
+    BtlChr *c;
+    float pos[4];
+
+    x = func_001B8198(id, x, 0, 1);
+    y = func_001B8198(id, y, 0, 1);
+    if (x >= 0 && y >= 0) {
+        c = MsGetChr(x);
+        c->f101 = v;
+        c->fFF = y;
+        msSetChrBodyHit(c, 0, 0);
+        func_001B66E0(c, pos);
+        MsSetChrPos(x, pos);
+        MsGetChr(y)->f100++;
+    }
+    return 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E9BA8);
+
+int func_001E9C98(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int h = AtelPopStackInteger(a, ctx);
+    BtlChr *c;
+    h = func_001B8198(*func_00144158(a), h, 0, 1);
+    if (h >= 0) {
+        c = MsGetChr(h);
+        x = ms_motion_trans(c, x);
+        if (c->fB0 == x) return 0;
+    }
+    return -1;
+}
+
+int func_001E9D40(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int z = AtelPopStackInteger(a, ctx);
+    int h = func_001B8198(*func_00144158(a), z, 0, 1);
+    if (h >= 0) {
+        BtlChr *c = MsGetChr(h);
+        if (c->chr != 0) {
+            graphicCharacterInstanceSetMeshSegmentAlpha(c->chr, y, x & 1);
+        }
+    }
+    return 0;
+}
+
+int func_001E9DF0(Actor *a, int unused, ScriptCtx *ctx) {
+    int v = AtelPopStackInteger(a, ctx);
+    return MsAttachWeapon(*func_00144158(a), v);
+}
+
+int func_001E9E38(Actor *ctx)
+{
+    if (*func_00144158(ctx) == 4) {
+        MsAttachWeapon(4, 0);
+    }
+    return 0;
+}
+
+int func_001E9E78(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    return MsAttachWeapon(5, AtelPopStackInteger(ctx, arg));
+}
+
+int func_001E9EA0(Actor *a, int unused, ScriptCtx *ctx) {
+    int v = AtelPopStackInteger(a, ctx);
+    return MsDetachWeapon(*func_00144158(a), v);
+}
+
+int func_001E9EE8(Actor *ctx, void *unused, ScriptCtx *arg)
+{
+    int v = AtelPopStackInteger(ctx, arg);
+    u8 id = *func_00144158(ctx);
+    int a = func_001B8198(id, v, 0, 1);
+    int b = func_001B8198(a, -0x10, 0, 1);
+
+    return MsGetDamageResult(a, b, 0, 0, 0);
+}
+
+int func_001E9F68(Actor *a, void *unused, ScriptCtx *ctx) {
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    int id = *func_00144158(a);
+    int h = func_001B8198(id, y, 0, 1);
+    return MsGetDamageLimit(h, func_001B8198(id, x, 0, 1));
+}

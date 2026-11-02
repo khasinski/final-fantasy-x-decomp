@@ -1,0 +1,308 @@
+/* tu_266 0x23cbd0-0x2414f0: medium; ~Tk (config/tu_map.tsv) */
+#include "common.h"
+#include "ffx/r5.h"
+#include "ffx/w7.h"
+#include "ffx/q6.h"
+#include "ffx/s5.h"
+#include "ffx/u4.h"
+#include "ffx/v5.h"
+
+void func_0023CBD0(char *dst, int n)
+{
+    char buf[64];
+
+    func_002F0008(buf, D_00326F58, n);
+    *(U4Str2 *)dst = D_00572CB0; /* DEBT(CAST): strcpy(dst, "/") expanded by the builtin */
+    func_002F032C(dst, buf);
+    func_002F032C(dst, D_00572CB0.c);
+    func_002F032C(dst, buf);
+}
+
+void func_0023CC50(char *dst, int n)
+{
+    char buf[64];
+
+    func_002F0008(buf, D_00326F58, n);
+    *(U4Str2 *)dst = D_00572CB0; /* DEBT(CAST): dst starts as a copy of the 2-byte string */
+    func_002F032C(dst, buf);
+    func_002F032C(dst, D_00572CB0.c);
+    func_002F0008(buf, D_00326EF0, n);
+    func_002F032C(dst, buf);
+}
+
+void func_0023CCF0(char *dst, int a1)
+{
+    char buf[0x40];
+
+    func_002F0008(buf, D_00326EF0, a1);
+    func_002F072C(dst, buf);
+}
+
+void func_0023CD30(char *dst, int n)
+{
+    char buf[64];
+
+    func_002F0008(buf, D_00326F58, n);
+    *(U4Str2 *)dst = D_00572CB0; /* DEBT(CAST): dst starts as a copy of the 2-byte string */
+    func_002F032C(dst, buf);
+    func_002F032C(dst, D_00572CB0.c);
+    func_002F032C(dst, D_00572CB8);
+}
+
+void func_0023CDB0(char *dst, int n)
+{
+    char buf[64];
+
+    func_002F0008(buf, D_00326F58, n);
+    *(U4Str2 *)dst = D_00572CB0; /* DEBT(CAST): dst starts as a copy of the 2-byte string */
+    func_002F032C(dst, buf);
+}
+
+/* DEBT(NAME): 64-byte records at the fixed address 0x01D5E400 (99 entries) */
+void *func_0023CE08(int n)
+{
+    int i;
+
+    if (n >= 0) {
+        if (n > 98) {
+            i = 98;
+        } else {
+            i = n;
+        }
+    } else {
+        i = 0;
+    }
+    return (char *)0x1D5E400 + i * 64; /* DEBT(CAST): record type unknown */
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CE38);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CF70);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D190);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D268);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D4B8);
+
+void func_0023D748(void) {
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D750);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D990);
+
+int func_0023DA88(void) { return 1; }
+
+Task *func_0023DA90(int v) {
+    Task *t = func_00243400();
+
+    D_0069A64C = t;
+    t->ext[0] = v;
+    t->cb = func_0023D990;
+    t->x0C = (s32)func_0023D748; /* DEBT(CAST): Task callbacks are typed s32 */
+    t->x10 = (s32)func_0023D750;
+    t->x14 = (s32)func_0023DA88;
+    t->b3E = 1;
+    TkMenuMainRegistWindow(t);
+    return t;
+}
+
+void func_0023DB10(void) {
+    if (D_0069A64C) {
+        D_0069A64C->b41 = 1;
+        D_0069A64C = 0;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023DB30);
+
+void func_0023DB90(void) {
+}
+
+Task *func_0023DB98(void) {
+    Task *t = func_00243400();
+
+    D_0069A658 = t;
+    t->cb = 0;
+    t->x0C = 0;
+    t->x14 = 0;
+    t->x1C = 0;
+    t->x10 = (s32)func_0023DB90; /* DEBT(CAST): Task callbacks are typed s32 */
+    t->b3E = 4;
+    TkMenuMainRegistWindow(t);
+    return t;
+}
+
+void func_0023DBF8(void) {
+    if (D_0069A658) {
+        D_0069A658->b41 = 1;
+        D_0069A658 = 0;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023DC18);
+
+Task *func_0023DD60(int v) {
+    Task *t = func_00243400();
+
+    t->ext[0] = v;
+    D_0069A648 = t;
+    t->cb = 0;
+    t->x0C = 0;
+    t->x14 = 0;
+    t->x1C = 0;
+    t->x10 = (s32)func_0023DC18; /* DEBT(CAST): Task callbacks are typed s32 */
+    t->b3E = 4;
+    TkMenuMainRegistWindow(t);
+    return t;
+}
+
+void func_0023DDD0(void) {
+    if (D_0069A648) {
+        D_0069A648->b41 = 1;
+        D_0069A648 = 0;
+    }
+}
+
+void TkMenuRestartSelFileWindow(Task *o) {
+    if (o != 0) {
+        o->state = 1;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", TkMenuCtrlSelFileWindow);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D00);
+
+int func_0023E310(int sel, int a) {
+    switch (sel) {
+    case 1:
+        return a + 0x20;
+    case 2:
+        func_002493D0(0x2019);
+        break;
+    case 0:
+    case 4:
+        func_002493D0(0x2014);
+        break;
+    default:
+        func_002493D0(0x202A);
+        break;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E390);
+
+void func_0023E660(Task *o, int a1, int a2) { func_00246210(a1, a2 + (o->x48 - o->x32) * 15, 0x1B8); }
+
+void func_0023E688(Task *o, int a1, int a2) { func_00246220(a1, a2 + (o->x48 - o->x32) * 15, 0x80); }
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E6B0);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E798);
+
+void func_0023E928(Task *o) { o->state = 0; }
+
+int func_0023E930(void) { return 1; }
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E938);
+
+void func_0023EA48(void) {
+    if (D_0069A644) {
+        D_0069A644->b41 = 1;
+        D_0069A644 = 0;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EA68);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D50);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EB20);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EC50);
+
+void func_0023ED40(void) {
+    D_0069A686 = 0;
+    D_0069A687 = 0;
+}
+
+void func_0023ED58(int v) {
+    D_0069A7C0 = 0;
+    D_0069A7C1 = 0;
+    D_0069A678 = 0;
+    D_0069A67C = 0;
+    D_0069A648->ext[0] = v;
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023ED88);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D70);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023F298);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572DB0);
+
+void func_00241240(void) {
+}
+
+void func_00241248(void) {
+    D_0069A7C8 = func_0014F168();
+}
+
+void func_00241270(void) {
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_00241278);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_00241308);
+
+void func_00241390(void) {
+}
+
+void func_00241398(void) { func_002D89C8(0); }
+
+void func_002413A0(int a0) { func_002D89E8(a0, -1); }
+
+void func_002413A8(void) {
+    func_002413A0(0);
+    func_002413A0(1);
+}
+
+void func_002413C8(void) {
+}
+
+void TOMenuMakeSaveFileName(void)
+{
+    switch (func_0020B850()) {
+    case 0:
+        func_002F072C(D_00326F58, D_00326E50);
+        break;
+    case 1:
+        func_002F072C(D_00326F58, D_00326E60);
+        break;
+    case 2:
+        func_002F072C(D_00326F58, D_00326E70);
+        break;
+    case 3:
+        func_002F072C(D_00326F58, D_00326E80);
+        break;
+    case 4:
+        func_002F072C(D_00326F58, D_00326EB0);
+        break;
+    case 5:
+        func_002F072C(D_00326F58, D_00326EA0);
+        break;
+    case 6:
+        func_002F072C(D_00326F58, D_00326E90);
+        break;
+    case 16:
+        func_002F072C(D_00326F58, D_00326E50);
+        break;
+    case 17:
+        func_002F072C(D_00326F58, D_00326EC0);
+        break;
+    case 18:
+        func_002F072C(D_00326F58, D_00326ED0);
+        break;
+    }
+    func_002F032C(D_00326F58, D_00326EE0);
+    D_003263E0 = 0;
+}

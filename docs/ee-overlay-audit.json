@@ -1,0 +1,243 @@
+{
+  "binary": "baserom/SCES_504.90",
+  "binary_sha1": "ea6422ddfd803836701a38ae3cc8cc6420a70363",
+  "disc": "baserom/Final Fantasy X (Europe, Australia).iso",
+  "disc_bytes": 4598169600,
+  "resource_table": {
+    "metadata_lba": 279,
+    "fat_lba": 280,
+    "fat_bytes": 131072,
+    "group_table_lba": 344,
+    "group_table_bytes": 130,
+    "fat_sha256": "86f9b8b3cadf2aa286d0435c85ddbbc0dd36fb2fdb917c5f84a695805d63d870",
+    "group_table_sha256": "264fbca4b1262e3896811b94106155829f268af65a7627e9038452cbfa597eb4",
+    "file0_equals_main_elf": true,
+    "resource_slots": 16227,
+    "present": 7338,
+    "prefix_decode_errors": 0
+  },
+  "groups": {
+    "0x11": {
+      "first_file": 9044,
+      "end_file_exclusive": 10068,
+      "slots": 1024,
+      "present": 584
+    },
+    "0x15": {
+      "first_file": 16086,
+      "end_file_exclusive": 16136,
+      "slots": 50,
+      "present": 38
+    },
+    "0x31": {
+      "first_file": 16136,
+      "end_file_exclusive": 16227,
+      "slots": 91,
+      "present": 76
+    }
+  },
+  "conclusions": {
+    "ee_battle_effect_overlays": "Confirmed by resident loader/call sites and decoded fixed-base MIPS code on disc.",
+    "battle_containers": 584,
+    "unique_battle_payload_sha256": 563,
+    "battle_container_bytes": {
+      "minimum": 46784,
+      "maximum": 3800800,
+      "total": 400708128,
+      "note": "Containers include code AND data; these numbers are not executable-code sizes."
+    },
+    "load_base": "0x01b00000",
+    "movie_region_reuse": "Confirmed: movie setup initializes task/work structures at 0x01b00000 and places movie work at base+0x1900. This is memory reuse, not by itself executable code loading.",
+    "movie_resource_groups": [
+      "0x15",
+      "0x31"
+    ],
+    "separate_executable_movie_overlay": "Not established by this audit. Scanned movie groups have no matching fixed-base function-table headers; movie buffers must not be counted as code overlays on that basis.",
+    "bss_heap_test": "OS startup passes end-BSS 0x007953e8 to SetupHeap, while the game creates a separate allocator with bounds 0x00a00000..0x01b00000."
+  },
+  "resident_io_dispatch": {
+    "table": "0x0078e498",
+    "initializer": "func_001655A8",
+    "select_group": {
+      "slot": "0x10",
+      "function": "func_00163FF0"
+    },
+    "resource_size": {
+      "slot": "0x14",
+      "function": "func_00162ED8"
+    },
+    "load": {
+      "slot": "0x00",
+      "function": "func_00164060"
+    },
+    "wait": {
+      "slot": "0x08",
+      "function": "func_00164340"
+    }
+  },
+  "battle_evidence": {
+    "load_site": "func_001CE620: select group 0x11, map effect to file, query size, queue load at 0x01b00000.",
+    "indirect_call_site": "func_001CEAD8: flush caches then LW from 0x01b00020 and JALR.",
+    "sample": {
+      "index": 9044,
+      "group_index": 0,
+      "lba": 467712,
+      "packed_bytes": 30328,
+      "decoded_bytes": 52160,
+      "codec": 2,
+      "path": "build/overlay-audit/overlay-group11-file09044.bin",
+      "sha256": "f01ccf73b1c8274bb801fb21d38f7b0473202e6d1b2c7e32efa248b344095205",
+      "vectors": [
+        {
+          "slot": "0x0",
+          "target": "0x1b00e60",
+          "first_instruction": "0x3c020201",
+          "plausible": true
+        },
+        {
+          "slot": "0x4",
+          "target": "0x1b00550",
+          "first_instruction": "0x27bdfff0",
+          "plausible": true
+        },
+        {
+          "slot": "0x8",
+          "target": "0x1b005a0",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0xc",
+          "target": "0x1b005a8",
+          "first_instruction": "0x27bdffd0",
+          "plausible": true
+        },
+        {
+          "slot": "0x10",
+          "target": "0x1b00658",
+          "first_instruction": "0x27bdffd0",
+          "plausible": true
+        },
+        {
+          "slot": "0x14",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x18",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x1c",
+          "target": "0x1b0bef0",
+          "first_instruction": "0x3",
+          "plausible": false
+        },
+        {
+          "slot": "0x20",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x24",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x28",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x2c",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x30",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x34",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x38",
+          "target": "0x1b00dd8",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        },
+        {
+          "slot": "0x3c",
+          "target": "0x1b00758",
+          "first_instruction": "0x3e00008",
+          "plausible": true
+        }
+      ]
+    }
+  },
+  "decompilation_scope": {
+    "catalogue": "config/funcs.txt",
+    "resident_function_entries": 11621,
+    "address_range": [
+      "0x00100000",
+      "0x003003b0"
+    ],
+    "overlay_functions_in_existing_catalogue": false,
+    "note": "Current resident-function progress does not count functions inside these effect containers."
+  },
+  "method_limits": [
+    "Function-table scan examines the first 64 decoded bytes for aligned pointers into 0x01b00000..0x02000000, then checks candidate entry instructions inside the decoded payload. It does not prove absence of headerless overlays, differently based modules or different formats.",
+    "The single non-battle header candidate (group 0x30/file362) has zero plausible entrypoints and was rejected.",
+    "584 files are present effect containers; 563 have distinct complete payload hashes. This is not a count of unique functions or unique code bodies.",
+    "No runtime emulator trace was captured; movie code-overlay attribution remains unconfirmed."
+  ],
+  "source_sha256": {
+    "asm/text.s": "d380e88e461510532529b6e72e6dc236a4a2e3b5e42d99efdf04727ab016b9fa",
+    "src/game/main/mem.c": "6593281a305d0baf8a6e3ce67d9cd8aadb3ae12c731a118e7ac9421fed7841f4",
+    "asm/nonmatchings/game/main/mem/func_0011BD90.s": "a662e5b2218af594288b90ace07aac6495504f8388de4e6ec89d8c584e84e470",
+    "asm/nonmatchings/game/battle/ms_1CCC10/func_001CE620.s": "51c3b519504c5a3294fd074c788825044f985bde48cbfed55c1628c73a36e397",
+    "asm/nonmatchings/game/battle/ms_1CE8E0/func_001CEAD8.s": "370d5f62d59d77f9fa61cd7c226e54e3ce553f44f5c23ba28efa1d6b024ed4d8",
+    "asm/nonmatchings/game/libmscd/func_001655A8.s": "3ecdde091f98408192e2935d2134b995d2044bbb192c7383cf266e1643b82c16",
+    "asm/nonmatchings/game/libmscd/func_00163FF0.s": "765d2a2ebae6fae5d722716d378d1bbfd8eed9359a97cb9b7ae350483a670755",
+    "asm/nonmatchings/game/libmscd/func_00164060.s": "30a5c0f867d85f517781b5899b29449a478df0620b0141ae0890334bce428cbd",
+    "asm/nonmatchings/game/libmscd/func_00162ED8.s": "70213f82cfdfd462e5e82f23b7745c0f72e84577b48a5dedf7ab54de73437bfa",
+    "asm/nonmatchings/game/libmscd/func_00163158.s": "551110c1e5f586c71bebf4a2ffc1d26c6dbf7ed99aa5e94f44279b49c3a17585",
+    "asm/nonmatchings/game/sqs/sqs_255A08/func_00255A08.s": "fa5cfc311744c0d51d5b335ff1bf381d83aec51fc642c72d51e4d06f73b539d4",
+    "asm/nonmatchings/game/sqs/sqs_255A08/func_00255B80.s": "75fcdf0695267139f4a9e887647ff455cabb8052d1920c7694cd7f042745fdca",
+    "asm/nonmatchings/game/movie/movie_157798/func_00159148.s": "f69c19440918fd44c61b4063b44d2028f49d3d3f1049214d0044e75c9523d184",
+    "asm/nonmatchings/game/movie/movie_157798/func_001596C8.s": "92c3f17475077e10dab9bd73f147f89bb61789f7cd55e355db5713d7347e57b6",
+    "src/game/movie/movie_157798.c": "b8ed00a9c0dc29825cdc44c8ecbb327cb3483aef7f57d36e9b68286ddcde32aa",
+    "src/game/movie/movie_str.c": "53132011bbf3bad7386f7a93b5fe827875ffe506f8384e990bdc48c2f13ffc3c"
+  },
+  "artifacts": {
+    "catalogue": "build/overlay-audit/catalogue.json",
+    "decoder": "tools/audit_overlays.py",
+    "catalogue_script": "tools/audit_overlays.py",
+    "reproduction": "python3 -P tools/audit_overlays.py \"baserom/Final Fantasy X (Europe, Australia).iso\"",
+    "script_sha256": {
+      "tools/audit_overlays.py": "32975ef41bf4f5dd331d68375329537e87c6e05eaafe93213dba4709d1ad6aa8"
+    }
+  },
+  "build_status": {
+    "status": "partial_c_verified",
+    "matched_containers": 20,
+    "matched_code_bytes": 22520,
+    "matched_text_span_bytes": 23304,
+    "matched_unique_units": 15,
+    "matched_function_instances": 299,
+    "verification": "python3 overlays/verify_overlays.py",
+    "note": "15 unique overlay C units in overlays/group11/ compile with ee-gcc 2.9-991111-01 -O2 -G0 to byte-identical .text and reconstruct 20 battle-effect containers with identical SHA-256."
+  }
+}

@@ -1,0 +1,92 @@
+/* tu_010 0x10d0a0-0x10d6d0: low; ~Ch (config/tu_map.tsv) */
+#include "common.h"
+#include "ffx/q0.h"
+#include "ffx/r0.h"
+
+typedef struct {
+    /* 0x00 */ u8 unk0[0x60];
+    /* 0x60 */ s32 val60;
+    /* 0x64 */ u8 unk64[6];
+    /* 0x6A */ u16 val6A;
+    /* 0x6C */ u8 unk6C[4];
+} TblEntry70; /* size 0x70 */
+
+/* two tables (pointer + count) live at 0x6F0 and 0x6F8 of the owner struct */
+typedef struct {
+    /* 0x000 */ u8 unk0[0x6F0];
+    /* 0x6F0 */ TblEntry70 *tblB;
+    /* 0x6F4 */ s16 cntB;
+    /* 0x6F6 */ s16 unk6F6;
+    /* 0x6F8 */ TblEntry70 *tblA;
+    /* 0x6FC */ s16 cntA;
+} TblOwner;
+#include "ffx/s0.h"
+#include "ffx/u0.h"
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D0A0);
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", ch_TextureLoad);
+
+u16 Ch_TextureGetImageBase(TblOwner *o, s32 i) {
+    TblEntry70 *e = o->tblA;
+    if (o->cntA < i) {
+        return 0;
+    }
+    return e[i].val6A;
+}
+
+u16 func_0010D2F0(TblOwner *o, s32 i) {
+    TblEntry70 *e = o->tblB;
+    if (o->cntB < i) {
+        return 0;
+    }
+    return e[i].val6A;
+}
+
+s32 func_0010D320(TblOwner *o, s32 i) {
+    TblEntry70 *e = o->tblA;
+    if (o->cntA < i) {
+        return 0;
+    }
+    return e[i].val60;
+}
+
+s32 func_0010D350(TblOwner *o, s32 i) {
+    TblEntry70 *e = o->tblB;
+    if (o->cntB < i) {
+        return 0;
+    }
+    return e[i].val60;
+}
+
+s32 Ch_TextureSetImageBase(Chr *chr, s32 v, s32 w)
+{
+    return func_0010D0A0(chr->w6F8, chr->h6FC, w, v);
+}
+
+s32 Ch_TextureSetClutBase(Chr *chr, s32 v, s32 w)
+{
+    return func_0010D0A0(chr->w6F0, chr->h6F4, w, v);
+}
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D3D0);
+
+void Ch_TextureLoadImage(Chr *chr, int v)
+{
+    ch_TextureLoad(chr->w6F8, chr->h6FC, v);
+    func_0010D3D0(chr);
+}
+
+void func_0010D4D8(Chr *chr, int v)
+{
+    ch_TextureLoad(chr->w6F0, chr->h6F4, v);
+}
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", Sg_GsClear);
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D648);
+
+TblEntry30 **Sg_PLightGetPtr(void)
+{
+    return &D_0057EAFC;
+}

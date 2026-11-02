@@ -1,0 +1,42 @@
+{
+  "scope": "584 nonempty battle-effect overlay containers from PAL disc group 0x11; movie buffers excluded.",
+  "working_estimate": "Approximately 15 MiB of stored EE instructions, including repeated code across overlay containers. Heuristic estimate, not an exact linked .text size.",
+  "measurements": {
+    "container_bytes": 400708128,
+    "detected_instruction_bytes": 15119236,
+    "detected_instruction_mib": 14.418827056884766,
+    "core_and_stack_prologue_seed_bytes": 15045468,
+    "code_region_span_bytes": 17525416,
+    "code_region_span_mib": 16.713539123535156,
+    "exact_byte_distinct_inferred_routine_piece_bytes": 6943516,
+    "exact_byte_distinct_inferred_routine_piece_mib": 6.621852874755859,
+    "resident_elf_text_bytes": 2098332,
+    "overlay_detected_to_resident_text_ratio": 7.2053593044380015,
+    "median_detected_code_per_container": 29746.0
+  },
+  "method": [
+    "Decode both packed formats using the game decoder algorithms.",
+    "Seed control flow from the seven main callback vectors, plausible additional callback pointers in the first 0x100 bytes, and stack prologues followed by a saved return address.",
+    "Follow direct calls and branches with MIPS delay slots; stop at returns, unresolved indirect jumps, invalid/implausible encodings and long zero padding.",
+    "Where the header resource pointer is valid, restrict analysis to the prefix preceding embedded resource data; otherwise use full payload. No discovered direct targets crossed a valid resource boundary.",
+    "Count the union of detected instruction addresses once per container.",
+    "Partition detected instructions at inferred entry candidates, hash each resulting raw-byte piece and sum distinct hashes as an exact-byte repetition metric."
+  ],
+  "limitations": [
+    "Not a full disassembly or certified function inventory. Inferred entry candidates are not a reliable function count.",
+    "1171 unresolved indirect-jump sites can hide switch cases or additional code.",
+    "The 16.7 MiB occupied-address span includes holes and possibly embedded data, and is not an exact code-size upper bound.",
+    "The 6.6 MiB exact-byte metric is not a semantic unique-code count: relocated copies may differ, and inferred routine boundaries can split functions. It cannot directly measure decompilation workload.",
+    "Container sizes include textures, animation and other data and must not be treated as executable-code sizes."
+  ],
+  "unresolved_indirect_jump_sites": 1171,
+  "artifacts": {
+    "details": "build/overlay-audit/code-size.json",
+    "details_sha256": "64d7a02f4a62cdabcaffb3de84852ffe28451110342344dedd09349b20214c94",
+    "analysis_script": "tools/audit_overlays.py",
+    "analysis_script_sha256": "32975ef41bf4f5dd331d68375329537e87c6e05eaafe93213dba4709d1ad6aa8",
+    "input_catalogue": "build/overlay-audit/catalogue.json",
+    "input_catalogue_sha256": "cc96315bc2cbc7c3264c1aa52b0215e411a21b83e5c32aa66f9826ad74a72ba8",
+    "reproduce": "python3 -P tools/audit_overlays.py \"baserom/Final Fantasy X (Europe, Australia).iso\""
+  }
+}

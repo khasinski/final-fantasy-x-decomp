@@ -1,0 +1,9 @@
+# TUs of config/tu_map.tsv that are built as two objects (tools/mk_units.py): address	reason
+# A `flag split` is not a TU boundary claim; it records what the current C cannot express in one object.
+# A `library split` is a boundary that tu_map.tsv missed between two different libraries (docs/LAYOUT.md).
+0x266EB8	flag split: func_00266EB8 needs -fno-schedule-insns -fno-schedule-insns2 (config/cflags.txt), the functions before it do not
+0x2A0618	flag split: 0x2A0618-0x2A0718 needs -Btools/cc/ee-as-delay/ -Wa,-mips4 (config/cflags.txt), func_0029FD20 does not
+0x266EE8	flag split: func_00266EE8 does not build with the flags of func_00266EB8
+0x2F5CB8	flag split: 0x2F5CB8-0x2F6D58 (newlib Bigint helpers) needs -fno-strict-aliasing, func_002F3A70 and func_002F48D0 do not
+0x2D98A8	library split: 0x2D9730-0x2D98A8 is FFX platform glue (FFXIsPC, FFXGetLang, FFXSetVideoMode: Switch-port names), 0x2D98A8 is sceGsResetGraph (libgraph); tu_map's low boundary 0x2D9730 put both in one TU
+0x2E2830	library split: 0x2E2220-0x2E2830 is libipu (IPU registers, IPU DMA channels), 0x2E2830 starts the fdlibm double math (calls fp-bit, 0x7FF00000 masks)

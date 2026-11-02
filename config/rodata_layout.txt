@@ -1,0 +1,428 @@
+piece piece_00568F00 0x568f00
+jtbl jtbl_00568FA0 game/chr/chr 0x568fa0
+jtbl jtbl_00569180 game/chr/chr 0x569180
+jtbl jtbl_005691E0 game/chr/chr 0x5691e0
+piece piece_00569200 0x569200
+jtbl jtbl_00569350 game/chr/chr 0x569350
+piece piece_00569390 0x569390
+jtbl jtbl_005694D0 game/chr/ch_104718 0x5694d0
+jtbl jtbl_005694F0 game/chr/ch_104718 0x5694f0
+jtbl jtbl_00569510 game/chr/ch_104718 0x569510
+piece piece_00569530 0x569530
+jtbl jtbl_00569570 game/chr/ch_106DC8 0x569570
+piece piece_005695B8 0x5695b8
+jtbl jtbl_00569720 game/chr/ch_111B50 0x569720
+piece piece_00569748 0x569748
+jtbl jtbl_005697E0 game/chr/ch_113FF8 0x5697e0
+piece piece_005699AC 0x5699ac
+jtbl jtbl_005699D0 game/chr/ch_113FF8 0x5699d0
+piece piece_005699E8 0x5699e8
+jtbl jtbl_00569A00 game/main/sg_117D78 0x569a00
+jtbl jtbl_00569A30 game/main/sg_1194E0 0x569a30
+piece piece_00569A48 0x569a48
+jtbl jtbl_00569C90 game/main/mem 0x569c90
+jtbl jtbl_00569CD0 game/main/mem 0x569cd0
+piece piece_00569CE8 0x569ce8
+jtbl jtbl_0056A440 game/atel/atel_126D68 0x56a440
+jtbl jtbl_0056A460 game/atel/atel_126D68 0x56a460
+jtbl jtbl_0056A480 game/atel/atel_12CE80 0x56a480
+jtbl jtbl_0056A4A0 game/atel/atel_12F740 0x56a4a0
+jtbl jtbl_0056A4F0 game/atel/atel_12F740 0x56a4f0
+piece piece_0056A510 0x56a510
+jtbl jtbl_0056A7F0 game/atel/atel_13A940 0x56a7f0
+piece piece_0056A810 0x56a810
+jtbl jtbl_0056A890 game/atel/atel_13CA80 0x56a890
+jtbl jtbl_0056A8B0 game/atel/atel_13CA80 0x56a8b0
+jtbl jtbl_0056A8D0 game/atel/atel_13CA80 0x56a8d0
+jtbl jtbl_0056A8F0 game/atel/atel_13CA80 0x56a8f0
+jtbl jtbl_0056A910 game/atel/atel_13CA80 0x56a910
+jtbl jtbl_0056A930 game/atel/atel_13CA80 0x56a930
+jtbl jtbl_0056A960 game/atel/atel_13CA80 0x56a960
+jtbl jtbl_0056A980 game/atel/atel_13CA80 0x56a980
+jtbl jtbl_0056A9A0 game/atel/atel_13CA80 0x56a9a0
+jtbl jtbl_0056A9D0 game/atel/atel_13CA80 0x56a9d0
+jtbl jtbl_0056A9F0 game/atel/atel_13CA80 0x56a9f0
+jtbl jtbl_0056AA50 game/atel/atel_13CA80 0x56aa50
+jtbl jtbl_0056AAC0 game/atel/atel_13CA80 0x56aac0
+jtbl jtbl_0056AB10 game/atel/atel_13CA80 0x56ab10
+jtbl jtbl_0056AD00 game/atel/atel_143BD0 0x56ad00
+jtbl jtbl_0056AD20 game/atel/atel_143BD0 0x56ad20
+piece piece_0056AD38 0x56ad38
+jtbl jtbl_0056ADB0 game/atel/atel_145938 0x56adb0
+piece piece_0056ADD8 0x56add8
+jtbl jtbl_0056ADE0 game/atel/atel_145938 0x56ade0
+piece piece_0056AE00 0x56ae00
+jtbl jtbl_0056AE10 game/atel/atel_145938 0x56ae10
+piece piece_0056AE28 0x56ae28
+jtbl jtbl_0056AE30 game/atel/atel_145938 0x56ae30
+piece piece_0056AE70 0x56ae70
+jtbl jtbl_0056AEB0 game/atel/atel_145938 0x56aeb0
+jtbl jtbl_0056AED0 game/atel/atel_148F40 0x56aed0
+jtbl jtbl_0056AEF0 game/atel/atel_148F40 0x56aef0
+jtbl jtbl_0056AF10 game/atel/atel_148F40 0x56af10
+piece piece_0056AF30 0x56af30
+jtbl jtbl_0056AF60 game/atel/atel_14B260 0x56af60
+jtbl jtbl_0056AF80 game/atel/atel_14B260 0x56af80
+piece piece_0056AF98 0x56af98
+jtbl jtbl_0056AFD0 game/atel/atel_14C3A8 0x56afd0
+jtbl jtbl_0056B0B0 game/atel/atel_14D940 0x56b0b0
+piece piece_0056B0D0 0x56b0d0
+jtbl jtbl_0056B1B0 game/atel/atel_14D940 0x56b1b0
+piece piece_0056B1D0 0x56b1d0
+jtbl jtbl_0056B5E0 game/movie/movie_157798 0x56b5e0
+piece piece_0056B778 0x56b778
+jtbl jtbl_0056B970 game/chr/tex_anim 0x56b970
+piece piece_0056B988 0x56b988
+jtbl jtbl_0056B990 game/chr/tex_anim 0x56b990
+piece piece_0056B9B0 0x56b9b0
+jtbl jtbl_0056B9C0 game/chr/tex_anim_old 0x56b9c0
+jtbl jtbl_0056B9E0 game/chr/tex_anim_old 0x56b9e0
+jtbl jtbl_0056BA00 game/libmscd 0x56ba00
+jtbl jtbl_0056BA20 game/libmscd 0x56ba20
+jtbl jtbl_0056BA40 game/libmscd 0x56ba40
+jtbl jtbl_0056BA60 game/libmscd 0x56ba60
+jtbl jtbl_0056BA80 game/libmscd 0x56ba80
+jtbl jtbl_0056BAA0 game/libmscd 0x56baa0
+jtbl jtbl_0056BAC0 game/libmscd 0x56bac0
+jtbl jtbl_0056BAE0 game/libmscd 0x56bae0
+jtbl jtbl_0056BB00 game/libmscd 0x56bb00
+piece piece_0056BB20 0x56bb20
+jtbl jtbl_0056BFB0 game/hddcopy 0x56bfb0
+piece piece_0056BFD0 0x56bfd0
+jtbl jtbl_0056C040 game/menu/to/to_1691C8 0x56c040
+jtbl jtbl_0056C060 game/menu/to/to_1691C8 0x56c060
+jtbl jtbl_0056C080 game/menu/to/to_1691C8 0x56c080
+jtbl jtbl_0056C0A0 game/menu/to/to_1691C8 0x56c0a0
+piece piece_0056C118 0x56c118
+jtbl jtbl_0056C160 game/menu/to/to_1691C8 0x56c160
+piece piece_0056C178 0x56c178
+jtbl jtbl_0056C1E0 game/yi/yi_171EF0 0x56c1e0
+piece piece_0056C238 0x56c238
+jtbl jtbl_0056C420 game/yi/yi_17A9C0 0x56c420
+piece piece_0056C448 0x56c448
+jtbl jtbl_0056C470 game/yi/yi_17A9C0 0x56c470
+jtbl jtbl_0056C530 game/yi/yi_17A9C0 0x56c530
+jtbl jtbl_0056C5F0 game/yi/yi_17A9C0 0x56c5f0
+piece piece_0056C6A8 0x56c6a8
+jtbl jtbl_0056C840 game/yi/yiimage_17DC98 0x56c840
+jtbl jtbl_0056C860 game/yi/yiimage_17DC98 0x56c860
+jtbl jtbl_0056C8C0 game/yi/yiimage_17DC98 0x56c8c0
+piece piece_0056C928 0x56c928
+jtbl jtbl_0056C9B0 game/yi/yiimage_17DC98 0x56c9b0
+piece piece_0056CA08 0x56ca08
+jtbl jtbl_0056CA20 game/yi/yiimage_17DC98 0x56ca20
+piece piece_0056CA78 0x56ca78
+jtbl jtbl_0056CDE0 game/yi/yi_180B70 0x56cde0
+piece piece_0056CF64 0x56cf64
+jtbl jtbl_0056CFF0 game/yi/yi_184EA0 0x56cff0
+jtbl jtbl_0056D040 game/yi/yi_184EA0 0x56d040
+jtbl jtbl_0056D0A0 game/yi/yi_184EA0 0x56d0a0
+piece piece_0056D100 0x56d100
+jtbl jtbl_0056D120 game/yi/yi_187260 0x56d120
+piece piece_0056D140 0x56d140
+jtbl jtbl_0056D1B0 game/yi/yi_18B680 0x56d1b0
+piece piece_0056D1D0 0x56d1d0
+jtbl jtbl_0056D2A0 game/yi/yi_18B680 0x56d2a0
+jtbl jtbl_0056D310 game/yi/yi_18B680 0x56d310
+piece piece_0056D378 0x56d378
+jtbl jtbl_0056D8A0 game/rc/bg/rcbgMain 0x56d8a0
+piece piece_0056D8D0 0x56d8d0
+jtbl jtbl_0056DA70 game/rc/bg/rcbgGuide 0x56da70
+piece piece_0056DA88 0x56da88
+jtbl jtbl_0056DB80 game/rc/bg/rcbgFP 0x56db80
+piece piece_0056DB98 0x56db98
+jtbl jtbl_0056DC70 game/rc/dt/rcdtRsd2 0x56dc70
+piece piece_0056DC88 0x56dc88
+jtbl jtbl_0056DD40 game/rc/dt/rcdtRsd2 0x56dd40
+piece piece_0056DD88 0x56dd88
+jtbl jtbl_0056DE80 game/battle/ms_1A56F8 0x56de80
+jtbl jtbl_0056DED0 game/battle/ms_1A56F8 0x56ded0
+piece piece_0056DEE8 0x56dee8
+jtbl jtbl_0056DF10 game/battle/ms_1A56F8 0x56df10
+jtbl jtbl_0056DF30 game/battle/ms_1A56F8 0x56df30
+piece piece_0056DF58 0x56df58
+jtbl jtbl_0056E000 game/battle/ms_1ACFD8 0x56e000
+piece piece_0056E020 0x56e020
+jtbl jtbl_0056E150 game/battle/ms_1ACFD8 0x56e150
+piece piece_0056E170 0x56e170
+jtbl jtbl_0056E1C0 game/battle/ms_1ACFD8 0x56e1c0
+jtbl jtbl_0056E1E0 game/battle/ms_1AF9E8 0x56e1e0
+piece piece_0056E230 0x56e230
+jtbl jtbl_0056E270 game/battle/ms_1AF9E8 0x56e270
+piece piece_0056E2A0 0x56e2a0
+jtbl jtbl_0056E2D0 game/battle/ms_1B15C8 0x56e2d0
+jtbl jtbl_0056E300 game/battle/ms_1B3388 0x56e300
+jtbl jtbl_0056E340 game/battle/ms_1B3388 0x56e340
+piece piece_0056E370 0x56e370
+jtbl jtbl_0056E380 game/battle/ms_1B72F0 0x56e380
+jtbl jtbl_0056E3C0 game/battle/ms_1B72F0 0x56e3c0
+piece piece_0056E430 0x56e430
+jtbl jtbl_0056E450 game/battle/ms_1B89D8 0x56e450
+jtbl jtbl_0056E490 game/battle/ms_1B89D8 0x56e490
+jtbl jtbl_0056E4D0 game/battle/ms_1BB380 0x56e4d0
+piece piece_0056E500 0x56e500
+jtbl jtbl_0056E550 game/battle/ms_1BC440 0x56e550
+jtbl jtbl_0056E5B0 game/battle/ms_1C0C98 0x56e5b0
+jtbl jtbl_0056E5E0 game/battle/ms_1C0C98 0x56e5e0
+jtbl jtbl_0056E640 game/battle/ms_1C0C98 0x56e640
+jtbl jtbl_0056E660 game/battle/ms_1C0C98 0x56e660
+jtbl jtbl_0056E680 game/battle/ms_1C5E90 0x56e680
+jtbl jtbl_0056E6C0 game/battle/ms_1C8C80 0x56e6c0
+jtbl jtbl_0056E740 game/battle/ms_1C8C80 0x56e740
+jtbl jtbl_0056E760 game/battle/ms_1C8C80 0x56e760
+piece piece_0056E780 0x56e780
+jtbl jtbl_0056E7A0 game/battle/ms_1C8C80 0x56e7a0
+piece piece_0056E7B8 0x56e7b8
+jtbl jtbl_0056E8B0 game/battle/ms_1CCC10 0x56e8b0
+piece piece_0056E8F0 0x56e8f0
+jtbl jtbl_0056E910 game/battle/ms_1CCC10 0x56e910
+piece piece_0056E930 0x56e930
+jtbl jtbl_0056E980 game/battle/ms_1CE8E0 0x56e980
+jtbl jtbl_0056E9F0 game/battle/ms_1CE8E0 0x56e9f0
+jtbl jtbl_0056EA20 game/battle/ms_1D00D8 0x56ea20
+piece piece_0056EA98 0x56ea98
+jtbl jtbl_0056EAA0 game/battle/ms_1D00D8 0x56eaa0
+jtbl jtbl_0056EAC0 game/battle/ms_1D27C0 0x56eac0
+piece piece_0056EAF8 0x56eaf8
+jtbl jtbl_0056EB20 game/battle/ms_1D27C0 0x56eb20
+jtbl jtbl_0056EB70 game/battle/ms_1D48D0 0x56eb70
+jtbl jtbl_0056F0E0 game/battle/ms_1D48D0 0x56f0e0
+jtbl jtbl_0056F650 game/battle/ms_1D48D0 0x56f650
+jtbl jtbl_0056F680 game/battle/ms_1D48D0 0x56f680
+piece piece_0056F6A8 0x56f6a8
+jtbl jtbl_0056F720 game/battle/ms_1DBB50 0x56f720
+jtbl jtbl_0056F770 game/battle/ms_1DBB50 0x56f770
+piece piece_0056F7B8 0x56f7b8
+jtbl jtbl_0056F810 game/battle/ms_1E08F0 0x56f810
+jtbl jtbl_0056F840 game/battle/ms_1E08F0 0x56f840
+jtbl jtbl_0056F890 game/battle/ms_1E08F0 0x56f890
+jtbl jtbl_0056F8B0 game/battle/ms_1E08F0 0x56f8b0
+piece piece_0056F8D0 0x56f8d0
+jtbl jtbl_0056F8E0 game/battle/ms_1E2360 0x56f8e0
+jtbl jtbl_0056F9B0 game/battle/ms_1E4CD0 0x56f9b0
+piece piece_0056F9F0 0x56f9f0
+jtbl jtbl_0056FA00 game/battle/ms_1E4CD0 0x56fa00
+piece piece_0056FA20 0x56fa20
+jtbl jtbl_0056FBE0 game/battle/ms_1E7AF0 0x56fbe0
+jtbl jtbl_0056FC20 game/battle/ms_1E7AF0 0x56fc20
+jtbl jtbl_0056FC40 game/battle/ms_1E7AF0 0x56fc40
+jtbl jtbl_0056FC60 game/battle/ms_1E7AF0 0x56fc60
+jtbl jtbl_0056FC80 game/battle/ms_1E7AF0 0x56fc80
+piece piece_0056FC98 0x56fc98
+jtbl jtbl_0056FD70 game/battle/battle_1EA000 0x56fd70
+jtbl jtbl_0056FDE0 game/battle/battle_1EA000 0x56fde0
+piece piece_0056FE48 0x56fe48
+jtbl jtbl_0056FEB0 game/menu/menu_1F4818 0x56feb0
+jtbl jtbl_0056FF20 game/menu/menu_1F4818 0x56ff20
+piece piece_0056FF90 0x56ff90
+jtbl jtbl_005700D0 game/menu/to/to_2021E8 0x5700d0
+jtbl jtbl_00570160 game/menu/to/to_2021E8 0x570160
+jtbl jtbl_00570220 game/menu/to/to_2021E8 0x570220
+jtbl jtbl_00570250 game/menu/to/to_2021E8 0x570250
+jtbl jtbl_00570280 game/menu/to/to_2021E8 0x570280
+piece piece_005702D0 0x5702d0
+jtbl jtbl_005702F0 game/menu/to/to_2021E8 0x5702f0
+piece piece_00570340 0x570340
+jtbl jtbl_00570840 game/menu/to/to_209460 0x570840
+jtbl jtbl_00570860 game/menu/to/to_209460 0x570860
+jtbl jtbl_00570880 game/menu/to/to_209460 0x570880
+piece piece_005708A0 0x5708a0
+jtbl jtbl_005708C0 game/menu/to/to_209460 0x5708c0
+jtbl jtbl_00570940 game/menu/to/to_209460 0x570940
+jtbl jtbl_00570960 game/menu/to/to_209460 0x570960
+jtbl jtbl_00570980 game/menu/to/to_209460 0x570980
+piece piece_00570A38 0x570a38
+jtbl jtbl_00570A80 game/menu/tk/tk_20EC90 0x570a80
+jtbl jtbl_00570AA0 game/menu/tk/tk_20EC90 0x570aa0
+jtbl jtbl_00570AD0 game/menu/to/to_210340 0x570ad0
+jtbl jtbl_00570B30 game/menu/to/to_210340 0x570b30
+piece piece_00570B90 0x570b90
+jtbl jtbl_00570C50 game/menu/to/to_210340 0x570c50
+piece piece_00570C90 0x570c90
+jtbl jtbl_00570D30 game/menu/to/to_214650 0x570d30
+jtbl jtbl_00570D50 game/menu/to/to_214650 0x570d50
+jtbl jtbl_00570D90 game/menu/to/to_214650 0x570d90
+piece piece_00570DD8 0x570dd8
+jtbl jtbl_00570F20 game/menu/to/to_218A78 0x570f20
+jtbl jtbl_00570F50 game/menu/to/to_218A78 0x570f50
+piece piece_00570F78 0x570f78
+jtbl jtbl_00570FB0 game/menu/to/to_218A78 0x570fb0
+jtbl jtbl_00570FE0 game/menu/to/to_218A78 0x570fe0
+piece piece_00571010 0x571010
+jtbl jtbl_00571030 game/menu/to/to_218A78 0x571030
+jtbl jtbl_00571060 game/menu/to/to_218A78 0x571060
+piece piece_00571090 0x571090
+jtbl jtbl_005710E0 game/menu/to/to_218A78 0x5710e0
+jtbl jtbl_00571110 game/menu/to/to_218A78 0x571110
+piece piece_00571138 0x571138
+jtbl jtbl_005711A0 game/menu/tk/tk_220F30 0x5711a0
+piece piece_005711B8 0x5711b8
+jtbl jtbl_005711D0 game/menu/tk/tk_220F30 0x5711d0
+piece piece_00571280 0x571280
+jtbl jtbl_00571290 game/menu/tk/tk_220F30 0x571290
+jtbl jtbl_005712B0 game/menu/tk/tk_220F30 0x5712b0
+piece piece_005712C8 0x5712c8
+jtbl jtbl_005712F0 game/menu/to/to_224430 0x5712f0
+jtbl jtbl_00571320 game/menu/tk/tk_224930 0x571320
+piece piece_00571378 0x571378
+jtbl jtbl_00571420 game/menu/tk/tk_227C88 0x571420
+piece piece_00571470 0x571470
+jtbl jtbl_005717E0 game/menu/tk/tk_228B08 0x5717e0
+piece piece_00571830 0x571830
+jtbl jtbl_00571840 game/menu/tk/tk_228B08 0x571840
+piece piece_00571860 0x571860
+jtbl jtbl_005718B0 game/menu/tk/tk_22B9F8 0x5718b0
+piece piece_005718E0 0x5718e0
+jtbl jtbl_00571930 game/menu/tk/tk_22B9F8 0x571930
+piece piece_005719B0 0x5719b0
+jtbl jtbl_00571B20 game/menu/tk/tk_22CE70 0x571b20
+piece piece_00571B68 0x571b68
+jtbl jtbl_00571B80 game/menu/tk/tk_22CE70 0x571b80
+piece piece_00571BB0 0x571bb0
+jtbl jtbl_00571C20 game/menu/tk/tk_22CE70 0x571c20
+piece piece_00571CB8 0x571cb8
+jtbl jtbl_00571CC0 game/menu/tk/tk_22CE70 0x571cc0
+piece piece_00571CE0 0x571ce0
+jtbl jtbl_00571D70 game/menu/tk/tk_22FB30 0x571d70
+jtbl jtbl_00571DC0 game/menu/tk/tk_22FB30 0x571dc0
+piece piece_00571E00 0x571e00
+jtbl jtbl_00571E50 game/menu/tk/tk_22FB30 0x571e50
+piece piece_00571E90 0x571e90
+jtbl jtbl_00571FF0 game/menu/tk/tk_2315E8 0x571ff0
+jtbl jtbl_00572030 game/menu/tk/tk_2315E8 0x572030
+jtbl jtbl_00572050 game/menu/tk/tk_2315E8 0x572050
+piece piece_00572068 0x572068
+jtbl jtbl_005721C0 game/menu/tk/tk_232C88 0x5721c0
+jtbl jtbl_005721F0 game/menu/tk/tk_232C88 0x5721f0
+piece piece_00572210 0x572210
+jtbl jtbl_00572340 game/menu/tk/tk_234A30 0x572340
+piece piece_00572370 0x572370
+jtbl jtbl_00572380 game/menu/menu_235C38 0x572380
+jtbl jtbl_005723A0 game/menu/menu_235C38 0x5723a0
+piece piece_005723C0 0x5723c0
+jtbl jtbl_005723D0 game/menu/to/to_2362B8 0x5723d0
+piece piece_00572420 0x572420
+jtbl jtbl_005725C0 game/menu/tk/tk_237888 0x5725c0
+jtbl jtbl_005725E0 game/menu/tk/tk_237888 0x5725e0
+piece piece_00572600 0x572600
+jtbl jtbl_00572610 game/menu/tk/tk_237888 0x572610
+piece piece_005726A8 0x5726a8
+jtbl jtbl_00572A30 game/menu/tk/tk_23A450 0x572a30
+jtbl jtbl_00572A50 game/menu/tk/tk_23A450 0x572a50
+piece piece_00572A70 0x572a70
+jtbl jtbl_00572A80 game/menu/tk/tk_23A450 0x572a80
+piece piece_00572B08 0x572b08
+jtbl jtbl_00572C80 game/menu/tk/tk_23C658 0x572c80
+piece piece_00572CB0 0x572cb0
+jtbl jtbl_00572D00 game/menu/tk/tk_23CBD0 0x572d00
+jtbl jtbl_00572D50 game/menu/tk/tk_23CBD0 0x572d50
+jtbl jtbl_00572D70 game/menu/tk/tk_23CBD0 0x572d70
+jtbl jtbl_00572DB0 game/menu/tk/tk_23CBD0 0x572db0
+jtbl jtbl_00572F80 game/menu/tk/tk_23CBD0 0x572f80
+piece piece_00572FD0 0x572fd0
+jtbl jtbl_00572FF0 game/menu/tk/tk_242040 0x572ff0
+piece piece_00573058 0x573058
+jtbl jtbl_005730F0 game/menu/tk/tk_249928 0x5730f0
+jtbl jtbl_00573150 game/menu/tk/tk_249928 0x573150
+piece piece_005731F0 0x5731f0
+jtbl jtbl_00573270 game/menu/tk/tk_249928 0x573270
+piece piece_00573288 0x573288
+jtbl jtbl_005732A0 game/menu/tk/tk_249928 0x5732a0
+piece piece_00573300 0x573300
+jtbl jtbl_005733B0 game/menu/tk/tk_24B828 0x5733b0
+jtbl jtbl_005733D0 game/menu/tk/tk_24B828 0x5733d0
+jtbl jtbl_005733F0 game/menu/tk/tk_24B828 0x5733f0
+piece piece_00573428 0x573428
+jtbl jtbl_005734B0 game/menu/tk/tk_24B828 0x5734b0
+jtbl jtbl_00573510 game/menu/tk/tk_24B828 0x573510
+piece piece_005735F8 0x5735f8
+jtbl jtbl_00573620 game/menu/tk/tk_24B828 0x573620
+piece piece_00573670 0x573670
+jtbl jtbl_00573A10 game/abm/abm_25AEB0 0x573a10
+piece piece_00573A24 0x573a24
+jtbl jtbl_00573A40 game/abm/ei_260A70 0x573a40
+jtbl jtbl_00573A60 game/abm/ei_260A70 0x573a60
+piece piece_00573A90 0x573a90
+jtbl jtbl_00573AD0 game/abm/abm_265F78 0x573ad0
+piece piece_00573B20 0x573b20
+jtbl jtbl_00573CC0 game/abm/abm_265F78 0x573cc0
+piece piece_00573D10 0x573d10
+jtbl jtbl_00573D30 game/abm/abm_265F78 0x573d30
+jtbl jtbl_00573D90 game/abm/abm_265F78 0x573d90
+piece piece_00573DF0 0x573df0
+jtbl jtbl_00573E10 game/particle/particle_266A48 0x573e10
+jtbl jtbl_00573E40 game/particle/particle_266A48 0x573e40
+jtbl jtbl_00573E70 game/particle/particle_266A48 0x573e70
+jtbl jtbl_00573EA0 game/particle/particle_266A48 0x573ea0
+jtbl jtbl_00573ED0 game/particle/particle_266A48 0x573ed0
+jtbl jtbl_00573F00 game/particle/particle_266A48 0x573f00
+jtbl jtbl_00573F30 game/particle/particle_266A48 0x573f30
+jtbl jtbl_00573F60 game/particle/particle_266A48 0x573f60
+piece piece_00573F88 0x573f88
+jtbl jtbl_00574020 game/particle/eiProg/ppp_268680 0x574020
+piece piece_00574038 0x574038
+jtbl jtbl_00574390 game/particle/eiProg/pppYanagi 0x574390
+jtbl jtbl_005743D0 game/particle/eiProg/pppYanagi 0x5743d0
+piece piece_005743E8 0x5743e8
+jtbl jtbl_00575470 game/op/opu/opu_29A8A8 0x575470
+jtbl jtbl_005754A0 game/op/opu/opu_29A8A8 0x5754a0
+piece piece_005754D8 0x5754d8
+jtbl jtbl_00575530 game/op/opu/opu_29A8A8 0x575530
+jtbl jtbl_00575550 game/op/opu/opu_29DC40 0x575550
+jtbl jtbl_00575570 game/op/opu/opu_29DC40 0x575570
+jtbl jtbl_00575590 game/op/opu/opu_29DC40 0x575590
+jtbl jtbl_005755B0 game/op/opu/opu_29DC40 0x5755b0
+jtbl jtbl_005755D0 game/op/opu/opu_2A0820 0x5755d0
+piece piece_005755E8 0x5755e8
+jtbl jtbl_00575670 game/op/opu/opu_2A43D8 0x575670
+piece piece_005756A0 0x5756a0
+jtbl jtbl_00575780 game/op/opu/opu_2A6FE8 0x575780
+jtbl jtbl_005757A0 game/op/opu/opu_2A6FE8 0x5757a0
+piece piece_005757F0 0x5757f0
+jtbl jtbl_00575820 game/op/opu/opu_2A6FE8 0x575820
+jtbl jtbl_00575860 game/op/opu/opu_2A6FE8 0x575860
+piece piece_00575878 0x575878
+jtbl jtbl_00575A70 game/op/opp_2AC750 0x575a70
+jtbl jtbl_00575A90 game/op/opp_2AF1D0 0x575a90
+piece piece_00575AA8 0x575aa8
+jtbl jtbl_00575CA0 game/op/op_2B4FF8 0x575ca0
+piece piece_00575CB8 0x575cb8
+jtbl jtbl_00575D30 game/op/op_2B6B50 0x575d30
+jtbl jtbl_00575D50 game/op/op_2B6B50 0x575d50
+jtbl jtbl_00575DE0 game/op/op_2B6B50 0x575de0
+piece piece_00575E00 0x575e00
+jtbl jtbl_00575E50 game/op/op_2B6B50 0x575e50
+piece piece_00575E70 0x575e70
+jtbl jtbl_00575EA0 game/op/op_2B6B50 0x575ea0
+piece piece_00575EC0 0x575ec0
+jtbl jtbl_00575F20 game/op/op_2B6B50 0x575f20
+piece piece_00575F40 0x575f40
+jtbl jtbl_00576020 game/tk/tk_2D25C8 0x576020
+piece piece_00576040 0x576040
+jtbl jtbl_00576060 game/snd/snd_2D6808 0x576060
+jtbl jtbl_005760A0 game/snd/snd_2D6808 0x5760a0
+jtbl jtbl_005760E0 game/snd/snd_2D6808 0x5760e0
+jtbl jtbl_00576100 game/snd/snd_2D6808 0x576100
+jtbl jtbl_00576140 game/snd/snd_2D6808 0x576140
+piece piece_00576180 0x576180
+jtbl jtbl_005766B0 sdk/libgraph/libgraph 0x5766b0
+piece piece_005767A0 0x5767a0
+jtbl jtbl_005768C0 sdk/libgraph/libgraph 0x5768c0
+piece piece_005769B0 0x5769b0
+jtbl jtbl_005769D0 game/platform/platform_2DC110 0x5769d0
+jtbl jtbl_005769F0 game/platform/ffx_2DC580 0x5769f0
+piece piece_00576A08 0x576a08
+jtbl jtbl_005781E0 sdk/newlib/libc/libc_2F0840 0x5781e0
+piece piece_00578298 0x578298
+jtbl jtbl_00578350 sdk/newlib/libc/vfprintf 0x578350
+piece piece_005784C0 0x5784c0
+jtbl jtbl_005784F0 sdk/newlib/libc/libc_2F3A70 0x5784f0
+jtbl jtbl_005786E0 sdk/newlib/libc/libc_2F3A70 0x5786e0
+jtbl jtbl_00578700 sdk/newlib/libc/libc_2F3A70 0x578700
+jtbl jtbl_00578840 sdk/newlib/libc/libc_2F3A70 0x578840
+piece piece_00578930 0x578930
+jtbl jtbl_00578970 sdk/newlib/libc/libc_2F3A70 0x578970
+piece piece_00578988 0x578988
+jtbl jtbl_00578BC0 sdk/libkernl/tty 0x578bc0
+jtbl jtbl_00578CF0 sdk/libkernl/libkernl_2FBBE8 0x578cf0
+piece piece_00578D58 0x578d58

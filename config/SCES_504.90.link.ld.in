@@ -1,0 +1,39 @@
+/* Hand-written: splat's generated script groups by section type, but this ELF
+   interleaves text/data/rodata/vutext/lit4 at fixed addresses. */
+INCLUDE config/undefined_syms_auto.txt
+INCLUDE config/undefined_funcs_auto.txt
+/* Projection work backing view starts inside an existing BSS allocation. */
+D_00600110 = 0x00600110;
+D_0069247A = 0x0069247a;
+/* data inside .text that splat folds into padding: absolute aliases */
+func_0017A540 = 0x17A540;
+/* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */
+dpadd = 0x2EBBB0;
+dpsub = 0x2EBC08;
+dpcmp = 0x2EC198;
+litodp = 0x2EC1E8;
+dptoli = 0x2EC2A0;
+dptoul = 0x2EC338;
+dptofp = 0x2EC440;
+fptodp = 0x2ED038;
+sqrtf = 0x2E9708;
+SECTIONS
+{
+    . = 0x100000;
+    .text : {
+@TEXT_OBJS@
+    }
+    . = 0x300500;
+    .data : { build/asm/data/data.data.s.o(.data) }
+    . = 0x568f00;
+    .rodata : SUBALIGN(1) {   /* every piece/table is placed by an explicit `. = ADDR` */
+@RODATA_OBJS@
+    }
+    . = 0x578e00;
+    .vutext : { build/assets/vutext.bin.o(.data) }
+    . = 0x57c680;
+    .lit4 : SUBALIGN(4) { build/asm/data/lit4.data.s.o(.data) }
+    . = 0x57cb80;
+    .bss (NOLOAD) : { build/asm/data/47DB0C.bss.s.o(.bss) }
+    /DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.gnu.attributes) *(.comment) *(.pdr) *(.mdebug*) }
+}

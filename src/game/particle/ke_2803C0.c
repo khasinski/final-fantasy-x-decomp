@@ -1,0 +1,728 @@
+/* tu_306 0x2803c0-0x2856f0: low; ~KeThBP_Update (config/tu_map.tsv) */
+/* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#include "common.h"
+#include "ffx/r6.h"
+#include "ffx/w9.h"
+#include "ffx/q6.h"
+#include "ffx/u4.h"
+#include "ffx/t6.h"
+#include "ffx/v6.h"
+
+void func_002803C0(LinkOwner *owner, int flags) {
+    LinkNode *n;
+
+    flags |= 8;
+    for (n = owner->head; n != 0; n = n->next) {
+        n->wC = 0;
+        n->h3E |= flags;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002803F8);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00280860);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00280D28);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00280F90);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00280FD0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00281010);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeThBP_Update);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00281ED0);
+
+void KeThBP_Quit(PoolNode *n)
+{
+    V6LinkObj *o = (V6LinkObj *)n; /* DEBT(CAST): the pool hands out untyped nodes */
+    V6Link30 *p = o->ent;
+    int f = o->h3E & 0x20;
+    int i;
+
+    for (i = o->h3C; i > 0; i--, p++) {
+        func_002803C0(&p->o, f);
+    }
+    p = &o->ent[o->h34];
+    for (i = o->h38; i > 0; i--, p++) {
+        func_002803C0(&p->o, f);
+    }
+    if (o->pprev != 0) {
+        if (o->next != 0) {
+            o->next->pprev = o->pprev;
+        }
+        *o->pprev = o->next;
+    }
+}
+
+void *func_00282040(Pool *pool) {
+    PoolNode *node = pool->free;
+
+    if (node == 0) {
+        return 0;
+    }
+    pool->free = node->next;
+    return node;
+}
+
+void func_00282060(Pool *pool, u8 count, u8 size) {
+    PoolNode *node;
+    int stride;
+    int i;
+
+    pool->count = count;
+    pool->size = size;
+    node = (PoolNode *)(pool + 1);
+    pool->free = node;
+    stride = (u8)(size - 1) * 0x30 + 0x80;
+    pool->stride = stride;
+    for (i = count - 1; i > 0; i--) {
+        PoolNode *cur = node;
+        node = (PoolNode *)((char *)node + stride);
+        cur->next = node;
+    }
+    node->next = 0;
+}
+
+void func_002820C0(PoolNode **list, Pool *pool)
+{
+    PoolNode *n = *list;
+    PoolNode *cur;
+
+    while (n != 0) {
+        cur = n;
+        n = n->next;
+        KeThBP_Quit(cur);
+        cur->next = pool->free;
+        ((PoolNode *)&pool->free)->next = cur; /* DEBT(CAST): the free-list head acts as a node (aliases cur->next) */
+    }
+    *list = 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282128);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeThCp_Update);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282358);
+
+void func_00282478(Pair *p) {
+    p->ptr = 0;
+    p->flag = 0;
+}
+
+int func_00282488(float *v, float *out)
+{
+    float x = v[0];
+    float y = v[1];
+    float a;
+    double t;
+
+    a = x * y; /* DEBT(FAKE): the product shares the result variable (register steering) */
+    if (a > 0.0f) {
+        a = -3.1415927f;
+        if (x > 0.0f) {
+            a = 0.0f;
+        }
+        t = func_002E76D0(func_002ED038(y / x));
+        a = func_002EC440(func_002EBBB0(func_002ED038(a), t));
+    } else if (a < 0.0f) {
+        a = -1.5707964f;
+        if (y > 0.0f) {
+            a = 1.5707964f;
+        }
+        t = func_002E76D0(func_002ED038(x / y));
+        a = func_002EC440(func_002EBC08(func_002ED038(a), t));
+    } else if (x != 0.0f) {
+        a = 3.1415927f;
+        if (x > 0.0f) {
+            a = 0.0f;
+        }
+    } else if (y != 0.0f) {
+        a = -1.5707964f;
+        if (y > 0.0f) {
+            a = 1.5707964f;
+        }
+    } else {
+        return 0;
+    }
+    *out = a;
+    return 1;
+}
+
+/* NAME guess: LCG random step */
+void func_00282608(void) {
+    D_00373050 = (D_00373050 * 0x80D + 7) & 0xFFFF;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282628);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0ItrsBallLine);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282758);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282780);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282798);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827B0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827D0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827F0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282810);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282830);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282850);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282870);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002828E0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282948);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282978);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002829F8);
+
+float func_00282A20(int n, float x)
+{
+    float r = 1.0f;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        r *= x;
+    }
+    return r;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282A58);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0VecLen);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0VecLenXY);
+
+/* NAME guess: length of difference vector (result discarded by this wrapper) */
+void func_00282AE0(Vec4 *a, Vec4 *b) {
+    Vec4 d;
+
+    func_002DD038(&d, a, b);
+    KeVu0VecLen(&d);
+}
+
+u16 func_00282B10(IdPool *pool) {
+    u16 head;
+
+    if (pool->head == 0xFFFF) {
+        return 0xFFFF;
+    }
+    head = pool->head;
+    pool->head = pool->next[head];
+    return head;
+}
+
+void func_00282B40(IdPool *pool, u16 *next, u16 count) {
+    u16 i;
+
+    pool->next = next;
+    pool->head = 0;
+    pool->count = count;
+    for (i = 1; i < count; i++) {
+        *next++ = i;
+    }
+    *next = 0xFFFF;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282B88);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282E68);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002830A0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002832F0);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", pppKeTh);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002839F8);
+
+void func_00283B00(char *base, ScriptCtx *ctx)
+{
+    V6Wk *w = SLOT_WORK(V6Wk, base, ctx, 0);
+    V6Sub *s = &w->s;
+
+    func_00282478(&w->p);
+    w->d70 = 0;
+    w->d78 = 0;
+    w->d80 = 0;
+    w->d88 = 0;
+    w->w6C = 0;
+    s->wC = 0;
+    s->w24 = 0;
+    s->w2C = 0;
+}
+
+void func_00283B60(char *base, ScriptCtx *ctx)
+{
+    V6Wk *w = SLOT_WORK(V6Wk, base, ctx, 0);
+    V6Sub *s = &w->s;
+
+    w->d70 = 0;
+    w->d78 = 0;
+    w->d80 = 0;
+    w->d88 = 0;
+    w->w6C = 0;
+    s->wC = 0;
+    s->w24 = 0;
+    s->w2C = 0;
+}
+
+void func_00283B98(void) {
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00283BA0);
+
+void func_00283C50(char *base, ScriptCtx *ctx) {
+    WkwCw1C *w = SLOT_WORK(WkwCw1C, base, ctx, 0);
+
+    w->w1C = 0;
+    w->wC = 0;
+}
+
+void func_00283C70(char *base, ScriptCtx *ctx)
+{
+    WkfCw1C *w = SLOT_WORK(WkfCw1C, base, ctx, 0);
+
+    w->fC = 1.0f;
+    w->w1C = 0;
+}
+
+void func_00283C98(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 3);
+}
+
+void func_00283CB8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 8);
+}
+
+void func_00283CD8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 8);
+}
+
+void func_00283CF8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 128, 8);
+}
+
+void func_00283D18(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 16);
+}
+
+void func_00283D38(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 16);
+}
+
+void func_00283D58(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 64, 16);
+}
+
+void func_00283D78(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 24);
+}
+
+void func_00283D98(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 24);
+}
+
+void func_00283DB8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 32);
+}
+
+void func_00283DD8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 32);
+}
+
+void func_00283DF8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 32, 32);
+}
+
+void func_00283E18(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 40);
+}
+
+void func_00283E38(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 40);
+}
+
+void func_00283E58(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 48);
+}
+
+void func_00283E78(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 48);
+}
+
+void func_00283E98(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 64);
+}
+
+void func_00283EB8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 64);
+}
+
+void func_00283ED8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 64);
+}
+
+void func_00283EF8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 128);
+}
+
+void func_00283F18(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 128);
+}
+
+void func_00283F38(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 128);
+}
+
+void func_00283F58(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 1, 255);
+}
+
+void func_00283F78(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 4, 255);
+}
+
+void func_00283F98(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 16);
+}
+
+void func_00283FB8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 16);
+}
+
+void func_00283FD8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 24, 16);
+}
+
+void func_00283FF8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 24);
+}
+
+void func_00284018(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 24);
+}
+
+void func_00284038(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 32);
+}
+
+void func_00284058(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 32);
+}
+
+void func_00284078(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 24, 32);
+}
+
+void func_00284098(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 40);
+}
+
+void func_002840B8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 40);
+}
+
+void func_002840D8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 48);
+}
+
+void func_002840F8(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 16, 48);
+}
+
+void func_00284118(char *base, ScriptCtx *ctx) {
+    func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 64);
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284138);
+
+void func_00284310(char *base, ScriptCtx *ctx) {
+    Wkb0b1b2b3 *w = SLOT_WORK(Wkb0b1b2b3, base, ctx, 1);
+
+    w->b0 = 0;
+}
+
+void func_00284328(T6TransformFrame *frame, T6AttributeDelta *delta, T6TransformInput *input)
+{
+    T6AttributeValues *values;
+    T6AttributeOutput *output;
+    T6AttributeVectors *vectors;
+    int *offsets;
+
+    if (D_006A3BC4 != 0)
+        return;
+    offsets = input->offsets;
+    /* DEBT(CAST): payload offsets select these typed attribute blocks. */
+    output = (T6AttributeOutput *)(frame->payload + offsets[1]);
+    vectors = &output->vectors;
+    values = (T6AttributeValues *)(frame->payload + offsets[0]);
+    if (frame->idC == delta->id)
+    {
+        output->enabled = (u8) delta->enabled;
+        values->channels[0] = (u16) (values->channels[0] + delta->channels[0]);
+        values->channels[1] = (u16) (values->channels[1] + delta->channels[1]);
+        values->values[2] = (float) (values->values[2] + delta->values[2]);
+        values->channels[2] = (u16) (values->channels[2] + delta->channels[2]);
+        values->values[0] = (float) (values->values[0] + delta->values[0]);
+        /* DEBT(ORDER): this independent float update precedes channel 3. */
+        values->values[1] = (float) (values->values[1] + delta->values[1]);
+        values->channels[3] = (u16) (values->channels[3] + delta->channels[3]);
+        values->channels[4] = (u16) (values->channels[4] + delta->channels[4]);
+        values->channels[5] = (u16) (values->channels[5] + delta->channels[5]);
+        values->values[3] = (float) (values->values[3] + delta->values[3]);
+        values->channels[6] = (u16) (values->channels[6] + delta->channels[6]);
+        values->channels[7] = (u16) (values->channels[7] + delta->channels[7]);
+        values->channels[8] = (u16) (values->channels[8] + delta->channels[8]);
+        values->channels[9] = (u16) (values->channels[9] + delta->channels[9]);
+        values->channels[10] = (u16) (values->channels[10] + delta->channels[10]);
+        values->channels[11] = (u16) (values->channels[11] + delta->channels[11]);
+        values->channels[12] = (u16) (values->channels[12] + delta->channels[12]);
+        values->channels[13] = (u16) (values->channels[13] + delta->channels[13]);
+        values->channels[14] = (u16) (values->channels[14] + delta->channels[14]);
+        values->channels[15] = (u16) (values->channels[15] + delta->channels[15]);
+        if (frame->idC == 0)
+            return;
+    }
+
+    output->channels[0] = (u16) (output->channels[0] + values->channels[0]);
+    output->channels[1] = (u16) (output->channels[1] + values->channels[1]);
+    output->value6C = (float) (output->value6C + values->values[2]);
+    output->channels[2] = (u16) (output->channels[2] + values->channels[2]);
+    output->channels[3] = (u16) (output->channels[3] + values->channels[3]);
+    vectors->value0C = (float) (vectors->value0C + values->values[0]);
+    output->channels[4] = (u16) (output->channels[4] + values->channels[4]);
+    output->channels[5] = (u16) (output->channels[5] + values->channels[5]);
+    vectors->value24 = (float) (vectors->value24 + values->values[1]);
+    output->channels[6] = (u16) (output->channels[6] + values->channels[6]);
+    vectors->value2C = (float) (vectors->value2C + values->values[3]);
+    output->channels[7] = (u16) (output->channels[7] + values->channels[7]);
+    output->channels[8] = (u16) (output->channels[8] + values->channels[8]);
+    output->channels[9] = (u16) (output->channels[9] + values->channels[9]);
+    output->channels[10] = (u16) (output->channels[10] + values->channels[10]);
+    output->channels[11] = (u16) (output->channels[11] + values->channels[11]);
+    output->channels[12] = (u16) (output->channels[12] + values->channels[12]);
+    output->channels[13] = (u16) (output->channels[13] + values->channels[13]);
+    output->channels[14] = (u16) (output->channels[14] + values->channels[14]);
+    output->channels[15] = (u16) (output->channels[15] + values->channels[15]);
+}
+
+void func_00284600(char *base, ScriptCtx *ctx) {
+    Wkq0q8q10q18w20w24w28w2C *w = SLOT_WORK(Wkq0q8q10q18w20w24w28w2C, base, ctx, 0);
+
+    w->w28 = 0;
+    w->w20 = 0;
+    w->w24 = 0;
+    w->w2C = 0;
+    w->q0 = 0;
+    w->q8 = 0;
+    w->q10 = 0;
+    w->q18 = 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284638);
+
+void func_00284920(char *base, ScriptCtx *ctx) {
+    Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
+
+    w->h0 = 0;
+}
+
+void func_00284938(char *base, void *p, void *entry, int *out)
+{
+    T6_EvA *ev = p;
+    s16 *pos = entry;
+    T6_Mem **mp = (T6_Mem **)out; /* DEBT(CAST): EvFrameCb declares the out slot as int * */
+    T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+    T6_Mem *m;
+    char *dir;
+    char *at;
+    Vec4 v;
+
+    if (e == 0) {
+        *mp = 0;
+    } else {
+        m = func_00267320(ppvMng, e);
+        *mp = m;
+        if (m == 0) {
+            return;
+        }
+        m->user = (ScriptWork *)base;
+    }
+    v.x = pos[0];
+    v.y = pos[1];
+    v.z = pos[2];
+    v.w = 1.0f;
+    at = (char *)*mp + (ev->ofs14 + 0xA0);
+    dir = (char *)*mp + (ev->ofs1C + 0xA0);
+    func_002DCE08(&v, base + 0x10, &v);
+    func_00282798(at, &v);
+    func_002DD038(&v, &v, (Vec4 *)(base + 0x40)); /* DEBT(CAST): position inside the script memory header */
+    func_002DCEC8((s32)&v, (s32)&v); /* DEBT(CAST): funcs.h prototype takes ints */
+    func_002DD068(&v, &v, ev->f8);
+    func_00282798(dir, &v);
+}
+
+int func_00284A60(char *base, EvMsgA *ev, ScriptCtx *ctx) {
+    if (D_006A3BC4 == 0) {
+        if (ev->bD != 0xFF) {
+            if (!((func_00282628() >> 8) & ev->bD)) {
+                if (ev->w10 != 0xFFFFFFFF && ev->w18 != 0xFFFFFFFF) {
+                    return func_0027F180(base, ev, func_00284938, &SLOT_WORK(Wkh0h2, base, ctx, 0)->h0, ev->h4, ev->bE, ev->bC);
+                }
+            }
+        }
+    }
+}
+
+void func_00284B20(char *base, ScriptCtx *ctx) {
+    Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
+
+    w->h0 = 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284B38);
+
+int func_00284C50(char *base, EvMsgB *ev, ScriptCtx *ctx) {
+    if (D_006A3BC4 == 0) {
+        if (ev->b7 != 0xFF) {
+            if (!((func_00282628() >> 8) & ev->b7)) {
+                if (ev->wC != 0xFFFFFFFF && ev->w14 != 0xFFFFFFFF) {
+                    return func_0027F180(base, ev, func_00284B38, &SLOT_WORK(Wkh0h2, base, ctx, 0)->h0, ev->h4, ev->b8, ev->b6);
+                }
+            }
+        }
+    }
+}
+
+void func_00284D10(char *base, ScriptCtx *ctx) {
+    Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
+
+    w->h0 = 0;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284D28);
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284E70);
+
+void func_002851C0(char *base, ScriptCtx *ctx) {
+    Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
+
+    w->h0 = 0;
+}
+
+void func_002851D8(char *base, void *p, void *entry, int *out)
+{
+    T6_EvA *ev = p;
+    s16 *pos = entry;
+    T6_Mem **mp = (T6_Mem **)out; /* DEBT(CAST): EvFrameCb declares the out slot as int * */
+    T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+    T6_Mem *m;
+    char *dir;
+    char *at;
+    Vec4 v;
+
+    if (e == 0) {
+        *mp = 0;
+    } else {
+        m = func_00267320(ppvMng, e);
+        *mp = m;
+        if (m == 0) {
+            return;
+        }
+        m->user = (ScriptWork *)base;
+    }
+    v.x = pos[0];
+    v.y = pos[1];
+    v.z = pos[2];
+    v.w = 1.0f;
+    at = (char *)*mp + (ev->ofs14 + 0xA0);
+    dir = (char *)*mp + (ev->ofs1C + 0xA0);
+    func_002DCE08(&v, base + 0x10, &v);
+    func_00282798(at, &v);
+    func_002DD038(&v, &v, (Vec4 *)(base + 0x40)); /* DEBT(CAST): position inside the script memory header */
+    func_002DCEC8((s32)&v, (s32)&v); /* DEBT(CAST): funcs.h prototype takes ints */
+    func_002DD068(&v, &v, ev->f8);
+    func_00282798(dir, &v);
+}
+
+void func_00285300(char *base, EvMsgA *ev, ScriptCtx *ctx) {
+    Wkh0b2 *w;
+    int cnt;
+
+    if (D_006A3BC4 == 0) {
+        cnt = ev->bD;
+        if (cnt != 0) {
+            w = SLOT_WORK(Wkh0b2, base, ctx, 0);
+            if (w->b2 != 0) {
+                w->b2--;
+            } else {
+                w->b2 = cnt;
+                if (ev->w10 != 0xFFFFFFFF && ev->w18 != 0xFFFFFFFF) {
+                    if (func_0027F180(base, ev, func_002851D8, &w->h0, ev->h4, ev->bE, ev->bC)) {
+                        w->b2--;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void func_002853A0(char *base, ScriptCtx *ctx) {
+    Wkh0b2 *w = SLOT_WORK(Wkh0b2, base, ctx, 0);
+
+    w->h0 = 0;
+    w->b2 = 0;
+}
+
+int func_002853C0(float *v, float *out)
+{
+    float x = v[0];
+    float y = v[1];
+    float a;
+    double t;
+
+    a = x * y; /* DEBT(FAKE): the product shares the result variable (register steering) */
+    if (a > 0.0f) {
+        a = -3.1415927f;
+        if (x > 0.0f) {
+            a = 0.0f;
+        }
+        t = func_002E76D0(func_002ED038(y / x));
+        a = func_002EC440(func_002EBBB0(func_002ED038(a), t));
+    } else if (a < 0.0f) {
+        a = -1.5707964f;
+        if (y > 0.0f) {
+            a = 1.5707964f;
+        }
+        t = func_002E76D0(func_002ED038(x / y));
+        a = func_002EC440(func_002EBC08(func_002ED038(a), t));
+    } else if (x != 0.0f) {
+        a = 3.1415927f;
+        if (x > 0.0f) {
+            a = 0.0f;
+        }
+    } else if (y != 0.0f) {
+        a = -1.5707964f;
+        if (y > 0.0f) {
+            a = 1.5707964f;
+        }
+    } else {
+        return 0;
+    }
+    *out = a;
+    return 1;
+}
+
+INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00285540);

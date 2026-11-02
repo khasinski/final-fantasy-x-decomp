@@ -1,0 +1,7 @@
+splat64[mips]
+spimdisasm
+rabbitizer
+pycdlib
+ninja_syntax
+tqdm
+mapfile_parser

@@ -1,0 +1,12 @@
+.venv/
+baserom/
+build/
+asm/
+assets/
+tools/cc/ee-gcc2.9-991111-01/
+tools/cc/ee-gcc2.96/
+*.iso
+*.elf
+__pycache__/
+build.ninja
+.ninja_log

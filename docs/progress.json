@@ -1,0 +1,57 @@
+{
+  "metric": "C-body byte coverage; full-game completion is not yet measurable",
+  "resident_elf": {
+    "catalogued_functions": 11610,
+    "c_functions": 8486,
+    "catalogued_function_bytes": 2071124,
+    "c_function_bytes": 664724,
+    "coverage_percent": 32.0948431865982,
+    "policy_assembly_bytes": 422772,
+    "decompilable_coverage_percent": 40.32658073032945
+  },
+  "ee_overlays": {
+    "containers": 584,
+    "distinct_payloads": 563,
+    "matched_containers": 20,
+    "matched_code_bytes": 22520,
+    "estimated_instruction_bytes": 15119236,
+    "coverage_percent": 0.1489493252172266,
+    "inventory_is_heuristic": true
+  },
+  "known_ee_estimate": {
+    "c_or_matched_bytes": 687244,
+    "estimated_total_bytes": 17190360,
+    "coverage_percent": 3.9978453039959607,
+    "span_scenario_percent": 3.506966025635138,
+    "span_scenario_is_confidence_interval": false,
+    "basis": "Resident catalogued function bytes plus detected overlay instructions, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
+    "excluded_scopes": [
+      "IOP",
+      "VU",
+      "undiscovered EE code"
+    ]
+  },
+  "whole_game_coverage_percent": null,
+  "other_scopes": {
+    "IOP": {
+      "coverage_percent": null,
+      "status": "not inventoried"
+    },
+    "VU": {
+      "coverage_percent": null,
+      "status": "not inventoried"
+    }
+  },
+  "debt_markers": {
+    "CAST": 947,
+    "FAKE": 41,
+    "GOTO": 15,
+    "NAME": 564,
+    "ORDER": 47,
+    "PAD": 1,
+    "PADDING": 31,
+    "TYPE": 598,
+    "UNKNOWN_FIELD": 11
+  },
+  "rom_verified": true
+}

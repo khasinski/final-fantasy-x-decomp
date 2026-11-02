@@ -1,0 +1,217 @@
+/* tu_258 0x232c88-0x234910: low; ~Tk (config/tu_map.tsv) */
+#include "common.h"
+#include "ffx/r5.h"
+#include "ffx/w7.h"
+#include "ffx/q6.h"
+#include "ffx/s5.h"
+#include "ffx/u4.h"
+#include "ffx/v5.h"
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00232C88);
+
+Pt16 *func_00232D30(void)
+{
+    if (func_0020B850() == 0) {
+        if (func_001BD360() == 0) {
+            if (D_00693E20 < 0) {
+                return D_00325C20;
+            }
+            return D_00325BF0;
+        }
+        if (D_00693E20 < 0) {
+            return D_00325C38;
+        }
+        return D_00325BD8;
+    }
+    if (D_00693E20 < 0) {
+        return D_00325C38;
+    }
+    return D_00325BD8;
+}
+
+void func_00232DB8(void)
+{
+    TkMn2GetCommonPlate((FlagRec *)&D_00693F18, /* DEBT(CAST): declared Pt16s in q6.h */ (int)D_00572080, (int)D_00572090, (int)D_00572090, 0xDA, 0xDB); /* DEBT(CAST): names passed as int */
+    TkMn2GetCommonPlate((FlagRec *)&D_00693F30, /* DEBT(CAST): declared DrawArgs in u4.h */ (int)D_005720A0, (int)D_005720B0, (int)D_005720C0, 0, 0);
+    TkMn2GetCommonPlate(&D_00693F48, (int)D_005720D0, (int)D_005720E0, (int)D_005720E0, 0, 0);
+    D_00693ED4 = V5_TkMn2SeqGetNum_int((int)D_005720F0);
+    D_00693EEC = V5_TkMn2SeqGetNum_int((int)D_00572100);
+    D_00693EF0 = V5_TkMn2SeqGetNum_int((int)D_00572110);
+    D_00693EE4 = TkMn2SeqGetColor((int)D_00572120);
+    func_00227460(D_00572130, D_00693EC8);
+    func_00227460(D_00572140, (s16 *)&D_00693ED0);
+    func_00227460(D_00572150, D_00693EE0);
+    func_00227460(D_00572160, D_00693EE8);
+    func_00227460(D_00572170, D_00693EF8);
+    func_00227460(D_00572180, D_00693F00);
+    func_00227460(D_00572190, D_00693F08);
+    func_00227460(D_005721A0, D_00693F10);
+    func_002273A0(D_005721A8, D_00693ED8);
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00232F48);
+
+void func_00233060(int a)
+{
+    u8 *s = (u8 *)a; /* DEBT(TYPE): string address passed as int */
+    int i = 0;
+    int c;
+
+    for (c = *s++; c != 0; c = *s++, i++) {
+        if (c >= 6 && c <= 46) {
+            D_00693E48[i].on = c;
+            D_00693E48[i].b1 = *s++;
+            D_00693E48[i].b2 = 0;
+        } else {
+            D_00693E48[i].on = c;
+            D_00693E48[i].b1 = 0;
+        }
+    }
+    for (; i < 32; i++) {
+        D_00693E48[i].on = 0;
+    }
+}
+
+void func_00233110(int i)
+{
+    if (i >= 0) {
+        if (func_0020B850() == 0) {
+            func_00233060(TOMenuGetNameMes(D_00325B18[i].id));
+        } else {
+            func_00233060(TOMenuGetNameMes(D_00325B60[i].id));
+        }
+    }
+}
+
+void func_00233198(void) {
+}
+
+void func_002331A0(void) {
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002331A8);
+
+int func_00233278(void) { return 1; }
+
+Task *func_00233280(int a)
+{
+    Task *t = func_00243400();
+
+    t->cb = func_00233198;
+    t->x0C = (s32)func_002331A0; /* DEBT(TYPE): Task callback slots are typed s32 */
+    t->x10 = (s32)func_002331A8;
+    t->x14 = (s32)func_00233278;
+    t->b3E = 3;
+    t->ext[0] = a;
+    TkMenuMainRegistWindow(t);
+    D_003258CC = a;
+    D_003258D0 = a;
+    D_003258D4 = a;
+    D_003258C8 = 0;
+    return t;
+}
+
+void func_00233318(void) {
+}
+
+void func_00233320(void) {
+}
+
+void func_00233328(int a, int x, int y) {
+    if (D_00693E38 == 1) {
+        x += D_00693F18.x;
+        y += D_00693F18.y;
+        func_002270F8(x + D_00693ED0.x, y + D_00693ED0.y + D_00693E34 * D_00693ED4, 0);
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233398);
+
+int func_00233518(void) { return 1; }
+
+int func_00233520(int a0, int a1)
+{
+    if (a1 == 4) {
+        return D_00693E48[0].on != 0;
+    } else if (a1 == 3) {
+        if (D_00693E20 < 0) {
+            return 1;
+        }
+        return D_00693E48[0].on != 0;
+    }
+    return 1;
+}
+
+Task *func_00233560(void) {
+    Task *t = func_00243400();
+
+    t->cb = func_00233318;
+    t->x0C = (s32)func_00233320; /* DEBT(CAST): Task callbacks are typed s32 */
+    t->x10 = (s32)func_00233398;
+    t->x14 = (s32)func_00233518;
+    t->x1C = (s32)func_00233520;
+    t->b3E = 3;
+    TkMenuMainRegistWindow(t);
+    return t;
+}
+
+void func_002335D8(void) {
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002335E0);
+
+int func_00233698(void) {
+    Pt16 *p = func_00232D30();
+    int n;
+
+    for (n = 0; p->x != 0; p++) {
+        n++;
+    }
+    return n;
+}
+
+void func_002336E8(int a, int b) {
+    D_00693E30 = a + b * 15;
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233700);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233890);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002338D0);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_232C88/rodata", jtbl_005721C0);
+INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_232C88/rodata", jtbl_005721F0);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00234100);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002341E8);
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00234428);
+
+void func_00234628(int a)
+{
+    DrawArgs box;
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    ((void (*)(void))func_00225920)(); /* DEBT(CAST): the original call site sees a void declaration */
+    box = D_00693F30;
+    func_00226FE0(&box);
+    func_002341E8(a);
+    func_00234428(a);
+    func_00234100(a, 0, 0);
+    func_00225B00();
+}
+
+int func_002346D0(void) { return 1; }
+
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002346D8);
+
+void func_002348D8(void)
+{
+    if (D_00693E40->h30 != 0) {
+        TkMenuMainSleepMenu(0xE);
+        func_00201CD0();
+    }
+}

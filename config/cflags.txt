@@ -1,0 +1,16 @@
+# newlib Bigint: retain alias-sensitive free-list load/store ordering.
+sdk/newlib/libc/libc_2F3A70_2F5CB8 -fno-strict-aliasing
+# Preserve the original shared splice exit in the actor-node list helpers.
+game/atel/atel_141FF0 -fno-thread-jumps
+# Preserve alias-sensitive packed script-state updates.
+game/op/opu/opu_2A43D8 -fno-strict-aliasing
+# Period assembler with corrected INSN_SYNC delay-slot scheduling test.
+game/menu/to/to_1F5060 -Btools/cc/ee-as-delay/
+game/platform/ffx_2DC580 -Btools/cc/ee-as-delay/
+game/platform/ffx_2DCE38 -Btools/cc/ee-as-delay/
+# Assemble compiler-emitted angle conversions without extra coprocessor move delays.
+game/op/opu/opu_29DC40_2A0618 -Btools/cc/ee-as-delay/ -Wa,-mips4
+# Preserve the independent record and flag streams in the actor pool traversal.
+game/atel/atel_13CA80 -fno-strength-reduce
+# Preserve the cached count and link writes in the list insertion entry.
+game/particle/particle_266A48_266EB8 -fno-schedule-insns -fno-schedule-insns2
