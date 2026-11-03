@@ -12,17 +12,17 @@
   "ee_overlays": {
     "containers": 584,
     "distinct_payloads": 563,
-    "matched_containers": 177,
-    "matched_code_bytes": 354332,
+    "matched_containers": 352,
+    "matched_code_bytes": 598572,
     "estimated_instruction_bytes": 15119236,
-    "coverage_percent": 2.3435840276585402,
+    "coverage_percent": 3.9590095690020317,
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 1019172,
+    "c_or_matched_bytes": 1263412,
     "estimated_total_bytes": 17190360,
-    "coverage_percent": 5.928741457421485,
-    "span_scenario_percent": 5.200775238894213,
+    "coverage_percent": 7.349537764188766,
+    "span_scenario_percent": 6.447117705472497,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus detected overlay instructions, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [
