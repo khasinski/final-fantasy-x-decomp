@@ -574,6 +574,30 @@ def _pool_9053_syms(pool_addr: int) -> dict[str, int]:
     }
 
 
+# (cid, text_start, D_01B049F8)
+POOL_9088_LAYOUTS = [
+    (9088, 0x01B025D0, 0x01B049F8),
+    (9490, 0x01B079A8, 0x01B0D078),
+    (9587, 0x01B079A8, 0x01B0D078),
+    (9588, 0x01B079A8, 0x01B0D078),
+    (9589, 0x01B079A8, 0x01B0D078),
+    (9590, 0x01B079A8, 0x01B0D078),
+    (9599, 0x01B079A8, 0x01B0D078),
+    (9600, 0x01B079A8, 0x01B0D078),
+    (9601, 0x01B079A8, 0x01B0D078),
+    (9602, 0x01B079A8, 0x01B0D078),
+    (9603, 0x01B079A8, 0x01B0D078),
+]
+
+
+def _pool_9088_syms(pool_addr: int) -> dict[str, int]:
+    return {
+        "D_01B049F8": pool_addr,
+        "D_01B079EC": pool_addr + 0x2FF4,
+        "D_01B079EE": pool_addr + 0x2FF6,
+    }
+
+
 OVERLAY_UNITS = [
     {
         "src": "overlays/group11/ovl_09551.c",
@@ -911,6 +935,24 @@ OVERLAY_UNITS = [
                 "syms": _pool_9053_syms(pool_addr),
             }
             for cid, ts, pool_addr in POOL_9053_LAYOUTS
+        ],
+    },
+    {
+        "src": "overlays/group11/ovl_09088_pool.c",
+        "containers": [row[0] for row in POOL_9088_LAYOUTS],
+        "text_start": 0x01B025D0,
+        "text_end": 0x01B02AA8,
+        "discovered_code_bytes": 1104,
+        "functions": 17,
+        "syms": _pool_9088_syms(POOL_9088_LAYOUTS[0][2]),
+        "container_layouts": [
+            {
+                "cid": cid,
+                "text_start": ts,
+                "text_end": ts + (0x01B02AA8 - 0x01B025D0),
+                "syms": _pool_9088_syms(pool_addr),
+            }
+            for cid, ts, pool_addr in POOL_9088_LAYOUTS
         ],
     },
 ]
