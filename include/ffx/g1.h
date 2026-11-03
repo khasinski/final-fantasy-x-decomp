@@ -69,6 +69,7 @@ typedef struct G1Vt78E498 {
     s32 w20;
     s32 w24;
     u32 *p28;
+    s16 *p2C;
 } G1Vt78E498;
 #define G1_VT78E498 ((G1Vt78E498 *)&D_0078E498) /* DEBT(CAST): Unk78E498 in types.h has pad18[0x18] over 0x20..0x2B */
 

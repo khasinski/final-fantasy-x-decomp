@@ -15,6 +15,7 @@ typedef char *va_list;
 
 /* ---- c_165320 ---- */
 
+extern u8 D_00595F68[][3]; /* DEBT(TYPE): 3-byte records indexed by D_00595F6C[i].value? seen in func_00162ED8 */
 
 typedef struct Rec595F6C { /* DEBT(NAME): named after D_00595F6C, 0x34-byte entries */
     u8 type;
