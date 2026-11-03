@@ -15,7 +15,7 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 2. Links the object at its fixed `.text` virtual address (`0x01B00xxx`) against resident ELF symbols (`SCES_504.90`) and overlay-local `.data`/`.bss` addresses.
 3. Verifies 100% byte-for-byte `.text` identity against `build/overlay-audit/overlay-group11-fileXXXXX.bin` and confirms the reconstructed container matches the original SHA-256.
 
-## Matched Units (20 Unique C Units / 364 Containers)
+## Matched Units (23 Unique C Units / 365 Containers)
 
 | C Unit | Containers (`group 0x11`) | `.text` Range | `.text` Span | Discovered Insns | Functions | Subsystem |
 |---|---|---|---:|---:|---:|---|
