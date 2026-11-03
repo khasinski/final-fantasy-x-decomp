@@ -232,12 +232,12 @@
   },
   "build_status": {
     "status": "partial_c_verified",
-    "matched_containers": 363,
-    "matched_code_bytes": 610716,
-    "matched_text_span_bytes": 678752,
-    "matched_unique_units": 19,
-    "matched_function_instances": 6838,
+    "matched_containers": 365,
+    "matched_code_bytes": 617920,
+    "matched_text_span_bytes": 686640,
+    "matched_unique_units": 23,
+    "matched_function_instances": 6943,
     "verification": "python3 overlays/verify_overlays.py",
-    "note": "19 unique overlay C units in overlays/group11/ compile with ee-gcc 2.9-991111-01 -O2 -G0 to byte-identical .text and reconstruct 363 battle-effect containers with identical SHA-256."
+    "note": "23 unique overlay C units in overlays/group11/ compile with ee-gcc 2.9-991111-01 -O2 -G0 to byte-identical .text and reconstruct 365 battle-effect containers with identical SHA-256."
   }
 }
