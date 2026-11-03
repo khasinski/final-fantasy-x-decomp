@@ -215,8 +215,8 @@ void func_01B00B90(W3Task *t)
     func_001A2F50(ctx->caster, 37, v2, v1, 0);
     v3[0] = 0;
     o->pos[0] = v1[0];
-    o->scale[3] = *(float *)&v3[0];
-    o->vel[0] = *(float *)&v3[0];
+    o->scale[3] = v3[0];
+    o->vel[0] = v3[0];
     o->pos[1] = v1[1];
     o->pos[2] = v1[2];
     o->pos_w = 0;
@@ -225,8 +225,8 @@ void func_01B00B90(W3Task *t)
     *(float *)&v3[1] = -15.0f;
     v3[2] = 0;
     v3[3] = 0;
-    o->vel[2] = *(float *)&v3[0];
-    o->vel[3] = *(float *)&v3[0];
+    o->vel[2] = v3[0];
+    o->vel[3] = v3[0];
     o->scale[0] = 0.045f;
     o->scale[1] = 0.045f;
     rcefMainKickPar(ctx, o, 0, 0);
