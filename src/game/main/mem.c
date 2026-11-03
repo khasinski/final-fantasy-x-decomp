@@ -402,7 +402,32 @@ void *func_0011D008(s32 *tab)
     return D_005808C8[0].p08 + 0x10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", Sg_MemGetMaxFree);
+s32 Sg_MemGetMaxFree(s32 mode)
+{
+    AllocHdr *h = (AllocHdr *)D_005808D4;
+    u32 max = 0;
+
+    if (mode == 1) {
+        func_0011BFD0();
+    } else if (mode == 2) {
+        while (Ch_MemMove_Over()) {
+        }
+        while (!Cache_OverFlow()) {
+        }
+    }
+
+    while (h != 0) {
+        if ((h->wC & 0xF) == 0) {
+            u32 free = h->w0 - (s32)h - 0x10;
+
+            if (max < free) {
+                max = free;
+            }
+        }
+        h = (AllocHdr *)h->w0;
+    }
+    return max;
+}
 
 void func_0011D228(void) {
 }
