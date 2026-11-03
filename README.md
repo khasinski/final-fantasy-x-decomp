@@ -17,6 +17,11 @@ Run `python3 -P tools/status.py` for current numbers, or see the
 [progress report](docs/progress.json). Overlay findings:
 [inventory](docs/ee-overlay-audit.json) · [size estimate](docs/ee-overlay-code-size.json) · [decompiled overlays](overlays/README.md).
 
+## Verification
+
+The rebuilt main image is byte-identical to the original:
+`OK a553c3d3380a8baea9be4db6f972185d39f448e5 (0x47cb0c bytes)` (tools/check.py).
+
 ## Build
 
 Requires Python 3 and Docker. Download `ee-gcc2.9-991111-01` from
