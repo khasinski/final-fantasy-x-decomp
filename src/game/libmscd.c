@@ -262,29 +262,8 @@ SysVt *GetCD(void) {
     return (SysVt *)&D_0078E498; /* DEBT(CAST): same address, two views of it */
 }
 
-void func_00162E00(int idx)
-{
-    int off;
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162E00);
 
-    if (D_0078E4B0 == 0) {
-        D_0078F330[idx][0] = 0;
-        off = 0x38;
-    } else {
-        off = 0x38;
-    }
-    {
-        G1Rec78E530 *rec = (G1Rec78E530 *)((char *)D_0078E530 + off * idx);
-
-        rec->w08 = 0;
-        rec->w04 = 0;
-        rec->w00 = 0;
-        rec->b30 = 0;
-        rec->used = 0;
-        rec->id = 0;
-        rec->flag = 0;
-        rec->b33 = 0;
-    }
-}
 
 void func_00162E68(void)
 {
@@ -303,94 +282,17 @@ void func_00162E68(void)
     func_0015B350();
 }
 
-int func_00162ED8(int idx)
-{
-    G1Vt78E498 *vt = G1_VT78E498;
-    int slot = vt->w20 + idx;
-    int ret = func_00165D90(vt->w24, idx);
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162ED8);
 
-    if (ret != 0) {
-        return ret;
-    } else {
-        u32 entry = vt->p28[slot];
 
-        if (entry & 0x800000) {
-            return ret;
-        } else if (entry & 0x400000) {
-            u8 *p = &D_00595F68[slot * 3];
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162FC0);
 
-            ret = p[0] + (p[1] << 8) + (p[2] << 16);
-            ret *= 8;
-        } else {
-            u32 next = vt->p28[slot + 1];
-            int a0 = (entry >> 24) * 8;
 
-            ret = ((next & 0x3FFFFF) - (entry & 0x3FFFFF)) * 2048 - a0;
-        }
-        return ret;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_001630B0);
 
-int func_00162FC0(int a0, int a1)
-{
-    G1Vt78E498 *vt = G1_VT78E498;
-    int slot = vt->p2C[a0] + a1;
-    int ret = func_00165D90(vt->w24, slot);
 
-    if (ret != 0) {
-        return ret;
-    } else {
-        u32 entry = vt->p28[slot];
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163110);
 
-        if (entry & 0x800000) {
-            return ret;
-        } else if (entry & 0x400000) {
-            u8 *p = &D_00595F68[slot * 3];
-
-            ret = p[0] + (p[1] << 8) + (p[2] << 16);
-            ret *= 8;
-        } else {
-            u32 next = vt->p28[slot + 1];
-            int a0 = (entry >> 24) * 8;
-
-            ret = ((next & 0x3FFFFF) - (entry & 0x3FFFFF)) * 2048 - a0;
-        }
-        return ret;
-    }
-}
-
-int func_001630B0(int idx)
-{
-    G1Vt78E498 *vt = G1_VT78E498;
-    u32 entry = vt->p28[vt->w20 + idx];
-    int ret;
-
-    if (entry & 0x800000) {
-        ret = 0;
-    } else {
-        int a0 = (entry >> 24) * 8;
-        ret = ((entry & 0x3FFFFF) - (entry & 0x3FFFFF)) * 2048 - a0;
-    }
-    return ret;
-}
-
-int func_00163110(int idx)
-{
-    G1Vt78E498 *vt = G1_VT78E498;
-    u32 *tbl = vt->p28;
-    int slot = vt->w20 + idx;
-    u32 entry;
-
-    entry = tbl[slot];
-    if (entry & 0x800000) {
-        return 0;
-    }
-    entry &= 0x400000;
-    if (entry == 0) {
-        return 0;
-    }
-    return 1;
-}
 
 int func_00163158(u8 *p) {
     return (D_0078E4C0[(int)p] & 0x3FFFFF) + D_0030DE2C; /* DEBT(TYPE): header declares a pointer, asm indexes with it */
