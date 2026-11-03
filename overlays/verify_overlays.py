@@ -102,6 +102,21 @@ RESIDENT_SYMS = {
     "func_002B2F30": 0x002B2F30,
     "op_oef2_set2": 0x002B4980,
     "op_oef2_a_get": 0x002B49A0,
+    "func_00110910": 0x00110910,
+    "Ch_OptposGetElement": 0x001089B8,
+    "func_001A0000": 0x001A0000,
+    "func_001A0040": 0x001A0040,
+    "MsDamageSetMotion": 0x001C69C8,
+    "func_002DCE08": 0x002DCE08,
+    "func_002EFD78": 0x002EFD78,
+    "func_001A3140": 0x001A3140,
+    "func_001A30E0": 0x001A30E0,
+    "func_001A2E80": 0x001A2E80,
+    "func_001A1D20": 0x001A1D20,
+    "func_002DD998": 0x002DD998,
+    "graphicCharacterInstanceSetMeshSegmentAlpha": 0x00110BC8,
+    "func_00110C30": 0x00110C30,
+    "rcefGetChrHandle": 0x001A2AB0,
     "op_oef2_texture_load": 0x002CF528,
     "op_oef2_clut_load": 0x002CF810,
     "func_002D02E8": 0x002D02E8,
@@ -954,6 +969,21 @@ OVERLAY_UNITS = [
             }
             for cid, ts, pool_addr in POOL_9088_LAYOUTS
         ],
+    },
+    {
+        "src": "overlays/group11/ovl_09572.c",
+        "containers": [9572],
+        "text_start": 0x01B00580,
+        "text_end": 0x01B00CB8,
+        "discovered_code_bytes": 1364,
+        "functions": 18,
+        "syms": {
+            "D_01B00540": 0x01B00540,
+            "D_01B00548": 0x01B00548,
+            "D_01B00CC0": 0x01B00CC0,
+            "D_01B00CC8": 0x01B00CC8,
+            "D_01B00CD0": 0x01B00CD0,
+        },
     },
 ]
 
