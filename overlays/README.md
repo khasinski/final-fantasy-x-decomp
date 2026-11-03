@@ -35,6 +35,7 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 | [`overlays/group11/ovl_09242.c`](group11/ovl_09242.c) | `file09242` | `0x01B00508..0x01B00CA8` | 1,952 B | 1,936 B | 9 | `oef` / `ppp` |
 | [`overlays/group11/ovl_09572.c`](group11/ovl_09572.c) | `file09572` | `0x01B00580..0x01B00CB8` | 1,848 B | 1,364 B | 18 | `rcef` |
 | [`overlays/group11/ovl_09543.c`](group11/ovl_09543.c) | `file09543` | `0x01B00450..0x01B00C58` | 2,056 B | 2,040 B | 12 | `oef` / `ppp` |
+| [`overlays/group11/ovl_09403.c`](group11/ovl_09403.c) | `file09403` | `0x01B00530..0x01B00F28` | 2,544 B | 2,544 B | 25 | `rcef` |
 | [`overlays/group11/ovl_09053_tu0.c`](group11/ovl_09053_tu0.c) | 40 containers (`file09053`..`file09725`) | `0x01B007D8..0x01B009B8` (relocated per container) | 480 B | 468 B | 6 | `oef` (`TU0`) |
 | [`overlays/group11/ovl_09088_pool.c`](group11/ovl_09088_pool.c) | 11 containers (`file09088`..`file09603`) | `0x01B025D0..0x01B02AA8` (relocated per container) | 1,240 B | 1,104 B | 17 | `oef` (list/pool allocator TU) |
 | [`overlays/group11/ovl_09053_pool.c`](group11/ovl_09053_pool.c) | 215 containers (`file09053`..`file09757`) | `0x01B046F8..0x01B04BF0` (relocated per container) | 1,272 B | 1,136 B | 17 | `oef` (list/pool allocator TU) |

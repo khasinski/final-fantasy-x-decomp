@@ -44,7 +44,8 @@ typedef struct RcefObj {
     int scale_w;            /* 0x13C */
     float unk140[3];        /* 0x140..0x14C */
     int unk14C_w;           /* 0x14C */
-    u8 pad150[0x30];        /* 0x150..0x180 */
+    u8 pad150[0x20];        /* 0x150..0x170 */
+    float unk170[4];        /* 0x170..0x17C */
     float unk180[3];        /* 0x180..0x18C */
     float unk18C;           /* 0x18C */
     u8 pad190[0x3C];        /* 0x190..0x1CC */

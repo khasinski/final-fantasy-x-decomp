@@ -21,6 +21,7 @@ RESIDENT_SYMS = {
     "D_00313E50": 0x00313E50,
     "func_0019FC00": 0x0019FC00,
     "rcefMainProcRunAfter": 0x0019FDF0,
+    "func_0019FDF0": 0x0019FDF0,
     "func_0019FE38": 0x0019FE38,
     "func_0019FE48": 0x0019FE48,
     "func_0019FE58": 0x0019FE58,
@@ -40,7 +41,10 @@ RESIDENT_SYMS = {
     "func_001A2210": 0x001A2210,
     "func_001A2B58": 0x001A2B58,
     "func_001A2B68": 0x001A2B68,
+    "func_001A2B78": 0x001A2B78,
     "func_001A2B80": 0x001A2B80,
+    "func_001A3818": 0x001A3818,
+    "func_001A3848": 0x001A3848,
     "func_001A36D8": 0x001A36D8,
     "func_001A37F0": 0x001A37F0,
     "func_001A3800": 0x001A3800,
@@ -969,6 +973,21 @@ OVERLAY_UNITS = [
             }
             for cid, ts, pool_addr in POOL_9088_LAYOUTS
         ],
+    },
+    {
+        "src": "overlays/group11/ovl_09403.c",
+        "containers": [9403],
+        "text_start": 0x01B00530,
+        "text_end": 0x01B00F28,
+        "discovered_code_bytes": 2544,
+        "functions": 25,
+        "syms": {
+            "D_01B004F0": 0x01B004F0,
+            "D_01B004F8": 0x01B004F8,
+            "D_01B00F30": 0x01B00F30,
+            "D_01B00F34": 0x01B00F34,
+            "D_01B00F40": 0x01B00F40,
+        },
     },
     {
         "src": "overlays/group11/ovl_09572.c",
