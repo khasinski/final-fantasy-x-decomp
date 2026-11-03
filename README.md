@@ -8,14 +8,23 @@ Uses **ee-gcc 2.9-991111-01** with `-O2 -G0`.
 | Part | Code size | In C |
 |---|---:|---:|
 | Main ELF | 1.98 MiB | **32.10%** |
-| Overlays — 584 battle-effect files | ~14.42 MiB | **4.09%** (365/584) |
+| Overlays — 584 battle-effect files | 16.54 MiB | **3.86%** |
 
-Together, that is **about 7.46% of the known EE code**. Progress is measured by
-code bytes. Overlay size is an estimate; IOP modules and VU microcode are not yet counted.
+Together, that is **about 6.88% of the known EE code**. Progress is measured by
+code bytes; IOP modules and VU microcode are not yet counted.
+
+Overlay bytes are function bytes from a heuristic split of every container
+(`tools/overlay_map.py`), counted once per container. 22 of the 584 containers are
+fully matched, 343 contain at least one matched unit, and 219 have none. Much of the
+overlay code is repeated across containers: by relocation-normalized function body, the
+distinct code is 1.50 MiB, of which 1.19% is matched. Shared code is ranked in
+[docs/overlay-tus.tsv](docs/overlay-tus.tsv).
 
 Run `python3 -P tools/status.py` for current numbers, or see the
 [progress report](docs/progress.json). Overlay findings:
-[inventory](docs/ee-overlay-audit.json) · [size estimate](docs/ee-overlay-code-size.json) · [decompiled overlays](overlays/README.md).
+[inventory](docs/ee-overlay-audit.json) · [size estimate](docs/ee-overlay-code-size.json) ·
+[function-based progress](docs/overlay-progress.json) · [shared TU ranking](docs/overlay-tus.tsv) ·
+[decompiled overlays](overlays/README.md).
 
 ## Verification
 

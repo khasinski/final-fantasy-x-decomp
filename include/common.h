@@ -20,5 +20,6 @@ typedef unsigned int u_long128 __attribute__((mode(TI)));
 #define EI() __asm__ volatile("ei")
 #define DI() __asm__ volatile("di")
 #define BREAK() __asm__ volatile("break 0") /* assert-style trap (encoding 0x0000000d); gcc's own div-by-zero checks are `break 0,7` and need no macro */
+#define VU0_STORE_VF0(p) __asm__ volatile("sqc2 $vf0, 0(%0)" : : "r"(p) : "memory") /* store the constant vector (0,0,0,1); a single cop2 store, no C form */
 
 #endif /* COMMON_H */

@@ -55,4 +55,5 @@ Single-instruction hardware primitives that appear inside ordinary C functions a
 - `SYNC()` (`sync.l`) and `SYNC_P()` (`sync.p`)
 - `EI()` and `DI()`
 - `BREAK()` (`break 0`)
+- `VU0_STORE_VF0(p)` (`sqc2 $vf0, 0(reg)`: store the constant vector 0,0,0,1; only for the single store, VU0 arithmetic stays handwritten)
 - `u_long128` (`typedef unsigned int u_long128 __attribute__((mode(TI)))`)

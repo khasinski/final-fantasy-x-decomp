@@ -9,6 +9,7 @@ the ffx-decomp container.
 import hashlib
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -715,7 +716,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B004B8,
         "text_end": 0x01B009D8,
         "discovered_code_bytes": 1264,
-        "functions": 18,
+        "functions": 19,
         "syms": {
             "D_01B00478": 0x01B00478,
             "D_01B00480": 0x01B00480,
@@ -741,7 +742,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B00508,
         "text_end": 0x01B00B00,
         "discovered_code_bytes": 1504,
-        "functions": 10,
+        "functions": 11,
         "syms": {
             "D_01B00040": 0x01B00040,
             "D_01B004F0": 0x01B004F0,
@@ -769,7 +770,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B00508,
         "text_end": 0x01B00B00,
         "discovered_code_bytes": 1504,
-        "functions": 10,
+        "functions": 11,
         "syms": {
             "D_01B00040": 0x01B00040,
             "D_01B004F0": 0x01B004F0,
@@ -797,7 +798,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B00508,
         "text_end": 0x01B00B10,
         "discovered_code_bytes": 1524,
-        "functions": 10,
+        "functions": 11,
         "syms": {
             "D_01B00040": 0x01B00040,
             "D_01B004F0": 0x01B004F0,
@@ -825,7 +826,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B00508,
         "text_end": 0x01B00B10,
         "discovered_code_bytes": 1524,
-        "functions": 10,
+        "functions": 11,
         "syms": {
             "D_01B00040": 0x01B00040,
             "D_01B004F0": 0x01B004F0,
@@ -975,38 +976,12 @@ OVERLAY_UNITS = [
         ],
     },
     {
-        "src": "overlays/group11/ovl_09379.c",
-        "containers": [9379, 9406],
-        "text_start": 0x01B00558,
-        "text_end": 0x01B008E0,
-        "discovered_code_bytes": 856,
-        "functions": 16,
-        "syms": {
-            "D_01B00518": 0x01B00518,
-            "D_01B00520": 0x01B00520,
-            "D_01B008F0": 0x01B008F0,
-        },
-    },
-    {
-        "src": "overlays/group11/ovl_09380.c",
-        "containers": [9380, 9407],
-        "text_start": 0x01B00468,
-        "text_end": 0x01B007B0,
-        "discovered_code_bytes": 792,
-        "functions": 15,
-        "syms": {
-            "D_01B00428": 0x01B00428,
-            "D_01B00430": 0x01B00430,
-            "D_01B007C0": 0x01B007C0,
-        },
-    },
-    {
         "src": "overlays/group11/ovl_09403.c",
         "containers": [9403],
         "text_start": 0x01B00530,
         "text_end": 0x01B00F28,
         "discovered_code_bytes": 2544,
-        "functions": 25,
+        "functions": 24,
         "syms": {
             "D_01B004F0": 0x01B004F0,
             "D_01B004F8": 0x01B004F8,
@@ -1021,7 +996,7 @@ OVERLAY_UNITS = [
         "text_start": 0x01B00580,
         "text_end": 0x01B00CB8,
         "discovered_code_bytes": 1364,
-        "functions": 18,
+        "functions": 19,
         "syms": {
             "D_01B00540": 0x01B00540,
             "D_01B00548": 0x01B00548,
@@ -1033,18 +1008,118 @@ OVERLAY_UNITS = [
 ]
 
 
-def main() -> int:
+# Drop-in unit registrations: overlays/units/<stem>.py may define UNITS (a list of dicts in the
+# OVERLAY_UNITS format) and RESIDENT_SYMS (extra resident names). One file per work package keeps
+# parallel work from editing the same list. Files are loaded in name order.
+UNITS_DIR = ROOT / "overlays" / "units"
+
+
+def _load_unit_files() -> None:
+    import importlib.util
+    for path in sorted(UNITS_DIR.glob("*.py")):
+        spec = importlib.util.spec_from_file_location(f"overlay_unit_{path.stem}", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        RESIDENT_SYMS.update(getattr(mod, "RESIDENT_SYMS", {}))
+        OVERLAY_UNITS.extend(getattr(mod, "UNITS", []))
+
+
+_load_unit_files()
+
+
+def resident_symbol(name: str, funcs_txt: dict[str, int]):
+    """Address of an undefined resident symbol: RESIDENT_SYMS, then config/funcs.txt names, then
+    the func_XXXXXXXX / D_XXXXXXXX spelling. Overlay-internal (>= 0x01B00000) names are never
+    guessed: they must come from the unit's syms / container_layouts."""
+    if name in RESIDENT_SYMS:
+        return RESIDENT_SYMS[name]
+    if name in funcs_txt:
+        return funcs_txt[name]
+    m = re.fullmatch(r"(?:func|D)_([0-9A-Fa-f]{6,8})", name)
+    if m and int(m.group(1), 16) < BASE:
+        return int(m.group(1), 16)
+    return None
+
+
+def load_funcs_txt() -> dict[str, int]:
+    out = {}
+    path = ROOT / "config" / "funcs.txt"
+    if path.exists():
+        for line in path.read_text().splitlines():
+            parts = line.split()
+            if len(parts) >= 2:
+                out[parts[0]] = int(parts[1], 16)
+    return out
+
+
+def unit_stem(unit: dict) -> str:
+    return Path(unit["src"]).stem
+
+
+def parse_args(argv: list[str]):
+    import argparse
+    ap = argparse.ArgumentParser(description="Verify decompiled group 0x11 overlay units byte-for-byte.")
+    ap.add_argument("--unit", action="append", default=[],
+                    help="only units whose source stem contains this text (e.g. ovl_09403, 09053_pool); repeatable")
+    ap.add_argument("--container", action="append", type=int, default=[],
+                    help="only check these container ids (e.g. 9053); repeatable")
+    ap.add_argument("--list", action="store_true", help="list registered units and exit (no compiler needed)")
+    ap.add_argument("--list-open", nargs="?", const=20, type=int, metavar="N",
+                    help="print the top N candidate TUs still OPEN (from tools/overlay_map.py output) and exit")
+    return ap.parse_args(argv)
+
+
+def list_units() -> int:
+    for unit in OVERLAY_UNITS:
+        cids = unit["containers"]
+        span = unit["text_end"] - unit["text_start"]
+        more = f" (+{len(cids) - 3} more)" if len(cids) > 3 else ""
+        print(f"{unit_stem(unit):18} {len(cids):4} containers  {span:6}B span  {unit['functions']:3} funcs  "
+              f"{','.join(map(str, cids[:3]))}{more}")
+    return 0
+
+
+def list_open(n: int) -> int:
+    import json
+    path = ROOT / "build" / "overlay-map" / "tus.json"
+    if not path.exists():
+        print("missing build/overlay-map/tus.json: run python3 -P tools/overlay_map.py first")
+        return 1
+    rows = json.loads(path.read_text())
+    print("rank family  score    bytes funcs conts  reference range                  sibling unit")
+    for i, r in enumerate(rows[:n], 1):
+        print(f"{i:4} {r['family']:6} {r['score']:8} {r['bytes']:6} {r['functions']:5} {len(r['containers']):5}  "
+              f"{r['ref']:32} {r['sibling_unit'] or '-'}")
+    return 0
+
+
+def main(argv=None) -> int:
     os.chdir(ROOT)
+    argv = sys.argv[1:] if argv is None else argv
+    args = parse_args(argv)
+    if args.list:
+        return list_units()
+    if args.list_open is not None:
+        return list_open(args.list_open)
     if sys.platform != "linux":
         cmd = [
             "docker", "run", "--rm", "-v", f"{ROOT}:/work", "ffx-decomp",
-            "python3", "overlays/verify_overlays.py",
+            "python3", "overlays/verify_overlays.py", *argv,
         ]
         return subprocess.run(cmd).returncode
 
+    units = [u for u in OVERLAY_UNITS if not args.unit or any(k in unit_stem(u) for k in args.unit)]
+    if args.container:
+        units = [u for u in units if set(u["containers"]) & set(args.container)]
+    if not units:
+        print("no unit matches the given --unit/--container filter (see --list)")
+        return 1
+
     cc = "tools/cc/ee-gcc2.9-991111-01/bin/ee-gcc"
-    out_dir = ROOT / "build" / "overlays"
+    out_dir = ROOT / "build" / "overlays" / f"run{os.getpid()}"  # per-process dir: concurrent runs must not share objects
     out_dir.mkdir(parents=True, exist_ok=True)
+    import atexit; atexit.register(shutil.rmtree, out_dir, True)
+    funcs_txt = load_funcs_txt()
 
     matched_cids: set[int] = set()
     total_containers = 0
@@ -1052,7 +1127,7 @@ def main() -> int:
     total_discovered_bytes = 0
     total_funcs = 0
 
-    for unit in OVERLAY_UNITS:
+    for unit in units:
         src = Path(unit["src"])
         stem = src.stem
         obj = out_dir / f"{stem}.o"
@@ -1061,10 +1136,19 @@ def main() -> int:
         text_bin = out_dir / f"{stem}.text.bin"
 
         subprocess.run(
-            [cc, "-c", "-O2", "-G0", "-g0", "-Iinclude", "-Ioverlays", str(src), "-o", str(obj)],
+            [cc, "-c", *unit.get("cflags", ["-O2"]), "-G0", "-g0", "-Iinclude", "-Ioverlays", str(src), "-o", str(obj)],
             check=True,
         )
         subprocess.run(["mipsel-linux-gnu-objcopy", str(obj), str(obj)], check=True)
+        undefined = subprocess.run(["mipsel-linux-gnu-nm", "-u", str(obj)], check=True,
+                                   capture_output=True, text=True).stdout.split()
+        resident = {}
+        for name in undefined:
+            if name == "U":
+                continue
+            addr = resident_symbol(name, funcs_txt)
+            if addr is not None:
+                resident[name] = addr
 
         layouts = unit.get("container_layouts") or [
             {
@@ -1075,6 +1159,8 @@ def main() -> int:
             }
             for cid in unit["containers"]
         ]
+        if args.container:
+            layouts = [item for item in layouts if item["cid"] in args.container]
 
         link_cache: dict[tuple, bytes] = {}
         for item in layouts:
@@ -1084,7 +1170,7 @@ def main() -> int:
             syms = item["syms"]
             cache_key = (ts, te, tuple(sorted(syms.items())))
             if cache_key not in link_cache:
-                sym_lines = [f"{k} = 0x{v:08x};" for k, v in sorted({**RESIDENT_SYMS, **syms}.items())]
+                sym_lines = [f"{k} = 0x{v:08x};" for k, v in sorted({**RESIDENT_SYMS, **resident, **syms}.items())]
                 ld_script = (
                     "SECTIONS\n{\n"
                     f"    . = 0x{ts:08x};\n"
@@ -1128,9 +1214,10 @@ def main() -> int:
             total_funcs += unit["functions"]
 
     print(
-        f"\nOK: {len(OVERLAY_UNITS)} unique overlay C units -> {len(matched_cids)} battle-effect containers matched "
-        f"({total_containers} unit-container matches, {total_funcs} function instances, "
-        f"{total_text_bytes} .text bytes / {total_discovered_bytes} instruction bytes)."
+        f"\nOK: {len(units)} unique overlay C units -> {len(matched_cids)} battle-effect containers with at least "
+        f"one matched unit ({total_containers} unit-container matches, {total_funcs} function instances, "
+        f"{total_text_bytes} .text bytes / {total_discovered_bytes} instruction bytes). Containers fully matched vs "
+        f"partially: see docs/overlay-progress.json (tools/overlay_map.py)."
     )
     return 0
 

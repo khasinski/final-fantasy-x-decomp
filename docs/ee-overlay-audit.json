@@ -232,12 +232,16 @@
   },
   "build_status": {
     "status": "partial_c_verified",
-    "matched_containers": 365,
-    "matched_code_bytes": 617920,
-    "matched_text_span_bytes": 686640,
-    "matched_unique_units": 23,
-    "matched_function_instances": 6943,
+    "matched_unique_units": 21,
+    "unit_container_matches": 405,
+    "containers_with_any_match": 365,
+    "containers_fully_matched": 22,
+    "containers_partially_matched": 343,
+    "matched_code_bytes": 669716,
+    "code_bytes": 17342672,
+    "matched_text_span_bytes": 683152,
     "verification": "python3 overlays/verify_overlays.py",
-    "note": "23 unique overlay C units in overlays/group11/ compile with ee-gcc 2.9-991111-01 -O2 -G0 to byte-identical .text and reconstruct 365 battle-effect containers with identical SHA-256."
+    "progress_source": "docs/overlay-progress.json (python3 -P tools/overlay_map.py)",
+    "note": "21 unique overlay C units in overlays/group11/ compile with ee-gcc 2.9-991111-01 -O2 -G0 to byte-identical .text; 365 containers contain at least one matched unit, of which 22 are matched completely. Byte counts are function bytes from tools/overlay_map.py."
   }
 }
