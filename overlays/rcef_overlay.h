@@ -42,7 +42,12 @@ typedef struct RcefObj {
     int rot_acc_w;          /* 0x12C */
     float scale[3];         /* 0x130..0x13C */
     int scale_w;            /* 0x13C */
-    u8 pad140[0x8C];        /* 0x140..0x1CC */
+    float unk140[3];        /* 0x140..0x14C */
+    int unk14C_w;           /* 0x14C */
+    u8 pad150[0x30];        /* 0x150..0x180 */
+    float unk180[3];        /* 0x180..0x18C */
+    float unk18C;           /* 0x18C */
+    u8 pad190[0x3C];        /* 0x190..0x1CC */
     u32 flags1CC;           /* 0x1CC: used via |= 0x10 / |= 0x2000 by overlays */
     u8 pad1D0[0x10];        /* 0x1D0..0x1E0 */
     u8 pad1E0[0x18];        /* 0x1E0..0x1F8 */
@@ -95,6 +100,7 @@ void func_002DCE08(float out[4], const float m[16], const float v[4]);
 void func_002DD998(float out[4], const float v[4], float scale);
 void MsDamageSetMotion(int chr_id, int a1, int a2);
 void func_001A0000(RcefObj *o, void *res, int idx);
+void func_001A2F00(int chr_id, int idx, void *out);
 void func_001A0040(RcefObj *o, void *res, int idx);
 void op_oef2_a_get(void);
 
