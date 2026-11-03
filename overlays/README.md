@@ -15,7 +15,7 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 2. Links the object at its fixed `.text` virtual address (`0x01B00xxx`) against resident ELF symbols (`SCES_504.90`) and overlay-local `.data`/`.bss` addresses.
 3. Verifies 100% byte-for-byte `.text` identity against `build/overlay-audit/overlay-group11-fileXXXXX.bin` and confirms the reconstructed container matches the original SHA-256.
 
-## Matched Units (15 Unique C Units / 20 Containers)
+## Matched Units (16 Unique C Units / 137 Containers)
 
 | C Unit | Containers (`group 0x11`) | `.text` Range | `.text` Span | Discovered Insns | Functions | Subsystem |
 |---|---|---|---:|---:|---:|---|
@@ -34,4 +34,5 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 | [`overlays/group11/ovl_09745.c`](group11/ovl_09745.c) | `file09745` | `0x01B00508..0x01B00B10` | 1,544 B | 1,524 B | 10 | `oef` / `ppp` |
 | [`overlays/group11/ovl_09242.c`](group11/ovl_09242.c) | `file09242` | `0x01B00508..0x01B00CA8` | 1,952 B | 1,936 B | 9 | `oef` / `ppp` |
 | [`overlays/group11/ovl_09543.c`](group11/ovl_09543.c) | `file09543` | `0x01B00450..0x01B00C58` | 2,056 B | 2,040 B | 12 | `oef` / `ppp` |
-| **Total (20 containers)** | **20 files** | | **23,304 B** | **22,520 B** | **299** | |
+| [`overlays/group11/ovl_09065_tu0.c`](group11/ovl_09065_tu0.c) | 117 containers (`file09065`..`file09756`) | `0x01B00878..0x01B01420` (relocated per container) | 2,984 B | 2,676 B | 21 | `opu` / `oef` / `ppp` (`TU0`) |
+| **Total (137 containers)** | **137 files** | | **372,432 B** | **335,612 B** | **2,756** | |

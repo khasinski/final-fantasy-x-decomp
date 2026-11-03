@@ -73,22 +73,31 @@ RESIDENT_SYMS = {
     "Sg_GetCurExecFrames": 0x00116068,
     "Ch_ClutDispose": 0x001178E0,
     "Ch_ClutCreate": 0x00117A68,
+    "func_00120108": 0x00120108,
     "func_0013B150": 0x0013B150,
     "func_0014AA50": 0x0014AA50,
     "func_00266F40": 0x00266F40,
     "pppMemAlloc": 0x00266FA0,
+    "_pppAllFreePObject": 0x00267530,
     "pppSetMatrix": 0x002675B0,
     "_pppStartPart": 0x00267658,
     "_pppInitData": 0x002678E0,
     "pppInitEnv": 0x00267A68,
     "_pppRunPart": 0x00267FA0,
     "func_0026BDE0": 0x0026BDE0,
+    "func_00293CD8": 0x00293CD8,
+    "func_00293D48": 0x00293D48,
     "op_oef2_sound_cue_multi": 0x002944B0,
     "op_oef2_se_on": 0x00294B70,
+    "func_00294CD8": 0x00294CD8,
+    "opu_init": 0x00296CB8,
+    "opu_test_data_read": 0x0029A8A8,
     "func_0029B830": 0x0029B830,
     "op_chara_hsv_size_get": 0x002A3B48,
     "func_002A3BD8": 0x002A3BD8,
     "op_chara_hsv": 0x002A3CA0,
+    "func_002AC750": 0x002AC750,
+    "func_002B22F8": 0x002B22F8,
     "func_002B2F30": 0x002B2F30,
     "op_oef2_set2": 0x002B4980,
     "op_oef2_a_get": 0x002B49A0,
@@ -100,11 +109,19 @@ RESIDENT_SYMS = {
     "func_002DCFF8": 0x002DCFF8,
     "func_002DD038": 0x002DD038,
     "func_002DD068": 0x002DD068,
+    "func_002EA328": 0x002EA328,
     "dpadd": 0x002EBBB0,
     "dpmul": 0x002EBC70,
     "dptofp": 0x002EC440,
     "fptodp": 0x002ED038,
+    "func_002EF0D0": 0x002EF0D0,
+    "D_003F3944": 0x003F3944,
+    "D_004F3FD0": 0x004F3FD0,
+    "D_004F4010": 0x004F4010,
     "D_004F4610": 0x004F4610,
+    "D_0054D5E8": 0x0054D5E8,
+    "D_00551C98": 0x00551C98,
+    "D_00551CA0": 0x00551CA0,
     "D_006A3924": 0x006A3924,
     "D_006A3930": 0x006A3930,
     "D_006A3970": 0x006A3970,
@@ -113,7 +130,152 @@ RESIDENT_SYMS = {
     "D_006A3AB0": 0x006A3AB0,
     "D_006A3BC4": 0x006A3BC4,
     "D_006A3BCC": 0x006A3BCC,
+    "D_00703E20": 0x00703E20,
+    "D_00764990": 0x00764990,
+    "D_007649A0": 0x007649A0,
+    "D_2008250": 0x02008250,
+    "func_206C3B8": 0x0206C3B8,
+    "func_206C3F8": 0x0206C3F8,
 }
+
+# (cid, text_start, D_01B00648, D_01B0A578, D_01B0F8D0, D_01B78720)
+TU0_9065_LAYOUTS = [
+    (9065, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0F8D0, 0x01B78720),
+    (9066, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F800, 0x01B74800),
+    (9067, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F800, 0x01B74B40),
+    (9068, 0x01B006E8, 0x01B004B8, 0x01B0A3E8, 0x01B0F740, 0x01B75F90),
+    (9069, 0x01B007D8, 0x01B005A8, 0x01B0A4D8, 0x01B0F630, 0x01B7A9B0),
+    (9070, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F790, 0x01B4DEF0),
+    (9071, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F590, 0x01B52550),
+    (9072, 0x01B00758, 0x01B00530, 0x01B0A458, 0x01B0F7B0, 0x01B57820),
+    (9073, 0x01B00758, 0x01B00530, 0x01B0A458, 0x01B0F5B0, 0x01B5C1B0),
+    (9074, 0x01B00788, 0x01B00558, 0x01B0A488, 0x01B0F7E0, 0x01B5EE20),
+    (9075, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F600, 0x01B63620),
+    (9078, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F800, 0x01B95A70),
+    (9079, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F600, 0x01B95D70),
+    (9080, 0x01B006B8, 0x01B00490, 0x01B0A3B8, 0x01B0F710, 0x01B97120),
+    (9081, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0F560, 0x01B9B990),
+    (9082, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F790, 0x01B6F200),
+    (9083, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F590, 0x01B73990),
+    (9113, 0x01B00B48, 0x01B00918, 0x01B0A848, 0x01B0D580, 0x01B725D0),
+    (9117, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F880, 0x01BB08A0),
+    (9162, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F680, 0x01BB06D0),
+    (9163, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0CCE0, 0x01B92650),
+    (9166, 0x01B00AC8, 0x01B008A0, 0x01B0A7C8, 0x01B0F990, 0x01B5D050),
+    (9167, 0x01B00668, 0x01B00440, 0x01B0A368, 0x01B0F530, 0x01B59830),
+    (9174, 0x01B006B8, 0x01B00490, 0x01B0A3B8, 0x01B0F580, 0x01B3B380),
+    (9175, 0x01B006B8, 0x01B00490, 0x01B0A3B8, 0x01B0F580, 0x01B3B380),
+    (9180, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F670, 0x01B836B0),
+    (9181, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0F670, 0x01B836B0),
+    (9182, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F600, 0x01B87F20),
+    (9183, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0F600, 0x01B87F20),
+    (9184, 0x01B00788, 0x01B00558, 0x01B0A488, 0x01B0F650, 0x01B87A90),
+    (9185, 0x01B00788, 0x01B00558, 0x01B0A488, 0x01B0F650, 0x01B87A90),
+    (9186, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0F5D0, 0x01B88930),
+    (9187, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0F5D0, 0x01B88930),
+    (9195, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0D780, 0x01BBD000),
+    (9201, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F880, 0x01BB08A0),
+    (9202, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F880, 0x01BB08A0),
+    (9204, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CEB0, 0x01B799B0),
+    (9205, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CF80, 0x01B79EC0),
+    (9211, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CF30, 0x01B79960),
+    (9213, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D800, 0x01B99FE0),
+    (9219, 0x01B006B8, 0x01B00490, 0x01B0A3B8, 0x01B0F580, 0x01B746D0),
+    (9234, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0D0B0, 0x01B84F00),
+    (9252, 0x01B00CF8, 0x01B00AD0, 0x01B0A9F8, 0x01B0CD80, 0x01BD9FF0),
+    (9279, 0x01B005C8, 0x01B003A0, 0x01B0A2C8, 0x01B0F490, 0x01B54FB0),
+    (9280, 0x01B005C8, 0x01B003A0, 0x01B0A2C8, 0x01B0F490, 0x01B54FB0),
+    (9281, 0x01B00758, 0x01B00530, 0x01B0A458, 0x01B0F620, 0x01B58AC0),
+    (9282, 0x01B00758, 0x01B00530, 0x01B0A458, 0x01B0F620, 0x01B58AC0),
+    (9300, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CFB0, 0x01B86500),
+    (9303, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0CDC0, 0x01BAB780),
+    (9305, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0CE10, 0x01BAB850),
+    (9308, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0CF00, 0x01BBD410),
+    (9309, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0D240, 0x01BA4120),
+    (9321, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0D7E0, 0x01BAD5B0),
+    (9322, 0x01B007D8, 0x01B005A8, 0x01B0A4D8, 0x01B0D050, 0x01B84B10),
+    (9323, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0D110, 0x01B79D00),
+    (9324, 0x01B007D8, 0x01B005A8, 0x01B0A4D8, 0x01B0D260, 0x01BBA200),
+    (9325, 0x01B00A58, 0x01B00828, 0x01B0A758, 0x01B0D6B0, 0x01BCC1E0),
+    (9326, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0D760, 0x01B89BA0),
+    (9333, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0D1B0, 0x01BA7C00),
+    (9334, 0x01B00848, 0x01B00620, 0x01B0A548, 0x01B0D2C0, 0x01BA65B0),
+    (9338, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0CED0, 0x01BBC3C0),
+    (9340, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0D0F0, 0x01BA3FD0),
+    (9346, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CF20, 0x01B79B80),
+    (9350, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0CF40, 0x01BBC7C0),
+    (9353, 0x01B00698, 0x01B00468, 0x01B0A398, 0x01B0CF10, 0x01B11FE0),
+    (9359, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0D360, 0x01BBD800),
+    (9363, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0F8D0, 0x01B78820),
+    (9364, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F880, 0x01B6C730),
+    (9365, 0x01B008E8, 0x01B006C0, 0x01B0A5E8, 0x01B0F940, 0x01B6C4D0),
+    (9367, 0x01B00698, 0x01B00468, 0x01B0A398, 0x01B0CDF0, 0x01B11FB0),
+    (9368, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0D040, 0x01B79A20),
+    (9370, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0F8D0, 0x01B78720),
+    (9371, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0F8D0, 0x01B78820),
+    (9372, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0F880, 0x01B6C730),
+    (9373, 0x01B008E8, 0x01B006C0, 0x01B0A5E8, 0x01B0F940, 0x01B6C4D0),
+    (9384, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0CE30, 0x01B88110),
+    (9388, 0x01B00988, 0x01B00760, 0x01B0A688, 0x01B0D010, 0x01BBEE30),
+    (9389, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0D360, 0x01BBD800),
+    (9390, 0x01B007A8, 0x01B00580, 0x01B0A4A8, 0x01B0CE80, 0x01B7A280),
+    (9399, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0CED0, 0x01B950E0),
+    (9402, 0x01B007F8, 0x01B005D0, 0x01B0A4F8, 0x01B0D170, 0x01B95560),
+    (9430, 0x01B009D8, 0x01B007B0, 0x01B0A6D8, 0x01B0D310, 0x01BD7940),
+    (9462, 0x01B006B8, 0x01B00490, 0x01B0A3B8, 0x01B0F580, 0x01B746D0),
+    (9480, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CEB0, 0x01B79930),
+    (9481, 0x01B008E8, 0x01B006C0, 0x01B0A5E8, 0x01B0D180, 0x01BA8600),
+    (9482, 0x01B008E8, 0x01B006C0, 0x01B0A5E8, 0x01B0D180, 0x01BA7520),
+    (9529, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0CE10, 0x01B351B0),
+    (9560, 0x01B00708, 0x01B004E0, 0x01B0A408, 0x01B0CEA0, 0x01B79C10),
+    (9597, 0x01B00828, 0x01B005F8, 0x01B0A528, 0x01B0CEC0, 0x01B64FF0),
+    (9625, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8EE50),
+    (9626, 0x01B00968, 0x01B00738, 0x01B0A668, 0x01B0D010, 0x01BC5B70),
+    (9636, 0x01B00738, 0x01B00508, 0x01B0A438, 0x01B0CDC0, 0x01B35170),
+    (9637, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0CF40, 0x01BBC7C0),
+    (9639, 0x01B00918, 0x01B006E8, 0x01B0A618, 0x01B0CFB0, 0x01C09390),
+    (9648, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0CF40, 0x01BBC7C0),
+    (9659, 0x01B00898, 0x01B00670, 0x01B0A598, 0x01B0CF40, 0x01BBC7C0),
+    (9666, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F320),
+    (9667, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F700),
+    (9668, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F240),
+    (9669, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F1E0),
+    (9670, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F2B0),
+    (9671, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F1D0),
+    (9672, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F3C0),
+    (9673, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0CFD0, 0x01B8F450),
+    (9674, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D110, 0x01BB3180),
+    (9675, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D190, 0x01BB2210),
+    (9676, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D0D0, 0x01BB1120),
+    (9677, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D190, 0x01BB3200),
+    (9678, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D1D0, 0x01BC3250),
+    (9679, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D190, 0x01BBC270),
+    (9680, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D110, 0x01BC3180),
+    (9681, 0x01B00938, 0x01B00710, 0x01B0A638, 0x01B0D190, 0x01BC25C0),
+    (9684, 0x01B00FC8, 0x01B00DA0, 0x01B0ACC8, 0x01B0D660, 0x01BF4B70),
+    (9714, 0x01B00578, 0x01B00350, 0x01B0A278, 0x01B0CC20, 0x01B52B80),
+    (9743, 0x01B00878, 0x01B00648, 0x01B0A578, 0x01B0F8D0, 0x01B73310),
+    (9753, 0x01B002A8, 0x01B00080, 0x01B09FA8, 0x01B0C9A0, 0x01B1E1A0),
+    (9756, 0x01B00578, 0x01B00350, 0x01B0A278, 0x01B0CC20, 0x01B59F00),
+]
+
+
+def _tu0_9065_syms(text_start: int, d_0648: int, d_a578: int, d_f8d0: int, d_end: int) -> dict[str, int]:
+    return {
+        "D_01B00000": 0x01B00000,
+        "D_01B00648": d_0648,
+        "D_01B006A0": text_start - 0x1D8,
+        "D_01B0A578": d_a578,
+        "D_01B0A5A8": d_a578 + 0x30,
+        "D_01B0A5C0": d_a578 + 0x48,
+        "D_01B0A6C0": d_a578 + 0x148,
+        "D_01B0A7C0": d_a578 + 0x248,
+        "D_01B0A8C0": d_a578 + 0x348,
+        "D_01B0C8C0": d_a578 + 0x2348,
+        "D_01B0F8D0": d_f8d0,
+        "D_01B78720": d_end,
+    }
+
 
 OVERLAY_UNITS = [
     {
@@ -400,6 +562,24 @@ OVERLAY_UNITS = [
             "D_01B83A50": 0x01B83A50,
         },
     },
+    {
+        "src": "overlays/group11/ovl_09065_tu0.c",
+        "containers": [row[0] for row in TU0_9065_LAYOUTS],
+        "text_start": 0x01B00878,
+        "text_end": 0x01B01420,
+        "discovered_code_bytes": 2676,
+        "functions": 21,
+        "syms": _tu0_9065_syms(*TU0_9065_LAYOUTS[0][1:]),
+        "container_layouts": [
+            {
+                "cid": cid,
+                "text_start": ts,
+                "text_end": ts + (0x01B01420 - 0x01B00878),
+                "syms": _tu0_9065_syms(ts, d_0648, d_a578, d_f8d0, d_end),
+            }
+            for cid, ts, d_0648, d_a578, d_f8d0, d_end in TU0_9065_LAYOUTS
+        ],
+    },
 ]
 
 
@@ -429,33 +609,51 @@ def main() -> int:
         elf = out_dir / f"{stem}.elf"
         text_bin = out_dir / f"{stem}.text.bin"
 
-        sym_lines = [f"{k} = 0x{v:08x};" for k, v in sorted({**RESIDENT_SYMS, **unit["syms"]}.items())]
-        ld_script = (
-            "SECTIONS\n{\n"
-            f"    . = 0x{unit['text_start']:08x};\n"
-            f"    .text : {{ {obj.as_posix()}(.text) }}\n"
-            "    /DISCARD/ : { *(*) }\n"
-            "}\n" + "\n".join(sym_lines) + "\n"
-        )
-        ld.write_text(ld_script)
-
         subprocess.run(
             [cc, "-c", "-O2", "-G0", "-g0", "-Iinclude", "-Ioverlays", str(src), "-o", str(obj)],
             check=True,
         )
         subprocess.run(["mipsel-linux-gnu-objcopy", str(obj), str(obj)], check=True)
-        subprocess.run(["mipsel-linux-gnu-ld", "-EL", "-T", str(ld), "-o", str(elf)], check=True)
-        subprocess.run(["mipsel-linux-gnu-objcopy", "-O", "binary", str(elf), str(text_bin)], check=True)
 
-        built_text = text_bin.read_bytes()
-        off_start = unit["text_start"] - BASE
-        off_end = unit["text_end"] - BASE
-        expected_len = off_end - off_start
-        if len(built_text) != expected_len:
-            print(f"FAIL {stem}: expected .text size {expected_len:#x}, got {len(built_text):#x}")
-            return 1
+        layouts = unit.get("container_layouts") or [
+            {
+                "cid": cid,
+                "text_start": unit["text_start"],
+                "text_end": unit["text_end"],
+                "syms": unit["syms"],
+            }
+            for cid in unit["containers"]
+        ]
 
-        for cid in unit["containers"]:
+        link_cache: dict[tuple, bytes] = {}
+        for item in layouts:
+            cid = item["cid"]
+            ts = item["text_start"]
+            te = item["text_end"]
+            syms = item["syms"]
+            cache_key = (ts, te, tuple(sorted(syms.items())))
+            if cache_key not in link_cache:
+                sym_lines = [f"{k} = 0x{v:08x};" for k, v in sorted({**RESIDENT_SYMS, **syms}.items())]
+                ld_script = (
+                    "SECTIONS\n{\n"
+                    f"    . = 0x{ts:08x};\n"
+                    f"    .text : {{ {obj.as_posix()}(.text) }}\n"
+                    "    /DISCARD/ : { *(*) }\n"
+                    "}\n" + "\n".join(sym_lines) + "\n"
+                )
+                ld.write_text(ld_script)
+                subprocess.run(["mipsel-linux-gnu-ld", "-EL", "-T", str(ld), "-o", str(elf)], check=True)
+                subprocess.run(["mipsel-linux-gnu-objcopy", "-O", "binary", str(elf), str(text_bin)], check=True)
+                link_cache[cache_key] = text_bin.read_bytes()
+
+            built_text = link_cache[cache_key]
+            off_start = ts - BASE
+            off_end = te - BASE
+            expected_len = off_end - off_start
+            if len(built_text) != expected_len:
+                print(f"FAIL {stem}: expected .text size {expected_len:#x}, got {len(built_text):#x}")
+                return 1
+
             orig_path = ROOT / "build" / "overlay-audit" / f"overlay-group11-file{cid:05d}.bin"
             orig = orig_path.read_bytes()
             orig_text = orig[off_start:off_end]
@@ -468,7 +666,7 @@ def main() -> int:
             assert rebuilt_sha == orig_sha
             print(
                 f"MATCH file{cid:05d} ({src.as_posix()}): "
-                f".text 0x{unit['text_start']:08x}..0x{unit['text_end']:08x} "
+                f".text 0x{ts:08x}..0x{te:08x} "
                 f"({len(built_text)}B span / {unit['discovered_code_bytes']}B insns, "
                 f"{unit['functions']} funcs) sha256={rebuilt_sha[:12]}..."
             )
