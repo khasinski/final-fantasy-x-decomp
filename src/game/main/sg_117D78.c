@@ -77,6 +77,7 @@ s16 func_00117E98(void)
     return D_005803DE;
 }
 
+/* DEBT(CAST): screen-fade slot at D_005803D8 accessed through byte pointer */
 INCLUDE_ASM("build/ee_asm/game/main/sg_117D78", Sg_AccSetAlpha);
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_117D78", Sg_FilterAdd);

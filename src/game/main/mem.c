@@ -7,6 +7,8 @@
 #include "ffx/w6.h"
 #include "ffx/v0.h"
 
+void func_0011BFE0(s32 a);
+
 void func_0011BA20(void)
 {
     s32 i;
@@ -21,6 +23,7 @@ void func_0011BA20(void)
     }
 }
 
+/* DEBT(CAST): frees the scratch address recorded in the header two slots back. */
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BA60);
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BAB8);
@@ -311,6 +314,7 @@ void *func_0011CC78(void *mem)
     return dst + 1;
 }
 
+/* DEBT(CAST): relocates a heap block into the free block in front of a0's tail. */
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011CD30);
 
 void Sg_MemSetMoveHeapStartAddr(s32 p)
@@ -322,6 +326,7 @@ void Sg_MemSetMoveHeapStartAddr(s32 p)
     }
 }
 
+/* DEBT(CAST): defrag-grows the current allocation into preceding free space. */
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011CDE8);
 
 int func_0011CFB8(int a, int v)
@@ -439,6 +444,7 @@ INCLUDE_ASM("build/ee_asm/game/main/mem", user_malloc);
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D420);
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D4B8);
+
 
 s32 func_0011D568(s32 a, s32 b, s32 c)
 {
