@@ -76,7 +76,7 @@ void func_01B005C8(W3Task *t)
     o->scale[0] = 0.06f;
     o->scale[1] = 0.06f;
     o->scale[2] = 0.06f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     func_001A4288(0);
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B005B8);

@@ -68,7 +68,7 @@ void func_01B00698(W3Task *t)
     func_001A13A0(o, D_00313CB0.targets[0], 3);
     func_001A1420(o, 0x40);
     o->scale[2] = o->scale[1] = o->scale[0] = 0.1f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     func_001A4288(0);
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B00688);

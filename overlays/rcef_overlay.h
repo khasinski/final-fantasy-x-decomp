@@ -30,8 +30,7 @@ typedef struct RcefObj {
     u8 padC0[0x10];         /* 0x0C0..0x0D0 */
     float pos[3];           /* 0x0D0..0x0DC */
     int pos_w;              /* 0x0DC */
-    float vel[3];           /* 0x0E0..0x0EC */
-    int vel_w;              /* 0x0EC */
+    float vel[4];           /* 0x0E0..0x0EC */
     float acc[3];           /* 0x0F0..0x0FC */
     int acc_w;              /* 0x0FC */
     float rot[3];           /* 0x100..0x10C */
@@ -40,8 +39,7 @@ typedef struct RcefObj {
     int rot_vel_w;          /* 0x11C */
     float rot_acc[3];       /* 0x120..0x12C */
     int rot_acc_w;          /* 0x12C */
-    float scale[3];         /* 0x130..0x13C */
-    int scale_w;            /* 0x13C */
+    float scale[4];         /* 0x130..0x13C */
     float unk140[3];        /* 0x140..0x14C */
     int unk14C_w;           /* 0x14C */
     u8 pad150[0x20];        /* 0x150..0x170 */

@@ -129,7 +129,7 @@ void func_01B00878(W3Task *t)
     o->scale[0] = 0.05f;
     o->scale[1] = 0.05f;
     o->scale[2] = 0.05f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B00868);
     func_001A1D50(t, func_001A20D8);

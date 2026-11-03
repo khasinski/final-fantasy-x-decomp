@@ -116,7 +116,7 @@ void func_01B00858(W3Task *t)
     o->vel[0] = vel[0];
     o->vel[1] = vel[1];
     o->vel[2] = vel[2];
-    o->vel_w = 0;
+    o->vel[3] = 0;
     o->rot[0] = 90.0f;
     o->rot[1] = 0;
     o->rot[2] = 0;
@@ -124,7 +124,7 @@ void func_01B00858(W3Task *t)
     o->scale[0] = 0.75f;
     o->scale[1] = 0.75f;
     o->scale[2] = 0.75f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B00848);
     func_001A1D50(t, func_001A20D8);
@@ -149,7 +149,7 @@ void func_01B00A20(W3Task *t)
     o->scale[0] = 0.65f;
     o->scale[1] = 0.65f;
     o->scale[2] = 0.65f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 2);
     func_001A1D08(&o->task, func_01B00848);
     func_001A1D50(&o->task, func_001A20D8);

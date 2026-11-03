@@ -109,7 +109,7 @@ void func_01B00898(W3Task *t)
     o->scale[0] = 0.15f;
     o->scale[1] = 0.15f;
     o->scale[2] = 0.15f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 1);
     func_001A1D08(t, func_01B00888);
     func_001A1D50(t, func_001A20D8);
@@ -125,7 +125,7 @@ void func_01B00948(W3Task *t)
     o->scale[0] = 0.8f;
     o->scale[1] = 0.8f;
     o->scale[2] = 0.8f;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B009D8);
     func_001A1DF0(t, 10);
@@ -181,11 +181,11 @@ void func_01B00A90(W3Task *t)
     o->vel[0] = vel[0];
     o->vel[1] = vel[1];
     o->vel[2] = vel[2];
-    o->vel_w = 0;
+    o->vel[3] = 0;
     o->rot[0] = 0;
     o->rot[1] = 0;
     o->rot_w = 0;
-    o->scale_w = 0;
+    o->scale[3] = 0;
     o->unk14C_w = 0;
     o->unk180[0] = 0;
     o->unk180[1] = 0;
