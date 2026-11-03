@@ -1,11 +1,13 @@
-/* EE Battle-Effect Overlay: group 0x11, file 09380 (group_index 336) & file 09407 (group_index 363)
- * Load base: 0x01B00000, .text: 0x01B00468..0x01B007B0 (840 bytes, 16 functions)
+/* EE Battle-Effect Overlay: group 0x11, file 09380 (group_index 336)
+ * Load base: 0x01B00000, .text: 0x01B00468..0x01B007B0
+ *
+ * Small effect scene: falling mote on the first target.
  */
 #include "../rcef_overlay.h"
 
-extern void *D_01B00428[];
-extern u8 D_01B00430[0x38];
-extern u8 D_01B007C0[];
+extern u8 D_01B00428[8];
+extern u8 D_01B00430[8];
+extern u8 D_01B007C0[8];
 
 void func_01B004A0(W3Task *t);
 void func_01B004E8(W3Task *t);
@@ -16,29 +18,37 @@ void func_01B005C8(W3Task *t);
 
 void func_01B00468(W3Task *t)
 {
-    func_001A1D08(t, func_01B004A0);
-    func_001A1D50(t, func_001A2058);
+    W3Task *task = t;
+
+    func_001A1D08(task, func_01B004A0);
+    func_001A1D50(task, func_001A2058);
 }
 
 void func_01B004A0(W3Task *t)
 {
+    W3Task *task = t;
+
     func_001A2B58(1);
-    func_001A1D08(t, func_01B004E8);
-    func_001A1D50(t, func_001A2098);
+    func_001A1D08(task, func_01B004E8);
+    func_001A1D50(task, func_001A2098);
 }
 
 void func_01B004E8(W3Task *t)
 {
+    W3Task *task = t;
+
     func_0019FF90(&D_00313CB0, func_01B005C8);
-    func_001A1D08(t, func_01B00538);
-    func_001A1DF0(t, 30);
+    func_001A1D08(task, func_01B00538);
+    func_001A1DF0(task, 30);
 }
 
 void func_01B00538(W3Task *t)
 {
+    W3Task *task = t;
+
     func_001A3800(D_00313E50, 0);
-    func_001A1D08(t, func_01B00588);
-    func_001A1D50(t, func_001A21E0);
+    func_001A1D08(task, func_01B00588);
+    func_001A1D50(task, func_001A21E0);
 }
 
 void func_01B00588(W3Task *t)
@@ -52,17 +62,20 @@ void func_01B005B8(W3Task *t)
     t->flags |= 4;
 }
 
+/* falling mote on the first target */
 void func_01B005C8(W3Task *t)
 {
     RcefObj *o = (RcefObj *)t;
 
     func_001A13A0(o, D_00313CB0.targets[0], 6);
-    func_001A1420(o, 0x40);
-    o->pos[0] = 0.0f;
+    func_001A1420(o, 64);
+    o->pos[0] = 0;
     o->pos[1] = -2.0f;
-    o->pos[2] = 0.0f;
+    o->pos[2] = 0;
     o->pos_w = 0;
-    o->scale[2] = o->scale[1] = o->scale[0] = 0.06f;
+    o->scale[0] = 0.06f;
+    o->scale[1] = 0.06f;
+    o->scale[2] = 0.06f;
     o->scale_w = 0;
     func_001A4288(0);
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
@@ -79,7 +92,7 @@ int func_01B00680(int eff_id)
 
 int func_01B006F0(void)
 {
-    rcefMainProcRunAfter((W3ObjBig *)&D_00313CB0);
+    func_0019FDF0(&D_00313CB0);
     return 0;
 }
 

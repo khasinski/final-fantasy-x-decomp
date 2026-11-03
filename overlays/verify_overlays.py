@@ -975,6 +975,32 @@ OVERLAY_UNITS = [
         ],
     },
     {
+        "src": "overlays/group11/ovl_09379.c",
+        "containers": [9379, 9406],
+        "text_start": 0x01B00558,
+        "text_end": 0x01B008E0,
+        "discovered_code_bytes": 856,
+        "functions": 16,
+        "syms": {
+            "D_01B00518": 0x01B00518,
+            "D_01B00520": 0x01B00520,
+            "D_01B008F0": 0x01B008F0,
+        },
+    },
+    {
+        "src": "overlays/group11/ovl_09380.c",
+        "containers": [9380, 9407],
+        "text_start": 0x01B00468,
+        "text_end": 0x01B007B0,
+        "discovered_code_bytes": 792,
+        "functions": 15,
+        "syms": {
+            "D_01B00428": 0x01B00428,
+            "D_01B00430": 0x01B00430,
+            "D_01B007C0": 0x01B007C0,
+        },
+    },
+    {
         "src": "overlays/group11/ovl_09403.c",
         "containers": [9403],
         "text_start": 0x01B00530,
