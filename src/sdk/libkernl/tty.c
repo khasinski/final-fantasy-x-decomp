@@ -6,271 +6,1202 @@
 #include "ffx/r7.h"
 #include "ffx/g4.h"
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8000);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8010);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8020);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8030);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8040);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8050);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8060);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8070);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8080);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8090);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F80F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8100);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8110);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8120);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8130);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8140);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8150);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8160);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8170);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8180);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8190);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F81F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8200);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8210);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8220);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8230);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8240);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8250);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8260);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8270);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8280);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8290);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F82F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8300);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8310);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8320);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8330);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8340);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8350);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8360);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8370);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8380);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8390);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F83F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8400);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8410);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8420);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8430);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8440);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8450);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8460);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8470);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8480);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8490);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F84F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8500);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8510);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8520);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8530);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8540);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8550);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8560);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8570);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8580);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8590);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F85F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8600);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8610);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8620);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8630);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8640);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8650);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8660);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8670);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8680);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8690);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F86F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8700);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8710);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8720);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8730);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8740);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8750);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8760);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8770);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8780);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8790);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87A0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87B0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87C0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87D0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87E0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F87F0);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8800);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8810);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8820);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8830);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8840);
+void func_002F8000(int a)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8010(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8020(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8030(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8040(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x8\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8050(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x9\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8060(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xA\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8070(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xB\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8080(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xC\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8090(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xD\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xE\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xF\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x10\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x10\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x11\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F80F0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x12\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8100(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x12\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+int func_002F8110(int irq, int id)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x13\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8120(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x14\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8130(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x15\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8140(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x16\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8150(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x17\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8160(int a, void (*fn)(void), int b)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xFC\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8170(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0xFD\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8180(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x1A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8190(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x1B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x1C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x1D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0xFE\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0xFF\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x20\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F81F0(s32 tid)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x21\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8200(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x22\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8210(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x23\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8220(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x24\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8230(s32 tid)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x25\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8240(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x26\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8250(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x27\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8260(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x28\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8270(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x29\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8280(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x2A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8290(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x2B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F82A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x2C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F82B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x2D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F82C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x2E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+s32 func_002F82D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x2F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+s32 func_002F82E0(s32 tid, ThreadParam * p)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x30\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F82F0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x31\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8300(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x32\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8310(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x33\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8320(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x34\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8330(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x35\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8340(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x36\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8350(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x37\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8360(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x38\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8370(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x39\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8380(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x3A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8390(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F83A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F83B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F83C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F83D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+s32 func_002F83E0(SemaParam * p)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x40\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F83F0(s32 sema)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x41\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8400(s32 sema)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x42\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8410(s32 sema)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x43\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+s32 func_002F8420(s32 sema)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x44\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8430(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x45\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8440(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x46\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+s32 func_002F8450(s32 sema, SemaParam * p)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x47\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8460(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x48\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8470(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x49\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8480(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8490(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x4F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x50\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F84F0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x51\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8500(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x52\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8510(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x53\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8520(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x54\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8530(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x55\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8540(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x56\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8550(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x57\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8560(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x58\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8570(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x59\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8580(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x5A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8590(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x5C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x5D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F85F0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x5E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8600(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8610(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x5F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8620(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x60\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8630(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x61\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8640(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x62\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8650(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x63\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8660(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x64\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8670(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x66\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8680(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x67\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8690(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x68\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x6A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F86F0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x6F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8700(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x70\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8710(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x70\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8720(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x71\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8730(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x71\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8740(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x72\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8750(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x73\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8760(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x74\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8770(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x75\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8780(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x76\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8790(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x76\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F87A0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x77\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F87B0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x77\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F87C0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x78\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F87D0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, -0x78\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F87E0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x79\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+int func_002F87F0(int a)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8800(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+int func_002F8810(int num, void * args)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7C\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8820(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7D\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8830(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7E\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
+
+void func_002F8840(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x7F\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
 void func_002F8850(void)
 {
@@ -411,9 +1342,23 @@ void func_002F9008(void)
     SYNC();
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9028);
+void func_002F9028(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x74\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9038);
+void func_002F9038(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5A\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
 int func_002F9048(u32 *dst, u32 *src, u32 n)
 {
@@ -426,7 +1371,14 @@ int func_002F9048(u32 *dst, u32 *src, u32 n)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9080);
+void func_002F9080(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x5B\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9090);
 

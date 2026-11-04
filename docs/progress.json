@@ -7,8 +7,8 @@
     "c_function_bytes": 664884,
     "coverage_percent": 32.10256846041087,
     "policy_assembly_bytes": 422772,
-    "inline_asm_wrapper_functions": 81,
-    "inline_asm_wrapper_bytes": 4564,
+    "inline_asm_wrapper_functions": 221,
+    "inline_asm_wrapper_bytes": 6804,
     "decompilable_coverage_percent": 40.33628739492536
   },
   "ee_overlays": {

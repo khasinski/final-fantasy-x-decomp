@@ -58,7 +58,7 @@ def mnem(t):
     return t.split()[0] if t else ''
 
 
-SPECIAL = re.compile(r'^(lqc2|sqc2|qmfc2|qmtc2|cfc2|ctc2|v\w+|p[a-z0-9]+|mult1|multu1|div1|divu1|madd1|maddu1|mfhi1|mflo1|mthi1|mtlo1|qfsrv|mfsa|mtsa)(\.\w+)*$')
+SPECIAL = re.compile(r'^(lqc2|sqc2|qmfc2|qmtc2|cfc2|ctc2|v\w+|p[a-z0-9]+|mult1|multu1|div1|divu1|madd1|maddu1|mfhi1|mflo1|mthi1|mtlo1|qfsrv|mfsa|mtsa|syscall|mfc0|mtc0|eret|cache|tlb\w+|ei|di|sync|break)(\.\w+)*$')
 # `p*` also matches ordinary mnemonics such as prefetch-free MIPS names; none exist in EE integer code (pref is excluded below)
 
 
@@ -191,32 +191,37 @@ def emit(name, proto=None):
     if not r:
         return None
     name, params, body, written = r
+    need, _ = inputs_of(body)
     ret = 'void'
     if proto:
         ret, params = proto
-    # parameters must be a prefix of a0.. in order so the function type matches the registers
-    ps = ', '.join(f'{t} {n}' for t, n in params) or 'void'
+    isflt = lambda t: bool(re.match(r'(const )?(float|double)$', t.strip()))
+    ps = ', '.join((f'{t} {n}' if n else t) for t, n in params) or 'void'
     NUM = {'v0': 2, 'v1': 3, 'a0': 4, 'a1': 5, 'a2': 6, 'a3': 7, 't0': 8, 't1': 9, 't2': 10, 't3': 11, 't4': 12, 't5': 13,
            't6': 14, 't7': 15, 't8': 24, 't9': 25}
-    pn = {f'a{k}' for k in range(sum(1 for t, n in params if not re.match(r'(const )?(float|double)$', t.strip())))}
-    clob = sorted(NUM[w] for w in written if w in NUM and w not in pn)
+    outs, ins_, covered = [], [], set()
+    idx = 0
+    for t, n in params:
+        if isflt(t):
+            continue
+        reg = f'a{idx}'
+        idx += 1
+        if not n:
+            continue
+        if reg in written:
+            outs.append(n)
+            covered.add(reg)
+        elif reg in need:
+            ins_.append(n)
+            covered.add(reg)
+    clob = sorted(NUM[w] for w in written if w in NUM and w not in covered)
     s = f'{ret} {name}({ps})\n{{\n    __asm__ volatile(\n'
     ctrl = any(t.endswith(':') or BRANCH.match(mnem(t)) for t in body[:-1])
     lines = ['.set noreorder'] + body[:-1] + ['.set reorder'] + body[-1:] if ctrl else body
     for t in lines:
         s += f'        "{numeric(t).replace("%", "%%")}\\n"\n'
-    isflt = lambda t: re.match(r'(const )?(float|double)$', t.strip())
-    regname = {'a0': 'a0', 'a1': 'a1', 'a2': 'a2', 'a3': 'a3'}
-    outs, ins_ = [], []
-    intidx = 0
-    for t, n in params:
-        if isflt(t):
-            continue
-        reg = f'a{intidx}'
-        intidx += 1
-        (outs if reg in written else ins_).append((n, reg))
-    o = ', '.join(f'"+r"({n})' for n, _ in outs)
-    i = ', '.join(f'"r"({n})' for n, _ in ins_)
+    o = ', '.join(f'"+r"({n})' for n in outs)
+    i = ', '.join(f'"r"({n})' for n in ins_)
     s += f'        : {o} : {i}' + (' : ' + ', '.join(f'"${c}"' for c in clob) if clob else '') + ');\n}\n'
     return s
 
@@ -335,7 +340,7 @@ if __name__ == '__main__' and a and a[0] == '--check':
     unit = a[a.index('--unit') + 1] if '--unit' in a else None
     cands = []
     for k, v in sorted(hw.items()):
-        if 'cop2' not in v and 'mmi' not in v:
+        if not any(c in v for c in ('cop2', 'mmi', 'syscall', 'cop0')):
             continue
         p = find(k)
         if not p or (unit and unit not in p):
@@ -392,28 +397,55 @@ def include_closure(src):
     return out
 
 
+def _split_top(s_):
+    out, depth, cur = [], 0, ''
+    for ch in s_:
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+        if ch == ',' and depth == 0:
+            out.append(cur)
+            cur = ''
+        else:
+            cur += ch
+    if cur.strip():
+        out.append(cur)
+    return [x.strip() for x in out]
+
+
 def header_proto(name, closure):
-    """(ret, [(type, name)]) from a prototype of `name` in the headers the TU includes, else None"""
+    """(ret, [(type, name)]) from a prototype of `name` in the headers the TU includes, else None.
+    A parameter that is not a plain `type name` (function pointers) keeps its full declarator as the 'type'
+    and an empty name; the caller then never uses it as an asm operand."""
     for f in closure:
         if not f.endswith('.h'):
             continue
         t = open(f).read()
-        m = re.search(r'^([A-Za-z_][\w \*]*?)\b' + re.escape(name) + r'\s*\(([^)]*)\)\s*;', t, re.M)
+        m = re.search(r'^([A-Za-z_][\w \*]*?)\b' + re.escape(name) + r'\s*\(', t, re.M)
         if not m:
             continue
+        i = m.end()
+        depth, j = 1, i
+        while j < len(t) and depth:
+            depth += {'(': 1, ')': -1}.get(t[j], 0)
+            j += 1
+        if not t[j:].lstrip().startswith(';'):
+            continue
         ret = re.sub(r'^(extern|static)\s+', '', m.group(1).strip())
-        plist = [x.strip() for x in m.group(2).split(',') if x.strip()]
+        plist = _split_top(t[i:j - 1])
         if plist == ['void']:
             plist = []
         ps = []
-        for i, x in enumerate(plist):
+        for k, x in enumerate(plist):
+            if '(' in x:                           # function pointer: keep verbatim, never an operand
+                ps.append((x, ''))
+                continue
             mm = re.match(r'(.*?)(\b[A-Za-z_]\w*)$', x)
-            if mm and mm.group(1).strip() and not mm.group(1).strip().endswith(('struct', 'unsigned', 'signed', 'const')) and mm.group(1).strip() not in ('unsigned', 'signed'):
+            if mm and mm.group(1).strip() and mm.group(1).strip() not in ('unsigned', 'signed', 'struct', 'const'):
                 ps.append((mm.group(1).strip(), mm.group(2)))
             else:
-                ps.append((x, f'p{i}'))
-        # unnamed pointer types: "float *" -> name p
-        ps = [(t_, n_) if not t_.endswith('*') or True else (t_, n_) for t_, n_ in ps]
+                ps.append((x, f'p{k}'))
         return ret, ps
     return None
 
@@ -450,7 +482,7 @@ if __name__ == '__main__' and a and a[0] == '--apply':
     hw = handwritten()
     cands = []
     for k, v in sorted(hw.items()):
-        if 'cop2' not in v and 'mmi' not in v:
+        if not any(c in v for c in ('cop2', 'mmi', 'syscall', 'cop0')):
             continue
         p = find(k)
         if not p or shape(parse(p)[1]) not in SHAPES or lift(k) is None or not has_special(parse(p)[1]):

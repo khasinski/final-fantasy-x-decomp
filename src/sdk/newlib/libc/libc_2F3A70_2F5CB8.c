@@ -826,10 +826,38 @@ INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7A50);
 
 /* Module: EE kernel/syscall wrapper library, SIO, misc libc */
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7FC0);
+void func_002F7FC0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x0\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7FD0);
+void func_002F7FD0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x1\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7FE0);
+void func_002F7FE0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x2\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7FF0);
+void func_002F7FF0(void)
+{
+    __asm__ volatile(
+        "addiu      $3, $0, 0x3\n"
+        "syscall    0 /* handwritten instruction */\n"
+        "nop\n"
+        :  :  : "$3");
+}
