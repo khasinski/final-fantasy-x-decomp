@@ -1,5 +1,14 @@
 #include "p8_overlay.h"
 
+/* PARKED (P8): F5 TU rank 17, func_01B041E8 (912 B, 211 containers), the ppp object
+ * update loop. Control flow and calls are reproduced (switch on mode, live/paused/delay
+ * logic, list cursor advance); not matched because the five 16-byte copies (o->mtx[] rows,
+ * ident row 3, o->color -> D_006A3BB0) are `addiu vX,base,off; lq a3,0(vX); sq a3,0(dst)` in
+ * the original: a fixed a3 temp with materialized addresses, i.e. an inline-asm vector copy
+ * (sceVu0CopyVector style), which docs/ASM_POLICY.md does not allow. A u_long128 copy folds
+ * the offsets and uses v0/v1, a 16-byte aligned struct copy gives ld/sd. The original frame is
+ * also 16 bytes larger (320 vs 304) and keeps `count` and &m.r[1] spilled on the stack. */
+
 void func_01B02EB8(P8Mtx *a, P8Mtx *b);
 void func_01B038E8(void *a);
 void func_01B03A88(void *a, P8Vec *pos);

@@ -18,6 +18,34 @@ struct P8Task {
     u8 group;          /* 0x18 */
 };
 
+/* Per-target damage record (file09053: D_01B005A0.dmg = D_01B006A4). */
+typedef struct P8Dmg {
+    int a;              /* 0x00 MsGetDamageInfo outputs */
+    int b;              /* 0x04 */
+    int c;              /* 0x08 */
+    int amount;         /* 0x0C MsGetDamageInfo result */
+    int e;              /* 0x10 func_001BB930 result */
+    int f;              /* 0x14 */
+    int g;              /* 0x18 */
+} P8Dmg;
+
+/* Target set of the running effect (file09053: D_01B005A0, .bss; P7Targets with the
+ * damage records split out of handles[]). */
+typedef struct P8Targets {
+    int chr;            /* 0x000 effect owner */
+    int count;          /* 0x004 number of targets */
+    u8 *list;           /* 0x008 target chr ids */
+    int mode;           /* 0x00C */
+    void *handle;       /* 0x010 */
+    u8 ids[48];         /* 0x014 */
+    int handles[48];    /* 0x044 indexed by chr id; DEBT(TYPE): character handles */
+    P8Dmg dmg[8];       /* 0x104 */
+    int total;          /* 0x1E4 sum of dmg[].amount */
+    int arg;            /* 0x1E8 */
+} P8Targets;
+
+extern P8Targets D_01B005A0;
+
 /* Pool-backed doubly linked list (ovl_09053_pool.c PoolNode/PoolList). */
 typedef struct P8Node {
     struct P8Node *prev;
@@ -46,7 +74,7 @@ typedef struct P8Mtx {
 
 typedef struct P8PppCfg {
     u8 pad00[0x10];
-    int *pdt;          /* 0x10 */
+    void **pdt;        /* 0x10 */
 } P8PppCfg;
 
 /* ppp particle manager: OefHeapMgr header + config + live object list. */
@@ -102,7 +130,7 @@ extern int D_006A3BC8;
 extern void *D_006A3BCC;
 
 void _pppAllFreePObject(P8PObj *o);
-void _pppStartPart(P8PObj *o, int a1, int pdt, int a3);
+void _pppStartPart(P8PObj *o, int a1, void *pdt, int a3);
 void _pppInitData(P8PppCfg *cfg, void *data);
 void pppInitEnv(P8PppMgr *mgr, P8PppCfg *cfg, void *buf, int size);
 int _pppRunPart(P8PObj *o, int stride);
