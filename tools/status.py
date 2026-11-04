@@ -33,10 +33,34 @@ if os.path.exists(f"{root}/config/handwritten.txt"):
         f = l.split()
         if f and not l.startswith("#") and f[0] in funcs:
             hand[f[0]] = f[1]
-# a handwritten function that has a body in src/ is a whole-function inline-asm wrapper (tools/vu0lift.py):
-# byte-exact, but still hand-written asm, so it is never counted as C
-wrapped = {n: s for n, s in funcs.items() if n in hand and n in defined}
-done = {n: s for n, s in funcs.items() if n in defined and n not in hand}
+# a handwritten function that has a body in src/ is either
+#   - a whole-function inline-asm wrapper (tools/vu0lift.py): the body is a single `__asm__` statement. It is byte-exact
+#     but still hand-written asm, so it is never counted as C; or
+#   - C using single-instruction hardware macros (include/vu0.h, docs/ASM_POLICY.md tier 1): counted as C and no
+#     longer reported as policy assembly.
+def _bodies():
+    out = {}
+    for p in src_files:
+        t = open(p).read()
+        for m in re.finditer(r"^[A-Za-z_][\w \*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*(?:[^;{}()]*;\s*)*\{", t, re.M):
+            depth, i = 1, m.end()
+            while i < len(t) and depth:
+                depth += {"{": 1, "}": -1}.get(t[i], 0)
+                i += 1
+            out[m.group(1)] = t[m.end():i - 1]
+    return out
+_b = _bodies() if hand else {}
+def _is_wrapper(name):
+    body = _b.get(name)
+    if body is None:
+        return False
+    rest = re.sub(r'__asm__\s+volatile\s*\((?:[^;]|"(?:\\.|[^"\\])*")*\)\s*;', "", body, flags=re.S)
+    return rest.strip() == ""
+wrapped = {n: s for n, s in funcs.items() if n in hand and n in defined and _is_wrapper(n)}
+tier1 = {n for n in hand if n in defined and n not in wrapped}
+for n in tier1:
+    hand.pop(n)
+done = {n: s for n, s in funcs.items() if n in defined and (n not in hand or n in tier1)}
 dbytes = sum(done.values())
 if not json_output:
     print(f"resident ELF C coverage: {len(done)}/{len(funcs)} functions, {dbytes:#x}/{total:#x} bytes = {100*dbytes/total:.2f}% (main ELF only)")
