@@ -1,5 +1,6 @@
 /* tu_063 0x135e88-0x1365d0: low; ~Atel (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q1.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
@@ -98,4 +99,10 @@ void AtelClearSnd3dWorkAll(void) {
     D_0058D1E8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_135E88", AtelInitCalcSound);
+extern u_long128 D_0058D150;
+
+void AtelInitCalcSound(void)
+{
+    AtelClearSnd3dWorkAll();
+    VU0_STORE_VF0(&D_0058D150);
+}

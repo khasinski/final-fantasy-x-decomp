@@ -1,6 +1,7 @@
 /* tu_327 0x2b1e08-0x2b33f8: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: wrappers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r6.h"
@@ -27,7 +28,13 @@ void func_002B21E0(s32 a) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", op_gs1_transfer);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2298);
+void func_002B2298(void)
+{
+    register int seed __asm__("$3") = func_002EFD78();
+
+    VU0_QMTC2_NI(31, seed);
+    VU0_OP("vrinit R, $vf31x");
+}
 
 int func_002B22C0(int n)
 {
