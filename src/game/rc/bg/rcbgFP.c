@@ -6,6 +6,7 @@
 #include "ffx/v2.h"
 #include "ffx/w3.h"
 #include "ffx/g2.h"
+#include "vu0.h"
 
 void rcbgSetWorldMatrix(void *dst) {
     func_002DD0C0(D_00313850, dst);
@@ -33,9 +34,42 @@ void func_0019A840(void) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019A8A8);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019A910);
+void func_0019A910(S2Ent *e, void *sub)
+{
+    float v[4];
+    float k = 11.3777781f; /* 0x41360B61 */
+    register float *p __asm__("$2") = (float *)((u8 *)e + 0x20); /* DEBT(CAST) */
+    register int ki __asm__("$3"); /* DEBT(FAKE): original register assignment */
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019A988);
+    MIPS_MFC1(ki, k);
+    VU0_LQC2(31, 0, p);
+    VU0_QMTC2_NI(30, ki);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v);
+    func_002DD128(sub);
+    rcMat4fSetScaleVec3f(sub, (u8 *)e + 0x30);
+    op_rt_m_yxz((int)sub, (int)sub, (int)v, (int)((u8 *)e + 0x10)); /* DEBT(CAST): prototype takes four ints */
+}
+
+void func_0019A988(float *v, Chr *chr, int i)
+{
+    int k;
+
+    func_001072F8(chr, i, v);
+    k = 0x41200000; /* 10.0f */
+    VU0_LQC2(31, 0, v);
+    VU0_QMTC2_NI(30, k);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v);
+    VU0_LQC2(31, 0, v + 4);
+    VU0_QMTC2_NI(30, k);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v + 4);
+    VU0_LQC2(31, 0, v + 8);
+    VU0_QMTC2_NI(30, k);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v + 8);
+}
 
 int func_0019A9F8(S2Ent *e, int n) {
     S2EntObj *obj;

@@ -582,7 +582,32 @@ void func_0028D168(char *base, ScriptCtx *ctx)
     SLOT_WORK(WkfCw1C, base, ctx, 0)->fC = 1.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", func_0028D188);
+typedef struct IVec4 {
+    int x, y, z, w;
+} __attribute__((aligned(8))) IVec4;
+
+extern u_long128 D_003730A0;
+extern void pppGetRotMatrixXYZ(void *m, void *rot);
+
+void func_0028D188(char *base, int unused, ScriptCtx *ctx) {
+    IVec4 t;
+    IVec4 *s = SLOT_WORK(IVec4, base, ctx, 1);
+    IVec4 *d = SLOT_WORK(IVec4, base, ctx, 0);
+    int x, y, z;
+
+    x = s->x;
+    t = d[8];
+    d[8].x = x;
+    y = s->y;
+    d[8].y = y;
+    z = s->z;
+    t.x -= x;
+    t.y -= y;
+    t.z -= z;
+    d[8].z = z;
+    pppGetRotMatrixXYZ(d + 4, &t);
+    *(u_long128 *)(d + 7) = D_003730A0;
+}
 
 void func_0028D230(char *base, ScriptCtx *ctx) {
     Wkw80w84w88 *w = SLOT_WORK(Wkw80w84w88, base, ctx, 0);

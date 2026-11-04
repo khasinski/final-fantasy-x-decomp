@@ -1,6 +1,7 @@
 /* tu_330 0x2b4ff8-0x2b6b50: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: resource loader wrappers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
@@ -125,13 +126,33 @@ void func_002B5750(u32 a0, u32 a1, u32 a2)
         :  : "r"(a0), "r"(a1), "r"(a2));
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_unit_m);
+void op_unit_m(float *m)
+{
+    int one = 0x3F800000;
+
+    MMI_SQ_ZERO(0x0, m);
+    MMI_SQ_ZERO(0x10, m);
+    MMI_SQ_ZERO(0x20, m);
+    MMI_SQ_ZERO(0x30, m);
+    ((int *)m)[5] = one;
+    ((int *)m)[10] = one;
+    ((int *)m)[15] = one;
+    ((int *)m)[0] = one;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_unit_m_scale);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_unit_m_scale2);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_m_copy);
+void op_m_copy(void *dst_, void *src_)
+{
+    volatile u_long128 *dst = dst_, *src = src_;
+    u_long128 a = src[0], b = src[1], c = src[2], d = src[3];
+    dst[0] = a;
+    dst[1] = b;
+    dst[2] = c;
+    dst[3] = d;
+}
 
 void func_002B5858(u32 a0, u32 a1, u32 a2)
 {

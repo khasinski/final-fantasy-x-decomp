@@ -5,6 +5,7 @@
 #include "ffx/s2.h"
 #include "ffx/t2.h"
 #include "ffx/v2.h"
+#include "vu0.h"
 
 void func_0018FCE0(R2Pkt *b) {
     b->cur = 0;
@@ -66,7 +67,30 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190408);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190588);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190608);
+void func_00190608(int a, float cx, float cy, float w, float h)
+{
+    float v[16];
+    float t[4];
+    float *tp = t;
+    float hw = w * 0.5f;
+    float hh = h * 0.5f;
+
+    v[0] = cx - hw;
+    v[1] = cy - hh;
+    v[2] = 256.0f;
+    v[4] = cx + hw;
+    v[5] = cy - hh;
+    v[6] = 256.0f;
+    v[8] = cx - hw;
+    v[9] = cy + hh;
+    v[10] = 256.0f;
+    v[12] = cx + hw;
+    v[13] = cy + hh;
+    v[14] = 256.0f;
+    VU0_LQC2(31, 0, v);
+    VU0_SQC2(31, 0, tp);
+    func_00190408(0x42, v, 5, a);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190698);
 

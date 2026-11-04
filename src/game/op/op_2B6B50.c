@@ -1,13 +1,37 @@
 /* tu_331 0x2b6b50-0x2cec08: medium; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: misc wrappers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r7.h"
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_size_get);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_copy);
+extern char D_00575CC8[];
+extern void func_00120108(char *fmt, ...);
+extern void func_002EA328(s32 status) __attribute__((noreturn));
+
+void op_md_copy(u_long128 *src, u_long128 *dst)
+{
+    s32 n = op_md_size_get(src);
+    u_long128 *s;
+    u_long128 *d;
+
+    if (n == 0)
+    {
+        func_00120108(D_00575CC8);
+        func_002EA328(1);
+    }
+    s = src;
+    d = dst;
+    n /= 16;
+    while (n > 0)
+    {
+        *d++ = *s++;
+        n--;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_tex0_change_limit);
 
@@ -33,7 +57,33 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7128);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7208);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7320);
+/* ambient light colour packed to RGBA8 */
+u32 func_002B7320(void)
+{
+    float col[4] __attribute__((aligned(16)));
+    u32 t;
+    u32 k;
+    u32 res;
+
+    Sg_LightGetColor(3, col);
+    __asm__ volatile("" : : "r"(0x70003F00)); /* DEBT(FAKE): the original loads the scratchpad base here and never uses it */
+    t = 0xFFFFFFFF;
+    MMI_OP2Z("pextlb", t, t);
+    MMI_OP2Z("pextlh", t, t);
+    VU0_QMTC2_NI(30, t);
+    VU0_OP("vitof0.xyzw $vf30, $vf30");
+    k = 0x43800000;
+    VU0_QMTC2_NI(29, k);
+    VU0_LQC2(31, 0, col);
+    VU0_OP("vsub.w $vf31, $vf0, $vf0");
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf29x");
+    VU0_OP("vmini.xyzw $vf31, $vf31, $vf30");
+    VU0_OP("vftoi0.xyzw $vf31, $vf31");
+    VU0_QMFC2_NI(t, 31);
+    MMI_OP2Z("ppach", t, t);
+    MMI_OP2Z("ppacb", res, t);
+    return res;
+}
 
 void *func_002B7388(W10PackedResource *resource, int index)
 {

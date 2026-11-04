@@ -97,7 +97,16 @@ void *func_002FC190(void *func, void *arg)
     return old;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FC220);
+void func_002FC220_(void *a, U5Callback *cb) __asm__("func_002FC220");
+void func_002FC220_(void *a, U5Callback *cb)
+{
+    void (*fn)(void *) = (void (*)(void *))cb->func;
+    if (fn) {
+        fn(cb->arg);
+    }
+    SYNC();
+    EI();
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FC250);
 

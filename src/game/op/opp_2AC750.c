@@ -1,5 +1,6 @@
 /* tu_323 0x2ac750-0x2af1d0: low; ~opp (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/v6.h"

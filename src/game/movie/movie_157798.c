@@ -176,13 +176,25 @@ INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158768);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158868);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_001588F8);
+int func_001588F8(void)
+{
+    if (!func_002D9868()) {
+        return D_0030D40C;
+    }
+    return D_0030D40C * 30 / 25;
+}
 
 int func_00158948(void) {
     return D_0030D40C;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158958);
+int func_00158958(void)
+{
+    if (!func_002D9868()) {
+        return D_0030D40C;
+    }
+    return D_0030D40C * 30 / 25;
+}
 
 int func_001589A8(void) {
     if (D_0058FE50 == 0 || D_0030D3EC == 0) {

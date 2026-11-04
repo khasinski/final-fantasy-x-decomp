@@ -5,6 +5,7 @@
 #include "ffx/s2.h"
 #include "ffx/u2.h"
 #include "ffx/v2.h"
+#include "vu0.h"
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC0B8);
 
@@ -127,13 +128,79 @@ void func_001AC290(u32 a0, u32 a1, u32 a2, float f12, float f13)
         :  : "r"(a0), "r"(a1), "r"(a2) : "$2", "$3");
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC2D0);
+float func_001AC2D0(float *v)
+{
+    float r;
+    volatile float t; /* DEBT(FAKE): original reads the stack copy twice */
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC310);
+    VU0_LQC2(4, 0, v);
+    VU0_OP("vmul.xyz $vf5, $vf4, $vf4");
+    VU0_OP("vaddy.x $vf5, $vf5, $vf5y");
+    VU0_OP("vaddz.x $vf5, $vf5, $vf5z");
+    VU0_OP(".word 0x4A0503BD"); /* vsqrt Q, $vf5x */
+    VU0_OP("vwaitq");
+    VU0_OP("vaddq.xyzw $vf5, $vf0, Q");
+    VU0_QMFC2_NI(r, 5);
+    t = r;
+    t;
+    return t;
+}
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC348);
+float func_001AC310(float *v)
+{
+    float r;
+    volatile float t; /* DEBT(FAKE): original reads the stack copy twice */
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC388);
+    VU0_LQC2(4, 0, v);
+    VU0_OP("vmul.xz $vf5, $vf4, $vf4");
+    VU0_OP("vaddz.x $vf5, $vf5, $vf5z");
+    VU0_OP(".word 0x4A0503BD"); /* vsqrt Q, $vf5x */
+    VU0_OP("vwaitq");
+    VU0_OP("vaddq.xyzw $vf5, $vf0, Q");
+    VU0_QMFC2_NI(r, 5);
+    t = r;
+    t;
+    return t;
+}
+
+float func_001AC348(float *a, float *b)
+{
+    float r;
+    volatile float t; /* DEBT(FAKE): original reads the stack copy twice */
+
+    VU0_LQC2(4, 0, a);
+    VU0_LQC2(6, 0, b);
+    VU0_OP("vsub.xz $vf4, $vf4, $vf6");
+    VU0_OP("vmul.xz $vf5, $vf4, $vf4");
+    VU0_OP("vaddz.x $vf5, $vf5, $vf5z");
+    VU0_OP(".word 0x4A0503BD"); /* vsqrt Q, $vf5x */
+    VU0_OP("vwaitq");
+    VU0_OP("vaddq.xyzw $vf5, $vf0, Q");
+    VU0_QMFC2_NI(r, 5);
+    t = r;
+    t;
+    return t;
+}
+
+float func_001AC388(float *a, float *b)
+{
+    float r;
+    volatile float t; /* DEBT(FAKE): original reads the stack copy twice */
+
+    VU0_LQC2(4, 0, a);
+    VU0_LQC2(6, 0, b);
+    VU0_OP("vsub.xyz $vf4, $vf4, $vf6");
+    VU0_OP("vmul.xyz $vf5, $vf4, $vf4");
+    VU0_OP("vaddy.x $vf5, $vf5, $vf5y");
+    VU0_OP("vaddz.x $vf5, $vf5, $vf5z");
+    VU0_OP(".word 0x4A0503BD"); /* vsqrt Q, $vf5x */
+    VU0_OP("vwaitq");
+    VU0_OP("vaddq.xyzw $vf5, $vf0, Q");
+    VU0_QMFC2_NI(r, 5);
+    t = r;
+    t;
+    return t;
+}
 
 void func_001AC3D0(float * dst, float * a, float * b)
 {
@@ -193,7 +260,19 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC750);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", MsVectorRect2Polar);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001ACAE8);
+void func_001ACAE8(float *a, float *b, float *c)
+{
+    VU0_LQC2(1, 0, a);
+    VU0_OP("vmove.xyzw $vf0, $vf2");
+    VU0_LQC2(3, 0, c);
+    if (b != 0) {
+        VU0_LQC2(2, 0, b);
+        VU0_OP("vsub.xyzw $vf1, $vf1, $vf2");
+    }
+    VU0_OP("vmul.xyzw $vf1, $vf1, $vf3");
+    VU0_OP("vadd.xyzw $vf1, $vf1, $vf2");
+    VU0_SQC2(1, 0, a);
+}
 
 void func_001ACB10(float * v, float f)
 {

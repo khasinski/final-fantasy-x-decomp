@@ -1,5 +1,6 @@
 /* tu_374 0x2fffd0-0x300500: medium; libkernl/iopreset (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
@@ -29,7 +30,15 @@ INCLUDE_ASM("build/ee_asm/sdk/libkernl/iopreset", func_00300170);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/iopreset", func_00300280);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/iopreset", func_003002C8);
+int func_003002C8_(void) __asm__("func_003002C8"); /* the header declares it void; callers that need the result cast */
+int func_003002C8_(void)
+{
+    int st;
+    COP0_MFC0_STATUS(st);
+    st &= 0x10000;
+    EI();
+    return st != 0;
+}
 
 void func_003002E0(void)
 {

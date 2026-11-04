@@ -8,6 +8,30 @@
 #include "ffx/v6.h"
 #include "ffx/r6.h"
 
+
+
+#define LPA(type, off) (*(type *)((char *)lpamng + (off)))
+extern u_long128 D_00327790[];
+
+/* local view of the float/byte members touched near the end of lpamng */
+typedef struct LpaView {
+    u8 pad0[0x114D8];
+    float f114D8;
+    float f114DC;
+    u8 pad114E0[0x11550 - 0x114E0];
+    float f11550;
+    u8 pad11554[0x1156C - 0x11554];
+    u8 f1156C;
+    u8 pad1156D[0x11608 - 0x1156D];
+    int f11608;
+    int f1160C;
+    int f11610;
+    int f11614;
+    s16 f11618;
+    s16 f1161A;
+} LpaView;
+#define LPV ((LpaView *)lpamng)
+
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260A70);
 
 float func_00260B68(void)
@@ -44,7 +68,11 @@ float func_00260D50(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260DD8);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260F60);
+void func_00260F60(void)
+{
+    u_long128 *src = (u_long128 *)((char *)lpamng + 0x112C0);
+    LPA(u_long128, 0x11310) = *src;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260F88);
 
@@ -52,7 +80,23 @@ INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261130);
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261288);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002613B8);
+/* header prototypes say (void); the real signature is (int, float) */
+void func_002613B8_impl(int a, float f) __asm__("func_002613B8");
+void func_002613B8_impl(int a, float f)
+{
+    GlobalWork *w;
+    float v;
+
+    LPA(u_long128, 0x115F0) = LPA(u_long128, 0x112C0);
+    lpamng->f115D4 = f;
+    lpamng->f115D8 = LPA(float, 0x112FC);
+    lpamng->f115D0 = 0.0f;
+    v = func_002596D8(a);
+    w = lpamng;
+    w->f115E4 = a;
+    *(u16 *)((char *)w + 0x11304) = a;
+    w->f115DC = v;
+}
 
 void func_00261430(void)
 {
@@ -107,7 +151,18 @@ INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", abmap_cheng_panel);
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262258);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002622D0);
+void func_002622D0(void)
+{
+    u_long128 *src;
+
+    LPV->f11550 = 256.0f;
+    src = (u_long128 *)((char *)lpamng + (LPV->f1156C * 0x50 + 0x11090));
+    LPA(u_long128, 0x114D0) = *src;
+    LPV->f114D8 = ((float *)src)[2] - 32.0f;
+    LPA(u_long128, 0x11510) = D_00327790[LPV->f1156C];
+    LPV->f114DC = LPV->f11550 + LPV->f11550;
+    func_00262258();
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262360);
 
@@ -295,7 +350,19 @@ void func_00263B98(int slot)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00263BD8);
+void func_00263BD8(int a) /* DEBT(TYPE): header says int, argument is a ChrWork * */
+{
+    ChrWork *w = (ChrWork *)a;
+
+    w->f23 = 1;
+    w->f29++;
+    if (w->f29 >= 3) {
+        w->f34 = 0;
+        w->rect1[1] = w->a.rect[1];
+        return;
+    }
+    w->rect1[1] = w->a.rect[1] + ((3 - w->f29) * (s16)w->a.rect[3]) / 3 + (s16)w->a.rect[3] / 6;
+}
 
 void func_00263C58(int slot)
 {

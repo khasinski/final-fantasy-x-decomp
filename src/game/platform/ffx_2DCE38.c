@@ -1,5 +1,6 @@
 /* tu_351 0x2dce38-0x2ddb48: low; ~FFXVu0InnerProduct (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/v7.h"
@@ -202,9 +203,36 @@ void func_002DD080(u32 a0, u32 a1, u32 a2)
         :  : "r"(a0), "r"(a1), "r"(a2) : "$7", "$8", "$9");
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD0B0);
+void func_002DD0B0(void *pa, void *pb)
+{
+    u_long128 *a = pa, *b = pb;
+    register u_long128 t __asm__("$6") = *b;
+    *a = t;
+}
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD0C0);
+void func_002DD0C0(void *pa, void *pb)
+{
+    u_long128 *a = pa, *b = pb;
+    register u_long128 t0 __asm__("$6");
+    register u_long128 t1 __asm__("$7");
+    register u_long128 t2 __asm__("$8");
+    register u_long128 t3 __asm__("$9");
+    t0 = b[0];
+    __asm__ volatile("");
+    t1 = b[1];
+    __asm__ volatile("");
+    t2 = b[2];
+    __asm__ volatile("");
+    t3 = b[3];
+    __asm__ volatile("");
+    a[0] = t0;
+    __asm__ volatile("");
+    a[1] = t1;
+    __asm__ volatile("");
+    a[2] = t2;
+    __asm__ volatile("");
+    a[3] = t3;
+}
 
 void func_002DD0E8(u32 a0, u32 a1)
 {
@@ -304,7 +332,26 @@ INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD718);
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD8A8);
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD900);
+void func_002DD900(void *a, void *b, void *c, int flag)
+{
+    VU0_LQC2(4, 0x0, b);
+    VU0_LQC2(5, 0x10, b);
+    VU0_LQC2(6, 0x20, b);
+    VU0_LQC2(7, 0x30, b);
+    VU0_LQC2(8, 0x0, c);
+    VU0_OP("vmulax.xyzw ACC, $vf4, $vf8x");
+    VU0_OP("vmadday.xyzw ACC, $vf5, $vf8y");
+    VU0_OP("vmaddaz.xyzw ACC, $vf6, $vf8z");
+    VU0_OP("vmaddw.xyzw $vf9, $vf7, $vf8w");
+    VU0_OP("vdiv Q, $vf0w, $vf9w");
+    VU0_OP("vwaitq");
+    VU0_OP("vmulq.xyz $vf9, $vf9, Q");
+    VU0_OP("vftoi4.xyzw $vf10, $vf9");
+    if (flag) {
+        VU0_OP("vftoi0.zw $vf10, $vf9");
+    }
+    VU0_SQC2(10, 0x0, a);
+}
 
 void func_002DD948(void *dst, float *src)
 {
@@ -342,9 +389,53 @@ void func_002DD998(u32 a0, u32 a1, float f12)
         :  : "r"(a0), "r"(a1) : "$8");
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD9B0);
+int func_002DD9B0(void *a)
+{
+    int r;
+    register u64 k __asm__("$2");
+    VU0_OP("vsub.xyzw $vf4, $vf0, $vf0");
+    k = 0x4580000045800000UL;
+    __asm__ volatile("" : : "r"(k));
+    VU0_LQC2(7, 0x0, a);
+    VU0_QMTC2_NI(6, k);
+    VU0_CTC2_NI_ZERO(16);
+    VU0_OP("vsub.xyw $vf5, $vf7, $vf4");
+    VU0_OP("vsub.xy $vf5, $vf6, $vf7");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_CFC2_NI(r, 16);
+    return r & 0xC0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD9F8);
+int func_002DD9F8(void *a, void *b, void *c)
+{
+    int r;
+    register u64 k __asm__("$2");
+    VU0_OP("vsub.xyzw $vf4, $vf0, $vf0");
+    k = 0x4580000045800000UL;
+    __asm__ volatile("" : : "r"(k));
+    VU0_LQC2(6, 0x0, a);
+    VU0_LQC2(8, 0x0, b);
+    VU0_LQC2(9, 0x0, c);
+    VU0_QMTC2_NI(7, k);
+    VU0_CTC2_NI_ZERO(16);
+    VU0_OP("vsub.xyw $vf5, $vf6, $vf4");
+    VU0_OP("vsub.xy $vf5, $vf7, $vf6");
+    VU0_OP("vsub.xyw $vf5, $vf8, $vf4");
+    VU0_OP("vsub.xy $vf5, $vf7, $vf8");
+    VU0_OP("vsub.xyw $vf5, $vf9, $vf4");
+    VU0_OP("vsub.xy $vf5, $vf7, $vf9");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_CFC2_NI(r, 16);
+    return r & 0xC0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DDA58);
 

@@ -1,5 +1,6 @@
 /* tu_290 0x26ac38-0x26b218: low; unk_26AC38 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/w8.h"
@@ -7,7 +8,21 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AC38);
+void func_0026AC38(char *a0, int *a1, char *a2) {
+    char *p;
+    int *q;
+    int off;
+
+    if (D_006A3BC4 == 0 && a1[0] == *(int *)(a0 + 0xC)) {
+        q = a1 + 4;
+        off = **(int **)(a2 + 0xC) + 0xA0;
+        p = a0 + off;
+        VU0_LQC2(10, 0, p);
+        VU0_LQC2(11, 0, q);
+        VU0_OP("vadd.xyzw $vf10, $vf10, $vf11");
+        VU0_SQC2(10, 0, p);
+    }
+}
 
 void func_0026AC80(u32 a0, u32 a1)
 {
@@ -61,7 +76,22 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AEA0);
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF08);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF28);
+void func_0026AF28(char *a0, int *a1, char *a2) {
+    char *p;
+    int *q;
+    int off;
+
+    if (D_006A3BC4 == 0 && a1[0] == *(int *)(a0 + 0xC)) {
+        q = a1 + 4;
+        off = **(int **)(a2 + 0xC) + 0xA0;
+        p = a0 + off;
+        VU0_LQC2(10, 0, p);
+        VU0_LQC2(11, 0, q);
+        VU0_OP("vadd.xyzw $vf10, $vf10, $vf11");
+        VU0_SQC2(10, 0, p);
+    }
+}
+
 
 void func_0026AF70(u32 a0, u32 a1)
 {

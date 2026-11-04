@@ -224,7 +224,14 @@ int func_002DF700(int fd, int buf, int size)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libmc/libmc", func_002DF880);
+extern void func_002F9318(s32 sema);
+void func_002DF880_(s32 a, s32 b, s32 sema) __asm__("func_002DF880");
+void func_002DF880_(s32 a, s32 b, s32 sema)
+{
+    func_002F9318(sema);
+    SYNC();
+    EI();
+}
 
 void func_002DF8A8(u16 id)
 {
@@ -586,4 +593,10 @@ int func_002E0590(int port, int slot, int name)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libmc/libmc", func_002E06A8);
+void func_002E06A8_(s32 a, s32 b, s32 sema) __asm__("func_002E06A8");
+void func_002E06A8_(s32 a, s32 b, s32 sema)
+{
+    func_002F8410(sema);
+    SYNC();
+    EI();
+}

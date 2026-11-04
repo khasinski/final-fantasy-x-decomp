@@ -190,4 +190,8 @@ void func_00115E48(u32 a0, u32 a1, float f12)
         :  : "r"(a0), "r"(a1) : "$8");
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115E60);
+void func_00115E60(u_long128 *dst, u_long128 *src)
+{
+    register u_long128 t __asm__("$6") = *src; /* DEBT(FAKE): original quadword temp lives in a2 */
+    *dst = t;
+}

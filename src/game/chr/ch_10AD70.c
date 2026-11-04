@@ -351,6 +351,29 @@ INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010C798);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010CA88);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010D008);
+extern char D_00569618[];
+extern void func_0011EDA8(int addr, int size, void *p);
+extern void func_00123C6C(void);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010D048);
+int func_0010D008(void)
+{
+    func_0011EDA8(0x1100C000, 0x4000, D_00569618);
+    SYNC();
+    EI();
+    func_00123C6C();
+    return 0;
+}
+
+extern volatile int D_003036F4;
+extern void func_0011ACD8(void);
+
+int func_0010D048(void)
+{
+    if ((*(volatile u32 *)0x10009000 & 0xFFFF0000) == 0xF0000000) {
+        D_003036F4++;
+        func_0011ACD8();
+    }
+    SYNC();
+    EI();
+    return 0;
+}

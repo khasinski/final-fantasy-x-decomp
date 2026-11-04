@@ -1,6 +1,7 @@
 /* tu_333 0x2ceff0-0x2d0af0: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: bitfield/size helpers and wrappers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r7.h"

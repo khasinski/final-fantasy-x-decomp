@@ -6,6 +6,7 @@
 #include "ffx/t2.h"
 #include "ffx/v2.h"
 #include "ffx/w3.h"
+#include "vu0.h"
 
 R2AnimFrame *func_00190F20(R2Anim *a) {
     u32 flags = a->flags;
@@ -129,7 +130,34 @@ void func_001921E0(float *m) {
     func_0018F260(m, pool->fFC, pool->fFC, pool->fFC);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", rcbgSetViewMatrix);
+extern void func_001ACB48(float ang, void *out, float *eye, float *tgt, void *up);
+
+void rcbgSetViewMatrix(void *out, float *eye, float *tgt, void *up, float ang)
+{
+    W3Core *core;
+    W3Pool *pool;
+    float e[4];
+    float t[4];
+    float *tp;
+    int s;
+
+    if (g_pMainWork != 0) {
+        V2_POOL(core, pool);
+    } else {
+        pool = 0;
+    }
+    s = *(int *)&pool->fFC; /* DEBT(CAST): the scale is moved as raw bits */
+    VU0_LQC2(31, 0, eye);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, e);
+    tp = t;
+    VU0_LQC2(31, 0, tgt);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, tp);
+    func_001ACB48(ang, out, e, tp, up);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192280);
 

@@ -6,6 +6,7 @@
 #include "ffx/t2.h"
 #include "ffx/v2.h"
 #include "ffx/g2.h"
+#include "vu0.h"
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195378);
 
@@ -76,7 +77,27 @@ void func_00195948(int a) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgModelFToS0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgModelDump);
+void rcbgModelDump(float *dst, s16 *src, int n, float scale)
+{
+    int iv[4];
+    u_long128 fv;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        iv[0] = src[0];
+        iv[1] = src[1];
+        iv[2] = src[2];
+        VU0_LQC2(31, 0, iv);
+        VU0_OP("vitof0.xyzw $vf31, $vf31");
+        VU0_SQC2(31, 0, &fv);
+        VU0_LQC2(31, 0, &fv);
+        VU0_QMTC2_NI(30, scale);
+        VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+        VU0_SQC2(31, 0, dst);
+        src += 3;
+        dst += 4;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195A88);
 

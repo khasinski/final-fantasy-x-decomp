@@ -6,6 +6,7 @@
 #include "ffx/v2.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
+#include "vu0.h"
 
 void func_001A21E0(W3Task *t)
 {
@@ -216,7 +217,19 @@ void func_001A2D98(float *p) {
     p[0] = 0.001f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2DD8);
+void func_001A2DD8(float *v)
+{
+    float k = -651.89862f; /* 0xC422F983 */
+    int ki;
+
+    MIPS_MFC1(ki, k);
+    VU0_LQC2(31, 0, v);
+    VU0_QMTC2_NI(30, ki);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v);
+    k = 1024.0f;
+    v[1] -= k;
+}
 
 void func_001A2E10(int a, int b, float *c) {
     S2_func_001072F8(rcefGetChrHandle(a), b, c);
@@ -236,7 +249,14 @@ void func_001A2EC0(int a, int b, float *c) {
     func_001A2E58(a, func_001A3080(a, b), c);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2F00);
+void func_001A2F00(int a, int b, float *c)
+{
+    float m[16];
+
+    ((void (*)(Chr *, int, float *))func_001072F8)(rcefGetChrHandle(a), b, m); /* DEBT(CAST) */
+    VU0_LQC2(31, 0, m + 12);
+    VU0_SQC2(31, 0, c);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2F50);
 
@@ -328,7 +348,22 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3A40);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3BB0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3BD8);
+extern void func_001A2DD8(float *v);
+extern void func_001A2D58(float *m);
+
+void func_001A3BD8(int id, int dst, float *in)
+{
+    float a[4];
+    float b[4];
+    float m[16];
+
+    VU0_LQC2(31, 0, in);
+    VU0_SQC2(31, 0, a);
+    func_001A2DD8(a);
+    func_001B6790(id, b);
+    func_001A2D58(m);
+    op_rt_m_yxz(dst, (int)m, (int)a, (int)b); /* DEBT(CAST): prototype takes four ints */
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3C50);
 
@@ -336,11 +371,46 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3DC8);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3ED8);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A40E0);
+void func_001A40E0(int a, int b, float *out)
+{
+    float m0[16];
+    float m1[16];
+    register Chr *c __asm__("$18"); /* DEBT(FAKE): keeps the original callee-saved register order */
+    int i;
+    register float *p __asm__("$3"); /* DEBT(FAKE): original pointer registers */
+    register float *q __asm__("$2");
+    float k;
+    int ki;
+
+    c = rcefGetChrHandle(a);
+    i = func_001A3080(a, 0);
+    ((void (*)(Chr *, int, float *))func_001072F8)(c, b, m0); /* DEBT(CAST) */
+    ((void (*)(Chr *, int, float *))func_001072F8)(c, i, m1);
+    p = m0 + 12;
+    q = m1 + 12;
+    VU0_LQC2(31, 0, p);
+    VU0_LQC2(30, 0, q);
+    VU0_OP("vsub.xyz $vf31, $vf31, $vf30");
+    VU0_SQC2(31, 0, out);
+    k = 10.0f;
+    MIPS_MFC1(ki, k);
+    VU0_LQC2(31, 0, out);
+    VU0_QMTC2_NI(30, ki);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, out);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4190);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A41D0);
+void func_001A41D0(int a, float *out)
+{
+    float m[16];
+
+    func_001A2E80(a, 0, m);
+    VU0_LQC2(31, 0, m + 8);
+    VU0_SQC2(31, 0, out);
+    rcVec3fNormalize((Vec4 *)out); /* DEBT(CAST) */
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4210);
 

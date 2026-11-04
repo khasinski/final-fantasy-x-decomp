@@ -6,7 +6,55 @@
 #include "ffx/t6.h"
 #include "ffx/v6.h"
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opu_world);
+void op_unit_m_scale2(void *m, void *n);
+void op_rt_m_6(void *m, void *n, void *a, void *b, int c);
+void func_002B5750(void *a, void *b, void *c);
+void func_002B5880(void *a, void *b, void *c);
+
+/* DEBT(CAST): raw byte offsets, record types unknown */
+s16 *opu_world(AnimCtx *o, s16 *p)
+{
+    u8 *m = (u8 *)o;
+    register u8 *t __asm__("$16");
+    float *f = (float *)o;
+    int idx;
+
+    t = o->p220;
+
+    if (o->h21A & 0x400) {
+        f[0] = p[1];
+        f[1] = p[2];
+        f[2] = p[3];
+        f[0] *= 0.00390625f;
+        f[1] *= 0.00390625f;
+        f[2] *= 0.00390625f;
+        p += 4;
+        op_unit_m_scale2(o, o);
+    } else {
+        op_unit_m_scale(o, 1.0f);
+        p += 1;
+    }
+    idx = (o->h21A & 0x7000) >> 12;
+    t[0x19] = idx;
+    op_rt_m_6(o, o, t + 0x30, t + 0x90, idx);
+    if (!(o->h21A & 0x800)) {
+        if (!(o->h21A & 0x200)) {
+            func_002B56D8(t + 0xC0, m + 0x280, o);
+        } else {
+            func_002B5880(m + 0x30, m + 0x280, m + 0x30);
+            op_m_copy(t + 0xC0, o);
+        }
+    } else {
+        if (o->h21A & 0x200) {
+            t += 0xC0;
+            func_002B5750(t, m + 0x280, o);
+            *(volatile u_long128 *)(t + 0x30) = *(u_long128 *)(m + 0x30);
+        } else {
+            op_m_copy(t + 0xC0, o);
+        }
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", func_002A4540);
 

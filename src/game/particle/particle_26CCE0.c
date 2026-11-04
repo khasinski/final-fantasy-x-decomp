@@ -1,5 +1,6 @@
 /* tu_293 0x26cce0-0x26dad8: low; unk_26CCE0 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/w8.h"
@@ -25,7 +26,25 @@ void func_0026CCE8(char *base, int a, ScriptCtx *ctx)
     w->m[3][2] = trans[2];
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26CCE0", func_0026CD70);
+void func_0026CD70(char *a0, int *a1) {
+    char *v;
+    char *m;
+
+    if ((u32)a1[1] != 0xFFFFFFFF) {
+        v = a0 + 0x40;
+        m = *(char **)(a0 + 4) + 0x10;
+        VU0_LQC2(27, 0, v);
+        VU0_LQC2(28, 0, m);
+        VU0_LQC2(29, 0x10, m);
+        VU0_LQC2(30, 0x20, m);
+        VU0_LQC2(31, 0x30, m);
+        VU0_OP("vmulax.xyzw ACC, $vf28, $vf27x");
+        VU0_OP("vmadday.xyzw ACC, $vf29, $vf27y");
+        VU0_OP("vmaddaz.xyzw ACC, $vf30, $vf27z");
+        VU0_OP("vmaddw.xyzw $vf26, $vf31, $vf0w");
+        VU0_SQC2(26, 0, v);
+    }
+}
 
 void func_0026CDC0(R6Mtx40 *o, void *unused, ScriptCtx *ctx) {
     Wkf0f4f8 *w = SLOT_WORK(Wkf0f4f8, o, ctx, 0);
@@ -78,7 +97,37 @@ void func_0026D0B8(U4Xform *o)
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26CCE0", func_0026D148);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26CCE0", func_0026D210);
+extern char D_006A3A00[];
+extern void func_002DCE80(void *d, void *a, void *b);
+
+void func_0026D210(void) {
+    float b[4];
+    float a[4];
+    float c[4];
+    float *base = (float *)D_006A39B0;
+    u_long128 *o;
+    u_long128 *q;
+
+    a[3] = 0;
+    a[0] = base[4];
+    a[1] = base[5];
+    a[2] = base[6];
+    func_002DCEC8((s32)a, (s32)a); /* DEBT(CAST): funcs.h prototype takes ints */
+    o = (u_long128 *)D_006A3A00;
+    *o = *(u_long128 *)a;
+    b[0] = a[1];
+    b[1] = -a[0];
+    b[2] = 0;
+    b[3] = 0;
+    func_002DCEC8((s32)b, (s32)b);
+    q = o - 1;
+    q[0] = *(u_long128 *)b;
+    func_002DCE80(c, b, a);
+    func_002DCEC8((s32)c, (s32)c);
+    q[3] = *(u_long128 *)(D_006A39B0 + 0x30);
+    q[2] = *(u_long128 *)c;
+    func_002DCE38(D_006A3AF0, D_006A3A70, q);
+}
 
 void func_0026D310(ScriptTransformWork *work)
 {

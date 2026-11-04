@@ -1,5 +1,6 @@
 /* tu_369 0x2f8000-0x2fac84: low; libkernl/tty (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
 #include "ffx/v7.h"
@@ -1251,7 +1252,36 @@ int func_002F8A30(int a, int b, int c)
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8A38);
+extern u32 D_00568634;
+u32 func_002F8A38(int a)
+{
+    int en, t;
+    u32 end, ret;
+
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        do {
+            DI();
+            SYNC_P();
+            COP0_MFC0_STATUS(t);
+        } while (t & 0x10000);
+    }
+    end = D_00568634 + a;
+    if (((u32(*)(void))func_002F83C0)() < end) {
+        func_002ED118()->_errno = 12;
+        if (en) {
+            EI();
+        }
+        return -1;
+    }
+    ret = D_00568634;
+    D_00568634 = end;
+    if (en) {
+        EI();
+    }
+    return ret;
+}
 
 int func_002F8AE8(int fd)
 {
@@ -1290,31 +1320,169 @@ int func_002F8B60(void)
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8B88);
+void func_002F8B88(int a, int b)
+{
+    u32 lo = a, hi = b;
+    u32 i, t;
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8C30);
+    for (i = 0; (int)i < 0x1000; i += 0x40) {
+        SYNC();
+        CACHE_OP(0x10, 0x0, i);
+        SYNC();
+        COP0_MFC0_TAGLO(t);
+        t = (t & 0xFFFFF000) + i;
+        if (!(t < lo) && !(hi < t)) {
+            SYNC();
+            CACHE_OP(0x14, 0x0, i);
+            SYNC();
+        }
+        SYNC();
+        CACHE_OP(0x10, 0x1, i);
+        SYNC();
+        COP0_MFC0_TAGLO(t);
+        t = (t & 0xFFFFF000) + i;
+        if (!(t < lo) && !(hi < t)) {
+            SYNC();
+            CACHE_OP(0x14, 0x1, i);
+            SYNC();
+        }
+        SYNC();
+    }
+}
+
+void func_002F8C30_(u32 a, u32 b) __asm__("func_002F8C30");
+void func_002F8C30_(u32 a, u32 b)
+{
+    int en;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    func_002F8B88(a & 0xFFFFFFC0, b & 0xFFFFFFC0);
+    if (en) {
+        func_003002C8();
+    }
+}
 
 void func_002F8CB0(u32 a, u32 b)
 {
     func_002F8B88(a & ~0x3F, b & ~0x3F);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8CC8);
+void func_002F8CC8(int a, int b)
+{
+    u32 lo = a, hi = b;
+    u32 i, t;
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8D70);
+    for (i = 0; (int)i < 0x1000; i += 0x40) {
+        SYNC();
+        CACHE_OP(0x10, 0x0, i);
+        SYNC();
+        COP0_MFC0_TAGLO(t);
+        t = (t & 0xFFFFF000) + i;
+        if (!(t < lo) && !(hi < t)) {
+            SYNC();
+            CACHE_OP(0x16, 0x0, i);
+            SYNC();
+        }
+        SYNC();
+        CACHE_OP(0x10, 0x1, i);
+        SYNC();
+        COP0_MFC0_TAGLO(t);
+        t = (t & 0xFFFFF000) + i;
+        if (!(t < lo) && !(hi < t)) {
+            SYNC();
+            CACHE_OP(0x16, 0x1, i);
+            SYNC();
+        }
+        SYNC();
+    }
+}
+
+void func_002F8D70_(u32 a, u32 b) __asm__("func_002F8D70");
+void func_002F8D70_(u32 a, u32 b)
+{
+    int en;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    func_002F8CC8(a & 0xFFFFFFC0, b & 0xFFFFFFC0);
+    if (en) {
+        func_003002C8();
+    }
+}
 
 void func_002F8DF0(u32 a, u32 b)
 {
     func_002F8CC8(a & 0xFFFFFFC0, b & 0xFFFFFFC0);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8E08);
+int func_002F8E08(int a)
+{
+    int en, r;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    r = ((int (*)(int))func_002F8130)(a);
+    SYNC();
+    if (en) {
+        func_003002C8();
+    }
+    return r;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8E70);
+int func_002F8E70(int a)
+{
+    int en, r;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    r = ((int (*)(int))func_002F8120)(a);
+    SYNC();
+    if (en) {
+        func_003002C8();
+    }
+    return r;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8ED8);
+int func_002F8ED8(int a)
+{
+    int en, r;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    r = ((int (*)(int))func_002F8150)(a);
+    SYNC();
+    if (en) {
+        func_003002C8();
+    }
+    return r;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8F40);
+int func_002F8F40(int a)
+{
+    int en, r;
+    COP0_MFC0_STATUS(en);
+    en &= 0x10000;
+    if (en) {
+        func_00300280();
+    }
+    r = ((int (*)(int))func_002F8140)(a);
+    SYNC();
+    if (en) {
+        func_003002C8();
+    }
+    return r;
+}
 
 void func_002F8FA8(void)
 {
@@ -1384,7 +1552,27 @@ INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9090);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9168);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9318);
+int func_002F9318(int c)
+{
+    register int r __asm__("$2");
+    int i, t;
+
+    EE_LI_V1(-0x2F);
+    EE_SYSCALL(r, c);
+    t = r;
+    if (t != c) {
+        return ((int (*)(int))func_002F8320)(c);
+    }
+    if ((u32)t >= 0x100 || D_00568DE0 == 0) {
+        return -1;
+    }
+    i = D_00791A38.count & 0x1FF;
+    D_00791A38.count = i + 1;
+    D_00791A38.ent[i].flag = 0;
+    D_00791A38.ent[i].c = t;
+    func_002F8410(D_00791A30);
+    return t;
+}
 
 int func_002F93B0(u32 c)
 {
@@ -1401,7 +1589,27 @@ int func_002F93B0(u32 c)
     return c;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9430);
+int func_002F9430(int c)
+{
+    register int r __asm__("$2");
+    int i, t;
+
+    EE_LI_V1(-0x2F);
+    EE_SYSCALL(r, c);
+    t = r;
+    if (t != c) {
+        return ((int (*)(int))func_002F8360)(c);
+    }
+    if ((u32)t >= 0x100 || D_00568DE0 == 0) {
+        return -1;
+    }
+    i = D_00791A38.count & 0x1FF;
+    D_00791A38.count = i + 1;
+    D_00791A38.ent[i].flag = 2;
+    D_00791A38.ent[i].c = t;
+    func_002F8410(D_00791A30);
+    return t;
+}
 
 int func_002F94C8(u16 a, int b, int c)
 {

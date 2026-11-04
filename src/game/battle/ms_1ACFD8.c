@@ -296,7 +296,18 @@ int MsBattleGetChrDisposeFlag(void) {
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", func_001AF2E8);
+extern void yiGetBattleCenter(float *v);
+
+void func_001AF2E8(u_long128 *dst)
+{
+    volatile u_long128 *p = (volatile u_long128 *)&D_003172F0; /* DEBT(CAST) */
+    if (*((s8 *)p + 0x212D) != 0) {
+        register u_long128 t __asm__("$8") = *p; /* DEBT(FAKE) */
+        *dst = t;
+    } else {
+        yiGetBattleCenter((float *)dst);
+    }
+}
 
 s8 MsBattleCursorType(void) {
     return D_003193ED;

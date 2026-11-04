@@ -26,7 +26,30 @@ void func_002B21E0(s32 a) {
     func_002B1F90(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", op_gs1_transfer);
+extern u_long128 D_006F2CE0[];
+extern void *D_003F395C;
+
+void op_gs1_transfer(void)
+{
+    u_long128 buf[11];
+    u_long128 *s = D_006F2CE0;
+
+    buf[0] = 0x7000000A;
+    buf[1] = s[1];
+    buf[2] = s[2];
+    buf[3] = s[3];
+    buf[4] = s[4];
+    buf[5] = s[5];
+    buf[6] = s[6];
+    buf[7] = s[7];
+    buf[8] = s[8];
+    buf[9] = s[9];
+    buf[10] = s[10];
+    func_002DA610(0, 0);
+    func_002F8660(0);
+    func_002DBA28(D_003F395C, (int)buf);
+    func_002DA610(0, 0);
+}
 
 void func_002B2298(void)
 {

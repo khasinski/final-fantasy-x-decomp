@@ -1,5 +1,6 @@
 /* tu_296 0x26fbf8-0x270220: low; unk_26FBF8 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/t6.h"
@@ -10,7 +11,30 @@ float func_0026FBF8(float a, float b) {
     return a * b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26FBF8", func_0026FC00);
+float func_0026FC00(u8 range) {
+    float a;
+    float b;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    if (range != 0) {
+        MIPS_ADDI0(t, -1);
+        VU0_QMTC2_NI(2, t);
+        VU0_OP("vrxor R, $vf2x");
+        VU0_OP("vitof0.x $vf2, $vf2");
+        VU0_OP("vrnext.x $vf1, R");
+        VU0_OP("vadd.x $vf1, $vf1, $vf2");
+        VU0_QMFC2_NI(b, 1);
+        a = (a + b) * 0.5f;
+    }
+    return a;
+}
 
 void func_0026FC68(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
 {
@@ -43,7 +67,31 @@ float func_0026FD70(float a, float b) {
     return a * b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26FBF8", func_0026FD78);
+float func_0026FD78(u8 range) {
+    float a;
+    float b;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    a = -a;
+    if (range != 0) {
+        MIPS_ADDI0(t, -1);
+        VU0_QMTC2_NI(2, t);
+        VU0_OP("vrxor R, $vf2x");
+        VU0_OP("vitof0.x $vf2, $vf2");
+        VU0_OP("vrnext.x $vf1, R");
+        VU0_OP("vadd.x $vf1, $vf1, $vf2");
+        VU0_QMFC2_NI(b, 1);
+        a = (a - b) * 0.5f;
+    }
+    return a;
+}
 
 void func_0026FDE0(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
 {
@@ -76,7 +124,33 @@ s8 func_0026FEE8(s8 a, float s) {
     return a * s - a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26FBF8", func_0026FF18);
+float func_0026FF18(u8 range) {
+    float a;
+    float b;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    if (range != 0) {
+        MIPS_ADDI0(t, -1);
+        VU0_QMTC2_NI(2, t);
+        VU0_OP("vrxor R, $vf2x");
+        VU0_OP("vitof0.x $vf2, $vf2");
+        VU0_OP("vrnext.x $vf1, R");
+        VU0_OP("vadd.x $vf1, $vf1, $vf2");
+        VU0_QMFC2_NI(b, 1);
+        a += b;
+    } else {
+        a += a;
+    }
+    return a;
+}
+
 
 void func_0026FF70(ScriptWork *base, T6_FxKeyB *k, ScriptCtx *ctx)
 {
@@ -107,7 +181,30 @@ s8 func_00270080(s8 a, float s) {
     return a * s;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26FBF8", func_002700A8);
+float func_002700A8(u8 range) {
+    float a;
+    float b;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    if (range != 0) {
+        MIPS_ADDI0(t, -1);
+        VU0_QMTC2_NI(2, t);
+        VU0_OP("vrxor R, $vf2x");
+        VU0_OP("vitof0.x $vf2, $vf2");
+        VU0_OP("vrnext.x $vf1, R");
+        VU0_OP("vadd.x $vf1, $vf1, $vf2");
+        VU0_QMFC2_NI(b, 1);
+        a = (a + b) * 0.5f;
+    }
+    return a;
+}
 
 void func_00270110(ScriptWork *base, T6_FxKeyB *k, ScriptCtx *ctx)
 {

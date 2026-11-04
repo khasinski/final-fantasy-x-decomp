@@ -35,9 +35,143 @@ void func_002A2C68(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", opu_tc_load);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", opu_clut_load);
+void Ch_ClutCreate(Chr *chr);
+void *func_001175D8(Chr *chr, int idx, int *n);
+void op_free(void *heap, void *p);
+#define HEAP(o) (*(void **)((u8 *)(o) + 0x3A8))
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", opu_texture_load);
+/* DEBT(CAST): script stream read as s16 words, raw byte offsets */
+s16 *opu_clut_load(AnimCtx *o, s16 *p)
+{
+    u8 *t = o->p220;
+    Chr *chr = owu_chr_hd[t[0x18]];
+    int src = *(int *)((u32)o + (t[0x1E] << 2) + 0x360);
+    int n;
+    u8 *x;
+
+    switch ((s16)o->h21A & 0xF000) {
+    case 0:
+        op_oef2_clut_load(op_oef2_a_get(src, 3, p[1]), 1);
+        p += 2;
+        break;
+    case 0x1000:
+        Ch_ClutCreate(chr);
+        n = op_chara_hsv_size_get(chr);
+        if (n != 0) {
+            op_free(HEAP(o), *(void **)(t + 0xBC));
+            *(void **)(t + 0xBC) = op_malloc(HEAP(o), n);
+            func_002A3BD8(chr, *(T6_PackBuf **)(t + 0xBC));
+        } else {
+            *(int *)(t + 0xBC) = 0;
+        }
+        p += 1;
+        break;
+    case 0x2000:
+        if (*(int *)(t + 0xBC) != 0) {
+            op_chara_hsv(chr, *(T6_PackBuf **)(t + 0xBC), (int)*(float *)(t + 0x40), (int)*(float *)(t + 0x44),
+                         (int)*(float *)(t + 0x48), (int)*(float *)(t + 0x3C));
+        }
+        p += 1;
+        break;
+    case 0x5000:
+        if (*(int *)(t + 0xBC) != 0) {
+            u8 *e = (u8 *)&owu_chr_status[opus_get_chr_status_index(chr, 0, 0)];
+            int v = e[0x17];
+
+            e[0x17] = v & 0xFE;
+            op_chara_hsv(chr, *(T6_PackBuf **)(t + 0xBC), (int)*(float *)(t + 0x40), (int)*(float *)(t + 0x44),
+                         (int)*(float *)(t + 0x48), (int)*(float *)(t + 0x3C));
+            e[0x17] = v;
+        }
+        p += 1;
+        break;
+    case 0x3000:
+        if (*(int *)(t + 0xBC) != 0) {
+            op_free(HEAP(o), *(void **)(t + 0xBC));
+            *(int *)(t + 0xBC) = 0;
+        }
+        Ch_ClutDispose(chr);
+        p += 1;
+        break;
+    case 0x4000: {
+        u8 *s = (u8 *)op_oef2_a_get(src, 9, p[2]);
+        int i;
+
+        x = func_001175D8(chr, p[1], &n);
+        for (i = 0; i < n; i += 16) {
+            *(u_long128 *)(x + i) = *(u_long128 *)(s + i);
+        }
+        p += 3;
+        break;
+    }
+    case 0x6000: {
+        int v = p[1];
+        int *s;
+        u8 *big;
+        u8 *d;
+
+        p += 2;
+        s = op_oef2_a_get(src, 3, v);
+        big = op_malloc(HEAP(o), 0x20000);
+        d = big + ((v & 7) << 14);
+        *(u_long128 *)(d + 0x2000) = *(u_long128 *)s;
+        func_002A3EC8(d, (void *)s[1], (u32)((u16 *)s)[1] >> 2);
+        x = d + 0x1000;
+        op_hsv_to_rgba(x, d, (u32)((u16 *)s)[1] >> 2, (int)*(float *)(t + 0x40), (int)*(float *)(t + 0x44),
+                       (int)*(float *)(t + 0x48), (int)*(float *)(t + 0x3C));
+        d += 0x2000;
+        *(u8 **)(d + 4) = x;
+        op_oef2_clut_load((int *)d, 1);
+        op_free(HEAP(o), big);
+        break;
+    }
+    }
+    return p;
+}
+
+void *Ch_TextureGetImagePtr(Chr *chr, int idx, int *w, int *h);
+
+/* DEBT(CAST): script stream read as s16 words, raw byte offsets */
+s16 *opu_texture_load(AnimCtx *o, s16 *p)
+{
+    u8 *t = o->p220;
+    int src = *(int *)((u32)o + (t[0x1E] << 2) + 0x360);
+    Chr *chr = owu_chr_hd[t[0x18]];
+    int *s;
+    u_long128 *d;
+    int w[2];
+    int n;
+    int i;
+
+    switch ((s16)o->h21A & 0xF000) {
+    case 0:
+        op_oef2_texture_load(op_oef2_a_get(src, 2, p[1]), 1);
+        p += 2;
+        break;
+    case 0x1000:
+        op_et_tex_load_triger(1);
+        p += 1;
+        break;
+    case 0x2000:
+        op_et_tex_load_triger(0);
+        p += 1;
+        break;
+    case 0x4000:
+        s = op_oef2_a_get(src, 9, p[2]);
+        d = Ch_TextureGetImagePtr(chr, p[1], &w[0], &w[1]);
+        n = w[0] * w[1];
+        for (i = 0; i < n; i += 16) {
+            *(u_long128 *)((u8 *)d + i) = *(u_long128 *)((u8 *)s + i);
+        }
+        p += 3;
+        break;
+    case 0x5000:
+        func_0010B9B8(chr, 0);
+        p += 1;
+        break;
+    }
+    return p;
+}
 
 u16 *func_002A3600(W10Ctx *c, u16 *pc) {
     W10Actor *a;

@@ -20,3 +20,4 @@ game/op/opf_2B0FC0 -Btools/cc/ee-as-delay/
 game/op/op_2B33F8 -Btools/cc/ee-as-delay/
 game/op/op_2B4FF8 -Btools/cc/ee-as-delay/
 game/rc/fx/rcfxWind -Btools/cc/ee-as-delay/
+game/platform/platform_2DC110 -Btools/cc/ee-as-delay/

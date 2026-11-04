@@ -143,7 +143,22 @@ void func_00295C00(u16 i, u16 n) {
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295C50);
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295CA0);
+/* DEBT(CAST): 0x100-byte script block copied field by field, raw byte offsets */
+void func_00295CA0(T6_BlkPool *p, T6_Blk *b, int arg)
+{
+    u8 *d = (u8 *)b;
+    u8 *s = (u8 *)arg;
+
+    *(u_long128 *)(d + 0x30) = *(u_long128 *)(s + 0x30);
+    *(u16 *)(d + 0x1C) = (u32)(s - p->blocks) >> 8;
+    *(u_long128 *)(d + 0x40) = *(u_long128 *)(s + 0x40);
+    *(u_long128 *)(d + 0x90) = *(u_long128 *)(s + 0x90);
+    d[0x1E] = s[0x1E];
+    *(u16 *)(d + 0x14) = *(u16 *)(s + 0x14);
+    d[0x18] = s[0x18];
+    d[0xBA] = s[0xBA];
+    d[0xB3] = s[0xB3];
+}
 
 void func_00295CF8(u_long128 *a, u_long128 *b)
 {

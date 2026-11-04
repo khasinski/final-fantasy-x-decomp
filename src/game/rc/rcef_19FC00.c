@@ -8,6 +8,7 @@
 #include "ffx/r2.h"
 #include "ffx/w3.h"
 #include "ffx/u2.h"
+#include "vu0.h"
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_0019FC00);
 
@@ -76,7 +77,25 @@ void func_001A01E0(u32 a0, u32 a1, u32 a2, u32 a3)
         :  : "r"(a0), "r"(a1), "r"(a2), "r"(a3) : "$2", "$3", "$8");
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0210);
+void func_001A0210(u8 *o)
+{
+    u_long128 tmp;
+    register u8 *b __asm__("$3") = o + 0x1E0; /* DEBT(FAKE) */
+    register u8 *a __asm__("$2");
+
+    VU0_LQC2(31, 0, b); /* DEBT(CAST) */
+    VU0_SQC2(31, 0, &tmp);
+    a = o + 0x1D0;
+    VU0_LQC2(31, 0, a);
+    VU0_SQC2(31, 0, b);
+    VU0_LQC2(31, 0, &tmp);
+    VU0_SQC2(31, 0, a);
+    *(s32 *)(o + 0x1F4) = 0;
+    {
+        register s32 one __asm__("$3") = 1; /* DEBT(FAKE) */
+        *(s32 *)(o + 0x1FC) = one;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0248);
 

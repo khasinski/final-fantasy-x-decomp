@@ -1,5 +1,6 @@
 /* tu_349 0x2dc110-0x2dc580: medium; unk_2DC110 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
@@ -46,7 +47,11 @@ INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC2C0);
 
 INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC2D0);
 
-INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC310);
+void func_002DC310(int addr)
+{
+    VU0_CTC2_NI(27, addr & 0xFFFF);
+    VU0_OP("vcallmsr $vi27");
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC320);
 

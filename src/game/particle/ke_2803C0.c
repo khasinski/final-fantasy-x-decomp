@@ -1,6 +1,7 @@
 /* tu_306 0x2803c0-0x2856f0: low; ~KeThBP_Update (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -155,11 +156,35 @@ void func_00282608(void) {
     D_00373050 = (D_00373050 * 0x80D + 7) & 0xFFFF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282628);
+int func_00282628(void) {
+    float a;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    return (int)(a * 32768.0f);
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0ItrsBallLine);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282758);
+float func_00282758(float x, float y) {
+    union {
+        u_long128 q;
+        float f[4];
+    } v;
+
+    v.f[0] = x;
+    v.f[1] = y;
+    VU0_LQC2(1, 0, &v);
+    VU0_OP("vmaxy.x $vf1, $vf1, $vf1y");
+    VU0_SQC2(1, 0, &v);
+    return v.f[0];
+}
 
 void func_00282780(u32 a0, u32 a1)
 {
@@ -304,11 +329,50 @@ float func_00282A20(int n, float x)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282A58);
+float func_00282A58(float x) {
+    union {
+        u_long128 q;
+        float f[4];
+    } v;
+    float r;
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0VecLen);
+    v.f[1] = x;
+    VU0_LQC2(10, 0, &v);
+    VU0_OP("vsqrt Q, $vf10y");
+    VU0_OP("vwaitq");
+    VU0_CFC2_NI(r, 22);
+    return r;
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0VecLenXY);
+float KeVu0VecLen(Vec4 *v) {
+    union {
+        u_long128 q;
+        float f[4];
+    } o;
+
+    VU0_LQC2(10, 0, v);
+    VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+    VU0_OP("vmove.xyz $vf9, $vf10");
+    VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+    VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+    VU0_OP("vsqrt Q, $vf9z");
+    VU0_OP("vwaitq");
+    VU0_OP("vaddq.x $vf10, $vf0, Q");
+    VU0_SQC2(10, 0, &o);
+    return o.f[0];
+}
+
+float KeVu0VecLenXY(Vec4 *v) {
+    float r;
+
+    VU0_LQC2(10, 0, v);
+    VU0_OP("vmul.xy $vf10, $vf10, $vf10");
+    VU0_OP("vaddx.y $vf10, $vf10, $vf10x");
+    VU0_OP("vsqrt Q, $vf10y");
+    VU0_OP("vwaitq");
+    VU0_CFC2_NI(r, 22);
+    return r;
+}
 
 /* NAME guess: length of difference vector (result discarded by this wrapper) */
 void func_00282AE0(Vec4 *a, Vec4 *b) {

@@ -1,6 +1,7 @@
 /* tu_318 0x2a0618-0x2a0820: low; ~opu; split at 0x2a0618: flag split: 0x2A0618-0x2A0718 needs -Btools/cc/ee-as-delay/ -Wa,-mips4 (config/cflags.txt), func_0029FD20 does not (config/tu_map.tsv) */
 /* Angle conversion and adjacent event-script helpers. */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/t6.h"
 #include "ffx/w9.h"
@@ -27,7 +28,16 @@ float func_002A0660(float x)
     return (float)((-(i & 0xFFF) + 0x400) & 0xFFF) * 3.141592f * 0.00048828125f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40_2A0618", func_002A06A0);
+void func_002A06A0(int id, float *out)
+{
+    Chr *chr;
+
+    MMI_SQ_ZERO(0x0, out);
+    chr = owu_chr_hd[id];
+    if (chr != 0) {
+        Ch_GetPos(chr, out, out + 1, out + 2);
+    }
+}
 
 void func_002A06D0(int id, float *out)
 {

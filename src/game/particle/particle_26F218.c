@@ -1,5 +1,6 @@
 /* tu_295 0x26f218-0x26fbf8: low; unk_26F218 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/u4.h"
@@ -46,7 +47,33 @@ float func_0026FA88(float a, float b) {
     return a * b - a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26F218", func_0026FA98);
+float func_0026FA98(u8 range) {
+    float a;
+    float b;
+    register int t __asm__("$8");
+
+    MIPS_ADDI0(t, -1);
+    VU0_QMTC2_NI(2, t);
+    VU0_OP("vrxor R, $vf2x");
+    VU0_OP("vitof0.x $vf2, $vf2");
+    VU0_OP("vrnext.x $vf1, R");
+    VU0_OP("vadd.x $vf1, $vf1, $vf2");
+    VU0_QMFC2_NI(a, 1);
+    if (range != 0) {
+        MIPS_ADDI0(t, -1);
+        VU0_QMTC2_NI(2, t);
+        VU0_OP("vrxor R, $vf2x");
+        VU0_OP("vitof0.x $vf2, $vf2");
+        VU0_OP("vrnext.x $vf1, R");
+        VU0_OP("vadd.x $vf1, $vf1, $vf2");
+        VU0_QMFC2_NI(b, 1);
+        a += b;
+    } else {
+        a += a;
+    }
+    return a;
+}
+
 
 void func_0026FAF0(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
 {

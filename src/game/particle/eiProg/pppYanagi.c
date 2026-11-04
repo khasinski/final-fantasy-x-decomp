@@ -1,5 +1,6 @@
 /* tu_298 0x270bb8-0x276e00: medium; pppYanagi (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -27,7 +28,38 @@ void func_00270C80(int a)
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00270CD8);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00270DD8);
+int func_00270DD8(char *m, char *v, int n) {
+    register int f __asm__("$2");
+    int c;
+
+    VU0_LQC2(4, 0, m);
+    VU0_LQC2(5, 0x10, m);
+    VU0_LQC2(6, 0x20, m);
+    VU0_LQC2(7, 0x30, m);
+    f = 0x3F;
+loop:
+    VU0_LQC2(8, 0, v);
+    MIPS_ADDI(v, 0x10);
+    VU0_OP("vmulax.xyzw ACC, $vf4, $vf8x");
+    VU0_OP("vmadday.xyzw ACC, $vf5, $vf8y");
+    VU0_OP("vmaddaz.xyzw ACC, $vf6, $vf8z");
+    VU0_OP("vmaddw.xyzw $vf9, $vf7, $vf8w");
+    VU0_OP("vclipw.xyz $vf9, $vf9w");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_CFC2_NI(c, 18);
+    f &= c;
+    if (f != 0) {
+        MIPS_ADDI(n, -1);
+        if (n > 0) {
+            goto loop;
+        }
+    }
+    return f;
+}
 
 void func_00270E40(float *v, float *d, int mode)
 {
@@ -415,7 +447,18 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274D80);
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274FB0);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00275320);
+extern void func_002DCF48(void *dst, void *src);
+
+void func_00275320(void *buf) {
+    struct {
+        char pad[0x30];
+        u_long128 v;
+    } t;
+
+    func_002DCF48(&t, D_006A3970);
+    VU0_LQC2(31, 0, &t.v);
+    VU0_SQC2(31, 0, buf);
+}
 
 int func_00275360(int a0, int *p) /* DEBT(TYPE): no value, but func_00275388 returns its result */
 {

@@ -101,7 +101,36 @@ int func_00268C98(void)
     return D_003708DC;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_00268CA8);
+extern char D_006A3A40[];
+extern void func_002DCE80(void *d, void *a, void *b);
+
+void func_00268CA8(void) {
+    float b[4];
+    float a[4];
+    float c[4];
+    float *base = (float *)D_006A3970;
+    u_long128 *o;
+    u_long128 *q;
+
+    a[3] = 0;
+    a[0] = base[4];
+    a[1] = base[5];
+    a[2] = base[6];
+    func_002DCEC8((s32)a, (s32)a); /* DEBT(CAST): funcs.h prototype takes ints */
+    o = (u_long128 *)D_006A3A40;
+    *o = *(u_long128 *)a;
+    b[0] = a[1];
+    b[1] = -a[0];
+    b[2] = 0;
+    b[3] = 0;
+    func_002DCEC8((s32)b, (s32)b);
+    q = o - 1;
+    q[0] = *(u_long128 *)b;
+    func_002DCE80(c, b, a);
+    func_002DCEC8((s32)c, (s32)c);
+    q[3] = *(u_long128 *)(D_006A3970 + 0x30);
+    q[2] = *(u_long128 *)c;
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpSetRotMatrix);
 INCLUDE_RODATA("build/ee_asm/game/particle/eiProg/ppp_268680/rodata", jtbl_00574020);

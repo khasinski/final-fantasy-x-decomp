@@ -4,8 +4,27 @@
 #include "ffx/q3.h"
 #include "ffx/s2.h"
 #include "ffx/v2.h"
+#include "vu0.h"
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxDamp", func_001A55A8);
+void func_001A55A8(u8 *obj, u8 *desc)
+{
+    int dst = *(int *)(desc + 0x24); /* DEBT(CAST) */
+    int scale = *(int *)(desc + 0x14);
+    int n = *(int *)(desc + 0x10);
+    u_long128 tmp;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        VU0_LQC2(31, 0, obj + 0x20);
+        VU0_QMTC2_NI(30, scale);
+        VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+        VU0_SQC2(31, 0, &tmp);
+        VU0_LQC2(31, 0, (u8 *)(i * 16 + dst));
+        VU0_LQC2(30, 0, &tmp);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, (u8 *)(i * 16 + dst));
+    }
+}
 
 void *rcfxDampNew(void) {
     void *p = _rcAlloc(0x20, D_0056DE70, 0x12);
@@ -32,3 +51,4 @@ void func_001A5650(void *p) {
 }
 
 INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxDamp", func_001A5698);
+
