@@ -94,7 +94,19 @@ void func_001149C0(Chr *chr, float *x, float *y, float *z)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_001149F8);
+void func_001149F8(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($5)\n"
+        "lqc2       $vf5, 0x10($5)\n"
+        "lqc2       $vf6, 0x20($5)\n"
+        "lqc2       $vf7, 0x0($6)\n"
+        "vmulax.xyzw ACC, $vf4, $vf7x\n"
+        "vmadday.xyzw ACC, $vf5, $vf7y\n"
+        "vmaddz.xyzw $vf8, $vf6, $vf7z\n"
+        "sqc2      $vf8, 0x0($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114A20);
 INCLUDE_RODATA("build/ee_asm/game/chr/ch_113FF8/rodata", jtbl_005697E0);
@@ -133,12 +145,49 @@ void Ch_ClothEnableGrav(Chr *chr, int v)
 INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114BA0);
 INCLUDE_RODATA("build/ee_asm/game/chr/ch_113FF8/rodata", jtbl_005699D0);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115DF0);
+void func_00115DF0(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($5)\n"
+        "lqc2       $vf5, 0x0($6)\n"
+        "vadd.xyz   $vf6, $vf4, $vf5\n"
+        "sqc2      $vf6, 0x0($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115E08);
+void func_00115E08(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($5)\n"
+        "lqc2       $vf5, 0x0($6)\n"
+        "vsub.xyz   $vf6, $vf4, $vf5\n"
+        "sqc2      $vf6, 0x0($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115E20);
+void func_00115E20(u32 a0, u32 a1, float f0)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($4)\n"
+        "lqc2       $vf5, 0x0($5)\n"
+        "vmul.xyz   $vf5, $vf4, $vf5\n"
+        "vaddy.x    $vf5, $vf5, $vf5y\n"
+        "vaddz.x    $vf5, $vf5, $vf5z\n"
+        "qmfc2.ni   $2, $vf5\n"
+        "mtc1       $2, $f0\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1) : "$2");
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115E48);
+void func_00115E48(u32 a0, u32 a1, float f12)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($5)\n"
+        "mfc1       $8, $f12\n"
+        "qmtc2.ni   $8, $vf5\n"
+        "vmulx.xyz  $vf6, $vf4, $vf5x\n"
+        "sqc2      $vf6, 0x0($4)\n"
+        :  : "r"(a0), "r"(a1) : "$8");
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00115E60);

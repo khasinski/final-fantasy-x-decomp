@@ -55,5 +55,35 @@ Single-instruction hardware primitives that appear inside ordinary C functions a
 - `SYNC()` (`sync.l`) and `SYNC_P()` (`sync.p`)
 - `EI()` and `DI()`
 - `BREAK()` (`break 0`)
-- `VU0_STORE_VF0(p)` (`sqc2 $vf0, 0(reg)`: store the constant vector 0,0,0,1; only for the single store, VU0 arithmetic stays handwritten)
+- `VU0_STORE_VF0(p)` (`sqc2 $vf0, 0(reg)`: store the constant vector 0,0,0,1)
 - `u_long128` (`typedef unsigned int u_long128 __attribute__((mode(TI)))`)
+
+### Tier 1: one instruction, one macro (`include/vu0.h`)
+
+VU0 macro-mode and R5900 MMI instructions may be written as **one macro per instruction** inside an otherwise ordinary C
+function. The control flow, integer work, calls and register allocation stay C; the macro only names the single
+instruction (`VU0_LQC2(4, 0, p)`, `VU0_OP("vmulax.xyzw ACC, $vf4, $vf8x")`, `MMI_OP3("pextlw", d, a, b)`).
+Several macros in a row are fine; they are ordinary `asm volatile` statements and keep their order.
+A function written this way counts as C (and leaves `config/handwritten.txt`).
+
+Not allowed under tier 1: one `asm` statement that carries several instructions, branches or labels, or that moves the
+function's real work into text.
+
+## 5. Tier 2: whole-function inline asm (library code only)
+
+Some functions are a single asm block by construction: the Sony `libvu0` leaf routines (`sceVu0ApplyMatrix`,
+`sceVu0OuterProduct`, `sceVu0TransposeMatrix`, ...) were written in C files as one `__asm__ volatile(...)` each, and the
+game's own tiny VU0 helpers follow the same pattern. For such a function (a straight-line or looping **leaf** routine
+whose whole body is VU0/MMI code, no calls, no stack) the project may keep the body as one inline-asm block, generated
+by `tools/vu0lift.py`.
+
+Rules:
+
+1. Only whole functions that are leaves and contain at least one VU0/MMI instruction. Nothing that C can express.
+2. The function stays in `config/handwritten.txt`; `tools/status.py` reports it as an **inline-asm wrapper**
+   (byte-exact, listed separately, never counted as C coverage).
+3. Verification is bytes, as for everything else: `tools/vu0lift.py --check` compares each wrapper with the original
+   encoding and exact size before `--apply` touches `src/`.
+4. Translation units whose wrappers need the period assembler (it fills the `jr $ra` delay slot with the last asm
+   instruction) get `-Btools/cc/ee-as-delay/` in `config/cflags.txt`; this is only kept when the whole TU still matches.
+5. `lq`/`sq` alone is not a reason for asm (see §3); functions that contain nothing else are C candidates.

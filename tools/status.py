@@ -26,10 +26,6 @@ for p in src_files:
     # `name(...) {` or an old-style `name(a, b)  T a; T b; {`
     # (any identifier: func_XXXXXXXX or an applied real name such as _rcFree, config/names_applied.tsv)
     defined.update(re.findall(r"^[A-Za-z_][\w \*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*(?:[^;{}()]*;\s*)*\{", open(p).read(), re.M))
-done = {n: s for n, s in funcs.items() if n in defined}
-dbytes = sum(done.values())
-if not json_output:
-    print(f"resident ELF C coverage: {len(done)}/{len(funcs)} functions, {dbytes:#x}/{total:#x} bytes = {100*dbytes/total:.2f}% (main ELF only)")
 # functions ee-gcc cannot produce from C (docs/ASM_POLICY.md): kept as asm, reported on their own
 hand = {}
 if os.path.exists(f"{root}/config/handwritten.txt"):
@@ -37,12 +33,20 @@ if os.path.exists(f"{root}/config/handwritten.txt"):
         f = l.split()
         if f and not l.startswith("#") and f[0] in funcs:
             hand[f[0]] = f[1]
+# a handwritten function that has a body in src/ is a whole-function inline-asm wrapper (tools/vu0lift.py):
+# byte-exact, but still hand-written asm, so it is never counted as C
+wrapped = {n: s for n, s in funcs.items() if n in hand and n in defined}
+done = {n: s for n, s in funcs.items() if n in defined and n not in hand}
+dbytes = sum(done.values())
+if not json_output:
+    print(f"resident ELF C coverage: {len(done)}/{len(funcs)} functions, {dbytes:#x}/{total:#x} bytes = {100*dbytes/total:.2f}% (main ELF only)")
 hbytes = sum(funcs[n] for n in hand)
 cats = collections.Counter()
 for n, c in hand.items():
     cats[c] += funcs[n]
 if hand and not json_output:
     print(f"  handwritten (asm by policy): {len(hand)} functions, {hbytes:#x} bytes = {100*hbytes/total:.2f}% of all code")
+    print(f"    of which as inline-asm wrappers (byte-exact, not counted as C): {len(wrapped)} functions, {sum(wrapped.values()):#x} bytes")
     print(f"  resident decompilable C coverage: {100*dbytes/max(total-hbytes,1):.2f}% of {total-hbytes:#x} bytes")
 
 # switch functions: a jump table still owned by an INCLUDE_RODATA line means the function is asm
@@ -66,6 +70,8 @@ report = {
         "catalogued_function_bytes": total, "c_function_bytes": dbytes,
         "coverage_percent": 100*dbytes/total,
         "policy_assembly_bytes": hbytes,
+        "inline_asm_wrapper_functions": len(wrapped),
+        "inline_asm_wrapper_bytes": sum(wrapped.values()),
         "decompilable_coverage_percent": 100*dbytes/max(total-hbytes,1),
     },
     "ee_overlays": None, "known_ee_estimate": None,

@@ -161,31 +161,137 @@ INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeVu0ItrsBallLine);
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282758);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282780);
+void func_00282780(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($4)\n"
+        "lqc2       $vf2, 0x0($5)\n"
+        "vmove.xy   $vf1, $vf2\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282798);
+void func_00282798(void * dst, void * src)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($4)\n"
+        "lqc2       $vf4, 0x0($5)\n"
+        "vmove.xyz  $vf1, $vf4\n"
+        "sqc2       $vf1, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(dst), "r"(src));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827B0);
+void func_002827B0(u32 a0, u32 a1, float f12)
+{
+    __asm__ volatile(
+        "swc1       $f12, 0x0($4)\n"
+        "lqc2       $vf1, 0x0($4)\n"
+        "lqc2       $vf2, 0x0($5)\n"
+        "vmulx.xyz  $vf2, $vf2, $vf1x\n"
+        "sqc2       $vf2, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827D0);
+void func_002827D0(u32 a0, u32 a1, float f12)
+{
+    __asm__ volatile(
+        "swc1       $f12, 0x0($4)\n"
+        "lqc2       $vf1, 0x0($4)\n"
+        "lqc2       $vf2, 0x0($5)\n"
+        "vmulx.xy   $vf2, $vf2, $vf1x\n"
+        "sqc2       $vf2, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002827F0);
+void func_002827F0(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x0($6)\n"
+        "lqc2       $vf3, 0x0($4)\n"
+        "vadd.xy    $vf3, $vf1, $vf2\n"
+        "sqc2       $vf3, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282810);
+void func_00282810(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x0($6)\n"
+        "lqc2       $vf3, 0x0($4)\n"
+        "vsub.xyz   $vf3, $vf1, $vf2\n"
+        "sqc2       $vf3, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282830);
+void func_00282830(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x0($6)\n"
+        "lqc2       $vf3, 0x0($4)\n"
+        "vadd.xyz   $vf3, $vf1, $vf2\n"
+        "sqc2       $vf3, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282850);
+void func_00282850(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x0($6)\n"
+        "lqc2       $vf3, 0x0($4)\n"
+        "vsub.xy    $vf3, $vf1, $vf2\n"
+        "sqc2       $vf3, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282870);
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002828E0);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282948);
+void func_00282948(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "vmul.xy    $vf31, $vf1, $vf1\n"
+        "vaddy.x    $vf31, $vf31, $vf31y\n"
+        ".word      0x4A1F03BD                    # vsqrt      Q, $vf31x # 00000000 <InstrIdType: R5900_COP2_SPECIAL2>\n"
+        "vwaitq\n"
+        "vaddq.x    $vf31, $vf0, Q\n"
+        "vdiv       Q, $vf0w, $vf31x\n"
+        "vwaitq\n"
+        "vmulq.xy   $vf31, $vf1, Q\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1));
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282978);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002829F8);
+void func_002829F8(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lqc2       $vf10, 0x0($5)\n"
+        "vdiv       Q, $vf0w, $vf10w\n"
+        "vwaitq\n"
+        "vmulq.xyz  $vf9, $vf10, Q\n"
+        "vftoi4.xy  $vf9, $vf9\n"
+        "vftoi0.z   $vf9, $vf9\n"
+        "vftoi0.w   $vf9, $vf10\n"
+        "sqc2       $vf9, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0), "r"(a1));
+}
 
 float func_00282A20(int n, float x)
 {

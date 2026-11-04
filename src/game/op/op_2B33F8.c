@@ -70,13 +70,97 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_file_read);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3C88);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3D10);
+void func_002B3D10(u32 a0)
+{
+    __asm__ volatile(
+        "daddu      $6, $4, $0\n"
+        "qmtc2.ni   $6, $vf30\n"
+        "lui        $3, (0x40000000 >> 16)\n"
+        "lui        $4, (0x40400000 >> 16)\n"
+        "lui        $5, (0x3FF19120 >> 16)\n"
+        "ori        $5, $5, (0x3FF19120 & 0xFFFF)\n"
+        "vrnext.xyzw $vf31, R\n"
+        "vitof0.xyzw $vf30, $vf30\n"
+        "qmtc2.ni   $3, $vf29\n"
+        "qmtc2.ni   $4, $vf28\n"
+        "qmtc2.ni   $5, $vf27\n"
+        "vmul.x     $vf31, $vf31, $vf29\n"
+        "vsubx.w    $vf25, $vf31, $vf27x\n"
+        "vsub.x     $vf31, $vf31, $vf28\n"
+        "vmul.x     $vf30, $vf31, $vf30\n"
+        "vftoi0.x   $vf30, $vf30\n"
+        "qmfc2.ni   $7, $vf30\n"
+        "vrinit     R, $vf25w\n"
+        "dsll32     $7, $7, 0\n"
+        "dsra32     $7, $7, 0\n"
+        "daddu     $2, $7, $0\n"
+        : "+r"(a0) :  : "$2", "$3", "$5", "$6", "$7");
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3D68);
+void func_002B3D68(u32 a0)
+{
+    __asm__ volatile(
+        "daddu      $6, $4, $0\n"
+        "qmtc2.ni   $6, $vf30\n"
+        "lui        $3, (0x3F800000 >> 16)\n"
+        "lui        $5, (0x3FF19120 >> 16)\n"
+        "ori        $5, $5, (0x3FF19120 & 0xFFFF)\n"
+        "vrnext.xyzw $vf31, R\n"
+        "vitof0.x   $vf30, $vf30\n"
+        "qmtc2.ni   $3, $vf29\n"
+        "qmtc2.ni   $5, $vf27\n"
+        "vsub.x     $vf31, $vf31, $vf29\n"
+        "vsubx.w    $vf25, $vf31, $vf27x\n"
+        "vmul.x     $vf30, $vf31, $vf30\n"
+        "vftoi0.x   $vf30, $vf30\n"
+        "qmfc2.ni   $7, $vf30\n"
+        "vrinit     R, $vf25w\n"
+        "daddu     $2, $7, $0\n"
+        :  : "r"(a0) : "$2", "$3", "$5", "$6", "$7");
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3DB0);
+void func_002B3DB0(float f12, float f0)
+{
+    __asm__ volatile(
+        "mfc1       $2, $f12\n"
+        "lui        $3, (0x40000000 >> 16)\n"
+        "lui        $4, (0x40400000 >> 16)\n"
+        "lui        $5, (0x3FF19120 >> 16)\n"
+        "ori        $5, $5, (0x3FF19120 & 0xFFFF)\n"
+        "vrnext.xyzw $vf31, R\n"
+        "qmtc2.ni   $2, $vf30\n"
+        "qmtc2.ni   $3, $vf29\n"
+        "qmtc2.ni   $4, $vf28\n"
+        "qmtc2.ni   $5, $vf27\n"
+        "vmul.x     $vf31, $vf31, $vf29\n"
+        "vsubx.w    $vf25, $vf31, $vf27x\n"
+        "vsub.x     $vf31, $vf31, $vf28\n"
+        "vmul.x     $vf31, $vf31, $vf30\n"
+        "qmfc2.ni   $2, $vf31\n"
+        "mtc1       $2, $f0\n"
+        "vrinit    R, $vf25w\n"
+        :  :  : "$2", "$3", "$4", "$5");
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3DF8);
+void func_002B3DF8(float f12, float f0)
+{
+    __asm__ volatile(
+        "mfc1       $2, $f12\n"
+        "lui        $3, (0x3F800000 >> 16)\n"
+        "lui        $5, (0x3FF19120 >> 16)\n"
+        "ori        $5, $5, (0x3FF19120 & 0xFFFF)\n"
+        "vrnext.xyzw $vf31, R\n"
+        "qmtc2.ni   $2, $vf30\n"
+        "qmtc2.ni   $3, $vf29\n"
+        "qmtc2.ni   $5, $vf27\n"
+        "vsub.x     $vf31, $vf31, $vf29\n"
+        "vsubx.w    $vf25, $vf31, $vf27x\n"
+        "vmul.x     $vf31, $vf31, $vf30\n"
+        "qmfc2.ni   $2, $vf31\n"
+        "mtc1       $2, $f0\n"
+        "vrinit    R, $vf25w\n"
+        :  :  : "$2", "$3", "$5");
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3E38);
 

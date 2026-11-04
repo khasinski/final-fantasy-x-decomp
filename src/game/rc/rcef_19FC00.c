@@ -42,9 +42,39 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0040);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0080);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A01B0);
+void func_001A01B0(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "addiu      $7, $0, 0x1\n"
+        "addiu      $2, $4, 0x1D0\n"
+        "sw         $7, 0x1C0($4)\n"
+        "sqc2       $vf0, 0x0($2)\n"
+        "addiu      $3, $4, 0x1E0\n"
+        "lqc2       $vf31, 0x0($5)\n"
+        "sqc2       $vf31, 0x0($3)\n"
+        "sw         $6, 0x1F0($4)\n"
+        "sw         $7, 0x1FC($4)\n"
+        "sw         $0, 0x200($4)\n"
+        "sw        $0, 0x1F4($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2) : "$2", "$3", "$7");
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A01E0);
+void func_001A01E0(u32 a0, u32 a1, u32 a2, u32 a3)
+{
+    __asm__ volatile(
+        "addiu      $8, $0, 0x1\n"
+        "addiu      $2, $4, 0x1D0\n"
+        "sw         $8, 0x1C0($4)\n"
+        "lqc2       $vf31, 0x0($5)\n"
+        "sqc2       $vf31, 0x0($2)\n"
+        "addiu      $3, $4, 0x1E0\n"
+        "lqc2       $vf31, 0x0($6)\n"
+        "sqc2       $vf31, 0x0($3)\n"
+        "sw         $8, 0x1FC($4)\n"
+        "sw         $7, 0x1F0($4)\n"
+        "sw        $0, 0x1F4($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2), "r"(a3) : "$2", "$3", "$8");
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0210);
 

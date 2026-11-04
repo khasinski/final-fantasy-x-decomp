@@ -14,3 +14,9 @@ game/op/opu/opu_29DC40_2A0618 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/atel/atel_13CA80 -fno-strength-reduce
 # Preserve the cached count and link writes in the list insertion entry.
 game/particle/particle_266A48_266EB8 -fno-schedule-insns -fno-schedule-insns2
+# Period assembler: fills the jr $ra delay slot of whole-function VU0/MMI inline-asm blocks (tools/vu0lift.py).
+game/rc/rcef_19FC00 -Btools/cc/ee-as-delay/
+game/op/opf_2B0FC0 -Btools/cc/ee-as-delay/
+game/op/op_2B33F8 -Btools/cc/ee-as-delay/
+game/op/op_2B4FF8 -Btools/cc/ee-as-delay/
+game/rc/fx/rcfxWind -Btools/cc/ee-as-delay/

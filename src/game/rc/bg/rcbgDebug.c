@@ -195,7 +195,27 @@ void func_001925D8(void *a, void *b) {
     func_002DCE38(a, D_00314260, a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192618);
+void func_00192618(u32 a0)
+{
+    __asm__ volatile(
+        "lui        $3, (0x42C80000 >> 16)\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "addiu      $2, $4, 0x10\n"
+        "lqc2       $vf31, 0x0($2)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($2)\n"
+        "addiu      $4, $4, 0x20\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) :  : "$2", "$3");
+}
 
 void rcCalcTex0Prm(int w, int h, int *tw, int *th, int *tbw) {
     if (tw != 0) {

@@ -9,15 +9,45 @@
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AC38);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AC80);
+void func_0026AC80(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x0($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026ACA0);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AD08);
+void func_0026AD08(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x4($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AD28);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AD90);
+void func_0026AD90(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x4($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026ADB0);
 
@@ -33,15 +63,45 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF08);
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF28);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF70);
+void func_0026AF70(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x0($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AF90);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026AFF8);
+void func_0026AFF8(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x4($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026B018);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026B080);
+void func_0026B080(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        "lw         $2, 0xC($5)\n"
+        "lw         $3, 0x4($2)\n"
+        "addiu      $3, $3, 0xA0\n"
+        "addu       $4, $4, $3\n"
+        "sqc2       $vf0, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) : "r"(a1) : "$2", "$3");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26AC38", func_0026B0A0);
 

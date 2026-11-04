@@ -46,4 +46,15 @@ void func_001A52B0(void *p) {
     o->f4C = o->f24;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxWind", rcfxWindCalc);
+void rcfxWindCalc(void * p, int a, int b, float f)
+{
+    __asm__ volatile(
+        "addiu      $2, $4, 0x20\n"
+        "lqc2       $vf31, 0x0($5)\n"
+        "sqc2       $vf31, 0x0($2)\n"
+        "addiu      $3, $4, 0x30\n"
+        "lqc2       $vf31, 0x0($6)\n"
+        "sqc2       $vf31, 0x0($3)\n"
+        "swc1      $f12, 0x40($4)\n"
+        :  : "r"(p), "r"(a), "r"(b) : "$2", "$3");
+}

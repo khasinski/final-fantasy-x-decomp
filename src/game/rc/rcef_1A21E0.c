@@ -107,7 +107,16 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A38);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A58);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A78);
+void func_001A2A78(u32 a0)
+{
+    __asm__ volatile(
+        "lui        $2, %%hi(D_00314240)\n"
+        "addiu      $2, $2, %%lo(D_00314240)\n"
+        "lqc2       $vf31, 0x0($2)\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        :  : "r"(a0) : "$2");
+}
 
 int rcefIsBattle(void)
 {
@@ -148,9 +157,50 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CB8);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CC0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CC8);
+void func_001A2CC8(float * v)
+{
+    __asm__ volatile(
+        "lui        $3, (0x42C80000 >> 16)\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "addiu      $2, $4, 0x10\n"
+        "lqc2       $vf31, 0x0($2)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($2)\n"
+        "addiu      $4, $4, 0x20\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        : "+r"(v) :  : "$2", "$3");
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2D10);
+void func_001A2D10(u32 a0)
+{
+    __asm__ volatile(
+        "lui        $3, (0x3C23D70A >> 16)\n"
+        "ori        $3, $3, (0x3C23D70A & 0xFFFF)\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "addiu      $2, $4, 0x10\n"
+        "lqc2       $vf31, 0x0($2)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($2)\n"
+        "addiu      $4, $4, 0x20\n"
+        "lqc2       $vf31, 0x0($4)\n"
+        "qmtc2.ni   $3, $vf30\n"
+        "vmulx.xyz  $vf31, $vf31, $vf30x\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        "nop\n"
+        : "+r"(a0) :  : "$2", "$3");
+}
 
 void func_001A2D58(float *p) {
     func_002DD128((struct W3Whole *)p); /* DEBT(CAST): prototype takes the W3Whole view of this object */

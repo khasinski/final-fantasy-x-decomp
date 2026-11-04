@@ -100,4 +100,18 @@ INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCC28);
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCDA8);
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCE08);
+void func_002DCE08(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0($5)\n"
+        "lqc2       $vf5, 0x10($5)\n"
+        "lqc2       $vf6, 0x20($5)\n"
+        "lqc2       $vf7, 0x30($5)\n"
+        "lqc2       $vf8, 0x0($6)\n"
+        "vmulax.xyzw ACC, $vf4, $vf8x\n"
+        "vmadday.xyzw ACC, $vf5, $vf8y\n"
+        "vmaddaz.xyzw ACC, $vf6, $vf8z\n"
+        "vmaddw.xyzw $vf9, $vf7, $vf8w\n"
+        "sqc2      $vf9, 0x0($4)\n"
+        :  : "r"(a0), "r"(a1), "r"(a2));
+}
