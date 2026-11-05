@@ -11,3 +11,4 @@ __pycache__/
 build.ninja
 .ninja_log
 LOCAL_NOTES.md
+external/

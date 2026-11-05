@@ -121,7 +121,32 @@ u32 func_002A5488(char *a) {
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opu_motion);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", func_002A5658);
+extern int D_003736A0[];
+
+/* opu_motion_etc (ffx-rust): speed / end-motion commands of the unit's character */
+u16 *func_002A5658(ScriptThread *th, u16 *pc)
+{
+    u8 *u = (u8 *)th->sub;
+    Chr *c = owu_chr_hd[u[0x18]];
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0:
+        ((void (*)(Chr *, int))Ch_SetMotionSpeed)(c, pc[1]); /* DEBT(TYPE): callers pass the u16 unsigned */
+        pc += 2;
+        break;
+    case 0x1000:
+        func_002967E8(th, pc);
+        pc += 1;
+        MsEffectEndMotion(u[0x18], 0);
+        break;
+    case 0x2000:
+        func_002967E8(th, pc);
+        MsEffectEndMotion(u[0x18], D_003736A0[pc[1]]);
+        pc += 2;
+        break;
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", func_002A5750);
 

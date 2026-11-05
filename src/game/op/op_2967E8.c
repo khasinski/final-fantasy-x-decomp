@@ -698,7 +698,29 @@ int func_00299840(Chr *key) {
     return func_00299770(key, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00299860);
+T6_Blk *func_002A0820(T6_BlkPool *p, int arg, int w, int key);
+
+void func_00299860(Chr *key, float *src)
+{
+    int i;
+    int e;
+    T6_Blk *b;
+
+    if (D_00703FFB != 0) {
+        i = opus_get_chr_status_index(key, 0, 0);
+        if (i >= 0) {
+            e = opus_get_eff_status_index((Chr *)(i + 0x50001800), 0, 0);
+            if (e > 0) {
+                SlotEntry *se = &owu_eff_status[e];
+
+                b = func_002A0820((T6_BlkPool *)D_0054D5E8[0], (int)se->sub, op_oef2_obj_a_get(D_00703E28, 0, 0x20), 1);
+                if (b != 0) {
+                    func_002B5978((float *)((u8 *)b + 0x40), src, 16.0f);
+                }
+            }
+        }
+    }
+}
 
 void func_00299928(Chr *key) {
     int i = opus_get_chr_status_index(key, 0, 0);
@@ -940,7 +962,35 @@ void func_0029A3A0(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_0029A3D8);
+/* DEBT(NAME): event host record; ffx-rust opu_end_all */
+typedef struct OpuEndUnit {
+    u8 pad0[0x14];
+    u16 h14;
+} OpuEndUnit;
+typedef struct OpuEndHost {
+    u8 pad0[0x210];
+    u8 b210;
+    u8 pad211[3];
+    u16 h214;
+    u16 pad216;
+    u16 h218;
+    u8 pad21A[6];
+    OpuEndUnit *unit;
+} OpuEndHost;
+
+int func_0029A3D8(OpuEndHost *h)
+{
+    OpuEndUnit *u;
+    u_long128 z = 0;
+
+    h->h218 = 0;
+    u = h->unit;
+    h->h214 = 0;
+    *(u_long128 *)u = z;
+    h->b210 = 1;
+    opus_end_all_sub(u->h14);
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opus_end_all_sub);
 
