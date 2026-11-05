@@ -8,17 +8,17 @@ Uses **ee-gcc 2.9-991111-01** with `-O2 -G0`.
 | Part | Code size | In C |
 |---|---:|---:|
 | Main ELF | 1.98 MiB | **32.55%** |
-| Overlays — 584 battle-effect files | 16.54 MiB | **37.30%** (by container) · **4.25%** (distinct code) |
+| Overlays — 584 battle-effect files | 16.54 MiB | **37.31%** (by container) · **4.36%** (distinct code) |
 
 Together, that is **about 36.8% of the known EE code** when repeated overlay code is counted once per
 container in which it appears. Progress is measured by
 code bytes; IOP modules and VU microcode are not yet counted.
 
 Overlay bytes are function bytes from a heuristic split of every container
-(`tools/overlay_map.py`), counted once per container. 26 of the 584 containers are
-fully matched, 530 contain at least one matched unit, and 28 have none. Much of the
+(`tools/overlay_map.py`), counted once per container. 27 of the 584 containers are
+fully matched, 530 contain at least one matched unit, and 27 have none. Much of the
 overlay code is repeated across containers: by relocation-normalized function body, the
-distinct code is 1.50 MiB, of which 4.25% is matched. Shared code is ranked in
+distinct code is 1.50 MiB, of which 4.36% is matched. Shared code is ranked in
 [docs/overlay-tus.tsv](docs/overlay-tus.tsv).
 
 Run `python3 -P tools/status.py` for current numbers, or see the

@@ -10,6 +10,7 @@ extern void MsSetMove(int chr_id, float f12, float f13, float f14, float f15, fl
 extern void func_001A2B78(int chr_id, int a1, float f12, float f13, float f14, float f15, float f16, int a2, int a3, int t0, int t1);
 extern void func_001A2B88(int chr_id);
 extern int func_001BB930(int a0, int a1, int a2, int a3, int t0, int t1, int t2, int t3);
+extern int func_001B6620_i(int id) __asm__("func_001B6620"); /* DEBT(TYPE): original returns an unextended int; funcs.h says u8 */
 extern void *D_01B00540[];
 extern u8 D_01B00548[0x38];
 extern u8 D_01B00ED0[8];
@@ -230,13 +231,15 @@ void func_01B00C38(W3Task *t)
     RcefObj *o = (RcefObj *)t;
     int target = D_00313CB0.targets[0];
     func_001A2B80(target, 74);
-    if ((int)func_001B6620(target) < 2) {
+    if (func_001B6620_i(target) < 2) {
         func_001A1D08(t, func_01B00CC8);
+        func_001A1D50(t, func_001A2148);
+        o->task.frame[o->task.sp].count = target;
     } else {
         func_001A1D08(t, func_01B00D50);
+        func_001A1D50(t, func_001A2148);
+        o->task.frame[o->task.sp].count = target;
     }
-    func_001A1D50(t, func_001A2148);
-    o->task.frame[o->task.sp].count = target;
 }
 
 /* target motion 35/36 branch + frame save */
@@ -245,10 +248,10 @@ void func_01B00CC8(W3Task *t)
     RcefObj *o = (RcefObj *)t;
     int target = D_00313CB0.targets[0];
 
-    if ((int)func_001B6620(target) > 0) {
-        func_001A2B80(target, 36);
-    } else {
+    if (func_001B6620_i(target) <= 0) {
         func_001A2B80(target, 35);
+    } else {
+        func_001A2B80(target, 36);
     }
     func_001A1D08(t, func_01B00D50);
     func_001A1D50(t, func_001A2148);

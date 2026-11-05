@@ -5,7 +5,7 @@
  */
 #include "../rcef_overlay.h"
 
-extern void func_001A2F50(int chr, int a1, float out1[4], float out2[4], int a4);
+extern void func_001A2F50(int chr, int a1, float out1[4], float out2[4]);
 
 typedef struct {
     float v[4];
@@ -168,7 +168,7 @@ void func_01B00A50(W3Task *t)
 
     func_001A1378(o, D_00313CB0.caster, 37);
     o->pos[0] = 0;
-    o->pos[1] = -17.0f;
+    o->pos[1] = -23.0f;
     o->pos[2] = 0;
     o->pos_w = 0;
     o->scale[0] = 0.075f;
@@ -187,7 +187,7 @@ void func_01B00AF0(W3Task *t)
 
     func_001A1378(o, D_00313CB0.caster, 37);
     o->pos[0] = 0;
-    o->pos[1] = -17.0f;
+    o->pos[1] = -23.0f;
     o->pos[2] = 0;
     o->pos_w = 0;
     o->scale[0] = 0.05f;
@@ -212,21 +212,21 @@ void func_01B00B90(W3Task *t)
     v2[1] = -23.0f;
     v2[2] = 0;
     v2[3] = 0;
-    func_001A2F50(ctx->caster, 37, v2, v1, 0);
+    func_001A2F50(ctx->caster, 37, v2, v1);
     v3[0] = 0;
     o->pos[0] = v1[0];
-    o->scale[3] = v3[0];
-    o->vel[0] = v3[0];
     o->pos[1] = v1[1];
     o->pos[2] = v1[2];
     o->pos_w = 0;
     o->vel[1] = -15.0f;
     o->scale[2] = 0.045f;
+    o->scale[3] = *(float *)&v3[0];
     *(float *)&v3[1] = -15.0f;
     v3[2] = 0;
     v3[3] = 0;
-    o->vel[2] = v3[0];
-    o->vel[3] = v3[0];
+    o->vel[0] = *(float *)&v3[0];
+    o->vel[2] = *(float *)&v3[0];
+    o->vel[3] = *(float *)&v3[0];
     o->scale[0] = 0.045f;
     o->scale[1] = 0.045f;
     rcefMainKickPar(ctx, o, 0, 0);
@@ -239,21 +239,28 @@ void func_01B00C80(W3Task *t)
 {
     RcefObj *o = (RcefObj *)t;
     float v[4];
+    int w[4];
+    RcefMainCtx *ctx = &D_00313CB0;
 
-    func_001A3000(D_00313CB0.targets[0], 6, v);
+    func_001A3000(ctx->targets[0], 6, v);
+    w[0] = 0;
+    v[1] = v[1] - 150.0f;
     o->pos[0] = v[0];
-    o->pos[1] = v[1] - 9.0f;
+    o->pos[1] = v[1];
     o->pos[2] = v[2];
     o->pos_w = 0;
-    o->scale[0] = 0.04f;
-    o->scale[1] = 0.04f;
-    o->scale[2] = 0.04f;
-    o->scale[3] = 0;
-    o->vel[0] = 0;
     o->vel[1] = 15.0f;
-    o->vel[2] = 0;
-    o->vel[3] = 0;
-    rcefMainKickPar(&D_00313CB0, o, 0, 0);
+    o->scale[2] = 0.045f;
+    o->scale[3] = *(float *)&w[0];
+    *(float *)&w[1] = 15.0f;
+    w[2] = 0;
+    w[3] = 0;
+    o->vel[0] = *(float *)&w[0];
+    o->vel[2] = *(float *)&w[0];
+    o->vel[3] = *(float *)&w[0];
+    o->scale[0] = 0.045f;
+    o->scale[1] = 0.045f;
+    rcefMainKickPar(ctx, o, 0, 0);
     func_001A1D08(t, func_01B009A0);
     func_001A1DF0(t, 10);
 }
