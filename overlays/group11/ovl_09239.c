@@ -73,7 +73,7 @@ void func_01B004D0(W3Task *t)
         } while (*slot != 0);
         if (i < D_00313CB0.target_count) {
             func_001A3000(D_00313E50_a[i], 6, D_01B01070[idx]);
-            *slot = 1;
+            D_01B010E0[idx] = 1;
             D_01B01100_a[idx] = D_00313E50_a[i];
         } else {
             func_001A3000(D_00313E50_a[func_002EFD78() % D_00313CB0.target_count], 0, D_01B01070[idx]);
@@ -162,9 +162,9 @@ void func_01B00948(W3Task *t)
     o->rot[1] = 0;
     o->rot[2] = 90.0f;
     o->rot_w = 0;
-    o->scale[2] = 0.1f;
-    o->scale[1] = 0.1f;
     o->scale[0] = 0.1f;
+    o->scale[1] = 0.1f;
+    o->scale[2] = 0.1f;
     o->scale[3] = 0;
     rcefMainKickPar(&D_00313CB0, o, 0, 0);
     func_001A1D08(t, func_01B00938);
@@ -181,6 +181,7 @@ void func_01B00A20(W3Task *t)
     float m[4];
     float k;
     register int ki __asm__("$2"); /* DEBT(FAKE): original register assignment */
+    register float *mp __asm__("$3"); /* DEBT(FAKE) */
     register int ki3 __asm__("$3"); /* DEBT(FAKE) */
 
     t->frame[t->sp].count = D_01B01060;
@@ -191,12 +192,13 @@ void func_01B00A20(W3Task *t)
     VEC3_SUB(n, q, p);
     rcVec3fNormalize((Vec4 *)n);
     k = 14.0f;
+    mp = m;
     MIPS_MFC1(ki, k);
-    VEC3_SCALE(m, n, ki);
+    VEC3_SCALE(mp, n, ki);
     VEC3_SUB(p, p, m);
     k = 18.0f;
     MIPS_MFC1(ki, k);
-    VEC3_SCALE(m, n, ki);
+    VEC3_SCALE(mp, n, ki);
     VEC3_SUB(q, q, m);
     VEC3_SUB(r, q, p);
     k = 0.1f;
@@ -249,12 +251,12 @@ void func_01B00D00(W3Task *t)
 
     o->pos[0] = v[0];
     o->pos[1] = v[1];
-    o->pos[2] = v[2];
     o->pos_w = 0;
-    o->scale[2] = 0.2f;
+    o->pos[2] = v[2];
     o->scale[0] = 0.2f;
-    o->scale[1] = 0.2f;
     o->scale[3] = 0;
+    o->scale[1] = 0.2f;
+    o->scale[2] = 0.2f;
     rcefMainKickPar(&D_00313CB0, o, 0, st);
     if (st == 1) {
         func_001A1D08(t, func_01B00E00);
