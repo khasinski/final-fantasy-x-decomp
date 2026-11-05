@@ -107,4 +107,13 @@ Chr *rcefGetChrHandle(int chr_id);   /* 0x001A2AB0 */
 void func_00110C30(Chr *chr, s32 i, float v);
 int graphicCharacterInstanceSetMeshSegmentAlpha(int chr, int seg, int alpha); /* 0x00110BC8 */
 
+/* One-block VU0 vector helpers (xyz only): all address operands are materialised before the block.
+ * VEC3_SUB: d = a - b; VEC3_SCALE: d = a * (scalar bit pattern in an int register). */
+#define VEC3_SUB(d, a, b) \
+    __asm__ volatile("lqc2 $vf31, 0(%1)\n\tlqc2 $vf30, 0(%2)\n\tvsub.xyz $vf31, $vf31, $vf30\n\tsqc2 $vf31, 0(%0)" \
+                     : : "r"(d), "r"(a), "r"(b) : "memory")
+#define VEC3_SCALE(d, a, ki) \
+    __asm__ volatile("lqc2 $vf31, 0(%1)\n\tqmtc2.ni %2, $vf30\n\tvmulx.xyz $vf31, $vf31, $vf30x\n\tsqc2 $vf31, 0(%0)" \
+                     : : "r"(d), "r"(a), "r"(ki) : "memory")
+
 #endif /* FFX_RCEF_OVERLAY_H */

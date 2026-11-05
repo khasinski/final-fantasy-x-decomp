@@ -106,13 +106,6 @@ void func_01B006F0(W3Task *t)
     func_001A1D50(t, func_001A20D8);
 }
 
-#define VEC3_SUB(d, a, b) \
-    __asm__ volatile("lqc2 $vf31, 0(%1)\n\tlqc2 $vf30, 0(%2)\n\tvsub.xyz $vf31, $vf31, $vf30\n\tsqc2 $vf31, 0(%0)" \
-                     : : "r"(d), "r"(a), "r"(b) : "memory")
-#define VEC3_SCALE(d, a, ki) \
-    __asm__ volatile("lqc2 $vf31, 0(%1)\n\tqmtc2.ni %2, $vf30\n\tvmulx.xyz $vf31, $vf31, $vf30x\n\tsqc2 $vf31, 0(%0)" \
-                     : : "r"(d), "r"(a), "r"(ki) : "memory")
-
 void func_01B007B0(W3Task *t)
 {
     RcefObj *o = (RcefObj *)t;
