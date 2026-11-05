@@ -57,6 +57,7 @@ void func_01B006B0(W3Task *t)
 
 void func_01B00700(W3Task *t)
 {
+    register W3Task *tt __asm__("$19") = t; /* DEBT(FAKE): original register assignment */
     int i;
 
     i = 5;
@@ -65,8 +66,8 @@ void func_01B00700(W3Task *t)
     } while (--i >= 0);
     D_01B00EC8 = D_01B00EC8 + 1;
     if (D_01B00EC8 >= 10) {
-        func_001A1D08(t, func_01B007B8);
-        func_001A1DF0(t, 10);
+        func_001A1D08(tt, func_01B007B8);
+        func_001A1DF0(tt, 10);
     }
 }
 
