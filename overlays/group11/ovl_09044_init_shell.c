@@ -547,14 +547,15 @@ void func_01B00E60(OvlScriptSub *sub)
 /* 0x01B00F18 */
 void func_01B00F18(OvlScriptSub *sub)
 {
+    OvlMgr *mgr = &D_01B0BEB0;
     int *res;
     int idx;
 
-    D_006A3924 = &D_01B0BEB0;
+    D_006A3924 = mgr;
     res = sub->pD0;
-    D_01B0BEB0.w20 = res[5];
-    D_01B0BEB0.w28 = res[7];
-    D_01B0BEB0.w24 = res[6];
+    mgr->w20 = res[5];
+    mgr->w24 = res[6];
+    mgr->w28 = res[7];
     idx = func_01B00DE0(sub);
     if (idx >= 0) {
         if (D_01B09BB0[idx] == 0) {
