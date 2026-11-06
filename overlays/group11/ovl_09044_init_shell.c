@@ -59,8 +59,10 @@ typedef struct OvlScriptSub {   /* ScriptSub fields used here */
     u8 padA8[0x13];
     u8 bBB;             /* 0xBB */
     void *pBC;          /* 0xBC */
-    u8 padC0[0x20];
-    void *pE0;          /* 0xE0 */
+    u8 padC0[0x10];
+    void *pD0;          /* 0xD0: resource table */
+    u8 bD4;
+    u8 padD5[7];
 } OvlScriptSub;
 
 extern OvlR6Obj *D_0054D5E8[];
@@ -270,7 +272,7 @@ void func_01B007C0(OvlScriptSub *sub)
     int j;
 
     D_006A3924 = mgr;
-    res = sub->pE0;
+    res = sub->pD0;
     mgr->w20 = res[5];
     mgr->w24 = res[6];
     mgr->w28 = res[7];
@@ -297,7 +299,7 @@ void func_01B007C0(OvlScriptSub *sub)
     D_01B09DB0[i] = key;
     sub->pBC = (OvlSlot *)((u8 *)D_01B09EB0 + (i << 7));
     _pppStartPart(sub->pBC, 0x1000,
-                  ((void **)*(int *)((u8 *)res + 0x10))[*(u8 *)((u8 *)sub + 0xD4)], 1);
+                  ((void **)*(int *)((u8 *)res + 0x10))[sub->bD4], 1);
 }
 
 /* 0x01B00958: run + free a ppp part */
@@ -309,7 +311,7 @@ int func_01B00958(OvlScriptSub *sub)
     int ret;
 
     D_006A3924 = mgr;
-    res = sub->pE0;
+    res = sub->pD0;
     mgr->w20 = res[5];
     mgr->w24 = res[6];
     mgr->w28 = res[7];
@@ -402,11 +404,11 @@ void func_01B00B38(OvlScriptSub *sub)
 /* 0x01B00BB0: free every ppp resource of sub a0 */
 void func_01B00BB0(OvlScriptSub *sub)
 {
-    u16 n = sub->h50;
     int i;
 
-    if (n != 0) {
-        for (i = 0; i < n; i++) {
+    if (sub->h50 != 0) {
+        i = 0;
+        do {
             void *o = op_oef2_a_get(sub, 8, i);
 
             if (o != 0) {
@@ -420,7 +422,8 @@ void func_01B00BB0(OvlScriptSub *sub)
                     tbl -= 1;
                 }
             }
-        }
+            i += 1;
+        } while (i < sub->h50);
     }
 }
 
@@ -440,62 +443,75 @@ void func_01B00C58(OvlScriptSub *sub)
 /* 0x01B00CC0: fill the D_01B00260 pointer records from sub a1 (base a0) */
 void func_01B00CC0(OvlScriptSub *base, OvlScriptSub *sub)
 {
-    u8 *rec = (u8 *)D_01B00260;
+    u8 *rec;
     u16 v;
 
     v = ((u16 *)sub)[2];
+    rec = (u8 *)D_01B00260;
     if (v != 0) {
-        *(void **)(rec + 8) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x8) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[3];
     if (v != 0) {
-        *(void **)(rec + 0xC) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0xC) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[4];
     if (v != 0) {
-        *(void **)(rec + 0x10) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x10) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[5];
     if (v != 0) {
-        *(void **)(rec + 0x14) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x14) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[6];
     if (v != 0) {
-        *(void **)(rec + 0x18) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x18) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[7];
     if (v != 0) {
-        *(void **)(rec + 0x1C) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x1C) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[8];
     if (v != 0) {
-        *(void **)(rec + 0x20) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x20) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[9];
     if (v != 0) {
-        *(void **)(rec + 0x24) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x24) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[10];
     if (v != 0) {
-        *(void **)(rec + 0x28) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x28) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[11];
     if (v != 0) {
-        *(void **)(rec + 0x2C) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x2C) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[12];
     if (v != 0) {
-        *(void **)(rec + 0x30) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x30) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[13];
     if (v != 0) {
-        *(void **)(rec + 0x34) = (u8 *)base + v + 0xA0;
+        int t = v + 0xA0;
+        *(void **)(rec + 0x34) = (u8 *)base + t;
     }
     v = ((u16 *)sub)[14];
     if (v != 0) {
-        *(void **)(rec + 0x38) = (u8 *)base + v + 0xA0;
-    }
-}
+        int t = v + 0xA0;
+        *(void **)(rec + 0x38) = (u8 *)base + t;
+    }}
 
 /* 0x01B00DD8 */
 void func_01B00DD8(void)
@@ -535,19 +551,19 @@ void func_01B00E60(OvlScriptSub *sub)
 /* 0x01B00F18 */
 void func_01B00F18(OvlScriptSub *sub)
 {
-    OvlMgr *mgr = &D_01B0BEB0;
-    int *res = sub->pE0;
+    int *res;
     int idx;
 
-    D_006A3924 = mgr;
-    mgr->w20 = res[5];
-    mgr->w24 = res[6];
-    mgr->w28 = res[7];
+    D_006A3924 = &D_01B0BEB0;
+    res = sub->pD0;
+    D_01B0BEB0.w20 = res[5];
+    D_01B0BEB0.w28 = res[7];
+    D_01B0BEB0.w24 = res[6];
     idx = func_01B00DE0(sub);
     if (idx >= 0) {
         if (D_01B09BB0[idx] == 0) {
-            D_01B09BB0[idx] = (u32)sub->pE0;
-            _pppInitData(sub->pE0, D_01B00210[idx]);
+            D_01B09BB0[idx] = (u32)sub->pD0;
+            _pppInitData(sub->pD0, D_01B00210[idx]);
         }
     }
 }
