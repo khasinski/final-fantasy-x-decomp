@@ -404,22 +404,21 @@ void func_01B00B38(OvlScriptSub *sub)
 /* 0x01B00BB0: free every ppp resource of sub a0 */
 void func_01B00BB0(OvlScriptSub *sub)
 {
-    int i;
+    int i = 0;
 
     if (sub->h50 != 0) {
-        i = 0;
         do {
             void *o = op_oef2_a_get(sub, 8, i);
 
             if (o != 0) {
-                u32 *tbl = &D_01B09BB0[0x3F];
+                u32 *tbl = D_01B09BB0;
                 int k;
 
                 for (k = 0x3F; k >= 0; k--) {
                     if (*tbl == (u32)o) {
                         *tbl = 0;
                     }
-                    tbl -= 1;
+                    tbl += 1;
                 }
             }
             i += 1;
