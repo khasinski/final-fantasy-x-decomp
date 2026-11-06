@@ -250,14 +250,12 @@ void func_01B00760(void)
 {
     OvlR6Obj *o = D_0054D5EC;
     int mask = *(volatile u32 *)0x10000000 & 0xFFFF;
-    int v;
 
     if (o->w58 == 0) {
         o->w54 = D_003F3944;
-        func_00294CD8(1, 2);
     }
-    v = o->w58;
-    if (v == 0) {
+    func_00294CD8(1, 2);
+    if (o->w58 == 0) {
         D_003F3944 = o->w54;
     }
 }
@@ -282,24 +280,24 @@ void func_01B007C0(OvlScriptSub *sub)
             break;
         }
     }
-    if (i == 0x40) {
+    if (i >= 0x40) {
         for (j = 0; j < 0x40; j++) {
             if (D_01B09DB0[j] == 0) {
                 break;
             }
         }
-        if (j == 0x40) {
+        if (j >= 0x40) {
             func_002EF240(D_01B09B98);
             func_002EA328(1);
         }
         i = j;
     }
     D_006A3924 = mgr;
-    _pppAllFreePObject(&D_01B09EB0[i]);
+    _pppAllFreePObject((OvlSlot *)((u8 *)D_01B09EB0 + (i << 7)));
     D_01B09DB0[i] = key;
-    res = sub->pE0;
-    sub->pBC = &D_01B09EB0[i];
-    _pppStartPart(mgr, 0x1000, ((void **)*(int *)((u8 *)res + 0x10))[sub->b1E], 1);
+    sub->pBC = (OvlSlot *)((u8 *)D_01B09EB0 + (i << 7));
+    _pppStartPart(sub->pBC, 0x1000,
+                  ((void **)*(int *)((u8 *)res + 0x10))[*(u8 *)((u8 *)sub + 0xD4)], 1);
 }
 
 /* 0x01B00958: run + free a ppp part */
