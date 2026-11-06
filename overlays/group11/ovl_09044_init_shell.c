@@ -387,10 +387,11 @@ void func_01B00B38(OvlScriptSub *sub)
         OvlSlot *slot = sub->pBC;
 
         if (slot != 0) {
-            int idx = slot->h1E;
+            int idx;
 
             D_006A3924 = &D_01B0BEB0;
             _pppAllFreePObject(slot);
+            idx = slot->h1E;
             sub->pBC = 0;
             D_01B09DB0[idx] = 0;
             sub->bBB = 0;
@@ -524,11 +525,7 @@ void func_01B00E60(OvlScriptSub *sub)
     OvlHwRegs *hw = &D_2008250;
     u8 *cbc = D_01B0CBC0;
 
-    if (D_007649A0 != 0) {
-        D_00703E24 = (void *)hw->wA8;
-    } else {
-        D_00703E24 = D_01B0C520;
-    }
+    D_00703E24 = (D_007649A0 != 0) ? (void *)hw->wA8 : D_01B0C520;
     env = (int)D_00703E24;
     op_oef2_set2(env);
     func_01B00438(opu_init(1, op_oef2_a_get(env, 1, 0), env,
