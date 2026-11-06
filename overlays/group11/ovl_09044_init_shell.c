@@ -434,9 +434,9 @@ void func_01B00C58(OvlScriptSub *sub)
 
     if (mgr->w20 == 0) {
         pppInitEnv(mgr, 0, sub->pA0, sub->pA4);
-    }
-    if (D_007649A0 != 0) {
-        func_00293D48((int)mgr, 0x8003);
+        if (D_007649A0 != 0) {
+            func_00293D48((int)mgr, 0x8003);
+        }
     }
 }
 
