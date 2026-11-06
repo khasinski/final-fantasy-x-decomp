@@ -358,12 +358,11 @@ void func_01B00A38(void)
 /* 0x01B00A78: free every live ppp object */
 void func_01B00A78(int a0)
 {
-    OvlMgr *mgr = &D_01B0BEB0;
     u32 *tbl;
     OvlSlot *slot;
     int i;
 
-    D_006A3924 = mgr;
+    D_006A3924 = &D_01B0BEB0;
     tbl = &D_01B09BB0[0x3F];
     for (i = 0x3F; i >= 0; i--) {
         *tbl = 0;
@@ -374,7 +373,7 @@ void func_01B00A78(int a0)
     for (i = 0x3F; i >= 0; i--) {
         if (*tbl != 0) {
             *tbl = 0;
-            D_006A3924 = mgr;
+            D_006A3924 = &D_01B0BEB0;
             _pppAllFreePObject(slot);
         }
         slot += 1;
