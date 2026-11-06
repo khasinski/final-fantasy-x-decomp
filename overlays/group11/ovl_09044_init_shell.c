@@ -429,12 +429,10 @@ void func_01B00BB0(OvlScriptSub *sub)
 /* 0x01B00C58 */
 void func_01B00C58(OvlScriptSub *sub)
 {
-    OvlMgr *mgr = &D_01B0BEB0;
-
-    if (mgr->w20 == 0) {
-        pppInitEnv(mgr, 0, sub->pA0, sub->pA4);
+    if (D_01B0BEB0.w20 == 0) {
+        pppInitEnv(&D_01B0BEB0, 0, sub->pA0, sub->pA4);
         if (D_007649A0 != 0) {
-            func_00293D48((int)mgr, 0x8003);
+            func_00293D48((int)&D_01B0BEB0, 0x8003);
         }
     }
 }
