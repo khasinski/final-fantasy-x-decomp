@@ -68,7 +68,7 @@ typedef struct OvlScriptSub {   /* ScriptSub fields used here */
 extern OvlR6Obj *D_0054D5E8[];
 extern OvlR6Obj *D_0054D5EC;
 extern OvlHandlePool D_00703E20;
-#define D_00703E24 (*(void **)((u8 *)&D_00703E20 + 4))
+extern void *D_00703E24;
 extern OvlHwRegs D_2008250;
 extern s8 D_007649A0;
 extern OvlW10Dual D_00764990;
