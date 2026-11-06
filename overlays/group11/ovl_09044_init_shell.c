@@ -51,7 +51,7 @@ typedef struct OvlScriptSub {   /* ScriptSub fields used here */
     u16 h1A;
     u8 pad1C[2];
     u8 b1E;
-    u8 pad1F[0x2F];
+    u8 pad1F[0x31];
     u16 h50;
     u8 pad52[0x4E];
     void *pA0;          /* 0xA0 */
@@ -504,17 +504,13 @@ void func_01B00DD8(void)
 /* 0x01B00DE0: find the ppp env for sub a0 (-1 = none) */
 int func_01B00DE0(OvlScriptSub *sub)
 {
-    void *env = D_00703E24;
+    OvlScriptSub *env = D_00703E24;
     int i;
 
     if (env != 0) {
-        u16 n = sub->h50;
-
-        if (n != 0) {
-            for (i = 0; i < n; i++) {
-                if (op_oef2_a_get(env, 8, i) == sub) {
-                    return i;
-                }
+        for (i = 0; i < env->h50; i++) {
+            if (op_oef2_a_get(env, 8, i) == (int)sub) {
+                return i;
             }
         }
     }

@@ -58,8 +58,8 @@ _pppRunPart = 0x00267FA0;
 pppInitEnv = 0x00267A68;
 opu_init = 0x00296CB8;
 opu_test_data_read = 0x0029A8A8;
-op_oef2_a_get = 0x00296D00;
-op_oef2_set2 = 0x00296D20;
+op_oef2_a_get = 0x002B49A0;
+op_oef2_set2 = 0x002B4980;
 EOF
 } > $D/t.ld
 mipsel-linux-gnu-ld -EL -T $D/t.ld -o $D/t.elf
