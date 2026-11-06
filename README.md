@@ -8,7 +8,7 @@ Uses **ee-gcc 2.9-991111-01** with `-O2 -G0`.
 | Part | Code size | In C |
 |---|---:|---:|
 | Main ELF | 1.98 MiB | **32.55%** |
-| Overlays — 584 battle-effect files | 16.54 MiB | **37.33%** (by container) · **4.50%** (distinct code) |
+| Overlays — 584 battle-effect files | 16.54 MiB | **37.36%** (by container) · **4.50%** (distinct code) |
 
 Together, that is **about 36.8% of the known EE code** when repeated overlay code is counted once per
 container in which it appears. Progress is measured by
