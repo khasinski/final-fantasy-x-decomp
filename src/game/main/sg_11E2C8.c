@@ -136,15 +136,84 @@ void func_0011E598(s32 left, s32 top, s32 right, s32 bottom)
     func_0011E4D8(left, top);
 }
 
+extern float D_00580938[];
+extern float D_00580970[];
+extern char D_00569D58[];
+extern char D_00569D60[];
+extern char D_00569D70[];
+extern s32 D_005809A4;
+void func_0011D590(s32, int);
+void func_001031F8(void);
+void func_00122CC8(char *, int);
+void Sg_MapInit(void);
+void Sg_GsXYZF2L(int arg0, int arg1, int arg2);
+
 INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E618);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E6C0);
+void func_0011E6C0(float *v, float r)
+{
+    float p[4];
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E788);
+    func_0011E420();
+    p[0] = v[0] - r;
+    p[1] = v[1];
+    p[2] = v[2];
+    func_0011E490(p);
+    p[0] = v[0] + r;
+    func_0011E490(p);
+    p[1] = v[1] - r;
+    p[0] = v[0];
+    func_0011E490(p);
+    p[1] = v[1] + r;
+    func_0011E490(p);
+    p[2] = v[2] - r;
+    p[1] = v[1];
+    func_0011E490(p);
+    p[2] = v[2] + r;
+    func_0011E490(p);
+}
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E830);
+void func_0011E788(float *v, float r)
+{
+    int i;
+    float p[4];
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E8D8);
+    func_0011E458();
+    for (i = 0; i < 13; i++) {
+        p[0] = v[0] + D_00580938[i] * r;
+        p[2] = v[2] + D_00580970[i] * r;
+        p[1] = v[1];
+        func_0011E490(p);
+    }
+}
+
+void func_0011E830(float *v, float r)
+{
+    int i;
+    float p[4];
+
+    func_0011E458();
+    for (i = 0; i < 13; i++) {
+        p[0] = v[0] + D_00580938[i] * r;
+        p[1] = v[1] + D_00580970[i] * r;
+        p[2] = v[2];
+        func_0011E490(p);
+    }
+}
+
+void func_0011E8D8(float *v, float r)
+{
+    int i;
+    float p[4];
+
+    func_0011E458();
+    for (i = 0; i < 13; i++) {
+        p[1] = v[1] + D_00580938[i] * r;
+        p[2] = v[2] + D_00580970[i] * r;
+        p[0] = v[0];
+        func_0011E490(p);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E980);
 
@@ -161,9 +230,75 @@ void func_0011EA98(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", Sg_DbDraw);
+void Sg_DbDraw(void)
+{
+    float v[4];
+    int out[4];
+    float m[16];
+    u8 *p;
+
+    if (ffx_debugmode) {
+        func_002DD128(m);
+        p = (u8 *)func_00106430();
+        func_002DCE38(m, p, func_00106420());
+        p = D_00580934;
+        *p = 0;
+        Sg_GsSetPacket((Cmd16 *)Sg_PacketGetPtr());
+        Sg_GsStart();
+        func_0011DF70(1, 1, 0, 0, 0, 0, 0, 0);
+        p = D_00580930;
+        while (*p != 0) {
+            switch (*p) {
+            case 1:
+                Sg_GsPRIM(*(u16 *)(p + 2));
+                p += 4;
+                break;
+            case 2:
+                func_0011D998(p[1], p[2], p[3], 0x80);
+                p += 4;
+                break;
+            case 4:
+                Sg_GsXYZF2L(*(u16 *)(p + 2), *(u16 *)(p + 4), 0);
+                p += 8;
+                break;
+            case 3:
+                v[0] = *(float *)(p + 4);
+                v[1] = *(float *)(p + 8);
+                v[2] = *(float *)(p + 12);
+                v[3] = 1.0f;
+                p += 0x10;
+                func_002DD900(out, m, v, 0);
+                Sg_GsXYZF2L(out[0], out[1], out[2]);
+                break;
+            }
+        }
+        Sg_GsEnd();
+        D_00580934 = D_00580930;
+    }
+}
 
 void func_0011ECC8(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", Sg_Test);
+s32 _m2c_Sg_Test_user_malloc(int, int, char *, int) __asm__("user_malloc");
+
+int Sg_Test(int cmd)
+{
+    switch (cmd) {
+    case 2:
+        D_005809A4 = _m2c_Sg_Test_user_malloc(0x10000, 6, D_00569D58, 0xB);
+        break;
+    case 3:
+        func_0011D590(D_005809A4, 6);
+        func_001031F8();
+        break;
+    case 0:
+        func_00122CC8(D_00569D60, 0);
+        func_00122CC8(D_00569D70, 1);
+        Sg_MapInit();
+        break;
+    case 1:
+        break;
+    }
+    return cmd;
+}

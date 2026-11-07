@@ -203,7 +203,113 @@ int func_00149A98(int v)
     return prev;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelEventRegistFootInfo);
+void SndSetFootSep(s32 a, s32 b, s32 c, s32 d);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void AtelEventRegistFootInfo(void *p) {
+    s32 *temp_2;
+    s32 *temp_2_2;
+    s32 *temp_2_3;
+    s32 *temp_2_4;
+    register s32 temp_20 __asm__("$20");
+    register s32 temp_20_3 __asm__("$20");
+    register s32 temp_20_4 __asm__("$20");
+    s32 var_16;
+    s32 var_16_3;
+    s32 var_16_4;
+    register s32 var_18 __asm__("$18");
+    s32 var_18_2;
+    s32 var_18_3;
+    s32 var_18_4;
+    register s32 var_19 __asm__("$19");
+    s32 var_19_2;
+    s32 var_19_3;
+    s32 var_19_4;
+    register void * var_17 __asm__("$17");
+    void *var_17_2;
+    void *var_17_3;
+    void *var_17_4;
+
+    var_18 = 0;
+    do {
+        temp_2 = func_00139178(p, 0, var_18);
+        var_17 = ((s32 *)((u8 *)temp_2 + (4)));
+        if ((temp_2 != 0) && (temp_20 = *temp_2, var_16 = 0, (temp_20 > 0))) {
+            var_19 = var_18 + 1;
+            do {
+                SndSetFootSep(0, var_18, var_16, *(s32 *)((u8 *)var_17 + 0));
+                SndSetFootSep(1, var_18, var_16, *(s32 *)((u8 *)var_17 + 4));
+                if (var_16 == 0) {
+                    SndSetFootSep(4, var_18, 0, *(s32 *)((u8 *)var_17 + 8));
+                }
+                SndSetFootSep(5, var_18, var_16, *(s32 *)((u8 *)var_17 + 0xC));
+                var_16 += 1;
+                var_17 += 0x10;
+            } while (var_16 < temp_20);
+        } else {
+            var_19 = var_18 + 1;
+        }
+        var_18 = var_19;
+    } while (var_18 < 0x10);
+    var_18_2 = 0;
+    do {
+        temp_2_2 = func_00139178(p, 1, var_18_2);
+        var_17_2 = ((s32 *)((u8 *)temp_2_2 + (4)));
+        if ((temp_2_2 != 0) && (temp_20 = *temp_2_2, var_16 = 0, (temp_20 > 0))) {
+            var_19_2 = var_18_2 + 1;
+            do {
+                SndSetFootSep(2, var_18_2, var_16, *(s32 *)((u8 *)var_17_2 + 0));
+                SndSetFootSep(3, var_18_2, var_16, *(s32 *)((u8 *)var_17_2 + 4));
+                SndSetFootSep(6, var_18_2, var_16, *(s32 *)((u8 *)var_17_2 + 8));
+                SndSetFootSep(7, var_18_2, var_16, *(s32 *)((u8 *)var_17_2 + 0xC));
+                var_16 += 1;
+                var_17_2 += 0x10;
+            } while (var_16 < temp_20);
+        } else {
+            var_19_2 = var_18_2 + 1;
+        }
+        var_18_2 = var_19_2;
+    } while (var_18_2 < 0x10);
+    var_18_3 = 0;
+    do {
+        temp_2_3 = func_00139178(p, 2, var_18_3);
+        var_17_3 = ((s32 *)((u8 *)temp_2_3 + (4)));
+        if ((temp_2_3 != 0) && (temp_20_3 = *temp_2_3, var_16_3 = 0, (temp_20_3 > 0))) {
+            var_19_3 = var_18_3 + 1;
+            do {
+                SndSetFootSep(8, var_18_3, var_16_3, *(s32 *)((u8 *)var_17_3 + 0));
+                SndSetFootSep(9, var_18_3, var_16_3, *(s32 *)((u8 *)var_17_3 + 4));
+                if (var_16_3 == 0) {
+                    SndSetFootSep(4, var_18_3, 0, *(s32 *)((u8 *)var_17_3 + 8));
+                }
+                SndSetFootSep(0xD, var_18_3, var_16_3, *(s32 *)((u8 *)var_17_3 + 0xC));
+                var_16_3 += 1;
+                var_17_3 += 0x10;
+            } while (var_16_3 < temp_20_3);
+        } else {
+            var_19_3 = var_18_3 + 1;
+        }
+        var_18_3 = var_19_3;
+    } while (var_18_3 < 0x10);
+    var_18_4 = 0;
+    do {
+        temp_2_4 = func_00139178(p, 3, var_18_4);
+        var_17_4 = ((s32 *)((u8 *)temp_2_4 + (4)));
+        if ((temp_2_4 != 0) && (temp_20_4 = *temp_2_4, var_16_4 = 0, (temp_20_4 > 0))) {
+            var_19_4 = var_18_4 + 1;
+            do {
+                SndSetFootSep(0xA, var_18_4, var_16_4, *(s32 *)((u8 *)var_17_4 + 0));
+                SndSetFootSep(0xB, var_18_4, var_16_4, *(s32 *)((u8 *)var_17_4 + 4));
+                SndSetFootSep(0xE, var_18_4, var_16_4, *(s32 *)((u8 *)var_17_4 + 8));
+                SndSetFootSep(0xF, var_18_4, var_16_4, *(s32 *)((u8 *)var_17_4 + 0xC));
+                var_16_4 += 1;
+                var_17_4 += 0x10;
+            } while (var_16_4 < temp_20_4);
+        } else {
+            var_19_4 = var_18_4 + 1;
+        }
+        var_18_4 = var_19_4;
+    } while (var_18_4 < 0x10);
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149E00);
 

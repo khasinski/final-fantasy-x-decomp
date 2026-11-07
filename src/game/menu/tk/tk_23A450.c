@@ -437,7 +437,27 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B4C8);
 
 int func_0023B700(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B708);
+Task *func_0023B708(void) {
+    Task *temp_2;
+
+    temp_2 = func_00243400();
+    temp_2->b36 = temp_2->b3E = 3;
+    temp_2->b42 = 1;
+    temp_2->x48 = 0;
+    temp_2->x32 = 0;
+    temp_2->x34 = 0;
+    temp_2->x0C = (s32) func_0023B1C0;
+    temp_2->x10 = (s32) func_0023B4C8;
+    temp_2->x14 = (s32) func_0023B700;
+    temp_2->x30 = (s16) D_00694114;
+    temp_2->b45 = -1;
+    temp_2->b37 = 0;
+    temp_2->x3A = 0xA;
+    D_00694124 = temp_2;
+    TkMenuMainRegistWindow(temp_2);
+    func_00227480((s8 *) D_00572A70);
+    return temp_2;
+}
 
 void func_0023B7B8(void)
 {

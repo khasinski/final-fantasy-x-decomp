@@ -23,7 +23,33 @@ typedef struct {
 #include "ffx/s0.h"
 #include "ffx/u0.h"
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D0A0);
+void Sg_GsloadSetBase(TblEntry70 *);
+
+s32 func_0010D0A0(int arg0, int cnt, int base, int idx)
+{
+    register TblEntry70 *tbl __asm__("$16") = (TblEntry70 *)arg0;
+    int i;
+
+    if (idx == -1) {
+        for (i = 0; i < cnt; i++, tbl++) {
+            *(u16 *)((u8 *)tbl + 0x68) = base;
+            tbl->val6A = base;
+            Sg_GsloadSetBase(tbl);
+            if (base != -1) {
+                base += *(u16 *)((u8 *)tbl + 0x66);
+            }
+        }
+    } else {
+        tbl += idx;
+        *(u16 *)((u8 *)tbl + 0x68) = base;
+        tbl->val6A = base;
+        Sg_GsloadSetBase(tbl);
+        if (base != -1) {
+            base += *(u16 *)((u8 *)tbl + 0x66);
+        }
+    }
+    return base;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", ch_TextureLoad);
 
