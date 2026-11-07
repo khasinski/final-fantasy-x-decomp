@@ -243,4 +243,18 @@ void func_002A2168(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A21A8);
+void _m2c_func_002A21A8_yiGetBackColor(int *v) __asm__("yiGetBackColor");
+void _m2c_func_002A21A8_func_00173650(void *) __asm__("func_00173650");
+/* DEBT(CAST) */
+void func_002A21A8(void *arg0) {
+    s32 sp[4];
+    if (D_00703FF0.flagF == 0) {
+        D_00703FF0.flagF = 1;
+        _m2c_func_002A21A8_yiGetBackColor((s32 *) D_00703FF0.buf);
+    }
+    sp[0] = (s32) (*(float *)((u8 *)(arg0) + (0)));
+    sp[1] = (s32) (*(float *)((u8 *)(arg0) + (4)));
+    sp[2] = (s32) (*(float *)((u8 *)(arg0) + (8)));
+    sp[3] = (s32) (*(float *)((u8 *)(arg0) + (0xC)));
+    _m2c_func_002A21A8_func_00173650(sp);
+}

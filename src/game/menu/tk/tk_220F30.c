@@ -126,7 +126,39 @@ s32 func_00221228(void)
     return D_0031FCBC;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00221238);
+s32 _m2c_func_00221238_func_00221198() __asm__("func_00221198");
+void _m2c_func_00221238_func_002210C8(s32, s32) __asm__("func_002210C8");
+void _m2c_func_00221238_func_00221158(s32, s32) __asm__("func_00221158");
+s32 _m2c_func_00221238_func_00221178(s32) __asm__("func_00221178");
+/* DEBT(FAKE) */
+void func_00221238(s32 id, s32 pos, s32 c) {
+    register s32 temp_17 __asm__("$17");
+    register s32 temp_2 __asm__("$16");
+    register s32 var_19 __asm__("$19");
+    register s32 cmp __asm__("$2");
+
+    var_19 = pos;
+    temp_17 = _m2c_func_00221238_func_00221198(id);
+    temp_2 = _m2c_func_00221238_func_00221178(id);
+    {
+        register s32 sum1 __asm__("$3") = temp_17 + var_19;
+        cmp = sum1 < temp_2;
+    }
+    if (!cmp) {
+        s32 r = func_00221108(id);
+        register s32 diff __asm__("$3") = temp_2 - temp_17;
+        __asm__("" : "+r"(diff));
+        var_19 = ((r ^ 0x62) == 0) ? diff : var_19;
+        {
+            register s32 sum2 __asm__("$3") = temp_17 + var_19;
+            cmp = sum2 < temp_2;
+        }
+        if (!cmp) {
+            _m2c_func_00221238_func_002210C8(id, c);
+        }
+    }
+    _m2c_func_00221238_func_00221158(id, var_19);
+}
 
 int func_002212E0(int id, int c)
 {

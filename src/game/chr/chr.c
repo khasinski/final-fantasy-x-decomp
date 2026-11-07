@@ -304,7 +304,38 @@ void Ch_Allocate2(s32 id, s32 v)
     CHR_S32(func_00102B98(id), 0x19C) = v; /* DEBT(CAST) */
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00102AF8);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00102AF8(Chr *arg0, ChrSrc *arg1) {
+    s32 temp_4;
+    s32 var_16;
+    s32 var_19;
+    register void *temp_17 __asm__("$17");
+    register s32 p71 __asm__("$3");
+    register u32 h0 __asm__("$2");
+    s32 c8;
+
+    p71 = (s32) ((u8 *)arg1 + 0x71);
+    h0 = (*(u16 *)((u8 *)(arg1) + (0)));
+    __asm__ volatile("" : "+r"(h0));
+    temp_17 = (*(void **)((u8 *)(arg1) + (4)));
+    c8 = (*(s32 *)((u8 *)(arg0) + (0x1C8)));
+    __asm__ volatile("" : : : "memory");
+    (*(u16 *)((u8 *)(arg0) + (0))) = h0;
+    (*(s32 *)((u8 *)(arg0) + (4))) = p71;
+    (*(void **)((u8 *)(arg0) + (0x1CC))) = temp_17;
+    if (c8 != 0) {
+        var_16 = 0;
+        if ((*(u16 *)((u8 *)(temp_17) + (6))) != 0) {
+            var_19 = 0;
+            do {
+                temp_4 = var_16;
+                var_16 += 1;
+                *(s32 *)(var_19 + (*(s32 *)((u8 *)(arg0) + (0x1C8)))) = (s32) func_00100178(temp_4, (*(s32 *)((u8 *)(temp_17) + (0x10))), (*(u16 *)((u8 *)(temp_17) + (4))));
+                var_19 += 0x30;
+            } while (var_16 < (s32) (*(u16 *)((u8 *)(temp_17) + (6))));
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00102B98);
 INCLUDE_RODATA("build/ee_asm/game/chr/chr/rodata", jtbl_00569350);

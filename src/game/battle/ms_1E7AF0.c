@@ -411,7 +411,39 @@ int func_001E8BE0(Actor *ctx, void *unused, ScriptCtx *arg)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", MsGetDirDivide);
+float _m2c_MsGetDirDivide_MsNearRag(float, float) __asm__("MsNearRag");
+void _m2c_MsGetDirDivide_MsVectorRect2Polar(s32, s32, float *, s32, s32) __asm__("MsVectorRect2Polar");
+float _m2c_MsGetDirDivide_func_001AC388(s32, s32) __asm__("func_001AC388");
+void _m2c_MsGetDirDivide_func_001B6E48(s32, void *) __asm__("func_001B6E48");
+s32 _m2c_MsGetDirDivide_func_002EC198(s32, s32) __asm__("func_002EC198");
+s32 _m2c_MsGetDirDivide_func_002ED038(float) __asm__("func_002ED038");
+/* DEBT(FAKE) */
+s32 MsGetDirDivide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    float sp0;
+    float sp4;
+    register s32 temp_hi __asm__("$4");
+    register s32 cvt __asm__("$2");
+    register s32 cvt1 __asm__("$3");
+    register s32 a3_2 __asm__("$5");
+
+    _m2c_MsGetDirDivide_func_001B6E48(arg2, (&sp0));
+    sp0 = _m2c_MsGetDirDivide_MsNearRag(0.0f, sp0);
+    if (_m2c_MsGetDirDivide_func_002EC198(_m2c_MsGetDirDivide_func_002ED038(_m2c_MsGetDirDivide_func_001AC388(arg0, arg1)), 0) == 0) {
+        sp4 = 0.0f;
+    } else {
+        _m2c_MsGetDirDivide_MsVectorRect2Polar(arg0, arg1, &sp4, 0, 0);
+        sp4 = _m2c_MsGetDirDivide_MsNearRag(sp0, sp4) - sp0;
+    }
+    if (arg4 != 0) {
+        cvt = (s32) (((((sp4 * 180.0f) / 3.1415927f) + 360.0f) * (float) arg3) / 360.0f);
+        return cvt % arg3;
+    }
+    cvt = (s32) (((((sp4 * 180.0f) / 3.1415927f) + 360.0f) * (float) arg3) / 180.0f);
+    cvt1 = cvt + 1;
+    a3_2 = arg3 * 2;
+    temp_hi = cvt1 % a3_2;
+    return (s32) (((u32) temp_hi >> 0x1F) + temp_hi) >> 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8DF0);
 

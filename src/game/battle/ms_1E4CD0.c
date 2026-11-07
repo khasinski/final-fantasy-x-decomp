@@ -854,4 +854,26 @@ int func_001E79D8(Actor *ctx)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsEffectMagicMotion);
+s32 _m2c_MsEffectMagicMotion_func_00144158() __asm__("func_00144158");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 MsEffectMagicMotion(s32 arg0, s32 arg1, s32 arg2) {
+    s32 temp_18;
+    register u32 temp_17 __asm__("$17");
+    void *temp_16;
+
+    temp_17 = _m2c_MsEffectMagicMotion_func_00144158(arg0);
+    __asm__ volatile("" : "+r"(temp_17), "+r"(arg0));
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_17 = *(u8 *)temp_17;
+    temp_16 = MsGetChr(temp_17);
+    if (temp_17 != 0xFF) {
+        if ((*(s8 *)((u8 *)(temp_16) + (0xB3))) == 0) {
+            MsTerminateMotion(temp_16);
+            (*(s8 *)((u8 *)(temp_16) + (0xB2))) = temp_18;
+            if (D_0031732B != 0) {
+                func_002EF240(D_0056FBB0, temp_17, temp_18, (*(s8 *)((u8 *)(temp_16) + (0xF2))), (*(s8 *)((u8 *)(temp_16) + (0xF3))));
+            }
+        }
+    }
+    return 0;
+}

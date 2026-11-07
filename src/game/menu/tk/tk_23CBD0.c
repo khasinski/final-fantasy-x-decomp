@@ -205,7 +205,39 @@ void func_0023E928(Task *o) { o->state = 0; }
 
 int func_0023E930(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E938);
+extern s32 _m2c_func_0023E938_D_00572CE0 __asm__("D_00572CE0");
+extern s32 _m2c_func_0023E938_D_00572CE8 __asm__("D_00572CE8");
+extern s32 _m2c_func_0023E938_D_00572CF0 __asm__("D_00572CF0");
+void _m2c_func_0023E938_func_0023DB30() __asm__("func_0023DB30");
+void _m2c_func_0023E938_func_0023E798() __asm__("func_0023E798");
+Task *func_0023E938(s32 arg0) {
+    Task *temp_2;
+
+    temp_2 = func_00243400();
+    D_0069A644 = temp_2;
+    if (D_0069A688 != 0) {
+        TkMenuSetHelpMessage(func_002493D0(0x2004));
+    } else {
+        TkMenuSetHelpMessage(func_002493D0(0x201F));
+    }
+    temp_2->ext[0] = arg0;
+    temp_2->cb = func_0023E928;
+    temp_2->x0C = (s32) TkMenuCtrlSelFileWindow;
+    temp_2->x10 = (s32) &_m2c_func_0023E938_func_0023E798;
+    temp_2->x14 = (s32) func_0023E930;
+    temp_2->x1C = (s32) &_m2c_func_0023E938_func_0023DB30;
+    temp_2->x30 = 0x63;
+    temp_2->x48 = 0;
+    temp_2->x32 = 0;
+    temp_2->x3A = 5;
+    temp_2->b42 = 1;
+    temp_2->b3E = 1;
+    TkMenuMainRegistWindow(temp_2);
+    TOSeqStartScene(1, &_m2c_func_0023E938_D_00572CE0);
+    TOSeqStartScene(1, &_m2c_func_0023E938_D_00572CE8);
+    TOSeqStartScene(1, &_m2c_func_0023E938_D_00572CF0);
+    return temp_2;
+}
 
 void func_0023EA48(void) {
     if (D_0069A644) {

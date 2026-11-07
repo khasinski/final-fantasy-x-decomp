@@ -135,7 +135,31 @@ void func_002156C0(s8 v)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOCheckBtlCommandUse);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOCheckBtlCommandTarget);
+s32 TOCheckBtlCommandTarget(s32 a, s32 b) {
+    s32 temp_3;
+
+    __asm__ volatile("" : : : "memory");
+    func_0021D7A0(a, b);
+    func_0021D820();
+    TOBtlMakeTargetGroupBit();
+    TOBtlMakeTargetChrStatusBit();
+    func_0021DBF0();
+    TOBtlMakeTargetTargetBit();
+    if (D_003249A4 == 0x100) {
+        toTarget.h12E = 0;
+        toTarget.h130 = 0;
+        toTarget.h126 = 1;
+        toTarget.w10 = 2;
+        toTarget.p128 = &toTarget.wB0;
+        temp_3 = toTarget.wC & toTarget.w84 & toTarget.w8C;
+        toTarget.hAC = 1;
+        toTarget.h12C = 0;
+        toTarget.wB0 = temp_3;
+        toTarget.wA8 = temp_3;
+        toTarget.h124 = 0xFF;
+    }
+    return 1;
+}
 
 u16 *TOGetSaveWindow(int id, int mode, s32 *out)
 {

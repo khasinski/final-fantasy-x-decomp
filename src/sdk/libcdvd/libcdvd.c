@@ -215,9 +215,65 @@ INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E19C0);
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1BA0);
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1C70);
+/* DEBT(FAKE) */ /* DEBT(GOTO) */
+s32 func_002E1C70(void) {
+    if (func_002E1108() != 6) {
+        if (func_002E0F98(0xA) != 0) {
+            register s32 *p414 __asm__("$3");
+            D_00566414 = 5;
+            __asm__ volatile("" : "=r"(p414) : "0"(&D_00566414) : "$2");
+            D_005663F0 = 1;
+            if (func_002FB4C8(D_00567590, 6, 1, 0, 0, 0, 0, func_002E0790, p414) >= 0) {
+                goto ret1;
+            }
+            {
+                register s32 r2 __asm__("$2");
+                __asm__ volatile("" : : "r"(r2) : "$3");
+            }
+            D_00566414 = 0;
+            __asm__ volatile("" : : : "$2");
+            __asm__ volatile("" : : : "$3");
+            D_005663F0 = 0;
+            func_002F8400(D_005663E8);
+            goto block_6;
+        }
+block_6:
+        return 0;
+    }
+    return 0;
+ret1:
+    return 1;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1D20);
+/* DEBT(FAKE) */ /* DEBT(GOTO) */
+s32 func_002E1D20(void) {
+    if (func_002E1108() != 6) {
+        if (func_002E0F98(0xC) != 0) {
+            register s32 *p414 __asm__("$3");
+            D_00566414 = 7;
+            __asm__ volatile("" : "=r"(p414) : "0"(&D_00566414) : "$2");
+            D_005663F0 = 1;
+            if (func_002FB4C8(D_00567590, 8, 1, 0, 0, 0, 0, func_002E0790, p414) >= 0) {
+                goto ret1;
+            }
+            {
+                register s32 r2 __asm__("$2");
+                __asm__ volatile("" : : "r"(r2) : "$3");
+            }
+            D_00566414 = 0;
+            __asm__ volatile("" : : : "$2");
+            __asm__ volatile("" : : : "$3");
+            D_005663F0 = 0;
+            func_002F8400(D_005663E8);
+            goto block_6;
+        }
+block_6:
+        return 0;
+    }
+    return 0;
+ret1:
+    return 1;
+}
 
 int func_002E1DD0(void)
 {

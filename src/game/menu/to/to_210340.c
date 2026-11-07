@@ -297,7 +297,38 @@ int func_002123B0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_002123B8);
+void _m2c_func_002123B8_func_00211E80() __asm__("func_00211E80");
+void _m2c_func_002123B8_func_00212288(s16, s16, s32) __asm__("func_00212288");
+extern s16 _m2c_func_002123B8_D_00324358 __asm__("D_00324358");
+extern s16 _m2c_func_002123B8_D_00324360 __asm__("D_00324360");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_002123B8(void *arg0) {
+    s16 temp_2;
+    s16 temp_5;
+    register s32 temp_7 __asm__("$7");
+    register s32 rem __asm__("$8");
+    register s32 h40 __asm__("$6");
+    s32 h70;
+    s32 h72;
+    _m2c_func_002123B8_func_00211E80();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    temp_5 = *(s32 *)(((*(s16 *)((u8 *)(arg0) + (0x42))) * 2) + (*(s32 *)((u8 *)(arg0) + (0x20))));
+    if (temp_5 == 0x30FF) {
+        _m2c_func_002123B8_func_00212288(0xF, _m2c_func_002123B8_D_00324358, 0xB4);
+        _m2c_func_002123B8_func_00212288(0x10, _m2c_func_002123B8_D_00324358, _m2c_func_002123B8_D_00324360 + 0xB4);
+        _m2c_func_002123B8_func_00212288(0x11, _m2c_func_002123B8_D_00324358, (_m2c_func_002123B8_D_00324360 * 2) + 0xB4);
+    } else {
+        _m2c_func_002123B8_func_00212288(temp_5, _m2c_func_002123B8_D_00324358, (_m2c_func_002123B8_D_00324360 * 2) + 0xB4);
+    }
+    temp_7 = (s16) ((*(s16 *)((u8 *)(arg0) + (0x38))));
+    temp_2 = (*(s16 *)((u8 *)(arg0) + (0x42)));
+    rem = temp_2 % temp_7;
+    h40 = (*(s16 *)((u8 *)(arg0) + (0x40)));
+    h70 = (*(s16 *)((u8 *)(arg0) + (0x70)));
+    h72 = (*(s16 *)((u8 *)(arg0) + (0x72)));
+    func_0021F448(0, (s16) (h70 + (rem * ((*(s16 *)((u8 *)(arg0) + (0x62))) + 0x10))), (s16) (h72 + (((temp_2 - h40) / temp_7) * 0x14)));
+    return 0;
+}
 
 int func_002124F0(void)
 {
@@ -329,7 +360,31 @@ int func_00212570(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00212578);
+void _m2c_func_00212578_TOBtlDrawWeaponAbilityWindow(s16, s32, s32) __asm__("TOBtlDrawWeaponAbilityWindow");
+void _m2c_func_00212578_func_00211E80() __asm__("func_00211E80");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_00212578(void *arg0) {
+    s16 temp_2;
+    s16 temp_2_2;
+    register s32 temp_7 __asm__("$7");
+    register s32 rem __asm__("$8");
+    register s32 h40 __asm__("$6");
+    s32 h70;
+    s32 h72;
+    _m2c_func_00212578_func_00211E80();
+    temp_7 = (s16) ((*(s16 *)((u8 *)(arg0) + (0x38))));
+    temp_2 = (*(s16 *)((u8 *)(arg0) + (0x42)));
+    rem = temp_2 % temp_7;
+    h40 = (*(s16 *)((u8 *)(arg0) + (0x40)));
+    h70 = (*(s16 *)((u8 *)(arg0) + (0x70)));
+    h72 = (*(s16 *)((u8 *)(arg0) + (0x72)));
+    func_0021F448(0, (s16) (h70 + (rem * ((*(s16 *)((u8 *)(arg0) + (0x62))) + 0x10))), (s16) (h72 + (((temp_2 - h40) / temp_7) * 0x14)));
+    temp_2_2 = *(s32 *)(((*(s16 *)((u8 *)(arg0) + (0x42))) * 2) + (*(s32 *)((u8 *)(arg0) + (0x20))));
+    if (temp_2_2 != 0xFF) {
+        _m2c_func_00212578_TOBtlDrawWeaponAbilityWindow(temp_2_2, (*(s16 *)((u8 *)(arg0) + (0x6C))) + 0x14, 0x16D);
+    }
+    return 0;
+}
 
 int func_00212638(void)
 {

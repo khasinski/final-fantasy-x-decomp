@@ -172,7 +172,34 @@ void *func_002AE960(void *arg0, s32 arg1, void *arg2, s32 arg3) {
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE9E0);
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", opp_anmm_fin_en_bone5);
+int _m2c_opp_anmm_fin_en_bone5_func_002B3D68(int n) __asm__("func_002B3D68");
+float _m2c_opp_anmm_fin_en_bone5_func_002B3DF8(float range) __asm__("func_002B3DF8");
+/* DEBT(CAST) */
+void *opp_anmm_fin_en_bone5(s32 arg0, void *arg1, void *arg2, void *arg3) {
+    float temp_f0;
+    s16 *temp_20;
+    s16 temp_16;
+    s32 temp_2;
+    s16 var_4;
+    void *temp_18;
+
+    temp_20 = arg2 + (*(s16 *)((u8 *)(arg2) + (2)));
+    temp_16 = *temp_20;
+    temp_18 = (*(s32 *)((u8 *)(arg1) + (0x20))) + ((*(u16 *)((u8 *)(arg3) + (0x4C))) << 8);
+    var_4 = _m2c_opp_anmm_fin_en_bone5_func_002B3D68((s32) temp_16);
+    if (var_4 >= temp_16) {
+        var_4 = temp_16 - 1;
+    }
+    temp_16 = (*(s16 *)((u8 *)((((s16 *)((u8 *)((var_4 * 2)) + (s32)temp_20)))) + (2)));
+    temp_2 = (s16) (Ch_ElemGetParent(owu_chr_hd[(*(u8 *)((u8 *)(temp_18) + (0x18)))], (s32) temp_16));
+    temp_f0 = (float) ((temp_2 <= -1) ? 0 : temp_2);
+    (*(float *)((u8 *)(arg3) + (0x40))) = (float) temp_16;
+    (*(float *)((u8 *)(arg3) + (0x44))) = temp_f0;
+    func_002B2298();
+    (*(float *)((u8 *)(arg3) + (0x48))) = _m2c_opp_anmm_fin_en_bone5_func_002B3DF8(1.0f);
+    (*(s8 *)((u8 *)(arg3) + (0x4E))) = 4;
+    return arg2 + 4;
+}
 
 /* DEBT(CAST): bytecode stream read as raw bytes */
 u8 *opp_anmm_fin_en_bone3x(AnimCtx *o, int b, u8 *p, AnimWork *w)

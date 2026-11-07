@@ -224,7 +224,36 @@ void func_001A2B88(s32 arg0) {
     MsEffectEndMotion(arg0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B90);
+extern s32 _m2c_func_001A2B90_D_00313CB0 __asm__("D_00313CB0");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_001A2B90(void) {
+    register s32 _cond __asm__("$6");
+    s32 *temp_4;
+    s32 *temp_5;
+    register s32 temp_17 __asm__("$17");
+    s32 temp_3;
+    s32 temp_hi;
+    register s32 var_16 __asm__("$16");
+    void *temp_18;
+    register u8 *base __asm__("$2");
+
+    base = (u8 *)&_m2c_func_001A2B90_D_00313CB0;
+    __asm__("" : "+r"(base));
+    temp_17 = (*(s32 *)((u8 *)(base) + (0x19C)));
+    var_16 = 0;
+    if (temp_17 > 0) {
+        temp_18 = base + 0x1A0;
+        do {
+            temp_hi = func_002EFD78() % (s32) (temp_17 - var_16);
+            temp_5 = temp_18 + (var_16 * 4);
+            var_16 += 1;
+            temp_3 = *temp_5;
+            temp_4 = temp_18 + (temp_hi * 4);
+            *temp_5 = *temp_4;
+            *temp_4 = temp_3;
+        } while ((_cond = (var_16 < temp_17)) != 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2C20);
 

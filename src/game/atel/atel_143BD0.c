@@ -248,7 +248,37 @@ int func_00144968(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", func_001449D0);
+int _m2c_func_001449D0_func_00138C78(int) __asm__("func_00138C78");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_001449D0(s32 arg0) {
+    Effect *temp_2;
+    s32 temp_19;
+    register s32 var_17 __asm__("$17");
+    register s32 c1a0 __asm__("$20");
+
+    var_17 = 0;
+    temp_19 = func_00138C68();
+    _m2c_func_001449D0_func_00138C78(arg0);
+    c1a0 = 0x1A0;
+    do {
+        temp_2 = AtelGetMesWinWork(var_17);
+        temp_2->h00 = 0;
+        temp_2->h02 = 0;
+        temp_2->h04 = 0x200;
+        temp_2->h06 = c1a0;
+        (*(s32 *)((u8 *)(temp_2) + (0x10))) = 0x50000080;
+        (*(s32 *)((u8 *)(temp_2) + (0x28))) = 0;
+        temp_2->w08 = (s32) D_0030B8C0;
+        temp_2->kind = 0;
+        temp_2->h16 = 0;
+        temp_2->b1C = 0;
+        temp_2->b1D = 0;
+        temp_2->b1E = 0;
+        temp_2->b1F = 0;
+        var_17 += 1;
+    } while (var_17 < 8);
+    _m2c_func_001449D0_func_00138C78(temp_19);
+}
 
 void func_00144A90(void) {
     int i = 0;

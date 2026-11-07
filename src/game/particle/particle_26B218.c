@@ -32,7 +32,34 @@ void func_0026B658(char *base, ScriptCtx *ctx) {
     w->h2 = w->h0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26B218", func_0026B678);
+/* DEBT(CAST) */ /* DEBT(GOTO) */
+void func_0026B678(ScriptWork *arg0, void *arg1, void *arg2) {
+    T6_Mem *var_4;
+    T6_MemEnt *temp_5;
+    s32 temp_3;
+    void *temp_2;
+
+    temp_3 = (*(s32 *)((u8 *)(arg1) + (0xC)));
+    if (temp_3 != 0xFFFFFFFF) {
+        temp_5 = &ppvMng->p3C[temp_3];
+        __asm__ volatile("" : "+r"(temp_5));
+        if (temp_5 != 0) {
+            var_4 = func_00267320(ppvMng, temp_5);
+            if (var_4 != 0) {
+                var_4->user = arg0;
+                goto block_4;
+            }
+        } else {
+            var_4 = 0;
+block_4:
+            __asm__ volatile("" : : : "memory");
+            temp_2 = ((T6_Mem *)((u8 *)var_4 + (((*(s32 *)((u8 *)(arg1) + (0x10))) + 0xA0))));
+            (*(float *)((u8 *)(temp_2) + (0))) = (float) (*(s16 *)((u8 *)(arg2) + (0)));
+            (*(float *)((u8 *)(temp_2) + (4))) = (float) (*(s16 *)((u8 *)(arg2) + (2)));
+            (*(float *)((u8 *)(temp_2) + (8))) = (float) (*(s16 *)((u8 *)(arg2) + (4)));
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26B218", func_0026B730);
 
