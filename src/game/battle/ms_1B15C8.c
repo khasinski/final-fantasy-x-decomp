@@ -252,7 +252,16 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestCamera);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestMagicCamera);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsGetVoiceEventFlag);
+/* DEBT(FAKE) */
+s32 MsGetVoiceEventFlag(void) {
+    register s32 var_2 __asm__("$2");
+
+    var_2 = 0;
+    if (*D_003172F0.h32[1].p1C != 0) {
+        var_2 = D_003172F0.f20FE == 0;
+    }
+    return var_2;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", func_001B2DF0);
 

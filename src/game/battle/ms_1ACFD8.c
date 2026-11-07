@@ -1,4 +1,5 @@
 /* tu_179 0x1acfd8-0x1af9e8: low; ~Ms (config/tu_map.tsv) */
+#define MsBattleFree _hdr_MsBattleFree
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -6,6 +7,7 @@
 #include "ffx/v2.h"
 #include "ffx/u2.h"
 #include "ffx/g2.h"
+#undef MsBattleFree
 
 void MsBattleMemInit(void) {
     D_0065FF40 = 0;
@@ -114,7 +116,30 @@ void MsBattleAllFree(void)
     func_0011D590((s32) D_003172F0.p90, 5);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBattleFree);
+void MsBattleFree(void) {
+    if (D_003172F0.f10 != 0) {
+        MsSaveEncountCheck();
+        Sg_IdSetEffectTableIndex(0);
+        func_001ADEF0();
+        MsNumberFreeMem();
+        MsBtlFreeItemMem();
+        MsBattleSpecialFree();
+        MsSEPbattleClear();
+        MsBtlReadSceneFree();
+        MsEtEffectStop();
+        MsDebugCameraSleepInit();
+        TOClearBtlWindow();
+        MsBtlBridgeBtl2Event();
+        func_001ADEA8(1);
+        MsBtlChrFreeAll();
+        MsAtelRegistFree();
+        func_001CCC40();
+        func_001B41A0();
+        D_003172F0.f1752 = 0;
+        D_003172F0.f10 = 0;
+        D_003172F0.h2078 = 0;
+    }
+}
 
 void func_001ADEA8(int i) {
     if (D_003172F0.h32[i].handle != 0) {

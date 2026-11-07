@@ -314,7 +314,21 @@ void func_002DD410(u32 a0, u32 a1, float f12, float f13)
         :  : "r"(a0), "r"(a1) : "$8", "$9");
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD438);
+typedef struct { s64 q[8]; } Blk64;
+void func_002DD438(s32 arg0, float *arg1, s32 arg2, s32 *arg3) {
+    u8 sp[0x10];
+    u8 sp10[0x10];
+    u8 sp20[0x20];
+    u8 sp40[0x10];
+
+    func_002DD128(sp);
+    func_002DCE80(sp40, arg3, arg2);
+    func_002DCEC8((s32) sp, (s32) sp40);
+    func_002DCEC8((s32) sp20, arg2);
+    func_002DCE80(sp10, sp20, (s32) sp);
+    func_002DD080((Blk64 *) sp, (Blk64 *) sp, arg1);
+    func_002DCF48(arg0, sp);
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD4E8);
 

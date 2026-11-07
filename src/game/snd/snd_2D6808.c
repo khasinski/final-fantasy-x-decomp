@@ -120,7 +120,10 @@ void func_002D6DB0(s32 bit, s32 on) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D6808", SndSetFootSep);
+s32 *_m2c_SndSetFootSep_func_002D6818(s32 a, s32 b, s32 c) __asm__("func_002D6818");
+void SndSetFootSep(s32 a, s32 b, s32 c, s32 d) {
+    *_m2c_SndSetFootSep_func_002D6818(a, b, c) = d;
+}
 
 s32 func_002D6E10(u32 idx) {
     u32 *tbl = D_0078BA50;

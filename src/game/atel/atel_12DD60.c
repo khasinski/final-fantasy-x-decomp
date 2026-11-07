@@ -522,9 +522,23 @@ s32 func_0012EEF0(void)
     return MsGetGIL();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12DD60", func_0012EF10);
+s32 func_0012EF10(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 _r;
+    s32 _m1;
+    _r = MsPayGIL(-AtelPopStackInteger(arg0, arg2));
+    _m1 = -1;
+    __asm__("" : "+r"(_m1));
+    return _m1 < _r;
+}
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12DD60", func_0012EF40);
+s32 func_0012EF40(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 _r;
+    s32 _m1;
+    _r = MsPayGIL(AtelPopStackInteger(arg0, arg2));
+    _m1 = -1;
+    __asm__("" : "+r"(_m1));
+    return _m1 < _r;
+}
 
 s32 func_0012EF70(Actor *a, s32 unused, ScriptCtx *ctx)
 {

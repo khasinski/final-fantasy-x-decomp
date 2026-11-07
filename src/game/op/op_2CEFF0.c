@@ -1,10 +1,12 @@
 /* tu_333 0x2ceff0-0x2d0af0: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: bitfield/size helpers and wrappers (see w10.h). */
+#define func_002CF8D0 _hdr_func_002CF8D0
 #include "common.h"
 #include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r7.h"
+#undef func_002CF8D0
 
 void func_002CEFF0(void)
 {
@@ -54,9 +56,29 @@ int func_002CF850(W10SoundVoice *voice, int value)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF880);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF8B8);
+/* DEBT(CAST) */
+u16 func_002CF8B8(void *arg0, s32 arg1) {
+    u16 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF8D0);
+    temp_2 = (*(u16 *)((u8 *)(arg0) + (0)));
+    (*(u16 *)((u8 *)(arg0) + (0))) = (u16) (arg1 & 0x3FFF);
+    (*(s8 *)((u8 *)(arg0) + (0xF))) = 1;
+    return temp_2;
+}
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_002CF8D0(void *arg0, s32 arg1) {
+    register s32 _ret_v0 __asm__("$2");
+    register u16 temp_5 __asm__("$5");
+
+    __asm__ volatile("" : : : "memory");
+    (*(s8 *)((u8 *)(arg0) + (0xF))) = 1;
+    temp_5 = (arg1 & 0x3FFF) + ((*(u16 *)((u8 *)(arg0) + (0))) & 0x3C);
+    _ret_v0 = temp_5;
+    __asm__ volatile("" : "+r"(_ret_v0));
+    (*(u16 *)((u8 *)(arg0) + (0))) = temp_5;
+    return _ret_v0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF8F8);
 

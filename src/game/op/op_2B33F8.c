@@ -1,10 +1,12 @@
 /* tu_328 0x2b33f8-0x2b4630: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: EE kernel thread/semaphore wrappers (SDK) (see w10.h). */
+#define func_002B3EA8 _hdr_func_002B3EA8
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/g4.h"
 #include "ffx/r7.h"
+#undef func_002B3EA8
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_spline_draw_path3);
 
@@ -164,7 +166,19 @@ void func_002B3DF8(float f12, float f0)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3E38);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3EA8);
+#ifndef MMI_SQ_ZERO
+#define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
+#endif
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002B3EA8(void *arg0, u16 arg1, u16 arg2, s32 arg3) {
+    register s32 ffff __asm__("$2");
+    MMI_SQ_ZERO(0, arg0);
+    __asm__("ori %0, $0, 0xffff" : "=r"(ffff));
+    (*(s16 *)((u8 *)(arg0) + (0))) = arg1;
+    (*(s16 *)((u8 *)(arg0) + (2))) = arg2;
+    (*(s16 *)((u8 *)(arg0) + (4))) = arg3;
+    (*(s16 *)((u8 *)(arg0) + (6))) = ffff;
+}
 
 void func_002B3ED0(ObjH4 *o, int q, u16 r)
 {

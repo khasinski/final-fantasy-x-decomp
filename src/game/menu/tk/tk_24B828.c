@@ -106,7 +106,28 @@ void func_0024C1F8(Task *t, int x, int y) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C238);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C398);
+/* DEBT(FAKE) */
+void func_0024C398(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register s32 _cond __asm__("$3");
+    s32 temp_19;
+    s32 temp_7;
+    s32 var_16;
+    s32 var_17;
+    s32 var_6;
+
+    var_16 = -1;
+    temp_19 = arg3 + D_003260B8.x;
+    var_17 = arg4 + D_003260B8.y;
+    var_6 = var_17;
+    do {
+        temp_7 = var_16 + arg2;
+        func_0024C238(arg0, temp_19, var_6, temp_7, arg1);
+        var_16 += 1;
+        var_17 += 0x20;
+        graphicUiRemapY2();
+        var_6 = var_17;
+    } while ((_cond = (var_16 < 0xA)) != 0);
+}
 
 void func_0024C438(Task *o) {
     if (o->b45 >= 0) {
@@ -482,7 +503,62 @@ int func_0024E1B8(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024E1C0);
+u8 _m2c_func_0024E1C0_TkMenuGetPlayerFromIndex(int i) __asm__("TkMenuGetPlayerFromIndex");
+u8 _m2c_func_0024E1C0_func_00242798(int i) __asm__("func_00242798");
+extern s32 _m2c_func_0024E1C0_func_0024DA58 __asm__("func_0024DA58");
+extern s32 _m2c_func_0024E1C0_func_0024DCD0 __asm__("func_0024DCD0");
+void func_0024E1C0(s32 a, s32 b, s32 c) {
+    Task *temp_2;
+    s32 temp_2_2;
+    s32 temp_2_4;
+    s32 temp_2_5;
+    s32 temp_2_7;
+    s32 var_16;
+    s32 var_16_2;
+    s32 var_19;
+    u8 temp_2_3;
+    u8 temp_2_6;
+
+    var_19 = 0x77;
+    temp_2 = func_00243400();
+    D_0069BE60 = temp_2;
+    if (a == 0) {
+        var_16 = 0;
+        temp_2_2 = func_00242818();
+        if (a < temp_2_2) {
+            do {
+                temp_2_3 = _m2c_func_0024E1C0_TkMenuGetPlayerFromIndex(var_16);
+                var_16 += 1;
+                temp_2_4 = func_002454E0(TOGetSaveChrName((s32) temp_2_3));
+                var_19 = (var_19 < temp_2_4) ? temp_2_4 : var_19;
+            } while (var_16 < temp_2_2);
+        }
+    } else {
+        var_16_2 = 0;
+        temp_2_5 = TkMenuGetSummonListMax();
+        if (temp_2_5 > 0) {
+            do {
+                temp_2_6 = _m2c_func_0024E1C0_func_00242798(var_16_2);
+                var_16_2 += 1;
+                temp_2_7 = func_002454E0(TOGetSaveChrName((s32) temp_2_6));
+                var_19 = (var_19 < temp_2_7) ? temp_2_7 : var_19;
+            } while (var_16_2 < temp_2_5);
+        }
+    }
+    temp_2->ext[1] = b;
+    temp_2->cb = func_0024DA50;
+    temp_2->x0C = (s32) &_m2c_func_0024E1C0_func_0024DA58;
+    temp_2->ext[2] = c;
+    temp_2->ext[0] = a;
+    temp_2->x10 = (s32) &_m2c_func_0024E1C0_func_0024DCD0;
+    temp_2->x14 = (s32) func_0024E1B0;
+    temp_2->x1C = (s32) func_0024E1B8;
+    temp_2->b3E = 2;
+    temp_2->x54 = 0x155;
+    temp_2->x48 = (s16) D_0069BE70[a];
+    temp_2->ext[4] = var_19;
+    TkMenuMainRegistWindow(temp_2);
+}
 
 void func_0024E358(void)
 {
@@ -591,8 +667,61 @@ void func_00250058(void) {
     TOSeqGetRect(1, D_005735F8, &D_0069BEE0[0], &D_0069BEE0[1], &D_0069BEE0[2], &D_0069BEE0[3]);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_002500A0);
+s32 _m2c_func_002500A0_func_0024E540() __asm__("func_0024E540");
+s32 _m2c_func_002500A0_func_0024F0E0() __asm__("func_0024F0E0");
+/* DEBT(CAST) */
+Task *func_002500A0(s32 a) {
+    Task *temp_2;
 
+    temp_2 = func_00243400();
+    temp_2->x0C = &_m2c_func_002500A0_func_0024E540;
+    temp_2->x10 = (s32) &_m2c_func_002500A0_func_0024F0E0;
+    temp_2->x14 = (s32) func_0024F3E0;
+    temp_2->b3E = 1;
+    temp_2->b3F = 0;
+    temp_2->x48 = 0;
+    temp_2->x32 = 0;
+    temp_2->x34 = 0;
+    temp_2->b42 = 1;
+    temp_2->b43 = (u8) a;
+    temp_2->ext[0] = 0;
+    temp_2->ext[1] = 0;
+    switch (a) {                                    /* irregular */
+    case 0:
+        (*(u8 *)((u8 *)(D_0069BE70) + (0))) = 0;
+        (*(s8 *)((u8 *)(D_0069BE70) + (1))) = 0;
+        temp_2->x30 = (s16) ((s32) (func_0024CB28() + 1) / 2);
+        temp_2->ext[0xF] = func_0024CB28();
+        temp_2->b36 = 3;
+        temp_2->x3A = 0xA;
+        temp_2->x4A = 0x1D;
+        temp_2->x4C = 0x32;
+        break;
+    case 1:
+        temp_2->b42 = 1;
+        temp_2->x30 = (s16) ((s32) (func_0024CB48() + 1) / 2);
+        temp_2->ext[0xF] = func_0024CB48();
+        temp_2->x3A = 0xA;
+        temp_2->x4A = 0x1D;
+        temp_2->x4C = 0x32;
+        temp_2->b36 = 0;
+        break;
+    case 2:
+        temp_2->x1C = (s32) &func_0024EC78;
+        temp_2->b36 = 3;
+        temp_2->x3A = 9;
+        temp_2->x4A = 0x1D;
+        temp_2->x4C = 0x50;
+        temp_2->b42 = 1;
+        (*(u8 *)((u8 *)(D_0069BE70) + (0))) = 0;
+        (*(s8 *)((u8 *)(D_0069BE70) + (1))) = 0;
+        break;
+    }
+    TkMenuMainRegistWindow(temp_2);
+    func_00227480(D_005733A0);
+    func_00227490(D_00573398);
+    return temp_2;
+}
 int func_00250248(int a, int b)
 {
     int r = 1;

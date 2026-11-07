@@ -1,4 +1,5 @@
 /* tu_171 0x1a43b0-0x1a4a38: medium; rcfxParticle (config/tu_map.tsv) */
+#define func_001A43B0 _hdr_func_001A43B0
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
@@ -6,8 +7,11 @@
 #include "ffx/v2.h"
 #include "ffx/r2.h"
 #include "ffx/g2.h"
+#undef func_001A43B0
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", func_001A43B0);
+void func_001A43B0(void)
+{
+}
 
 void *func_001A43B8(void) {
     void *p = _rcAlloc(0x34, D_0056DE20, 0x14);

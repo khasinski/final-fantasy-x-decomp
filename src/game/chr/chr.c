@@ -331,7 +331,50 @@ void func_001031F8(void)
     D_0057CE88 = 0x1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_Dispose);
+void _m2c_Ch_Dispose_chr_texanim_del(s32) __asm__("chr_texanim_del");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void Ch_Dispose(s32 v) {
+    register s32 _cond __asm__("$2");
+    s32 temp_4;
+    register s32 var_18 __asm__("$18");
+    register s32 var_19 __asm__("$19");
+    register void *temp_16 __asm__("$16");
+    register void *temp_20 __asm__("$20");
+
+    if (Ch_CheckHandle(v) == 0) {
+        Ch_ClutDispose((void *) v);
+        if (!((*(s32 *)((u8 *)((*(void **)((u8 *)(v) + (0x1D0)))) + (0x70))) & 2)) {
+            op_et_monster_free((Chr *) v);
+        }
+        (*(s8 *)((u8 *)(v) + (2))) = 0;
+        if (Sg_GetPlayer() == v) {
+            Sg_SetPlayer(0);
+        }
+        temp_20 = (*(void **)((u8 *)(v) + (0x1CC)));
+        var_18 = 0;
+        if ((*(u16 *)((u8 *)(temp_20) + (6))) != 0) {
+            var_19 = 0;
+            do {
+                var_18 += 1;
+                temp_16 = (*(s32 *)((u8 *)(v) + (0x1C8))) + var_19;
+                temp_4 = (*(s32 *)((u8 *)(temp_16) + (4)));
+                var_19 += 0x30;
+                func_0011D590(temp_4, 6);
+                func_0011D590((*(s32 *)((u8 *)(temp_16) + (8))), 6);
+                func_0011D590((*(s32 *)((u8 *)(temp_16) + (0xC))), 6);
+            } while ((_cond = (var_18 < (s32) (*(u16 *)((u8 *)(temp_20) + (6))))) != 0);
+        }
+        if ((*(s32 *)((u8 *)(v) + (0x708))) != 0) {
+            _m2c_Ch_Dispose_chr_texanim_del((*(s32 *)((u8 *)(v) + (0x70C))));
+        }
+        func_0011D590((*(s32 *)((u8 *)(v) + (0x320))), 6);
+        func_0011D590((*(s32 *)((u8 *)(v) + (0x1C8))), 6);
+        func_0011D590((*(s32 *)((u8 *)(v) + (0x754))), 6);
+        func_0011D590((*(s32 *)((u8 *)(v) + (0x6E8))), 6);
+        func_0011D590((*(s32 *)((u8 *)(v) + (0x324))), 6);
+        func_001031F8();
+    }
+}
 
 void func_00103358(Chr *chr, int d)
 {

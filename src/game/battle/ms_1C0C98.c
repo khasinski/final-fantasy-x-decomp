@@ -130,8 +130,63 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsGetCommandMP);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsGetCommand);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C2C98);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C0C98/rodata", jtbl_0056E5B0);
+/* DEBT(CAST) */
+s32 func_001C2C98(s32 id, s32 a, s32 b) {
+    BtlChr *temp_4;
+    OfsTbl *temp_2;
+    s32 var_17;
+    s32 var_5;
+    s32 var_6;
+
+    temp_2 = MsGetComData(a, 0);
+    var_17 = 0;
+    if (temp_2 != 0) {
+        temp_4 = MsGetChr(id);
+        if (!(!(((u32) temp_2->flags >> 0x12) & 1))) {
+            var_6 = temp_4->f281;
+            var_5 = temp_2->b2D | temp_4->f299;
+        } else {
+            var_6 = temp_2->b28;
+            var_5 = temp_2->b2D;
+        }
+        switch (b) {
+        case 0:
+            var_17 = var_6;
+            break;
+        case 1:
+            var_17 = (*(u16 *)((u8 *)(temp_2) + (0x20))) & 3;
+            break;
+        case 10:
+            var_17 = ((u16) temp_2->h1A >> 2) & 3;
+            break;
+        case 2:
+            var_17 = temp_2->pad23 & 1;
+            break;
+        case 3:
+            var_17 = temp_2->pad23 & 2;
+            break;
+        case 4:
+            var_17 = temp_2->pad23 & 4;
+            break;
+        case 5:
+            var_17 = ((s32) var_5 >> 4) & 1;
+            break;
+        case 6:
+            var_17 = ((s32) var_5 >> 3) & 1;
+            break;
+        case 7:
+            var_17 = ((s32) var_5 >> 2) & 1;
+            break;
+        case 8:
+            var_17 = ((s32) var_5 >> 1) & 1;
+            break;
+        case 9:
+            var_17 = var_5 & 1;
+            break;
+        }
+    }
+    return (s32) var_17;
+}
 
 int MsGetRndChr(int id, int kind) {
     int off = 0;
@@ -463,7 +518,31 @@ int func_001C4EF0(int x) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C4F40);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C5340);
+/* DEBT(CAST) */
+s32 func_001C5340(s32 arg0, void *arg1, void *arg2, void *arg3, void *arg4) {
+    s32 temp_19;
+    s32 temp_3;
+    s32 var_22;
+
+    var_22 = 0;
+    if ((*(s32 *)((u8 *)(arg2) + (0x1C))) < 0) {
+        temp_19 = ((u32) ((u32) ((D_003172F0.f15C0 + (*(s32 *)((u8 *)(arg1) + (0x3C4)))) << 8) / (u32) (*(u32 *)((u8 *)(arg1) + (0x254)))) / 20U) - 0x40;
+        temp_3 = brnd(MsGetRndChr(arg0, 2)) & 0xFF;
+        if ((((u16) (*(u16 *)((u8 *)(arg1) + (0x278))) >> 0xA) & 1) || ((*(u8 *)((u8 *)(arg4) + (7))) != 0)) {
+            (*(s32 *)((u8 *)(arg3) + (0x14))) = (s32) ((*(s32 *)((u8 *)(arg3) + (0x14))) + 1);
+        } else if (((temp_3 < temp_19) && (D_003172F0.f15C0 > 0)) || ((s8) D_003172F0.pad34[6] != 0)) {
+            (*(s32 *)((u8 *)(arg1) + (0x3C8))) = temp_19;
+            (*(s8 *)((u8 *)(arg1) + (0x3C1))) = 2;
+            var_22 = 1;
+            (*(u16 *)((u8 *)(arg4) + (0x16))) = (u16) ((*(u16 *)((u8 *)(arg4) + (0x16))) | 0x100);
+            (*(s32 *)((u8 *)(arg3) + (0x10))) = (s32) ((*(s32 *)((u8 *)(arg3) + (0x10))) + 1);
+        } else {
+            (*(s32 *)((u8 *)(arg3) + (0x18))) = (s32) ((*(s32 *)((u8 *)(arg3) + (0x18))) + 1);
+        }
+        (*(s32 *)((u8 *)(arg1) + (0x3C4))) = MsCheckRange((*(s32 *)((u8 *)(arg1) + (0x3C4))) + D_003172F0.f15C0, 0, 0x3B9AC9FF);
+    }
+    return var_22;
+}
 
 int func_001C54A0(BtlChr *c, Triple *t, Q4Cnt *n, int unused, int t0, int t1) {
     if (t0 & 4) {

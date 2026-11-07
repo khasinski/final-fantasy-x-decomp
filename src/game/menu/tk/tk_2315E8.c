@@ -101,7 +101,28 @@ void func_00231E10(int level)
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00231E68);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00231F88);
+/* DEBT(FAKE) */
+void func_00231F88(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register s32 _cond __asm__("$3");
+    s32 temp_19;
+    s32 temp_7;
+    s32 var_16;
+    s32 var_17;
+    s32 var_6;
+
+    var_16 = -1;
+    temp_19 = arg3 + D_00693D88.x;
+    var_17 = arg4 + D_00693D88.y;
+    var_6 = var_17;
+    do {
+        temp_7 = var_16 + arg2;
+        func_00231E68(arg0, temp_19, var_6, temp_7, arg1);
+        var_16 += 1;
+        var_17 += 0x20;
+        graphicUiRemapY2();
+        var_6 = var_17;
+    } while ((_cond = (var_16 < 0xA)) != 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232028);
 
@@ -160,7 +181,28 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232560);
 
 void func_00232660(Task *o, int a1, int a2) { func_002270F8(a1, a2 + ((o->x48 - o->x32) << 5), 0); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232688);
+/* DEBT(FAKE) */
+void func_00232688(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register s32 _cond __asm__("$3");
+    s32 temp_19;
+    s32 temp_7;
+    s32 var_16;
+    s32 var_17;
+    s32 var_6;
+
+    var_16 = -1;
+    temp_19 = arg3 + D_00693D88.x;
+    var_17 = arg4 + D_00693D88.y;
+    var_6 = var_17;
+    do {
+        temp_7 = var_16 + arg2;
+        func_00232560(arg0, temp_19, var_6, temp_7, arg1);
+        var_16 += 1;
+        var_17 += 0x20;
+        graphicUiRemapY2();
+        var_6 = var_17;
+    } while ((_cond = (var_16 < 0xA)) != 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232728);
 

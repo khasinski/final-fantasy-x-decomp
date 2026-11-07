@@ -17,7 +17,21 @@ INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_001715C0);
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_001715D8);
 
-INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_00171648);
+/* DEBT(CAST) */
+void func_00171648(s32 on) {
+    SlotTaskContext **var_2;
+    s32 var_3;
+
+    var_3 = 7;
+    var_2 = D_00597E38;
+    __asm__("" : "+r"(var_2));
+    var_2 += 7;
+    do {
+        *var_2 = 0;
+        var_3 -= 1;
+        var_2 = (SlotTaskContext **)((u8 *)var_2 - (4));
+    } while (var_3 >= 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_00171680);
 

@@ -1,10 +1,14 @@
 /* tu_195 0x1c8c80-0x1ccc10: low; ~Ms (config/tu_map.tsv) */
+#define MsStructClear _hdr_MsStructClear
+#define func_001CB7A0 _hdr_func_001CB7A0
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/u2.h"
 #include "ffx/g2.h"
+#undef func_001CB7A0
+#undef MsStructClear
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C8C80);
 
@@ -201,7 +205,29 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CB560);
 void func_001CB798(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CB7A0);
+void *_m2c_func_001CB7A0_MsGetChr() __asm__("MsGetChr");
+s32 _m2c_func_001CB7A0_func_002EC198(s32, s32) __asm__("func_002EC198");
+s32 _m2c_func_001CB7A0_func_002ED038(float) __asm__("func_002ED038");
+extern s8 _m2c_func_001CB7A0_D_0031942F __asm__("D_0031942F");
+/* DEBT(CAST) */ /* DEBT(GOTO) */
+s8 func_001CB7A0(s32 arg0) {
+    s8 var_16;
+    s8 var_2;
+    void *temp_2;
+
+    var_16 = _m2c_func_001CB7A0_D_0031942F;
+    if (arg0 != 0xFF) {
+        temp_2 = _m2c_func_001CB7A0_MsGetChr(arg0);
+        if (((*(s8 *)((u8 *)(temp_2) + (0x15))) == 0) || (var_2 = var_16, (_m2c_func_001CB7A0_func_002EC198(_m2c_func_001CB7A0_func_002ED038((*(float *)((u8 *)(temp_2) + (0x40)))), 0) == 0))) {
+            var_16 = 0;
+            goto block_4;
+        }
+    } else {
+block_4:
+        var_2 = var_16;
+    }
+    return var_2;
+}
 
 int func_001CB808(void) {
     int r = 0;
@@ -371,7 +397,20 @@ int func_001CCA60(int a, int b, int mask, int k) {
     return mask;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsStructClear);
+void MsStructClear(s8 *arg0, s32 arg1) {
+    s32 var_5;
+    s8 *var_4;
+
+    var_4 = arg0;
+    var_5 = arg1;
+    if (var_5 > 0) {
+        do {
+            *var_4 = 0;
+            var_5 -= 1;
+            var_4 += 1;
+        } while (var_5 != 0);
+    }
+}
 
 void MsStructFill(u16 *p, int n, int v) {
     int i;

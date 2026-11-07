@@ -24,7 +24,20 @@ void func_0011BA20(void)
 }
 
 /* DEBT(CAST): frees the scratch address recorded in the header two slots back. */
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BA60);
+/* DEBT(CAST) */
+void func_0011BA60(void *p) {
+    u32 temp_3;
+    void *temp_5;
+
+    temp_5 = p - 0x10;
+    if ((ffx_debugmode != 0) && (p != 0)) {
+        temp_3 = (*(u32 *)((u8 *)(temp_5) + (8)));
+        if (temp_3 & 0x07FF0000) {
+            *(s8 *)(0x05FB0000 + ((temp_3 >> 0xB) & 0xFFE0)) = 0;
+            (*(u32 *)((u8 *)(temp_5) + (8))) = (u32) ((*(u32 *)((u8 *)(temp_5) + (8))) & 0xF800FFFF);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BAB8);
 
@@ -168,7 +181,37 @@ void func_0011C348(int a)
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", Sg_MemGet);
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C6E0);
+void _m2c_func_0011C6E0__Sg_MemCheckMCBerr() __asm__("_Sg_MemCheckMCBerr");
+/* DEBT(CAST) */
+s32 func_0011C6E0(s32 a, s32 b, s32 c, s32 d) {
+    s32 temp_7_2;
+    u32 temp_16;
+    u32 temp_18;
+    void *temp_17;
+    void *temp_2;
+
+    if (c == 0) {
+        return Sg_MemGet(0, a, 0xE, d, 0);
+    }
+    __asm__ volatile("" : : : "memory");
+    temp_17 = c - 0x10;
+    d += 0xF;
+    temp_16 = d & 0xFFFFFFF0;
+    _m2c_func_0011C6E0__Sg_MemCheckMCBerr(temp_17);
+    temp_7_2 = (*(s32 *)((u8 *)(c) + (-0x10)));
+    temp_18 = (((s32)((u8 *)(temp_7_2) - (u8 *)temp_17))) - 0x10;
+    if (temp_18 == temp_16) {
+        return c;
+    }
+    if (temp_16 < temp_18) {
+        func_0011C950(((u32) (*(u32 *)((u8 *)(temp_17) + (0xC))) >> 0x1B) & 3, temp_17 + (temp_16 + 0x10), temp_17, temp_7_2);
+        return c;
+    }
+    temp_2 = Sg_MemGet(0, a, (*(u32 *)((u8 *)(temp_17) + (0xC))) & 0xF, (s32) temp_16, 0);
+    func_002EEF1C(temp_2, (void *) c, (s32) temp_18);
+    func_0011CA28(c, (*(u32 *)((u8 *)(temp_17) + (0xC))) & 0xF);
+    return (s32) temp_2;
+}
 
 void func_0011C7E8(u8 *p, int f)
 {

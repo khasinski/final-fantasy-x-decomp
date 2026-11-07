@@ -1,4 +1,5 @@
 /* tu_281 0x256098-0x258140: low; ~abmap (config/tu_map.tsv) */
+#define func_002571B8 _hdr_func_002571B8
 #include "common.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -9,6 +10,7 @@
 #define GIF_CHCR (*(volatile u32 *)0x1000A000) /* GIF DMA channel control; bit 8 = STR (transfer running) */
 #include "ffx/r6.h"
 #include "ffx/g4.h"
+#undef func_002571B8
 
 void func_00256098(void)
 {
@@ -291,7 +293,19 @@ void func_00257108(int a, int b, int c)
     func_002B2A80(start, (D_006A3BCC - start) >> 4, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_002571B8);
+u8 *_m2c_func_002571B8_func_001F4350(u8 *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_001F4350");
+s32 _m2c_func_002571B8_func_002606E0() __asm__("func_002606E0");
+s32 _m2c_func_002571B8_func_002B2A80(u8 *, s32, s32, s32) __asm__("func_002B2A80");
+void func_002571B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    u8 *temp_16;
+    u8 *temp_2;
+
+    _m2c_func_002571B8_func_002606E0();
+    temp_16 = D_006A3BCC;
+    temp_2 = _m2c_func_002571B8_func_001F4350(temp_16 + 0x10, 7, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    D_006A3BCC = temp_2;
+    _m2c_func_002571B8_func_002B2A80(temp_16, (s32) (temp_2 - temp_16) >> 4, 1, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00257288);
 

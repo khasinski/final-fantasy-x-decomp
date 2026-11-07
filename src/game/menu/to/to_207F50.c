@@ -53,7 +53,35 @@ s32 func_002080D8(int a)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_207F50", func_00208100);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207F50", func_002082B8);
+extern s32 _m2c_func_002082B8_D_00323930 __asm__("D_00323930");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002082B8(s32 arg0, u8 *arg1, TextItem *arg2) {
+    register u8 *var_16 __asm__("$16");
+    u8 var_2;
+
+    func_002EF0D0(&_m2c_func_002082B8_D_00323930, 0, 0x20);
+    var_16 = TOGetChangeMacroAddress(arg0, arg1);
+    if (var_16 != 0) {
+    __asm__ volatile("" : "+r"(var_16));
+        var_2 = *var_16;
+        if (var_2 != 0) {
+            do {
+                if (var_2 == 7) {
+                    if ((u32) (((*(u8 *)((u8 *)(var_16) + (1))) + 0x20) & 0xFF) < 0x10U) {
+                        arg2->x += (*(u8 *)((u8 *)(var_16) + (1))) + 0xFF20;
+                    }
+                } else if (TOGetGroup((*(u8 *)((u8 *)(var_16) + (0)))) == 3) {
+                    { register u8 *_a1 __asm__("$5") = var_16; __asm__ volatile("" : "+r"(_a1)); func_002082B8(arg0, _a1, arg2); }
+                } else {
+                    func_00204CA8(var_16, &_m2c_func_002082B8_D_00323930);
+                    TOMakePktFont1612(arg2, &_m2c_func_002082B8_D_00323930);
+                }
+                var_16 = TOSkipCode(var_16);
+                var_2 = *var_16;
+            } while (var_2 != 0);
+        }
+    }
+}
 
 int func_002083E8(u32 id)
 {

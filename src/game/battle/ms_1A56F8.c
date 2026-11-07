@@ -1,4 +1,6 @@
 /* tu_177 0x1a56f8-0x1ac0b8: low; ~Ms (config/tu_map.tsv) */
+#define MsCameraSetRoll _hdr_MsCameraSetRoll
+#define MsCameraSetScrDpt _hdr_MsCameraSetScrDpt
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -9,6 +11,8 @@
 #include "ffx/q4.h"
 #include "ffx/t2.h"
 #include "ffx/g2.h"
+#undef MsCameraSetRoll
+#undef MsCameraSetScrDpt
 
 void func_001A56F8(int a, int b) {
     D_00314250 = a;
@@ -212,9 +216,63 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7F88);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8058);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetRoll);
+s32 _m2c_MsCameraSetRoll_MsCameraIDcheck() __asm__("MsCameraIDcheck");
+void _m2c_MsCameraSetRoll_MsSetCheckChange(s32, s32, s32, s32) __asm__("MsSetCheckChange");
+s32 _m2c_MsCameraSetRoll_func_001A6738(s32, void *, void *) __asm__("func_001A6738");
+extern s32 _m2c_MsCameraSetRoll_D_00314840 __asm__("D_00314840");
+/* DEBT(CAST) */
+void MsCameraSetRoll(s32 arg0, float fparg0) {
+    s32 temp_2;
+    s32 temp_3;
+    s32 temp_6;
+    void *temp_17;
+    void *temp_5;
+    void *temp_6_2;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetScrDpt);
+    if (_m2c_MsCameraSetRoll_MsCameraIDcheck() != 0) {
+        temp_6 = (arg0 & 0xFF) * 0xDA0;
+        temp_3 = (s32) (arg0 & 0xFF00) >> 8;
+        temp_17 = temp_6 + ((u8 *)&_m2c_MsCameraSetRoll_D_00314840);
+        temp_6_2 = temp_6 + (((u8 *)&_m2c_MsCameraSetRoll_D_00314840) + 0x650);
+        temp_5 =((void *)((u8 *)((temp_3 * 0x130)) + (s32)temp_6_2));
+        (*(s8 *)((u8 *)(temp_5) + (0xC7))) = 0;
+        (*(float *)((u8 *)((((void *)((u8 *)((temp_3 * 0x30)) + (s32)temp_17)))) + (0xCC0))) = fparg0;
+        temp_2 = _m2c_MsCameraSetRoll_func_001A6738(arg0, temp_5, temp_6_2);
+        if (temp_2 == arg0) {
+            (*(float *)((u8 *)(temp_17) + (0xC9C))) = fparg0;
+            _m2c_MsCameraSetRoll_MsSetCheckChange(temp_2, 1, 0, 1);
+        }
+    }
+}
+
+s32 _m2c_MsCameraSetScrDpt_MsCameraIDcheck() __asm__("MsCameraIDcheck");
+void _m2c_MsCameraSetScrDpt_MsSetCheckChange(s32, s32, s32, s32) __asm__("MsSetCheckChange");
+s32 _m2c_MsCameraSetScrDpt_func_001A6738(s32, void *, void *) __asm__("func_001A6738");
+extern s32 _m2c_MsCameraSetScrDpt_D_00314840 __asm__("D_00314840");
+/* DEBT(CAST) */
+void MsCameraSetScrDpt(s32 arg0, float fparg0) {
+    s32 temp_2;
+    s32 temp_3;
+    s32 temp_6;
+    void *temp_17;
+    void *temp_5;
+    void *temp_6_2;
+
+    if (_m2c_MsCameraSetScrDpt_MsCameraIDcheck() != 0) {
+        temp_6 = (arg0 & 0xFF) * 0xDA0;
+        temp_3 = (s32) (arg0 & 0xFF00) >> 8;
+        temp_17 = temp_6 + ((u8 *)&_m2c_MsCameraSetScrDpt_D_00314840);
+        temp_6_2 = temp_6 + (((u8 *)&_m2c_MsCameraSetScrDpt_D_00314840) + 0x650);
+        temp_5 =((void *)((u8 *)((temp_3 * 0x130)) + (s32)temp_6_2));
+        (*(s8 *)((u8 *)(temp_5) + (0xC7))) = 0;
+        (*(float *)((u8 *)((((void *)((u8 *)((temp_3 * 0x30)) + (s32)temp_17)))) + (0xCC8))) = fparg0;
+        temp_2 = _m2c_MsCameraSetScrDpt_func_001A6738(arg0, temp_5, temp_6_2);
+        if (temp_2 == arg0) {
+            (*(float *)((u8 *)(temp_17) + (0xCA8))) = fparg0;
+            _m2c_MsCameraSetScrDpt_MsSetCheckChange(temp_2, 1, 0, 2);
+        }
+    }
+}
 
 void func_001A82A8(int id, int v)
 {
@@ -510,7 +568,22 @@ void func_001A9B38(int id, int which) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A9BA8);
+void func_001A9BA8(s32 arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4, float fparg5) {
+    Unk314840 *temp_2_2;
+    s32 temp_2;
+
+    temp_2 = func_001A6738(arg0);
+    if (temp_2 == arg0) {
+        temp_2_2 = &D_00314840[temp_2 & 0xFF];
+        temp_2_2->fC92 = 1;
+        temp_2_2->f20 = fparg3;
+        temp_2_2->f24 = fparg4;
+        temp_2_2->f28 = fparg5;
+        temp_2_2->f10 = fparg0;
+        temp_2_2->f14 = fparg1;
+        temp_2_2->f18 = fparg2;
+    }
+}
 
 void func_001A9C50(int a) {
     int r = func_001A6738(a);

@@ -1,9 +1,11 @@
 /* tu_011 0x10d6d0-0x10de98: medium; ~Sg (config/tu_map.tsv) */
+#define Sg_PLightGetColor _hdr_Sg_PLightGetColor
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/s0.h"
 #include "ffx/u0.h"
+#undef Sg_PLightGetColor
 
 void func_0010D6D0(void)
 {
@@ -77,7 +79,22 @@ void Sg_PLightGetPos(s32 idx, float *x, float *y, float *z)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10D6D0", Sg_PLightGetColor);
+void Sg_PLightGetColor(s32 arg0, s32 *arg1, s32 *arg2, s32 *arg3) {
+    TblEntry30 *temp_10;
+
+    temp_10 = &D_0057EAFC[arg0];
+    if (D_0057EB00 >= arg0) {
+        if (arg1 != 0) {
+            *arg1 = (s32) (temp_10->color[0] * 255.0f);
+        }
+        if (arg2 != 0) {
+            *arg2 = (s32) (temp_10->color[1] * 255.0f);
+        }
+        if (arg3 != 0) {
+            *arg3 = (s32) (temp_10->color[2] * 255.0f);
+        }
+    }
+}
 
 void Sg_PLightSetEnable(s32 idx, s32 flag) {
     if (D_0057EB00 >= idx) {

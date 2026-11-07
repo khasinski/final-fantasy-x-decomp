@@ -1,12 +1,56 @@
 /* tu_082 0x14c3a8-0x14ce18: low; ~Atel (config/tu_map.tsv) */
+#define func_0014C3A8 _hdr_func_0014C3A8
 #include "common.h"
 #include "ffx/g0.h"
 #include "ffx/q2.h"
 #include "ffx/r1.h"
 #include "ffx/s1.h"
 #include "ffx/u0.h"
+#undef func_0014C3A8
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014C3A8);
+s32 _m2c_func_0014C3A8_MsBattleCheck(s32) __asm__("MsBattleCheck");
+extern s32 _m2c_func_0014C3A8_D_0058F7E8 __asm__("D_0058F7E8");
+extern s32 _m2c_func_0014C3A8_D_0058F7F4 __asm__("D_0058F7F4");
+extern s32 _m2c_func_0014C3A8_IsAtelTextureLoaded __asm__("IsAtelTextureLoaded");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_0014C3A8(void) {
+    s32 *var_16;
+    s32 var_3;
+    s32 var_4;
+    s32 var_7;
+    u16 temp_4;
+    register void *temp_5 __asm__("$5");
+    void *temp_6;
+
+    var_16 = &_m2c_func_0014C3A8_IsAtelTextureLoaded;
+    if (_m2c_func_0014C3A8_D_0058F7E8 != 0) {
+        if ((_m2c_func_0014C3A8_MsBattleCheck(_m2c_func_0014C3A8_D_0058F7E8) == 0) && (_m2c_func_0014C3A8_D_0058F7F4 != 0)) {
+            var_7 = 0x7F;
+            do {
+                if ((*(u8 *)((u8 *)(var_16) + (0))) != 0) {
+                    temp_4 = (*(u16 *)((u8 *)(var_16) + (0xC)));
+                    temp_5 = (*(void **)((u8 *)(var_16) + (0x14)));
+                    temp_6 = temp_5 + ((temp_4 * 8) + 0x10);
+                    var_3 = (*(s32 *)((u8 *)(var_16) + (0x18))) + 0x100;
+                    if (var_3 >= (*(s16 *)((u8 *)(temp_6) + (2)))) {
+                        var_4 = temp_4 + 1;
+                        var_3 = 0;
+                        if (var_4 >= (*(s16 *)((u8 *)(temp_5) + (4)))) {
+                            var_4 = 0;
+                            if (!((*(s8 *)((u8 *)(temp_6) + (4))) & 0x80)) {
+                                (*(u8 *)((u8 *)(var_16) + (0))) = 0U;
+                            }
+                        }
+                        (*(u16 *)((u8 *)(var_16) + (0xC))) = (u16) var_4;
+                    }
+                    (*(s32 *)((u8 *)(var_16) + (0x18))) = var_3;
+                }
+                var_7 -= 1;
+                var_16 = (s32 *)((u8 *)var_16 + (0x1C));
+            } while (var_7 >= 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014C478);
 
@@ -188,7 +232,45 @@ void func_0014CB88(void)
     func_0014CB20();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014CB90);
+extern s32 _m2c_func_0014CB90_D_0030BA90 __asm__("D_0030BA90");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_0014CB90(u32 arg0, s8 *arg1, s32 arg2) {
+    register s32 var_7 __asm__("$7");
+    s8 *var_5;
+    s8 *var_8;
+    u32 *var_10;
+    u32 *var_9;
+    u32 var_3;
+    u32 var_4;
+
+    var_4 = arg0;
+    var_5 = arg1;
+    var_10 = (u32 *)&_m2c_func_0014CB90_D_0030BA90;
+    __asm__ volatile("" : "+r"(var_10));
+    var_3 = _m2c_func_0014CB90_D_0030BA90;
+    if (var_3 != 0) {
+        var_10 += 1;
+        do {
+            var_7 = 0;
+            if (var_4 >= var_3) {
+                var_9 = ((u32 *)((u8 *)var_10 + (4)));
+                var_8 = var_5 + 1;
+                do {
+                    var_4 -= var_3;
+                    var_7 += 1;
+                } while (var_4 >= var_3);
+            } else {
+                var_9 = ((u32 *)((u8 *)var_10 + (4)));
+                var_8 = var_5 + 1;
+            }
+            *var_5 = var_7 + arg2;
+            var_5 = var_8;
+            var_3 = *var_10;
+            var_10 = var_9;
+        } while (var_3 != 0);
+    }
+    *var_5 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014CC10);
 

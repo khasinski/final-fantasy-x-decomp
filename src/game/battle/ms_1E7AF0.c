@@ -272,9 +272,46 @@ int func_001E8458(Actor *a) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8480);
+s32 func_001E8480(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    float var_f20;
+    s32 temp_2;
+    s32 var_16;
+    s32 var_19;
+    s32 var_2;
+    u8 temp_17;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8550);
+    var_19 = 0;
+    var_f20 = 0.0f;
+    temp_17 = *func_00144158(arg0);
+    var_16 = 0;
+    temp_2 = MsGetChrBit((s32) temp_17, AtelPopStackInteger(arg0, arg2), 0, 1);
+    do {
+        if ((temp_2 >> var_16) & 1) {
+            var_19 += 1;
+            var_f20 += func_001D3B10(var_16, 1);
+        }
+        var_16 += 1;
+    } while (var_16 < 0x1F);
+    if (var_19 > 0) {
+        var_f20 /= (float) var_19;
+    }
+    return (s32) var_f20;
+}
+
+s32 func_001E8550(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    u8 sp[0x10];
+    float sp10;
+    s32 temp_17_2;
+    s32 temp_19;
+    u8 temp_17;
+
+    temp_17 = *func_00144158(arg0);
+    temp_19 = MsGetChrBit((s32) temp_17, AtelPopStackInteger(arg0, arg2), 0, 1);
+    temp_17_2 = MsGetChrBit((s32) temp_17, AtelPopStackInteger(arg0, arg2), 0, 1);
+    MsGetChrInfo(1, temp_19, -1, sp);
+    MsGetChrInfo(1, temp_17_2, -1, &sp10);
+    return (s32) func_001AC348(sp, &sp10);
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8620);
 
@@ -385,7 +422,15 @@ int func_001E9050(Actor *a, int unused, ScriptCtx *ctx) {
     return func_001E8DF0(*func_00144158(a), v, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E90A0);
+float _m2c_func_001E90A0_func_001D3350(BtlChr *, float) __asm__("func_001D3350");
+s32 func_001E90A0(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    BtlChr *temp_2;
+    s32 temp_17;
+
+    temp_17 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = MsGetChr((s32) *func_00144158(arg0));
+    return (s32) (((_m2c_func_001E90A0_func_001D3350(temp_2, (((struct { u8 _pad[0x1D4]; float a[1]; } *)(temp_2))->a[temp_2->f1D1])) - temp_2->f150[0]) / 3.1415927f) * (float) temp_17);
+}
 
 int func_001E9138(Actor *a, void *unused, ScriptCtx *ctx) {
     float x = AtelPopStackFloat(a, ctx);
@@ -443,7 +488,30 @@ float func_001E9320(Actor *a, void *u, ScriptCtx *c) {
     return 0.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E9380);
+/* DEBT(FAKE) */
+s32 func_001E9380(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    BtlChr *temp_2_2;
+    float temp_f20;
+    register s32 temp_17 __asm__("$17");
+    register s32 temp_2 __asm__("$17");
+    register s32 var_18 __asm__("$18");
+    s32 var_2;
+
+    var_18 = 0;
+    temp_f20 = MsNearRag(0.0f, (AtelPopStackFloat(arg0, arg2) * 3.1415927f) / 180.0f);
+    temp_17 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = MsGetChrBit((s32) *func_00144158(arg0), temp_17, 0, 1);
+    do {
+        if ((temp_2 >> var_18) & 1) {
+            temp_2_2 = MsGetChr(var_18);
+            temp_2_2->f1D2 = 1;
+            temp_2_2->f1D4[0] = temp_f20;
+            temp_2_2->f1D4[1] = temp_f20;
+        }
+        var_18 += 1;
+    } while (var_18 < 0x1F);
+    return 0;
+}
 
 int func_001E9470(Actor *a, void *unused, ScriptCtx *ctx) {
     int id = *func_00144158(a);
@@ -618,7 +686,34 @@ int func_001E9AA0(Actor *a, void *unused, ScriptCtx *ctx) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E9BA8);
+int _m2c_func_001E9BA8_Ch_OptposGet(int a, int b, int c) __asm__("Ch_OptposGet");
+/* DEBT(FAKE) */
+s32 func_001E9BA8(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    u8 sp[0x10];
+    Chr *temp_4;
+    s32 temp_16;
+    register s32 temp_19 __asm__("$19");
+    register s32 temp_19_2 __asm__("$19");
+    s32 temp_20;
+    u8 temp_18;
+
+    temp_18 = *func_00144158(arg0);
+    temp_20 = AtelPopStackInteger(arg0, arg2);
+    temp_19 = AtelPopStackInteger(arg0, arg2);
+    temp_16 = func_001B8198((s32) temp_18, AtelPopStackInteger(arg0, arg2), 0, 1);
+    temp_19_2 = func_001B8198((s32) temp_18, temp_19, 0, 1);
+    if (temp_16 >= 0) {
+        if (temp_19_2 >= 0) {
+            temp_4 = MsGetChr(temp_19_2)->chr;
+            if (temp_4 != 0) {
+                _m2c_func_001E9BA8_Ch_OptposGet(temp_4, temp_20, sp);
+            }
+            MsTransSpPos(0, (s32) sp);
+            MsSetChrPosReset(temp_16, sp);
+        }
+    }
+    return 0;
+}
 
 int func_001E9C98(Actor *a, void *unused, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);

@@ -423,7 +423,43 @@ void func_00298708(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298740);
+#ifndef MMI_SQ_ZERO
+#define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
+#endif
+/* DEBT(CAST) */
+void func_00298740(s32 i) {
+    Chr **var_6;
+    Chr *temp_7;
+    ResEntry *temp_3;
+    s32 var_5;
+
+    if (i < 0xF1) {
+        temp_3 = &owu_chr_status[i];
+        temp_7 = temp_3->chr;
+        MMI_SQ_ZERO(0, temp_3);
+        MMI_SQ_ZERO(0x10, temp_3);
+        temp_3->b17 = 0;
+        temp_3->pad14[0] = 0xFF;
+        temp_3->b16 = 0;
+        temp_3->color10 = 0x80808080;
+        temp_3->pad14[1] = 0xFF;
+        temp_3->color18 = 0x80808080;
+        temp_3->hE = 0xFFFF;
+        if (temp_7 != 0) {
+            var_6 = owu_chr_hd;
+            var_5 = 0;
+            do {
+                if (*var_6 == temp_7) {
+                    owu_chr_drawoff_back[var_5] = 0;
+                    owu_chr_drawoff[var_5] = 0;
+                    *var_6 = 0;
+                }
+                var_5 += 1;
+                var_6 = (Chr **)((u8 *)var_6 + (4));
+            } while (var_5 < 0xF0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opus_get_chr_status_index);
 

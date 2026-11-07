@@ -1,8 +1,10 @@
 /* tu_077 0x143bd0-0x145938: low; ~Atel (config/tu_map.tsv) */
+#define AtelSetUpCtrlWork _hdr_AtelSetUpCtrlWork
 #include "common.h"
 #include "ffx/q1.h"
 #include "ffx/r1.h"
 #include "ffx/u0.h"
+#undef AtelSetUpCtrlWork
 
 void func_00143BD0(void) {
     int old = CALL0_AtelChangeCurrentCtrl();
@@ -293,7 +295,42 @@ void func_00144D48(int v) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", AtelRequireCtrlWork);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", AtelSetUpCtrlWork);
+void *_m2c_AtelSetUpCtrlWork_AtelGetCtrlWork() __asm__("AtelGetCtrlWork");
+s32 _m2c_AtelSetUpCtrlWork_func_00124828() __asm__("func_00124828");
+s32 _m2c_AtelSetUpCtrlWork_func_0013AB38(s32, s32) __asm__("func_0013AB38");
+extern s32 _m2c_AtelSetUpCtrlWork_AtelGetBasicWork __asm__("AtelGetBasicWork");
+extern s32 _m2c_AtelSetUpCtrlWork_func_0013C920 __asm__("func_0013C920");
+extern s32 _m2c_AtelSetUpCtrlWork_func_00140468 __asm__("func_00140468");
+extern s32 _m2c_AtelSetUpCtrlWork_func_00140558 __asm__("func_00140558");
+extern s32 _m2c_AtelSetUpCtrlWork_func_001406E8 __asm__("func_001406E8");
+/* DEBT(CAST) */
+void AtelSetUpCtrlWork(void) {
+    void *temp_2;
+
+    temp_2 = _m2c_AtelSetUpCtrlWork_AtelGetCtrlWork();
+    (*(s32 *)((u8 *)(temp_2) + (0))) = (s32) ((*(s32 *)((u8 *)(temp_2) + (0))) | 1);
+    if ((*(s32 *)((u8 *)(temp_2) + (0x1C))) == 0) {
+        _m2c_AtelSetUpCtrlWork_func_0013AB38(0, 8);
+    }
+    if ((*(s32 **)((u8 *)(temp_2) + (0x20))) == 0) {
+        (*(s32 **)((u8 *)(temp_2) + (0x20))) = &_m2c_AtelSetUpCtrlWork_AtelGetBasicWork;
+    }
+    if ((*(s32 *)((u8 *)(temp_2) + (0x2C))) == 0) {
+        (*(s32 *)((u8 *)(temp_2) + (0x2C))) = (s32) (_m2c_AtelSetUpCtrlWork_func_00124828() + 0x1EC);
+    }
+    if ((*(s32 **)((u8 *)(temp_2) + (0x4C))) == 0) {
+        (*(s32 **)((u8 *)(temp_2) + (0x4C))) = &_m2c_AtelSetUpCtrlWork_func_0013C920;
+    }
+    if ((*(s32 **)((u8 *)(temp_2) + (0x58))) == 0) {
+        (*(s32 **)((u8 *)(temp_2) + (0x58))) = &_m2c_AtelSetUpCtrlWork_func_00140468;
+    }
+    if ((*(s32 **)((u8 *)(temp_2) + (0x5C))) == 0) {
+        (*(s32 **)((u8 *)(temp_2) + (0x5C))) = &_m2c_AtelSetUpCtrlWork_func_00140558;
+    }
+    if ((*(s32 **)((u8 *)(temp_2) + (0x60))) == 0) {
+        (*(s32 **)((u8 *)(temp_2) + (0x60))) = &_m2c_AtelSetUpCtrlWork_func_001406E8;
+    }
+}
 
 void func_00145148(int id)
 {

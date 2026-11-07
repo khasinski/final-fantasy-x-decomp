@@ -1,4 +1,9 @@
 /* tu_148 0x190f20-0x193c80: medium; rcbgDebug (config/tu_map.tsv) */
+#define func_00191BF0 _hdr_func_00191BF0
+#define func_001921A8 _hdr_func_001921A8
+#define func_001921B0 _hdr_func_001921B0
+#define rcbgFpSaveSub _hdr_rcbgFpSaveSub
+#define func_00191A70 _hdr_func_00191A70
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -7,6 +12,11 @@
 #include "ffx/v2.h"
 #include "ffx/w3.h"
 #include "vu0.h"
+#undef func_00191A70
+#undef func_00191BF0
+#undef func_001921A8
+#undef func_001921B0
+#undef rcbgFpSaveSub
 
 R2AnimFrame *func_00190F20(R2Anim *a) {
     u32 flags = a->flags;
@@ -73,9 +83,39 @@ void func_001910A8(void) {
     func_001921B0();
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", rcbgFpSaveSub);
+void rcbgFpSaveSub(void)
+{
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001910B8);
+void _m2c_func_001910B8_func_00194C18(int id) __asm__("func_00194C18");
+extern s32 _m2c_func_001910B8_D_0056D640 __asm__("D_0056D640");
+extern s32 _m2c_func_001910B8_D_0056D660 __asm__("D_0056D660");
+extern s32 _m2c_func_001910B8_D_0056D688 __asm__("D_0056D688");
+extern s32 _m2c_func_001910B8_D_0056D690 __asm__("D_0056D690");
+void func_001910B8(void) {
+    u8 sp[0x100];
+    W3Pair *temp_2;
+    W3Pair *temp_4;
+
+    func_0018F5E8(&_m2c_func_001910B8_D_0056D640);
+    func_002F0008(sp, &_m2c_func_001910B8_D_0056D660, func_0013A278());
+    temp_4 = g_pMainWork->buf10;
+    if (temp_4 != 0) {
+        rcdtChunkDelete(temp_4);
+        g_pMainWork->buf10 = 0;
+    }
+    temp_2 = rcdtChunkNew();
+    if (rcdtChunkLoadFromFile(temp_2, sp) != 0) {
+        func_0018F5E8(&_m2c_func_001910B8_D_0056D688, sp);
+        _m2c_func_001910B8_func_00194C18(0x20006);
+        _m2c_func_001910B8_func_00194C18(0x20005);
+        func_00194C80(temp_2->ptr);
+        g_pMainWork->buf10 = temp_2;
+    } else if (temp_2 != 0) {
+        rcdtChunkDelete(temp_2);
+    }
+    func_0018F5E8(&_m2c_func_001910B8_D_0056D690);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001911A0);
 
@@ -89,19 +129,29 @@ INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001916D0);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191920);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191A70);
+void _m2c_func_00191A70_func_00191A78() __asm__("func_00191A78");
+void func_00191A70(s32 a0, s32 a1)
+{
+    _m2c_func_00191A70_func_00191A78(a0, a1, 1);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191A78);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191BF0);
+void func_00191BF0(void)
+{
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191BF8);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191ED0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001921A8);
+void func_001921A8(void)
+{
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001921B0);
+void func_001921B0(void)
+{
+}
 
 void func_001921B8(void) {
 }
@@ -159,7 +209,10 @@ void rcbgSetViewMatrix(void *out, float *eye, float *tgt, void *up, float ang)
     func_001ACB48(ang, out, e, tp, up);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192280);
+s32 _m2c_rcbgSetProjectionMatrixSub(s32, s32, s32, float, float, float) __asm__("rcbgSetProjectionMatrixSub");
+s32 func_00192280(s32 arg0, float arg1) {
+    return _m2c_rcbgSetProjectionMatrixSub(arg0, 1, 0, arg1, 0.0f, 0.0f);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", rcbgSetProjectionMatrixSub);
 

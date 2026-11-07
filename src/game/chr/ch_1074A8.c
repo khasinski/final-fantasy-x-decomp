@@ -1,10 +1,12 @@
 /* tu_008 0x1074a8-0x10ad70: low; ~Ch (config/tu_map.tsv) */
+#define Ch_ElemCalcQuaternion _hdr_Ch_ElemCalcQuaternion
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/g0.h"
 #include "ffx/v0.h"
+#undef Ch_ElemCalcQuaternion
 
 s32 func_001074A8(s32 i)
 {
@@ -342,11 +344,47 @@ s8 func_00109BE8(void)
     return D_00303636;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00109BF8);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00109BF8(void *arg0) {
+    register u8 *saved_reg_gp __asm__("$28");
+    (*(float *)((u8 *)(arg0) + (0x4E4))) = (float) (*(float *)((u8 *)(saved_reg_gp) + (-0x7E90)));
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_Mouth);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_ElemCalcQuaternion);
+void _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion(void *, s32 *) __asm__("Sg_MatrixToQuaternion");
+void _m2c_Ch_ElemCalcQuaternion_Sg_QuaternionSlerp(s32 *, s32 *, s32 *, float) __asm__("Sg_QuaternionSlerp");
+void _m2c_Ch_ElemCalcQuaternion_func_00120958(s32 *, void *) __asm__("func_00120958");
+void _m2c_Ch_ElemCalcQuaternion_func_002DD0C0(void *, void *) __asm__("func_002DD0C0");
+/* DEBT(CAST) */
+void Ch_ElemCalcQuaternion(void *arg0) {
+    u8 sp[0x10];
+    u8 sp10[0x10];
+    float temp_f1;
+    float temp_f20;
+    float temp_f21;
+    float temp_f22;
+    void *temp_17;
+
+    temp_f1 = (*(float *)((u8 *)(arg0) + (0xE8)));
+    if (temp_f1 != 0.0f) {
+        temp_f22 = (*(float *)((u8 *)(arg0) + (0xC0)));
+        temp_f21 = (*(float *)((u8 *)(arg0) + (0xC4)));
+        temp_f20 = (*(float *)((u8 *)(arg0) + (0xC8)));
+        if (temp_f1 == 1.0f) {
+            _m2c_Ch_ElemCalcQuaternion_func_002DD0C0(arg0 + 0x90, (*(void **)((u8 *)(arg0) + (0xD4))));
+        } else if (temp_f1 != 0.0f) {
+            temp_17 = arg0 + 0x90;
+            _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion(temp_17, sp10);
+            _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion((*(void **)((u8 *)(arg0) + (0xD4))), sp);
+            _m2c_Ch_ElemCalcQuaternion_Sg_QuaternionSlerp(sp10, sp, sp, (*(float *)((u8 *)(arg0) + (0xE8))));
+            _m2c_Ch_ElemCalcQuaternion_func_00120958(sp, temp_17);
+        }
+        (*(float *)((u8 *)(arg0) + (0xC0))) = temp_f22;
+        (*(float *)((u8 *)(arg0) + (0xC4))) = temp_f21;
+        (*(float *)((u8 *)(arg0) + (0xC8))) = temp_f20;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_NeckSetEnable);
 

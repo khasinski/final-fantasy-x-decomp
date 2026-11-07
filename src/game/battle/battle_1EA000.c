@@ -1,4 +1,7 @@
 /* tu_215 0x1ea000-0x1ef4e8: low; unk_1EA000 (config/tu_map.tsv) */
+#define func_001EA718 _hdr_func_001EA718
+#define func_001EE8E0 _hdr_func_001EE8E0
+#define func_001EE9E8 _hdr_func_001EE9E8
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -18,6 +21,9 @@
 #include "ffx/r4.h"
 #undef MsGetChrInfo
 #include "ffx/s4.h"
+#undef func_001EA718
+#undef func_001EE8E0
+#undef func_001EE9E8
 
 int func_001EA000(Actor *a, int unused, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);
@@ -199,7 +205,29 @@ int func_001EA698(Actor *ctx, void *unused, ScriptCtx *arg)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001EA718);
+float _m2c_func_001EA718_AtelPopStackFloat(s32, s32) __asm__("AtelPopStackFloat");
+s32 _m2c_func_001EA718_AtelPopStackInteger(s32, s32) __asm__("AtelPopStackInteger");
+s32 _m2c_func_001EA718_MsGetChrHandle(s32) __asm__("MsGetChrHandle");
+void _m2c_func_001EA718_func_001149A8(s32, float, float, float) __asm__("func_001149A8");
+u8 *_m2c_func_001EA718_func_00144158() __asm__("func_00144158");
+s32 _m2c_func_001EA718_func_001B8198(u8, s32, s32, s32) __asm__("func_001B8198");
+s32 func_001EA718(s32 arg0, s32 arg1, s32 arg2) {
+    float temp_f20;
+    float temp_f21;
+    float temp_f22;
+    s32 temp_2;
+    u8 temp_18;
+
+    temp_18 = *_m2c_func_001EA718_func_00144158(arg0);
+    temp_f22 = _m2c_func_001EA718_AtelPopStackFloat(arg0, arg2);
+    temp_f21 = _m2c_func_001EA718_AtelPopStackFloat(arg0, arg2);
+    temp_f20 = _m2c_func_001EA718_AtelPopStackFloat(arg0, arg2);
+    temp_2 = _m2c_func_001EA718_MsGetChrHandle(_m2c_func_001EA718_func_001B8198(temp_18, _m2c_func_001EA718_AtelPopStackInteger(arg0, arg2), 0, 1));
+    if (temp_2 != 0) {
+        _m2c_func_001EA718_func_001149A8(temp_2, temp_f20, temp_f21, temp_f22);
+    }
+    return 0;
+}
 
 int func_001EA7E0(Actor *a, void *unused, ScriptCtx *ctx) {
     int id = *func_00144158(a);
@@ -1636,9 +1664,51 @@ float func_001EE870(Actor *a, void *op, ScriptCtx *ctx)
     return pos[1];
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001EE8E0);
+s32 _m2c_func_001EE8E0_AtelPopStackInteger(s32, s32) __asm__("AtelPopStackInteger");
+s32 _m2c_func_001EE8E0_MsGetChrBit(u8, s32, s32, s32) __asm__("MsGetChrBit");
+void _m2c_func_001EE8E0_MsGetChrInfo(s32, s32, s32, s32 *) __asm__("MsGetChrInfo");
+void _m2c_func_001EE8E0_MsVectorRect2Polar(s32 *, s32 *, float *, s32, s32) __asm__("MsVectorRect2Polar");
+u8 *_m2c_func_001EE8E0_func_00144158() __asm__("func_00144158");
+float func_001EE8E0(s32 arg0, s32 arg1, s32 arg2) {
+    u8 sp[0x10];
+    u8 sp10[0x10];
+    float sp20;
+    float temp_f1;
+    s32 temp_19;
+    u8 temp_18;
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001EE9E8);
+    temp_18 = *_m2c_func_001EE8E0_func_00144158(arg0);
+    temp_19 = _m2c_func_001EE8E0_AtelPopStackInteger(arg0, arg2);
+    _m2c_func_001EE8E0_MsGetChrInfo(5, _m2c_func_001EE8E0_MsGetChrBit(temp_18, _m2c_func_001EE8E0_AtelPopStackInteger(arg0, arg2), 0, 1), 0, sp);
+    _m2c_func_001EE8E0_MsGetChrInfo(5, _m2c_func_001EE8E0_MsGetChrBit(temp_18, temp_19, 0, 1), 0, sp10);
+    _m2c_func_001EE8E0_MsVectorRect2Polar(sp, sp10, &sp20, 0, 0);
+    temp_f1 = (MsNearRag(0.0f, sp20) * 180.0f) / 3.1415927f;
+    sp20 = temp_f1;
+    return temp_f1;
+}
+
+s32 _m2c_func_001EE9E8_AtelPopStackInteger(s32, s32) __asm__("AtelPopStackInteger");
+s32 _m2c_func_001EE9E8_MsGetChrBit(u8, s32, s32, s32) __asm__("MsGetChrBit");
+void _m2c_func_001EE9E8_MsGetChrInfo(s32, s32, s32, s32 *) __asm__("MsGetChrInfo");
+void _m2c_func_001EE9E8_MsVectorRect2Polar(s32 *, s32 *, s32, float *, s32) __asm__("MsVectorRect2Polar");
+u8 *_m2c_func_001EE9E8_func_00144158() __asm__("func_00144158");
+float func_001EE9E8(s32 arg0, s32 arg1, s32 arg2) {
+    u8 sp[0x10];
+    u8 sp10[0x10];
+    float sp20;
+    float temp_f1;
+    s32 temp_19;
+    u8 temp_18;
+
+    temp_18 = *_m2c_func_001EE9E8_func_00144158(arg0);
+    temp_19 = _m2c_func_001EE9E8_AtelPopStackInteger(arg0, arg2);
+    _m2c_func_001EE9E8_MsGetChrInfo(5, _m2c_func_001EE9E8_MsGetChrBit(temp_18, _m2c_func_001EE9E8_AtelPopStackInteger(arg0, arg2), 0, 1), 0, sp);
+    _m2c_func_001EE9E8_MsGetChrInfo(5, _m2c_func_001EE9E8_MsGetChrBit(temp_18, temp_19, 0, 1), 0, sp10);
+    _m2c_func_001EE9E8_MsVectorRect2Polar(sp, sp10, 0, &sp20, 0);
+    temp_f1 = (MsNearRag(0.0f, sp20) * 180.0f) / 3.1415927f;
+    sp20 = temp_f1;
+    return temp_f1;
+}
 
 float func_001EEAF0(Actor *a, void *op, ScriptCtx *ctx)
 {

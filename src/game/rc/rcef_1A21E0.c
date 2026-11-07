@@ -82,11 +82,38 @@ void func_001A23C8(void *obj)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2400);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A24C8);
+/* DEBT(CAST) */
+void func_001A24C8(void *obj) {
+    void *temp_6;
+
+    Ch_TextureSetImageBase((*(Chr **)((u8 *)(obj) + (4))), -1, -1);
+    Ch_TextureSetClutBase((*(Chr **)((u8 *)(obj) + (4))), -1, -1);
+    Ch_DrawEnEffect((*(Chr **)((u8 *)(obj) + (4))), 0);
+    temp_6 = (*(void **)((u8 *)(obj) + (8)));
+    if (temp_6 != 0) {
+        func_00267028(D_006A3924, D_006A3924->sub, temp_6);
+        (*(void **)((u8 *)(obj) + (8))) = 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2530);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2608);
+int _m2c_func_001A2608_Ch_TextureLoadImage(int, int) __asm__("Ch_TextureLoadImage");
+s32 _m2c_func_001A2608_func_0010D4D8(s32, s32) __asm__("func_0010D4D8");
+s32 _m2c_func_001A2608_op1_mdc_draw(s32, void *, void *, s32, s32) __asm__("op1_mdc_draw");
+/* DEBT(CAST) */
+void func_001A2608(void *arg0) {
+    void *temp_17;
+    void *temp_18;
+
+    temp_18 = arg0 + 0xC0;
+    temp_17 = arg0 + 0x80;
+    func_002DCE38(temp_17, D_003142A0, temp_18);
+    func_002DCE38(temp_17, D_00314260, temp_17);
+    _m2c_func_001A2608_Ch_TextureLoadImage((*(s32 *)((u8 *)(arg0) + (4))), -1);
+    _m2c_func_001A2608_func_0010D4D8((*(s32 *)((u8 *)(arg0) + (4))), -1);
+    _m2c_func_001A2608_op1_mdc_draw((*(s32 *)((u8 *)(arg0) + (8))), arg0 + 0x10, temp_18, 0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2698);
 
@@ -101,8 +128,14 @@ typedef struct RcefSlot30 {
 extern RcefSlot30 D_00313F30[16];
 extern s16 D_00314230;
 extern s16 D_00314232;
+extern float D_00314234;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A29A0);
+s32 func_001A29A0(s32 arg0) {
+    s32 _bit_v;
+    u8 *_base_p = (u8 *)&D_00313F30;
+    _bit_v = (*(u16 *)((arg0 * 0x30) + _base_p)) & 2;
+    return _bit_v != 0;
+}
 
 void func_001A29C8(int i)
 {
@@ -119,13 +152,28 @@ void func_001A29F8(int v)
     D_00314232 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A08);
+/* DEBT(CAST) */
+float func_001A2A08(s32 arg0) {
+    u8 *_base_p = (u8 *)&D_00313F30;
+    return (*(float *)((u8 *)(((arg0 * 0x30) + _base_p)) + (8)));
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A28);
+float func_001A2A28(void)
+{
+    return D_00314234;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A38);
+/* DEBT(CAST) */
+float func_001A2A38(s32 arg0) {
+    u8 *_base_p = (u8 *)&D_00313F30;
+    return (*(float *)((u8 *)(((arg0 * 0x30) + _base_p)) + (0xC)));
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A58);
+/* DEBT(CAST) */
+float func_001A2A58(s32 arg0) {
+    u8 *_base_p = (u8 *)&D_00313F30;
+    return (*(float *)((u8 *)(((arg0 * 0x30) + _base_p)) + (0x10)));
+}
 
 void func_001A2A78(u32 a0)
 {
@@ -153,29 +201,53 @@ Chr *rcefGetChrHandle(int a)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", rcuiMotionProc);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B58);
+int _m2c_func_001A2B58_MsEffectReady(int id, int flag) __asm__("MsEffectReady");
+void func_001A2B58(s32 arg0) {
+    _m2c_func_001A2B58_MsEffectReady(D_00313CB4, arg0 != 0);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B68);
+extern s32 _m2c_func_001A2B68_D_00313E48 __asm__("D_00313E48");
+void func_001A2B68(void) {
+    MsEffectEndMotion(_m2c_func_001A2B68_D_00313E48, 0);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B78);
+s32 _m2c_func_001A2B78_MsSetMove() __asm__("MsSetMove");
+void func_001A2B78(void) {
+    _m2c_func_001A2B78_MsSetMove();
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B80);
+void func_001A2B80(void) {
+    func_001CE050();
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B88);
+void func_001A2B88(s32 arg0) {
+    MsEffectEndMotion(arg0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2B90);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2C20);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2C80);
+void _m2c_func_001A2C80_MsSetChrPos(int id, float *pos) __asm__("MsSetChrPos");
+void func_001A2C80(s32 arg0, float *arg1) {
+    _m2c_func_001A2C80_MsSetChrPos(arg0, arg1);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2C88);
+void func_001A2C88(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    MsSetChrDirTarget(arg0, 2, 0, arg1, arg2, arg3);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CA0);
+void func_001A2CA0(s32 arg0, s32 arg1, s32 arg2) {
+    MsSetChrDirTarget(arg0, 1, 0, 0, arg1, arg2);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CB8);
+void func_001A2CB8(Chr *arg0) {
+    func_002994B8(arg0);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2CC0);
+void func_001A2CC0(Chr *arg0) {
+    func_002994D8(arg0);
+}
 
 void func_001A2CC8(float * v)
 {
@@ -325,7 +397,10 @@ float func_001A3170(int a)
     return func_001109E0(rcefGetChrHandle(a)) * 10.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A31A0);
+int MsSetChrDirF(int id, float v); /* DEBT(TYPE): defined with u8 id, callers do not mask */
+void func_001A31A0(s32 arg0, float fparg0) {
+    MsSetChrDirF(arg0, func_001A3200(fparg0));
+}
 
 float func_001A31D0(int id) {
     float v = 0.0f;
@@ -360,41 +435,142 @@ float func_001A3348(float a)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3360);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A33F0);
+void func_001A33F0(s32 arg0, s32 arg1) {
+    MsSetChrVisible(arg0, arg1);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A33F8);
+int MsGetWeaponHandle(int id, int flag); /* DEBT(TYPE): guessed from call sites */
+void func_001A33F8(s32 arg0, s32 arg1) {
+    s32 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3438);
+    temp_2 = MsGetWeaponHandle(arg0, 0);
+    if (temp_2 != 0) {
+        func_00110718(temp_2, arg1 == 0);
+    }
+}
+
+int MsGetWeaponHandle(int id, int flag); /* DEBT(TYPE): guessed from call sites */
+void func_001A3438(s32 arg0, s32 arg1) {
+    s32 temp_2;
+
+    temp_2 = MsGetWeaponHandle(arg0, 1);
+    if (temp_2 != 0) {
+        func_00110718(temp_2, arg1 == 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3478);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3568);
+typedef struct RcefCtx238 {
+    u8 pad0[0x204];
+    s32 w204;
+    float f208;
+    s32 w20C;
+    s32 w210;
+    s32 w214;
+    s32 w218;
+    s32 w21C;
+    s32 w220;
+    s32 w224;
+    s32 w228;
+    s32 w22C;
+    s32 w230;
+    s32 w234;
+} RcefCtx238;
+
+extern RcefCtx238 D_00313CB0;
+extern void func_001A01B0(void *ctx, float *c, int frames);
+extern void func_001A01E0(void *ctx, float *c0, float *c1, int frames);
+
+void func_001A3568(float *v)
+{
+    do {
+        v[0] = (float)func_002EFD78() * 4.656612873077393e-10f * 2.0f - 1.0f;
+        v[2] = (float)func_002EFD78() * 4.656612873077393e-10f * 2.0f - 1.0f;
+        v[1] = v[3] = 0.0f;
+        rcVec3fNormalize((Vec4 *)v); /* DEBT(CAST) */
+    } while (v[0] == 0.0f && v[2] == 0.0f);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3620);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A36D8);
+void func_001A36D8(u8 r, u8 g, u8 b, u8 a, int frames)
+{
+    float c[4];
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3740);
+    c[0] = r;
+    c[1] = g;
+    c[2] = b;
+    c[3] = a;
+    func_001A01B0(&D_00313CB0, c, frames);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A37F0);
+void func_001A3740(u8 r0, u8 g0, u8 b0, u8 a0, u8 r1, u8 g1, u8 b1, u8 a1, int frames)
+{
+    float c0[4];
+    float c1[4];
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3800);
+    c0[0] = r0;
+    c0[1] = g0;
+    c0[2] = b0;
+    c0[3] = a0;
+    c1[0] = r1;
+    c1[1] = g1;
+    c1[2] = b1;
+    c1[3] = a1;
+    func_001A01E0(&D_00313CB0, c0, c1, frames);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3818);
+s32 _m2c_func_001A37F0_func_001A0210(s32 *) __asm__("func_001A0210");
+extern s32 _m2c_func_001A37F0_D_00313CB0 __asm__("D_00313CB0");
+void func_001A37F0(void) {
+    _m2c_func_001A37F0_func_001A0210(&_m2c_func_001A37F0_D_00313CB0);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3848);
+void func_001A3800(s32 arg0, s32 arg1) {
+    func_001C5E90(D_00313CB4, arg0, arg1);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3870);
+void func_001A3818(int a0, int a1, int a2, int a3, float f12)
+{
+    D_00313CB0.w220 = 1;
+    D_00313CB0.w204 = a0;
+    D_00313CB0.f208 = f12;
+    D_00313CB0.w20C = a1;
+    D_00313CB0.w214 = a2;
+    D_00313CB0.w218 = a3;
+    D_00313CB0.w210 = 0;
+}
+
+void func_001A3848(int a0, int a1, int a2)
+{
+    D_00313CB0.w234 = 1;
+    D_00313CB0.w224 = a0;
+    D_00313CB0.w228 = a1;
+    D_00313CB0.w22C = a2;
+    D_00313CB0.w230 = 0;
+}
+
+s32 _m2c_func_001A3870_Ch_ClutCreate(Chr *) __asm__("Ch_ClutCreate");
+void func_001A3870(s32 arg0) {
+    _m2c_func_001A3870_Ch_ClutCreate(rcefGetChrHandle(arg0));
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3890);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A39F0);
+void func_001A39F0(s32 arg0) {
+    Ch_ClutDispose(rcefGetChrHandle(arg0));
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3A10);
+void func_001A3A10(s32 arg0, s32 arg1) {
+    Ch_SetOrgMatrix(rcefGetChrHandle(arg0), arg1);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3A40);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3BB0);
+void func_001A3BB0(s32 arg0) {
+    Ch_SetOrgMatrix(rcefGetChrHandle(arg0), 0);
+}
 
 extern void func_001A2DD8(float *v);
 extern void func_001A2D58(float *m);
@@ -448,7 +624,10 @@ void func_001A40E0(int a, int b, float *out)
     VU0_SQC2(31, 0, out);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4190);
+s32 _m2c_func_001A4190_func_001A40E0(s32, s32, s32) __asm__("func_001A40E0");
+void func_001A4190(s32 arg0, s32 arg1, s32 arg2) {
+    _m2c_func_001A4190_func_001A40E0(arg0, func_001A3080(arg0, arg1), arg2);
+}
 
 void func_001A41D0(int a, float *out)
 {
@@ -462,10 +641,36 @@ void func_001A41D0(int a, float *out)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4210);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4288);
+int *_m2c_func_001A4288_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
+s32 _m2c_func_001A4288_op_oef2_se_on(PtrHolder8 *, s32, s32) __asm__("op_oef2_se_on");
+extern s32 _m2c_func_001A4288_D_00313CB8 __asm__("D_00313CB8");
+void func_001A4288(s32 arg0) {
+    PtrHolder8 *temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A42D0);
+    temp_2 = _m2c_func_001A4288_op_oef2_a_get(_m2c_func_001A4288_D_00313CB8, 6, arg0);
+    func_002943B8(temp_2);
+    _m2c_func_001A4288_op_oef2_se_on(temp_2, 0x40, 0x100);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4310);
+int *_m2c_func_001A42D0_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
+s32 _m2c_func_001A42D0_op_oef2_stream_cue(s32 *, s32, s32) __asm__("op_oef2_stream_cue");
+extern s32 _m2c_func_001A42D0_D_00313CB8 __asm__("D_00313CB8");
+void func_001A42D0(s32 arg0, s32 arg1) {
+    _m2c_func_001A42D0_op_oef2_stream_cue(_m2c_func_001A42D0_op_oef2_a_get(_m2c_func_001A42D0_D_00313CB8, 6, arg0), arg1, 0x800);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A4370);
+int *_m2c_func_001A4310_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
+s32 _m2c_func_001A4310_op_oef2_se_on(s32 *, s32, s32) __asm__("op_oef2_se_on");
+extern s32 _m2c_func_001A4310_D_00313CB8 __asm__("D_00313CB8");
+void func_001A4310(s32 arg0) {
+    if (op_oef2_sound_cue_check(0x800) == 0) {
+        _m2c_func_001A4310_op_oef2_se_on(_m2c_func_001A4310_op_oef2_a_get(_m2c_func_001A4310_D_00313CB8, 6, arg0), 0x40, 0x100);
+    }
+}
+
+void _m2c_func_001A4370_func_0014D3F0(int a, int b, int c) __asm__("func_0014D3F0");
+int *_m2c_func_001A4370_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
+extern s32 _m2c_func_001A4370_D_00313CB8 __asm__("D_00313CB8");
+void func_001A4370(s32 arg0, s32 arg1) {
+    _m2c_func_001A4370_func_0014D3F0(7, arg1, _m2c_func_001A4370_op_oef2_a_get(_m2c_func_001A4370_D_00313CB8, 5, arg0));
+}

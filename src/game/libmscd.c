@@ -1,4 +1,5 @@
 /* tu_108 0x162618-0x165eb8: high; libmscd (config/tu_map.tsv) */
+#define func_00163FF0 _hdr_func_00163FF0
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
@@ -7,6 +8,7 @@
 #include "ffx/u1.h"
 #define D_0030DE34 v1_D_0030DE34 /* DEBT(TYPE): v1.h guesses another type for this datum */
 #include "ffx/v1.h"
+#undef func_00163FF0
 #undef D_0030DE34
 
 int func_00162618(void) {
@@ -336,7 +338,25 @@ INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163D40);
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163EB0);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163FF0);
+s32 _m2c_func_00163FF0_func_001577A8(s32 *, u8 *, s32) __asm__("func_001577A8");
+extern s8 _m2c_func_00163FF0_D_0030DDFD __asm__("D_0030DDFD");
+extern s32 _m2c_func_00163FF0_D_0056BB78 __asm__("D_0056BB78");
+/* DEBT(CAST) */
+s16 func_00163FF0(s32 arg0) {
+    s16 var_2;
+
+    if (_m2c_func_00163FF0_D_0030DDFD == 0) {
+        _m2c_func_00163FF0_func_001577A8(&_m2c_func_00163FF0_D_0056BB78, D_0056BB20, 0x534);
+    }
+    var_2 = *(s32 *)((arg0 * 2) + D_0078E498.f2C);
+    (*(s32 *)((u8 *)(&D_0078E498) + (0x24))) = arg0;
+    (*(s32 *)((u8 *)(&D_0078E498) + (0x20))) = (s32) var_2;
+    if (var_2 < 0) {
+        (*(s32 *)((u8 *)(&D_0078E498) + (0x20))) = 0;
+        var_2 = -1;
+    }
+    return var_2;
+}
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164060);
 
@@ -417,7 +437,52 @@ void func_001653C0(int v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00165408);
+extern s32 _m2c_func_00165408_D_0056BB90 __asm__("D_0056BB90");
+/* DEBT(CAST) */ /* DEBT(GOTO) */
+s32 func_00165408(s32 a, s32 b, s32 c) {
+    G1Rec78E530 *temp_5;
+    s32 temp_2;
+    s32 var_16;
+
+    var_16 = 0;
+    if (D_0078E530->used != 0) {
+loop_2:
+        var_16 += 1;
+        if (var_16 < 0x40) {
+            if (D_0078E530[var_16].used == 0) {
+
+            } else {
+                goto loop_2;
+            }
+        }
+    }
+    if (var_16 == 0x40) {
+        func_001577A8(&_m2c_func_00165408_D_0056BB90, D_0056BB20, 0x816);
+    }
+    temp_5 = &D_0078E530[var_16];
+    temp_5->w08 = c;
+    temp_5->used = 1;
+    temp_5->w04 = 0;
+    temp_2 = D_0030DDF8 + 1;
+    (*(s32 *)((u8 *)(temp_5) + (0x28))) = b;
+    (*(s32 *)((u8 *)(temp_5) + (0xC))) = 0;
+    (*(s32 *)((u8 *)(temp_5) + (0x10))) = 0;
+    (*(s32 *)((u8 *)(temp_5) + (0x14))) = 0;
+    (*(s32 *)((u8 *)(temp_5) + (0x18))) = 0;
+    temp_5->w00 = 0;
+    (*(s32 *)((u8 *)(temp_5) + (0x20))) = 0;
+    D_0030DDF8 = temp_2;
+    if (temp_2 > 0xFFFF) {
+        D_0030DDF8 = 1;
+    }
+    temp_5->id = D_0030DDF8;
+    (*(s32 *)((u8 *)(temp_5) + (0x1C))) = a;
+    temp_5->b33 = 0;
+    temp_5->pad34[0] = 0;
+    (*(s32 *)((u8 *)(temp_5) + (0x2C))) = 0;
+    temp_5->b30 = 1;
+    return D_0030DDF8;
+}
 
 int func_00165548(int a) {
     return func_00165408(a, 0, 0);

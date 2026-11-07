@@ -1,4 +1,5 @@
 /* tu_149 0x193c80-0x1944c0: medium; rcbgLoad (config/tu_map.tsv) */
+#define rcbgPreLoad _hdr_rcbgPreLoad
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
@@ -6,6 +7,7 @@
 #include "ffx/v2.h"
 #include "ffx/r2.h"
 #include "ffx/g2.h"
+#undef rcbgPreLoad
 
 int func_00193C80(W3Voice *v) {
     if (v->subB0.img != 0) {
@@ -23,7 +25,36 @@ int func_00193CB0(int n) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgLoad", rcbgPreLoad);
+s32 _m2c_rcbgPreLoad__rcAlloc(s32, s32 *, s32) __asm__("_rcAlloc");
+void _m2c_rcbgPreLoad_func_0019DE78() __asm__("func_0019DE78");
+void _m2c_rcbgPreLoad_rcbgSceneInit(s32) __asm__("rcbgSceneInit");
+extern s32 _m2c_rcbgPreLoad_D_0056D810 __asm__("D_0056D810");
+extern void **_m2c_rcbgPreLoad_g_pMainWork __asm__("g_pMainWork");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void rcbgPreLoad(s32 arg0) {
+    s32 temp_2;
+    s32 var_16;
+    s32 var_17;
+    register void *var_18 __asm__("$18");
+
+    var_18 = 0;
+    if (_m2c_rcbgPreLoad_g_pMainWork != 0) {
+        var_18 = *_m2c_rcbgPreLoad_g_pMainWork;
+    }
+    _m2c_rcbgPreLoad_func_0019DE78(arg0, var_18, 4);
+    var_17 = 0;
+    temp_2 = _m2c_rcbgPreLoad__rcAlloc((*(s32 *)((u8 *)(var_18) + (0))) * 0x120, &_m2c_rcbgPreLoad_D_0056D810, 0x29);
+    (*(s32 *)((u8 *)(var_18) + (4))) = temp_2;
+    (*(s32 *)((u8 *)(var_18) + (8))) = temp_2;
+    if ((*(s32 *)((u8 *)(var_18) + (0))) > 0) {
+        var_16 = 0;
+        do {
+            var_17 += 1;
+            _m2c_rcbgPreLoad_rcbgSceneInit((*(s32 *)((u8 *)(var_18) + (4))) + var_16);
+            var_16 += 0x120;
+        } while (var_17 < (*(s32 *)((u8 *)(var_18) + (0))));
+    }
+}
 
 void rcbgSceneLoad(W3Pool *p, W3Reader *r) {
     int i;

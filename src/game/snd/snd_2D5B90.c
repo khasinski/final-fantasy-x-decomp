@@ -1,9 +1,11 @@
 /* tu_339 0x2d5b90-0x2d6808: low; ~Snd (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: event flag pairs (cur,pend) (see w10.h). */
+#define SndSeqIopCommandSendMain _hdr_SndSeqIopCommandSendMain
 #include "common.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
+#undef SndSeqIopCommandSendMain
 
 s32 func_002D5B90(void) {
     return D_0078BA20;
@@ -52,7 +54,22 @@ void SndSepLock(s32 on) {
     D_0078BB9D = on != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", SndSeqIopCommandSendMain);
+extern s8 _m2c_SndSeqIopCommandSendMain_D_005661F4 __asm__("D_005661F4");
+s32 _m2c_SndSeqIopCommandSendMain_SqsIopCommandSend() __asm__("SqsIopCommandSend");
+s32 _m2c_SndSeqIopCommandSendMain_TkCdReadSync(s32) __asm__("TkCdReadSync");
+s32 _m2c_SndSeqIopCommandSendMain_TkRefreshHDDMode() __asm__("TkRefreshHDDMode");
+s32 _m2c_SndSeqIopCommandSendMain_func_00165EE8(s32) __asm__("func_00165EE8");
+s32 _m2c_SndSeqIopCommandSendMain_func_002D88B8() __asm__("func_002D88B8");
+extern u8 _m2c_SndSeqIopCommandSendMain_D_0078BBA3 __asm__("D_0078BBA3");
+void SndSeqIopCommandSendMain(void) {
+    _m2c_SndSeqIopCommandSendMain_SqsIopCommandSend();
+    if ((_m2c_SndSeqIopCommandSendMain_D_0078BBA3 == 0) && (_m2c_SndSeqIopCommandSendMain_D_005661F4 != 0) && (_m2c_SndSeqIopCommandSendMain_func_002D88B8() != 0) && (_m2c_SndSeqIopCommandSendMain_TkCdReadSync(1) == 0)) {
+        _m2c_SndSeqIopCommandSendMain_D_005661F4 = 0;
+        _m2c_SndSeqIopCommandSendMain_D_0078BBA3 = 1;
+        _m2c_SndSeqIopCommandSendMain_TkRefreshHDDMode();
+        _m2c_SndSeqIopCommandSendMain_func_00165EE8(1);
+    }
+}
 
 void func_002D5DB8(void) {
     SndSeqIopCommandSendMain();

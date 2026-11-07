@@ -158,7 +158,38 @@ Task *func_00233560(void) {
 void func_002335D8(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002335E0);
+extern u16 _m2c_func_002335E0_D_00325C98 __asm__("D_00325C98");
+extern u16 _m2c_func_002335E0_D_00325CC0 __asm__("D_00325CC0");
+extern u16 _m2c_func_002335E0_D_00325D00 __asm__("D_00325D00");
+extern s32 _m2c_func_002335E0_D_00325D28 __asm__("D_00325D28");
+extern s32 _m2c_func_002335E0_D_00693E24 __asm__("D_00693E24");
+/* DEBT(CAST) */
+s32 func_002335E0(void) {
+    s32 var_4;
+    u16 *var_3;
+
+    if (func_0020B850() == 0) {
+        if (func_001BD360() == 0) {
+            if (D_00693E20 < 0) {
+                var_3 = *(s32 *)((_m2c_func_002335E0_D_00693E24 * 4) + ((void *)&_m2c_func_002335E0_D_00325D28));
+            } else {
+                var_3 = &_m2c_func_002335E0_D_00325C98;
+            }
+        } else {
+            var_3 = &_m2c_func_002335E0_D_00325D00;
+        }
+    } else {
+        var_3 = &_m2c_func_002335E0_D_00325CC0;
+    }
+    var_4 = 0;
+    if (*var_3 != 0) {
+        do {
+            var_3 = (u16 *)((u8 *)var_3 + (2));
+            var_4 += 1;
+        } while (*var_3 != 0);
+    }
+    return var_4 / 3;
+}
 
 int func_00233698(void) {
     Pt16 *p = func_00232D30();

@@ -1,4 +1,5 @@
 /* tu_132 0x180b70-0x184ea0: medium; ~yi (config/tu_map.tsv) */
+#define func_001812C0 _hdr_func_001812C0
 #include "common.h"
 #include "vu0.h"
 #include "ffx/r2.h"
@@ -6,6 +7,7 @@
 #include "ffx/s2.h"
 #include "ffx/t2.h"
 #include "ffx/v2.h"
+#undef func_001812C0
 
 void func_00180B70(R2Big4000 *o) {
     int i;
@@ -35,11 +37,45 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00180C58);
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", yiExecVIFpacket);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_180B70/rodata", jtbl_0056CDE0);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_001812C0);
+void func_001812C0(void)
+{
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_001812C8);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00181378);
+extern s32 _m2c_func_00181378_D_0030EE00 __asm__("D_0030EE00");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00181378(void *arg0) {
+    u8 sp[0x4090];
+    s32 *var_17;
+    s32 temp_2_2;
+    s32 temp_3;
+    s32 var_16;
+    register void *temp_2 __asm__("$2");
+    register void *var_18 __asm__("$18");
+
+    func_00180B70(sp);
+    yiExecVIFpacket(sp, &_m2c_func_00181378_D_0030EE00, 4);
+    temp_2 = (*(void **)((u8 *)(arg0) + (0x68868)));
+    __asm__("" : "+r"(temp_2));
+    if (temp_2 != 0) {
+        var_18 = temp_2;
+        do {
+            var_17 = (*(s32 *)((u8 *)(var_18) + (0x44))) + 0x10;
+            var_16 = (*(s32 *)((u8 *)(var_18) + (0x48))) * 4;
+            if (var_16 != 0) {
+                do {
+                    temp_2_2 = yiExecVIFpacket(sp, var_17, var_16);
+                    temp_3 = temp_2_2 * 4;
+                    var_16 -= temp_2_2;
+                    var_17 = (s32 *)((u8 *)var_17 + (temp_3));
+                } while (var_16 != 0);
+            }
+            var_18 = (*(void **)((u8 *)(var_18) + (0x4C)));
+        } while (var_18 != 0);
+    }
+    func_00180BE8(sp);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00181428);
 

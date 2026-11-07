@@ -1,4 +1,6 @@
 /* tu_180 0x1af9e8-0x1b15c8: low; ~Ms (config/tu_map.tsv) */
+#define func_001B0480 _hdr_func_001B0480
+#define func_001B0528 _hdr_func_001B0528
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -6,6 +8,8 @@
 #include "ffx/u2.h"
 #include "ffx/v2.h"
 #include "ffx/t2.h"
+#undef func_001B0528
+#undef func_001B0480
 
 s8 func_001AF9E8(int flag) {
     s8 old = D_003172F0.f30;
@@ -50,9 +54,69 @@ void func_001B0460(Q4Link *p) {
     func_001B0290();
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", func_001B0480);
+void *_m2c_func_001B0480_MsGetMon() __asm__("MsGetMon");
+s32 _m2c_func_001B0480_MsRegistSEdata(void *, void *, s8, void *, s32) __asm__("MsRegistSEdata");
+/* DEBT(CAST) */
+void func_001B0480(void) {
+    s32 temp_3;
+    s32 temp_8;
+    s8 temp_6;
+    void *temp_2;
+    void *temp_7;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", func_001B0528);
+    temp_2 = _m2c_func_001B0480_MsGetMon();
+    temp_7 = (*(void **)((u8 *)(temp_2) + (0x48)));
+    temp_6 = (*(s8 *)((u8 *)(temp_2) + (0x11)));
+    temp_8 = (*(s32 *)((u8 *)(temp_7) + (0)));
+    (*(void **)((u8 *)(temp_2) + (0xC38))) = (void *) (temp_7 + (*(s32 *)((u8 *)(temp_7) + (4))));
+    (*(u8 **)((u8 *)(temp_2) + (0xC3C))) = (u8 *) (temp_7 + (*(s32 *)((u8 *)(temp_7) + (8))));
+    (*(void **)((u8 *)(temp_2) + (0xC40))) = (void *) (temp_7 + (*(s32 *)((u8 *)(temp_7) + (0xC))));
+    (*(void **)((u8 *)(temp_2) + (0xC44))) = (void *) (temp_7 + (*(s32 *)((u8 *)(temp_7) + (0x1C))));
+    if (temp_6 != 0) {
+        temp_3 = (*(s32 *)((u8 *)(temp_7) + (0x18)));
+        if ((temp_8 >= 7) && (temp_3 != 0)) {
+            _m2c_func_001B0480_MsRegistSEdata(temp_2, temp_7 + temp_3, temp_6, temp_7, temp_8);
+        }
+    }
+    (*(u8 *)((u8 *)(temp_2) + (0xAB6))) = (u8) *(*(u8 **)((u8 *)(temp_2) + (0xC3C)));
+    (*(u8 *)((u8 *)(temp_2) + (0xAB5))) = (u8) D_0065FF70;
+    D_0065FF70 += 1;
+}
+
+void _m2c_func_001B0528_MsCheckStatus() __asm__("MsCheckStatus");
+void *_m2c_func_001B0528_MsGetMon(s32) __asm__("MsGetMon");
+void _m2c_func_001B0528_MsSetFirstCTB(s8) __asm__("MsSetFirstCTB");
+void _m2c_func_001B0528_MsSetRamMonData() __asm__("MsSetRamMonData");
+void _m2c_func_001B0528_func_001B05F8() __asm__("func_001B05F8");
+void _m2c_func_001B0528_func_002F0008(void *, s32 *, s32) __asm__("func_002F0008");
+extern s32 _m2c_func_001B0528_D_0056E240 __asm__("D_0056E240");
+/* DEBT(CAST) */
+void func_001B0528(void) {
+    u8 sp[0x10];
+    s32 var_17;
+    s32 var_18;
+    void *temp_2;
+
+    var_18 = 0;
+    var_17 = 0;
+    _m2c_func_001B0528_MsSetRamMonData();
+    do {
+        temp_2 = _m2c_func_001B0528_MsGetMon(var_17);
+        if ((*(s32 *)((u8 *)(temp_2) + (0x48))) != 0) {
+            var_18 += 1;
+            _m2c_func_001B0528_func_002F0008(sp, &_m2c_func_001B0528_D_0056E240, (*(u16 *)((u8 *)(temp_2) + (0xE))) & 0x3FF);
+            MsAtelRegist(1, (s32) sp, (*(s32 *)((u8 *)(temp_2) + (0xC38))));
+        }
+        var_17 += 1;
+    } while (var_17 < 8);
+    if (var_18 > 0) {
+        D_003172F0.pad2108[3] = 1;
+        func_001B1700(1);
+    }
+    _m2c_func_001B0528_func_001B05F8();
+    _m2c_func_001B0528_MsSetFirstCTB((s8) D_003172F0.pad2108[4]);
+    _m2c_func_001B0528_MsCheckStatus();
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", func_001B05F8);
 

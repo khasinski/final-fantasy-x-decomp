@@ -1,10 +1,12 @@
 /* tu_246 0x21fdd8-0x2207e8: low; ~TOMenuInit (config/tu_map.tsv) */
+#define func_0021FF58 _hdr_func_0021FF58
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
 #include "ffx/u3.h"
 #include "ffx/v4.h"
+#undef func_0021FF58
 
 void TOMenuInit(void)
 {
@@ -58,7 +60,11 @@ void TODrawMenu(void)
     TOInitAddPkt();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21FDD8", func_0021FF58);
+extern s32 _m2c_func_0021FF58_D_00692CF0 __asm__("D_00692CF0");
+extern s32 _m2c_func_0021FF58_D_00693030 __asm__("D_00693030");
+void func_0021FF58(void) {
+    _m2c_func_0021FF58_D_00692CF0 = Sg_GetDBuffDC(&_m2c_func_0021FF58_D_00693030);
+}
 
 void func_0021FF88(void)
 {

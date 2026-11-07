@@ -69,7 +69,32 @@ s32 Ch_TextureSetClutBase(Chr *chr, s32 v, s32 w)
     return func_0010D0A0(chr->w6F0, chr->h6F4, w, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D3D0);
+extern s32 _m2c_func_0010D3D0_D_00307F4C __asm__("D_00307F4C");
+s32 _m2c_func_0010D3D0_func_0010D320() __asm__("func_0010D320");
+/* DEBT(CAST) */
+void func_0010D3D0(Chr *chr) {
+    u8 sp[0xA00];
+    void *temp_2;
+
+    if (chr->w708 != 0) {
+        if (D_0057EAE8 != 0) {
+            temp_2 = chr_texanim_draw(chr->w70C, sp, _m2c_func_0010D3D0_func_0010D320(chr, 0));
+            if (temp_2 != sp) {
+                (*(s64 *)((u8 *)(temp_2) + (8))) = 0;
+                (*(s64 *)((u8 *)(temp_2) + (0))) = 0x70000000;
+                func_002F8660(0);
+                do {
+
+                __asm__ volatile("" : : : "memory");
+                } while (*(s32 *)0x10009000 & 0x100);
+                func_002DBA28(_m2c_func_0010D3D0_D_00307F4C, (s32) sp);
+                do {
+
+                } while (*(volatile s32 *)0x10009000 & 0x100);
+            }
+        }
+    }
+}
 
 void Ch_TextureLoadImage(Chr *chr, int v)
 {

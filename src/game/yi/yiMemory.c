@@ -5,7 +5,17 @@
 #include "ffx/r2.h"
 #include "ffx/s2.h"
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiMemory", func_0017DB20);
+extern s8 _m2c_func_0017DB20_D_0056C6A8 __asm__("D_0056C6A8");
+void func_0017DB20(void) {
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x80);
+    func_002EF240(&_m2c_func_0017DB20_D_0056C6A8, 0x40);
+}
 
 void *func_0017DBA0(int size) {
     return user_malloc(size, 0xC, D_0056C6B0, -1);

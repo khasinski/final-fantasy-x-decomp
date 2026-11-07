@@ -99,7 +99,7 @@ extern void func_0018F5E8(char *fmt, ...);extern void rcbgPreDummyInit(void);
 extern void rcbgFpSaveSub(void);
 extern void func_00194948(int a);
 extern int func_001AEBD8(void);
-typedef struct S2Obj1C { u8 pad0[0x1C]; u8 sub[1]; } S2Obj1C;
+typedef struct S2Obj1C { u8 pad0[0x10]; HeapMgr *w10; u8 pad14[8]; u8 sub[1]; } S2Obj1C;
 extern void *rcefObjNew(void);
 extern void rcefObjInit(void *p);
 extern void func_001A1FF0(void *sub, void *p);/* DEBT(CAST): the 32 twelve-byte command records at D_003172F0 + 0x15D0 (GameState.ent starts 8 bytes earlier) */

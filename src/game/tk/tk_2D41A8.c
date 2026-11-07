@@ -60,7 +60,22 @@ float func_002D42D0(float x)
     return t - 3.1415927f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D4338);
+float func_002D4338(float a) {
+    float var_f0;
+
+    var_f0 = a;
+    if (var_f0 < -3.1415927f) {
+        do {
+            var_f0 += 6.2831855f;
+        } while (var_f0 < -3.1415927f);
+    }
+    if (var_f0 > 3.1415927f) {
+        do {
+            var_f0 -= 6.2831855f;
+        } while (var_f0 > 3.1415927f);
+    }
+    return var_f0;
+}
 
 float func_002D43C8(float x)
 {
@@ -345,7 +360,21 @@ INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5458);
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5540);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5628);
+void func_002D5628(float fparg0) {
+    float var_f0;
+
+    var_f0 = func_002D4338(fparg0) * 57.295776f;
+    if (var_f0 > 360.0f) {
+        do {
+            var_f0 -= 360.0f;
+        } while (var_f0 > 360.0f);
+    }
+    if (var_f0 < 0.0f) {
+        do {
+            var_f0 += 360.0f;
+        } while (var_f0 < 0.0f);
+    }
+}
 
 float func_002D56C0(float angle)
 {

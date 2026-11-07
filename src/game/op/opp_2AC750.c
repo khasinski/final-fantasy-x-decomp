@@ -153,7 +153,22 @@ u8 *func_002AE930(AnimCtx *o, AnimRes *r, u8 *p, AnimWork *w)
     return p + 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE960);
+/* DEBT(CAST) */
+void *func_002AE960(void *arg0, s32 arg1, void *arg2, s32 arg3) {
+    float *temp_3;
+    float var_f1;
+    u8 temp_18;
+
+    temp_18 = (*(u8 *)((u8 *)(arg2) + (2)));
+    MsGetChrScale((*(u8 *)((u8 *)((*(void **)((u8 *)(arg0) + (0x220)))) + (0x18))), arg0 + 0xC0);
+    var_f1 = (*(float *)((u8 *)(arg0) + (0xC4)));
+    if (var_f1 < 0.0f) {
+        var_f1 = -var_f1;
+    }
+    temp_3 = arg3 + temp_18;
+    *temp_3 *= var_f1;
+    return arg2 + 4;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE9E0);
 

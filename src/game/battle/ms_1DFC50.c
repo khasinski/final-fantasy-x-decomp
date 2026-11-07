@@ -1,9 +1,11 @@
 /* tu_208 0x1dfc50-0x1e08f0: low; ~Ms (config/tu_map.tsv) */
+#define func_001E0410 _hdr_func_001E0410
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef func_001E0410
 
 int MsMusicSync(int a)
 {
@@ -164,6 +166,32 @@ void func_001E03A0(int a, int v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DFC50", func_001E0410);
+void *_m2c_func_001E0410_MsGetChr() __asm__("MsGetChr");
+s32 _m2c_func_001E0410_MsGetChrInfo(s32, s32, s32, s32 *) __asm__("MsGetChrInfo");
+s32 _m2c_func_001E0410_func_001B6790(s32, float *) __asm__("func_001B6790");
+extern s32 _m2c_func_001E0410_D_00662FD0 __asm__("D_00662FD0");
+/* DEBT(CAST) */
+void func_001E0410(s32 arg0) {
+    u8 sp[0x10];
+    float *var_2;
+    float *var_3;
+    float temp_f0;
+    s32 var_4;
+    void *temp_17;
+
+    temp_17 = _m2c_func_001E0410_MsGetChr();
+    _m2c_func_001E0410_func_001B6790(arg0, sp);
+    var_3 = temp_17 + 0x50;
+    var_2 = sp;
+    var_4 = 2;
+    do {
+        temp_f0 = *var_2;
+        var_4 -= 1;
+        var_2 = (float *)((u8 *)var_2 + (4));
+        *var_3 = temp_f0;
+        var_3 = (float *)((u8 *)var_3 + (4));
+    } while (var_4 >= 0);
+    _m2c_func_001E0410_MsGetChrInfo(0xD, (*(s32 *)((u8 *)(temp_17) + (0xA80))), 0x10, &_m2c_func_001E0410_D_00662FD0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DFC50", MsSetBallSpline);

@@ -1,4 +1,6 @@
 /* tu_186 0x1b72f0-0x1b89d8: low; ~Ms (config/tu_map.tsv) */
+#define MsGetChrBtlPosHeight _hdr_MsGetChrBtlPosHeight
+#define MsGetChrBtlPos _hdr_MsGetChrBtlPos
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -6,10 +8,58 @@
 #include "ffx/v2.h"
 #include "ffx/t2.h"
 #include "ffx/u2.h"
+#undef MsGetChrBtlPos
+#undef MsGetChrBtlPosHeight
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsGetChrBtlPos);
+s32 _m2c_MsGetChrBtlPos_MsBtlChrNumCheck(s32) __asm__("MsBtlChrNumCheck");
+void _m2c_MsGetChrBtlPos_MsBtlGetPos(s32, void *, s8, s8, s8, void *) __asm__("MsBtlGetPos");
+void *_m2c_MsGetChrBtlPos_MsGetChr(s32) __asm__("MsGetChr");
+void _m2c_MsGetChrBtlPos_func_001B6790(s32, void *) __asm__("func_001B6790");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 MsGetChrBtlPos(s32 arg0, void *arg1) {
+    float temp_f20;
+    s32 temp_18;
+    register s32 var_2 __asm__("$2");
+    register s32 c2c8 __asm__("$3");
+    void *temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsGetChrBtlPosHeight);
+    temp_18 = arg0 & 0xFF;
+    if (_m2c_MsGetChrBtlPos_MsBtlChrNumCheck(temp_18) != 0) {
+        temp_2 = _m2c_MsGetChrBtlPos_MsGetChr(temp_18);
+        _m2c_MsGetChrBtlPos_MsBtlGetPos(0, temp_2, (*(s8 *)((u8 *)(temp_2) + (0x1BC))), (*(s8 *)((u8 *)(temp_2) + (0x1BD))), (*(s8 *)((u8 *)(temp_2) + (0x1BE))), arg1);
+        c2c8 = (*(u8 *)((u8 *)(temp_2) + (0x2C8)));
+        __asm__("" : "+r"(c2c8));
+        if (((c2c8 == 0) && (((*(s8 *)((u8 *)(temp_2) + (0xA8C))) == 0) || ((*(u8 *)((u8 *)(temp_2) + (0xAA7))) != 0))) || ((*(s8 *)((u8 *)(temp_2) + (0x1CD))) != 0)) {
+            (*(float *)((u8 *)(arg1) + (4))) = (float) ((*(float *)((u8 *)(arg1) + (4))) + (*(float *)((u8 *)(temp_2) + (0x1F4))));
+        }
+        if ((*(u8 *)((u8 *)(temp_2) + (0x39D))) != 0) {
+            temp_f20 = (*(float *)((u8 *)(arg1) + (4)));
+            _m2c_MsGetChrBtlPos_func_001B6790(temp_18, arg1);
+            (*(float *)((u8 *)(arg1) + (4))) = temp_f20;
+        }
+        var_2 = -1;
+    } else {
+        var_2 = 0;
+    }
+    __asm__ volatile("" : "+r"(var_2));
+    return var_2;
+}
+
+s32 _m2c_MsGetChrBtlPosHeight_MsBtlChrNumCheck(s32) __asm__("MsBtlChrNumCheck");
+void *_m2c_MsGetChrBtlPosHeight_MsGetChr(s32) __asm__("MsGetChr");
+/* DEBT(CAST) */
+float MsGetChrBtlPosHeight(s32 arg0) {
+    float var_f0;
+    s32 temp_16;
+    void *temp_2;
+
+    temp_16 = arg0 & 0xFF;
+    var_f0 = 0.0f;
+    if ((_m2c_MsGetChrBtlPosHeight_MsBtlChrNumCheck(temp_16) != 0) && (((temp_2 = _m2c_MsGetChrBtlPosHeight_MsGetChr(temp_16), ((*(u8 *)((u8 *)(temp_2) + (0x2C8))) == 0)) && (((*(s8 *)((u8 *)(temp_2) + (0xA8C))) == 0) || ((*(u8 *)((u8 *)(temp_2) + (0xAA7))) != 0))) || (var_f0 = 0.0f, ((*(s8 *)((u8 *)(temp_2) + (0x1CD))) != 0)))) {
+        var_f0 = (*(float *)((u8 *)(temp_2) + (0x1F4)));
+    }
+    return var_f0;
+}
 
 float func_001B7448(int id) {
     u8 i = id;

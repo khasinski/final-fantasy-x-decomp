@@ -30,7 +30,21 @@ int func_0013AB28(void) {
     return D_0058E992;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", func_0013AB38);
+s32 func_0013AB38(s32 a, s32 b) {
+    s32 v0;
+    if (b != 0xA) {
+        D_0058E994 = 0;
+    }
+    __asm__ volatile("" : "+r"(b));
+    if (b == 0xA) {
+        v0 = (D_0058E994 + 1) & 0xFF;
+        D_0058E994 = v0;
+        __asm__ volatile("" : "+r"(v0));
+    } else {
+        v0 = D_0058E994;
+    }
+    return v0;
+}
 
 Effect *AtelGetMesWinWork(int id)
 {

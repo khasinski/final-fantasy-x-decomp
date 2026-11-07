@@ -6,7 +6,22 @@
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_178648", func_00178648);
+void _m2c_func_00178648_Sg_MFIFOSync(void) __asm__("Sg_MFIFOSync");
+void func_00178648(s32 a, s32 b) {
+    s32 temp_2;
+
+    _m2c_func_00178648_Sg_MFIFOSync();
+    func_002DA610(0, 0);
+    temp_2 = func_002DB6D8(2);
+    func_002DBF78(temp_2, 0, 0x100);
+    *(volatile u8 *)(temp_2) |= 1;
+    *(volatile u8 *)(temp_2) |= 0x40;
+    *(volatile u8 *)(temp_2) &= 0x7F;
+    *(u8 *)(temp_2) &= 0xF3;
+    func_002F8660(0);
+    func_002DBB00((S2DmaCtl *) temp_2, a, b);
+    func_002DA610(0, 0);
+}
 
 void func_001786F8(int a) {
     func_00178648(a + 0x27640, 0x4007);

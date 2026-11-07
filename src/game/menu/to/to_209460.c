@@ -1,4 +1,6 @@
 /* tu_231 0x209460-0x20cc98: low; ~TOSetExeWindowArea (config/tu_map.tsv) */
+#define TODrawMessageWindowForMenu _hdr_TODrawMessageWindowForMenu
+#define TODrawMessageWindow _hdr_TODrawMessageWindow
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -7,6 +9,8 @@
 #include "ffx/u3.h"
 #include "ffx/v4.h"
 #include "ffx/s4.h"
+#undef TODrawMessageWindow
+#undef TODrawMessageWindowForMenu
 
 void func_00209460(s32 i)
 {
@@ -174,7 +178,17 @@ void TOSetExeMessageWindowArea(int a)
 void func_0020A758(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOGetInternationalBaseDicType);
+/* DEBT(FAKE) */
+s32 TOGetInternationalBaseDicType(void) {
+    register s32 var_3 __asm__("$3");
+
+    if (func_0020B850() == 0) {
+        var_3 = (func_001BD360() == 0) ? 0 : 4;
+    } else {
+        var_3 = 4;
+    }
+    return var_3;
+}
 
 s32 func_0020A798(void)
 {
@@ -260,7 +274,62 @@ void func_0020A998(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TODrawMessageWindow);
+s32 *_m2c_TODrawMessageWindow_MsGetSaveMenu() __asm__("MsGetSaveMenu");
+void _m2c_TODrawMessageWindow_TODrawBtlWindow() __asm__("TODrawBtlWindow");
+void _m2c_TODrawMessageWindow_TODrawKick() __asm__("TODrawKick");
+void _m2c_TODrawMessageWindow_TODrawMessage(s32) __asm__("TODrawMessage");
+void _m2c_TODrawMessageWindow_TODrawWindow(s32) __asm__("TODrawWindow");
+void _m2c_TODrawMessageWindow_TOInitAddPkt() __asm__("TOInitAddPkt");
+void _m2c_TODrawMessageWindow_TOMakePktScissor(s32, s32, s32, s32) __asm__("TOMakePktScissor");
+void _m2c_TODrawMessageWindow_TOSetAddPkt() __asm__("TOSetAddPkt");
+void _m2c_TODrawMessageWindow_TOSetPktBuffAdrs(s32, s32, s32) __asm__("TOSetPktBuffAdrs");
+void _m2c_TODrawMessageWindow_TOTransTexture() __asm__("TOTransTexture");
+void _m2c_TODrawMessageWindow_func_001EF940() __asm__("func_001EF940");
+void _m2c_TODrawMessageWindow_func_001EF978() __asm__("func_001EF978");
+void _m2c_TODrawMessageWindow_func_001EFB08() __asm__("func_001EFB08");
+void _m2c_TODrawMessageWindow_func_001FC3C8(s32, s32) __asm__("func_001FC3C8");
+void _m2c_TODrawMessageWindow_func_0020B520(void *) __asm__("func_0020B520");
+void _m2c_TODrawMessageWindow_func_0020E5F0() __asm__("func_0020E5F0");
+void _m2c_TODrawMessageWindow_func_0020EC88() __asm__("func_0020EC88");
+/* DEBT(CAST) */
+void TODrawMessageWindow(void) {
+    u8 sp[0x10];
+    MenuSlot **var_17;
+    s16 temp_2;
+    s32 var_16;
+    void *temp_4;
+
+    var_16 = 0;
+    _m2c_TODrawMessageWindow_TOSetAddPkt();
+    _m2c_TODrawMessageWindow_TOTransTexture();
+    _m2c_TODrawMessageWindow_TOSetPktBuffAdrs(0x01F00000, 0x100000, 0xF0000);
+    _m2c_TODrawMessageWindow_func_001EF940();
+    _m2c_TODrawMessageWindow_func_0020B520(sp);
+    _m2c_TODrawMessageWindow_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_TODrawMessageWindow_func_001EFB08();
+    var_17 = D_0068F0A8;
+    do {
+        if ((((s32) *_m2c_TODrawMessageWindow_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*(void **)((u8 *)(*var_17) + (0x14))), ((*(s32 *)((u8 *)(temp_4) + (8))) != 2)) || ((temp_2 = (*(s16 *)((u8 *)(temp_4) + (0x1A))), (temp_2 != 1)) && (temp_2 != 3)) || ((*(u16 *)((u8 *)(temp_4) + (0x10))) == 0x4000) || ((*(s16 *)((u8 *)(temp_4) + (0xC))) != 0) || (D_0068EEDC != 0)) {
+            _m2c_TODrawMessageWindow_TODrawWindow(var_16);
+            _m2c_TODrawMessageWindow_TODrawMessage(var_16);
+        }
+        var_16 += 1;
+        var_17 = (MenuSlot **)((u8 *)var_17 + (4));
+    } while (var_16 < 8);
+    _m2c_TODrawMessageWindow_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_TODrawMessageWindow_TODrawBtlWindow();
+    _m2c_TODrawMessageWindow_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_TODrawMessageWindow_func_0020E5F0();
+    _m2c_TODrawMessageWindow_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    if (D_00323958 != 0) {
+        _m2c_TODrawMessageWindow_func_001FC3C8(0xA, 0x172);
+    }
+    _m2c_TODrawMessageWindow_func_001EF978();
+    _m2c_TODrawMessageWindow_TODrawKick();
+    D_003238D0.pad00[0] = 1;
+    _m2c_TODrawMessageWindow_TOInitAddPkt();
+    _m2c_TODrawMessageWindow_func_0020EC88();
+}
 
 void func_0020AC10(void)
 {
@@ -281,7 +350,44 @@ void func_0020AC10(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TODrawMessageWindowForMenu);
+s32 *_m2c_TODrawMessageWindowForMenu_MsGetSaveMenu() __asm__("MsGetSaveMenu");
+s32 _m2c_TODrawMessageWindowForMenu_TODrawKick() __asm__("TODrawKick");
+s32 _m2c_TODrawMessageWindowForMenu_TODrawMessage(s32) __asm__("TODrawMessage");
+s32 _m2c_TODrawMessageWindowForMenu_TODrawWindow(s32) __asm__("TODrawWindow");
+s32 _m2c_TODrawMessageWindowForMenu_TOMakePktScissor(s32, s32, s32, s32) __asm__("TOMakePktScissor");
+s32 _m2c_TODrawMessageWindowForMenu_TOSetPktBuffAdrs(s32, s32, s32) __asm__("TOSetPktBuffAdrs");
+s32 _m2c_TODrawMessageWindowForMenu_func_001EF940() __asm__("func_001EF940");
+s32 _m2c_TODrawMessageWindowForMenu_func_001EF978() __asm__("func_001EF978");
+s32 _m2c_TODrawMessageWindowForMenu_func_001EFB08() __asm__("func_001EFB08");
+s32 _m2c_TODrawMessageWindowForMenu_func_0020B520(void *) __asm__("func_0020B520");
+/* DEBT(CAST) */
+void TODrawMessageWindowForMenu(void) {
+    u8 sp[0x10];
+    MenuSlot **var_17;
+    s16 temp_2;
+    s32 var_16;
+    void *temp_4;
+
+    var_16 = 0;
+    _m2c_TODrawMessageWindowForMenu_TOSetPktBuffAdrs(0x01F00000, 0x100000, 0xF0000);
+    _m2c_TODrawMessageWindowForMenu_func_001EF940();
+    _m2c_TODrawMessageWindowForMenu_func_0020B520(sp);
+    _m2c_TODrawMessageWindowForMenu_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_TODrawMessageWindowForMenu_func_001EFB08();
+    var_17 = D_0068F0A8;
+    do {
+        if ((((s32) *_m2c_TODrawMessageWindowForMenu_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*(void **)((u8 *)(*var_17) + (0x14))), ((*(s32 *)((u8 *)(temp_4) + (8))) != 2)) || ((temp_2 = (*(s16 *)((u8 *)(temp_4) + (0x1A))), (temp_2 != 1)) && (temp_2 != 3)) || ((*(u16 *)((u8 *)(temp_4) + (0x10))) == 0x4000) || ((*(s16 *)((u8 *)(temp_4) + (0xC))) != 0) || (D_0068EEDC != 0)) {
+            _m2c_TODrawMessageWindowForMenu_TODrawWindow(var_16);
+            _m2c_TODrawMessageWindowForMenu_TODrawMessage(var_16);
+        }
+        var_16 += 1;
+        var_17 = (MenuSlot **)((u8 *)var_17 + (4));
+    } while (var_16 < 8);
+    _m2c_TODrawMessageWindowForMenu_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_TODrawMessageWindowForMenu_func_001EF978();
+    _m2c_TODrawMessageWindowForMenu_TODrawKick();
+    D_003238D0.pad00[0] = 1;
+}
 
 void TOAllCloseMessageWindow(void)
 {

@@ -1,4 +1,6 @@
 /* tu_284 0x260a70-0x265f78: low; ~ei (config/tu_map.tsv) */
+#define func_00260A70 _hdr_func_00260A70
+#define func_00264248 _hdr_func_00264248
 #include "common.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -7,6 +9,10 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/r6.h"
+#undef func_00264248
+#undef func_00260A70
+
+void func_00264248(void);
 
 
 
@@ -32,7 +38,26 @@ typedef struct LpaView {
 } LpaView;
 #define LPV ((LpaView *)lpamng)
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260A70);
+s32 _m2c_func_00260A70__pppRunPart(void *, s32) __asm__("_pppRunPart");
+void _m2c_func_00260A70_func_002DCE38(u8 *, u8 *, u8 *) __asm__("func_002DCE38");
+void _m2c_func_00260A70_func_002DD0C0(u8 *, u8 *) __asm__("func_002DD0C0");
+void _m2c_func_00260A70_pppSetMatrix(void *) __asm__("pppSetMatrix");
+void func_00260A70(void *arg0) __attribute__((register_precision(s3, 128)));
+/* DEBT(CAST) */
+void func_00260A70(void *arg0) {
+    if ((*(u16 *)((u8 *)(arg0) + (0x1E))) != 0) {
+        _m2c_func_00260A70_func_002DD0C0(D_006A3A70, &lpamng->ents3[8].pad2[0x3A]);
+        _m2c_func_00260A70_func_002DD0C0(D_006A3970, lpamng->ents3[7].pad4C);
+        (*(float *)((u8 *)(D_006A3A70) + (0x38))) = (float) ((*(float *)((u8 *)(D_006A3A70) + (0x38))) + 29184.0f);
+        _m2c_func_00260A70_pppSetMatrix(arg0);
+        _m2c_func_00260A70_func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
+        _m2c_func_00260A70_func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+        D_006A3924 = (HeapMgr *) D_006A3690;
+        if (_m2c_func_00260A70__pppRunPart(arg0, 0x30) != 0) {
+            (*(u16 *)((u8 *)(arg0) + (0x1E))) = 0U;
+        }
+    }
+}
 
 float func_00260B68(void)
 {
@@ -428,9 +453,70 @@ void func_00264210(void)
     chr->f24 |= 8;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264248);
+#ifndef ATTR_REG_PREC_S3
+#define ATTR_REG_PREC_S3 __attribute__((register_precision(s3, 128)))
+#endif
+extern s32 _m2c_func_00264248_D_006A391C __asm__("D_006A391C");
+s32 _m2c_func_00264248_func_00257FB0(u8, u16, u16) __asm__("func_00257FB0");
+void _m2c_func_00264248_func_00262E58() __asm__("func_00262E58");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void ATTR_REG_PREC_S3 func_00264248(void) {
+    register s32 _cond __asm__("$2");
+    ChrWork *temp_18;
+    register s32 var_17 __asm__("$17");
+    u16 temp_19;
+    void *var_16;
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264330);
+    var_17 = 0;
+    temp_18 = _m2c_func_00264248_D_006A391C + 0x1A00;
+    var_16 = _m2c_func_00264248_D_006A391C + 0x1A40;
+    temp_19 = lpamng->ents3[lpamng->f1156C].h0;
+    if (temp_18->f1E > 0) {
+        do {
+            if (_m2c_func_00264248_func_00257FB0(lpamng->f1156C, temp_19, (*(u16 *)((u8 *)(var_16) + (8)))) != 0) {
+                (*(s8 *)((u8 *)(var_16) + (4))) = 0;
+            } else {
+                (*(s8 *)((u8 *)(var_16) + (4))) = 1;
+            }
+            var_17 += 1;
+            var_16 += 0xC;
+        } while ((_cond = (var_17 < temp_18->f1E)) != 0);
+    }
+    func_0025B010(8, _m2c_func_00264248_func_00262E58);
+}
+
+#ifndef ATTR_REG_PREC_S3
+#define ATTR_REG_PREC_S3 __attribute__((register_precision(s3, 128)))
+#endif
+/* DEBT(FAKE) */
+void ATTR_REG_PREC_S3 func_00264330(s32 a, s32 b) {
+    register u8 *saved_reg_s1 __asm__("$17");
+    u8 sp[0x10];
+    s32 temp_2;
+    s32 temp_2_2;
+    s32 var_17;
+    register s32 _v0 __asm__("$2");
+    s32 var_18;
+
+    var_17 = (s32)saved_reg_s1;
+    var_18 = 0;
+    func_0024CB58(b);
+    temp_2 = MsGetSaveSP();
+    if (temp_2 > 0) {
+        do {
+            temp_2_2 = TOAmapGetItemType(var_18);
+            if ((func_001BFE30(temp_2_2) > 0) && (MsGetRomItem(temp_2_2, (s32 *)sp)->b5D != 0xFF)) {
+                _v0 = temp_2_2 & 0xFFFF;
+                __asm__ volatile("" : "+r"(var_17), "+r"(_v0));
+                var_17 &= 0xFFFF0000;
+                __asm__ volatile("" : "+r"(var_17), "+r"(_v0));
+                var_17 |= _v0;
+                func_0025B050(a, 0, var_17);
+            }
+            var_18 += 1;
+        } while (var_18 < temp_2);
+    }
+}
 
 void func_00264400(void)
 {
@@ -438,7 +524,35 @@ void func_00264400(void)
     func_00264330(8, 3);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264418);
+#ifndef ATTR_REG_PREC_S3
+#define ATTR_REG_PREC_S3 __attribute__((register_precision(s3, 128)))
+#endif
+/* DEBT(CAST) */
+void ATTR_REG_PREC_S3 func_00264418(s32 arg0, s32 arg1) {
+    u8 sp[0x10];
+    OfsTbl *temp_2_2;
+    s32 temp_2;
+    s32 var_17;
+    s32 var_4;
+    u16 temp_5;
+
+    var_17 = 0;
+    temp_2 = func_001DC0D8();
+    if (temp_2 > 0) {
+        __asm__ volatile("" : "+r"(var_17));
+        var_4 = var_17;
+        do {
+            temp_2_2 = MsMenuStatusNum(var_4, 0);
+            if ((*(u8 *)((u8 *)(temp_2_2) + (0))) == arg1) {
+                MsGetRomPlyCommand((s32) temp_2_2->a[0].y, sp);
+                temp_5 = temp_2_2->a[0].y;
+                func_0025B050(arg0, temp_5, temp_5 - 0x3000);
+            }
+            var_17 += 1;
+            var_4 = var_17;
+        } while (var_17 < temp_2);
+    }
+}
 
 void func_002644C0(int slot)
 {
@@ -479,7 +593,22 @@ void func_002645D8(int a, int *b) /* DEBT(TYPE) */
     func_00257288(func_00256FD8(b[2]));
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002645F8);
+void _m2c_func_002645F8_func_00257810(s32, s32, s32, s32) __asm__("func_00257810");
+/* DEBT(CAST) */
+void func_002645F8(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 temp_20;
+    u16 temp_17;
+
+    temp_17 = (*(u16 *)((u8 *)(arg1) + (8)));
+    temp_20 = func_001BFE30((s32) temp_17);
+    if ((*(u8 *)((u8 *)(arg1) + (4))) != 0) {
+        func_002576B8((s32) temp_17, arg3, arg4, 1);
+        _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (*(s16 *)((u8 *)(arg0) + (0xC)))) - 0x11, arg4, 1);
+        return;
+    }
+    func_002576B8((s32) temp_17, arg3, arg4, 0);
+    _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (*(s16 *)((u8 *)(arg0) + (0xC)))) - 0x11, arg4, 0);
+}
 
 void func_002646E0(int a, EvtObj *p, int c, int d, int e)
 {
@@ -505,8 +634,61 @@ void func_00264748(int a, EvtObj *p, int c, int d, int e)
     func_002571B8(p->f0, d + 4, e - 4, 0, 0x80, 0x80, 0x80, lpamng->f11569);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264780);
-INCLUDE_RODATA("build/ee_asm/game/abm/ei_260A70/rodata", jtbl_00573A60);
+#ifndef ATTR_REG_PREC_S3
+#define ATTR_REG_PREC_S3 __attribute__((register_precision(s3, 128)))
+#endif
+void _m2c_func_00264780_func_00257810(s32, s32, s32, s32) __asm__("func_00257810");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void ATTR_REG_PREC_S3 func_00264780(s32 arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register u8 *saved_reg_s2 __asm__("$18");
+    register PartySlot *temp_17 __asm__("$17");
+    register s32 temp_19 __asm__("$19");
+    register s32 var_18 __asm__("$18");
+    u32 temp_3;
+
+    var_18 = saved_reg_s2;
+    temp_19 = arg4 - 4;
+    temp_17 = MsGetSavePlayerPtr((s32) lpamng->f1156C);
+    func_00257108((*(s32 *)((u8 *)(arg1) + (0))), arg3, temp_19);
+    temp_3 = (*(u32 *)((u8 *)(arg1) + (8)));
+    switch (temp_3) {
+    case 0:
+        var_18 = temp_17->v24;
+        break;
+    case 1:
+        var_18 = temp_17->v28;
+        break;
+    case 2:
+        var_18 = (s32) temp_17->pad2F[0];
+        break;
+    case 3:
+        var_18 = (s32) temp_17->pad32[1];
+        break;
+    case 4:
+        var_18 = (s32) temp_17->pad2F[1];
+        break;
+    case 5:
+        var_18 = (s32) temp_17->pad32[2];
+        break;
+    case 6:
+        var_18 = (s32) temp_17->b31;
+        break;
+    case 7:
+        var_18 = (s32) temp_17->pad32[3];
+        break;
+    case 8:
+        var_18 = (s32) temp_17->pad32[0];
+        break;
+    case 9:
+        var_18 = (s32) temp_17->pad32[4];
+        break;
+    }
+    if ((FFXGetLang() == 0) && (func_001BD360() == 0)) {
+        _m2c_func_00264780_func_00257810(var_18, arg3 + 0x80, temp_19, 0);
+        return;
+    }
+    _m2c_func_00264780_func_00257810(var_18, arg3 + 0xA0, temp_19, 0);
+}
 
 void func_002648C0(int a, EvtObj *p, int c, int d, int e)
 {
@@ -592,7 +774,25 @@ void eiAbmSetLang(void)
     func_002F8660(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00265E00);
+int _m2c_func_00265E00_func_0011D678(int size) __asm__("func_0011D678");
+void func_00265E00(void) {
+    s32 temp_17;
+    s32 temp_17_2;
+    s32 temp_18;
+    s32 temp_19;
+    s32 temp_2;
+
+    D_0078E498.f10(0xD);
+    temp_19 = D_0078E498.f14(0x12);
+    temp_17 = D_0078E498.f14(0x11);
+    D_0078E498.f10(7);
+    temp_18 = D_0078E498.f14(0x12);
+    temp_2 = D_0078E498.f14(0x11);
+    temp_17_2 = (temp_17 < temp_2) ? temp_2 : temp_17;
+    D_006A38F4 = _m2c_func_00265E00_func_0011D678((temp_19 >= temp_18) ? temp_19 : temp_18);
+    D_006A38F0 = _m2c_func_00265E00_func_0011D678(temp_17_2);
+    eiAbmSetLang();
+}
 
 int func_00265ED0(void)
 {

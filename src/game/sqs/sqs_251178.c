@@ -694,7 +694,39 @@ void SqsBattleStreamingStart(int a, int b, int c)
     D_0069BF98 = 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00253788);
+extern s32 _m2c_func_00253788_D_0069BFCC __asm__("D_0069BFCC");
+/* DEBT(CAST) */
+void func_00253788(s32 a, s32 b) {
+    S6Rpc *var_6;
+    s32 temp_2;
+    s32 var_16;
+
+    if (a != 0) {
+        func_002F8660(0);
+        var_6 = &D_0069BF00;
+        if (b > 0xA0000) {
+            D_0069BF00.w0 = a;
+            D_0069BF00.w8 = 0x80000;
+            D_0069BF00.w4 = _m2c_func_00253788_D_0069BFCC;
+            D_0069BF00.wC = 0;
+            var_6 = ((void *)&D_0069BF00) + 0x10;
+            var_16 = 2;
+            (*(s32 *)((u8 *)(&D_0069BF00) + (0x10))) = (s32) (a + 0x80000);
+            var_6->w4 = _m2c_func_00253788_D_0069BFCC + 0x80000;
+            var_6->w8 = b - 0x80000;
+        } else {
+            D_0069BF00.w0 = a;
+            var_16 = 1;
+            D_0069BF00.w8 = b;
+            D_0069BF00.w4 = _m2c_func_00253788_D_0069BFCC;
+        }
+        var_6->wC = 0;
+        do {
+            temp_2 = func_002F87A0(&D_0069BF00, var_16);
+        } while (temp_2 == 0);
+        D_0069C8C0 = temp_2;
+    }
+}
 
 void func_00253860(int a)
 {

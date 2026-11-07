@@ -76,7 +76,11 @@ void func_00110260(Chr *chr, float v)
     chr->f14 += v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_110158", func_00110270);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00110270(void *arg0, float fparg0) {
+    register u8 *saved_reg_gp __asm__("$28");
+    (*(float *)((u8 *)(arg0) + (0x54))) = (float) (fparg0 * (*(float *)((u8 *)(saved_reg_gp) + (-0x7DF8))));
+}
 
 float func_00110280(Chr *chr)
 {

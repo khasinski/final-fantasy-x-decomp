@@ -26,7 +26,31 @@ void func_00270C80(int a)
     func_002DBF78(h, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00270CD8);
+/* DEBT(CAST) */
+void func_00270CD8(struct W3Whole *arg0) {
+    float temp_f20;
+    float temp_f20_2;
+    float temp_f21;
+    float temp_f22;
+    float temp_f23;
+    float temp_f24;
+    float temp_f2;
+
+    temp_f20 = ms_screen->f1C;
+    temp_f24 = 512.0f / ms_screen->f10;
+    temp_f23 = 416.0f / ms_screen->f14;
+    temp_f22 = ms_screen->f08;
+    temp_f21 = ms_screen->f0C;
+    func_002DD128(arg0);
+    temp_f2 = temp_f21 - temp_f22;
+    temp_f20_2 = 2.0f * temp_f20;
+    (*(s32 *)((u8 *)(arg0) + (0x3C))) = 0;
+    (*(float *)((u8 *)(arg0) + (0x2C))) = 1.0f;
+    (*(float *)((u8 *)(arg0) + (0))) = (float) (temp_f20_2 / temp_f24);
+    (*(float *)((u8 *)(arg0) + (0x14))) = (float) (temp_f20_2 / temp_f23);
+    (*(float *)((u8 *)(arg0) + (0x28))) = (float) ((temp_f21 + temp_f22) / temp_f2);
+    (*(float *)((u8 *)(arg0) + (0x38))) = (float) ((temp_f21 * -2.0f * temp_f22) / temp_f2);
+}
 
 int func_00270DD8(char *m, char *v, int n) {
     register int f __asm__("$2");

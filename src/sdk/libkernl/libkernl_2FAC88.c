@@ -1,20 +1,45 @@
 /* tu_371 0x2fac88-0x2fbbe8: medium; unk_2FAC88 (config/tu_map.tsv) */
+#define func_002FAE28 _hdr_func_002FAE28
 #include "common.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
 #include "ffx/v7.h"
 #include "ffx/u5.h"
+#undef func_002FAE28
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAC88);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAE28);
+void _m2c_func_002FAE28_func_002FA838() __asm__("func_002FA838");
+extern s32 _m2c_func_002FAE28_D_00568DF0 __asm__("D_00568DF0");
+void func_002FAE28(void) {
+    _m2c_func_002FAE28_func_002FA838();
+    _m2c_func_002FAE28_D_00568DF0 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAE50);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAEF8);
+void func_002FAEF8(SifRpcPkt *pkt) {
+    pkt->rpc_id = 0;
+    pkt->rec_id &= 0xFFFFFFFE;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAF18);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+SifRpcPkt *func_002FAF18(SifRpcState *rd) {
+    register s32 temp_hi __asm__("$2");
+    register s32 next __asm__("$3");
+    register SifRpcPkt *tbl __asm__("$5");
+
+    temp_hi = (s32) rd->rdata_table_idx % (s32) rd->rdata_table_len;
+    tbl = rd->rdata_table;
+    __asm__("" : "+r"(tbl));
+    next = temp_hi + 1;
+    __asm__("" : "+r"(next));
+    temp_hi <<= 6;
+    __asm__("" : "+r"(temp_hi));
+    rd->rdata_table_idx = next;
+    return (SifRpcPkt *)((u8 *)tbl + temp_hi);
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAF48);
 

@@ -5,7 +5,21 @@
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00188D98);
+void _m2c_func_00188D98_Sg_MFIFOSync(void) __asm__("Sg_MFIFOSync");
+void func_00188D98(s32 arg0, s32 arg1) {
+    s32 temp_2;
+
+    _m2c_func_00188D98_Sg_MFIFOSync();
+    func_002DA610(0, 0);
+    temp_2 = func_002DB6D8(2);
+    func_002DBF78(temp_2, 0, 0x100);
+    *(volatile u8 *)(temp_2) |= 1;
+    *(volatile u8 *)(temp_2) |= 0x40;
+    *(volatile u8 *)(temp_2) &= 0x7F;
+    *(u8 *)(temp_2) &= 0xF3;
+    func_002F8660(0);
+    func_002DBB00((S2DmaCtl *) temp_2, arg0, arg1);
+}
 
 void func_00188E40(Sys597F00 *s, int a) {
     if (Sg_GetDispMode() == 0) {

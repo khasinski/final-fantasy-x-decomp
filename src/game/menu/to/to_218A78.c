@@ -1,4 +1,5 @@
 /* tu_243 0x218a78-0x21d048: low; ~TOBtlDrawInfoWin (config/tu_map.tsv) */
+#define func_0021BAB8 _hdr_func_0021BAB8
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q5.h"
@@ -9,6 +10,7 @@
 #include "ffx/s4.h"
 #include "ffx/text.h"
 #include "ffx/t4.h"
+#undef func_0021BAB8
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_00218A78);
 
@@ -639,7 +641,20 @@ void func_0021B9C8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_0021BAB8);
+void _m2c_func_0021BAB8_NkzSetLuluLimitTbl(s32) __asm__("NkzSetLuluLimitTbl");
+void _m2c_func_0021BAB8_func_0021A7C0(float) __asm__("func_0021A7C0");
+float _m2c_func_0021BAB8_func_00265FF8(s32) __asm__("func_00265FF8");
+void func_0021BAB8(s32 arg0) {
+    s32 temp_16;
+
+    temp_16 = arg0 - 0x3078;
+    _m2c_func_0021BAB8_func_0021A7C0(_m2c_func_0021BAB8_func_00265FF8(temp_16));
+    _m2c_func_0021BAB8_NkzSetLuluLimitTbl(temp_16);
+    D_006926A8.b17 = 1;
+    D_006926A8.b16 = *D_006926D8;
+    D_006926A8.h14 = 3;
+    D_006926A8.state = 1;
+}
 
 void func_0021BB20(void)
 {

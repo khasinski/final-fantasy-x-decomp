@@ -511,7 +511,71 @@ void func_0014E800(void)
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14D940", AtelEventSetUp);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14D940", AtelEventRemove);
+void _m2c_AtelEventRemove_MsBattleExeClear(void) __asm__("MsBattleExeClear");
+void _m2c_AtelEventRemove_func_00136430(float v) __asm__("func_00136430");
+void _m2c_AtelEventRemove_func_00144D48(int v) __asm__("func_00144D48");
+s32 _m2c_AtelEventRemove_AtelActorRemove() __asm__("AtelActorRemove");
+s32 _m2c_AtelEventRemove_AtelClearSnd3dWorkAll() __asm__("AtelClearSnd3dWorkAll");
+s32 _m2c_AtelEventRemove_AtelEventRemoveSep(s32) __asm__("AtelEventRemoveSep");
+s32 _m2c_AtelEventRemove_func_00138700() __asm__("func_00138700");
+s32 _m2c_AtelEventRemove_func_001394E0() __asm__("func_001394E0");
+s32 _m2c_AtelEventRemove_func_00139EA0(s32) __asm__("func_00139EA0");
+s32 _m2c_AtelEventRemove_func_00145188(s32) __asm__("func_00145188");
+s32 _m2c_AtelEventRemove_func_00145938() __asm__("func_00145938");
+s32 _m2c_AtelEventRemove_func_0014D4B0() __asm__("func_0014D4B0");
+s32 _m2c_AtelEventRemove_func_0014DAC0(s32) __asm__("func_0014DAC0");
+s32 _m2c_AtelEventRemove_func_0014DDB8() __asm__("func_0014DDB8");
+s32 _m2c_AtelEventRemove_op_event_effect_free() __asm__("op_event_effect_free");
+void AtelEventRemove(void) {
+    if (_m2c_AtelEventRemove_func_00145188(0) != 0) {
+        func_0014CB20();
+        AtelClearPauseFlag();
+        _m2c_AtelEventRemove_op_event_effect_free();
+        SndSepLock(1);
+        SndStopStream();
+        func_002D3FF0(0);
+        func_002D6630();
+        func_002D3FF0(0);
+        func_002D6630();
+        _m2c_AtelEventRemove_MsBattleExeClear();
+        _m2c_AtelEventRemove_func_00138700();
+        func_0014AF68(-1);
+        AtelRegistAlbhedDic(0, 0);
+        AtelSetEncountBattleEndStatus(0, 0, 0);
+        _m2c_AtelEventRemove_func_00145938();
+        func_0014B150(-1, -1, -1, -1);
+        func_0019CE30(0);
+        _m2c_AtelEventRemove_func_0014D4B0();
+        _m2c_AtelEventRemove_func_00144D48(0);
+        func_00138C78(0);
+        SndMusicStop(0x8AU);
+        SndMusicClear(0x8AU);
+        func_0014D7D0(0);
+        func_001487B0();
+        func_0014DC48();
+        MsEventEffectFree();
+        func_0014AEA0();
+        SndEventClearPcToActorFoot();
+        _m2c_AtelEventRemove_AtelActorRemove();
+        MsBattleDisposeAtEvent();
+        _m2c_AtelEventRemove_AtelClearSnd3dWorkAll();
+        _m2c_AtelEventRemove_func_00136430(0.0f);
+        func_00136440(0.0f);
+        SndRemoveFootSepWork();
+        SndClearFootStatus();
+        _m2c_AtelEventRemove_AtelEventRemoveSep(1);
+        _m2c_AtelEventRemove_func_00139EA0(0);
+        func_002D7C28(-2);
+        func_00145148(0);
+    }
+    _m2c_AtelEventRemove_func_001394E0();
+    func_0014D9F8(0);
+    _m2c_AtelEventRemove_func_0014DAC0(0);
+    func_002D67F8(0);
+    _m2c_AtelEventRemove_func_0014DDB8();
+    movie_stop_prog();
+    func_0014BF60();
+}
 
 void func_0014F0D0(void)
 {

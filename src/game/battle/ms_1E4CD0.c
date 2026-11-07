@@ -483,9 +483,49 @@ int func_001E6CF8(int v) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E6D18);
+s32 func_001E6D18(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_16;
+    s32 temp_17;
+    s32 temp_18;
+    s32 temp_19;
+    s32 temp_20;
+    s32 temp_21;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E6E08);
+    temp_21 = AtelPopStackInteger(arg0, arg2);
+    temp_20 = AtelPopStackInteger(arg0, arg2);
+    temp_19 = AtelPopStackInteger(arg0, arg2);
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_17 = func_001E6CF8(AtelPopStackInteger(arg0, arg2));
+    temp_16 = D_003172F0.h32[1].w14;
+    D_003172F0.f1980 = temp_18;
+    if (temp_16 != 0) {
+        func_00217610(temp_17, temp_16 + *(u16 *)((((temp_18 * 2) + MsGetSaveConfigHiragana()) * 4) + temp_16), temp_19, temp_20, temp_21);
+    }
+    return 0;
+}
+
+s32 func_001E6E08(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_16;
+    s32 temp_17;
+    s32 temp_18;
+    s32 temp_19;
+    s32 temp_20;
+    s32 temp_21;
+
+    temp_21 = AtelPopStackInteger(arg0, arg2);
+    temp_20 = AtelPopStackInteger(arg0, arg2);
+    temp_19 = AtelPopStackInteger(arg0, arg2);
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_17 = func_001E6CF8(AtelPopStackInteger(arg0, arg2));
+    temp_16 = D_003172F0.h32[0].w14;
+    D_003172F0.f1980 = temp_18;
+    if (temp_16 != 0) {
+        if (func_001BD320() != 0) {
+            func_00217610(temp_17, temp_16 + *(u16 *)((((temp_18 * 2) + MsGetSaveConfigHiragana()) * 4) + temp_16), temp_19, temp_20, temp_21);
+        }
+    }
+    return 0;
+}
 
 int func_001E6F08(Actor *a, void *unused, ScriptCtx *ctx)
 {

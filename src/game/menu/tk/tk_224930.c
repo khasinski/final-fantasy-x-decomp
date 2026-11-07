@@ -1,4 +1,5 @@
 /* tu_250 0x224930-0x226bf0: low; ~Tk (config/tu_map.tsv) */
+#define func_00225E88 _hdr_func_00225E88
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -7,6 +8,7 @@
 #include "ffx/v5.h"
 #include "ffx/g3.h"
 #include "ffx/u4.h"
+#undef func_00225E88
 
 s32 func_00224930(void)
 {
@@ -239,7 +241,29 @@ void func_00225E70(int a0) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_224930", func_00225E88);
+CmdRec *_m2c_func_00225E88_func_00200870(CmdRec *, s32, s32, s32, s32, s32, s32, s32) __asm__("func_00200870");
+/* DEBT(CAST) */
+void func_00225E88(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    CmdRec *temp_16;
+    CmdRec *temp_2;
+    CmdRec *temp_2_2;
+    s32 temp_3;
+
+    if (arg5 < arg6) {
+        temp_16 = D_0069384C;
+        temp_2 = ((CmdRec *)((u8 *)temp_16 + (0x10)));
+        D_0069384C = temp_2;
+        temp_2_2 = _m2c_func_00225E88_func_00200870(temp_2, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        D_0069384C = temp_2_2;
+        temp_3 = ((u32) ((((s32)((u8 *)temp_2_2 - (u8 *)temp_16))) + 0xF) >> 4) - 1;
+        temp_16->b2 = 0;
+        temp_16->w0 = temp_3;
+        temp_16->wC = temp_3 | 0x50000000;
+        temp_16->w4 = 0;
+        temp_16->w8 = 0;
+        temp_16->b3 = 0x10;
+    }
+}
 
 void func_00225F30(int x, int y, int k)
 {

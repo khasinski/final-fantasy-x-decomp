@@ -1,4 +1,6 @@
 /* tu_101 0x157798-0x15a560: low; ~movie (config/tu_map.tsv) */
+#define func_00158410 _hdr_func_00158410
+#define func_00158FE8 _hdr_func_00158FE8
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/w2.h"
@@ -10,6 +12,8 @@
 #include "ffx/q3.h"
 #include "ffx/u1.h"
 #include "ffx/v1.h"
+#undef func_00158FE8
+#undef func_00158410
 
 u8 *func_00157798(void)
 {
@@ -100,7 +104,34 @@ INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157BE8);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158200);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158410);
+extern s32 _m2c_func_00158410_D_0030D408 __asm__("D_0030D408");
+extern s32 _m2c_func_00158410_D_0030D410 __asm__("D_0030D410");
+extern s32 _m2c_func_00158410_D_0058FE60 __asm__("D_0058FE60");
+extern s32 _m2c_func_00158410_D_0058FE64 __asm__("D_0058FE64");
+s32 _m2c_func_00158410_func_00158200(s32, s32, s32, s32, s32, s32, s32) __asm__("func_00158200");
+s32 _m2c_func_00158410_func_001656D8() __asm__("func_001656D8");
+/* DEBT(CAST) */
+void func_00158410(void) {
+    s32 temp_16;
+    s32 temp_16_2;
+    s32 temp_2;
+    u32 *temp_17;
+
+    temp_16 = _m2c_func_00158410_D_0030D410;
+    if ((temp_16 == 2) && (_m2c_func_00158410_D_0030D408 != 0)) {
+        if (((*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7144))) != 0) && ((*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7148))) != 0)) {
+            func_002DA610(0, 0);
+            temp_17 = func_002DB6D8(2);
+            temp_16_2 = ((*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7130))) == 0) ? 0 : temp_16;
+            temp_2 = Sg_PacketGetPtr();
+            _m2c_func_00158410_func_00158200(temp_2, _m2c_func_00158410_D_0058FE64, (*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF714C))), (*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7150))), (*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7154))), (*(s32 *)((u8 *)(_m2c_func_00158410_D_0058FE60) + (0xF7158))), temp_16_2);
+            func_002F8660(0);
+            func_002DBA28(temp_17, temp_2);
+            func_002DA610(0, 0);
+        }
+    }
+    _m2c_func_00158410_func_001656D8();
+}
 
 void func_00158500(void) {
 }
@@ -260,7 +291,20 @@ int func_00158FA8(Actor *a, void *op, ScriptCtx *ctx) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158FE8);
+u8 *_m2c_func_00158FE8_MsGetSaveMenu() __asm__("MsGetSaveMenu");
+void func_00158FE8(void) {
+    u64 tmp = *_m2c_func_00158FE8_MsGetSaveMenu();
+    __asm__("" : "+r"(tmp));
+    if ((tmp >> 7) != 0) {
+        D_0030D3F0 = 1;
+    } else {
+        D_0030D3F0 = 0;
+    }
+    if (D_0058FE50 != 0) {
+        D_0058FE54->w50714 = D_0030D3F0;
+        D_0058FE54->w506C8 = D_0030D3F0;
+    }
+}
 
 s32 func_00159050(Actor *arg0, int unused1, ScriptCtx *arg2)
 {

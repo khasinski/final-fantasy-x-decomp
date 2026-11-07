@@ -63,13 +63,38 @@ char *func_00135DA0(int i) {
     return D_0056A518;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_135B90", func_00135DD0);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_00135DD0(s32 arg0) {
+    register CbEnt *var_4 __asm__("$4");
+    register s32 var_3 __asm__("$3");
+    s32 var_5;
+
+    var_5 = 0;
+    var_4 = D_0058CF48[arg0];
+    __asm__ volatile("" : "+r"(var_5));
+    if (var_4->fn != 0) {
+        var_3 = 0;
+        var_5 = 1;
+        do {
+            var_3 += 1;
+            if (var_3 >= 0x10) {
+                break;
+            }
+            var_4 = (CbEnt *)((u8 *)var_4 + 0x10);
+            if (var_4->fn == 0) {
+                break;
+            }
+            var_5 += 1;
+        } while (1);
+    }
+    return var_5;
+}
 
 void func_00135E28(s32 a)
 {
     s32 remaining;
 
-    remaining = func_00135DD0();
+    remaining = func_00135DD0(a);
     if (remaining > 0)
     {
         do

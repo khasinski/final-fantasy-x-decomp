@@ -1,10 +1,12 @@
 /* tu_182 0x1b3388-0x1b4100: medium; ~Ms (config/tu_map.tsv) */
+#define func_001B34B8 _hdr_func_001B34B8
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
 #include "ffx/s2.h"
 #include "ffx/u2.h"
 #include "ffx/v2.h"
+#undef func_001B34B8
 
 void func_001B3388(void) {
     GsTbl *t = D_003172F0.pF4;
@@ -42,7 +44,45 @@ u8 *func_001B3448(int a, int n) {
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", func_001B34B8);
+void *_m2c_func_001B34B8_MsBtlListEncount(s32) __asm__("MsBtlListEncount");
+void *_m2c_func_001B34B8_MsBtlListField() __asm__("MsBtlListField");
+u8 *_m2c_func_001B34B8_func_001B3448(s32, s32) __asm__("func_001B3448");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_001B34B8(s32 arg0, s32 *arg1, s32 *arg2) {
+    register s32 _cond __asm__("$2");
+    register s32 var_16 __asm__("$16");
+    register s32 var_17 __asm__("$17");
+    s32 var_3;
+    s32 var_3_2;
+    u8 *temp_2_2;
+    u8 *temp_2_3;
+    register void * temp_21 __asm__("$21");
+    void *temp_2;
+
+    temp_21 = _m2c_func_001B34B8_MsBtlListField(arg0);
+    temp_2 = _m2c_func_001B34B8_MsBtlListEncount(arg0);
+    var_3_2 = *arg1;
+    if ((var_3_2 < 0) || (var_16 = 0, ((var_3_2 < (s32) (*(u8 *)((u8 *)(temp_2) + (1)))) == 0))) {
+        *arg1 = 0;
+        var_3_2 = 0;
+        var_16 = 0;
+    }
+    var_17 = 0;
+    if (var_3_2 > 0) {
+        do {
+            temp_2_2 = _m2c_func_001B34B8_func_001B3448(arg0, var_16);
+            var_16 += 1;
+            var_17 += *temp_2_2;
+        } while ((_cond = (var_16 < *arg1)) != 0);
+    }
+    temp_2_3 = _m2c_func_001B34B8_func_001B3448(arg0, *arg1);
+    var_3 = *arg2;
+    if ((var_3 < 0) || (var_3 >= (s32) *temp_2_3)) {
+        *arg2 = 0;
+        var_3 = 0;
+    }
+    return (*(s16 *)((u8 *)(temp_21) + (4))) + var_17 + var_3;
+}
 
 int MsBtlListFieldNum(int id) {
     int r = -1;

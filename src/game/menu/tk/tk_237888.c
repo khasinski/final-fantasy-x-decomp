@@ -1,4 +1,5 @@
 /* tu_263 0x237888-0x23a450: low; ~Tk (config/tu_map.tsv) */
+#define func_0023A298 _hdr_func_0023A298
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -8,6 +9,7 @@
 #include "ffx/s5.h"
 #include "ffx/s6.h"
 #include "ffx/u3.h"
+#undef func_0023A298
 
 void func_00237888(void)
 {
@@ -120,7 +122,19 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002381F0);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002382D0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002383F8);
+/* DEBT(FAKE) */
+s32 func_002383F8(void) {
+    register s32 v0 __asm__("$2");
+    s32 temp_16;
+
+    v0 = D_00693FF4;
+    if (v0 == 0) {
+        __asm__ volatile("" : "=r"(v0));
+        return 0;
+    }
+    temp_16 = func_002381F0();
+    return MsGetGIL() >= temp_16;
+}
 
 void func_00238440(Task *t)
 {
@@ -639,4 +653,52 @@ void func_0023A250(int a0, Sub1C *a1)
     TODapsPrintf(D_005726C8, a0, buf);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_0023A298);
+void _m2c_func_0023A298_TODapsSetPos(int x, int y) __asm__("TODapsSetPos");
+s32 _m2c_func_0023A298_func_0014B0A0(void) __asm__("func_0014B0A0");
+extern s32 _m2c_func_0023A298_D_00326040 __asm__("D_00326040");
+extern s32 _m2c_func_0023A298_D_005726D0 __asm__("D_005726D0");
+extern s32 _m2c_func_0023A298_D_005726D8 __asm__("D_005726D8");
+extern s32 _m2c_func_0023A298_D_005726E8 __asm__("D_005726E8");
+extern s32 _m2c_func_0023A298_D_005726F8 __asm__("D_005726F8");
+extern s32 _m2c_func_0023A298_D_00572708 __asm__("D_00572708");
+extern s32 _m2c_func_0023A298_D_00572718 __asm__("D_00572718");
+extern s32 _m2c_func_0023A298_D_00572728 __asm__("D_00572728");
+extern s32 _m2c_func_0023A298_D_00572738 __asm__("D_00572738");
+extern s32 _m2c_func_0023A298_D_00572748 __asm__("D_00572748");
+extern s32 _m2c_func_0023A298_D_00572758 __asm__("D_00572758");
+extern s32 _m2c_func_0023A298_D_00572760 __asm__("D_00572760");
+extern s32 _m2c_func_0023A298_D_00572768 __asm__("D_00572768");
+extern s32 _m2c_func_0023A298_D_00572770 __asm__("D_00572770");
+extern s32 _m2c_func_0023A298_D_00572778 __asm__("D_00572778");
+extern s32 _m2c_func_0023A298_D_00572780 __asm__("D_00572780");
+extern s32 _m2c_func_0023A298_D_00572788 __asm__("D_00572788");
+void func_0023A298(void) {
+    s32 temp_17;
+    s32 temp_18;
+    s32 temp_19;
+
+    temp_17 = func_00220318();
+    temp_18 = TOMenuGetControlPadRep();
+    temp_19 = TOMenuGetControlPadTrg();
+    if (func_0020D540() != 0) {
+        _m2c_func_0023A298_TODapsSetPos(0x138, 0xB0);
+        TODapsPrintf(&_m2c_func_0023A298_D_005726D0);
+        TODapsPrintf(&_m2c_func_0023A298_D_005726D8, func_00224930());
+        TODapsPrintf(&_m2c_func_0023A298_D_005726E8, func_00243450());
+        TODapsPrintf(&_m2c_func_0023A298_D_005726F8, func_00242040());
+        __asm__ volatile("" : : : "memory");
+        TODapsPrintf(&_m2c_func_0023A298_D_00572708, D_00694080);
+        TODapsPrintf(&_m2c_func_0023A298_D_00572718, _m2c_func_0023A298_func_0014B0A0());
+        TODapsPrintf(&_m2c_func_0023A298_D_00572728, temp_17);
+        TODapsPrintf(&_m2c_func_0023A298_D_00572738, temp_18);
+        TODapsPrintf(&_m2c_func_0023A298_D_00572748, temp_19);
+        __asm__ volatile("" : : : "memory");
+        func_0023A1F8(&_m2c_func_0023A298_D_00572758, D_00326030);
+        func_0023A1F8(&_m2c_func_0023A298_D_00572760, D_00693FD0);
+        func_0023A1F8(&_m2c_func_0023A298_D_00572768, D_00693FD4);
+        func_0023A1F8(&_m2c_func_0023A298_D_00572770, D_00693FD8);
+        func_0023A1F8(&_m2c_func_0023A298_D_00572778, D_00693FDC);
+        func_0023A1F8(&_m2c_func_0023A298_D_00572780, D_00693FE0);
+        func_0023A250(&_m2c_func_0023A298_D_00572788, &_m2c_func_0023A298_D_00326040);
+    }
+}

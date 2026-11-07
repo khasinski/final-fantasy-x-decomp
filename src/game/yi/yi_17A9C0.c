@@ -1,9 +1,11 @@
 /* tu_128 0x17a9c0-0x17db20: low; unk_17A9C0 (config/tu_map.tsv) */
+#define func_0017AB10 _hdr_func_0017AB10
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
 #include "ffx/v2.h"
 #include "ffx/r2.h"
+#undef func_0017AB10
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017A9C0);
 
@@ -19,21 +21,83 @@ void func_0017AAE8(Obj17A110 *o) {
     o->w50 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AB10);
+/* DEBT(CAST) */
+void func_0017AB10(float *arg0, float *arg1) {
+    float *var_4;
+    float *var_5;
+    float temp_f0;
+    s32 var_2;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AB40);
+    var_4 = arg0;
+    var_5 = arg1;
+    var_2 = 3;
+    do {
+        temp_f0 = *var_5;
+        var_2 -= 1;
+        var_5 = (float *)((u8 *)var_5 + (4));
+        *var_4 = temp_f0;
+        var_4 = (float *)((u8 *)var_4 + (4));
+    } while (var_2 >= 0);
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017ABA8);
+/* DEBT(CAST) */
+void func_0017AB40(void *arg0, void *arg1) {
+    (*(u16 *)((u8 *)(arg0) + (0x80))) = (u16) (*(u16 *)((u8 *)(arg1) + (0)));
+    (*(u16 *)((u8 *)(arg0) + (0x82))) = (u16) (*(u16 *)((u8 *)(arg1) + (2)));
+    (*(u16 *)((u8 *)(arg0) + (0x84))) = (u16) (*(u16 *)((u8 *)(arg1) + (4)));
+    func_0017AB10(arg0 + 0x50, arg1 + 0x50);
+    func_0017AB10(arg0 + 0x60, arg1 + 0x60);
+    func_0017AB10(arg0 + 0x70, arg1 + 0x70);
+}
+
+/* DEBT(CAST) */
+void func_0017ABA8(void *arg0, void *arg1) {
+    (*(u16 *)((u8 *)(arg0) + (0))) = (u16) (*(u16 *)((u8 *)(arg1) + (0x80)));
+    (*(u16 *)((u8 *)(arg0) + (2))) = (u16) (*(u16 *)((u8 *)(arg1) + (0x82)));
+    (*(u16 *)((u8 *)(arg0) + (4))) = (u16) (*(u16 *)((u8 *)(arg1) + (0x84)));
+    func_0017AB10(arg0 + 0x50, arg1 + 0x50);
+    func_0017AB10(arg0 + 0x60, arg1 + 0x60);
+    func_0017AB10(arg0 + 0x70, arg1 + 0x70);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AC10);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AC88);
+/* DEBT(CAST) */
+void func_0017AC88(void *arg0, void *arg1) {
+    (*(u16 *)((u8 *)(arg0) + (0))) = (u16) (*(u16 *)((u8 *)(arg1) + (0x30)));
+    (*(float *)((u8 *)(arg0) + (0x40))) = (float) (*(float *)((u8 *)(arg1) + (0x38)));
+    (*(u16 *)((u8 *)(arg0) + (2))) = (u16) (*(u16 *)((u8 *)(arg1) + (0x32)));
+    (*(float *)((u8 *)(arg0) + (0x44))) = (float) (*(float *)((u8 *)(arg1) + (0x3C)));
+    (*(s32 *)((u8 *)(arg0) + (4))) = (s32) (*(u16 *)((u8 *)(arg1) + (0x36)));
+    (*(s32 *)((u8 *)(arg0) + (0x4C))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x48)));
+    func_0017AB10(arg0 + 0x10, arg1);
+    func_0017AB10(arg0 + 0x20, arg1 + 0x10);
+    func_0017AB10(arg0 + 0x30, arg1 + 0x20);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AD00);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AD78);
+/* DEBT(CAST) */
+void func_0017AD78(void *arg0, void *arg1) {
+    (*(s32 *)((u8 *)(arg0) + (0))) = (s32) (*(s32 *)((u8 *)(arg1) + (0)));
+    (*(s64 *)((u8 *)(arg0) + (0x20))) = (s64) (*(s64 *)((u8 *)(arg1) + (0x20)));
+    (*(s32 *)((u8 *)(arg0) + (4))) = (s32) (*(s32 *)((u8 *)(arg1) + (4)));
+    (*(s32 *)((u8 *)(arg0) + (8))) = (s32) (*(s32 *)((u8 *)(arg1) + (8)));
+    (*(s32 *)((u8 *)(arg0) + (0xC))) = (s32) (*(s32 *)((u8 *)(arg1) + (0xC)));
+    (*(s32 *)((u8 *)(arg0) + (0x10))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x10)));
+    (*(s32 *)((u8 *)(arg0) + (0x14))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x14)));
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017ADB8);
+/* DEBT(CAST) */
+void func_0017ADB8(void *arg0, void *arg1) {
+    (*(s32 *)((u8 *)(arg0) + (0))) = (s32) (*(s32 *)((u8 *)(arg1) + (0)));
+    (*(s64 *)((u8 *)(arg0) + (0x20))) = (s64) (*(s64 *)((u8 *)(arg1) + (0x20)));
+    (*(s32 *)((u8 *)(arg0) + (4))) = (s32) (*(s32 *)((u8 *)(arg1) + (4)));
+    (*(s32 *)((u8 *)(arg0) + (8))) = (s32) (*(s32 *)((u8 *)(arg1) + (8)));
+    (*(s32 *)((u8 *)(arg0) + (0xC))) = (s32) (*(s32 *)((u8 *)(arg1) + (0xC)));
+    (*(s32 *)((u8 *)(arg0) + (0x10))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x10)));
+    (*(s32 *)((u8 *)(arg0) + (0x14))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x14)));
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017ADF8);
 
@@ -196,13 +260,20 @@ INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C470);
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CA18);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C530);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CCF8);
+void _m2c_func_0017CCF8_func_002DAB10(void *ctx, int a, int b, int c, int d, int e, int f, int g) __asm__("func_002DAB10");
+void func_0017CCF8(s32 arg0) {
+    u8 sp[0x70];
+    _m2c_func_0017CCF8_func_002DAB10(sp, 0x3C00, 1, 0, 0, 0, 0x40, 0x400);
+    func_0017CA18(sp, arg0 + 0x276B0);
+}
 
 void func_0017CD50(void *p) {
     func_002EF0D0(p, 0, 0x40);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CD60);
+void func_0017CD60(void *arg0) {
+    func_002EF0D0(arg0, 0, 0x40);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CD70);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C5F0);

@@ -1,4 +1,5 @@
 /* tu_160 0x19a708-0x19bad8: low; rcbgFP (config/tu_map.tsv) */
+#define func_0019B810 _hdr_func_0019B810
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -7,6 +8,7 @@
 #include "ffx/w3.h"
 #include "ffx/g2.h"
 #include "vu0.h"
+#undef func_0019B810
 
 void rcbgSetWorldMatrix(void *dst) {
     func_002DD0C0(D_00313850, dst);
@@ -155,9 +157,18 @@ void func_0019AD20(R2Vt2 *o) {
     o->pC = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", rcbgFPm097Proc010);
+void rcbgFPm097Proc010(void *p)
+{
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019AD80);
+extern s32 _m2c_func_0019AD80_D_00313990 __asm__("D_00313990");
+s32 _m2c_func_0019AD80_func_0019ADC0() __asm__("func_0019ADC0");
+/* DEBT(CAST) */
+void func_0019AD80(void *arg0) {
+    if (func_0019A9F8(&_m2c_func_0019AD80_D_00313990, 9) != 0) {
+        (*(s32 **)((u8 *)(arg0) + (8))) = &_m2c_func_0019AD80_func_0019ADC0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019ADC0);
 
@@ -273,9 +284,24 @@ void func_0019B6F0(V2Obj7C *o) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", rcbgFPm173ProcKieru);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019B810);
+s32 _m2c_func_0019B810_AtelGetEventCharHandleFromID(s32) __asm__("AtelGetEventCharHandleFromID");
+/* DEBT(CAST) */
+void func_0019B810(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019B878);
+    (*(s32 *)((u8 *)(arg0) + (0x10))) = _m2c_func_0019B810_AtelGetEventCharHandleFromID(arg1);
+    temp_2 = _m2c_func_0019B810_AtelGetEventCharHandleFromID(arg2);
+    (*(s32 *)((u8 *)(arg0) + (0x18))) = arg3;
+    (*(s32 *)((u8 *)(arg0) + (0x14))) = temp_2;
+    (*(s32 *)((u8 *)(arg0) + (0x1C))) = 0;
+    (*(s32 *)((u8 *)(arg0) + (0x20))) = 1;
+    (*(s32 *)((u8 *)(arg0) + (0x24))) = 0;
+}
+
+/* DEBT(CAST) */
+void func_0019B878(void *p) {
+    (*(s32 *)((u8 *)(p) + (0x24))) = 1;
+}
 
 void *func_0019B888(void) {
     void *p = _rcAlloc(0x10, D_0056DB98, 0x3A3);
@@ -297,8 +323,17 @@ void func_0019B8F0(R2Vt2 *o) {
     o->pC = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", rcbgFPm565Proc010);
+void rcbgFPm565Proc010(void *p)
+{
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019B950);
+extern s32 _m2c_func_0019B950_D_00313BD0 __asm__("D_00313BD0");
+s32 _m2c_func_0019B950_func_0019B990() __asm__("func_0019B990");
+/* DEBT(CAST) */
+void func_0019B950(void *arg0) {
+    if (func_0019A9F8(&_m2c_func_0019B950_D_00313BD0, 3) != 0) {
+        (*(s32 **)((u8 *)(arg0) + (8))) = &_m2c_func_0019B950_func_0019B990;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019B990);

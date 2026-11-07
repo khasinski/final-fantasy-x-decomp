@@ -28,7 +28,22 @@ void rcbgPSimInit(void *p) {
     o->pC = func_00198730;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgPSim", rcbgPSimCreate);
+/* DEBT(CAST) */
+void rcbgPSimCreate(void *p) {
+    s32 temp_4_2;
+    void *temp_4;
+
+    temp_4 = (*(void **)((u8 *)(p) + (0x14)));
+    if (temp_4 != 0) {
+        rcbgModelDelete(temp_4);
+        (*(void **)((u8 *)(p) + (0x14))) = 0;
+    }
+    temp_4_2 = (*(s32 *)((u8 *)(p) + (0x18)));
+    if (temp_4_2 != 0) {
+        func_001A43F8(temp_4_2);
+        (*(s32 *)((u8 *)(p) + (0x18))) = 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgPSim", func_00197E10);
 

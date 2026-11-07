@@ -598,7 +598,47 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147F10);
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147FA8);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_001481F0);
+s32 _m2c_func_001481F0_AtelStopSoundAll() __asm__("AtelStopSoundAll");
+s32 _m2c_func_001481F0_TOReset1() __asm__("TOReset1");
+s32 _m2c_func_001481F0_func_00138260() __asm__("func_00138260");
+s32 _m2c_func_001481F0_func_0013A1B0(s32, s32) __asm__("func_0013A1B0");
+s32 _m2c_func_001481F0_func_00147F10() __asm__("func_00147F10");
+s32 _m2c_func_001481F0_func_0014D4B0() __asm__("func_0014D4B0");
+s32 _m2c_func_001481F0_func_00209B68() __asm__("func_00209B68");
+/* DEBT(CAST) */
+void func_001481F0(void) {
+    s32 temp_16;
+
+    _m2c_func_001481F0_TOReset1();
+    MsBtlGetInit();
+    _m2c_func_001481F0_func_0014D4B0();
+    func_0014CED0(-1, 1);
+    if (AtelGetMusicNumber() >= 0) {
+        SndMusicReplayPointClear(AtelGetMusicNumber());
+    }
+    if (SndGetNowPlayMusic() >= 0) {
+        SndMusicReplayPointClear(SndGetNowPlayMusic());
+        SndMusicVolumeFadeOut(SndGetNowPlayMusic(), 0x78);
+    }
+    SndMusicStop(0x8AU);
+    SndMusicClear(0x8AU);
+    AtelRegistMusicNumber(-1);
+    SndSepClearAll();
+    _m2c_func_001481F0_AtelStopSoundAll();
+    func_002D7C28(-2);
+    func_00149200();
+    func_00138C08();
+    func_0014DB70(6);
+    temp_16 = AtelChangeCurrentCtrl(0);
+    D_0058E3D8->flags |= 0x80;
+    (*(s32 *)((u8 *)(D_0058E3D8) + (0x210))) = (s32) ((*(s32 *)((u8 *)(D_0058E3D8) + (0x210))) | 2);
+    func_00147EE0();
+    _m2c_func_001481F0_func_00147F10();
+    _m2c_func_001481F0_func_00209B68();
+    _m2c_func_001481F0_func_00138260();
+    _m2c_func_001481F0_func_0013A1B0(0x17, 0);
+    AtelSetCurrentCtrl(temp_16);
+}
 
 void func_00148320(void)
 {

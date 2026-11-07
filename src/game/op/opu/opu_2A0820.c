@@ -1,11 +1,13 @@
 /* tu_319 0x2a0820-0x2a2220: medium; ~opu (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#define opu_unit _hdr_opu_unit
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w9.h"
 #include "ffx/t6.h"
 #include "ffx/v6.h"
 #include "ffx/w10.h"
+#undef opu_unit
 
 T6_Blk *func_002A0820(T6_BlkPool *p, int arg, int w, int key)
 {
@@ -29,7 +31,35 @@ T6_Blk *func_002A0820(T6_BlkPool *p, int arg, int w, int key)
 void func_002A08D0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_unit);
+void _m2c_opu_unit_func_00295C50(void *) __asm__("func_00295C50");
+void _m2c_opu_unit_func_00295CA0(void *, void *, s32) __asm__("func_00295CA0");
+s32 _m2c_opu_unit_func_00295D58(void *, u32) __asm__("func_00295D58");
+/* DEBT(CAST) */
+void *opu_unit(void *arg0, void *arg1) {
+    s32 temp_17;
+    s32 temp_2;
+    void *temp_16;
+    void *temp_19;
+
+    if ((*(s16 *)((u8 *)(arg0) + (0x212))) != 0) {
+        (*(void **)((u8 *)(arg0) + (0))) = arg0;
+        return arg1 + 4;
+    }
+    temp_16 = arg0 + 0x300;
+    temp_17 = (*(s32 *)((u8 *)(arg0) + (0x220)));
+    temp_19 = (*(s32 *)((u8 *)(arg0) + (0x320))) + (_m2c_opu_unit_func_00295D58(temp_16, (u32) ((*(u16 *)((u8 *)(arg0) + (0x21A))) & 0x3000) >> 0xC) << 8);
+    _m2c_opu_unit_func_00295C50(temp_19);
+    _m2c_opu_unit_func_00295CA0(temp_16, temp_19, temp_17);
+    (*(u16 *)((u8 *)(temp_19) + (0x1A))) = (u16) (*(u16 *)((u8 *)(arg0) + (0x302)));
+    temp_2 = (*(u16 *)((u8 *)(arg0) + (0x302))) + 1;
+    (*(u16 *)((u8 *)(arg0) + (0x302))) = temp_2;
+    if ((u32) (temp_2 & 0xFFFF) > 0xFFEFU) {
+        (*(s16 *)((u8 *)(arg0) + (0x302))) = -0x8000;
+    }
+    (*(void **)((u8 *)(temp_19) + (0))) = (void *) (arg1 + (*(s16 *)((u8 *)(arg1) + (2))));
+    (*(void **)((u8 *)(arg0) + (0))) = temp_19;
+    return arg1 + 4;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_unit_en);
 

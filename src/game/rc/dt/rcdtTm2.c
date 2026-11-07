@@ -147,4 +147,6 @@ int func_0019FB60(Obj19FB60 *o) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", rcefMainInit);
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", func_0019FBF8);
+s32 func_0019FBF8(void) {
+    return -1;
+}

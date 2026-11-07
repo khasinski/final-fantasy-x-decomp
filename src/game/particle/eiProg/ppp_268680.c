@@ -135,8 +135,31 @@ void func_00268CA8(void) {
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpSetRotMatrix);
 INCLUDE_RODATA("build/ee_asm/game/particle/eiProg/ppp_268680/rodata", jtbl_00574020);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_00268EE8);
+extern s32 _m2c_func_00268EE8_D_006A3A30 __asm__("D_006A3A30");
+void func_00268EE8(s32 arg0) {
+    s32 temp_4;
 
+    temp_4 = arg0 & 0xFF;
+    switch (temp_4) {                               /* irregular */
+    case 0:
+        func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
+        func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+        return;
+    case 1:
+        func_002DD0C0(D_006A39B0, D_006A3930);
+        func_002DCE08(D_006A39B0 + 0x30, D_006A3970, D_006A3930 + 0x30);
+        func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+        return;
+    case 2:
+        func_002DCE38(D_006A39B0, &_m2c_func_00268EE8_D_006A3A30, D_006A3930);
+        func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+        return;
+    default:
+        func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
+        func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+        return;
+    }
+}
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_00269050);
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpInfPrint);

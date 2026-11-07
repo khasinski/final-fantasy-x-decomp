@@ -5,17 +5,72 @@
 #include "ffx/v2.h"
 #include "ffx/t2.h"
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D0F8);
+s32 func_0018D0F8(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_18;
+    s32 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D158);
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = AtelPopStackInteger(arg0, arg2);
+    TkSetMapGroupDrawStatus(temp_2, temp_18);
+    return temp_2;
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D1A8);
+void _m2c_func_0018D158_yiRenderEnable(int v) __asm__("yiRenderEnable");
+s32 func_0018D158(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D218);
+    temp_2 = AtelPopStackInteger(arg0, arg2);
+    if (temp_2 != 0) {
+        _m2c_func_0018D158_yiRenderEnable(0x10);
+    } else {
+        yiRenderDisable(0x10);
+    }
+    return temp_2;
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D288);
+s32 func_0018D1A8(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_18;
+    s32 temp_2;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18D0F8", func_0018D2B0);
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = AtelPopStackInteger(arg0, arg2);
+    if (temp_18 != 0) {
+        pppFpIDon(temp_2 & 0xFFFF);
+    } else {
+        pppFpIDoff(temp_2 & 0xFFFF);
+    }
+    return temp_18;
+}
+
+s32 func_0018D218(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    s32 temp_18;
+    s32 temp_2;
+
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = AtelPopStackInteger(arg0, arg2);
+    if (temp_18 != 0) {
+        pppFpIDdispOn(temp_2 & 0xFFFF);
+    } else {
+        pppFpIDdispOff(temp_2 & 0xFFFF);
+    }
+    return temp_18;
+}
+
+s32 func_0018D288(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
+    func_00269B08(AtelPopStackInteger(arg0, arg2) & 0xFFFF);
+    return 1;
+}
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_0018D2B0(Actor *a, void *op, ScriptCtx *ctx) {
+    register s32 temp_17 __asm__("$17");
+    s32 temp_2;
+
+    temp_17 = AtelPopStackInteger(a, ctx);
+    temp_2 = AtelPopStackInteger(a, ctx);
+    (*(s32 *)((u8 *)(op) + (4))) = temp_17;
+    (*(s32 *)((u8 *)(op) + (0))) = temp_2;
+}
 
 int func_0018D310(Actor *a, ScrOpId *op, ScriptCtx *ctx) {
     int ret = 5;

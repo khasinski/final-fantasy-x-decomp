@@ -1,10 +1,12 @@
 /* tu_023 0x116cb8-0x117d38: medium; ~Ch (config/tu_map.tsv) */
+#define Ch_ClutCreate _hdr_Ch_ClutCreate
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/s0.h"
 #include "ffx/v0.h"
+#undef Ch_ClutCreate
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", Ch_TexDataMapping);
 
@@ -195,7 +197,55 @@ void Ch_ClutDispose(void *p)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", Ch_ClutMapping);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", Ch_ClutCreate);
+s32 _m2c_Ch_ClutCreate_Ch_ClutDispose(void *) __asm__("Ch_ClutDispose");
+s32 _m2c_Ch_ClutCreate_Ch_ClutEnable(void *, s32) __asm__("Ch_ClutEnable");
+s32 _m2c_Ch_ClutCreate_Ch_ClutMapping(void *, s32) __asm__("Ch_ClutMapping");
+s32 _m2c_Ch_ClutCreate_func_0011BB08(s32, void *, s32) __asm__("func_0011BB08");
+s32 _m2c_Ch_ClutCreate_func_0011C348(s32, s32) __asm__("func_0011C348");
+s32 _m2c_Ch_ClutCreate_func_002F0008(void *, s32 *, s32) __asm__("func_002F0008");
+s32 _m2c_Ch_ClutCreate_op_get_chr_status_stone() __asm__("op_get_chr_status_stone");
+s32 _m2c_Ch_ClutCreate_user_malloc(s32, s32, s8 *, s32) __asm__("user_malloc");
+extern s32 _m2c_Ch_ClutCreate_D_005699F8 __asm__("D_005699F8");
+/* DEBT(CAST) */
+void Ch_ClutCreate(void *arg0) {
+    u8 sp[0x20];
+    s16 temp_2;
+    s32 var_16;
+    s32 var_3;
+    s32 var_5;
+    s32 var_6;
+    void *temp_18;
+
+    temp_18 = (*(void **)((u8 *)((*(void **)((u8 *)(arg0) + (0x1D0)))) + (0x14)));
+    if (_m2c_Ch_ClutCreate_op_get_chr_status_stone() == 0) {
+        _m2c_Ch_ClutCreate_Ch_ClutDispose(arg0);
+        temp_2 = (*(s16 *)((u8 *)(arg0) + (0x6F4)));
+        var_5 = 0;
+        var_16 = temp_2 * 0x10;
+        if (temp_2 > 0) {
+            do {
+                var_6 = var_16 + 0x20;
+                if (var_6 & 0x7F) {
+                    var_3 = var_5 * 8;
+                    do {
+                        var_16 += 1;
+                        var_6 = var_16 + 0x20;
+                    } while (var_6 & 0x7F);
+                } else {
+                    var_3 = var_5 * 8;
+                }
+                var_5 += 1;
+                var_16 = var_6 + ((((*(s32 *)((u8 *)((*(void **)((u8 *)((var_3 + (*(s32 *)((u8 *)(temp_18) + (0x18))))) + (4)))) + (-0x10))) & 0x7FFF) + 2) * 0x10);
+            } while (var_5 < (s16) (u16) (*(s16 *)((u8 *)(arg0) + (0x6F4))));
+        }
+        _m2c_Ch_ClutCreate_func_0011C348(0x40, var_5);
+        (*(s32 *)((u8 *)(arg0) + (0x710))) = _m2c_Ch_ClutCreate_user_malloc(var_16, 6, D_005699E8, 0x1CA);
+        _m2c_Ch_ClutCreate_func_002F0008(sp, &_m2c_Ch_ClutCreate_D_005699F8, (*(s32 *)((u8 *)(arg0) + (4))));
+        _m2c_Ch_ClutCreate_func_0011BB08((*(s32 *)((u8 *)(arg0) + (0x710))), sp, -1);
+        _m2c_Ch_ClutCreate_Ch_ClutMapping(arg0, 1);
+        _m2c_Ch_ClutCreate_Ch_ClutEnable(arg0, 1);
+    }
+}
 
 s16 func_00117BB8(Chr *chr)
 {

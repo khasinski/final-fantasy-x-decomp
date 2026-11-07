@@ -15,8 +15,55 @@ s32 func_00126D68(Actor *a, void *op, ScriptCtx *ctx)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_126D68", func_00126DA0);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_126D68/rodata", jtbl_0056A440);
+void _m2c_func_00126DA0_TkCh_Dispose(int v) __asm__("TkCh_Dispose");
+/* DEBT(FAKE) */
+s32 func_00126DA0(Actor *a, void *op, ScriptCtx *ctx) {
+    register s32 _cond __asm__("$3");
+    s32 temp_20;
+    s32 var_17;
+    s32 var_6;
+    u16 temp_5;
+    register u8 temp_3 __asm__("$3");
+
+    temp_20 = AtelPopStackInteger(a, ctx);
+    temp_3 = a->stateAA;
+    switch (temp_3) {
+    case 0:
+    case 3:
+        break;
+    case 4:
+    case 5:
+        AtelSetBindObject(a);
+        break;
+    case 1:
+        var_17 = 0;
+        if (a->ptr9C != 0) {
+            __asm__ volatile("" : "+r"(var_17));
+            var_6 = var_17;
+            do {
+                AtelPushStackInteger(a, ctx, var_6);
+                var_17 += 1;
+                func_00126D68(a, op, ctx);
+                var_6 = var_17;
+            } while ((_cond = (var_17 < 2)) != 0);
+            _m2c_func_00126DA0_TkCh_Dispose((s32) a->ptr9C);
+            a->w38 &= ~0x10;
+            if (temp_20 != 0) {
+                ChN_DataDispose((s32) a->hA8, 0);
+                temp_5 = a->hA8;
+                func_002EF240(D_0056A420, temp_5, temp_5);
+            }
+            a->ptr9C = 0;
+        }
+        break;
+    case 2:
+        MsBindOffCamera(a);
+        break;
+    }
+    a->stateAA = 0;
+    a->hA8 = 0;
+    return 0;
+}
 
 int func_00126EC8(Actor *a, void *op, ScriptCtx *ctx) {
     AtelPushStackInteger(a, ctx, 0);

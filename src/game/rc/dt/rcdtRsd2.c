@@ -1,4 +1,6 @@
 /* tu_167 0x19d688-0x19f190: medium; rcdtRsd2 (config/tu_map.tsv) */
+#define func_0019DFB8 _hdr_func_0019DFB8
+#define func_0019DF68 _hdr_func_0019DF68
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -6,6 +8,8 @@
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/t2.h"
+#undef func_0019DF68
+#undef func_0019DFB8
 
 void func_0019D688(W3Pair *p)
 {
@@ -285,15 +289,32 @@ int func_0019DE30(W3Reader *r)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DE78);
+void func_0019DE78(W3Reader *r, void *dst, s32 n) {
+    func_002EEF1C(dst, r->cur, n);
+    func_0019D878(r, n);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DEB8);
 
 INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DF10);
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DF68);
+void _m2c_func_0019DF68_func_0019D878() __asm__("func_0019D878");
+/* DEBT(CAST) */
+u32 func_0019DF68(void *arg0) {
+    u32 temp_16 = *(*(u32 **)((u8 *)(arg0) + (4)));
+    _m2c_func_0019DF68_func_0019D878(arg0, 4);
+    return (temp_16 << 0x18) | ((temp_16 >> 0x18) | (((temp_16 >> 8) & 0xFF00) | ((temp_16 & 0xFF00) << 8)));
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DFB8);
+void _m2c_func_0019DFB8_func_0019D878() __asm__("func_0019D878");
+/* DEBT(CAST) */
+s32 func_0019DFB8(void *arg0) {
+    u16 temp_16;
+
+    temp_16 = *(*(u16 **)((u8 *)(arg0) + (4)));
+    _m2c_func_0019DFB8_func_0019D878(arg0, 2);
+    return ((temp_16 >> 8) | (temp_16 << 8)) & 0xFFFF;
+}
 
 int rcdtParseGetTokenNo(W3Reader *r, u8 **names)
 {

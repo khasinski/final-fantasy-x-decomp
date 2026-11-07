@@ -1,4 +1,7 @@
 /* tu_152 0x195378-0x197cd8: medium; rcbgGuide (config/tu_map.tsv) */
+#define func_00195750 _hdr_func_00195750
+#define func_00195378 _hdr_func_00195378
+#define rcbgGuideSetModelSub _hdr_rcbgGuideSetModelSub
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -7,8 +10,24 @@
 #include "ffx/v2.h"
 #include "ffx/g2.h"
 #include "vu0.h"
+#undef rcbgGuideSetModelSub
+#undef func_00195750
+#undef func_00195378
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195378);
+void func_001950B0(void *, void *);
+void func_00195378(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 sp0[3];
+    s32 sp10[4];
+
+    sp0[0] = arg1;
+    sp10[2] = arg3;
+    sp10[0] = 1;
+    sp10[3] = arg4;
+    sp0[1] = arg2;
+    sp10[1] = (s32)sp0;
+    sp0[2] = 0;
+    func_001950B0(arg0, sp10);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001953B8);
 
@@ -37,7 +56,9 @@ void func_001956A8(void *p, u64 v) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001956B0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195750);
+void func_00195750(void)
+{
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgModelDraw);
 
@@ -99,7 +120,32 @@ void rcbgModelDump(float *dst, s16 *src, int n, float scale)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195A88);
+extern s32 _m2c_func_00195A88_D_0056D968 __asm__("D_0056D968");
+/* DEBT(CAST) */
+void func_00195A88(void *arg0) {
+    s16 temp_18;
+    s16 temp_6;
+    s16 temp_7;
+    s32 temp_5;
+    s32 var_17;
+    void *temp_2;
+    void *var_16;
+
+    var_17 = 0;
+    temp_2 = (*(void **)((u8 *)(arg0) + (0x14)));
+    temp_18 = (*(s16 *)((u8 *)(temp_2) + (0x12)));
+    var_16 = temp_2 + (*(s32 *)((u8 *)(temp_2) + (8)));
+    if (temp_18 > 0) {
+        do {
+            temp_6 = (*(s16 *)((u8 *)(var_16) + (0)));
+            temp_5 = var_17;
+            temp_7 = (*(s16 *)((u8 *)(var_16) + (4)));
+            var_17 += 1;
+            var_16 += 6;
+            func_0018F5E8(&_m2c_func_00195A88_D_0056D968, temp_5, temp_6, temp_7);
+        } while (var_17 < temp_18);
+    }
+}
 
 void *rcbgGuideNew(void) {
     void *p = _rcAlloc(0x80, D_0056D980, 0x6F);
@@ -221,7 +267,36 @@ void func_00195C58(GuideMap *g) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgGuideSetModelSub);
+void _m2c_rcbgGuideSetModelSub_func_0018F410(void *, s32) __asm__("func_0018F410");
+void _m2c_rcbgGuideSetModelSub_func_001956B0(void *, s32) __asm__("func_001956B0");
+void _m2c_rcbgGuideSetModelSub_func_00195FF8(void *) __asm__("func_00195FF8");
+void *_m2c_rcbgGuideSetModelSub_func_00197C90() __asm__("func_00197C90");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void rcbgGuideSetModelSub(void *arg0) {
+    float temp_f0;
+    float temp_f2;
+    register float var_f1 __asm__("$f1");
+    void *temp_17;
+    void *temp_2;
+
+    temp_2 = _m2c_rcbgGuideSetModelSub_func_00197C90();
+    (*(s32 *)((u8 *)(temp_2) + (0x40))) = (s32) (arg0 + 0x10);
+    temp_17 = temp_2 + 0x90;
+    _m2c_rcbgGuideSetModelSub_func_001956B0(temp_2, 0x80);
+    _m2c_rcbgGuideSetModelSub_func_0018F410(temp_17, arg0 + 0x50);
+    temp_f2 = (*(float *)((u8 *)(temp_17) + (0x10))) - (*(float *)((u8 *)(temp_2) + (0x90)));
+    (*(float *)((u8 *)(arg0) + (0x64))) = temp_f2;
+    temp_f0 = (*(float *)((u8 *)(temp_17) + (0x18))) - (*(float *)((u8 *)(temp_17) + (8)));
+    var_f1 = temp_f0;
+    __asm__("" : "+f"(var_f1));
+    (*(float *)((u8 *)(arg0) + (0x68))) = temp_f0;
+    if (temp_f0 < temp_f2) {
+        var_f1 = temp_f2;
+        __asm__("" : "+f"(var_f1));
+    }
+    (*(float *)((u8 *)(arg0) + (0x60))) = var_f1;
+    _m2c_rcbgGuideSetModelSub_func_00195FF8(arg0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195FF8);
 
@@ -231,9 +306,20 @@ INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001961F8);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00196498);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgGuideUpdateEx);
+extern s32 _m2c_rcbgGuideUpdateEx_D_00313734 __asm__("D_00313734");
+extern s32 _m2c_rcbgGuideUpdateEx_D_0031373C __asm__("D_0031373C");
+extern s32 _m2c_rcbgGuideUpdateEx_D_00313744 __asm__("D_00313744");
+extern s32 _m2c_rcbgGuideUpdateEx_D_00313748 __asm__("D_00313748");
+void rcbgGuideUpdateEx(void) {
+    _m2c_rcbgGuideUpdateEx_D_00313734 = 0;
+    _m2c_rcbgGuideUpdateEx_D_0031373C = 0;
+    _m2c_rcbgGuideUpdateEx_D_00313744 = 0;
+    _m2c_rcbgGuideUpdateEx_D_00313748 = 0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00196638);
+void func_00196638(struct W3Sub *sub) {
+    func_00196640(sub, 1);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00196640);
 

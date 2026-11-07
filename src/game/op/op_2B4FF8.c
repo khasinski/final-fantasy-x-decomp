@@ -140,9 +140,43 @@ void op_unit_m(float *m)
     ((int *)m)[0] = one;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_unit_m_scale);
+/* DEBT(FAKE) */
+void op_unit_m_scale(float *m, float a)
+{
+    register int one __asm__("$2") = 0x3F800000;
+    __asm__ volatile("" : "+r"(one));
+    MMI_SQ_ZERO(0x0, m);
+    MMI_SQ_ZERO(0x10, m);
+    MMI_SQ_ZERO(0x20, m);
+    MMI_SQ_ZERO(0x30, m);
+    m[5] = a;
+    m[10] = a;
+    m[0] = a;
+    __asm__ volatile("" : : : "memory");
+    ((int *)m)[15] = one;
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_unit_m_scale2);
+/* DEBT(FAKE) */
+void op_unit_m_scale2(int *m, int *s)
+{
+    register int one __asm__("$2") = 0x3F800000;
+    register int s0 __asm__("$8");
+    register int s1 __asm__("$9");
+    register int s2 __asm__("$10");
+    __asm__ volatile("" : "+r"(one));
+    s1 = s[1];
+    s2 = s[2];
+    s0 = s[0];
+    __asm__ volatile("" : "+r"(s0), "+r"(s1), "+r"(s2));
+    MMI_SQ_ZERO(0x0, m);
+    MMI_SQ_ZERO(0x10, m);
+    MMI_SQ_ZERO(0x20, m);
+    MMI_SQ_ZERO(0x30, m);
+    m[5] = s1;
+    m[10] = s2;
+    m[15] = one;
+    m[0] = s0;
+}
 
 void op_m_copy(void *dst_, void *src_)
 {
@@ -282,7 +316,34 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6278);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6358);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_deg_in_check);
+/* DEBT(FAKE) */
+int op_deg_in_check(float v, float lo, float hi) {
+    register int temp_3 __asm__("$3");
+    register int temp_5 __asm__("$5");
+    register int temp_4 __asm__("$4");
+    int var_2;
+
+    temp_3 = (int)lo;
+    temp_5 = (int)hi;
+    temp_4 = (int)v;
+    temp_3 &= 0xFFF;
+    temp_5 &= 0xFFF;
+    temp_4 &= 0xFFF;
+    if (temp_5 < temp_3) {
+        if ((temp_4 >= temp_3) || (temp_5 >= temp_4)) {
+            __asm__ volatile("" : "+r"(temp_3));
+            return 1;
+        }
+        __asm__ volatile("" : "+r"(temp_4), "+r"(temp_5));
+        return 0;
+    }
+    var_2 = 0;
+    if (temp_4 >= temp_3) {
+        var_2 = temp_5 >= temp_4;
+        __asm__ volatile("" : "+r"(temp_4), "+r"(temp_5));
+    }
+    return var_2;
+}
 
 void op_length_get(u32 a0, u32 a1, float f0)
 {

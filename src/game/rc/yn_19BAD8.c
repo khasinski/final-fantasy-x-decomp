@@ -1,4 +1,5 @@
 /* tu_161 0x19bad8-0x19cfe0: low; ~Yn (config/tu_map.tsv) */
+#define Yn_GuideMapSetMapNo _hdr_Yn_GuideMapSetMapNo
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -6,6 +7,7 @@
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/g2.h"
+#undef Yn_GuideMapSetMapNo
 
 void Yn_BgInit(void) {
     func_00194530();
@@ -362,7 +364,19 @@ void func_0019C500(int idx, u32 v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/yn_19BAD8", func_0019C580);
+void func_0019C580(float a, float b) {
+    W3Core *temp_4;
+    W3Pool *var_2;
+
+    if (g_pMainWork != 0) {
+        V2_POOL(temp_4, var_2);
+        if (var_2 != 0) {
+            var_2->fC0 = a;
+            var_2->fC4 = b;
+            rcbgSceneSetMatrix(var_2);
+        }
+    }
+}
 
 float func_0019C5C0(void)
 {
@@ -755,7 +769,18 @@ float func_0019CEF0(void)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/yn_19BAD8", Yn_GuideMapSetMapNo);
+void Yn_GuideMapSetMapNo(s32 v) {
+    W3Core *temp_2;
+    W3Pool *var_5;
+
+    if ((g_pMainWork != 0) && (g_pMainWork->sub != 0)) {
+        V2_POOL(temp_2, var_5);
+        if ((var_5 != 0) && (v >= 0) && (v < var_5->numItems)) {
+            var_5->curItem = (s16) v;
+            rcbgGuideSetModelFromIdMap(g_pMainWork->sub, var_5->items[v]);
+        }
+    }
+}
 
 int Yn_GuideMapGetMapNo(void)
 {

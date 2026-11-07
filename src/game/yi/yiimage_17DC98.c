@@ -1,18 +1,33 @@
 /* tu_130 0x17dc98-0x180618: low; ~yiImage (config/tu_map.tsv) */
+#define func_00180370 _hdr_func_00180370
+#define func_00180520 _hdr_func_00180520
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/t2.h"
+#undef func_00180370
+#undef func_00180520
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", yiImage_GSSInit);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", yiImage_printusemem);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017DF50);
+/* DEBT(FAKE) */
+s32 func_0017DF50(void) {
+    register s32 var_2 __asm__("$2");
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017DF80);
+    var_2 = 0;
+    if (D_0030ECD4 != D_0030ECE4) {
+        var_2 = D_0030ECD4 != 0xF0000;
+    }
+    return var_2;
+}
+
+void func_0017DF80(s32 arg0) {
+    D_0030ECE0 = 0xE0000 - (arg0 << 0xE);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017DF98);
 INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C840);
@@ -24,7 +39,13 @@ INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C860);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E688);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E758);
+extern s32 _m2c_func_0017E758_D_0030ECA0 __asm__("D_0030ECA0");
+void func_0017E758(s32 arg0, s32 arg1) {
+    _m2c_func_0017E758_D_0030ECA0 = D_0030ECA4 = arg0;
+    D_0030ECA8 = arg1;
+    D_0030ECAC = 0;
+    D_0030ECB0 = 0;
+}
 
 int func_0017E788(S2Ctx *ctx, S2Disp *d, int a2) {
     u8 buf[0x60];
@@ -368,10 +389,14 @@ INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_001801A0);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180270);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180370);
+void func_00180370(void)
+{
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180378);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180520);
+void func_00180520(void)
+{
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180528);

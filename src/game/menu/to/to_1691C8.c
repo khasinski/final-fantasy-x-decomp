@@ -160,7 +160,16 @@ int func_0016CCF8(void) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016CD10);
+/* DEBT(FAKE) */
+s32 func_0016CD10(void) {
+    register s32 var_2 __asm__("$2");
+
+    var_2 = 0;
+    if (D_0030E0C5 != 0) {
+        var_2 = ((D_00597A18 | D_00597A1C) & 0xF000) != 0;
+    }
+    return var_2;
+}
 
 int func_0016CD48(int id) {
     return MsGetSavePlyJoin(id) == 1;

@@ -141,7 +141,29 @@ void func_00295C00(u16 i, u16 n) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295C50);
+#ifndef MMI_SQ_ZERO
+#define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
+#endif
+/* DEBT(CAST) */
+void func_00295C50(T6_Blk *b) {
+    MMI_SQ_ZERO(0, b);
+    MMI_SQ_ZERO(0x10, b);
+    MMI_SQ_ZERO(0x20, b);
+    MMI_SQ_ZERO(0x30, b);
+    MMI_SQ_ZERO(0x40, b);
+    MMI_SQ_ZERO(0x50, b);
+    MMI_SQ_ZERO(0x60, b);
+    MMI_SQ_ZERO(0x70, b);
+    MMI_SQ_ZERO(0x80, b);
+    MMI_SQ_ZERO(0x90, b);
+    MMI_SQ_ZERO(0xA0, b);
+    MMI_SQ_ZERO(0xB0, b);
+    MMI_SQ_ZERO(0xC0, b);
+    MMI_SQ_ZERO(0xD0, b);
+    MMI_SQ_ZERO(0xE0, b);
+    MMI_SQ_ZERO(0xF0, b);
+    (*(s32 *)((u8 *)(b) + (0xC8))) = 0x80808080;
+}
 
 /* DEBT(CAST): 0x100-byte script block copied field by field, raw byte offsets */
 void func_00295CA0(T6_BlkPool *p, T6_Blk *b, int arg)

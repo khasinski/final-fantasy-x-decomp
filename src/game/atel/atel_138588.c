@@ -1,9 +1,13 @@
 /* tu_069 0x138588-0x13a5d8: low; ~Atel (config/tu_map.tsv) */
+#define func_00139440 _hdr_func_00139440
+#define func_0013A358 _hdr_func_0013A358
 #include "common.h"
 #include "ffx/q1.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_0013A358
+#undef func_00139440
 
 void func_00138588(void) {
     D_0058E440 = 0;
@@ -488,7 +492,36 @@ char *func_00139400(char *p) {
     return D_0030B900;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_00139440);
+s32 _m2c_func_00139440_AtelChangeCurrentCtrl(s32) __asm__("AtelChangeCurrentCtrl");
+void _m2c_func_00139440_AtelSetCurrentCtrl(s32) __asm__("AtelSetCurrentCtrl");
+u16 *_m2c_func_00139440_func_00139400(s32) __asm__("func_00139400");
+extern u16 _m2c_func_00139440_D_0030B900 __asm__("D_0030B900");
+extern void *_m2c_func_00139440_D_0058E3D8 __asm__("D_0058E3D8");
+/* DEBT(CAST) */
+u16 *func_00139440(s32 arg0) {
+    s32 temp_17;
+    s32 temp_4;
+    u16 *var_16;
+    s32 var_2;
+
+    temp_17 = _m2c_func_00139440_AtelChangeCurrentCtrl(0);
+    temp_4 = (*(s32 *)((u8 *)(_m2c_func_00139440_D_0058E3D8) + (0x48)));
+    if (temp_4 != 0) {
+        var_16 = _m2c_func_00139440_func_00139400(temp_4);
+    } else {
+        var_16 = &_m2c_func_00139440_D_0030B900;
+    }
+    _m2c_func_00139440_AtelSetCurrentCtrl(temp_17);
+    if (arg0 != 0) {
+        var_2 = *var_16;
+        if (var_2 != 0) {
+            do {
+                var_2 -= 1;
+            } while (var_2 != 0);
+        }
+    }
+    return var_16;
+}
 
 void func_001394E0(void) {
     int v = AtelChangeCurrentCtrl(0);
@@ -721,7 +754,11 @@ char *func_0013A2E8(char *p, int k) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_0013A358);
+s32 _m2c_func_0013A358_func_0013A2E8(s32, s32) __asm__("func_0013A2E8");
+/* DEBT(CAST) */
+s32 func_0013A358(void *arg0) {
+    return _m2c_func_0013A358_func_0013A2E8((*(s32 *)((u8 *)(arg0) + (4))), -1);
+}
 
 CamInfo *func_0013A378(Actor *a, int id) {
     return (CamInfo *)func_0013A2E8(*(char **)((char *)a + 4), id); /* DEBT(CAST): word at Actor+4 is the blob pointer */

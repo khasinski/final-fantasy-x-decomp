@@ -1,4 +1,5 @@
 /* tu_060 0x12f740-0x135510: low; unk_12F740 (config/tu_map.tsv) */
+#define func_00133BB8 _hdr_func_00133BB8
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -10,6 +11,7 @@
 #undef func_00125268
 #undef TOSetAlbhedFlg
 #include "ffx/s0.h"
+#undef func_00133BB8
 
 int func_0012F740(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
@@ -1436,7 +1438,27 @@ int func_00133B98(void) {
     return func_00173190();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00133BB8);
+float _m2c_func_00133BB8_AtelPopStackFloat(s32, s32) __asm__("AtelPopStackFloat");
+s32 _m2c_func_00133BB8_AtelPopStackInteger() __asm__("AtelPopStackInteger");
+s32 _m2c_func_00133BB8_func_001731C0(s32, float, float, float) __asm__("func_001731C0");
+/* DEBT(FAKE) */
+s32 func_00133BB8(s32 arg0, s32 arg1, s32 arg2) {
+    float temp_f20;
+    float temp_f21;
+    float temp_f0;
+    register float f13 __asm__("$f13");
+    register float f14 __asm__("$f14");
+    s32 temp_18;
+
+    temp_18 = _m2c_func_00133BB8_AtelPopStackInteger(arg0, arg2);
+    temp_f21 = _m2c_func_00133BB8_AtelPopStackFloat(arg0, arg2);
+    temp_f20 = _m2c_func_00133BB8_AtelPopStackFloat(arg0, arg2);
+    temp_f0 = _m2c_func_00133BB8_AtelPopStackFloat(arg0, arg2);
+    f13 = temp_f20;
+    f14 = temp_f21;
+    __asm__ volatile("" : "+f"(f13), "+f"(f14));
+    return _m2c_func_00133BB8_func_001731C0(temp_18, temp_f0, f13, f14);
+}
 
 int func_00133C48(void) {
     func_00173240();
@@ -1854,8 +1876,31 @@ void func_00135048(Actor *a, OpArgs *op) {
     op->v1 = 10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00135058);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_00135058(s32 arg0, void *arg1) {
+    register s32 var_16 __asm__("$16");
+    register s32 var_17 __asm__("$17");
+    s32 var_3;
 
+    var_3 = 0;
+    var_17 = (*(s32 *)((u8 *)(arg1) + (0)));
+    var_16 = (*(s32 *)((u8 *)(arg1) + (4)));
+    switch (var_17) {                               /* irregular */
+    case 0:
+        if (var_16 != 0) {
+            var_16 -= 1;
+        } else {
+            var_17 = 1;
+        }
+        break;
+    case 1:
+        var_3 = (func_00265ED0() == 0) ? 0 : 5;
+        break;
+    }
+    (*(s32 *)((u8 *)(arg1) + (0))) = var_17;
+    (*(s32 *)((u8 *)(arg1) + (4))) = var_16;
+    return var_3;
+}
 int func_001350D8(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);

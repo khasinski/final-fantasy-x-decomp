@@ -1,10 +1,16 @@
 /* tu_080 0x148f40-0x14b260: low; ~Atel (config/tu_map.tsv) */
+#define func_001496F0 _hdr_func_001496F0
+#define func_0014ACC0 _hdr_func_0014ACC0
+#define AtelGetHyoukaMenuEnable _hdr_AtelGetHyoukaMenuEnable
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/r1.h"
 #include "ffx/s1.h"
 #include "ffx/u0.h"
 #include "ffx/actor_resources.h"
+#undef AtelGetHyoukaMenuEnable
+#undef func_001496F0
+#undef func_0014ACC0
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00148F40);
 
@@ -25,7 +31,43 @@ void func_00149200(void)
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149210);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetHyoukaMenuEnable);
+s32 _m2c_AtelGetHyoukaMenuEnable_AtelChangeCurrentCtrl(s32) __asm__("AtelChangeCurrentCtrl");
+void _m2c_AtelGetHyoukaMenuEnable_AtelSetCurrentCtrl(s32) __asm__("AtelSetCurrentCtrl");
+s32 _m2c_AtelGetHyoukaMenuEnable_MsBattleCheck() __asm__("MsBattleCheck");
+s32 _m2c_AtelGetHyoukaMenuEnable_TkGetTGS() __asm__("TkGetTGS");
+s32 _m2c_AtelGetHyoukaMenuEnable_func_0014AD18() __asm__("func_0014AD18");
+s32 _m2c_AtelGetHyoukaMenuEnable_func_0015A550() __asm__("func_0015A550");
+s32 _m2c_AtelGetHyoukaMenuEnable_func_002D6730() __asm__("func_002D6730");
+extern u32 *_m2c_AtelGetHyoukaMenuEnable_D_0058E3D8 __asm__("D_0058E3D8");
+/* DEBT(FAKE) */
+s32 AtelGetHyoukaMenuEnable(void) {
+    s32 temp_16;
+    s32 temp_16_2;
+    s32 temp_16_3;
+    s32 temp_18;
+    s32 var_16;
+    register u32 *p __asm__("$3");
+    register u32 v __asm__("$2");
+
+    temp_18 = _m2c_AtelGetHyoukaMenuEnable_AtelChangeCurrentCtrl(0);
+    p = _m2c_AtelGetHyoukaMenuEnable_D_0058E3D8;
+    __asm__("" : "+r"(p));
+    v = *p >> 0xC;
+    __asm__("" : "+r"(v));
+    temp_16_2 = v & 1;
+    temp_16_3 = (_m2c_AtelGetHyoukaMenuEnable_TkGetTGS() != 0) ? 0 : temp_16_2;
+    if (_m2c_AtelGetHyoukaMenuEnable_MsBattleCheck() != 0) {
+        var_16 = 0;
+    } else {
+        var_16 = (((*_m2c_AtelGetHyoukaMenuEnable_D_0058E3D8 & 0x87200403) ^ 3) != 0) ? 0 : temp_16_3;
+    }
+    if ((_m2c_AtelGetHyoukaMenuEnable_func_002D6730() != 0) || (_m2c_AtelGetHyoukaMenuEnable_func_0015A550() != 0)) {
+        var_16 = 0;
+    }
+    temp_16 = ((_m2c_AtelGetHyoukaMenuEnable_func_0014AD18() ^ 1) == 0) ? 0 : var_16;
+    _m2c_AtelGetHyoukaMenuEnable_AtelSetCurrentCtrl(temp_18);
+    return temp_16;
+}
 
 void func_001493C8(int v)
 {
@@ -53,9 +95,39 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetActorEndPos);
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_001495A8);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149678);
+float _m2c_func_00149678_func_00138FC8(char *p) __asm__("func_00138FC8");
+float func_00149678(void) {
+    float var_f20;
+    s32 temp_16;
+    s8 *temp_4;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_001496F0);
+    temp_16 = AtelChangeCurrentCtrl(0);
+    if ((D_0058E3D8->flags & 1) && (temp_4 = D_0058E3D8->p48, (temp_4 != 0))) {
+        var_f20 = _m2c_func_00149678_func_00138FC8(temp_4);
+    } else {
+        var_f20 = 0.0f;
+    }
+    AtelSetCurrentCtrl(temp_16);
+    return var_f20;
+}
+
+s32 _m2c_func_001496F0_AtelChangeCurrentCtrl(s32) __asm__("AtelChangeCurrentCtrl");
+s32 _m2c_func_001496F0_AtelSetCurrentCtrl(s32) __asm__("AtelSetCurrentCtrl");
+float _m2c_func_001496F0_func_00138FF0(s8 *, s32) __asm__("func_00138FF0");
+float func_001496F0(s32 arg0) {
+    float var_f20;
+    s32 temp_17;
+    s8 *temp_4;
+
+    temp_17 = _m2c_func_001496F0_AtelChangeCurrentCtrl(0);
+    if ((D_0058E3D8->flags & 1) && (temp_4 = D_0058E3D8->p48, (temp_4 != 0))) {
+        var_f20 = _m2c_func_001496F0_func_00138FF0(temp_4, arg0);
+    } else {
+        var_f20 = 0.0f;
+    }
+    _m2c_func_001496F0_AtelSetCurrentCtrl(temp_17);
+    return var_f20;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149770);
 
@@ -303,7 +375,20 @@ Chr *TkCh_Allocate(int id)
     return c;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", TkCh_Allocate2);
+void _m2c_TkCh_Allocate2_TkChPatchM160(Chr *chr, int v) __asm__("TkChPatchM160");
+/* DEBT(FAKE) */
+Chr *TkCh_Allocate2(s32 arg0) {
+    register Chr *temp_17 __asm__("$17");
+
+    temp_17 = Ch_Allocate2();
+    ChN_ReadSystemMGRP(arg0, 0);
+    if (temp_17 != 0) {
+        if (arg0 == 3) {
+            _m2c_TkCh_Allocate2_TkChPatchM160(temp_17, 1);
+        }
+    }
+    return temp_17;
+}
 
 /* DEBT(CAST): shared declarations retain untyped handles or buffers at these calls. */
 void TkCh_BindToElem(s32 a, Chr *b, Chr *c, s32 d, s32 e)
@@ -413,7 +498,18 @@ int TkRefreshSoundMode(void)
     TkSetControlerActuatorMode();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_0014ACC0);
+s32 *_m2c_func_0014ACC0_AtelGetCurCtrlWork() __asm__("AtelGetCurCtrlWork");
+s32 func_0014ACC0(s32 arg0) {
+    s32 temp_4;
+    s32 var_3;
+
+    temp_4 = *_m2c_func_0014ACC0_AtelGetCurCtrlWork();
+    var_3 = (temp_4 & 0x22) != 0;
+    if (arg0 != 0) {
+        var_3 = (temp_4 & 0x84000400) ? 0 : var_3;
+    }
+    return var_3 != 0;
+}
 
 void func_0014AD08(u8 v)
 {

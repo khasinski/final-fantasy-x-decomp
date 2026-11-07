@@ -1,4 +1,5 @@
 /* tu_248 0x220f30-0x224430: medium; ~Tk (config/tu_map.tsv) */
+#define func_002238D8 _hdr_func_002238D8
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -8,6 +9,7 @@
 #include "ffx/s5.h"
 #include "ffx/v5.h"
 #include "ffx/w7.h"
+#undef func_002238D8
 
 int func_00220F30(void)
 {
@@ -440,7 +442,32 @@ void func_00223878(void)
     TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_002238D8);
+void _m2c_func_002238D8_TOMakePktScissor(s32, s32, s32, s32) __asm__("TOMakePktScissor");
+void _m2c_func_002238D8_TOMenuDrawKickTmp() __asm__("TOMenuDrawKickTmp");
+void _m2c_func_002238D8_TOMenuOpenPktBuffTmp() __asm__("TOMenuOpenPktBuffTmp");
+void _m2c_func_002238D8__TOGetMessageWH(s32, s32, void *, u16 *, s32, s32) __asm__("_TOGetMessageWH");
+void _m2c_func_002238D8_func_001F37C8(s32, s32, s32) __asm__("func_001F37C8");
+void _m2c_func_002238D8_func_001FA548(s32, s32, s16, s16) __asm__("func_001FA548");
+void func_002238D8(void) {
+    s16 sp0;
+    u16 sp2;
+    s32 temp_17;
+    s32 temp_3;
+
+    _m2c_func_002238D8_TOMenuOpenPktBuffTmp();
+    _m2c_func_002238D8__TOGetMessageWH(7, D_003257A4, (&sp0), &sp2, 0, 0);
+    sp0 = 0xE8;
+    temp_3 = sp2 + 0x10;
+    sp2 = temp_3;
+    temp_17 = 0x198 - (s16) temp_3;
+    _m2c_func_002238D8_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_func_002238D8_func_001FA548(0x118, temp_17, sp0, (s16) sp2);
+    if (D_003257A4 != 0) {
+        _m2c_func_002238D8_func_001F37C8(D_003257A4, 0x128, temp_17 + 8);
+    }
+    _m2c_func_002238D8_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    _m2c_func_002238D8_TOMenuDrawKickTmp();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_002239A8);
 

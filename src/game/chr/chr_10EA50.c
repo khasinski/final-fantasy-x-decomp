@@ -1,9 +1,11 @@
 /* tu_013 0x10ea50-0x110158: low; ~Sg (config/tu_map.tsv) */
+#define func_0010F060 _hdr_func_0010F060
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_0010F060
 
 /* DEBT(TYPE): global type guessed from the access width only */
 void func_0010EA50(s32 v)
@@ -104,7 +106,15 @@ INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EBD8);
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EF98);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F060);
+s32 _m2c_func_0010F060_func_0010EBD8(s32) __asm__("func_0010EBD8");
+void _m2c_func_0010F060_func_0010EF98(s32 *) __asm__("func_0010EF98");
+extern u_long128 _m2c_func_0010F060_D_00578E00 __asm__("D_00578E00");
+/* DEBT(CAST) */
+s32 func_0010F060(u_long128 *arg0) {
+    _m2c_func_0010F060_func_0010EF98(&D_0057EBA0);
+    *arg0 = _m2c_func_0010F060_D_00578E00;
+    return _m2c_func_0010F060_func_0010EBD8(((u_long128 *)((u8 *)arg0 + (0x10))));
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F0A8);
 

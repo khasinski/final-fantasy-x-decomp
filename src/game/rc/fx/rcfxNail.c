@@ -1,10 +1,14 @@
 /* tu_173 0x1a4dd8-0x1a4fc8: medium; rcfxNail (config/tu_map.tsv) */
+#define func_001A4F20 _hdr_func_001A4F20
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/g2.h"
+#undef func_001A4F20
+
+void func_001A4F20(void *arg0, s32 arg1);
 
 void *rcfxNailNew(void) {
     void *p = _rcAlloc(0x38, D_0056DE40, 0x12);
@@ -56,4 +60,15 @@ void func_001A4EA0(S2Four *p) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxNail", func_001A4F20);
+s32 _m2c_func_001A4F20__rcRealloc(s32, s32, s8 *, s32) __asm__("_rcRealloc");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_001A4F20(void *arg0, s32 arg1) {
+    register s32 temp_17 __asm__("$17");
+
+    (*(s32 *)((u8 *)(arg0) + (0x1C))) = arg1;
+    (*(s32 *)((u8 *)(arg0) + (0x20))) = _m2c_func_001A4F20__rcRealloc((*(s32 *)((u8 *)(arg0) + (0x20))), arg1 * 4, D_0056DE40, 0x3D);
+    temp_17 = arg1 * 0x10;
+    (*(s32 *)((u8 *)(arg0) + (0x24))) = _m2c_func_001A4F20__rcRealloc((*(s32 *)((u8 *)(arg0) + (0x24))), temp_17, D_0056DE40, 0x3E);
+    (*(s32 *)((u8 *)(arg0) + (0x28))) = _m2c_func_001A4F20__rcRealloc((*(s32 *)((u8 *)(arg0) + (0x28))), temp_17, D_0056DE40, 0x3F);
+    (*(s32 *)((u8 *)(arg0) + (0x2C))) = _m2c_func_001A4F20__rcRealloc((*(s32 *)((u8 *)(arg0) + (0x2C))), temp_17, D_0056DE40, 0x40);
+}

@@ -1,4 +1,5 @@
 /* tu_211 0x1e2360-0x1e4c30: medium; ~Ms (config/tu_map.tsv) */
+#define msResetHeadTarget _hdr_msResetHeadTarget
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q4.h"
@@ -6,6 +7,7 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/w5.h"
+#undef msResetHeadTarget
 
 int func_001E2360(void) {
     int i;
@@ -230,7 +232,27 @@ int func_001E3518(int arg, BtlChr *c) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", func_001E35D8);
+s32 _m2c_func_001E35D8_func_001E3698(s32, BtlChr *, s32, s32) __asm__("func_001E3698");
+/* DEBT(CAST) */
+s32 func_001E35D8(s32 a, s32 b, float x, float y) {
+    BtlChr *temp_2;
+    s32 temp_16;
+    s32 var_18;
+
+    temp_16 = a & 0xFF;
+    temp_2 = MsGetChr(temp_16);
+    var_18 = 0;
+    if (temp_2->f9E4 != 0) {
+        temp_2->f9F0 = y;
+        temp_2->f9E4 = 0;
+        (*(s32 *)((u8 *)(temp_2) + (0x9E8))) = b;
+        var_18 = 1;
+        temp_2->f9EC = x;
+        _m2c_func_001E35D8_func_001E3698(temp_16, temp_2, b, (s32) x);
+        MsAtelRequestMagicCamera(0, temp_16, 0, 0x88, 0xFFFF, 0, 1, 0, 0);
+    }
+    return var_18;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", func_001E3698);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E2360/rodata", jtbl_0056F8E0);
@@ -400,4 +422,27 @@ int MsSetHeadTarget(int id, int mask) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", msResetHeadTarget);
+void _m2c_msResetHeadTarget_Ch_NeckSetEnable(s32, s32) __asm__("Ch_NeckSetEnable");
+void _m2c_msResetHeadTarget_func_0010A230(s32, float, float) __asm__("func_0010A230");
+/* DEBT(CAST) */
+s32 msResetHeadTarget(void *arg0) {
+    s32 temp_16;
+    s32 var_17;
+
+    var_17 = 0;
+    if ((*(u8 *)((u8 *)(arg0) + (0xF8))) != 0xFF) {
+        var_17 = 1;
+        (*(u8 *)((u8 *)(arg0) + (0xF8))) = 0xFFU;
+        if ((*(s8 *)((u8 *)(arg0) + (0xA8E))) != 0) {
+            temp_16 = (*(s32 *)((u8 *)(arg0) + (0)));
+            (*(s8 *)((u8 *)(arg0) + (0xF9))) = 0;
+            if (temp_16 != 0) {
+                _m2c_msResetHeadTarget_func_0010A230(temp_16, 0, 0);
+                _m2c_msResetHeadTarget_Ch_NeckSetEnable(temp_16, 0);
+            }
+        } else {
+            (*(s8 *)((u8 *)(arg0) + (0xF9))) = 1;
+        }
+    }
+    return var_17;
+}

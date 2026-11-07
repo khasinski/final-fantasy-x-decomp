@@ -6,7 +6,37 @@
 #include "ffx/w10.h"
 #include "ffx/r7.h"
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_size_get);
+#define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr)((u8 *)(expr) + (offset)))
+extern s32 D_004F4140[];
+
+/* DEBT(CAST) */
+s32 op_md_size_get(void *arg0) {
+    u8 *p = (u8 *)arg0 + 0x20;
+    s32 sz;
+    register s32 t __asm__("$2");
+    register s32 cnt __asm__("$3");
+    register s32 prod __asm__("$4");
+    while (1) {
+        switch (M2C_FIELD(p, s8 *, 1) & 0xF0) {
+        case 0x10:
+        case 0x20:
+            return 0;
+        case 0xF0:
+            p += 0x10;
+            sz = (s32)p - (s32)arg0;
+            sz += M2C_FIELD(arg0, s16 *, 0x12) * 6;
+            sz += M2C_FIELD(arg0, s16 *, 0x14) * 6;
+            return (sz + 0xF) & 0x7FFFFFF0;
+        }
+        t = M2C_FIELD(p, u8 *, 1) & 7;
+        cnt = M2C_FIELD(p, s16 *, 2);
+        __asm__ volatile("" : "+r"(cnt), "+r"(t));
+        t = D_004F4140[t];
+        prod = t * cnt;
+        p = prod + p;
+        p += 0x10;
+    }
+}
 
 extern char D_00575CC8[];
 extern void func_00120108(char *fmt, ...);
@@ -39,13 +69,67 @@ void op_md_tex0_change(s32 a, u64 b) {
     op_md_tex0_change_limit(a, b, 0, 0x4000);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B6E20);
+/* DEBT(FAKE) */
+void func_002B6E20(s32 a0, u16 a1, u16 a2) {
+    register u32 _a1 __asm__("$5") = a1;
+    register u32 _a2 __asm__("$6") = a2;
+    register u64 t0 __asm__("$2");
+    register u64 t1 __asm__("$3");
+    register u64 res __asm__("$7");
+    __asm__ volatile("" : "+r"(_a1), "+r"(_a2));
+    t0 = _a1 & 0x3FFF;
+    __asm__ volatile("" : "+r"(_a2), "+r"(t0));
+    t1 = _a2 & 0x3FFF;
+    res = t0 | (t1 << 37);
+    __asm__ volatile("" : "+r"(res));
+    op_md_tex0_change(a0, res);
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B6E40);
+/* DEBT(FAKE) */
+void func_002B6E40(s32 a0, u16 a1, u16 a2, u16 a3, u16 a4) {
+    register u32 _a1 __asm__("$5") = a1;
+    register u32 _a2 __asm__("$6") = a2;
+    register u64 t0 __asm__("$2");
+    register u64 t1 __asm__("$3");
+    register u64 res __asm__("$9");
+    __asm__ volatile("" : "+r"(_a1), "+r"(_a2));
+    t0 = _a1 & 0x3FFF;
+    __asm__ volatile("" : "+r"(_a2), "+r"(t0));
+    t1 = _a2 & 0x3FFF;
+    res = t0 | (t1 << 37);
+    __asm__ volatile("" : "+r"(res));
+    op_md_tex0_change_limit(a0, res, a3, a4);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_tex0_reset);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B6EC8);
+/* DEBT(CAST) */
+void func_002B6EC8(void *arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
+    register u32 temp_2 __asm__("$2");
+    u32 temp_4;
+    u8 *var_9;
+    u32 s2 = arg2 << 5;
+    u32 s4 = arg4 << 5;
+
+    var_9 = (u8 *)arg0 + 0x20;
+    while (1) {
+        if (M2C_FIELD(var_9, s8 *, 1) == -1) {
+            return;
+        }
+        temp_4 = M2C_FIELD(var_9, u8 *, 1) & 7;
+        if (temp_4 & 2) {
+            temp_2 = M2C_FIELD(var_9, u32 *, 8);
+            if ((temp_2 & 0x3FFF) == arg1) {
+                M2C_FIELD(var_9, u32 *, 8) = (temp_2 & 0xFFFFC000) | arg3;
+            }
+            temp_2 = M2C_FIELD(var_9, u32 *, 0xC);
+            if ((temp_2 & 0x7FFE0) == s2) {
+                M2C_FIELD(var_9, u32 *, 0xC) = (temp_2 & 0xFFF8001F) | s4;
+            }
+        }
+        var_9 = var_9 + D_004F4140[temp_4] * M2C_FIELD(var_9, s16 *, 2) + 0x10;
+    }
+}
 
 s32 op_md_packet_size_check(void) {
     return 0;

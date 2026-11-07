@@ -1,5 +1,6 @@
 /* tu_322 0x2a6fe8-0x2ac750: low; ~op_mdc_size_get_main (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: script call wrappers (see w10.h). */
+#define func_002A74A8 _hdr_func_002A74A8
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
@@ -8,6 +9,7 @@
 #include "ffx/r6.h"
 #include "ffx/s6.h"
 #include "ffx/r7.h"
+#undef func_002A74A8
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", op_mdc_size_get_main);
 
@@ -60,7 +62,49 @@ found:
     s->val = val;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A74A8);
+s32 _m2c_func_002A74A8_Ch_ModelGetBaseMatrix(s32, u16, s32) __asm__("Ch_ModelGetBaseMatrix");
+s32 _m2c_func_002A74A8_func_00110C00(s32, u16) __asm__("func_00110C00");
+s32 _m2c_func_002A74A8_func_00110C18(s32, u16) __asm__("func_00110C18");
+extern u8 _m2c_func_002A74A8_D_00703FFA __asm__("D_00703FFA");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002A74A8(void) {
+    register s32 _cond __asm__("$3");
+    Slot16 *var_22;
+    Slot16 *var_3;
+    s32 temp_18;
+    register s32 var_19 __asm__("$19");
+    s32 var_20;
+    s32 var_4;
+    void *temp_16;
+    register void * temp_21 __asm__("$21");
+    void *var_17;
+
+    if (_m2c_func_002A74A8_D_00703FFA != 0) {
+        var_4 = 0;
+        var_3 = D_006F37E0;
+        do {
+            temp_18 = (*(s32 *)((u8 *)(var_3) + (0)));
+            var_19 = 0;
+            if ((temp_18 != 0) && (temp_21 = (*(void **)((u8 *)(var_3) + (4))), var_17 = temp_21 + 0x10, ((*(u16 *)((u8 *)(temp_21) + (4))) != 0))) {
+                var_22 = &var_3[1];
+                var_20 = var_4 + 1;
+                do {
+                    temp_16 = (*(void **)((u8 *)(var_17) + (0)));
+                    var_19 += 1;
+                    (*(s32 *)((u8 *)(temp_16) + (8))) = (s32) (((s32)((u8 *)(_m2c_func_002A74A8_func_00110C18(temp_18, (*(u16 *)((u8 *)(var_17) + (0xA))))) - (u8 *)temp_16)));
+                    (*(s32 *)((u8 *)(temp_16) + (0xC))) = (s32) (((s32)((u8 *)(_m2c_func_002A74A8_func_00110C00(temp_18, (*(u16 *)((u8 *)(var_17) + (0xA))))) - (u8 *)temp_16)));
+                    (*(s32 *)((u8 *)(var_17) + (4))) = _m2c_func_002A74A8_Ch_ModelGetBaseMatrix(temp_18, (*(u16 *)((u8 *)(var_17) + (0xA))), 0);
+                    var_17 += 0x10;
+                } while ((_cond = (var_19 < (s32) (*(u16 *)((u8 *)(temp_21) + (4))))) != 0);
+            } else {
+                var_22 = &var_3[1];
+                var_20 = var_4 + 1;
+            }
+            var_4 = var_20;
+            var_3 = var_22;
+        } while (var_4 < 8);
+    }
+}
 
 void op_mdc_mem_transfer_cue_free_all(void)
 {

@@ -166,7 +166,15 @@ void AtelSetEventElemHandleFromID(int a, int b, int c)
     AtelSetCurrentCtrl(v1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", func_00148CB0);
+s32 func_00148CB0(s32 arg0, s32 arg1) {
+    s32 temp_17;
+    s32 temp_17_2;
+
+    temp_17_2 = AtelChangeCurrentCtrl(0);
+    temp_17 = (((struct { u8 _pad[0xAFC]; s32 a[1]; } *)(AtelGetBasicWork(arg0)))->a[arg1]);
+    AtelSetCurrentCtrl(temp_17_2);
+    return temp_17;
+}
 
 void AtelSetEventElemPosFromID(int id, int index, int value)
 {
@@ -178,7 +186,15 @@ void AtelSetEventElemPosFromID(int id, int index, int value)
     AtelSetCurrentCtrl(saved);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", func_00148D78);
+u16 func_00148D78(s32 arg0, s32 arg1) {
+    s32 temp_17_2;
+    u16 temp_17;
+
+    temp_17_2 = AtelChangeCurrentCtrl(0);
+    temp_17 = (((struct { u8 _pad[0xB04]; u16 a[1]; } *)(AtelGetBasicWork(arg0)))->a[arg1]);
+    AtelSetCurrentCtrl(temp_17_2);
+    return temp_17;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelSetEventElemCharIDFromID);
 

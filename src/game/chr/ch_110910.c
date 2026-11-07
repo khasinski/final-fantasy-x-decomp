@@ -1,9 +1,11 @@
 /* tu_016 0x110910-0x110cd8: low; ~Ch (config/tu_map.tsv) */
+#define func_001109F0 _hdr_func_001109F0
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_001109F0
 
 float func_00110910(Chr *chr)
 {
@@ -69,7 +71,21 @@ float func_001109E0(Chr *chr)
     return chr->param->f20;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_110910", func_001109F0);
+s32 _m2c_func_001109F0_Ch_SetThickness(Chr *, float) __asm__("Ch_SetThickness");
+/* DEBT(CAST) */
+void func_001109F0(float fparg0) {
+    Chr *var_16;
+
+    var_16 = D_00300664;
+    if (var_16 != &var_16[D_00300668]) {
+        do {
+            if (var_16->active != 0) {
+                _m2c_func_001109F0_Ch_SetThickness(var_16, fparg0);
+            }
+            var_16 = (Chr *)((u8 *)var_16 + (0x840));
+        } while (var_16 != &D_00300664[D_00300668]);
+    }
+}
 
 void Ch_MotionSetHokan(Chr *chr, int v)
 {
