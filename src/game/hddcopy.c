@@ -1,4 +1,5 @@
 /* tu_109 0x165eb8-0x1691c8: medium; hddcopy (config/tu_map.tsv) */
+#define func_00165F70 _hdr_func_00165F70
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
@@ -7,6 +8,7 @@
 #include "ffx/v1.h"
 #include "ffx/s1.h"
 #include "ffx/w2.h"
+#undef func_00165F70
 
 void TkyiAssert(const char *msg)
 {
@@ -45,7 +47,16 @@ int hdd_rmode_get(int i) {
     return r->b10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00165F70);
+s64 func_00165F70(s32 arg0) {
+    s64 m1 = -1;
+    s64 v = D_00597490[arg0].q08;
+    s64 v2 = v + 0x7FF;
+    __asm__("" : "+r"(m1));
+    if (m1 < v) {
+        v2 = v;
+    }
+    return (v2 << 21) >> 32;
+}
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00165FA8);
 

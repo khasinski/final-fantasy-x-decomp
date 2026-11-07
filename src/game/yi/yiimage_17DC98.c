@@ -32,7 +32,15 @@ void func_0017DF80(s32 arg0) {
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017DF98);
 INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C840);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E558);
+s32 func_0017E558(s32 arg0) {
+    u32 temp_2 = D_0030ECD0;
+    u32 temp_3_2 = temp_2 + (((arg0 + 0x3F) / 64) << 6);
+    if ((u32) D_0030ECE0 >= temp_3_2) {
+        D_0030ECD0 = temp_3_2;
+        return temp_2 >> 6;
+    }
+    return -1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E5A8);
 INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C860);

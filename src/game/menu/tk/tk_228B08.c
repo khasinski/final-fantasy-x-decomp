@@ -1,4 +1,5 @@
 /* tu_253 0x228b08-0x22b9f8: medium; ~Tk (config/tu_map.tsv) */
+#define func_0022B598 _hdr_func_0022B598
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -7,6 +8,7 @@
 #include "ffx/u3.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
+#undef func_0022B598
 
 void TkMn2InitStatusBG(void)
 {
@@ -313,7 +315,110 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuFlushSummonCommand);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuGetDispCommand);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_0022B598);
+s32 _m2c_func_0022B598_TkMenuGetCurrentPlayer() __asm__("TkMenuGetCurrentPlayer");
+s32 _m2c_func_0022B598_TkMenuGetDispCommand(s32, s32, s32, s32, s32 *) __asm__("TkMenuGetDispCommand");
+s32 _m2c_func_0022B598_func_00224950(s32, s32) __asm__("func_00224950");
+s32 _m2c_func_0022B598_func_00224978(s32, s32) __asm__("func_00224978");
+void _m2c_func_0022B598_func_002253F8(s32, s32, s32, s32) __asm__("func_002253F8");
+void _m2c_func_0022B598_func_00225420() __asm__("func_00225420");
+void _m2c_func_0022B598_func_00225498() __asm__("func_00225498");
+void _m2c_func_0022B598_func_00225920() __asm__("func_00225920");
+void _m2c_func_0022B598_func_00225A38() __asm__("func_00225A38");
+void _m2c_func_0022B598_func_00226290(s16, s32, s32) __asm__("func_00226290");
+void _m2c_func_0022B598_func_00226688(s32, s32, s32, s32) __asm__("func_00226688");
+void _m2c_func_0022B598_func_00226770(s32, s32, s32, s32) __asm__("func_00226770");
+void _m2c_func_0022B598_func_00226800(s32, s32, s32, s32) __asm__("func_00226800");
+void _m2c_func_0022B598_func_00226D88(s32, s32, s32) __asm__("func_00226D88");
+void _m2c_func_0022B598_func_00226E10(s32, s32, s32) __asm__("func_00226E10");
+s32 _m2c_func_0022B598_func_002292B8(s16, s16) __asm__("func_002292B8");
+s32 _m2c_func_0022B598_func_00242940() __asm__("func_00242940");
+void _m2c_func_0022B598_func_002492F0() __asm__("func_002492F0");
+void _m2c_func_0022B598_graphicUiRemapY2() __asm__("graphicUiRemapY2");
+/* DEBT(CAST) */
+void func_0022B598(void *arg0) {
+    u8 sp[0x60];
+    s32 sp60;
+    s32 sp64;
+    s32 sp68;
+    s32 var_17;
+    s32 var_30;
+    s32 *var_20;
+    s32 temp_16;
+    s32 temp_17;
+    s32 temp_18;
+    s32 temp_18_2;
+    s32 temp_22;
+    s32 temp_3;
+    s32 temp_5;
+    s32 var_16;
+    s32 var_21;
+    s32 var_23;
+    s32 var_7;
+    u32 var_19;
+
+    sp60 = (*(s32 *)((u8 *)(arg0) + (0x58)));
+    temp_18 = (*(s32 *)((u8 *)(arg0) + (0x5C)));
+    sp64 = (*(s32 *)((u8 *)(arg0) + (0x60)));
+    _m2c_func_0022B598_func_002492F0();
+    _m2c_func_0022B598_func_002492F0();
+    _m2c_func_0022B598_func_00225A38();
+    _m2c_func_0022B598_func_00225920();
+    if ((*(s32 *)((u8 *)(arg0) + (0x64))) == 0) {
+        var_7 = _m2c_func_0022B598_TkMenuGetCurrentPlayer();
+        var_30 = D_00693A58[1];
+        var_23 = D_00693A5C;
+        var_17 = D_00693A48[1];
+    } else {
+        var_7 = _m2c_func_0022B598_func_00242940();
+        var_30 = D_00693A58[1] + 0xB;
+        var_23 = D_00693A5C - 1;
+        var_17 = D_00693A48[1] + 0xB;
+    }
+    temp_22 = _m2c_func_0022B598_TkMenuGetDispCommand(sp64, sp60, temp_18, var_7, sp);
+    temp_5 = _m2c_func_0022B598_func_002292B8((*(s16 *)((u8 *)(arg0) + (0x52))), (*(s16 *)((u8 *)(arg0) + (0x54))));
+    if ((*(s16 *)((u8 *)(arg0) + (0x54))) > 0) {
+        temp_3 = temp_5 * 0xD0;
+        sp68 = 0;
+        var_21 = ((s32)temp_3 / 4096);
+    } else {
+        var_21 = 0;
+        sp68 = ((s32)temp_5 / 16);
+    }
+    var_19 = 0;
+    _m2c_func_0022B598_func_00225420();
+    _m2c_func_0022B598_func_002253F8(0x80, 0x80, 0x80, (s32) ((u16) (*(s16 *)((u8 *)(arg0) + (0x52))) << 0x10) >> 0x15);
+    _m2c_func_0022B598_func_00226290((*(s16 *)((u8 *)(D_00693A48) + (0))), var_17 + var_21, (*(s32 *)((u8 *)(arg0) + (0x68))));
+    _m2c_func_0022B598_func_00225498();
+    var_20 = sp;
+    if (temp_22 > 0) {
+        do {
+            temp_18_2 = *var_20;
+            temp_16 = (s32) (var_19 + (var_19 >> 0x1F)) >> 1;
+            temp_17 = (var_23 * temp_16) + var_30 + _m2c_func_0022B598_func_00224950(var_21, temp_16);
+            if (var_19 & 1) {
+                var_16 = (*(s16 *)((u8 *)(D_00693A58) + (0))) + _m2c_func_0022B598_func_00224978(sp68, temp_16);
+            } else {
+                var_16 = *D_00693A50 - _m2c_func_0022B598_func_00224978(sp68, temp_16);
+            }
+            if ((temp_17 < 0x1A1) && (var_16 < 0x201) && (var_16 >= -0x200)) {
+                _m2c_func_0022B598_func_00226D88(var_16, temp_17, 0x10);
+                _m2c_func_0022B598_func_00226E10(var_16 + (*(s16 *)((u8 *)(D_00325878) + (0))) + 0x58, temp_17 + D_00325878[1], 0xD7);
+                if (temp_18_2 != 0) {
+                    if (sp60 == 1) {
+                        _m2c_func_0022B598_func_00226688(temp_18_2, var_16 + 0xC, temp_17 + 1, 0);
+                    } else if (sp64 == 0) {
+                        _m2c_func_0022B598_func_00226800(temp_18_2, var_16, temp_17, 0);
+                    } else {
+                        _m2c_func_0022B598_func_00226770(temp_18_2, var_16, temp_17, 0);
+                    }
+                }
+            }
+            var_19 += 1;
+            var_20 = (s32 *)((u8 *)var_20 + (4));
+        } while ((s32) var_19 < temp_22);
+    }
+    _m2c_func_0022B598_graphicUiRemapY2();
+}
 
 void func_0022B878(void) {
 }

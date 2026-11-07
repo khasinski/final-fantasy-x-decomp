@@ -1,9 +1,11 @@
 /* tu_207 0x1df1c0-0x1dfc50: low; ~Ms (config/tu_map.tsv) */
+#define MsSEPtransRegist _hdr_MsSEPtransRegist
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef MsSEPtransRegist
 
 void func_001DF1C0(void) {
     int i;
@@ -33,7 +35,23 @@ int MsSEPtransCheckWave(void) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DF1C0", MsSEPtransRegist);
+/* DEBT(CAST) */
+void MsSEPtransRegist(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Q4Ent12 *temp_3_2;
+    s32 temp_3;
+
+    while (D_00662EE4 >= 0x10) {
+        MsSEPtransProcess();
+    }
+    temp_3 = D_00662EE0 + D_00662EE4;
+    D_00662EE4 += 1;
+    temp_3_2 = &D_00662E20[temp_3 % 16];
+    (*(s32 *)((u8 *)(temp_3_2) + (0))) = arg1;
+    (*(s32 *)((u8 *)(temp_3_2) + (4))) = arg2;
+    temp_3_2->pad9[0] = arg0;
+    temp_3_2->f8 = arg3;
+    temp_3_2->pad9[1] = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DF1C0", MsSEPtransProcess);
 

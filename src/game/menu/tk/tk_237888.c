@@ -1,5 +1,7 @@
 /* tu_263 0x237888-0x23a450: low; ~Tk (config/tu_map.tsv) */
 #define func_0023A298 _hdr_func_0023A298
+#define func_00238718 _hdr_func_00238718
+#define func_00238C48 _hdr_func_00238C48
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -9,6 +11,8 @@
 #include "ffx/s5.h"
 #include "ffx/s6.h"
 #include "ffx/u3.h"
+#undef func_00238718
+#undef func_00238C48
 #undef func_0023A298
 
 void func_00237888(void)
@@ -170,7 +174,46 @@ void func_002386D8(Task *t, int x, int y) {
     func_002270F8(x + D_003260B8.x, y + D_003260B8.y + ((t->x48 - t->x32) << 5), 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00238718);
+void _m2c_func_00238718_func_00225908() __asm__("func_00225908");
+void _m2c_func_00238718_func_00225920() __asm__("func_00225920");
+void _m2c_func_00238718_func_00225A38() __asm__("func_00225A38");
+void _m2c_func_00238718_func_00225B00() __asm__("func_00225B00");
+void _m2c_func_00238718_func_00225E88(s16, s16, s16, s16, s16, u16, u16) __asm__("func_00225E88");
+void _m2c_func_00238718_func_002274A0(s16, s32, s32, s16) __asm__("func_002274A0");
+s32 _m2c_func_00238718_func_00228220(s32, s32) __asm__("func_00228220");
+void _m2c_func_00238718_func_00238630(void *, s32, s16, s32, s32, s32) __asm__("func_00238630");
+void _m2c_func_00238718_func_002386D8(void *, s32, s32) __asm__("func_002386D8");
+void _m2c_func_00238718_func_002492F0() __asm__("func_002492F0");
+extern s16 _m2c_func_00238718_D_003260BA __asm__("D_003260BA");
+/* DEBT(CAST) */
+void func_00238718(void *arg0) {
+    s16 temp_17;
+    s32 temp_18;
+    s32 temp_2;
+
+    _m2c_func_00238718_func_002492F0();
+    _m2c_func_00238718_func_002492F0();
+    _m2c_func_00238718_func_00225A38();
+    _m2c_func_00238718_func_00225920();
+    temp_18 = _m2c_func_00238718_func_00228220(D_00694080, D_0069408C);
+    temp_17 = _m2c_func_00238718_D_003260BA;
+    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 0, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00238718_func_00238630(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+    } else {
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 1, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00238718_func_00238630(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0x120);
+        _m2c_func_00238718_func_00238630(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
+    }
+    _m2c_func_00238718_func_00225908();
+    if (D_00326030->b45 > 0) {
+        _m2c_func_00238718_func_002386D8(arg0, 0, 0);
+    }
+    _m2c_func_00238718_func_00225E88((*(s16 *)((u8 *)(D_00326108) + (0))), D_00326108[1], D_00326108[2], D_00326108[3], (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (*(u16 *)((u8 *)(arg0) + (0x30))));
+    _m2c_func_00238718_func_00225B00();
+}
 
 int func_00238898(void) { return 1; }
 
@@ -250,7 +293,46 @@ void func_00238C08(Task *t, int x, int y) {
     func_002270F8(x + D_003260B8.x, y + D_003260B8.y + ((t->x48 - t->x32) << 5), 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00238C48);
+void _m2c_func_00238C48_func_00225908() __asm__("func_00225908");
+void _m2c_func_00238C48_func_00225920() __asm__("func_00225920");
+void _m2c_func_00238C48_func_00225A38() __asm__("func_00225A38");
+void _m2c_func_00238C48_func_00225B00() __asm__("func_00225B00");
+void _m2c_func_00238C48_func_00225E88(s16, s16, s16, s16, s16, u16, u16) __asm__("func_00225E88");
+void _m2c_func_00238C48_func_002274A0(s16, s32, s32, s16) __asm__("func_002274A0");
+s32 _m2c_func_00238C48_func_00228220(s32, s32) __asm__("func_00228220");
+void _m2c_func_00238C48_func_00238B60(void *, s32, s16, s32, s32, s32) __asm__("func_00238B60");
+void _m2c_func_00238C48_func_00238C08(void *, s32, s32) __asm__("func_00238C08");
+void _m2c_func_00238C48_func_002492F0() __asm__("func_002492F0");
+extern s16 _m2c_func_00238C48_D_003260BA __asm__("D_003260BA");
+/* DEBT(CAST) */
+void func_00238C48(void *arg0) {
+    s16 temp_17;
+    s32 temp_18;
+    s32 temp_2;
+
+    _m2c_func_00238C48_func_002492F0();
+    _m2c_func_00238C48_func_002492F0();
+    _m2c_func_00238C48_func_00225A38();
+    _m2c_func_00238C48_func_00225920();
+    temp_18 = _m2c_func_00238C48_func_00228220(D_00694080, D_0069408C);
+    temp_17 = _m2c_func_00238C48_D_003260BA;
+    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 0, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00238C48_func_00238B60(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+    } else {
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 1, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00238C48_func_00238B60(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0x120);
+        _m2c_func_00238C48_func_00238B60(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
+    }
+    _m2c_func_00238C48_func_00225908();
+    if (D_00326030->b45 > 0) {
+        _m2c_func_00238C48_func_00238C08(arg0, 0, 0);
+    }
+    _m2c_func_00238C48_func_00225E88((*(s16 *)((u8 *)(D_00326108) + (0))), D_00326108[1], D_00326108[2], D_00326108[3], (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (*(u16 *)((u8 *)(arg0) + (0x30))));
+    _m2c_func_00238C48_func_00225B00();
+}
 
 int func_00238DC8(void) { return 1; }
 

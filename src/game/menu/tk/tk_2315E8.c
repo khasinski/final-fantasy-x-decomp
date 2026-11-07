@@ -1,4 +1,5 @@
 /* tu_257 0x2315e8-0x232c88: medium; ~Tk (config/tu_map.tsv) */
+#define func_00232180 _hdr_func_00232180
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -6,6 +7,7 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #include "ffx/s5.h"
+#undef func_00232180
 
 void func_002315E8(void)
 {
@@ -128,7 +130,54 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232028);
 
 void func_00232158(Task *o, int a1, int a2) { func_002270F8(a1, a2 + ((o->x48 - o->x32) << 5), 0); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232180);
+s32 _m2c_func_00232180_TkMenuGetCurrentPlayer() __asm__("TkMenuGetCurrentPlayer");
+void _m2c_func_00232180_func_00225908() __asm__("func_00225908");
+void _m2c_func_00232180_func_00225920() __asm__("func_00225920");
+void _m2c_func_00232180_func_00225A38() __asm__("func_00225A38");
+void _m2c_func_00232180_func_00225B00() __asm__("func_00225B00");
+void _m2c_func_00232180_func_00225E88(s16, s16, s16, s16, s16, u16, u16) __asm__("func_00225E88");
+void _m2c_func_00232180_func_00225F30(s16, s16, s32) __asm__("func_00225F30");
+void _m2c_func_00232180_func_00226210(s16, s16, s32) __asm__("func_00226210");
+void _m2c_func_00232180_func_002274A0(s16, s32, s32, s16) __asm__("func_002274A0");
+s32 _m2c_func_00232180_func_00228B80() __asm__("func_00228B80");
+s32 _m2c_func_00232180_func_00231DC8(void *) __asm__("func_00231DC8");
+void _m2c_func_00232180_func_00231E10(s32) __asm__("func_00231E10");
+void _m2c_func_00232180_func_00231F88(void *, s32, s16, s32, s32) __asm__("func_00231F88");
+void _m2c_func_00232180_func_00232028(s16) __asm__("func_00232028");
+void _m2c_func_00232180_func_00232158(void *, s32, s32) __asm__("func_00232158");
+/* DEBT(CAST) */
+void func_00232180(void *arg0) {
+    s16 temp_16;
+    s16 temp_17;
+    s16 temp_17_2;
+    s32 temp_2;
+
+    _m2c_func_00232180_func_00225A38();
+    _m2c_func_00232180_func_00225920();
+    _m2c_func_00232180_TkMenuGetCurrentPlayer();
+    temp_17 = D_00693D88.y;
+    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
+        _m2c_func_00232180_func_002274A0(temp_17, 0x120, 0, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00232180_func_00231F88(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20);
+    } else {
+        _m2c_func_00232180_func_002274A0(temp_17, 0x120, 1, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        _m2c_func_00232180_func_00231F88(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20);
+        _m2c_func_00232180_func_002274A0(temp_17, 0x120, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0x120);
+        _m2c_func_00232180_func_00231F88(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20);
+    }
+    _m2c_func_00232180_func_00225908();
+    _m2c_func_00232180_func_00232158(arg0, D_00693D88.x + 0xC, (temp_17 = D_00693D88.y) + 1);
+    _m2c_func_00232180_func_00225E88((*(s16 *)((u8 *)(D_00693D90) + (0))), D_00693D90[1], D_00693D90[2], D_00693D90[3], (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (*(u16 *)((u8 *)(arg0) + (0x30))));
+    _m2c_func_00232180_func_00226210((*(s16 *)((u8 *)(D_00693D78) + (0))), D_00693D78[1], 7);
+    _m2c_func_00232180_func_00226210((*(s16 *)((u8 *)(D_00693D70) + (0))), D_00693D70[1], 6);
+    _m2c_func_00232180_func_00231E10(_m2c_func_00232180_func_00228B80());
+    _m2c_func_00232180_func_00232028((*(s16 *)((u8 *)(arg0) + (0x48))));
+    temp_16 = (*(s16 *)((u8 *)(D_00693D68) + (0)));
+    temp_17_2 = D_00693D68[1];
+    _m2c_func_00232180_func_00225F30(temp_16, temp_17_2, _m2c_func_00232180_func_00231DC8(arg0));
+    _m2c_func_00232180_func_00225B00();
+}
 
 int func_00232348(void) { return 1; }
 

@@ -1,5 +1,6 @@
 /* tu_250 0x224930-0x226bf0: low; ~Tk (config/tu_map.tsv) */
 #define func_00225E88 _hdr_func_00225E88
+#define func_00225920 _hdr_func_00225920
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -8,6 +9,7 @@
 #include "ffx/v5.h"
 #include "ffx/g3.h"
 #include "ffx/u4.h"
+#undef func_00225920
 #undef func_00225E88
 
 s32 func_00224930(void)
@@ -104,7 +106,28 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_224930", func_00225800);
 
 void func_00225908(void) { func_00225800(0, 0, 0x1FF, 0x19F); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_224930", func_00225920);
+CmdRec *_m2c_func_00225920_func_00220830() __asm__("func_00220830");
+s32 _m2c_func_00225920_func_00220838() __asm__("func_00220838");
+/* DEBT(CAST) */
+void func_00225920(void) {
+    CmdRec *temp_16;
+    s32 temp_2;
+    s32 temp_2_2;
+
+    temp_16 = _m2c_func_00225920_func_00220830();
+    temp_2 = _m2c_func_00225920_func_00220838();
+    temp_2_2 = ((s32)temp_2 / 128) << 6;
+    if (D_00693850 == temp_16) {
+        D_0069384C = (CmdRec *)((u8 *)temp_16 + temp_2_2);
+    } else {
+        D_0069384C = temp_16;
+    }
+    D_003257E8[0] = 0x80;
+    D_003257F0[0] = 0x80;
+    D_003257F8[0] = 0x80;
+    D_00325800[0] = 0x80;
+    D_00693850 = D_0069384C;
+}
 
 void func_002259B8(void)
 {

@@ -135,7 +135,9 @@ s8 func_0016CBF8(int i) {
     return ((s8 *)MsGetSaveEventFlag())[i];
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016CC28);
+s32 func_0016CC28(s32 arg0) {
+    return ((s8) *(s8 *)(MsGetSaveEventFlag() + (((s32)arg0 / 8))) >> (arg0 & 7)) & 1;
+}
 
 int func_0016CC78(void) {
     return func_0014AC00();

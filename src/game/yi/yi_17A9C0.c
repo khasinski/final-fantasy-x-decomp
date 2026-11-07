@@ -207,9 +207,51 @@ void func_0017AFB0(V2Save17A *s, Obj17A110 *o)
     func_0017AB10(s->v30, o->v20);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B028);
+void func_0017B028(u8 *a, u8 *b) {
+    u8 *b30 = b + 0x30;
+    B4 *dst;
+    B4 *src;
+    s32 i;
+    *(B4 *)(a + 0x68370) = *(B4 *)(b + 0xC);
+    *(float *)(a + 0x68374) = *(float *)(b + 0x10);
+    *(float *)(a + 0x68378) = *(float *)(b + 0x14);
+    *(float *)(a + 0x6837C) = *(float *)(b + 0x18);
+    *(float *)(a + 0xBCB44) = *(float *)(b + 0x1C);
+    *(float *)(a + 0xBCB48) = *(float *)(b + 0x20);
+    dst = (B4 *)(a + 0x683A8);
+    src = (B4 *)b;
+    i = 2;
+    do {
+        *dst = *src;
+        i--;
+        dst++;
+        src++;
+    } while (i >= 0);
+    func_0017AB10(a + 0x68250, b30);
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B0D0);
+void func_0017B0D0(u8 *a, u8 *b) {
+    u8 *a30 = a + 0x30;
+    B4 *dst;
+    B4 *src;
+    s32 i;
+    *(B4 *)(a + 0xC) = *(B4 *)(b + 0x68370);
+    *(float *)(a + 0x10) = *(float *)(b + 0x68374);
+    *(float *)(a + 0x14) = *(float *)(b + 0x68378);
+    *(float *)(a + 0x18) = *(float *)(b + 0x6837C);
+    *(float *)(a + 0x1C) = *(float *)(b + 0xBCB44);
+    *(float *)(a + 0x20) = *(float *)(b + 0xBCB48);
+    dst = (B4 *)a;
+    src = (B4 *)(b + 0x683A8);
+    i = 2;
+    do {
+        *dst = *src;
+        i--;
+        dst++;
+        src++;
+    } while (i >= 0);
+    func_0017AB10(a30, b + 0x68250);
+}
 
 void func_0017B178(R2Cpy38 *d, R2Cpy20 *s) {
     d->w0 = s->w0;
@@ -264,9 +306,53 @@ void func_0017B2E8(R2Big68 *a, R2Mat40 *b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B360);
+void _m2c_func_0017B360_func_0017B480(void *, void *) __asm__("func_0017B480");
+void func_0017B360(void *a, R2Mat40 *b) {
+    if (b->w4 != 0x100) {
+        __asm__ volatile("");
+        if (b->w4 == 0x110) {
+            _m2c_func_0017B360_func_0017B480(a, b);
+        } else {
+            BREAK();
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B390);
+extern s32 _m2c_func_0017B390_D_0065F750[] __asm__("D_0065F750");
+void _m2c_func_0017B390_func_002DA610(int a, int b) __asm__("func_002DA610");
+s32 _m2c_func_0017B390_func_002DB6D8(int a0) __asm__("func_002DB6D8");
+extern void _m2c_func_0017B390_func_002DBB00(void *ch, int a, int b) __asm__("func_002DBB00");
+void _m2c_func_0017B390_func_002DBF78(int a, int b, int c) __asm__("func_002DBF78");
+void _m2c_func_0017B390_func_002F8660() __asm__("func_002F8660");
+void func_0017B390(void) {
+    s32 temp_2_2;
+    s32 *temp_2;
+    s32 *temp_3;
+
+    _m2c_func_0017B390_D_0065F750[0] = 0x8004;
+    _m2c_func_0017B390_D_0065F750[1] = 0x10000000;
+    temp_3 = &_m2c_func_0017B390_D_0065F750[4];
+    _m2c_func_0017B390_D_0065F750[2] = 0xE;
+    _m2c_func_0017B390_D_0065F750[3] = 0;
+    temp_3[0] = 0x01000000;
+    temp_3[1] = 1;
+    temp_3[2] = 0x4C;
+    temp_3[3] = 0;
+    temp_2 = &_m2c_func_0017B390_D_0065F750[8];
+    temp_2[0] = 0x01000000;
+    temp_2[1] = 1;
+    temp_2[2] = 0x4D;
+    temp_2[3] = 0;
+    temp_2_2 = _m2c_func_0017B390_func_002DB6D8(2);
+    _m2c_func_0017B390_func_002DBF78(temp_2_2, 0, 0x100);
+    *(volatile u8 *)(temp_2_2) |= 1;
+    *(volatile u8 *)(temp_2_2) |= 0x40;
+    *(volatile u8 *)(temp_2_2) &= 0x7F;
+    *(u8 *)(temp_2_2) &= 0xF3;
+    _m2c_func_0017B390_func_002F8660(0);
+    _m2c_func_0017B390_func_002DBB00((void *) temp_2_2, (s32) _m2c_func_0017B390_D_0065F750, 5);
+    _m2c_func_0017B390_func_002DA610(0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B480);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C420);

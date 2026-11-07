@@ -214,7 +214,20 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", AtelInitBasicWork);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_143BD0/rodata", jtbl_0056AD00);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_143BD0/rodata", jtbl_0056AD20);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", func_00144810);
+/* DEBT(CAST) */
+s32 func_00144810(s32 a) {
+    s32 temp_2;
+    s32 var_16;
+    s32 var_17 = 0;
+    s8 *temp_2_2;
+
+    temp_2 = AtelGetActorNumber((Actor *) a);
+    for (var_16 = 0; var_16 < temp_2; var_16++) {
+        temp_2_2 = AtelGetIndexWork((Actor *) a, var_16);
+        var_17 += (((*(s32 *)((u8 *)(temp_2_2) + (0x10))) + 0xF) / 16) * 0x10;
+    }
+    return var_17;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", AtelInitSourceCodeDebugWork);
 

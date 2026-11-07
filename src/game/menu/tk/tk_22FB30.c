@@ -1,4 +1,5 @@
 /* tu_256 0x22fb30-0x2315e8: high; ~Tk (config/tu_map.tsv) */
+#define func_002305B8 _hdr_func_002305B8
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -9,6 +10,7 @@
 #include "ffx/v5.h"
 #define func_001F8800 q6_func_001F8800 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q6.h"
+#undef func_002305B8
 #undef func_001F8800
 
 void func_0022FB30(void)
@@ -118,7 +120,36 @@ void func_00230560(Task *t, int a1, int a2)
     func_002270F8(x, y, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22FB30", func_002305B8);
+void _m2c_func_002305B8_func_00225908() __asm__("func_00225908");
+void _m2c_func_002305B8_func_00225E88(s16, s16, s16, s16, s16, u16, s32) __asm__("func_00225E88");
+void _m2c_func_002305B8_func_002274A0(s16, s32, s32, s16) __asm__("func_002274A0");
+void _m2c_func_002305B8_func_00230480(void *, s32, s16, s32, s32) __asm__("func_00230480");
+void _m2c_func_002305B8_func_00230560(void *, s32, s32) __asm__("func_00230560");
+extern s16 _m2c_func_002305B8_D_00693C3A __asm__("D_00693C3A");
+/* DEBT(CAST) */
+void func_002305B8(void *arg0) {
+    s16 temp_17;
+    s16 temp_7;
+    s32 temp_2;
+
+    temp_17 = _m2c_func_002305B8_D_00693C3A;
+    temp_7 = (*(s16 *)((u8 *)(arg0) + (0x46)));
+    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
+        _m2c_func_002305B8_func_002274A0(temp_17, 0xE0, 0, temp_7);
+        _m2c_func_002305B8_func_00230480(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20);
+    } else {
+        _m2c_func_002305B8_func_002274A0(temp_17, 0xE0, 1, temp_7);
+        _m2c_func_002305B8_func_00230480(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20);
+        _m2c_func_002305B8_func_002274A0(temp_17, 0xE0, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
+        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0xE0);
+        _m2c_func_002305B8_func_00230480(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20);
+    }
+    _m2c_func_002305B8_func_00225908();
+    _m2c_func_002305B8_func_00225E88((*(s16 *)((u8 *)(D_00693C40) + (0))), (*(s16 *)((u8 *)(D_00693C40) + (2))), (*(s16 *)((u8 *)(D_00693C40) + (4))), (*(s16 *)((u8 *)(D_00693C40) + (6))), (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (s32) ((*(u16 *)((u8 *)(arg0) + (0x30))) + 1) >> 1);
+    if ((*(s8 *)((u8 *)(arg0) + (0x45))) >= 0) {
+        _m2c_func_002305B8_func_00230560(arg0, 0xC, 1);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22FB30", func_00230700);
 

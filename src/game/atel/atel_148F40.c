@@ -686,9 +686,34 @@ void func_0014AF68(s32 v)
     D_0030B8B8 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetHelpEventFlag);
+s32 AtelGetHelpEventFlag(s32 a) {
+    s8 *p = (s8 *)MsGetSaveEventFlag();
+    u8 mask;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelSetHelpEventFlag);
+    a = (a < 0) ? 0 : a;
+    mask = 1 << (a % 8);
+    a >>= 3;
+    a = (a >= 0x80) ? 0x7F : a;
+    if (p[a] & mask) {
+        return 1;
+    }
+    return 0;
+}
+
+void AtelSetHelpEventFlag(s32 a, s32 b) {
+    u8 *p = (u8 *)MsGetSaveEventFlag();
+    u8 mask;
+
+    a = (a < 0) ? 0 : a;
+    mask = 1 << (a % 8);
+    a >>= 3;
+    a = (a >= 0x80) ? 0x7F : a;
+    if (b != 0) {
+        p[a] |= mask;
+    } else {
+        p[a] &= ~mask;
+    }
+}
 
 void AtelSetShopRatio(s32 v)
 {
