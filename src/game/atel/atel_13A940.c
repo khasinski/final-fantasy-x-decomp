@@ -693,7 +693,26 @@ int func_0013C1C0(Actor *a, int mask) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", AtelExecInitFunc);
+/* DEBT(CAST) */
+void AtelExecInitFunc(u32 *p) {
+    s32 temp_2;
+    s32 var_16;
+    u8 temp_19;
+    Actor *temp_16;
+
+    temp_2 = AtelGetCtrlworkActorTotal((char *)p);
+    temp_19 = *((u8 *)p + 8);
+    for (var_16 = 0; var_16 < temp_2; var_16++) {
+        temp_16 = AtelGetBasicWork(var_16);
+        do {
+            func_00140B48(temp_16, temp_19, 1);
+        } while (!((*(s32 *)((u8 *)(temp_16) + (0x34))) & 0x10));
+    }
+    for (var_16 = 0; var_16 < temp_2; var_16++) {
+        AtelDecodeSignal(var_16, -1);
+    }
+    *p |= 8;
+}
 
 void func_0013C308(int v) {
     D_0058E3D8->b1E6 = v;

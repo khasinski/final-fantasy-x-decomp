@@ -128,7 +128,33 @@ void func_002B2810(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2970);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B29D8);
+extern s32 _m2c_func_002B29D8_D_006F3A20 __asm__("D_006F3A20");
+extern u_long128 _m2c_func_002B29D8_D_00703C50 __asm__("D_00703C50");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002B29D8(void) {
+    s32 *temp_2;
+    s32 *var_3;
+    register s32 var_4 __asm__("$4");
+    register u_long128 val __asm__("$5");
+
+    var_3 = &_m2c_func_002B29D8_D_006F3A20;
+    val = 0x20000000;
+    __asm__("" : "+r"(val), "+r"(var_3));
+    var_4 = 0x1022;
+    do {
+        __asm__ volatile("");
+        (*(u_long128 *)((u8 *)(var_3) + (0))) = val;
+        __asm__ volatile("" : : : "memory");
+        temp_2 = (s32 *)((u8 *)var_3 + 0x10);
+        (*(s32 **)((u8 *)(var_3) + (4))) = temp_2;
+        (*(s32 **)((u8 *)(var_3) + (8))) = var_3;
+        var_4 -= 1;
+        __asm__ volatile("" : "+r"(var_4));
+        var_3 = temp_2;
+        __asm__ volatile("");
+    } while (var_4 >= 0);
+    _m2c_func_002B29D8_D_00703C50 = 0x70000000;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2A28);
 

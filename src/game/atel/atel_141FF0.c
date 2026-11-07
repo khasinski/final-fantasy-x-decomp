@@ -248,7 +248,27 @@ int AtelGetActorType(int id) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", func_00142B50);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", func_00142C40);
+void func_00142C40(Actor *a, ObjBindR *b, s32 n) {
+    ObjSlotR *temp_3;
+    ObjSlotBR *temp_4;
+
+    temp_3 = &OBJR(a)->slot[n];
+    temp_3->f10 = 0.0f;
+    temp_3->f3C = 3.1415927f;
+    temp_3->f40 = 3.1415927f;
+    temp_4 = &OBJR(a)->slotB[n];
+    temp_4->f10 = 0.049087387f;
+    temp_4->f14 = 0.049087387f;
+    temp_4->f18 = 0.049087387f;
+    temp_3->h4 = 0x5A;
+    temp_3->h6 = 0;
+    temp_4->f1C = 0.049087387f;
+    temp_4->h4 = 0x5A;
+    temp_4->h6 = 0;
+    b->s44 = temp_3;
+    temp_3->f38 = 1.0f;
+    b->s48 = temp_4;
+}
 
 /* DEBT(CAST): SlotCQ is the existing subsystem view of the bind-slot record. */
 void func_00142CC0(Actor *a, int n)

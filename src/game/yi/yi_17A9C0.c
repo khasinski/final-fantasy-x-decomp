@@ -60,7 +60,18 @@ void func_0017ABA8(void *arg0, void *arg1) {
     func_0017AB10(arg0 + 0x70, arg1 + 0x70);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AC10);
+/* DEBT(CAST) */
+void func_0017AC10(void *arg0, void *arg1) {
+    (*(u16 *)((u8 *)(arg0) + (0x30))) = (u16) (*(u16 *)((u8 *)(arg1) + (0)));
+    (*(u16 *)((u8 *)(arg0) + (0x32))) = (u16) (*(u16 *)((u8 *)(arg1) + (2)));
+    (*(u16 *)((u8 *)(arg0) + (0x36))) = (u16) (*(s32 *)((u8 *)(arg1) + (4)));
+    (*(float *)((u8 *)(arg0) + (0x38))) = (float) (*(float *)((u8 *)(arg1) + (0x40)));
+    (*(float *)((u8 *)(arg0) + (0x3C))) = (float) (*(float *)((u8 *)(arg1) + (0x44)));
+    (*(s32 *)((u8 *)(arg0) + (0x48))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x4C)));
+    func_0017AB10(arg0, arg1 + 0x10);
+    func_0017AB10(arg0 + 0x10, arg1 + 0x20);
+    func_0017AB10(arg0 + 0x20, arg1 + 0x30);
+}
 
 /* DEBT(CAST) */
 void func_0017AC88(void *arg0, void *arg1) {
@@ -75,7 +86,23 @@ void func_0017AC88(void *arg0, void *arg1) {
     func_0017AB10(arg0 + 0x30, arg1 + 0x20);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017AD00);
+typedef struct { u8 b[4]; } B4;
+void func_0017AD00(u8 *a, u8 *b) {
+    u8 *p = a + 0x68000;
+    B4 *dst = (B4 *)(a + 0x683A8);
+    B4 *src = (B4 *)(b + 0x20);
+    s32 i = 2;
+    *(B4 *)(p + 0x370) = *(B4 *)b;
+    *(float *)(p + 0x374) = *(float *)(b + 4);
+    *(float *)(p + 0x378) = *(float *)(b + 8);
+    *(float *)(p + 0x37C) = *(float *)(b + 0xC);
+    do {
+        *dst = *src;
+        i--;
+        dst++;
+        src++;
+    } while (i >= 0);
+}
 
 /* DEBT(CAST) */
 void func_0017AD78(void *arg0, void *arg1) {
@@ -99,7 +126,31 @@ void func_0017ADB8(void *arg0, void *arg1) {
     (*(s32 *)((u8 *)(arg0) + (0x14))) = (s32) (*(s32 *)((u8 *)(arg1) + (0x14)));
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017ADF8);
+void func_0017ADF8(V2Save17AE *save, V2State17AE *state) {
+    s32 remaining;
+    u16 *src;
+    u16 *dst;
+    u16 value;
+
+    save->h80 = (u16) state->h00;
+    save->h82 = (u16) state->h02;
+    save->h84 = (u16) state->w04;
+    save->h86 = (u16) state->h30;
+    save->w88 = (s32) state->w08;
+    CALL_func_0017AB10_INT(save->v50, state->v10);
+    CALL_func_0017AB10_INT(save->v60, state->v20);
+    dst = save->h90;
+    src = state->h38;
+    remaining = 3;
+    save->w8C = (s32) state->w34;
+    do {
+        value = *src;
+        remaining -= 1;
+        src += 1;
+        *dst = value;
+        dst += 1;
+    } while (remaining >= 0);
+}
 
 /* DEBT(CAST): integer-width views follow the existing shared interfaces. */
 void func_0017AE98(V2State17AE *state, V2Save17AE *save)

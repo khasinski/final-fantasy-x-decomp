@@ -129,7 +129,25 @@ float func_001496F0(s32 arg0) {
     return var_f20;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149770);
+/* DEBT(FAKE) */
+s32 func_00149770(void) {
+    register s32 temp_17 __asm__("$17");
+    register s32 var_16 __asm__("$16");
+    s8 *temp_4;
+
+    temp_17 = AtelChangeCurrentCtrl(0);
+    if (D_0058E3D8->flags & 1) {
+        var_16 = 0;
+        temp_4 = D_0058E3D8->p48;
+        if (temp_4 != 0) {
+            var_16 = func_00139080(temp_4);
+        }
+    } else {
+        var_16 = 0;
+    }
+    AtelSetCurrentCtrl(temp_17);
+    return var_16;
+}
 
 int func_001497E0(void)
 {

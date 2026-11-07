@@ -116,7 +116,16 @@ s32 func_0010F060(u_long128 *arg0) {
     return _m2c_func_0010F060_func_0010EBD8(((u_long128 *)((u8 *)arg0 + (0x10))));
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F0A8);
+/* DEBT(CAST) */
+void *func_0010F0A8(void *arg0) {
+    (*(s64 *)((u8 *)(arg0) + (0))) = 0x10000001;
+    (*(s32 *)((u8 *)(arg0) + (8))) = 0x11000000;
+    (*(s32 *)((u8 *)(arg0) + (0xC))) = 0x11000000;
+    arg0 = (u8 *)arg0 + 0x10;
+    (*(s64 *)((u8 *)(arg0) + (8))) = 0x11000000;
+    (*(s64 *)((u8 *)(arg0) + (0))) = 0;
+    return (u8 *)arg0 + 0x10;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F0D8);
 

@@ -1,10 +1,12 @@
 /* tu_208 0x1dfc50-0x1e08f0: low; ~Ms (config/tu_map.tsv) */
 #define func_001E0410 _hdr_func_001E0410
+#define MsChrSEplayMotion _hdr_MsChrSEplayMotion
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef MsChrSEplayMotion
 #undef func_001E0410
 
 int MsMusicSync(int a)
@@ -89,7 +91,27 @@ int func_001E00A0(u8 id, int b)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DFC50", MsChrSEplayMotion);
+void *_m2c_MsChrSEplayMotion_MsGetChr(s32) __asm__("MsGetChr");
+s32 _m2c_MsChrSEplayMotion_MsGetChrTop(void) __asm__("MsGetChrTop");
+s32 _m2c_MsChrSEplayMotion_func_001DFFA0(s32, s32) __asm__("func_001DFFA0");
+s32 _m2c_MsChrSEplayMotion_func_002EC198(s32, s32) __asm__("func_002EC198");
+s32 _m2c_MsChrSEplayMotion_func_002ED038(float) __asm__("func_002ED038");
+/* DEBT(CAST) */
+s32 MsChrSEplayMotion(s32 arg0, s32 arg1) {
+    s32 var_18 = 0;
+    void *temp_2;
+
+    if (_m2c_MsChrSEplayMotion_MsGetChrTop() != 0) {
+        arg0 &= 0xFF;
+        temp_2 = _m2c_MsChrSEplayMotion_MsGetChr(arg0);
+        if ((*(s8 *)((u8 *)(temp_2) + (0x15))) != 0) {
+            if (_m2c_MsChrSEplayMotion_func_002EC198(_m2c_MsChrSEplayMotion_func_002ED038((*(float *)((u8 *)(temp_2) + (0x40)))), 0) != 0) {
+                var_18 = _m2c_MsChrSEplayMotion_func_001DFFA0(arg0, arg1);
+            }
+        }
+    }
+    return var_18;
+}
 
 int func_001E0188(u8 id, int unused, int v) {
     u32 h = func_001DFD60(id, unused);

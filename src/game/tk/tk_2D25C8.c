@@ -78,7 +78,17 @@ u8 func_002D2790(s32 a, s32 b) {
     return p->active;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D27B8);
+s32 func_002D27B8(s32 a, s32 b) {
+    W10Pad *p = &D_0078ACC8[a][b];
+    s32 v = 0;
+    if (p->type == 5) {
+        v = p->shift[0] != 8;
+        if (p->shift[1] != 8) {
+            v++;
+        }
+    }
+    return v;
+}
 
 void func_002D2808(s32 a, s32 b, s32 v) {
     W10Pad *p = &D_0078ACC8[a][b];
@@ -221,7 +231,64 @@ void func_002D2BB8(W10Pad *p) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2C00);
+extern u16 _m2c_func_002D2C00_D_00561F20[] __asm__("D_00561F20");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_002D2C00(W10Pad *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register s32 temp_3_2 __asm__("$3");
+    register s32 temp_5 __asm__("$5");
+    register s32 var_10 __asm__("$10");
+    s32 var_12;
+    u16 *var_11;
+    register u16 *var_8 __asm__("$8");
+    register u32 temp_3 __asm__("$3");
+    s32 var_9;
+    s32 diff;
+    register u8 *base __asm__("$3");
+    register u16 *end __asm__("$13");
+
+    var_11 = _m2c_func_002D2C00_D_00561F20;
+    base = arg0->padA0;
+    end = &var_11[4];
+    __asm__("" : "+r"(end));
+    var_8 = (u16 *)((arg4 * 8) + (s32)base);
+    __asm__ volatile("" : "+r"(var_8), "+r"(end));
+    arg2 &= 0xFFFF;
+    arg3 &= 0xFFFF;
+    __asm__("" : "+r"(arg2), "+r"(arg3));
+    var_12 = 0;
+    do {
+        temp_3 = *var_11;
+        var_10 = 0;
+        var_9 = *var_8;
+        temp_5 = arg2 & temp_3;
+        temp_3_2 = arg3 & temp_3;
+        diff = temp_3_2 & (temp_3_2 ^ temp_5);
+        if (temp_5 != 0) {
+            if (temp_5 == temp_3_2) {
+                var_9 -= 1;
+                if (var_9 <= 0) {
+                    var_10 = temp_5;
+                    var_9 = (*(s16 *)((u8 *)(arg0) + (0x96)));
+                }
+            } else {
+                var_10 = temp_5;
+                __asm__("" : "+r"(var_10));
+                var_9 = (*(s16 *)((u8 *)(arg0) + (0x94)));
+                if (diff) {
+                    var_10 = 0;
+                }
+            }
+        }
+        {
+            register s32 or_v0 __asm__("$2") = var_12 | var_10;
+            var_12 = or_v0 & 0xFFFF;
+        }
+        *var_8 = var_9;
+        var_11++;
+        var_8++;
+    } while ((s32) var_11 < (s32) end);
+    return var_12;
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2C98);
 
@@ -264,7 +331,16 @@ void func_002D3330(W10Pad *a, u8 b, u8 c) {
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3348);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3468);
+void _m2c_func_002D3468_func_002D2C98(void *, s32, u16) __asm__("func_002D2C98");
+void _m2c_func_002D3468_func_002D3348(s32, s32, void *, s32) __asm__("func_002D3348");
+void _m2c_func_002D3468_func_002DE228() __asm__("func_002DE228");
+/* DEBT(CAST) */
+void func_002D3468(s32 arg0, s32 arg1, s32 arg2) {
+    W10Pad *temp_16 = &D_0078ACC8[arg0][arg1];
+    _m2c_func_002D3468_func_002DE228(arg0, arg1, arg2);
+    _m2c_func_002D3468_func_002D3348(arg0, arg1, temp_16, arg2);
+    _m2c_func_002D3468_func_002D2C98(temp_16, arg2, (*(u16 *)((u8 *)(temp_16) + (0x98))));
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D34E8);
 INCLUDE_RODATA("build/ee_asm/game/tk/tk_2D25C8/rodata", jtbl_00576020);
@@ -339,9 +415,44 @@ void func_002D3B88(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3BC0);
+void func_002D3BC0(s32 a, s32 b) {
+    u8 *base = D_0078ACC8[a][b].padA0;
+    s32 i, j;
+    __asm__("" : "+r"(base));
+    for (i = 0; i < 2; i++) {
+        s16 *row = (s16 *)((i * 8) + (s32)base);
+        for (j = 0; j < 4; j++) {
+            row[j] = 0;
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3C30);
+/* DEBT(CAST) */
+void func_002D3C30(s32 a, s32 b) {
+    W10Pad *temp_16;
+    s32 var_17;
+    s32 var_6;
+
+    var_17 = 0;
+    temp_16 = &D_0078ACC8[a][b];
+    temp_16->type = temp_16->pad9E = 1;
+    temp_16->active = 0;
+    (*(s16 *)((u8 *)(temp_16) + (0x94))) = 0xC;
+    (*(s16 *)((u8 *)(temp_16) + (0x96))) = 5;
+    func_002D2B58(temp_16);
+    func_002D2B68(temp_16);
+    func_002D2BB8(temp_16);
+    func_002D3BC0(a, b);
+    __asm__ volatile("" : "+r"(var_17));
+    var_6 = var_17;
+    temp_16->head = 0;
+    temp_16->stat[3] = 0;
+    do {
+        func_002D25C8(a, b, var_6, var_17);
+        var_17 += 1;
+        var_6 = var_17;
+    } while (var_17 < 0x10);
+}
 
 void func_002D3D00(void) {
     s32 i, j;

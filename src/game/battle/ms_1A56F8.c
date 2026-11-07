@@ -2,6 +2,7 @@
 #define MsCameraSetRoll _hdr_MsCameraSetRoll
 #define MsCameraSetScrDpt _hdr_MsCameraSetScrDpt
 #define func_001A65E0 _hdr_func_001A65E0
+#define func_001AA360 _hdr_func_001AA360
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -12,6 +13,7 @@
 #include "ffx/q4.h"
 #include "ffx/t2.h"
 #include "ffx/g2.h"
+#undef func_001AA360
 #undef func_001A65E0
 #undef MsCameraSetRoll
 #undef MsCameraSetScrDpt
@@ -717,7 +719,31 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraReset);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsEffectCameraInit);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AA360);
+extern float _m2c_func_001AA360_D_00317128 __asm__("D_00317128");
+extern float _m2c_func_001AA360_D_0065FDF0 __asm__("D_0065FDF0");
+extern u_long128 _m2c_func_001AA360_D_0065FE00 __asm__("D_0065FE00");
+extern u_long128 _m2c_func_001AA360_D_0065FE10 __asm__("D_0065FE10");
+extern s32 _m2c_func_001AA360_ms_effect_camera_flag __asm__("ms_effect_camera_flag");
+/* DEBT(FAKE) */
+void func_001AA360(u_long128 *arg0, u_long128 *arg1, float fparg0, float fparg1) {
+    register u_long128 t0 __asm__("$8");
+    u_long128 *p;
+    _m2c_func_001AA360_ms_effect_camera_flag = 1;
+    if (arg0 != 0) {
+        p = &_m2c_func_001AA360_D_0065FE10;
+        __asm__ volatile("" : "+r"(p));
+        t0 = *arg0;
+        *p = t0;
+    }
+    if (arg1 != 0) {
+        p = &_m2c_func_001AA360_D_0065FE00;
+        __asm__ volatile("" : "+r"(p));
+        t0 = *arg1;
+        *p = t0;
+    }
+    _m2c_func_001AA360_D_00317128 = fparg0;
+    _m2c_func_001AA360_D_0065FDF0 = fparg1;
+}
 
 void func_001AA3A8(void) {
     ms_effect_camera_flag = 0;

@@ -5,7 +5,20 @@
 #include "ffx/s0.h"
 #include "ffx/u0.h"
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", func_0010DE98);
+/* DEBT(FAKE) */
+s32 func_0010DE98(s32 a) {
+    register s32 hi2 __asm__("$6") = 0x580000;
+    register s32 hi5 __asm__("$5");
+    D_0057EB38 = 0;
+    __asm__ volatile("" : "+r"(hi2) : : "$2", "memory");
+    D_0057EB34 = a;
+    hi5 = 0x580000;
+    __asm__("" : "+r"(hi5));
+    *(s32 *)(hi2 - 0x14d0) = 0;
+    __asm__("" : "+r"(hi5) : "m"(*(s32 *)(hi2 - 0x14d0)));
+    *(s32 *)(hi5 - 0x14c4) = 0;
+    return 0x70000000;
+}
 
 s32 Sg_GetSpadPtr(void)
 {
