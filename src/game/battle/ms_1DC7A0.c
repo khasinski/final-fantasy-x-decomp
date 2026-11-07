@@ -7,6 +7,11 @@
 #include "ffx/v3.h"
 #include "ffx/g2.h"
 
+#ifndef NULL
+#define NULL ((void *)0)
+#endif
+#define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr)((u8 *)(expr) + (offset)))
+
 int func_001DC7A0(void)
 {
     return func_001CE050();
@@ -107,7 +112,44 @@ int MsApUp(int idx, BtlChr *c, int v, int r) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", MsGetItem);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", func_001DD2D0);
+s32 func_001DD2D0(s32 arg0, s32 arg1, s32 arg2) {
+    W5Ent16 *var_16;
+    s32 temp_2;
+    s32 var_5;
+
+    var_16 = NULL;
+    if (arg0 != 0) {
+        temp_2 = func_001DCA38(&btlgetdata);
+        if (temp_2 >= 0) {
+            var_16 = (void *)((temp_2 * 0x16) + btlgetdata.padFE);
+        }
+    } else {
+        for (var_5 = 0; var_5 < 0xC8; var_5++) {
+            W5Ent16 *temp_2_2 = &D_0031D96C[var_5];
+            if (temp_2_2->b2 == 0) {
+                var_16 = temp_2_2;
+                break;
+            }
+        }
+    }
+    if (var_16 != NULL) {
+        M2C_FIELD(var_16, s16 *, 0) = arg2;
+        var_16->b2 = 1;
+        var_16->b3 = 0;
+        var_16->b4 = arg1;
+        var_16->b5 = 0;
+        var_16->pad6[0] = 0xFF;
+        var_16->pad6[2] = 1;
+        var_16->pad6[3] = 1;
+        var_16->pad6[4] = 0;
+        var_16->pad6[5] = 1;
+        for (var_5 = 0; var_5 < 4; var_5++) {
+            ((s16 *)&var_16->pad6[8])[var_5] = 0xFF;
+        }
+        return 0;
+    }
+    return -1;
+}
 
 void MsFieldItemRead(void) {
     GetCD()->f10(0xD);

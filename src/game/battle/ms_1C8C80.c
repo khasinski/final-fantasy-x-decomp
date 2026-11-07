@@ -365,7 +365,53 @@ int MsGetCommandFar(int a, Obj1A *p) {
     return m;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CC7E8);
+s32 func_001CC7E8(s32 r) {
+    u8 sp[8];
+    u8 *p;
+    s32 i;
+    s32 cnt;
+    s32 rnd;
+    s32 acc;
+    s32 ret;
+
+    p = &sp[7];
+    for (i = 7; i >= 0; i--) {
+        *p = 0;
+        p--;
+    }
+    for (i = 0; i < 31; i++) {
+        if ((r >> i) & 1) {
+            sp[MsGetChrGroup(i)]++;
+        }
+    }
+    cnt = 0;
+    for (i = 0; i < 8; i++) {
+        if (sp[i] != 0) {
+            cnt++;
+        }
+    }
+    ret = 0;
+    if (cnt != 0) {
+        rnd = brnd(5) % cnt;
+        acc = 0;
+        cnt = rnd;
+        for (i = 0; i < 8; i++) {
+            if (sp[i] != 0) {
+                acc++;
+                if (acc > rnd) {
+                    cnt = i;
+                    break;
+                }
+            }
+        }
+        for (i = 0; i < 31; i++) {
+            if (((r >> i) & 1) && (MsGetChrGroup(i) == cnt)) {
+                ret |= 1 << i;
+            }
+        }
+    }
+    return ret;
+}
 
 /* DEBT(FAKE) */ /* DEBT(GOTO) */
 s32 MsGetCommandTarget2(s32 id, s32 a, s32 b, s32 c) {
