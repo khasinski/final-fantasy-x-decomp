@@ -39,6 +39,7 @@ extern u8 D_01B18910[];
 extern u8 D_01B18920[];
 extern u8 D_01B98D10[];
 
+int func_00107428_i(void *chr, int bone, int a2, void *dst) __asm__("func_00107428");
 void func_00110220(void *chr, float *x, float *y, float *z);
 void func_0026BE48(float *mtx, int angle);
 void func_00268610(void *o, void *a1, int a2);
@@ -172,8 +173,8 @@ int func_01B00A80(void)
             func_01B00698(&D_01B014C0, 1, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.121998f, 0.121998f, 0.121998f);
             D_01B01594 = 1;
         }
-        func_00107428(D_01B01574, 19, 0, a);
-        func_00107428(D_01B01574, 35, 0, b);
+        func_00107428_i(D_01B01574, 19, 0, a);
+        func_00107428_i(D_01B01574, 35, 0, b);
         D_01B014C0.position[0] = (a[0] + b[0]) * 0.5f + D_01B00670.x;
         D_01B014C0.position[1] = (a[1] + b[1]) * 0.5f + D_01B00670.y;
         D_01B014C0.position[2] = (a[2] + b[2]) * 0.5f + D_01B00670.z;
@@ -188,11 +189,11 @@ int func_01B00A80(void)
             D_01B00630[2] = func_01B009C8;
             D_01B01590 = 1;
         }
-        func_00107428(D_01B01570, 35, 0, D_01B01340.position);
+        func_00107428_i(D_01B01570, 35, 0, D_01B01340.position);
         D_01B01340.position[0] += D_01B00650.x;
         D_01B01340.position[1] += D_01B00650.y;
         D_01B01340.position[2] += D_01B00650.z;
-        func_00107428(D_01B01570, 35, 0, D_01B01440.position);
+        func_00107428_i(D_01B01570, 35, 0, D_01B01440.position);
         D_01B01440.position[0] += D_01B00660.x;
         D_01B01440.position[1] += D_01B00660.y;
         D_01B01440.position[2] += D_01B00660.z;
@@ -236,14 +237,14 @@ int func_01B00A80(void)
             func_01B007A8(&D_01B012C0);
         }
         if (D_01B0157C >= 70) {
-            func_00107428(D_01B01570, 35, 0, D_01B013C0.position);
+            func_00107428_i(D_01B01570, 35, 0, D_01B013C0.position);
             D_01B013C0.position[0] += D_01B00680.x;
             D_01B013C0.position[1] += D_01B00680.y;
             D_01B013C0.position[2] += D_01B00680.z;
             func_01B007A8(&D_01B013C0);
         }
         if (D_01B0157C >= 80) {
-            func_00107428(D_01B01570, 35, 0, D_01B01340.position);
+            func_00107428_i(D_01B01570, 35, 0, D_01B01340.position);
             D_01B01340.position[0] += D_01B00650.x;
             D_01B01340.position[1] += D_01B00650.y;
             D_01B01340.position[2] += D_01B00650.z;
