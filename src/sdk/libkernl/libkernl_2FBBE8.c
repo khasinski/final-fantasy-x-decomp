@@ -195,8 +195,95 @@ U5FioSlot *func_002FBCD0(u32 i)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FBD40);
-INCLUDE_RODATA("build/ee_asm/sdk/libkernl/libkernl_2FBBE8/rodata", jtbl_00578CF0);
+typedef struct {
+    s32 sema;
+    s32 cmd;
+    void *res;
+    s32 size;
+} IntrHdr;
+
+typedef struct {
+    s32 len1;
+    s32 len2;
+    u8 *dst1;
+    u8 *dst2;
+    u8 buf1[0x40];
+    u8 buf2[0x40];
+} IntrRead;
+
+void func_002FBD40(void) {
+    IntrHdr *p = (IntrHdr *)&D_00794A40;
+    IntrHdr hdr;
+    void *dst;
+    u32 len;
+    s32 i;
+    u8 *p1;
+    s32 sema;
+
+    __builtin_memcpy(&hdr.sema, (void *)((s32)&p->sema | 0x20000000), 4);
+    __builtin_memcpy(&hdr.cmd, (void *)((s32)&p->cmd | 0x20000000), 4);
+    __builtin_memcpy(&hdr.res, (void *)((s32)&p->res | 0x20000000), 4);
+    __builtin_memcpy(&hdr.size, (void *)((s32)&p->size | 0x20000000), 4);
+    if (hdr.sema >= 0) {
+        func_002EEF1C(hdr.res, (void *)((s32)(p + 1) | 0x20000000), hdr.size);
+    }
+    switch (hdr.cmd) {
+    case 2: {
+        IntrRead *rd = (IntrRead *)((s32)&D_00794A54 | 0x20000000);
+        if (rd->len1 > 0) {
+            p1 = rd->dst1;
+            for (i = 0; i < rd->len1; i++) {
+                p1[i] = rd->buf1[i];
+            }
+        }
+        if (rd->len2 > 0) {
+            p1 = rd->dst2;
+            for (i = 0; i < rd->len2; i++) {
+                p1[i] = rd->buf2[i];
+            }
+        }
+        break;
+    }
+    case 11: {
+        u32 *d = (u32 *)&D_00794A54;
+        __builtin_memcpy(&dst, (void *)((s32)&d[0] | 0x20000000), 4);
+        __builtin_memcpy(dst, (void *)((s32)&d[1] | 0x20000000), 0x144);
+        break;
+    }
+    case 12: {
+        u32 *d = (u32 *)&D_00794A54;
+        __builtin_memcpy(&dst, (void *)((s32)&d[0] | 0x20000000), 4);
+        __builtin_memcpy(dst, (void *)((s32)&d[1] | 0x20000000), 0x40);
+        break;
+    }
+    case 23:
+    case 25:
+    case 26: {
+        u32 *d = (u32 *)&D_00794A54;
+        __builtin_memcpy(&dst, (void *)((s32)&d[0] | 0x20000000), 4);
+        __builtin_memcpy(&len, (void *)((s32)&d[1] | 0x20000000), 4);
+        if (len > 0x400) {
+            len = 0x400;
+        }
+        func_002EEF1C(dst, (void *)((s32)&d[2] | 0x20000000), len);
+        break;
+    }
+    }
+    if (hdr.sema < 0) {
+        hdr.sema = -hdr.sema;
+        sema = hdr.sema;
+        for (i = 0; i < 0x20; i++) {
+            if (D_00568DF8[i] == sema) {
+                D_00568DF8[i] = -1;
+                __asm__("");
+                break;
+            }
+            __asm__("" : "+r"(sema));
+        }
+    } else {
+        func_002F8410(hdr.sema);
+    }
+}
 
 void func_002FC100(void)
 {
