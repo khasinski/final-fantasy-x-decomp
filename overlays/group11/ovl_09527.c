@@ -121,6 +121,7 @@ int func_01B008A8(void)
     float a[4];
     float b[4];
     OefPartObj *part;
+    int pd;
     float x, y, z;
 
     if (D_01B005E8 == 0) {
@@ -144,17 +145,18 @@ int func_01B008A8(void)
             _pppAllFreePObject(&D_01B01340);
             D_006A3924 = &D_01B01540;
             _pppStartPart(&D_01B013C0, 0x1000, D_01B015C0.pdt[0], 1);
+            pd = D_01B015C0.pdt[4];
+            D_01B013C0.enabled = 1;
+            D_01B013C0.rotation[2] = 0;
             D_01B013C0.rotation[1] = 0;
-            D_01B013C0.position[3] = 1.0f;
+            D_01B013C0.rotation[0] = 0;
             D_01B013C0.scale[2] = 0.1f;
             D_01B013C0.scale[1] = 0.1f;
-            D_01B013C0.rotation[0] = 0;
             D_01B013C0.scale[3] = 1.0f;
-            D_01B013C0.rotation[2] = 0;
             D_01B013C0.scale[0] = 0.1f;
-            D_01B013C0.enabled = 1;
+            D_01B013C0.position[3] = 1.0f;
             D_006A3924 = &D_01B01540;
-            _pppStartPart(&D_01B01440, 0x1000, D_01B015C0.pdt[4], 1);
+            _pppStartPart(&D_01B01440, 0x1000, pd, 1);
             D_01B01440.enabled = 1;
             D_01B01440.position[3] = 1.0f;
             D_006A3924 = &D_01B01540;
@@ -233,16 +235,17 @@ int func_01B008A8(void)
                 D_006A3924 = &D_01B01540;
                 _pppStartPart(&D_01B01240, 0x1000, D_01B015C0.pdt[2], 1);
                 D_006A3924 = &D_01B01540;
+                pd = D_01B015C0.pdt[3];
                 D_01B01240.position[3] = 1.0f;
-                D_01B01240.rotation[0] = 0;
                 D_01B01240.enabled = 1;
                 D_01B01240.rotation[2] = 0;
-                D_01B01240.scale[2] = 0.0800000057f;
                 D_01B01240.rotation[1] = 0;
+                D_01B01240.rotation[0] = 0;
+                D_01B01240.scale[2] = 0.0800000057f;
                 D_01B01240.scale[1] = 0.0800000057f;
                 D_01B01240.scale[3] = 1.0f;
                 D_01B01240.scale[0] = 0.0800000057f;
-                _pppStartPart(&D_01B012C0, 0x1000, D_01B015C0.pdt[3], 1);
+                _pppStartPart(&D_01B012C0, 0x1000, pd, 1);
                 D_01B012C0.rotation[1] = 16384;
                 D_01B012C0.rotation[2] = 0;
                 D_01B012C0.rotation[0] = 0;
