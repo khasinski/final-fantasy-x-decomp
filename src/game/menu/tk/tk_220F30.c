@@ -399,7 +399,34 @@ void func_00222D30(void)
     func_002243C0(10, 0x94, 0x2D);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00222DB0);
+s32 _m2c_func_00222DB0_func_001F5580() __asm__("func_001F5580");
+/* DEBT(CAST) */
+void func_00222DB0(s32 arg0) {
+    s32 temp_20;
+    s32 var_17;
+    s32 var_18;
+    u8 temp_4;
+
+    temp_20 = arg0 + 0x1E;
+    var_18 = 0x46;
+    var_17 = 0;
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOMenuDrawKickTmp();
+    func_002243C0(0xB, arg0 + 0x1C, 0x2D);
+    TOMenuOpenPktBuffTmp();
+    if ((s8) btlgetdata.padC8[8] > 0) {
+        do {
+            func_001F4EB0(temp_20, var_18, 0xA);
+            _m2c_func_00222DB0_func_001F5580((((struct { u8 _pad[0xD4]; u16 a[1]; } *)(&btlgetdata))->a[var_17]), temp_20, var_18, 0);
+            temp_4 = (*(u8 *)((u8 *)(&btlgetdata.pad0[var_17]) + (0xE4)));
+            var_17 += 1;
+            func_001F5E80(temp_4, arg0 + 0xF1, var_18 + 6, 0);
+            var_18 += 0x20;
+        } while (var_17 < (s8) btlgetdata.padC8[8]);
+    }
+    TOMenuDrawKickTmp();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00222EB0);
 

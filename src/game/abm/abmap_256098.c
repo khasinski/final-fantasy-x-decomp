@@ -307,8 +307,52 @@ void func_002571B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     _m2c_func_002571B8_func_002B2A80(temp_16, (s32) (temp_2 - temp_16) >> 4, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00257288);
+void _m2c_func_00257288_func_00257108() __asm__("func_00257108");
+/* DEBT(CAST) */
+void func_00257288(s32 a) {
+    s16 temp_4;
+    s32 temp_4_2;
 
+    if (lpamng->f1161A > 0) {
+        temp_4 = (*(s16 *)((u8 *)(lpamng) + (0x11618)));
+        lpamng->f1161A = (u16) lpamng->f1161A - 1;
+        switch (temp_4) {                           /* irregular */
+        case 0:
+            TOMenuSetMacroCommandType(7, 0, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandType(7, 1, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            TOMenuSetMacroCommandType(7, 2, 1);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 2, (*(s32 *)((u8 *)(lpamng) + (0x11614))));
+            break;
+        case 1:
+            TOMenuSetMacroCommandType(7, 0, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandType(7, 1, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            break;
+        case 2:
+            TOMenuSetMacroCommandType(7, 0, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandType(7, 1, 0);
+    __asm__ volatile("" : : : "$3");
+            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            break;
+        }
+        temp_4_2 = (*(s32 *)((u8 *)(lpamng) + (0x11608)));
+        if (temp_4_2 != 0) {
+            func_002571B8(temp_4_2, 0x28, 4, 0, 0x80, 0x80, 0x80, lpamng->f11569);
+        }
+    } else if (a != 0) {
+        _m2c_func_00257288_func_00257108(a, 0x28, 4);
+    }
+}
 void func_00257490(int a, int b, int c, int d)
 {
     u8 *start = D_006A3BCC;

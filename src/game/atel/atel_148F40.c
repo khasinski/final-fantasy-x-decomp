@@ -347,7 +347,41 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelBindFp);
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_0014A650);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_0014A730);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_0014A730(Actor *a, s32 v) {
+    Actor *var_16;
+    register s32 var_17 __asm__("$17");
+    register s32 mask __asm__("$18");
+
+    if (a->hdr->type == 1) {
+        var_16 = a;
+        if (v == 0) {
+            mask = 0xFFFF7FFF;
+            __asm__ volatile("" : "+r"(mask));
+            var_17 = 3;
+            do {
+                if ((*(u16 *)((u8 *)(var_16) + (0xB18))) & mask) {
+                    (*(u16 *)((u8 *)(var_16) + (0xB18))) = 0U;
+                    func_00269DA8(v);
+                }
+                var_17 -= 1;
+                var_16 = (Actor *)((u8 *)var_16 + (0x10));
+            } while (var_17 >= 0);
+            return;
+        }
+        mask = 0xFFFF7FFF;
+        __asm__ volatile("" : "+r"(mask));
+        var_17 = 3;
+        do {
+            if (((*(u16 *)((u8 *)(var_16) + (0xB18))) & mask) == v) {
+                (*(u16 *)((u8 *)(var_16) + (0xB18))) = 0U;
+                func_00269DA8(v);
+            }
+            var_17 -= 1;
+            var_16 = (Actor *)((u8 *)var_16 + (0x10));
+        } while (var_17 >= 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", TkChPatchM160);
 

@@ -127,4 +127,21 @@ int func_0021F940(int a)
     return TOGetSaveChrName(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", func_0021F960);
+/* DEBT(FAKE) */
+s32 func_0021F960(void) {
+    register s32 temp_2 __asm__("$3");
+
+    temp_2 = MsCalcWeakLevel();
+    if (temp_2 < 3) {
+        if (temp_2 <= 0) {
+            __asm__ volatile("");
+            return 0;
+        }
+        return 2;
+    }
+    if (temp_2 == 3) {
+        __asm__ volatile("");
+        return 0x53;
+    }
+    return 0;
+}

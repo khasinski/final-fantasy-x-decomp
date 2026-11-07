@@ -313,7 +313,49 @@ int _TOInitMessageWaitNormal(TextWin *win)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_00202A10);
+s32 _m2c_func_00202A10_func_00203FC0() __asm__("func_00203FC0");
+/* DEBT(FAKE) */
+s32 func_00202A10(MenuCmd *arg0) {
+    register s32 temp_2 __asm__("$2");
+    s32 temp_4;
+    register s32 temp_4_2 __asm__("$4");
+    s32 temp_5;
+    s32 var_3;
+    s32 var_3_2;
+
+    temp_4 = arg0->x98;
+    temp_5 = arg0->x90;
+    var_3 = temp_4;
+    if (temp_4 >= temp_5) {
+        var_3 = temp_5;
+        if (var_3 < 0) {
+            var_3 = 0;
+        }
+    }
+    arg0->x90 = var_3;
+    if (var_3 >= temp_4) {
+        arg0->sub = arg0->state = 2;
+        if (*arg0->text == 0) {
+            arg0->sub = 3;
+        }
+        arg0->fn[5] = func_00202AD8;
+        arg0->fn[7] = func_00202A10;
+    }
+    _m2c_func_00202A10_func_00203FC0(arg0);
+    temp_2 = arg0->x98;
+    temp_4_2 = arg0->x90;
+    var_3_2 = temp_2;
+    __asm__ volatile("" : "+r"(temp_2), "+r"(var_3_2), "+r"(temp_4_2));
+    if (temp_2 >= temp_4_2) {
+        var_3_2 = temp_4_2;
+        __asm__ volatile("" : "+r"(var_3_2));
+        if (var_3_2 < 0) {
+            var_3_2 = 0;
+        }
+    }
+    arg0->x90 = var_3_2;
+    return 0;
+}
 
 s32 func_00202AD8(MenuCmd *m)
 {

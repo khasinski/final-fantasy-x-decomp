@@ -145,7 +145,25 @@ int func_0019FB60(Obj19FB60 *o) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", rcefMainInit);
+void rcefMainInit(void *clut) {
+    s32 temp_2;
+    s32 i;
+    u32 temp_2_2;
+    void *var_4;
+
+    var_4 = clut;
+    for (i = 0; i < 256; i++) {
+        temp_2 = *(s32 *)(var_4);
+        temp_2_2 = (u32) (temp_2 & 0xFF000000) >> 0x18;
+        if (temp_2_2 != 0) {
+            temp_2_2 = (temp_2_2 << 7) / 0xFF;
+            *(s32 *)(var_4) = (s32) ((temp_2 & 0xFFFFFF) | (temp_2_2 << 0x18));
+        } else {
+            *(s32 *)(var_4) = 0;
+        }
+        var_4 += 4;
+    }
+}
 
 s32 func_0019FBF8(void) {
     return -1;

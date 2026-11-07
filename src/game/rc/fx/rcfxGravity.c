@@ -19,4 +19,17 @@ void func_001A5550(void *p) {
     func_0018FC10(p);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxGravity", func_001A5558);
+void _m2c_func_001A5558_func_001A55A8() __asm__("func_001A55A8");
+/* DEBT(CAST) */
+void func_001A5558(void *p) {
+    (*(s32 *)((u8 *)(p) + (0))) = 0x30002;
+    (*(s32 **)((u8 *)(p) + (4))) = &func_001A5550;
+    (*(s32 **)((u8 *)(p) + (0x14))) = &_m2c_func_001A5558_func_001A55A8;
+    (*(s32 *)((u8 *)(p) + (8))) = 0;
+    (*(s32 *)((u8 *)(p) + (0xC))) = 0;
+    (*(s32 *)((u8 *)(p) + (0x10))) = 0;
+    (*(s32 *)((u8 *)(p) + (0x18))) = 0;
+    (*(float *)((u8 *)(p) + (0x28))) = (*(float *)((u8 *)(p) + (0x2C))) = 0.0f;
+    (*(float *)((u8 *)(p) + (0x24))) = 0.0f;
+    (*(float *)((u8 *)(p) + (0x20))) = 0.0f;
+}

@@ -1,6 +1,7 @@
 /* tu_177 0x1a56f8-0x1ac0b8: low; ~Ms (config/tu_map.tsv) */
 #define MsCameraSetRoll _hdr_MsCameraSetRoll
 #define MsCameraSetScrDpt _hdr_MsCameraSetScrDpt
+#define func_001A65E0 _hdr_func_001A65E0
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -11,6 +12,7 @@
 #include "ffx/q4.h"
 #include "ffx/t2.h"
 #include "ffx/g2.h"
+#undef func_001A65E0
 #undef MsCameraSetRoll
 #undef MsCameraSetScrDpt
 
@@ -28,7 +30,37 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsNearRag);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraMoveCalc);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A65E0);
+extern s32 _m2c_func_001A65E0_D_00314840 __asm__("D_00314840");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_001A65E0(s32 arg0) {
+    register s32 t_v0 __asm__("$2");
+    register s32 t_v1 __asm__("$3");
+    register s32 temp_5 __asm__("$5");
+    s32 var_6;
+    s32 var_7;
+    s32 var_8;
+    void *var_4;
+
+    var_8 = 0;
+    var_7 = 0;
+    var_6 = 0;
+    var_4 = ((arg0 & 0xFF) * 0xDA0) + ((u8 *)&_m2c_func_001A65E0_D_00314840);
+    do {
+        t_v0 = (*(s32 *)((u8 *)(var_4) + (0xC70)));
+        t_v1 = (*(s8 *)((u8 *)(var_4) + (0xC76)));
+        t_v0 &= 0xFF0000;
+        __asm__ volatile("" : "+r"(t_v0), "+r"(t_v1));
+        temp_5 = t_v0 >> 0x10;
+        temp_5 += t_v1;
+        if ((var_7 < temp_5) && ((*(s8 *)((u8 *)(var_4) + (0xC74))) == 0) && ((*(s8 *)((u8 *)(var_4) + (0xC75))) == 0)) {
+            var_7 = temp_5;
+            var_8 = var_6;
+        }
+        var_6 += 1;
+        var_4 += 8;
+    } while (var_6 < 4);
+    return var_8;
+}
 
 u32 func_001A6660(u32 a) {
     u32 hi = (a >> 16) & 0xF;

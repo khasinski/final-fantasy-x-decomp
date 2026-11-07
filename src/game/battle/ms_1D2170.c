@@ -6,7 +6,28 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D2170", func_001D2170);
+/* DEBT(CAST) */
+s32 func_001D2170(BtlChr *c) {
+    s32 var_18;
+    u8 temp_17;
+
+    var_18 = 0;
+    if (c->fFF == 0xFF) {
+        if (((c->fA8C != 2) && (c->fA8E == 0) && (((*(s32 *)((u8 *)(c) + (0xA88))) & 0xFF0000FF) || (c->fB9 != 0))) || (((*(s32 *)((u8 *)(c) + (0xAA4))) & 0xFFFF0000) && ((temp_17 = c->f0C, (func_001D9780((s32) temp_17) != 0)) || (func_001D8CD0((s32) temp_17) != 0)))) {
+            var_18 = 1;
+        }
+        if (var_18 != 0) {
+            if (c->f38 != 0) {
+                if (c->fFE == 0) {
+                    if (c->fE6 == 0) {
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 void MsMotionPosCheckAll(void)
 {

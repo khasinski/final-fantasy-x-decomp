@@ -366,7 +366,36 @@ int func_001CF6D0(int a, int b) {
     return func_001CF600(a, 0, b == 0 ? 0x4C : 0x4D);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", func_001CF6F8);
+/* DEBT(FAKE) */
+s32 func_001CF6F8(s32 a, s32 b, s32 c, s32 d, s32 e) {
+    BtlChr *temp_16;
+    s32 var_4_2;
+    u16 var_4;
+    register u32 temp_17 __asm__("$17");
+    register s32 r __asm__("$3");
+
+    if (a != 0xFF) {
+        temp_16 = MsGetChr(a);
+        if (c == 1) {
+            var_4 = temp_16->fAE2;
+            temp_16->fAE2 = var_4 + 1;
+        } else {
+            var_4 = temp_16->fADE;
+            temp_16->fADE = var_4 + 1;
+        }
+        temp_17 = MsGetEffID((s32) var_4, c, a);
+        var_4_2 = 0;
+        if ((e == 0) || (D_00317337 == 0)) {
+            var_4_2 = temp_16->f4C;
+        }
+        r = op_et_eff(var_4_2, b, d, (s32) temp_17);
+        __asm__ volatile("" : "+r"(r));
+        if (r > 0) {
+            return (s32) temp_17;
+        }
+    }
+    return 0;
+}
 
 int func_001CF7D8(int id, int on) {
     BtlChr *c = MsGetChr(id);
@@ -426,8 +455,79 @@ void MsMagicEffectSet(int a, BtlChr *c) {
     c->fAD1 = y;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", func_001CFA38);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1CE8E0/rodata", jtbl_0056E980);
+/* DEBT(FAKE) */
+s32 func_001CFA38(s32 id, s32 v) {
+    BtlChr *temp_2;
+    BtlChr *var_20;
+    s32 var_2;
+    u32 temp_19;
+    register u32 var_17 __asm__("$17");
+    u8 var_18;
+
+    if (id != 0xFF) {
+        temp_2 = MsGetChr(id);
+        var_2 = -1;
+        if (temp_2->fB60 == 0) {
+            var_2 = -1;
+            if (temp_2->fACF != 0) {
+                if (v == 0) {
+                    if ((D_003172F0.f20FE != 0) || (temp_2->f1C5 != 0)) {
+                        var_18 = 0x35;
+                        if (temp_2->f280 == 0) {
+                            var_18 = temp_2->fAD1;
+                        }
+                    } else {
+                        var_18 = 0x34;
+                        if (temp_2->f280 == 0) {
+                            var_18 = temp_2->fAD0;
+                        }
+                    }
+                } else {
+                    if ((D_003172F0.f20FE != 0) || (temp_2->f1C5 != 0)) {
+                        var_18 = 0x21;
+                    } else {
+                        var_18 = 0x20;
+                    }
+                }
+                if (var_18 != 0) {
+                    var_17 = 0;
+                    var_20 = 0;
+                    switch (var_18) {
+                    case 0x34:
+                    case 0x35:
+                        var_17 = 0x3E;
+                        break;
+                    case 0x20:
+                    case 0x21:
+                        var_17 = 0x1A;
+                        var_20 = MsGetChr((s32) (&D_003172F0)->f2118);
+                        break;
+                    case 0x1E:
+                    case 0x1F:
+                    case 0x37:
+                    case 0x38:
+                        var_17 = 0x19;
+                        break;
+                    }
+                    MsRegSEplay(id, var_17);
+                    temp_19 = MsGetEffID((s32) temp_2->fAE4, 5, id);
+                    temp_2->fC36 = (u16) var_17;
+                    temp_2->fAE4 += 1;
+                    if (var_20 != 0) {
+                        var_20->fC36 = (u16) var_17;
+                    }
+                    op_et_eff(D_003172F0.f8C, 0, (s32) var_18, (s32) temp_19);
+                    temp_2->fB60 = (s32) temp_19;
+                }
+                return -1;
+            }
+        }
+        /* Duplicate return node #24. Try simplifying control flow for better match */
+        return var_2;
+    }
+    var_2 = 0;
+    return var_2;
+}
 
 int func_001CFBC8(int id) {
     BtlChr *c;

@@ -186,7 +186,22 @@ void SndStartStream(void) {
     D_0078BB70.pend = temp_3;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7090", SndStartStream2);
+/* DEBT(FAKE) */
+void SndStartStream2(s32 a, s32 b) {
+    register u32 temp_3 __asm__("$3");
+    u32 temp_5;
+
+    D_0078BA10 |= 1;
+    D_0078BA08 = 1;
+    D_0078BA14 = 0;
+    func_00252C10(a, (func_0014AC20() != 0) ? b : 0);
+    temp_3 = D_0078BB70.pend | 1;
+    temp_5 = D_0078BB90.pend | 1;
+    D_0078BB90.pend = temp_5;
+    D_0078BA1C |= temp_3;
+    D_0078BA10 |= temp_5;
+    D_0078BB70.pend = temp_3;
+}
 
 void SndStopStream(void)
 {

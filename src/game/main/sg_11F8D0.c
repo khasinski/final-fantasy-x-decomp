@@ -65,4 +65,41 @@ void func_0011FAA8(void)
     D_00307FE0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11F8D0", Sg_Capture);
+extern s32 _m2c_Sg_Capture_D_00307FF4 __asm__("D_00307FF4");
+extern s32 _m2c_Sg_Capture_D_00569E48 __asm__("D_00569E48");
+extern s32 _m2c_Sg_Capture_D_00569E70 __asm__("D_00569E70");
+extern s32 _m2c_Sg_Capture_D_00569EA0 __asm__("D_00569EA0");
+extern s32 _m2c_Sg_Capture_D_00569EE0 __asm__("D_00569EE0");
+/* DEBT(CAST) */
+s32 Sg_Capture(void) {
+    u8 sp10[0x200];
+
+    if (D_00307FE0 == 0) {
+        return 0;
+    }
+    if (Sg_GetUserName() != 0) {
+        if (_m2c_Sg_Capture_D_00307FF4 != 0) {
+            func_002F0008(sp10, &_m2c_Sg_Capture_D_00569E48, Sg_GetUserName());
+            func_202CF08(sp10, sp10);
+            func_002F0008(sp10, &_m2c_Sg_Capture_D_00569E70, Sg_GetUserName());
+            func_202CF08(sp10, sp10);
+            _m2c_Sg_Capture_D_00307FF4 = 0;
+        }
+        func_002F0008(sp10, &_m2c_Sg_Capture_D_00569EA0, Sg_GetUserName(), D_00307FE8, (*(s8 *)((u8 *)(D_00580B10) + (0))), (*(s8 *)((u8 *)(D_00580B10) + (1))), (*(s8 *)((u8 *)(D_00580B10) + (2))), (*(s8 *)((u8 *)(D_00580B10) + (3))), (s32) (*(s8 *)((u8 *)(D_00580B10) + (4))), D_00307FF0);
+    } else {
+        func_002F0008(sp10, &_m2c_Sg_Capture_D_00569EE0, D_00307FE8, (s32) (*(s8 *)((u8 *)(D_00580B10) + (0))), (*(s8 *)((u8 *)(D_00580B10) + (1))), (*(s8 *)((u8 *)(D_00580B10) + (2))), (*(s8 *)((u8 *)(D_00580B10) + (3))), (*(s8 *)((u8 *)(D_00580B10) + (4))), D_00307FF0);
+    }
+    if (D_00307FEC != 0) {
+        Sg_CaptureToFile(sp10);
+    __asm__ volatile("" : : : "$3");
+        D_00307FF0 += 1;
+    } else if (D_00307FE4 == 0) {
+        Sg_CaptureToFile(sp10);
+    __asm__ volatile("" : : : "$3");
+        D_00307FF0 += 1;
+        D_00307FE0 -= 1;
+    } else {
+        D_00307FE4 -= 1;
+    }
+    return 1;
+}

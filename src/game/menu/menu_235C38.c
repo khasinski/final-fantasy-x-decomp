@@ -83,7 +83,32 @@ INCLUDE_ASM("build/ee_asm/game/menu/menu_235C38", func_00235DC8);
 
 int func_00235F48(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_235C38", func_00235F50);
+void func_00235DC8();
+s32 func_00235F50(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Task *temp_2;
+
+    temp_2 = func_00243400();
+    D_0032602C = temp_2;
+    temp_2->x0C = (s32) &func_00235C38;
+    temp_2->x10 = (s32) &func_00235DC8;
+    temp_2->x14 = (s32) func_00235F48;
+    temp_2->cb = 0;
+    temp_2->x1C = 0;
+    temp_2->x30 = 2;
+    temp_2->b42 = temp_2->x48 = 1;
+    temp_2->x3A = 2;
+    if (arg1 != 0) {
+        temp_2->b3E = 2;
+    } else {
+        temp_2->b3E = 3;
+    }
+    temp_2->x24 = arg0;
+    temp_2->ext[0] = arg1;
+    temp_2->ext[1] = arg2;
+    temp_2->ext[2] = arg3;
+    TkMenuMainRegistWindow(temp_2);
+    return (s32) temp_2;
+}
 
 void func_00236020(void)
 {
@@ -95,7 +120,7 @@ void func_00236020(void)
 
 int func_00236040(int a0, int a1, int a2) { return func_00235F50(a0, a1, a2, 0); }
 
-int func_00236060(void) { return func_00235F50(); }
+int func_00236060(void) { return ((int (*)(void))func_00235F50)(); }
 
 Task *func_00236080(void) {
     return D_0032602C;

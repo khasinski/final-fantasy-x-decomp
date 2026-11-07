@@ -82,7 +82,49 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2748);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2788);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2810);
+s32 _m2c_func_002B2810_func_002B2D50() __asm__("func_002B2D50");
+s32 _m2c_func_002B2810_func_002B2D48() __asm__("func_002B2D48");
+extern s32 _m2c_func_002B2810_D_003F3824 __asm__("D_003F3824");
+extern s32 _m2c_func_002B2810_D_003F3828 __asm__("D_003F3828");
+extern s16 _m2c_func_002B2810_D_00551C88 __asm__("D_00551C88");
+extern s32 _m2c_func_002B2810_D_006F3960 __asm__("D_006F3960");
+extern s32 _m2c_func_002B2810_D_006F3A20 __asm__("D_006F3A20");
+extern s32 _m2c_func_002B2810_D_00703B60 __asm__("D_00703B60");
+extern s32 _m2c_func_002B2810_D_00703C60 __asm__("D_00703C60");
+void func_002B2810(void) {
+    s32 temp_18;
+
+    _m2c_func_002B2810_D_003F3828 = 0;
+    _m2c_func_002B2810_D_003F3824 = 0;
+    func_002B2D38();
+    temp_18 = *(volatile s32 *)0x10000000 & 0xFFFF;
+    func_002D0940();
+    func_002D09E0();
+    func_002DA610(0, 0);
+    func_002F8660(0);
+    func_002DBA28(D_003F395C, (s32) &_m2c_func_002B2810_D_006F3960);
+    func_002DA610(0, 0);
+    func_00266E08(&D_0036F1F0);
+    func_002B2D40();
+    func_002DA610(0, 0);
+    func_002F8660(0);
+    func_002DBA28(D_003F395C, (s32) &_m2c_func_002B2810_D_00703B60);
+    if (D_00703FF0.b[7] != 0) {
+        func_002B29D8();
+    }
+    _m2c_func_002B2810_func_002B2D48();
+    if (D_00703FF0.b[7] != 0) {
+        func_002DA610(0, 0);
+        func_002F8660(0);
+        func_002DBA28(D_003F395C, (s32) &_m2c_func_002B2810_D_006F3A20);
+    }
+    func_002DA610(0, 0);
+    func_002F8660(0);
+    func_002DBA28(D_003F395C, (s32) &_m2c_func_002B2810_D_00703C60);
+    func_002DA610(0, 0);
+    _m2c_func_002B2810_func_002B2D50();
+    _m2c_func_002B2810_D_00551C88 = *(volatile s32 *)0x10000000 - temp_18;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2970);
 

@@ -80,7 +80,25 @@ void func_002E09C8(void *data)
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0A68);
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0B00);
+extern s32 _m2c_func_002E0B00_D_005663D4 __asm__("D_005663D4");
+extern s32 _m2c_func_002E0B00_D_005663E0 __asm__("D_005663E0");
+extern s32 _m2c_func_002E0B00_D_005663E8 __asm__("D_005663E8");
+extern s32 _m2c_func_002E0B00_D_005663EC __asm__("D_005663EC");
+extern s32 _m2c_func_002E0B00_D_00566414 __asm__("D_00566414");
+void func_002E0B00(void) {
+    if (_m2c_func_002E0B00_D_005663D4 != 0) {
+        _m2c_func_002E0B00_D_00566414 = -1;
+        __asm__ volatile("" : : : "memory");
+        func_002F8400(_m2c_func_002E0B00_D_005663E0);
+    }
+    func_002F83F0(_m2c_func_002E0B00_D_005663E8);
+    __asm__ volatile("" : : : "$2");
+    func_002F83F0(_m2c_func_002E0B00_D_005663EC);
+    func_002F83F0(_m2c_func_002E0B00_D_005663E0);
+    func_00300280();
+    func_002FA8D0(0x80000012U);
+    func_003002C8();
+}
 
 void *func_002E0B80(void (*func)(int), int arg)
 {

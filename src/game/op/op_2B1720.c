@@ -104,7 +104,31 @@ void func_002B1CF8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1720", func_002B1D88);
+void _m2c_func_002B1D88__pppAllFreePObject(void *) __asm__("_pppAllFreePObject");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002B1D88(void *arg0) {
+    void *temp_16;
+    register u32 hi __asm__("$3");
+    register HeapMgr *val __asm__("$2");
+    register void *a0 __asm__("$4");
+
+    if ((*(u8 *)((u8 *)(arg0) + (0xBB))) == 3) {
+        temp_16 = (*(void **)((u8 *)(arg0) + (0xBC)));
+        if (temp_16 != 0) {
+            hi = 0x006A0000;
+            __asm__ volatile("" : "+r"(hi));
+            val = (HeapMgr *) &D_006F2CB0;
+            __asm__ volatile("" : "+r"(val));
+            a0 = temp_16;
+            __asm__ volatile("" : "+r"(a0));
+            *(HeapMgr **)(hi + 0x3924) = val;
+            _m2c_func_002B1D88__pppAllFreePObject(a0);
+            (*(void **)((u8 *)(arg0) + (0xBC))) = 0;
+            D_006EA8B0[(*(u16 *)((u8 *)(temp_16) + (0x1E)))] = 0;
+            (*(u8 *)((u8 *)(arg0) + (0xBB))) = 0U;
+        }
+    }
+}
 
 void func_002B1E00(void) {
 }

@@ -214,7 +214,40 @@ int func_001B97B0(s16 *bits, int n) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsClearStatus);
+s32 _m2c_MsClearStatus_MsLimitStatusProcess() __asm__("MsLimitStatusProcess");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void MsClearStatus(s32 arg0, s32 arg1) {
+    BtlChr *temp_2;
+    s32 var_3;
+    register s32 var_3_2 __asm__("$3");
+    register s8 *var_2_2 __asm__("$2");
+    register s8 *p31E __asm__("$5");
+    u8 *var_2;
+    void *temp_4;
+
+    temp_2 = MsGetChr(arg0);
+    var_3 = 0xC;
+    temp_4 = ((BtlChr *)((u8 *)temp_2 + (0x200)));
+    p31E = (s8 *)temp_2 + 0x31E;
+    (*(s16 *)((u8 *)(temp_4) + (0xC6))) = 0;
+    var_2 = &temp_2->f2D4;
+    do {
+        *var_2 = 0;
+        var_3 -= 1;
+        var_2 -= 1;
+    } while (var_3 >= 0);
+    (*(s16 *)((u8 *)(temp_4) + (0xD6))) = 0;
+    __asm__ volatile("" : "+r"(p31E));
+    var_2_2 = p31E + 5;
+    var_3_2 = 5;
+    do {
+        *var_2_2 = 0;
+        var_3_2 -= 1;
+        var_2_2 -= 1;
+    } while (var_3_2 >= 0);
+    _m2c_MsClearStatus_MsLimitStatusProcess(arg0, temp_2, 0);
+    temp_2->f2C6 = (temp_2->f2C6 & 0xFFFE) | (arg1 & 1);
+}
 
 void func_001B98A8(Obj436 *p) {
     int i;

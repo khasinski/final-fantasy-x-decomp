@@ -1208,7 +1208,13 @@ int func_001ED948(void)
     return MsVoiceStatus() != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001ED968);
+s32 func_001ED968(void) {
+    if (MsVoiceStatus() == 0) {
+        __asm__ volatile("");
+        return 1;
+    }
+    return 0;
+}
 
 int func_001ED990(Actor *a, void *op, ScriptCtx *ctx)
 {

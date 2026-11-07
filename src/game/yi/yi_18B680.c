@@ -7,7 +7,16 @@
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B680);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B7A0);
+void func_0018B7A0(void *p, s32 a, s32 b) {
+    s32 var_17;
+    void *var_16;
+
+    var_16 = p + 0x70;
+    for (var_17 = 0; var_17 < 0x48; var_17++) {
+        func_0018C468(var_16, var_16, a, b, 0x100);
+        var_16 += 0x460;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B810);
 

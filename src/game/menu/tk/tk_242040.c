@@ -724,7 +724,19 @@ void func_00244150(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244188);
+void _m2c_func_00244188_func_002429E0(s32) __asm__("func_002429E0");
+void _m2c_func_00244188_func_002436D0() __asm__("func_002436D0");
+void func_00244188(void) {
+    s32 i;
+    for (i = 0; i < 25; i++) {
+        D_0069A808[i] = 0;
+    }
+    D_0069A86C = 0;
+    D_0069A870 = 0;
+    D_0069A874 = 0;
+    _m2c_func_00244188_func_002436D0();
+    _m2c_func_00244188_func_002429E0(1);
+}
 
 u32 func_002441E8(void) {
     u32 r = D_0069A86C;
