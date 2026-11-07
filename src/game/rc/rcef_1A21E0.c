@@ -92,13 +92,32 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2698);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2880);
 
+typedef struct RcefSlot30 {
+    u16 flags;
+    s16 timer;
+    u8 pad04[0x2C];
+} RcefSlot30;
+
+extern RcefSlot30 D_00313F30[16];
+extern s16 D_00314230;
+extern s16 D_00314232;
+
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A29A0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A29C8);
+void func_001A29C8(int i)
+{
+    D_00313F30[i].flags = 0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A29E8);
+int func_001A29E8(void)
+{
+    return D_00314230;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A29F8);
+void func_001A29F8(int v)
+{
+    D_00314232 = v;
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2A08);
 
@@ -260,7 +279,11 @@ void func_001A2F00(int a, int b, float *c)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2F50);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2FD8);
+void func_001A2FD8(int a, int b, float *c)
+{
+    func_001A2F00(a, b, c);
+    c[1] = 0;
+}
 
 void func_001A3000(int a, int b, float *c) {
     func_001A2F00(a, func_001A3080(a, b), c);
@@ -270,15 +293,37 @@ void func_001A3040(int a, int b, float *c) {
     func_001A2FD8(a, func_001A3080(a, b), c);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3080);
+int func_001A3080(int a, int b)
+{
+    return Ch_OptposGetElement((s32)rcefGetChrHandle(a), b, 0); /* DEBT(CAST): Ch_OptposGetElement declared with s32 */
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A30B8);
+float func_001A30B8(int a)
+{
+    return Ch_GetFixHeight(rcefGetChrHandle(a));
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A30E0);
+float func_001A30E0(int a)
+{
+    float v0[4];
+    float v1[4];
+    Chr *c;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3140);
+    c = rcefGetChrHandle(a);
+    Ch_OptposGet(c, 0, v0);
+    Ch_OptposGet(c, 2, v1);
+    return (v0[1] - v1[1]) * 10.0f;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3170);
+float func_001A3140(int a)
+{
+    return func_00110910(rcefGetChrHandle(a)) * 10.0f;
+}
+
+float func_001A3170(int a)
+{
+    return func_001109E0(rcefGetChrHandle(a)) * 10.0f;
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A31A0);
 
@@ -308,7 +353,10 @@ void func_001A32F8(float *out, float a) {
     out[3] = 0.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3348);
+float func_001A3348(float a)
+{
+    return 4.712389f - a;
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3360);
 

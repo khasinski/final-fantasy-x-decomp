@@ -1,5 +1,12 @@
 #include "p1_overlay.h"
 
+/* WIP: file09044 ppp-shell functions that do NOT yet match the
+ * original bytes (gcc-2.9 scheduling/regalloc diffs). Not registered with the
+ * overlay verifier - see overlays/group11/ovl_09044_init_[a-e].c for the matched
+ * functions and LOCAL_NOTES.md for per-function remaining diffs.
+ * NOTE: duplicates the local type definitions from the matched run files on purpose
+ * (each file must compile standalone).
+
 /* Resident types needed by this unit (declared locally to avoid conflicts with the
  * p1 package's own provisional declarations). */
 
@@ -138,60 +145,6 @@ void *opu_init(int a, void *b, void *c, void *d, int e, int f, void *g);
 void *op_oef2_a_get(void *res, int type, int idx);
 void op_oef2_set2(char *a);
 
-/* 0x01B00438: overlay init */
-void func_01B00438(OvlThread *th)
-{
-    OvlSlot *slot;
-    u32 *cnt;
-    u32 *tbl;
-    int i;
-    s16 h;
-
-    func_002B22F8(0x3400, 0x800);
-    if (D_007649A0 != 0) {
-        h = D_2008250.h40;
-        D_2008250.h40 = 0x10;
-        opu_test_data_read(1);
-        D_2008250.h40 = h;
-    }
-    *(int *)((u8 *)th + 0x50) = (int)D_01B00000;
-    slot = (OvlSlot *)D_01B09EB0;
-    cnt = (u32 *)D_01B09DB0;
-    for (i = 0; i < 0x40; i++) {
-        func_002EF0D0(slot, 0, 0x80);
-        slot->h1E = i;
-        *cnt = 0;
-        slot = (OvlSlot *)((u8 *)slot + 0x80);
-        cnt += 1;
-    }
-    tbl = (u32 *)D_01B09BB0;
-    tbl += 0x3F;
-    for (i = 0x3F; i >= 0; i--) {
-        *tbl = 0;
-        tbl = (u32 *)((u8 *)tbl - 4);
-    }
-    func_002EF0D0(&D_01B0BEB0, 0, 0x2C);
-    *(int *)((u8 *)th + 0xC) = (int)((u8 *)th + 0x21200);
-}
-
-/* 0x01B00550 */
-void func_01B00550(void)
-{
-    D_0054D5EC = 0;
-    D_00764990.mirror = 0;
-    if (D_00764990.primary == 0) {
-        return;
-    }
-    func_206C3B8(1);
-    func_206C3B8(2);
-    func_206C3B8(0x8003);
-}
-
-/* 0x01B005A0 */
-void func_01B005A0(void)
-{
-}
-
 /* 0x01B005A8 */
 void func_01B005A8(void)
 {
@@ -211,40 +164,6 @@ void func_01B005A8(void)
         func_002EA328(1);       /* does not return */
     }
     D_00551C98 = *(u32 *)0x10000000 - mask;
-}
-
-/* 0x01B00658 */
-void func_01B00658(void)
-{
-    OvlR6Obj *o = D_0054D5EC;
-    int mask = *(volatile u32 *)0x10000000 & 0xFFFF;
-    int w58;
-
-    if (o->w58 != 0) {
-        o->w54 = o->w58;
-    } else {
-        o->w54 = D_003F3944;
-    }
-    func_001A9EE0(D_004F3FD0);
-    func_001AACA0(D_004F4010);
-    func_00294CD8(1, 1);
-    func_002AC750(1);
-    w58 = o->w58;
-    if (w58 == 0) {
-        D_003F3944 = o->w54;
-    }
-    if (D_007649A0 != 0) {
-        D_00551CA0 = *(volatile u32 *)0x10000000 - mask;
-        if (o->wA0 != 0) {
-            func_206C3F8(o->w54 - w58, o->wB0, 1);
-            func_206C3F8(func_00293CD8(o->a8.w), o->pAC, 2);
-        }
-    }
-}
-
-/* 0x01B00758 */
-void func_01B00758(void)
-{
 }
 
 /* 0x01B00760 */
@@ -326,35 +245,6 @@ int func_01B00958(OvlScriptSub *sub)
     return ret;
 }
 
-/* 0x01B009F8: save the id table to the backup copy, then free all */
-void func_01B009F8(void)
-{
-    u32 *dst = &D_01B09CB8[0];
-    u32 *src = &D_01B09BB0[0];
-    int i;
-
-    for (i = 0x3F; i >= 0; i--) {
-        *dst = *src;
-        dst += 1;
-        src += 1;
-    }
-    func_01B00A78(0);
-}
-
-/* 0x01B00A38: restore the id table from the backup copy */
-void func_01B00A38(void)
-{
-    u32 *dst = &D_01B09BB0[0];
-    u32 *src = &D_01B09CB8[0];
-    int i;
-
-    for (i = 0x3F; i >= 0; i--) {
-        *dst = *src;
-        dst += 1;
-        src += 1;
-    }
-}
-
 /* 0x01B00A78: free every live ppp object */
 void func_01B00A78(int a0)
 {
@@ -397,31 +287,6 @@ void func_01B00B38(OvlScriptSub *sub)
             D_01B09DB0[idx] = 0;
             sub->bBB = 0;
         }
-    }
-}
-
-/* 0x01B00BB0: free every ppp resource of sub a0 */
-void func_01B00BB0(OvlScriptSub *sub)
-{
-    int i = 0;
-
-    if (sub->h50 != 0) {
-        do {
-            void *o = op_oef2_a_get(sub, 8, i);
-
-            if (o != 0) {
-                u32 *tbl = D_01B09BB0;
-                int k;
-
-                for (k = 0x3F; k >= 0; k--) {
-                    if (*tbl == (u32)o) {
-                        *tbl = 0;
-                    }
-                    tbl += 1;
-                }
-            }
-            i += 1;
-        } while (i < sub->h50);
     }
 }
 
@@ -508,27 +373,6 @@ void func_01B00CC0(OvlScriptSub *base, OvlScriptSub *sub)
         int t = v + 0xA0;
         *(void **)(rec + 0x38) = (u8 *)base + t;
     }}
-
-/* 0x01B00DD8 */
-void func_01B00DD8(void)
-{
-}
-
-/* 0x01B00DE0: find the ppp env for sub a0 (-1 = none) */
-int func_01B00DE0(OvlScriptSub *sub)
-{
-    OvlScriptSub *env = D_00703E24;
-    int i;
-
-    if (env != 0) {
-        for (i = 0; i < env->h50; i++) {
-            if (op_oef2_a_get(env, 8, i) == (int)sub) {
-                return i;
-            }
-        }
-    }
-    return -1;
-}
 
 /* 0x01B00E60: pick env, init opu and the overlay */
 void func_01B00E60(OvlScriptSub *sub)
