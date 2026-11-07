@@ -17,6 +17,10 @@
 #define func_002FD578 _hdr_func_002FD578
 #define func_002FBD40 _hdr_func_002FBD40
 #define func_002FC768 _hdr_func_002FC768
+#define func_002FC8E8 _hdr_func_002FC8E8
+#define func_002FCB20 _hdr_func_002FCB20
+#define func_002FCD90 _hdr_func_002FCD90
+#define func_002FD050 _hdr_func_002FD050
 #define func_002FD3A0 _hdr_func_002FD3A0
 #define func_002FD740 _hdr_func_002FD740
 #define func_002FD910 _hdr_func_002FD910
@@ -29,6 +33,7 @@
 #define func_002FE428 _hdr_func_002FE428
 #define func_002FE638 _hdr_func_002FE638
 #define func_002FE7D0 _hdr_func_002FE7D0
+#define func_002FEA60 _hdr_func_002FEA60
 #define func_002FEC98 _hdr_func_002FEC98
 #define func_002FEEC8 _hdr_func_002FEEC8
 #define func_002FF0A8 _hdr_func_002FF0A8
@@ -57,6 +62,10 @@
 #undef func_002FD578
 #undef func_002FBD40
 #undef func_002FC768
+#undef func_002FC8E8
+#undef func_002FCB20
+#undef func_002FCD90
+#undef func_002FD050
 #undef func_002FD3A0
 #undef func_002FD740
 #undef func_002FD910
@@ -69,6 +78,7 @@
 #undef func_002FE428
 #undef func_002FE638
 #undef func_002FE7D0
+#undef func_002FEA60
 #undef func_002FEC98
 #undef func_002FEEC8
 #undef func_002FF0A8
@@ -241,7 +251,44 @@ void func_002FC220_(void *a, U5Callback *cb)
     EI();
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FC250);
+int func_002FC250(void) {
+    U5Callback *cb = &D_00795100;
+    U5FioSlot *p;
+    int i;
+
+    func_002FAC88(0);
+    cb->func = NULL;
+    __asm__("" : "+r"(cb));
+    cb->arg = NULL;
+    func_00300280();
+    func_002FA8A0(0x80000011, func_002FBD40, &D_007950C0);
+    func_002FA8A0(0x80000013, func_002FC220_, cb);
+    func_003002C8();
+    while (1) {
+        if (func_002FB2F8(&D_00795080, 0x80000001, 0) < 0) {
+            return -1;
+        }
+        if (D_00795080.serve != 0) {
+            break;
+        }
+        i = 0x100000;
+        while (i-- != 0)
+            ;
+    }
+    func_002FBBE8();
+    func_002F8420(D_00568E80);
+    for (p = D_00794E80; p < &D_00794E80[0x20]; p++) {
+        p->busy = 0;
+    }
+    ((s32 (*)(s32))func_002F8400)(D_00568E80);
+    D_00793D80 = &D_00794A40;
+    if (func_002FB4C8(&D_00795080, 0xFF, 0, &D_00793D80, 4, &D_00794A00, 4, NULL, NULL) < 0) {
+        return -0x10001;
+    }
+    __builtin_memcpy(D_007950A8, (void *)((s32)&D_00794A00 | 0x20000000), 4);
+    D_00568E78 = 1;
+    return 0;
+}
 
 int func_002FC418(void)
 {
@@ -262,7 +309,89 @@ int func_002FC4A8(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FC4E0);
+typedef struct {
+    s32 sema;
+    s32 *res;
+    s32 size;
+    s32 flags;
+    s32 mode;
+    char name[0x400];
+    s32 slot;
+} PktOpen;
+
+s32 func_002FC4E0(const char *name, s32 flags, ...) {
+    PktOpen *pkt = (PktOpen *)&D_00793DC0;
+    SemaParam sp10;
+    s32 sp30;
+    U5FioSlot *slot;
+    s32 i;
+    s32 mode;
+    s32 idx;
+    s32 sema;
+    s32 res2;
+    s32 *ap;
+
+    func_002FC150(0);
+    if (D_00568E78 == 0) {
+        __asm__("" :: "r"(name));
+        func_002FC250();
+    }
+    if (func_002FC418() != 0) {
+        func_002FC180();
+        return -0x10004;
+    }
+    slot = func_002FBC48();
+    if (slot == NULL) {
+        func_002FC180();
+        return -0x13;
+    }
+    R7_VA_START(ap, flags, 6);
+    mode = *ap;
+    for (i = 0; i < 0x400; i++) {
+        if ((pkt->name[i] = name[i]) == 0) {
+            break;
+        }
+    }
+    if (i == 0x400) {
+        pkt->name[0x3FF] = 0;
+    }
+    idx = slot - D_00794E80;
+    pkt->flags = flags & 0x6FFFFFFF;
+    pkt->mode = mode;
+    pkt->slot = idx;
+    sp10.maxCount = 1;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    sema = func_002F83E0(&sp10);
+    pkt->sema = sema;
+    pkt->res = &sp30;
+    pkt->size = 4;
+    if (func_002FB4C8(&D_00795080, 0, 0, &D_00793DC0, 0x418, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(sema);
+        func_002FC180();
+        return -0xB;
+    }
+    res2 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (res2 == 0) {
+        func_002F83F0(sema);
+        return -0xB;
+    }
+    func_002F8420(sema);
+    ((s32 (*)(s32))func_002F83F0)(sema);
+    if (sp30 < 0) {
+        func_002F8420(D_00568E80);
+        slot->busy = 0;
+        func_002F8400(D_00568E80);
+        return sp30;
+    }
+    res2 = idx;
+    func_002F8420(D_00568E80);
+    slot->w0 = sp30;
+    slot->busy |= flags;
+    func_002F8400(D_00568E80);
+    return res2;
+}
 
 s32 func_002FC768(s32 fd) {
     void *pkt = &D_00793DC0;
@@ -311,13 +440,336 @@ s32 func_002FC768(s32 fd) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FC8E8);
+s32 func_002FC8E8(s32 fd, s32 b, s32 c) {
+    void *pkt = &D_00793DC0;
+    SemaParam sp10;
+    s32 sp30;
+    s32 temp_16_2;
+    s32 temp_18;
+    s32 temp_19;
+    s32 var_6;
+    U5FioSlot *temp_16;
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FCB20);
+    temp_16 = func_002FBCD0(fd);
+    func_002FC150(4);
+    if (D_00568E78 == 0) {
+        func_002FC180();
+        return -1;
+    }
+    if ((temp_16 == NULL) || ((temp_19 = temp_16->busy) == 0)) {
+        func_002FC180();
+        return -9;
+    }
+    M2C_FIELD(pkt, s32 *, 0xC) = temp_16->w0;
+    M2C_FIELD(pkt, s32 *, 0x10) = b;
+    M2C_FIELD(pkt, s32 *, 0x14) = c;
+    M2C_FIELD(pkt, s32 *, 0x18) = temp_16 - D_00794E80;
+    sp10.maxCount = 1;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    temp_18 = func_002F83E0(&sp10);
+    M2C_FIELD(pkt, s32 *, 0) = temp_18;
+    M2C_FIELD(pkt, s32 **, 4) = &sp30;
+    M2C_FIELD(pkt, s32 *, 8) = 4;
+    if (temp_19 & 0x8000) {
+        func_002F8420(D_00568E84);
+        var_6 = 0;
+        __asm__ volatile("" :: "r"(var_6), "m"(D_00568DF8[0]));
+        for (; var_6 < 0x20; var_6++) {
+            if (D_00568DF8[var_6] == -1) {
+                D_00568DF8[var_6] = M2C_FIELD(pkt, s32 *, 0);
+                M2C_FIELD(pkt, s32 *, 0) = -M2C_FIELD(pkt, s32 *, 0);
+                break;
+            }
+        }
+        func_002F8400(D_00568E84);
+    }
+    if (func_002FB4C8(&D_00795080, 4, 0, &D_00793DC0, 0x1C, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(temp_18);
+        func_002FC180();
+        return -0xB;
+    }
+    __asm__("" : "+r"(temp_19));
+    temp_16_2 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (temp_16_2 == 0) {
+        func_002F83F0(temp_18);
+        return -0xB;
+    }
+    if (temp_19 & 0x8000) {
+        func_002F83F0(temp_18);
+        return 0;
+    }
+    func_002F8420(temp_18);
+    func_002F83F0(temp_18);
+    return sp30;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FCD90);
+s32 func_002FCB20(s32 fd, void *buf, s32 size) {
+    void *pkt = &D_00793DC0;
+    SemaParam sp10;
+    s32 sp30;
+    s32 temp_16_2;
+    s32 temp_18;
+    s32 temp_19;
+    s32 var_6;
+    U5FioSlot *temp_16;
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FD050);
+    temp_16 = func_002FBCD0(fd);
+    func_002FC150(2);
+    if (D_00568E78 == 0) {
+        func_002FC180();
+        return -1;
+    }
+    if ((temp_16 == NULL) || ((temp_19 = temp_16->busy) == 0)) {
+        func_002FC180();
+        return -9;
+    }
+    M2C_FIELD(pkt, s32 *, 0xC) = temp_16->w0;
+    M2C_FIELD(pkt, s32 *, 0x1C) = temp_16 - D_00794E80;
+    sp10.maxCount = 1;
+    M2C_FIELD(pkt, void **, 0x10) = buf;
+    M2C_FIELD(pkt, s32 *, 0x14) = size;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    temp_18 = func_002F83E0(&sp10);
+    M2C_FIELD(pkt, s32 *, 0) = temp_18;
+    M2C_FIELD(pkt, s32 **, 4) = &sp30;
+    M2C_FIELD(pkt, s32 *, 8) = 4;
+    if (temp_19 & 0x8000) {
+        func_002F8420(D_00568E84);
+        var_6 = 0;
+        __asm__ volatile("" :: "r"(var_6), "m"(D_00568DF8[0]));
+        for (; var_6 < 0x20; var_6++) {
+            if (D_00568DF8[var_6] == -1) {
+                D_00568DF8[var_6] = M2C_FIELD(pkt, s32 *, 0);
+                M2C_FIELD(pkt, s32 *, 0) = -M2C_FIELD(pkt, s32 *, 0);
+                break;
+            }
+        }
+        func_002F8400(D_00568E84);
+    }
+    if (!(temp_19 & 0x20000000)) {
+        func_002FABD8(buf, size);
+    }
+    func_002FABD8(&D_00794A40, 0xA4);
+    func_002FABD8(pkt, 0x20);
+    if (func_002FB4C8(&D_00795080, 2, 0, &D_00793DC0, 0x20, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(temp_18);
+        func_002FC180();
+        return -0xB;
+    }
+    __asm__("" : "+r"(temp_19));
+    temp_16_2 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (temp_16_2 == 0) {
+        func_002F83F0(temp_18);
+        return -0xB;
+    }
+    if (temp_19 & 0x8000) {
+        func_002F83F0(temp_18);
+        return 0;
+    }
+    func_002F8420(temp_18);
+    func_002F83F0(temp_18);
+    return sp30;
+}
+
+typedef struct {
+    s32 sema;
+    s32 *res;
+    s32 size;
+    s32 fd;
+    void *buf;
+    s32 len;
+    s32 mis;
+    u8 data[16];
+    s32 slot;
+} PktWrite;
+
+s32 func_002FCD90(s32 fd, u8 *buf, s32 size) {
+    PktWrite *pkt = (PktWrite *)&D_00793DC0;
+    SemaParam sp10;
+    s32 sp30;
+    s32 temp_16_2;
+    s32 temp_16_3;
+    s32 temp_20;
+    s32 temp_22;
+    s32 var_5;
+    s32 var_6;
+    s32 tmp;
+    U5FioSlot *temp_16;
+
+    temp_16 = func_002FBCD0(fd);
+    func_002FC150(3);
+    if (D_00568E78 == 0) {
+        func_002FC180();
+        return -1;
+    }
+    if ((temp_16 == NULL) || ((temp_22 = temp_16->busy) == 0)) {
+        func_002FC180();
+        return -9;
+    }
+    pkt->fd = temp_16->w0;
+    pkt->slot = temp_16 - D_00794E80;
+    sp10.maxCount = 1;
+    pkt->len = size;
+    pkt->buf = buf;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    temp_20 = func_002F83E0(&sp10);
+    pkt->sema = temp_20;
+    pkt->res = &sp30;
+    pkt->size = 4;
+    if (temp_22 & 0x8000) {
+        func_002F8420(D_00568E84);
+        var_6 = 0;
+        __asm__ volatile("" :: "r"(var_6), "m"(D_00568DF8[0]));
+        for (; var_6 < 0x20; var_6++) {
+            if (D_00568DF8[var_6] == -1) {
+                D_00568DF8[var_6] = pkt->sema;
+                pkt->sema = -pkt->sema;
+                break;
+            }
+        }
+        func_002F8400(D_00568E84);
+    }
+    if (((u32)buf & 0xF) == 0) {
+        temp_16_2 = 0;
+    } else {
+        u32 sh = (u32)buf >> 4;
+        tmp = (s32)buf - 0x10;
+        __asm__("" : "+r"(sh), "+r"(tmp));
+        sh <<= 4;
+        temp_16_2 = sh - tmp;
+    }
+    temp_16_2 = (size < temp_16_2) ? size : temp_16_2;
+    if (!(temp_22 & 0x20000000)) {
+        __asm__("" :: "r"(size));
+        func_002FABD8(buf, size);
+    }
+    buf = (u8 *)((s32)buf | 0x20000000);
+    pkt->mis = temp_16_2;
+    for (var_5 = 0; var_5 < temp_16_2; var_5++) {
+        pkt->data[var_5] = buf[var_5];
+    }
+    if (func_002FB4C8(&D_00795080, 3, 0, &D_00793DC0, 0x30, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(temp_20);
+        func_002FC180();
+        return -0xB;
+    }
+    __asm__("" : "+r"(temp_22));
+    temp_16_3 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (temp_16_3 == 0) {
+        func_002F83F0(temp_20);
+        return -0xB;
+    }
+    if (temp_22 & 0x8000) {
+        func_002F83F0(temp_20);
+        return 0;
+    }
+    func_002F8420(temp_20);
+    func_002F83F0(temp_20);
+    return sp30;
+}
+
+typedef struct {
+    s32 sema;
+    s32 *res;
+    s32 size;
+    s32 fd;
+    s32 cmd;
+    u8 arg[0x400];
+    s32 f414;
+    s32 f418;
+    s32 len;
+} PktIoctl;
+
+s32 func_002FD050(s32 fd, s32 cmd, void *arg) {
+    PktIoctl *pkt = (PktIoctl *)&D_00793DC0;
+    SemaParam sp10;
+    s32 sp30;
+    U5FioSlot *slot;
+    s32 i;
+    s32 sema;
+    s32 res2;
+    s32 one = 1;
+
+    slot = func_002FBCD0(fd);
+    func_002FC150(one + 4);
+    D_00793D84 = (s32 *)arg;
+    if (D_00568E78 == 0) {
+        func_002FC250();
+    }
+    if (slot == NULL || slot->busy == 0) {
+        func_002FC180();
+        return -9;
+    }
+    pkt->f414 = 0;
+    pkt->f418 = 0;
+    switch (cmd) {
+    case 1: {
+        s32 *p, *q;
+        func_002F8420(D_00568E84);
+        p = D_00568DF8;
+        q = D_00568DF8;
+        i = p - q;
+        __asm__ volatile("" :: "r"(i));
+        for (; i < 0x20; i++) {
+            if (D_00568DF8[i] != -1) {
+                break;
+            }
+        }
+        if (i == 0x20) {
+            *D_00793D84 = 0;
+        } else {
+            *D_00793D84 = 1;
+        }
+        func_002F8400(D_00568E84);
+        func_002FC180();
+        return 0;
+    }
+    case 2:
+        *(s32 *)arg = *(s32 *)((s32)&D_00794A50 | 0x20000000);
+        func_002FC180();
+        return 0;
+    case 3:
+        *(u64 *)arg = *(u64 *)((s32)&D_00794A50 | 0x20000000);
+        func_002FC180();
+        return 0;
+    }
+    pkt->fd = slot->w0;
+    pkt->cmd = cmd;
+    if (arg == NULL) {
+        pkt->len = 0;
+    } else {
+        pkt->len = 0x400;
+        __builtin_memcpy(pkt->arg, arg, 0x400);
+    }
+    sp10.maxCount = 1;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    sema = func_002F83E0(&sp10);
+    pkt->sema = sema;
+    pkt->res = &sp30;
+    pkt->size = 4;
+    func_002FABD8(&D_00793DC0, 0x420);
+    if (func_002FB4C8(&D_00795080, 5, 0, &D_00793DC0, 0x420, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(sema);
+        func_002FC180();
+        return -0xB;
+    }
+    res2 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (res2 == 0) {
+        func_002F83F0(sema);
+        return -0xB;
+    }
+    func_002F8420(sema);
+    func_002F83F0(sema);
+    return sp30;
+}
 
 s32 func_002FD3A0(s32 fd, s32 arg1, void *arg2, u32 arg3, s32 arg4, u32 arg5) {
     void *pkt = &D_00793DC0;
@@ -955,7 +1407,70 @@ int func_002FEA40(int a)
     return func_002FD578(a, 0x15);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FBBE8", func_002FEA60);
+s64 func_002FEA60(s32 fd, s64 b, s32 c) {
+    void *pkt = &D_00793DC0;
+    SemaParam sp10;
+    s64 sp30;
+    s32 temp_16_2;
+    s32 temp_18;
+    s32 temp_19;
+    s32 var_6;
+    U5FioSlot *temp_16;
+
+    temp_16 = func_002FBCD0(fd);
+    func_002FC150(0x16);
+    if (D_00568E78 == 0) {
+        func_002FC180();
+        return -1;
+    }
+    if ((temp_16 == NULL) || ((temp_19 = temp_16->busy) == 0)) {
+        func_002FC180();
+        return -9;
+    }
+    M2C_FIELD(pkt, s32 *, 0xC) = temp_16->w0;
+    M2C_FIELD(pkt, s64 *, 0x10) = b;
+    M2C_FIELD(pkt, s32 *, 0x18) = c;
+    M2C_FIELD(pkt, s32 *, 0x1C) = temp_16 - D_00794E80;
+    sp10.maxCount = 1;
+    sp10.initCount = 0;
+    sp10.option = 0;
+    temp_18 = func_002F83E0(&sp10);
+    M2C_FIELD(pkt, s32 *, 0) = temp_18;
+    M2C_FIELD(pkt, s64 **, 4) = &sp30;
+    M2C_FIELD(pkt, s32 *, 8) = 8;
+    if (temp_19 & 0x8000) {
+        func_002F8420(D_00568E84);
+        var_6 = 0;
+        __asm__ volatile("" :: "r"(var_6), "m"(D_00568DF8[0]));
+        for (; var_6 < 0x20; var_6++) {
+            if (D_00568DF8[var_6] == -1) {
+                D_00568DF8[var_6] = M2C_FIELD(pkt, s32 *, 0);
+                M2C_FIELD(pkt, s32 *, 0) = -M2C_FIELD(pkt, s32 *, 0);
+                break;
+            }
+        }
+        func_002F8400(D_00568E84);
+    }
+    if (func_002FB4C8(&D_00795080, 0x16, 0, &D_00793DC0, 0x20, &D_00794A00, 4, NULL, NULL) < 0) {
+        func_002F83F0(temp_18);
+        func_002FC180();
+        return -0xB;
+    }
+    __asm__("" : "+r"(temp_19));
+    temp_16_2 = *(s32 *)((s32)&D_00794A00 | 0x20000000);
+    func_002FC180();
+    if (temp_16_2 == 0) {
+        func_002F83F0(temp_18);
+        return -0xB;
+    }
+    if (temp_19 & 0x8000) {
+        func_002F83F0(temp_18);
+        return 0;
+    }
+    func_002F8420(temp_18);
+    func_002F83F0(temp_18);
+    return sp30;
+}
 
 s32 func_002FEC98(s8 *dev, s32 cmd, u8 *arg, s32 arglen, void *buf, s32 buflen) {
     PktDevctl *pkt = (PktDevctl *)&D_00793DC0;
