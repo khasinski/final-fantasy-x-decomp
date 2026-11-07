@@ -1088,7 +1088,37 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248F98);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00249108);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_002491D0);
+void func_002491D0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 (*arg6)(s32, s32, s32)) {
+    s32 temp_3;
+    s32 temp_4;
+    s32 temp_6;
+    s32 var_16;
+    s32 var_17;
+    s32 var_18;
+    s32 var_2;
+    s32 var_7;
+
+    var_7 = arg3;
+    var_2 = (arg5 < 0) ? -arg5 : arg5;
+    temp_6 = var_2 + 0xFFF;
+    temp_4 = ((s32)temp_6 / 4096);
+    var_18 = arg4 - temp_4;
+    var_17 = arg1 - (temp_4 * arg2);
+    if (arg5 != 0) {
+        temp_3 = arg2 * arg5;
+        var_7 += temp_4 * 2;
+        var_17 += ((s32)temp_3 / 4096);
+    }
+    if (var_7 > 0) {
+        var_16 = var_7;
+        do {
+            var_16 -= 1;
+            arg6(var_18, arg0, var_17);
+            var_17 += arg2;
+            var_18 += 1;
+        } while (var_16 != 0);
+    }
+}
 
 void func_002492A0(u8 *buf) /* DEBT(TYPE): argument unused, the global is reread */
 {

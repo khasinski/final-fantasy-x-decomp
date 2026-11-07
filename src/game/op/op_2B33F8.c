@@ -1,11 +1,17 @@
 /* tu_328 0x2b33f8-0x2b4630: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: EE kernel thread/semaphore wrappers (SDK) (see w10.h). */
 #define func_002B3EA8 _hdr_func_002B3EA8
+#define func_002B3888 _hdr_func_002B3888
+#define func_002B3938 _hdr_func_002B3938
+#define func_002B39C0 _hdr_func_002B39C0
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/g4.h"
 #include "ffx/r7.h"
+#undef func_002B3888
+#undef func_002B3938
+#undef func_002B39C0
 #undef func_002B3EA8
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_spline_draw_path3);
@@ -47,17 +53,95 @@ void func_002B37F0(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_pad_set);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3888);
+extern s8 _m2c_func_002B3888_D_004F3F80 __asm__("D_004F3F80");
+extern s8 _m2c_func_002B3888_D_004F4110 __asm__("D_004F4110");
+extern s8 _m2c_func_002B3888_D_00575B50[] __asm__("D_00575B50");
+void _m2c_func_002B3888_func_00120108(void *) __asm__("func_00120108");
+/* DEBT(FAKE) */
+s32 func_002B3888(s32 a) {
+    register s32 ra __asm__("$31");
+    s32 idx = _m2c_func_002B3888_D_004F3F80;
+    s32 v6;
+    s32 v7;
+    if (idx < 0x1F) {
+        v6 = (&D_00703F20)[idx];
+        v7 = v6 + a;
+        if (v7 <= (s32)(&D_00764130)[_m2c_func_002B3888_D_004F4110]) {
+            idx++;
+            _m2c_func_002B3888_D_004F3F80 = idx;
+            (&D_00703F20)[idx] = v7;
+            return v6;
+        }
+    }
+    *(s32 *)0x70003FE0 = a;
+    __asm__ volatile("");
+    *(volatile s32 *)0x70003FF0 = ra;
+    __asm__ volatile("");
+    _m2c_func_002B3888_func_00120108(_m2c_func_002B3888_D_00575B50);
+    func_002EA328(1);
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3938);
+extern s8 _m2c_func_002B3938_D_004F4110 __asm__("D_004F4110");
+extern s8 _m2c_func_002B3938_D_00575B68[] __asm__("D_00575B68");
+void _m2c_func_002B3938_func_00120108(void *) __asm__("func_00120108");
+s32 func_002B3938(s32 arg0) {
+    s32 idx = _m2c_func_002B3938_D_004F4110;
+    s32 v6;
+    s32 v4;
+    if (idx < 0x1F) {
+        v6 = (&D_00764130)[idx];
+        v4 = v6 - arg0;
+        if (v4 >= (s32)(&D_00703F20)[idx]) {
+            idx++;
+            _m2c_func_002B3938_D_004F4110 = idx;
+            (&D_00764130)[idx] = v6;
+            return v4;
+        }
+    }
+    _m2c_func_002B3938_func_00120108(_m2c_func_002B3938_D_00575B68);
+    *(s32 *)0 = 0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B39C0);
+extern s8 _m2c_func_002B39C0_D_004F3F80 __asm__("D_004F3F80");
+extern s8 _m2c_func_002B39C0_D_00575B88[] __asm__("D_00575B88");
+void _m2c_func_002B39C0_func_00120108(void *) __asm__("func_00120108");
+/* DEBT(FAKE) */
+void func_002B39C0(s32 n) {
+    register s32 ra __asm__("$31");
+    s32 idx = _m2c_func_002B39C0_D_004F3F80;
+    s32 prev;
+    if (idx > 0) {
+        prev = idx - 1;
+        if ((s32)((&D_00703F20)[idx] - (&D_00703F20)[prev]) == n) {
+            _m2c_func_002B39C0_D_004F3F80 = prev;
+            return;
+        }
+    }
+    *(s32 *)0x70003FE0 = n;
+    __asm__ volatile("" : "=r"(ra));
+    *(volatile s32 *)0x70003FF0 = ra;
+    __asm__ volatile("");
+    _m2c_func_002B39C0_func_00120108(_m2c_func_002B39C0_D_00575B88);
+    func_002EA328(1);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3A48);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3AC8);
+extern s8 _m2c_func_002B3AC8_D_004F4110 __asm__("D_004F4110");
+s32 func_002B3AC8(s32 arg0) {
+    if (arg0 + (s32)&D_00703F20 > *(s32 *)((s32)&D_00764130 + ((_m2c_func_002B3AC8_D_004F4110 + 1) << 2))) {
+        return -1;
+    }
+    return 0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3B08);
+extern s8 _m2c_func_002B3B08_D_004F3F80 __asm__("D_004F3F80");
+s32 func_002B3B08(s32 arg0) {
+    if ((s32)&D_00764130 - arg0 < *(s32 *)((s32)&D_00703F20 + ((_m2c_func_002B3B08_D_004F3F80 + 1) << 2))) {
+        return -1;
+    }
+    return 0;
+}
 
 void func_002B3B48(const char *path, void *buffer)
 {

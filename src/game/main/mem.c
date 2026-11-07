@@ -119,7 +119,31 @@ void func_0011BFE0(s32 a)
     D_00580910 = ((a - 8) >> 2) & 0x7FFFFF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C000);
+s32 func_0011C000(arg0)
+void *arg0;
+{
+    u32 temp_8 = (*(u32 *)((u8 *)(arg0) + (0xC)));
+    R0Heap *temp_3 = &D_005808C8[(temp_8 >> 0x1B) & 3];
+    if ((s32)arg0 < (s32)temp_3->first) {
+        return -1;
+    }
+    if ((s32)temp_3->last < (s32)arg0) {
+        return -2;
+    }
+    if ((*(s32 *)((u8 *)(arg0) + (0))) < (s32)temp_3->first && (temp_8 & 0xF) != 0xF) {
+        return -3;
+    }
+    if ((s32)temp_3->last < (*(s32 *)((u8 *)(arg0) + (0)))) {
+        return -4;
+    }
+    if ((*(s32 *)((u8 *)(arg0) + (4))) < (s32)temp_3->first && (*(s32 *)((u8 *)(arg0) + (4))) != 0) {
+        return -5;
+    }
+    if ((s32)temp_3->last < (*(s32 *)((u8 *)(arg0) + (4)))) {
+        return -6;
+    }
+    return 0;
+}
 
 int Sg_MemCheckPtr(u8 *p)
 {

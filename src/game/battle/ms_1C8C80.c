@@ -12,7 +12,16 @@
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C8C80);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C90C0);
+/* DEBT(CAST) */
+s32 func_001C90C0(void) {
+    if ((D_003172F0.f2100 != 0) || (D_003172F0.f211A != 0) || (D_003172F0.f2114 >= 0) || (D_003172F0.f2074 != 0) || (D_003172F0.f14 != 0)) {
+        return 0;
+    }
+    if (D_003172F0.f175B != 0) {
+        return 0;
+    }
+    return ((*(s64 *)((u8 *)(&D_003172F0) + (0x2138))) & 0x0000FF00FF000000LL) ? 0 : -1;
+}
 
 int func_001C9138(void) {
     int r = 0;

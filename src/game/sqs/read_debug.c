@@ -1,4 +1,5 @@
 /* tu_278 0x254a38-0x255a08: low; read_debug (config/tu_map.tsv) */
+#define func_00255020 _hdr_func_00255020
 #include "common.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -6,6 +7,7 @@
 #include "ffx/v6.h"
 #include "ffx/s6.h"
 #include "ffx/t6.h"
+#undef func_00255020
 
 #define GIF_CHCR (*(volatile u32 *)0x1000A000) /* GIF DMA channel control; bit 8 = STR (transfer running) */
 
@@ -63,7 +65,34 @@ void func_00254FF8(int n)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/read_debug", func_00255020);
+void _m2c_func_00255020_func_00254FF8(s32, s32) __asm__("func_00254FF8");
+void _m2c_func_00255020_func_002F8660(s32) __asm__("func_002F8660");
+s32 _m2c_func_00255020_func_002FC4E0(s32, s32) __asm__("func_002FC4E0");
+void _m2c_func_00255020_func_002FC768(s32) __asm__("func_002FC768");
+s32 _m2c_func_00255020_func_002FC8E8(s32, s32, s32) __asm__("func_002FC8E8");
+void _m2c_func_00255020_func_002FCB20(s32, s32, s32) __asm__("func_002FCB20");
+s32 _m2c_func_00255020_user_malloc(s32, s32, s8 *, s32) __asm__("user_malloc");
+s32 func_00255020(s32 arg0, s32 *arg1) {
+    s32 temp_16;
+    s32 temp_18;
+    s32 temp_2;
+    s32 temp_3;
+
+    temp_2 = _m2c_func_00255020_func_002FC4E0(arg0, 1);
+    _m2c_func_00255020_func_00254FF8(temp_2, arg0);
+    temp_16 = _m2c_func_00255020_func_002FC8E8(temp_2, 0, 2);
+    _m2c_func_00255020_func_002FC8E8(temp_2, 0, 0);
+    temp_3 = temp_16 + 3;
+    temp_18 = _m2c_func_00255020_user_malloc((((s32)temp_3 / 4)) * 4, 0xA, D_00573850, 0x165);
+    _m2c_func_00255020_func_002F8660(0);
+    _m2c_func_00255020_func_002FCB20(temp_2, temp_18, temp_16);
+    _m2c_func_00255020_func_002FC768(temp_2);
+    _m2c_func_00255020_func_002F8660(0);
+    if (arg1 != 0) {
+        *arg1 = temp_16;
+    }
+    return temp_18;
+}
 
 INCLUDE_ASM("build/ee_asm/game/sqs/read_debug", func_00255100);
 
