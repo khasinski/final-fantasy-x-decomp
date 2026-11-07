@@ -2,6 +2,7 @@
 #define func_001EA718 _hdr_func_001EA718
 #define func_001EE8E0 _hdr_func_001EE8E0
 #define func_001EE9E8 _hdr_func_001EE9E8
+#define func_001EBF18 _hdr_func_001EBF18
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -21,6 +22,7 @@
 #include "ffx/r4.h"
 #undef MsGetChrInfo
 #include "ffx/s4.h"
+#undef func_001EBF18
 #undef func_001EA718
 #undef func_001EE8E0
 #undef func_001EE9E8
@@ -659,7 +661,34 @@ int func_001EBEB0(Actor *a, int unused, ScriptCtx *ctx) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001EBF18);
+s32 _m2c_func_001EBF18_AtelPopStackInteger() __asm__("AtelPopStackInteger");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_001EBF18(s32 arg0, s32 arg1, s32 arg2) {
+    s32 sp20;
+    s32 temp_17;
+    register s32 temp_18 __asm__("$18");
+    s32 temp_18_2;
+    s32 temp_19;
+    s32 temp_19_2;
+    u8 temp_16;
+    void *temp_16_2;
+    register s32 v0 __asm__("$2");
+    register s32 a0 __asm__("$4");
+
+    v0 = _m2c_func_001EBF18_AtelPopStackInteger(arg0, arg2);
+    a0 = arg0;
+    __asm__ volatile("" : "+r"(a0), "+r"(v0));
+    sp20 = v0;
+    temp_19 = _m2c_func_001EBF18_AtelPopStackInteger(a0, arg2);
+    temp_18 = _m2c_func_001EBF18_AtelPopStackInteger(arg0, arg2);
+    temp_16 = *func_00144158(arg0);
+    temp_18_2 = func_001B8198(temp_16, temp_18, 0, 1);
+    temp_19_2 = func_001B8198(temp_16, temp_19, 0, 1);
+    __asm__ volatile("" : : : "$17", "memory");
+    temp_16_2 = MsGetCommand(temp_18_2, 0, -1, 0, &sp20);
+    temp_17 = MsGetChr(temp_18_2);
+    MsCalcDamageCommand(temp_17, MsGetChr(temp_19_2), temp_16_2, (*(u8 *)((u8 *)(temp_16_2) + (0x28))), (*(u8 *)((u8 *)(temp_16_2) + (0x2A))), 0, (*(u8 *)((u8 *)(temp_16_2) + (0x23))), 0, 0, 0, 0);
+}
 
 int func_001EC020(Actor *a)
 {

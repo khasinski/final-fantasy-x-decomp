@@ -381,9 +381,113 @@ void func_0024D108(int a0, int a1) {
     TkMenuSetHP(a0, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D168);
+extern u16 _m2c_func_0024D168_D_0069BE6A __asm__("D_0069BE6A");
+u8 _m2c_func_0024D168_TkMenuGetPlayerFromIndex(int i) __asm__("TkMenuGetPlayerFromIndex");
+u8 _m2c_func_0024D168_func_00242798(int i) __asm__("func_00242798");
+/* DEBT(FAKE) */
+void func_0024D168(s32 arg0) {
+    u8 sp[0x10];
+    OfsTbl *temp_2;
+    s32 temp_2_2;
+    s32 temp_2_4;
+    s32 temp_5;
+    register s32 var_16 __asm__("$16");
+    register u32 var_2 __asm__("$2");
+    u8 temp_2_3;
+    u8 temp_2_5;
+    register u32 temp_3 __asm__("$3");
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D2B0);
+    temp_5 = func_0024CF48((s32) _m2c_func_0024D168_D_0069BE6A, arg0, 0);
+    if (D_0069BE6C == 1) {
+        func_0024D108(arg0, temp_5);
+        return;
+    }
+    temp_2 = TkMsGetRomItem((s32) _m2c_func_0024D168_D_0069BE6A, sp);
+    __asm__ volatile("" : : : "$2");
+    temp_3 = (u8) temp_2->b22;
+    var_2 = temp_3 >> 7;
+    if (var_2 != 0) {
+        var_16 = 0;
+        temp_2_2 = TkMenuGetSummonListMax();
+        if (temp_2_2 > 0) {
+            do {
+                temp_2_3 = _m2c_func_0024D168_func_00242798(var_16);
+                var_16 += 1;
+                func_0024D108((s32) temp_2_3, func_0024CF48((s32) _m2c_func_0024D168_D_0069BE6A, (s32) temp_2_3, 0));
+            } while (var_16 < temp_2_2);
+        }
+        temp_3 = (u8) temp_2->b22;
+        var_2 = temp_3 >> 6;
+    } else {
+        var_2 = temp_3 >> 6;
+    }
+    if (var_2 & 1) {
+        __asm__ volatile("" : "+r"(var_16));
+        var_16 = 0;
+        temp_2_4 = func_00242818();
+        if (temp_2_4 > 0) {
+            do {
+                temp_2_5 = _m2c_func_0024D168_TkMenuGetPlayerFromIndex(var_16);
+                var_16 += 1;
+                func_0024D108((s32) temp_2_5, func_0024CF48((s32) _m2c_func_0024D168_D_0069BE6A, (s32) temp_2_5, 0));
+            } while (var_16 < temp_2_4);
+        }
+    }
+}
+
+extern u16 _m2c_func_0024D2B0_D_0069BE6A __asm__("D_0069BE6A");
+u8 _m2c_func_0024D2B0_TkMenuGetPlayerFromIndex(int i) __asm__("TkMenuGetPlayerFromIndex");
+u8 _m2c_func_0024D2B0_func_00242798(int i) __asm__("func_00242798");
+/* DEBT(FAKE) */
+void func_0024D2B0(s32 a, s32 idx) {
+    u8 sp[0x10];
+    OfsTbl *temp_2;
+    s32 temp_2_2;
+    s32 temp_2_4;
+    s32 temp_5;
+    register s32 var_16 __asm__("$16");
+    register u32 var_2 __asm__("$2");
+    u8 temp_2_3;
+    u8 temp_2_5;
+    register u32 temp_3 __asm__("$3");
+
+    temp_5 = func_0024D038((s32) _m2c_func_0024D2B0_D_0069BE6A, idx);
+    if (D_0069BE6C == 1) {
+        func_0024D108(a, temp_5);
+        return;
+    }
+    temp_2 = MsGetRomPlyCommand((s32) _m2c_func_0024D2B0_D_0069BE6A, sp);
+    __asm__ volatile("" : : : "$2");
+    temp_3 = (u8) temp_2->b22;
+    var_2 = temp_3 >> 7;
+    if (var_2 != 0) {
+        var_16 = 0;
+        temp_2_2 = TkMenuGetSummonListMax();
+        if (temp_2_2 > 0) {
+            do {
+                temp_2_3 = _m2c_func_0024D2B0_func_00242798(var_16);
+                var_16 += 1;
+                func_0024D108((s32) temp_2_3, func_0024CF48((s32) _m2c_func_0024D2B0_D_0069BE6A, (s32) temp_2_3, 0));
+            } while (var_16 < temp_2_2);
+        }
+        temp_3 = (u8) temp_2->b22;
+        var_2 = temp_3 >> 6;
+    } else {
+        var_2 = temp_3 >> 6;
+    }
+    if (var_2 & 1) {
+        __asm__ volatile("" : "+r"(var_16));
+        var_16 = 0;
+        temp_2_4 = func_00242818();
+        if (temp_2_4 > 0) {
+            do {
+                temp_2_5 = _m2c_func_0024D2B0_TkMenuGetPlayerFromIndex(var_16);
+                var_16 += 1;
+                func_0024D108((s32) temp_2_5, func_0024CF48((s32) _m2c_func_0024D2B0_D_0069BE6A, (s32) temp_2_5, 0));
+            } while (var_16 < temp_2_4);
+        }
+    }
+}
 
 void func_0024D3F0(int a0, int a1) {
     int v = TkMenuGetMP(a0) + a1;
@@ -394,7 +498,59 @@ void func_0024D3F0(int a0, int a1) {
     TkMenuSetMP(a0, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D450);
+extern u16 _m2c_func_0024D450_D_0069BE6A __asm__("D_0069BE6A");
+u8 _m2c_func_0024D450_TkMenuGetPlayerFromIndex(int i) __asm__("TkMenuGetPlayerFromIndex");
+u8 _m2c_func_0024D450_func_00242798(int i) __asm__("func_00242798");
+/* DEBT(FAKE) */
+void func_0024D450(s32 arg0) {
+    u8 sp[0x10];
+    OfsTbl *temp_2;
+    s32 temp_2_2;
+    s32 temp_2_4;
+    s32 temp_5;
+    register s32 var_16 __asm__("$16");
+    register u32 var_2 __asm__("$2");
+    u8 temp_2_3;
+    u8 temp_2_5;
+    register u32 temp_3 __asm__("$3");
+
+    temp_5 = func_0024CF48((s32) _m2c_func_0024D450_D_0069BE6A, arg0, 1);
+    if (D_0069BE6C == 1) {
+        func_0024D3F0(arg0, temp_5);
+        return;
+    }
+    temp_2 = TkMsGetRomItem((s32) _m2c_func_0024D450_D_0069BE6A, sp);
+    __asm__ volatile("" : : : "$2");
+    temp_3 = (u8) temp_2->b22;
+    var_2 = temp_3 >> 7;
+    if (var_2 != 0) {
+        var_16 = 0;
+        temp_2_2 = TkMenuGetSummonListMax();
+        if (temp_2_2 > 0) {
+            do {
+                temp_2_3 = _m2c_func_0024D450_func_00242798(var_16);
+                var_16 += 1;
+                func_0024D3F0((s32) temp_2_3, func_0024CF48((s32) _m2c_func_0024D450_D_0069BE6A, (s32) temp_2_3, 1));
+            } while (var_16 < temp_2_2);
+        }
+        temp_3 = (u8) temp_2->b22;
+        var_2 = temp_3 >> 6;
+    } else {
+        var_2 = temp_3 >> 6;
+    }
+    if (var_2 & 1) {
+        __asm__ volatile("" : "+r"(var_16));
+        var_16 = 0;
+        temp_2_4 = func_00242818();
+        if (temp_2_4 > 0) {
+            do {
+                temp_2_5 = _m2c_func_0024D450_TkMenuGetPlayerFromIndex(var_16);
+                var_16 += 1;
+                func_0024D3F0((s32) temp_2_5, func_0024CF48((s32) _m2c_func_0024D450_D_0069BE6A, (s32) temp_2_5, 1));
+            } while (var_16 < temp_2_4);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D598);
 

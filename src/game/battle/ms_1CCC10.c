@@ -47,7 +47,27 @@ void func_001CCD10(Q4ObjC *o) {
     D_003193F8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", func_001CCD38);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_001CCD38(s32 a, s32 b) {
+    s32 temp_6;
+    s32 var_7;
+    u16 *temp_4;
+    u16 temp_2;
+
+    var_7 = -1;
+    if (a < 0x400) {
+        register u16 *base __asm__("$5") = D_00317370;
+        temp_6 = b + 1;
+        temp_4 = (u16 *)((u8 *)(a * 2) + (u32)base);
+        __asm__ volatile("" : : : "$2");
+        temp_2 = (*(u16 *)((u8 *)(temp_4) + (0)));
+        if (temp_6 < ((*(u16 *)((u8 *)(temp_4) + (2))) - temp_2)) {
+            var_7 = temp_2 + temp_6;
+        }
+        __asm__ volatile("" : "+r"(temp_6));
+    }
+    return var_7;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectRead);
 

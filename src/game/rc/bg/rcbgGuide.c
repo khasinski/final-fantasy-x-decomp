@@ -2,6 +2,7 @@
 #define func_00195750 _hdr_func_00195750
 #define func_00195378 _hdr_func_00195378
 #define rcbgGuideSetModelSub _hdr_rcbgGuideSetModelSub
+#define func_001956B0 _hdr_func_001956B0
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -10,6 +11,7 @@
 #include "ffx/v2.h"
 #include "ffx/g2.h"
 #include "vu0.h"
+#undef func_001956B0
 #undef rcbgGuideSetModelSub
 #undef func_00195750
 #undef func_00195378
@@ -54,7 +56,36 @@ void func_001956A8(void *p, u64 v) {
     op_md_tex0_reset(o->f14, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001956B0);
+/* DEBT(CAST) */
+void func_001956B0(void *arg0, s32 arg1) {
+    s32 var_10;
+    s32 var_9;
+    s32 temp_5;
+    void *temp_2;
+    void *var_6;
+    void *var_7;
+
+    temp_2 = (*(void **)((u8 *)(arg0) + (0x14)));
+    temp_5 = arg1 & 0xFF;
+    var_10 = (*(s16 *)((u8 *)(temp_2) + (0x10)));
+    var_7 = temp_2 + 0x20;
+    if (var_10 > 0) {
+        do {
+            var_6 = var_7 + 0x10;
+            for (var_9 = 0; var_9 < (*(s16 *)((u8 *)(var_7) + (2))); var_9 += 1) {
+                (*(s8 *)((u8 *)(var_6) + (3))) = temp_5;
+                (*(s8 *)((u8 *)(var_6) + (7))) = temp_5;
+                (*(s8 *)((u8 *)(var_6) + (0xB))) = temp_5;
+                if ((*(s8 *)((u8 *)(var_7) + (1))) >= 4) {
+                    (*(s8 *)((u8 *)(var_6) + (0xF))) = temp_5;
+                }
+                var_6 += D_00313710[(s8) (u8) (*(s8 *)((u8 *)(var_7) + (1)))];
+            }
+            var_10 -= (s16) (u16) (*(s16 *)((u8 *)(var_7) + (2)));
+            var_7 = var_6;
+        } while (var_10 > 0);
+    }
+}
 
 void func_00195750(void)
 {

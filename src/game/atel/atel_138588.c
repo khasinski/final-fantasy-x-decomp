@@ -479,7 +479,47 @@ char *func_001392C8(char *p) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_00139308);
+s32 _m2c_func_00139308_func_00139298(s32 *, s32, s32) __asm__("func_00139298");
+s32 *_m2c_func_00139308_func_001392C8(s8 *) __asm__("func_001392C8");
+/* DEBT(CAST) */
+void func_00139308(s32 arg0, s32 arg1, s32 arg2) {
+    s32 *var_16;
+    s32 temp_19;
+    s32 var_4;
+    s32 var_5;
+    s8 *temp_4;
+    void *temp_2_2;
+    s32 cnt;
+
+    if (MsBattleCheck() == 0) {
+        var_16 = 0;
+        temp_19 = AtelChangeCurrentCtrl(0);
+        temp_4 = D_0058E3D8->p48;
+        if (temp_4 != 0) {
+            var_16 = _m2c_func_00139308_func_001392C8(temp_4);
+        }
+        if (var_16 != 0) {
+            var_4 = _m2c_func_00139308_func_00139298(var_16, arg1, arg2);
+            cnt = *var_16;
+            if (var_4 >= 0) {
+                var_5 = var_4 + 1;
+                do {
+                    if (var_5 >= cnt) {
+                        var_4 = -1;
+                    } else {
+                        temp_2_2 = ((s32 *)((u8 *)var_16 + (((var_5 * 8) + 4))));
+                        var_4 = -1;
+                        if ((*(u16 *)((u8 *)(temp_2_2) + (0))) == arg1) {
+                            var_4 = (((*(u16 *)((u8 *)(temp_2_2) + (2))) ^ arg2) == 0) ? var_5 : -1;
+                        }
+                    }
+                    var_5 = var_4 + 1;
+                } while (var_4 >= 0);
+            }
+        }
+        AtelSetCurrentCtrl(temp_19);
+    }
+}
 
 char *func_00139400(char *p) {
     Fmt138 *q = func_00138D60(p);

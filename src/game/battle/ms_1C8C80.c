@@ -358,7 +358,46 @@ int MsGetCommandFar(int a, Obj1A *p) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CC7E8);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsGetCommandTarget2);
+/* DEBT(FAKE) */ /* DEBT(GOTO) */
+s32 MsGetCommandTarget2(s32 id, s32 a, s32 b, s32 c) {
+    OfsTbl *temp_18;
+    s32 var_16;
+    register s32 var_2 __asm__("$2");
+    register s32 var_5 __asm__("$5");
+    s32 var_5_2;
+    s32 var_5_3;
+    s32 temp_ret;
+    s32 cond;
+
+    var_16 = b;
+    temp_18 = MsGetComData(a, 0);
+    if (var_16 >= 0) {
+        var_5_2 = var_16 & 0xFF;
+        if (var_16 & 0x200) {
+
+        } else {
+            goto block_4;
+        }
+    } else {
+        var_16 = (((u16) temp_18->h1A >> 1) & 1) ^ 1;
+block_4:
+        temp_ret = MsGetRamChrMonster(id);
+        cond = var_16 & 0xFF;
+        if (temp_ret == 0) {
+            var_5_3 = -0xF;
+            var_2 = -0xE;
+        } else {
+            var_5_3 = -0xE;
+            var_2 = -0xF;
+        }
+        var_5_2 = cond ? var_2 : var_5_3;
+    }
+    var_5 = MsGetCursorTarget(id, var_5_2, temp_18, a, c);
+    if ((var_16 >= 0) && (var_16 & 0x100)) {
+        var_5 &= ~(1 << id);
+    }
+    return var_5;
+}
 
 int func_001CCA60(int a, int b, int mask, int k) {
     OfsTbl *t = MsGetComData(k, 0);

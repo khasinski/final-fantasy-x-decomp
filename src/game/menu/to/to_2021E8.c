@@ -686,7 +686,47 @@ int func_00205480(u8 *s)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOSetMessageAuto);
+/* DEBT(CAST) */
+s32 TOSetMessageAuto(s32 w, s32 a, s32 b) {
+    MenuCmd **temp_20;
+    MenuCmd *temp_2_3;
+    MenuCmd *temp_3;
+    MenuCmd *temp_3_2;
+    MenuCmd *temp_4;
+    s32 temp_2;
+    s32 temp_2_2;
+    s32 var_17;
+
+    var_17 = b;
+    temp_2 = TOGetFFXLangSwapFlag();
+    if ((temp_2 == 1) && (func_001BD360() == temp_2)) {
+        var_17 = ((D_00323954 ^ 1) == 0) ? a : var_17;
+    }
+    temp_20 = &D_00668740[w];
+    temp_3 = *temp_20;
+    (*(s32 *)((u8 *)(temp_3) + (0x4C))) = a;
+    (*(s32 *)((u8 *)(temp_3) + (0x64))) = var_17;
+    (*(s32 *)((u8 *)(temp_3) + (0x50))) = a;
+    (*(s32 *)((u8 *)(temp_3) + (0x68))) = var_17;
+    temp_2_2 = TOGetFFXLangSwapFlag();
+    if ((temp_2_2 == 1) && (func_001BD360() == temp_2_2)) {
+        temp_2_3 = *temp_20;
+        (*(s32 *)((u8 *)(temp_2_3) + (0x80))) = (s32) (*(s32 *)((u8 *)(temp_2_3) + (0x64)));
+        temp_2_3->x84 = (*(s32 *)((u8 *)(temp_2_3) + (0x68)));
+    } else {
+        temp_3_2 = D_00668740[w];
+        (*(s32 *)((u8 *)(temp_3_2) + (0x80))) = (s32) (*(s32 *)((u8 *)(temp_3_2) + (0x4C)));
+        temp_3_2->x84 = (*(s32 *)((u8 *)(temp_3_2) + (0x50)));
+    }
+    (*(s16 *)((u8 *)(D_00668740[w]) + (0x20))) = 0;
+    if (MsGetSaveConfigCreditName() == 1) {
+        (*(s16 *)((u8 *)(D_00668740[w]) + (0x22))) = 1;
+    } else {
+        (*(s16 *)((u8 *)(D_00668740[w]) + (0x22))) = 0;
+    }
+    temp_4 = D_00668740[w];
+    return temp_4->fD4(temp_4);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOSwapRenewMessage);
 

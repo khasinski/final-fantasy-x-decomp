@@ -823,7 +823,27 @@ void func_001AACA0(void *a0) {
     func_002DD0C0(a0, D_00314260);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsSetScreen);
+/* DEBT(CAST) */
+void MsSetScreen(s32 arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4, float fparg5, float fparg6, float fparg7, float arg_sp0) {
+    Rec142F0 *temp_2;
+    float temp_f1;
+
+    if (arg0 < 3) {
+        temp_2 = &ms_screen[arg0];
+        (*(float *)((u8 *)(temp_2) + (0))) = fparg5;
+        (*(float *)((u8 *)(temp_2) + (4))) = fparg6;
+        temp_2->f08 = fparg7;
+        temp_f1 = -fparg7 + arg_sp0;
+        (*(float *)((u8 *)(temp_2) + (0x28))) = (float) (((-fparg6 * fparg7) + (fparg5 * arg_sp0)) / temp_f1);
+        (*(float *)((u8 *)(temp_2) + (0x18))) = (float) ((arg_sp0 * fparg7 * (-fparg5 + fparg6)) / temp_f1);
+        temp_2->f1C = fparg0;
+        temp_2->f10 = fparg1;
+        temp_2->f14 = fparg2;
+        (*(float *)((u8 *)(temp_2) + (0x20))) = fparg3;
+        (*(float *)((u8 *)(temp_2) + (0x24))) = fparg4;
+        temp_2->f0C = arg_sp0;
+    }
+}
 
 void func_001AAD48(u32 idx, int i, int v) {
     if (idx < 3) {

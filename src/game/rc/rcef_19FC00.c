@@ -365,7 +365,56 @@ void func_001A17A0(void *b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A17E8);
+extern u8 _m2c_func_001A17E8_D_006A3970[] __asm__("D_006A3970");
+extern u8 _m2c_func_001A17E8_D_006A3A70[] __asm__("D_006A3A70");
+/* DEBT(CAST) */
+void func_001A17E8(u32 *o) {
+    s16 *temp_20;
+    s32 temp_19;
+    s32 off;
+    s32 temp_f0;
+    s32 temp_f0_2;
+    s32 temp_f1;
+    s32 temp_f5;
+    u32 *temp_17;
+    u32 *temp_18;
+    void *temp_2;
+
+    temp_17 = ((u32 *)((u8 *)o + (0x50)));
+    temp_19 = (*(s32 *)((u8 *)(o) + (4)));
+    temp_18 = ((u32 *)((u8 *)o + (0x10)));
+    off = ((*(s16 *)((u8 *)(o) + (0x42))) * 8) + 0x10;
+    temp_20 = (s16 *)(temp_19 + off);
+    func_002DCE38(temp_17, _m2c_func_001A17E8_D_006A3970, (*(void **)((u8 *)(o) + (0x48))));
+    func_002DCE38(temp_17, _m2c_func_001A17E8_D_006A3A70, temp_17);
+    temp_2 = (*(void **)((u8 *)(o) + (0x4C)));
+    temp_f5 = (s32) ((*(float *)((u8 *)(temp_2) + (0))) * 128.0f);
+    temp_f1 = (s32) ((*(float *)((u8 *)(temp_2) + (4))) * 128.0f);
+    temp_f0_2 = (s32) ((*(float *)((u8 *)(temp_2) + (8))) * 128.0f);
+    temp_f0 = (s32) ((*(float *)((u8 *)(temp_2) + (0xC))) * 128.0f);
+    if (temp_f5 >= 0) {
+        (*(s8 *)((u8 *)(temp_18) + (4))) = (s8) ((temp_f5 < 0x100) ? temp_f5 : 0xFF);
+    } else {
+        (*(s8 *)((u8 *)(temp_18) + (4))) = 0;
+    }
+    if (temp_f1 >= 0) {
+        (*(s8 *)((u8 *)(temp_18) + (5))) = (s8) ((temp_f1 < 0x100) ? temp_f1 : 0xFF);
+    } else {
+        (*(s8 *)((u8 *)(temp_18) + (5))) = 0;
+    }
+    if (temp_f0_2 >= 0) {
+        (*(s8 *)((u8 *)(temp_18) + (6))) = (s8) ((temp_f0_2 < 0x100) ? temp_f0_2 : 0xFF);
+    } else {
+        (*(s8 *)((u8 *)(temp_18) + (6))) = 0;
+    }
+    if (temp_f0 >= 0) {
+        (*(s8 *)((u8 *)(temp_18) + (7))) = (s8) ((temp_f0 < 0x100) ? temp_f0 : 0xFF);
+    } else {
+        (*(s8 *)((u8 *)(temp_18) + (7))) = 0;
+    }
+    (*(u8 **)((u8 *)(temp_18) + (0x14))) = (u8 *) D_006A3BCC;
+    D_006A3BCC = func_002CD590(temp_19 + *temp_20, temp_18, temp_f0_2, temp_f0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1948);
 

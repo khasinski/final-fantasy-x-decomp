@@ -309,7 +309,27 @@ void func_002D39D8(s32 port, s32 slot) {
     D_0078ACC0[port] |= r << slot;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3AA8);
+/* DEBT(FAKE) */
+void func_002D3AA8(s32 a, s32 b) {
+    s32 var_16;
+    register s32 var_17 __asm__("$17");
+
+    if (a < 0) {
+        var_17 = 0;
+        do {
+            var_16 = 0;
+            do {
+                func_002D3AA8(var_17, var_16);
+                var_16 += 1;
+            } while (var_16 <= 0);
+            var_17 += 1;
+        } while (var_17 < 2);
+    }
+    if (((s32) D_0078ACC0[a] >> b) & 1) {
+        func_002DE0C0(a, b);
+        D_0078ACC0[a] &= ~(1 << b);
+    }
+}
 
 void func_002D3B88(void) {
     s32 i;

@@ -1,4 +1,5 @@
 /* tu_276 0x251178-0x254028: medium; ~Sqs (config/tu_map.tsv) */
+#define func_00252AB8 _hdr_func_00252AB8
 #include "common.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
@@ -9,6 +10,7 @@
 #define func_00252AB8 func_00252AB8_orig /* DEBT(TYPE): funcs.h has u8 d */
 #include "ffx/v6.h"
 #include "ffx/g4.h"
+#undef func_00252AB8
 #undef func_00252AB8
 
 int func_00251178(int cmd, int nowait)
@@ -544,7 +546,15 @@ void func_00252A88(int a, int b, int c, int d)
     func_00251360(0x2F, a, b, ((c << 8) | d) & 0xFFFF, 0, 0, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00252AB8);
+void _m2c_func_00252AB8_func_00251360(s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_00251360");
+/* DEBT(FAKE) */
+void func_00252AB8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    register s32 v0 __asm__("$2") = arg3 << 8;
+    register s32 v1 __asm__("$3") = arg1;
+    register s32 a3 __asm__("$7") = arg2;
+    __asm__ volatile("" : "+r"(v0), "+r"(v1), "+r"(a3));
+    _m2c_func_00252AB8_func_00251360(0x30, arg0, v1, a3, (v0 | arg4) & 0xFFFF, 0, 0, 0);
+}
 
 int func_00252AE8(int shift)
 {

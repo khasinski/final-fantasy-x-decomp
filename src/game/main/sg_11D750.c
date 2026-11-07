@@ -1,4 +1,5 @@
 /* tu_032 0x11d750-0x11e2c8: low; ~Sg (config/tu_map.tsv) */
+#define Sg_GsXYZF2L _hdr_Sg_GsXYZF2L
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -6,6 +7,7 @@
 #include "ffx/u0.h"
 #include "ffx/w6.h"
 #include "ffx/v0.h"
+#undef Sg_GsXYZF2L
 
 void Sg_GsSetPacket(Cmd16 *buf)
 {
@@ -191,7 +193,26 @@ void func_0011E180(int x, int y, int z)
     D_00580920 = i + 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11D750", Sg_GsXYZF2L);
+extern s32 _m2c_Sg_GsXYZF2L_D_00580920 __asm__("D_00580920");
+extern s32 _m2c_Sg_GsXYZF2L_D_00580928 __asm__("D_00580928");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void Sg_GsXYZF2L(s16 arg0, s16 arg1, s32 arg2) {
+    s64 var_2;
+    register void * temp_3 __asm__("$3");
+
+    temp_3 = (_m2c_Sg_GsXYZF2L_D_00580920 * 0x10) + _m2c_Sg_GsXYZF2L_D_00580928;
+    (*(s16 *)((u8 *)(temp_3) + (0))) = arg0;
+    (*(s16 *)((u8 *)(temp_3) + (2))) = arg1;
+    (*(s32 *)((u8 *)(temp_3) + (4))) = 0;
+    if (arg2 < 0) {
+        var_2 = 0xC;
+    } else {
+    __asm__ volatile("" : : : "$2");
+        var_2 = 4;
+    }
+    (*(s64 *)((u8 *)(temp_3) + (8))) = var_2;
+    _m2c_Sg_GsXYZF2L_D_00580920 += 1;
+}
 
 void Sg_GsXYZF2V(int x, int y, int z)
 {

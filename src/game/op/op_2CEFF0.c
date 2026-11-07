@@ -1,11 +1,13 @@
 /* tu_333 0x2ceff0-0x2d0af0: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: bitfield/size helpers and wrappers (see w10.h). */
 #define func_002CF8D0 _hdr_func_002CF8D0
+#define func_002D0940 _hdr_func_002D0940
 #include "common.h"
 #include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r7.h"
+#undef func_002D0940
 #undef func_002CF8D0
 
 void func_002CEFF0(void)
@@ -149,7 +151,25 @@ void func_002D0928(u_long128 *d, u_long128 *s)
 void func_002D0938(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0940);
+void _m2c_func_002D0940_op_oef2_clut_load(int *p, int a) __asm__("op_oef2_clut_load");
+void _m2c_func_002D0940_op_oef2_texture_load(int *p, int a) __asm__("op_oef2_texture_load");
+extern s32 _m2c_func_002D0940_D_00518D40 __asm__("D_00518D40");
+extern s32 _m2c_func_002D0940_D_00703FF3 __asm__("D_00703FF3");
+void func_002D0940(void) {
+    s32 var_16;
+    s32 base;
+
+    if ((u8) _m2c_func_002D0940_D_00703FF3 != 0) {
+        var_16 = 0;
+        base = (s32) &_m2c_func_002D0940_D_00518D40;
+        op_oef2_set2((void *)base);
+        do {
+            _m2c_func_002D0940_op_oef2_texture_load(op_oef2_a_get(base, 2, var_16), 1);
+            _m2c_func_002D0940_op_oef2_clut_load(op_oef2_a_get(base, 3, var_16), 1);
+            var_16 += 1;
+        } while (var_16 < 6);
+    }
+}
 
 void func_002D09D0(u8 a) {
     D_00703FF6 = a;
