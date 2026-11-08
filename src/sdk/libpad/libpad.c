@@ -39,7 +39,22 @@ s32 func_002DDDB8(void) {
     return (*(s32 *)((u8 *)(D_0078BF80) + (0xC)));
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDE58);
+extern s32 D_00566340;
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_002DDE58(void) {
+    register s32 a3 __asm__("$7");
+
+    (*(s32 *)((u8 *)(D_0078BF80) + (0))) = 0xF;
+    if (func_002FB4C8(D_0078BC40, 1, 0, D_0078BF80, 0x80, D_0078BF80, 0x80, 0, 0) < 0) {
+        return 0;
+    }
+    a3 = (*(s32 *)((u8 *)(D_0078BF80) + (0xC)));
+    if (a3 == 1) {
+        D_00566340 = 0;
+    }
+    return a3;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDED8);
 

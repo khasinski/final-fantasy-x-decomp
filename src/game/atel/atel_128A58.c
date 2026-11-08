@@ -306,7 +306,37 @@ s32 func_00129810(Actor *a, void *op, ScriptCtx *ctx)
     return func_00129738(a, op, ctx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_128A58", func_00129830);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_00129830(Actor *arg0, void *arg1, ScriptCtx *arg2) {
+    float temp_f0;
+    register float temp_f20 __asm__("$f20");
+    register float temp_f21 __asm__("$f21");
+    u8 temp_4;
+    ActorState *temp_18;
+    register s32 c10080 __asm__("$4");
+    s32 ret;
+
+    temp_18 = AtelGetPosWorkAdrs(arg0);
+    temp_f21 = AtelPopStackFloat(arg0, arg2);
+    temp_f20 = AtelPopStackFloat(arg0, arg2);
+    temp_f0 = AtelPopStackFloat(arg0, arg2);
+    temp_4 = arg0->hdr->type;
+    if ((temp_4 == 3) || (temp_4 == 6)) {
+        (*(float *)((u8 *)(temp_18) + (8))) = temp_f21;
+        __asm__ volatile("" : : : "memory");
+        c10080 = 0x10000;
+        __asm__ volatile("" : "+r"(c10080) : : "memory");
+        (*(float *)((u8 *)(temp_18) + (0))) = temp_f0;
+        c10080 |= 0x80;
+        __asm__ volatile("" : "+r"(c10080) : : "memory");
+        (*(float *)((u8 *)(temp_18) + (4))) = temp_f20;
+        ret = 1;
+        __asm__ volatile("" : "+r"(ret) : : "memory");
+        arg0->flags34.w = arg0->flags34.w | c10080;
+        return ret;
+    }
+    return 0;
+}
 
 /* DEBT(CAST) */ /* DEBT(FAKE) */
 s32 func_001298E8(Actor *arg0, void *arg1, ScriptCtx *arg2) {
