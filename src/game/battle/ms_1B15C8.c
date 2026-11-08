@@ -371,7 +371,33 @@ int func_001B3278(s32 arg) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelCamInit);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void MsAtelCamInit(void) {
+    register void *p __asm__("$2");
+    register s32 v0 __asm__("$2");
+    register s32 a1 __asm__("$5");
+    register s32 v1 __asm__("$3");
+    register s32 a0 __asm__("$4");
+
+    v0 = 0x660000;
+    a1 = 0x660000;
+    v1 = 0x660000;
+    __asm__ volatile("" : "+r"(v0), "+r"(a1), "+r"(v1));
+    p = (void *)(v0 - 120);
+    __asm__ volatile("" : "+r"(p));
+    *(u8 *)(a1 + 6416) = 0;
+    a0 = 0x660000;
+    __asm__ volatile("" : "+r"(a0));
+    *(s32 *)(v1 + 6420) = 0;
+    *(s32 *)(a0 + 6424) = 0;
+    (*(s32 *)((u8 *)(p) + (0xB8))) = 0;
+    __asm__ volatile("" : : : "memory");
+    (*(s32 *)((u8 *)(p) + (0xA8))) = 0;
+    (*(s32 *)((u8 *)(p) + (0xAC))) = 0;
+    (*(s32 *)((u8 *)(p) + (0xB0))) = 0;
+    __asm__ volatile("" : : : "memory");
+    (*(s32 *)((u8 *)(p) + (0xB4))) = 0;
+}
 
 void MsAtelCamFree(void) {
     if (D_00661910 != 0) {

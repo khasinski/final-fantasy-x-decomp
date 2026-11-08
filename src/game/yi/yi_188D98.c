@@ -51,7 +51,30 @@ void func_00188E98(void *p) {
     o->bE0E = 0x80;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00188F10);
+/* DEBT(FAKE) */
+s32 func_00188F10(s32 arg0) {
+    register s32 a0 __asm__("$4") = arg0;
+    register s32 var_2 __asm__("$2");
+    register s32 var_3 __asm__("$3");
+    register s64 var_5 __asm__("$5");
+    register s32 ret __asm__("$5");
+
+    var_5 = -1;
+    var_3 = 0;
+    __asm__("" : "+r"(a0), "+r"(var_3), "+r"(var_5));
+    do {
+        var_2 = a0 >> var_3;
+        if (var_2 & 1) {
+            var_5 = var_3;
+        }
+        __asm__ volatile("" : "+r"(var_3), "+r"(var_5));
+        var_2 = var_3 + 1;
+        __asm__("" : "+r"(var_2));
+        var_3 = var_2;
+    } while (var_3 < 0x10);
+    __asm__("" : "=r"(ret) : "0"(var_5));
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00188F48);
 

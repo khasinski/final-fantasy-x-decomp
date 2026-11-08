@@ -15,7 +15,41 @@ s32 Sg_IdGetPtr(void)
     return D_00580B34;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00120D18);
+extern s32 D_00580B28;
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00120D18(s32 a) {
+    Chr *var_3;
+    void *temp_4;
+    register Chr *v0 __asm__("$2");
+    register Chr *temp_2 __asm__("$4");
+
+    D_00580B34 = a;
+    if (a != 0) {
+        temp_4 = (*(void **)((u8 *)(a) + (0x1C)));
+        D_00580B28 = (s32) (*(s16 *)((u8 *)(temp_4) + (8)));
+        D_00308900 = (*(s16 **)((u8 *)(temp_4) + (0xC)));
+        D_00580B2C = (*(u8 **)((u8 *)(a) + (0x18)));
+        D_00580B30 = (*(float *)((u8 *)(a) + (0xC))) / 10.0f;
+    } else {
+        D_00580B28 = 0;
+        D_00308900 = 0;
+        D_00580B2C = 0;
+        D_00580B30 = 1.0f;
+    }
+    var_3 = D_00300664;
+    v0 = &var_3[D_00300668];
+    __asm__("" : "+r"(v0));
+    if (var_3 != v0) {
+        temp_2 = v0;
+        __asm__("" : "+r"(temp_2));
+        do {
+            if (var_3->active != 0) {
+                var_3->h82E = -1;
+            }
+            var_3 = (Chr *)((u8 *)var_3 + (0x840));
+        } while (var_3 != temp_2);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00120DE8);
 

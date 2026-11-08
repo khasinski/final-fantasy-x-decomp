@@ -1324,7 +1324,46 @@ int func_001334F0(Actor *a, void *op, ScriptCtx *ctx) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00133550);
+/* DEBT(FAKE) */
+s32 func_00133550(Actor *arg0, void *arg1, ScriptCtx *arg2) {
+    s32 temp_18;
+    s32 temp_19;
+    s32 temp_20;
+    register s32 temp_21 __asm__("$19");
+    s32 temp_2;
+    s32 var_4;
+    s32 var_5;
+    s32 var_6;
+    s32 var_7;
+
+    temp_19 = AtelPopStackInteger(arg0, arg2);
+    temp_21 = AtelPopStackInteger(arg0, arg2);
+    temp_20 = AtelPopStackInteger(arg0, arg2);
+    temp_18 = AtelPopStackInteger(arg0, arg2);
+    temp_2 = AtelPopStackInteger(arg0, arg2);
+    if (temp_2 >= 0) {
+        var_4 = (temp_2 >= 8) ? 7 : temp_2;
+    } else {
+        var_4 = 0;
+    }
+    if (temp_18 >= 0) {
+        var_5 = (temp_18 >= 2) ? 1 : temp_18;
+    } else {
+        var_5 = 0;
+    }
+    if (temp_20 >= 0) {
+        var_6 = (temp_20 >= 0x80) ? 0x7F : temp_20;
+    } else {
+        var_6 = 0;
+    }
+    if (temp_21 >= 0) {
+        var_7 = (temp_21 >= 0x80) ? 0x7F : temp_21;
+    } else {
+        var_7 = 0;
+    }
+    func_0014D2F8(var_4, var_5, var_6, var_7, temp_19);
+    return 1;
+}
 
 int func_00133660(Actor *a, void *op, ScriptCtx *ctx) {
     int e = AtelPopStackInteger(a, ctx);

@@ -350,7 +350,36 @@ int func_0022E280(int x) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E2A0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E380);
+s32 _m2c_func_0022E380_func_0022DF88(PartySlot *, R5Rec1C *, s32, s32) __asm__("func_0022DF88");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_0022E380(s32 arg0, s32 arg1, s32 *arg2, s32 *arg3) {
+    PartySlot *temp_18;
+    R5Rec1C *temp_16;
+    s32 temp_2;
+    s32 var_21;
+    void *p;
+    register s32 temp_7 __asm__("$7");
+
+    var_21 = 0;
+    *arg2 = -1;
+    *arg3 = 0;
+    temp_18 = MsGetSavePlayerPtr(arg1);
+    if (arg0 < 0xA) {
+        p = (void *)func_0022E240(arg0);
+        temp_16 = &D_00325900[arg0];
+        temp_7 = (*(u16 *)((u8 *)(p) + (4)));
+        __asm__("" : "+r"(temp_7));
+        *arg2 = temp_7;
+        temp_2 = _m2c_func_0022E380_func_0022DF88(temp_18, temp_16, 1, temp_7);
+        if (temp_2 < (*(s32 *)((u8 *)(temp_16) + (0x14)))) {
+            var_21 = 1;
+            *arg3 = func_0022E280((*(s32 (**)(s32, s32))((u8 *)(temp_16) + (0x18)))(arg1, temp_2));
+        } else {
+            *arg3 = 0;
+        }
+    }
+    return var_21;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E468);
 

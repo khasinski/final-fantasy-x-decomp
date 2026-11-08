@@ -1,6 +1,7 @@
 /* tu_177 0x1a56f8-0x1ac0b8: low; ~Ms (config/tu_map.tsv) */
 #define MsCameraSetRoll _hdr_MsCameraSetRoll
 #define MsCameraSetScrDpt _hdr_MsCameraSetScrDpt
+#define MsSetCameraMatrix _hdr_MsSetCameraMatrix
 #define func_001A65E0 _hdr_func_001A65E0
 #define func_001AA360 _hdr_func_001AA360
 #include "common.h"
@@ -15,6 +16,7 @@
 #include "ffx/g2.h"
 #undef func_001AA360
 #undef func_001A65E0
+#undef MsSetCameraMatrix
 #undef MsCameraSetRoll
 #undef MsCameraSetScrDpt
 
@@ -694,7 +696,35 @@ float MsCameraGetScrDpt(void) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AA048);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsSetCameraMatrix);
+extern s32 D_003142E0;
+extern float D_0065FDC0;
+extern s32 D_0065FDD0;
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void MsSetCameraMatrix(float f, s32 a, s32 b, s32 c, s32 d, s32 e) {
+    s32 temp_4;
+    register u_long128 *p __asm__("$2");
+    register u_long128 q __asm__("$8");
+
+    temp_4 = a & 1;
+    D_003142E0 = temp_4;
+    if (temp_4 != 0) {
+        func_002DD0C0(D_00314260, (void *) b);
+        func_002DD0C0(D_003142A0, (void *) c);
+        p = (u_long128 *)&D_0065FDD0;
+        __asm__ volatile("" : "+r"(p) : : "memory");
+        q = *(u_long128 *)d;
+        __asm__("" : "+r"(q));
+        *p = q;
+        p++;
+        __asm__ volatile("" : "+r"(p) : : "memory");
+        q = *(u_long128 *)e;
+        __asm__("" : "+r"(q));
+        *p = q;
+        __asm__ volatile("" : : : "memory");
+        D_0065FDC0 = f;
+        __asm__("" : : "r"(p));
+    }
+}
 
 void func_001AA150(int a, int b) {
     if (func_001A6738(a) == a) {

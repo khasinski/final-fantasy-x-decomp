@@ -45,7 +45,29 @@ INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAF48);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FAF88);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FB040);
+void _m2c_func_002FB040_func_002FAA70(s32, void *, s32, s32, s32, s32) __asm__("func_002FAA70");
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002FB040(void *arg0, SifRpcState *arg1) {
+    SifRpcPkt *temp_2;
+    register s32 a1 __asm__("$5");
+    register s32 v1 __asm__("$3");
+    register s32 a0 __asm__("$4");
+    register s32 a2 __asm__("$6");
+
+    temp_2 = func_002FAF18(arg1);
+    a1 = (*(s32 *)((u8 *)(arg0) + (0x14)));
+    v1 = 0x80000000;
+    a0 = (*(s32 *)((u8 *)(arg0) + (0x1C)));
+    __asm__ volatile("" : "+r"(a1), "+r"(v1), "+r"(a0));
+    v1 |= 0xC;
+    __asm__ volatile("" : "+r"(v1));
+    (*(s32 *)((u8 *)(temp_2) + (0x14))) = a1;
+    a2 = 0x40;
+    __asm__ volatile("" : "+r"(a2) : : "memory");
+    (*(s32 *)((u8 *)(temp_2) + (0x1C))) = a0;
+    (*(s32 *)((u8 *)(temp_2) + (0x20))) = v1;
+    _m2c_func_002FB040_func_002FAA70(0x80000008, temp_2, a2, (*(s32 *)((u8 *)(arg0) + (0x20))), (*(s32 *)((u8 *)(arg0) + (0x24))), (*(s32 *)((u8 *)(arg0) + (0x28))));
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FAC88", func_002FB0A0);
 

@@ -135,7 +135,27 @@ void func_0010D4D8(Chr *chr, int v)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", Sg_GsClear);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10D0A0", func_0010D648);
+extern void *D_00303704;
+/* DEBT(CAST) */ /* DEBT(GOTO) */
+int func_0010D648(u8 *chr)
+{
+    u8 *p;
+    void *ptr;
+    s8 c;
+
+    p = (u8 *)func_00124828();
+    ptr = p + 0xD2;
+    D_00303704 = ptr;
+    *(void **)0x00100000 = ptr;
+    if (func_001AEB80() == 0 || (c = (s8)chr[0x192]) == 2) {
+zero:
+        return 0;
+    }
+    if (c == 3) {
+        goto zero;
+    }
+    return p[0xD2];
+}
 
 TblEntry30 **Sg_PLightGetPtr(void)
 {

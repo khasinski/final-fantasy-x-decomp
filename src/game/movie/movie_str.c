@@ -222,7 +222,37 @@ void func_001603E0(int a, int b) {
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", chr_texanim_set);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_00160520);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00160520(s32 *arg0, s32 *arg1) {
+    register s32 *a0_save __asm__("$9");
+    register s32 hi __asm__("$2");
+    register s32 *var_7 __asm__("$7");
+    register s32 var_6 __asm__("$6");
+    register s32 *end __asm__("$8");
+    register s32 next __asm__("$3");
+    s32 val;
+
+    hi = 0x790000;
+    __asm__ volatile("" : "+r"(hi));
+    a0_save = arg0;
+    __asm__ volatile("" : "+r"(a0_save));
+    var_7 = (s32 *)(hi - 10088);
+    var_6 = 0;
+    __asm__ volatile("" : "+r"(var_7), "+r"(var_6));
+    end = (s32 *)((u8 *)var_7 + 0xC00);
+    __asm__ volatile("" : "+r"(end));
+    do {
+        val = *var_7;
+        next = var_6 + 1;
+        __asm__("" : "+r"(val), "+r"(next));
+        if (val != 0) {
+            var_6 = next;
+        }
+        var_7 = (s32 *)((u8 *)var_7 + 0x30);
+    } while ((s32) var_7 < (s32) end);
+    *a0_save = var_6;
+    *arg1 = 0x40;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", chr_texanim_del);
 

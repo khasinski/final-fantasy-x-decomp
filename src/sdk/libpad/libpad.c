@@ -8,7 +8,36 @@ INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDB48);
 
 INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDC78);
 
-INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDDB8);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+s32 func_002DDDB8(void) {
+    register void *sp __asm__("$29");
+    register void *d __asm__("$6");
+    s32 var_3;
+    void *var_2;
+
+    __asm__("" : "=r"(d) : "r"(sp));
+    __asm__("" : "+r"(d));
+    var_2 = (void *)D_0078BC90;
+    __asm__("" : "+r"(var_2), "=r"(var_3) : "r"(d));
+    var_2 += 0x84;
+    var_3 = 3;
+    do {
+        (*(s32 *)((u8 *)(var_2) + (-0x74))) = 0;
+        var_3 -= 1;
+        (*(s32 *)((u8 *)(var_2) + (-0x6C))) = 0;
+        (*(s32 *)((u8 *)(var_2) + (-0x70))) = 0;
+        (*(s32 *)((u8 *)(var_2) + (-4))) = 0;
+        (*(s32 *)((u8 *)(var_2) + (4))) = 0;
+        (*(s32 *)((u8 *)(var_2) + (0))) = 0;
+        var_2 += 0x1C;
+    } while (var_3 >= 0);
+    (*(s32 *)((u8 *)(D_0078BF80) + (0))) = 0x10;
+    (*(s32 *)((u8 *)(D_0078BF80) + (0x10))) = 0;
+    if (func_002FB4C8(D_0078BC40, 1, 0, D_0078BF80, 0x80, D_0078BF80, 0x80, 0, 0) < 0) {
+        return 0;
+    }
+    return (*(s32 *)((u8 *)(D_0078BF80) + (0xC)));
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDE58);
 
