@@ -1,9 +1,12 @@
 /* tu_287 0x266f10-0x268680: low; ~ppp (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
+#define pppSetMatrix _unused_pppSetMatrix
 #include "ffx/s6.h"
+#undef pppSetMatrix
 #include "ffx/t6.h"
 #include "ffx/u4.h"
 #include "ffx/v6.h"
@@ -160,7 +163,42 @@ void _pppAllFreePObject(Slot80 *s)
     D_006A3BC8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", pppSetMatrix);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void pppSetMatrix(void *arg0) {
+    register u8 *s0 __asm__("$16");
+    register u8 *s1 __asm__("$17");
+    register u8 *v0 __asm__("$2");
+    register u8 *v1 __asm__("$3");
+    register float f1 __asm__("$f1");
+    register float f0 __asm__("$f0");
+
+    s0 = (u8 *)&D_006A3930;
+    s1 = (u8 *)arg0;
+    pppGetRotMatrixXYZ((void *)s0, (void *)(s1 + 0x50));
+    VU0_QMTC2_NI(9, *(float *)(s1 + 0x60));
+    VU0_LQC2(10, 0, s0);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, s0);
+
+    v0 = s0 + 0x10;
+    VU0_QMTC2_NI(9, *(float *)(s1 + 0x64));
+    VU0_LQC2(10, 0, v0);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, v0);
+
+    v1 = s0 + 0x20;
+    VU0_QMTC2_NI(9, *(float *)(s1 + 0x68));
+    VU0_LQC2(10, 0, v1);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, v1);
+
+    f1 = *(float *)(s1 + 0x40);
+    *(float *)(s0 + 0x30) = f1;
+    f0 = *(float *)(s1 + 0x44);
+    *(float *)(s0 + 0x34) = f0;
+    f1 = *(float *)(s1 + 0x48);
+    *(float *)(s0 + 0x38) = f1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppStartPart);
 

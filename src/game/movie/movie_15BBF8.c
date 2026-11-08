@@ -9,7 +9,21 @@ INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015BBF8);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015BF00);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015BF50);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_0015BF50(void *arg0, s64 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    register s64 v0 __asm__("$2");
+    register s32 a3 __asm__("$7");
+    register s32 t1 __asm__("$9");
+
+    (*(s32 *)((u8 *)(arg0) + (0xC))) = (s32)(arg1 >> 0x20);
+    t1 = (arg5 << 0xE) | (arg2 << 0x1C);
+    a3 = (arg3 << 0x1A) | (arg4 << 0xF);
+    t1 |= a3;
+    (*(s32 *)((u8 *)(arg0) + (4))) = t1;
+    v0 = arg1 & 0xFFFFFFFFULL;
+    (*(s32 *)((u8 *)(arg0) + (8))) = (s32)v0;
+    (*(s32 *)((u8 *)(arg0) + (0))) = (arg6 << 0xF) | arg7;
+}
 
 void func_0015BFA0(int *p, int a, long b) {
     p[2] = a;

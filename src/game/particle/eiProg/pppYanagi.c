@@ -10,7 +10,37 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", prcPacketDataClose);
+typedef union {
+    u_long128 q;
+    unsigned long d[2];
+    u32 w[4];
+} QWunion_Yanagi;
+typedef struct {
+    QWunion_Yanagi *base;
+    QWunion_Yanagi *ptr;
+    s32 size;
+} PrcPacket_Yanagi;
+
+extern u8 D_00574210[];
+extern u8 D_00574240[];
+extern u8 D_00574258[];
+
+/* DEBT(CAST) */
+void prcPacketDataClose(void *pkt) {
+    PrcPacket_Yanagi *arg0 = (PrcPacket_Yanagi *)pkt;
+    s32 diff;
+
+    arg0->ptr->d[0] = 0x1000000000008000ULL;
+    arg0->ptr->d[1] = 0;
+    (++arg0->ptr)->q = 0x70000000;
+    arg0->ptr++;
+    diff = (s32)arg0->ptr - (s32)arg0->base;
+    if (arg0->size < diff) {
+        func_002EF240(D_00574210, D_00574240, D_00574258, 0x34);
+    }
+    arg0->base->q = 0;
+    arg0->base->w[0] = (((u32)diff >> 4) - 2) | 0x10000000;
+}
 
 void func_00270C78(int *a)
 {
@@ -286,9 +316,100 @@ void func_00271788(int *a)
     func_00270C78(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00271790);
+extern void op_rot_m_z(void *, void *, float);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_002718A0);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00271790(void *arg0, void *arg1, void *arg2) {
+    u8 *s0 = (u8 *)arg0;
+    u8 *s1 = (u8 *)arg1;
+    register float f1 __asm__("$f1");
+    register float f0 __asm__("$f0");
+    register s32 z __asm__("$0");
+    register void *a0 __asm__("$4");
+    register void *a1 __asm__("$5");
+    register s32 a2 __asm__("$6");
+
+    *(s16 *)(s0 + 4) = 0;
+    *(s16 *)(s0 + 6) = 0;
+    *(s32 *)(s0 + 8) = 0;
+    *(s32 *)(s0 + 0) |= 1;
+    VU0_SQC2(0, 0, s0 + 0x10);
+
+    f1 = *(float *)(s1 + 0x40);
+    a0 = s0 + 0x20;
+    a1 = s1 + 0x50;
+    a2 = 0;
+    *(float *)(s0 + 0x20) = f1;
+    f0 = *(float *)(s1 + 0x44);
+    *(float *)(s0 + 0x24) = f0;
+    f1 = *(float *)(s1 + 0x48);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0), "r"(a1), "r"(a2));
+    *(s32 *)(s0 + 0x2C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x28) = f1;
+    func_00270E40((float *)a0, (float *)a1, a2);
+
+    f1 = *(float *)(s1 + 0x70);
+    a0 = s0 + 0x30;
+    a1 = s1 + 0x80;
+    a2 = 0;
+    *(float *)(s0 + 0x30) = f1;
+    f0 = *(float *)(s1 + 0x74);
+    *(float *)(s0 + 0x34) = f0;
+    f1 = *(float *)(s1 + 0x78);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0), "r"(a1), "r"(a2));
+    *(s32 *)(s0 + 0x3C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x38) = f1;
+    func_00270EE8((float *)a0, (float *)a1, a2);
+
+    f1 = *(float *)(s1 + 0x90);
+    a0 = s0 + 0x50;
+    *(float *)(s0 + 0x40) = f1;
+    f0 = *(float *)(s1 + 0x94);
+    *(float *)(s0 + 0x44) = f0;
+    f1 = *(float *)(s1 + 0x98);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0));
+    *(s32 *)(s0 + 0x4C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x48) = f1;
+    VU0_SQC2(0, 0, a0);
+    func_00270E40((float *)a0, (float *)(s1 + 0xB0), 0);
+
+    func_002DD128((struct W3Whole *)(s0 + 0x60));
+    op_rot_m_z((void *)(s0 + 0x60), (void *)(s0 + 0x60), (*(float *)(s0 + 0x58) * 4096.0f) / 360.0f);
+}
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002718A0(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx) {
+    u8 *arg0 = (u8 *)o;
+    u8 *arg1 = (u8 *)k;
+    u8 *arg2 = (u8 *)ctx;
+    u8 *s1;
+    u8 *s0;
+    s32 i;
+    register s32 v0 __asm__("$2");
+
+    s1 = arg0 + (**(s32 **)(arg2 + 0xC) + 0xA0);
+    v0 = *(s32 *)(s1 + 0x48);
+    if (v0 == 0) {
+        __asm__("" : "+r"(v0));
+        for (i = 0; i < *(u8 *)(arg1 + 0xC0); i++) {
+            s0 = *(u8 **)(s1 + 0x40) + *(s32 *)(s1 + 0x4C) * 0xA0;
+            func_00271790(s0, arg1, s1);
+            s0 += 0x10;
+            VU0_SQC2(0, 0, s0);
+            func_00270E40((float *)s0, (float *)(arg1 + 0x10), *(u8 *)(arg1 + 0x20));
+            *(u32 *)(s1 + 0x4C) += 1;
+            if (*(u32 *)(s1 + 0x4C) >= *(u32 *)(arg1 + 8)) {
+                *(u32 *)(s1 + 0x4C) = 0;
+            }
+        }
+        v0 = *(u8 *)(arg1 + 0xC1);
+    }
+    *(s32 *)(s1 + 0x48) = v0 - 1;
+    __asm__ volatile("" : : : "memory");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00271988);
 
@@ -508,7 +629,46 @@ int func_00275388(char *base, int ev, ScriptCtx *ctx) /* DEBT(TYPE): returns fun
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_002753C8);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002753C8(void *a0, void *a1) {
+    u8 *arg0 = (u8 *)a0;
+    u8 *arg1 = (u8 *)a1;
+    u8 *s2;
+    void *s1;
+    register float f0 __asm__("$f0");
+    register u32 v0_u __asm__("$2");
+
+    if (*(s32 *)(arg0 + 4) != 0xFFFF) {
+        s2 = *(u8 **)((*(s32 *)(arg0 + 4) << 5) + *(s32 *)((u8 *)D_006A3924 + 0x20) + 0x1C);
+        if (s2 == 0) {
+            return;
+        }
+        func_002DD128((struct W3Whole *)arg1);
+        VU0_SQC2(0, 0, arg1 + 0x40);
+        VU0_SQC2(0, 0, arg1 + 0x50);
+        VU0_SQC2(0, 0, arg1 + 0x60);
+        f0 = 0.0f;
+        __asm__("" : "+f"(f0));
+        *(u8 **)(arg1 + 0x88) = arg0;
+        *(float *)(arg1 + 0x84) = f0;
+        *(float *)(arg1 + 0x80) = f0;
+        *(float *)(arg1 + 0x7C) = f0;
+        *(float *)(arg1 + 0x78) = f0;
+        *(float *)(arg1 + 0x74) = f0;
+        *(float *)(arg1 + 0x70) = f0;
+        v0_u = *(u8 *)(arg0 + 0x21);
+        __asm__("" : "+r"(v0_u));
+        *(u8 *)(arg1 + 0x8E) = 0;
+        *(u8 *)(arg1 + 0x8C) = v0_u;
+        *(u8 *)(arg1 + 0x8D) = 0;
+        s1 = (void *)func_0019CFE0(*(u8 *)(arg0 + 0x20));
+        if (s1 != 0) {
+            func_0019D030(s1, *(unsigned long *)(s2 + *(s32 *)(s2 + 4) + 8));
+            *(s8 *)(arg1 + 0x8E) = *(s8 *)(arg1 + 0x8D) = func_0019D010(s1);
+        }
+        *(u8 *)(arg1 + 0x8F) = 0;
+    }
+}
 
 void func_002754B8(int base, ScriptCtx *ctx)
 {
@@ -574,6 +734,9 @@ void func_00275BB8(char *base, ScriptCtx *ctx)
     }
 }
 
+void func_00275F00(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx);
+void func_00276C38(PtEmitterB *e, PtOwnerB *o);
+
 void func_00275C20(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
 {
     T6_PLife *life = *o->life;
@@ -625,9 +788,100 @@ void func_00275C20(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00275DF0);
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00275DF0(void *arg0, void *arg1, void *arg2) {
+    u8 *s0 = (u8 *)arg0;
+    u8 *s1 = (u8 *)arg1;
+    register float f1 __asm__("$f1");
+    register float f0 __asm__("$f0");
+    register s32 z __asm__("$0");
+    register void *a0 __asm__("$4");
+    register void *a1 __asm__("$5");
+    register s32 a2 __asm__("$6");
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00275F00);
+    *(s16 *)(s0 + 4) = 0;
+    *(s16 *)(s0 + 6) = 0;
+    *(s32 *)(s0 + 8) = 0;
+    *(s32 *)(s0 + 0) |= 1;
+    VU0_SQC2(0, 0, s0 + 0x10);
+
+    f1 = *(float *)(s1 + 0x30);
+    a0 = s0 + 0x20;
+    a1 = s1 + 0x40;
+    a2 = 0;
+    *(float *)(s0 + 0x20) = f1;
+    f0 = *(float *)(s1 + 0x34);
+    *(float *)(s0 + 0x24) = f0;
+    f1 = *(float *)(s1 + 0x38);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0), "r"(a1), "r"(a2));
+    *(s32 *)(s0 + 0x2C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x28) = f1;
+    func_00270E40((float *)a0, (float *)a1, a2);
+
+    f1 = *(float *)(s1 + 0x60);
+    a0 = s0 + 0x30;
+    a1 = s1 + 0x70;
+    a2 = 0;
+    *(float *)(s0 + 0x30) = f1;
+    f0 = *(float *)(s1 + 0x64);
+    *(float *)(s0 + 0x34) = f0;
+    f1 = *(float *)(s1 + 0x68);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0), "r"(a1), "r"(a2));
+    *(s32 *)(s0 + 0x3C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x38) = f1;
+    func_00270EE8((float *)a0, (float *)a1, a2);
+
+    f1 = *(float *)(s1 + 0x80);
+    a0 = s0 + 0x50;
+    *(float *)(s0 + 0x40) = f1;
+    f0 = *(float *)(s1 + 0x84);
+    *(float *)(s0 + 0x44) = f0;
+    f1 = *(float *)(s1 + 0x88);
+    __asm__("" : "=r"(z) : "f"(f1), "r"(a0));
+    *(s32 *)(s0 + 0x4C) = z;
+    __asm__ volatile("" : "+f"(f1) : : "memory");
+    *(float *)(s0 + 0x48) = f1;
+    VU0_SQC2(0, 0, a0);
+    func_00270E40((float *)a0, (float *)(s1 + 0xA0), 0);
+
+    func_002DD128((struct W3Whole *)(s0 + 0x60));
+    op_rot_m_z((void *)(s0 + 0x60), (void *)(s0 + 0x60), (*(float *)(s0 + 0x58) * 4096.0f) / 360.0f);
+}
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_00275F00(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx) {
+    u8 *arg0 = (u8 *)o;
+    u8 *arg1 = (u8 *)k;
+    u8 *arg2 = (u8 *)ctx;
+    u8 sp[0x40];
+    u8 *s1;
+    u8 *s0;
+    s32 i;
+    register s32 v0 __asm__("$2");
+
+    s1 = arg0 + (**(s32 **)(arg2 + 0xC) + 0xA0);
+    v0 = *(s32 *)(s1 + 0x44);
+    if (v0 == 0) {
+        func_002DCF48(sp, D_006A3970);
+        for (i = 0; i < *(u8 *)(arg1 + 0xB0); i++) {
+            s0 = *(u8 **)(s1 + 0x40) + *(s32 *)(s1 + 0x48) * 0xA0;
+            func_00275DF0(s0, arg1, s1);
+            s0 += 0x10;
+            VU0_LQC2(31, 0, sp + 0x30);
+            VU0_SQC2(31, 0, s0);
+            func_00270E40((float *)s0, (float *)(arg1 + 0x10), *(u8 *)(arg1 + 0x20));
+            *(u32 *)(s1 + 0x48) += 1;
+            if (*(u32 *)(s1 + 0x48) >= *(u32 *)(arg1 + 8)) {
+                *(u32 *)(s1 + 0x48) = 0;
+            }
+        }
+        v0 = *(u8 *)(arg1 + 0xB1);
+    }
+    *(s32 *)(s1 + 0x44) = v0 - 1;
+    __asm__ volatile("" : : : "memory");
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00276008);
 

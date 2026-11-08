@@ -27,7 +27,39 @@ int func_00268680(float x, float y)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_002686F0);
+s32 func_002686F0(void *arg0, void *arg1, float arg2, float arg3, float arg4) {
+    float sp[4];
+    float z;
+    float inv;
+    float x, y;
+    float x0, x1, y0, y1;
+    s32 res;
+
+    if (arg2 < 0.0f) {
+        return 0;
+    }
+    func_002DCE08(sp, arg0, arg1);
+    if (arg2 < sp[2]) {
+        return 0xF;
+    }
+    z = sp[2] + arg3;
+    sp[2] = z;
+    if (z <= 0.0f) {
+        return 0xF;
+    }
+    inv = 1.0f / z;
+    x = sp[0] * inv;
+    y = sp[1] * inv;
+    x0 = x - arg3 * inv;
+    x1 = x + arg3 * inv;
+    y1 = y + arg4 * inv;
+    y0 = y - arg4 * inv;
+    res = func_00268680(x0, y1);
+    res &= func_00268680(x1, y1);
+    res &= func_00268680(x0, y0);
+    res &= func_00268680(x1, y0);
+    return res;
+}
 
 void pppSetFpTex(int h)
 {
@@ -166,7 +198,32 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpInfPrint);
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpLoop);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_002697B8);
+extern s32 D_003708E8;
+extern s32 D_003708EC;
+
+/* DEBT(CAST) */
+void func_002697B8(void) {
+    s32 i;
+
+    op_fp_effect_free();
+    if (D_006E7BFC != 0) {
+        D_006A3924 = (HeapMgr *)&D_006E7BD0;
+        for (i = 0; i < D_006E7BFC->count; i++) {
+            D_006A3924 = (HeapMgr *)&D_006E7BD0;
+            _pppAllFreePObject(&D_006E3BD0[i]);
+        }
+        D_006E7BFC = 0;
+    }
+    if (D_003708EC != 0) {
+        func_0011D590(D_003708EC, 8);
+        D_003708EC = 0;
+    }
+    if (D_003708E8 != 0) {
+        func_0011D590(D_003708E8, 0xB);
+        D_003708E8 = 0;
+    }
+    Sg_PLightDispose();
+}
 
 void pppFpIDon(u16 id)
 {

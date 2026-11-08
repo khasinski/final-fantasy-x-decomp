@@ -14,7 +14,23 @@ void func_002D9190(void) {
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D9188", func_002D9198);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D9188", func_002D9208);
+typedef struct { s8 a; s8 b; } S2Bytes_2D9208;
+char *func_002F032C(char *dst, const char *src);
+extern S2Bytes_2D9208 D_00576360;
+
+/* DEBT(CAST) */ /* DEBT(FAKE) */
+void func_002D9208(char *arg0, char *arg1) {
+    char sp[0x400];
+    register char *temp_2 __asm__("$2");
+
+    func_002F0008(sp, arg1, 0);
+    *(S2Bytes_2D9208 *)arg0 = D_00576360;
+    func_002F032C(arg0, sp);
+    temp_2 = (char *)(func_002F0840(arg0) + (s32)arg0);
+    __asm__("" : "+r"(temp_2));
+    *(temp_2 - 1) = '?';
+    *(temp_2 - 2) = '?';
+}
 
 /* two trailing ASCII digits of the string -> number */
 int func_002D9270(const char *s)
