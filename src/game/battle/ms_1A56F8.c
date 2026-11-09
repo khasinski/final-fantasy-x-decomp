@@ -35,11 +35,11 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsNearRag);
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraMoveCalc);
 
 extern s32 _m2c_func_001A65E0_D_00314840 __asm__("D_00314840");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 s32 func_001A65E0(s32 arg0) {
-    register s32 t_v0 __asm__("$2");
-    register s32 t_v1 __asm__("$3");
-    register s32 temp_5 __asm__("$5");
+    s32 t_v0;
+    s32 t_v1;
+    s32 temp_5;
     s32 var_6;
     s32 var_7;
     s32 var_8;
@@ -53,7 +53,6 @@ s32 func_001A65E0(s32 arg0) {
         t_v0 = (*(s32 *)((u8 *)(var_4) + (0xC70)));
         t_v1 = (*(s8 *)((u8 *)(var_4) + (0xC76)));
         t_v0 &= 0xFF0000;
-        __asm__ volatile("" : "+r"(t_v0), "+r"(t_v1));
         temp_5 = t_v0 >> 0x10;
         temp_5 += t_v1;
         if ((var_7 < temp_5) && ((*(s8 *)((u8 *)(var_4) + (0xC74))) == 0) && ((*(s8 *)((u8 *)(var_4) + (0xC75))) == 0)) {
@@ -835,7 +834,22 @@ void func_001AA9D0(int *a, int *b, int *c, int *d) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AAA38);
+void func_001AAA38(u32 idx, int b) {
+    if (idx < 3) {
+        Rec142F0 *p = &ms_screen[idx];
+        struct Rec142F0Slot *s;
+        int i;
+
+        b &= 1;
+        s = p->sl[b];
+        for (i = 0; i < 4; i++) {
+            s[i].h0 = 0;
+            s[i].hC = 0;
+            s[i].hE = 0;
+            p->f80[b][i] = p->f40[b][i];
+        }
+    }
+}
 
 int func_001AAAB0(u32 idx, int b) {
     Rec142F0 *p;
@@ -929,14 +943,61 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCamSetBtl);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB568);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB668);
+typedef struct {
+    u8 pad0[0x15C];
+    s32 w15C[2];
+    float f164[2];
+    struct Rec142F0ShakeEnt {
+        s8 b0;
+        s8 b1;
+        s16 h2;
+        s16 h4;
+        s16 h6;
+        s32 w8;
+        u8 padC[0x18];
+    } e16C[2];
+    u8 pad1B4[0x1C0 - 0x1B4];
+} Rec142F0Shake;
+
+void func_001AB668(u32 idx, int mask, int a, float f, int b, int c, int d) {
+    if (idx < 3) {
+        Rec142F0Shake *r = &((Rec142F0Shake *)ms_screen)[idx];
+        int i;
+        for (i = 0; i < 2; i++) {
+            if ((mask >> i) & 1) {
+                struct Rec142F0ShakeEnt *e = &r->e16C[i];
+                e->b0 = a;
+                e->b1 = d;
+                e->w8 = 0;
+                e->h2 = c;
+                e->h4 = b;
+                e->h6 = b;
+                r->w15C[i] = 0;
+                r->f164[i] = f;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB6D8);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB838);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DF30);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001ABFD8);
+void func_001ABFD8(int h, int which) {
+    int cur = func_001A6738(h);
+    if (cur == h) {
+        int i;
+        Unk314840 *u = &D_00314840[cur & 0xFF];
+        Unk317120Rec *r;
+        which &= 1;
+        r = &u->rec[which];
+        for (i = 0; i < 3; i++) {
+            r->e5B0[i].on = 0;
+            r->v90[i] = 0.0f;
+        }
+    }
+}
 
 void MsScreenResetShake(u32 i) {
     int j;

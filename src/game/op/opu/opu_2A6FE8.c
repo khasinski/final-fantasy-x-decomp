@@ -238,12 +238,12 @@ u16 *opu_mdmap(ScriptThread *th, u16 *pc)
     case 0x1000:
         pc += 1;
         op_unit_m_scale(th->m80, sub->f3C * (1.0f / 1024));
-        func_002B5348((int)th->m80, (int)th->m80, (int)sub->v30, (int)&sub->f90); /* DEBT(TYPE): prototype takes ints */
+        func_002B5348(th->m80, th->m80, sub->v30, &sub->f90);
         func_002B56D8(th->m80, opus_local_get(th, sub), th->m80);
         func_002B56D8(th->mC0, th->m2C0, th->m80);
         op_md_draw_map_test(0x6800000, (int)th->mC0, 0x1F00000); /* DEBT(TYPE): takes the matrix as an int */
         break;
-    case 0x2000: /* DEBT(FAKE): empty case, gives the compare tree of the original */
+    case 0x2000:
         break;
     }
     return pc;

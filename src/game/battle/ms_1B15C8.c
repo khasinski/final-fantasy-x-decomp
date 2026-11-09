@@ -156,11 +156,84 @@ void MsAtelRequestAdd(int a, int b, int c, int d) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", func_001B1BD8);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", func_001B1C70);
+extern u8 D_003193FB;
+void *func_001B1BD8(void *p, int idx, int *out);
+
+typedef struct {
+    u8 pad0[0xB4];
+    struct {
+        s8 b0;
+        u8 pad1[0xF];
+        void *w10;
+        u8 pad14[0xC];
+    } h32[2];
+} GameState1C70;
+extern GameState1C70 _gs_1C70 __asm__("D_003172F0");
+
+void *func_001B1C70(int a, int b, int c, int *out) {
+    void *res = 0;
+    int off = 0;
+    int sp0 = 0;
+    int i;
+
+    switch (a) {
+    case 2:
+        if ((u32)b >= 2) {
+            return 0;
+        }
+        res = func_001B1BD8(_gs_1C70.h32[b].w10, c, &sp0);
+        for (i = 0; i < b; i++) {
+            off += _gs_1C70.h32[i].b0;
+        }
+        break;
+    case 3:
+        if (D_003193FB == 0) {
+            return 0;
+        }
+        {
+            BtlChr *chr = MsGetChr(b);
+            if (MsBtlChrNumCheck(b) == 0 || chr->p48 == 0) {
+                return 0;
+            }
+            res = func_001B1BD8(chr->pC3C, c, &sp0);
+            for (i = 0; i < b; i++) {
+                off += *(s8 *)&MsGetChr(i)->fAB6;
+            }
+        }
+        break;
+    case 4:
+        if (b != 0 || D_00661910 == 0) {
+            return 0;
+        }
+        off = 0;
+        res = func_001B1BD8((void *)D_00661918, c, &sp0);
+        break;
+    }
+    if (out != 0) {
+        *out = off;
+    }
+    return res;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestExe);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelParseSysTag);
+int MsAtelParseSysTag(int a, int b, int c) {
+    int r = -1;
+    int save = AtelChangeCurrentCtrl(a);
+    int off;
+    u8 *p = func_001B1C70(a, b, c, &off);
+
+    if (p) {
+        int id = *p + off;
+        do {
+            AtelDecodeCommand(id, 0);
+            AtelDecodeSignal(id, -1);
+        } while (AtelGetRequestLevel(id) >= 7);
+        r = 0;
+    }
+    AtelSetCurrentCtrl(save);
+    return r;
+}
 
 int MsAtelGetSysReq(int a, int b, int c) {
     int r = -1;
@@ -234,7 +307,48 @@ void AtelGetEventActorPos(u8 id, int kind, float *out) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelChrInfo);
+int AtelGetTotalActorNumber2(void);
+int AtelIsBind(int id);
+int AtelGetNowCtrlTopId(void);
+void _C_AtelGetEventActorPos(int id, int kind, float *out) __asm__("AtelGetEventActorPos");
+
+int MsAtelChrInfo(int id, int kind, float *out) {
+    int res = 0;
+    int count = 0;
+    int total = AtelGetTotalActorNumber2();
+    float sp0[3];
+
+    sp0[0] = 0.0f;
+    sp0[1] = 0.0f;
+    sp0[2] = 0.0f;
+    switch (id) {
+    case -21:
+    case -5:
+        for (id = 0; id < total; id++) {
+            if (AtelIsBind(id) != 0) {
+                _C_AtelGetEventActorPos(id, kind, sp0);
+                count++;
+            }
+        }
+        break;
+    case -2:
+        id = AtelGetNowCtrlTopId();
+    default:
+        if (id >= 0 && id < total) {
+            _C_AtelGetEventActorPos(id, kind, sp0);
+            count = 1;
+        }
+        break;
+    }
+    if (count > 0 && out != 0) {
+        res = 1;
+        out[0] = sp0[0] / (float)count;
+        out[1] = sp0[1] / (float)count;
+        out[2] = sp0[2] / (float)count;
+        out[3] = 0.0f;
+    }
+    return res;
+}
 
 void func_001B2940(void) {
     int h;
@@ -248,9 +362,113 @@ void func_001B2940(void) {
     AtelSetCurrentCtrl(h);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestCamera);
+typedef struct {
+    u8 pad0[0x14];
+    s8 f14;
+    u8 pad15[0x2E - 0x15];
+    s8 f2E;
+    u8 pad2F[0x2107 - 0x2F];
+    s8 f2107;
+} GameStateCam;
+extern GameStateCam _gs_cam __asm__("D_003172F0");
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestMagicCamera);
+int MsAtelRequestCamera(int a, int b, int c, int d, int e, int f, void *g, void *h) {
+    if (_gs_cam.f2E != 0 || (g == 0 && (_gs_cam.f14 == 2 || _gs_cam.f2107 != 0))) {
+        return -1;
+    }
+    if (e != 0) {
+        MsReturnCameraVisible();
+    }
+    MsAtelRequestInit();
+    if (c != 0xFFFF) {
+        MsAtelRequestAdd(2, 1, a, c);
+    }
+    if (d != 0xFFFF) {
+        MsAtelRequestAdd(2, 1, a, d);
+    }
+    if (b != 0xFF && MsGetRamChrMonster(b) != 0) {
+        if (c != 0xFFFF) {
+            MsAtelRequestAdd(3, b, a, c);
+        }
+        if (d != 0xFFFF) {
+            MsAtelRequestAdd(3, b, a, d);
+        }
+    }
+    if (c != 0xFFFF) {
+        MsAtelRequestAdd(2, 0, a, c);
+    }
+    if (d != 0xFFFF) {
+        MsAtelRequestAdd(2, 0, a, d);
+    }
+    return MsAtelRequestExe(2, 0, a, f | 4, g, h);
+}
+
+int MsAtelRequestMagicCamera(int a, int b, int c, int d, int e, int f, int g, int h, int k) {
+    int id;
+    int type;
+    int base;
+
+    if (_gs_cam.f2E != 0 || (h == 0 && (_gs_cam.f14 == 2 || _gs_cam.f2107 != 0))) {
+        return -1;
+    }
+    if (f != 0) {
+        MsReturnCameraVisible();
+    }
+    id = c & 0xFFF;
+    type = c >> 12;
+    base = 0xFF;
+    switch (type) {
+    case 2:
+        base = 0x44;
+        break;
+    case 3:
+        base = 0x41;
+        break;
+    case 4:
+        base = 0x47;
+        break;
+    case 6:
+        base = 0x4A;
+        break;
+    }
+    MsAtelRequestInit();
+    if (base != 0xFF) {
+        MsAtelRequestAdd(2, 1, base + a, id);
+    }
+    if (d != 0xFFFF) {
+        MsAtelRequestAdd(2, 1, a, d);
+    }
+    if (e != 0xFFFF) {
+        MsAtelRequestAdd(2, 1, a, e);
+    }
+    if (b != 0xFF && MsGetRamChrMonster(b) != 0) {
+        if (base != 0xFF) {
+            MsAtelRequestAdd(3, b, base + a, id);
+        }
+        if (d != 0xFFFF) {
+            MsAtelRequestAdd(3, b, a, d);
+        }
+        if (e != 0xFFFF) {
+            MsAtelRequestAdd(3, b, a, e);
+        }
+    }
+    if (d != 0xFFFF) {
+        MsAtelRequestAdd(4, 0, a, d);
+    }
+    if (e != 0xFFFF) {
+        MsAtelRequestAdd(4, 0, a, e);
+    }
+    if (base != 0xFF) {
+        MsAtelRequestAdd(2, 0, base + a, id);
+    }
+    if (d != 0xFFFF) {
+        MsAtelRequestAdd(2, 0, a, d);
+    }
+    if (e != 0xFFFF) {
+        MsAtelRequestAdd(2, 0, a, e);
+    }
+    return MsAtelRequestExe(2, 0, a, g | 4, h, k);
+}
 
 /* DEBT(FAKE) */
 s32 MsGetVoiceEventFlag(void) {
@@ -263,7 +481,31 @@ s32 MsGetVoiceEventFlag(void) {
     return var_2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", func_001B2DF0);
+extern u8 D_00317305;
+
+int func_001B2DF0(int a, int b, Actor *c, int *d) {
+    int res = -1;
+
+    if ((u32)a < 8) {
+        D_00317305 = 0;
+        MsAtelRequestInit();
+        MsAtelRequestAdd(2, 1, 0x3E, a);
+        res = MsAtelRequestExe(2, 1, 0x3E, b, c, d);
+    } else if ((u32)(a - 8) < 16) {
+        D_00317305 = 1;
+        if (MsGetVoiceEventFlag() != 0) {
+            MsAtelRequestInit();
+            MsAtelRequestAdd(2, 1, 0x3F, a);
+            MsAtelRequestAdd(2, 0, 0x3F, a);
+            res = MsAtelRequestExe(2, 0, 0x3F, b, c, d);
+        } else {
+            MsAtelRequestInit();
+            MsAtelRequestAdd(2, 1, 0x3F, a);
+            res = MsAtelRequestExe(2, 1, 0x3F, b, c, d);
+        }
+    }
+    return res;
+}
 
 s32 MsAtelRequestSystemCheckExe(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {

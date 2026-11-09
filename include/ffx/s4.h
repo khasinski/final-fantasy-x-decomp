@@ -83,7 +83,7 @@ extern S4PanelA D_00692690;
 extern S4PanelB D_006926A8;
 
 void func_00201B60(int a, int b, int c);
-int func_001F3808(int id, int x, int y, int z);
+void func_001F3808(void *id, int x, int y, int z);
 void func_001FCC88(int a, int b, int c, u32 rgba);
 void func_001F0580(int a, int b, int c, int d, int e, int f, int g);
 

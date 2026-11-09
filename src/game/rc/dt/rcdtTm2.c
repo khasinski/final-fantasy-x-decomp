@@ -83,7 +83,7 @@ int func_0019F258(W3Obj50 *o, char *file, int swizzle) {
         rcefMainInit(t->clut);
     }
     if (rd != 0) {
-        func_0019D688((W3Pair *)rd); /* DEBT(CAST): declared with W3Pair, deletes the reader */
+        func_0019D688(rd);
     }
     if (blk != 0) {
         rcdtChunkDelete(blk);
@@ -128,7 +128,18 @@ void func_0019F510(Tim2Img *t, int bp, int bw, int x, int y, int w, int h, int d
     func_0018FC10(buf);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", func_0019F658);
+void func_0019F658(Tim2Img *t, u8 *dst, int x, int y, int w, int h) {
+    Tim2Pic *pic = &t->pic;
+    int bw8 = (w + 7) & ~7;
+    u8 *src = (u8 *)t->image + (y * pic->width + x);
+    int i;
+
+    for (i = 0; i < h; i++) {
+        func_002EEF1C(dst, src, w);
+        dst += bw8;
+        src += pic->width;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", func_0019F6F8);
 

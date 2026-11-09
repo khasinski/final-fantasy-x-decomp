@@ -10,7 +10,7 @@
 
 extern int D_00693D9C;
 extern Task *D_0032602C;
-extern int D_00326038;
+extern Task *D_00326038;
 extern int D_00323954;
 extern u8 D_0069A686;
 extern u8 D_0069A687;
@@ -164,7 +164,6 @@ extern u8 *D_0069BCDC;
 u8 *func_001F85A8();
 u8 *func_001F91D8();
 u8 *func_002417D8();
-u8 *func_001F8800();
 
 extern u8 D_005733A8[];
 extern u8 D_00573610[];

@@ -7,20 +7,20 @@
 
 void func_00106380(Blk64 *src)
 {
-    *(Blk64 *)&D_0057E8B0 = *src; /* DEBT(CAST) */
+    D_0057E8B0 = *src;
 }
 
 void func_001063D0(Blk64 *src)
 {
-    *(Blk64 *)&D_0057E8F0 = *src; /* DEBT(CAST) */
+    D_0057E8F0 = *src;
 }
 
-s32 *func_00106420(void)
+Blk64 *func_00106420(void)
 {
     return &D_0057E8F0;
 }
 
-s32 *func_00106430(void)
+Blk64 *func_00106430(void)
 {
     return &D_0057E8B0;
 }

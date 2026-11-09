@@ -25,9 +25,7 @@ extern u8 D_00574210[];
 extern u8 D_00574240[];
 extern u8 D_00574258[];
 
-/* DEBT(CAST) */
-void prcPacketDataClose(void *pkt) {
-    PrcPacket_Yanagi *arg0 = (PrcPacket_Yanagi *)pkt;
+void prcPacketDataClose(PrcPacket_Yanagi *arg0) {
     s32 diff;
 
     arg0->ptr->d[0] = 0x1000000000008000ULL;
@@ -56,7 +54,6 @@ void func_00270C80(int a)
     func_002DBF78(h, 0, 0);
 }
 
-/* DEBT(CAST) */
 void func_00270CD8(struct W3Whole *arg0) {
     float temp_f20;
     float temp_f20_2;
@@ -74,12 +71,12 @@ void func_00270CD8(struct W3Whole *arg0) {
     func_002DD128(arg0);
     temp_f2 = temp_f21 - temp_f22;
     temp_f20_2 = 2.0f * temp_f20;
-    (*(s32 *)((u8 *)(arg0) + (0x3C))) = 0;
-    (*(float *)((u8 *)(arg0) + (0x2C))) = 1.0f;
-    (*(float *)((u8 *)(arg0) + (0))) = (float) (temp_f20_2 / temp_f24);
-    (*(float *)((u8 *)(arg0) + (0x14))) = (float) (temp_f20_2 / temp_f23);
-    (*(float *)((u8 *)(arg0) + (0x28))) = (float) ((temp_f21 + temp_f22) / temp_f2);
-    (*(float *)((u8 *)(arg0) + (0x38))) = (float) ((temp_f21 * -2.0f * temp_f22) / temp_f2);
+    arg0->m[3][3] = 0.0f;
+    arg0->m[2][3] = 1.0f;
+    arg0->m[0][0] = (float) (temp_f20_2 / temp_f24);
+    arg0->m[1][1] = (float) (temp_f20_2 / temp_f23);
+    arg0->m[2][2] = (float) ((temp_f21 + temp_f22) / temp_f2);
+    arg0->m[3][2] = (float) ((temp_f21 * -2.0f * temp_f22) / temp_f2);
 }
 
 int func_00270DD8(char *m, char *v, int n) {
@@ -232,7 +229,7 @@ void func_002714A0(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysW *s = SLOT_WORK(T6_PSysW, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w48 = 0;
     s->parts = 0;
     s->w4C = 0;
@@ -286,11 +283,10 @@ void func_002715A8(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->rec[n].h[0] = src->h[0];
         s->rec[n].h[1] = src->h[1];
         s->rec[n].h[2] = src->h[2];
-        i = 0; /* DEBT(FAKE): dead store, steers register allocation */
         s->rec[n].h[3] = src->h[3];
     }
     if (t >= life->len - 0x1000) {
-        p = (Particle *)s->parts; /* DEBT(CAST): parts is declared as a word pointer */
+        p = s->parts;
         n = k->count;
         for (i = 0; i < n; i++, p++) {
             if (p->flags & 1) {
@@ -302,12 +298,12 @@ void func_002715A8(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         }
         s->done = 1;
     }
-    if (D_006A3BC4 == 0 && ((u8 *)ppvMng)[0x1D] == 0) { /* DEBT(CAST): byte 0x1D of the manager */
+    if (D_006A3BC4 == 0 && ppvMng->b1D == 0) {
         func_002718A0(o, k, ctx);
     }
     func_00271988(o, k, ctx, s);
     if (D_006A3BC4 == 0) {
-        func_002725B8((PtEmitter *)k, (PtOwner *)s); /* DEBT(CAST): emitter/owner views of the key and work */
+        func_002725B8(k, s);
     }
 }
 
@@ -376,7 +372,7 @@ void func_00271790(void *arg0, void *arg1, void *arg2) {
     VU0_SQC2(0, 0, a0);
     func_00270E40((float *)a0, (float *)(s1 + 0xB0), 0);
 
-    func_002DD128((struct W3Whole *)(s0 + 0x60));
+    func_002DD128(s0 + 0x60);
     op_rot_m_z((void *)(s0 + 0x60), (void *)(s0 + 0x60), (*(float *)(s0 + 0x58) * 4096.0f) / 360.0f);
 }
 
@@ -415,7 +411,7 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00271988);
 
 void func_002725B8(PtEmitter *e, PtOwner *o)
 {
-    PtAnim *anim = (PtAnim *)D_006A3924->tbl[e->anim]; /* DEBT(CAST): tbl is declared as DataRef ** */
+    PtAnim *anim = D_006A3924->tbl[e->id];
     Particle *p = o->parts;
     PtKey *k;
     int i;
@@ -426,7 +422,7 @@ void func_002725B8(PtEmitter *e, PtOwner *o)
         if (p->flags & 1) {
             p->age++;
             k = &anim->keys[p->frame];
-            if (p->age >= o->life) {
+            if (p->age >= o->nrec) {
                 p->flags &= ~1;
             }
             p->vel.x += e->vel.x;
@@ -629,26 +625,25 @@ int func_00275388(char *base, int ev, ScriptCtx *ctx) /* DEBT(TYPE): returns fun
     }
 }
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_002753C8(void *a0, void *a1) {
     u8 *arg0 = (u8 *)a0;
     u8 *arg1 = (u8 *)a1;
     u8 *s2;
     void *s1;
-    register float f0 __asm__("$f0");
-    register u32 v0_u __asm__("$2");
+    float f0;
+    u32 v0_u;
 
     if (*(s32 *)(arg0 + 4) != 0xFFFF) {
         s2 = *(u8 **)((*(s32 *)(arg0 + 4) << 5) + *(s32 *)((u8 *)D_006A3924 + 0x20) + 0x1C);
         if (s2 == 0) {
             return;
         }
-        func_002DD128((struct W3Whole *)arg1);
+        func_002DD128(arg1);
         VU0_SQC2(0, 0, arg1 + 0x40);
         VU0_SQC2(0, 0, arg1 + 0x50);
         VU0_SQC2(0, 0, arg1 + 0x60);
         f0 = 0.0f;
-        __asm__("" : "+f"(f0));
         *(u8 **)(arg1 + 0x88) = arg0;
         *(float *)(arg1 + 0x84) = f0;
         *(float *)(arg1 + 0x80) = f0;
@@ -657,7 +652,6 @@ void func_002753C8(void *a0, void *a1) {
         *(float *)(arg1 + 0x74) = f0;
         *(float *)(arg1 + 0x70) = f0;
         v0_u = *(u8 *)(arg0 + 0x21);
-        __asm__("" : "+r"(v0_u));
         *(u8 *)(arg1 + 0x8E) = 0;
         *(u8 *)(arg1 + 0x8C) = v0_u;
         *(u8 *)(arg1 + 0x8D) = 0;
@@ -711,7 +705,7 @@ void func_00275B30(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysB *s = SLOT_WORK(T6_PSysB, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w44 = 0;
     s->w48 = 0;
     s->parts = 0;
@@ -763,11 +757,10 @@ void func_00275C20(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->rec[n].h[0] = src->h[0];
         s->rec[n].h[1] = src->h[1];
         s->rec[n].h[2] = src->h[2];
-        i = 0; /* DEBT(FAKE): dead store, steers register allocation */
         s->rec[n].h[3] = src->h[3];
     }
     if (t >= life->len - 0x1000) {
-        p = (Particle *)s->parts; /* DEBT(CAST): parts is declared as a word pointer */
+        p = s->parts;
         n = k->count;
         for (i = 0; i < n; i++, p++) {
             if (p->flags & 1) {
@@ -780,11 +773,11 @@ void func_00275C20(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->done = 1;
     }
     if (D_006A3BC4 == 0) {
-        if (((u8 *)ppvMng)[0x1D] == 0) { /* DEBT(CAST): byte 0x1D of the manager */
+        if (ppvMng->b1D == 0) {
             func_00275F00(o, k, ctx);
         }
         func_00276008(o, k, ctx, s);
-        func_00276C38((PtEmitterB *)k, (PtOwnerB *)s); /* DEBT(CAST): emitter/owner views of the key and work */
+        func_00276C38(k, s);
     }
 }
 
@@ -846,7 +839,7 @@ void func_00275DF0(void *arg0, void *arg1, void *arg2) {
     VU0_SQC2(0, 0, a0);
     func_00270E40((float *)a0, (float *)(s1 + 0xA0), 0);
 
-    func_002DD128((struct W3Whole *)(s0 + 0x60));
+    func_002DD128(s0 + 0x60);
     op_rot_m_z((void *)(s0 + 0x60), (void *)(s0 + 0x60), (*(float *)(s0 + 0x58) * 4096.0f) / 360.0f);
 }
 
@@ -887,7 +880,7 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00276008);
 
 void func_00276C38(PtEmitterB *e, PtOwnerB *o)
 {
-    PtAnim *anim = (PtAnim *)D_006A3924->tbl[e->anim]; /* DEBT(CAST): tbl is declared as DataRef ** */
+    PtAnim *anim = D_006A3924->tbl[e->id];
     Particle *p = o->parts;
     PtKey *k;
     int i;
@@ -898,16 +891,16 @@ void func_00276C38(PtEmitterB *e, PtOwnerB *o)
         if (p->flags & 1) {
             p->age++;
             k = &anim->keys[p->frame];
-            if (p->age >= o->life) {
+            if (p->age >= o->nrec) {
                 p->flags &= ~1;
             }
-            p->vel.x += e->vel.x;
-            p->vel.y += e->vel.y;
-            p->vel.z += e->vel.z;
+            p->vel.x += e->velB.x;
+            p->vel.y += e->velB.y;
+            p->vel.z += e->velB.z;
             func_002DD020(&p->v10, &p->v10, &p->vel);
-            p->acc.x += e->acc.x;
-            p->acc.y += e->acc.y;
-            p->acc.z += e->acc.z;
+            p->acc.x += e->accB.x;
+            p->acc.y += e->accB.y;
+            p->acc.z += e->accB.z;
             p->pos.x += p->acc.x;
             p->pos.y += p->acc.y;
             p->pos.z += p->acc.z;

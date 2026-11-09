@@ -10,7 +10,7 @@
 #undef Sg_MainInit
 #undef func_0011B9D8
 
-s32 *Sg_GetDBuffDC(s32 *p)
+void *Sg_GetDBuffDC(s32 *p)
 {
     if (p != 0) {
         *p = D_00307F2C;

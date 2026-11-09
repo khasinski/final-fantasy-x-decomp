@@ -26,35 +26,45 @@ typedef struct LpaView {
     float f114DC;
     u8 pad114E0[0x11550 - 0x114E0];
     float f11550;
-    u8 pad11554[0x1156C - 0x11554];
+    float f11554;
+    u8 pad11558[0x1156C - 0x11558];
     u8 f1156C;
-    u8 pad1156D[0x11608 - 0x1156D];
+    u8 pad1156D[0x11575 - 0x1156D];
+    u8 f11575;
+    u8 f11576;
+    u8 pad11577[0x115CC - 0x11577];
+    int f115CC;
+    u8 pad115D0[0x11608 - 0x115D0];
     int f11608;
     int f1160C;
     int f11610;
     int f11614;
     s16 f11618;
     s16 f1161A;
+    u8 pad1161C[0x1164C - 0x1161C];
+    int f1164C;
+    int f11650;
+    int f11654;
 } LpaView;
 #define LPV ((LpaView *)lpamng)
 
 s32 _m2c_func_00260A70__pppRunPart(void *, s32) __asm__("_pppRunPart");
-void _m2c_func_00260A70_func_002DCE38(u8 *, u8 *, u8 *) __asm__("func_002DCE38");
-void _m2c_func_00260A70_func_002DD0C0(u8 *, u8 *) __asm__("func_002DD0C0");
+void _m2c_func_00260A70_func_002DCE38(void *, void *, void *) __asm__("func_002DCE38");
+void _m2c_func_00260A70_func_002DD0C0(void *, void *) __asm__("func_002DD0C0");
 void _m2c_func_00260A70_pppSetMatrix(void *) __asm__("pppSetMatrix");
-void func_00260A70(void *arg0) __attribute__((register_precision(s3, 128)));
+void func_00260A70(S6Task *arg0) __attribute__((register_precision(s3, 128)));
 /* DEBT(CAST) */
-void func_00260A70(void *arg0) {
-    if ((*(u16 *)((u8 *)(arg0) + (0x1E))) != 0) {
+void func_00260A70(S6Task *arg0) {
+    if (arg0->h1E != 0) {
         _m2c_func_00260A70_func_002DD0C0(D_006A3A70, &lpamng->ents3[8].pad2[0x3A]);
         _m2c_func_00260A70_func_002DD0C0(D_006A3970, lpamng->ents3[7].pad4C);
         (*(float *)((u8 *)(D_006A3A70) + (0x38))) = (float) ((*(float *)((u8 *)(D_006A3A70) + (0x38))) + 29184.0f);
         _m2c_func_00260A70_pppSetMatrix(arg0);
         _m2c_func_00260A70_func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
         _m2c_func_00260A70_func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
-        D_006A3924 = (HeapMgr *) D_006A3690;
+        D_006A3924 = D_006A3690;
         if (_m2c_func_00260A70__pppRunPart(arg0, 0x30) != 0) {
-            (*(u16 *)((u8 *)(arg0) + (0x1E))) = 0U;
+            arg0->h1E = 0U;
         }
     }
 }
@@ -168,7 +178,21 @@ void func_00261C08(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261C40);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261DC8);
+void func_00261DC8(int a, int b) __attribute__((register_precision(s3, 128)));
+void func_00261DC8(int a, int b)
+{
+    int out0, out1;
+    Pt16 *p0, *p1;
+
+    p0 = func_00256F08(lpamng->ents[b].f06, &out0);
+    p1 = func_00256F08(a, &out1);
+    LPV->f1161A = 0x78;
+    LPV->f11614 = 0;
+    LPV->f11608 = func_00256FA0(0x22);
+    LPV->f1160C = func_00256F58(out0, p0);
+    LPV->f11610 = func_00256F58(out1, p1);
+    LPV->f11618 = 2;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261E98);
 
@@ -191,7 +215,18 @@ void func_002622D0(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262360);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002626D0);
+void func_002626D0(int a, int b)
+{
+    lpamng->f115D0 = 1.0f;
+    lpamng->f115D4 = 0.0f;
+    lpamng->f115E0 = lpamng->f115E2 = lpamng->ents3[a].h0;
+    lpamng->f115E4 = b;
+    lpamng->f115E8 = a;
+    if (lpamng->next_a == 0) {
+        lpamng->next_a = lpamng->cb_a;
+        lpamng->cb_a = func_00262360;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262740);
 
@@ -345,9 +380,9 @@ void func_00263888(void)
     w->f11573 = 0;
 }
 
-int func_002638B0(u8 *p)
+int func_002638B0(WorkEnt *p)
 {
-    return p[0x22] & 1; /* DEBT(CAST): record type unknown, raw byte offset */
+    return p->f22 & 1;
 }
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002638C0);
@@ -375,10 +410,8 @@ void func_00263B98(int slot)
     }
 }
 
-void func_00263BD8(int a) /* DEBT(TYPE): header says int, argument is a ChrWork * */
+void func_00263BD8(ChrWork *w)
 {
-    ChrWork *w = (ChrWork *)a;
-
     w->f23 = 1;
     w->f29++;
     if (w->f29 >= 3) {
@@ -442,7 +475,30 @@ void func_00264108(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264140);
+void func_00264140(void) __attribute__((register_precision(s3, 128)));
+void func_00264140(void)
+{
+    int i;
+    ChrWork *w = &D_006A391C[7];
+    ChrSub *sub = w->sub;
+
+    for (i = 0; i < w->f1E; i++, sub++) {
+        sub->off = 0;
+        switch (i) {
+        case 0:
+            if (func_001BE7B8(lpamng->f1156C) == 0) {
+                sub->off = 1;
+            }
+            break;
+        case 1:
+            func_0024CB58(3);
+            if (MsGetSaveSP() == 0) {
+                sub->off = 1;
+            }
+            break;
+        }
+    }
+}
 
 void func_00264210(void)
 {
@@ -557,12 +613,12 @@ void ATTR_REG_PREC_S3 func_00264418(s32 arg0, s32 arg1) {
 void func_002644C0(int slot)
 {
     ChrWork *w = &D_006A391C[slot];
-    T6_MenuEnt *e = (T6_MenuEnt *)w->sub; /* DEBT(CAST): see T6_MenuEnt */
-    T6_SlotBits *p = (T6_SlotBits *)MsGetSavePlayerPtr(lpamng->f1156C); /* DEBT(CAST): see T6_SlotBits */
+    ChrSub *e = w->sub;
+    PartySlot *p = MsGetSavePlayerPtr(lpamng->f1156C);
     int i;
 
     for (i = 0; i < w->f1E; i++, e++) {
-        if ((p->bits[e->arg >> 4] >> (e->arg & 0xF)) & 1) {
+        if ((p->h3E[e->arg >> 4] >> (e->arg & 0xF)) & 1) {
             e->off = 0;
         } else {
             e->off = 1;
@@ -594,20 +650,19 @@ void func_002645D8(int a, int *b) /* DEBT(TYPE) */
 }
 
 void _m2c_func_002645F8_func_00257810(s32, s32, s32, s32) __asm__("func_00257810");
-/* DEBT(CAST) */
-void func_002645F8(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4) {
+void func_002645F8(ChrWork *arg0, EvtObj *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 temp_20;
     u16 temp_17;
 
-    temp_17 = (*(u16 *)((u8 *)(arg1) + (8)));
+    temp_17 = arg1->h8;
     temp_20 = func_001BFE30((s32) temp_17);
-    if ((*(u8 *)((u8 *)(arg1) + (4))) != 0) {
+    if (arg1->b4 != 0) {
         func_002576B8((s32) temp_17, arg3, arg4, 1);
-        _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (*(s16 *)((u8 *)(arg0) + (0xC)))) - 0x11, arg4, 1);
+        _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (s16)arg0->rect1[2]) - 0x11, arg4, 1);
         return;
     }
     func_002576B8((s32) temp_17, arg3, arg4, 0);
-    _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (*(s16 *)((u8 *)(arg0) + (0xC)))) - 0x11, arg4, 0);
+    _m2c_func_002645F8_func_00257810(temp_20, (arg3 + (s16)arg0->rect1[2]) - 0x11, arg4, 0);
 }
 
 void func_002646E0(int a, EvtObj *p, int c, int d, int e)
@@ -638,8 +693,8 @@ void func_00264748(int a, EvtObj *p, int c, int d, int e)
 #define ATTR_REG_PREC_S3 __attribute__((register_precision(s3, 128)))
 #endif
 void _m2c_func_00264780_func_00257810(s32, s32, s32, s32) __asm__("func_00257810");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
-void ATTR_REG_PREC_S3 func_00264780(s32 arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4) {
+/* DEBT(FAKE) */
+void ATTR_REG_PREC_S3 func_00264780(s32 arg0, ChrSub *arg1, s32 arg2, s32 arg3, s32 arg4) {
     register u8 *saved_reg_s2 __asm__("$18");
     register PartySlot *temp_17 __asm__("$17");
     register s32 temp_19 __asm__("$19");
@@ -649,8 +704,8 @@ void ATTR_REG_PREC_S3 func_00264780(s32 arg0, void *arg1, s32 arg2, s32 arg3, s3
     var_18 = saved_reg_s2;
     temp_19 = arg4 - 4;
     temp_17 = MsGetSavePlayerPtr((s32) lpamng->f1156C);
-    func_00257108((*(s32 *)((u8 *)(arg1) + (0))), arg3, temp_19);
-    temp_3 = (*(u32 *)((u8 *)(arg1) + (8)));
+    func_00257108(arg1->id, arg3, temp_19);
+    temp_3 = arg1->arg;
     switch (temp_3) {
     case 0:
         var_18 = temp_17->v24;
@@ -739,7 +794,7 @@ int func_002659F8(void) /* DEBT(TYPE): funcs.h says int; nothing is returned */
     if (lpamng->f1156A == 0) {
         func_00293570();
         op_loop_ffx_after();
-        src = (T6_GsSrc *)func_00245470(&D_006A36BC); /* DEBT(TYPE): funcs.h returns int */
+        src = func_00245470(&D_006A36BC);
         D_006A36C0.a = src->a;
         D_006A36C0.b = src->b;
         /* DEBT(TYPE): funcs.h types func_002B21E0 with one argument; it forwards two to func_002B1F90 */

@@ -107,7 +107,19 @@ void func_0011BF40(s32 v)
     D_00307F58 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BF50);
+void func_0011BF50(R0Heap *h)
+{
+    R0Blk *b = h->first;
+
+    while ((b->flags & 0xF) != 0xF) {
+        while ((b->flags & 0xF) == 0 && (b->end->flags & 0xF) == 0) {
+            b->end = b->end->end;
+        }
+        b->end->next = b;
+        b = b->end;
+    }
+    h->b00 = 0;
+}
 
 void func_0011BFD0(void)
 {
@@ -248,11 +260,52 @@ void func_0011C7E8(u8 *p, int f)
     }
 }
 
+typedef struct MemBlk {
+    struct MemBlk *end;
+    struct MemBlk *next;
+    u16 sum;
+    u16 hi16;
+    u32 kind : 4;
+    u32 pc : 22;
+    u32 chk : 1;
+    u32 heap_id : 2;
+    u32 top : 3;
+} MemBlk;
+
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C838);
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C8B8);
+R0Blk *func_0011C8B8(R0Blk *b)
+{
+    if ((b->flags & 0xF) != 0) {
+        return b;
+    }
+    while ((b->next->flags & 0xF) == 0) {
+        b = b->next;
+    }
+    while ((b->flags & 0xF) == 0 && (b->end->flags & 0xF) == 0) {
+        b->end = b->end->end;
+    }
+    b->end->next = b;
+    return b;
+}
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C950);
+void func_0011C950(int idx, R0Blk *arg1, R0Blk *arg2, R0Blk *arg3)
+{
+    MemBlk *b = (MemBlk *)arg1;
+    MemBlk *prev = (MemBlk *)arg2;
+    MemBlk *next = (MemBlk *)arg3;
+    R0Heap *h = &D_005808C8[idx];
+
+    func_002EF0D0(b, 0, 0x10);
+    b->heap_id = idx;
+    b->end = next;
+    b->next = prev;
+    prev->end = b;
+    b->end->next = b;
+    func_0011C838(arg1);
+    func_0011C8B8(arg1);
+    h->b00 = 0;
+}
 
 s32 func_0011CA08(void *p)
 {
@@ -381,8 +434,21 @@ void *func_0011CC78(void *mem)
     return dst + 1;
 }
 
-/* DEBT(CAST): relocates a heap block into the free block in front of a0's tail. */
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011CD30);
+void *func_0011CD30(void *a, void *b)
+{
+    R0Blk *ha = (R0Blk *)a - 1;
+    R0Blk *hb = (R0Blk *)b - 1;
+    s32 nb = (u8 *)hb->end - (u8 *)hb;
+
+    a = (u8 *)a + (((u8 *)ha->end - (u8 *)ha) - nb - 0x10);
+    func_002EEFCC(a, hb, nb);
+    func_0011C838(hb);
+    ((R0Blk *)a)->end = ha->end;
+    ha->end->next = (R0Blk *)a;
+    ha->end = (R0Blk *)a;
+    ((R0Blk *)a)->next = ha;
+    return (R0Blk *)a + 1;
+}
 
 void Sg_MemSetMoveHeapStartAddr(s32 p)
 {

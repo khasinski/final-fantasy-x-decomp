@@ -19,13 +19,84 @@ struct Obj436Slot *func_001C0C98(Obj436 *o) {
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C0D00);
+typedef struct {
+    u8 pad0[6];
+    u8 b6;
+    u8 b7[13];
+    u16 h14;
+    u16 h16;
+} Unk1C0D00;
+
+typedef struct {
+    u8 pad0[0x2C6];
+    u16 h2C6;
+    u8 b2C8[13];
+    u8 pad2D5;
+    u16 h2D6;
+    u8 pad2D8[0x300 - 0x2D8];
+    u8 b300;
+} Unk1C0D00Chr;
+
+void func_001C0D00(Unk1C0D00 *dst, Unk1C0D00 *src, Unk1C0D00Chr *c) {
+    int i;
+    if (src != 0) {
+        dst->h14 = src->h14;
+        for (i = 0; i < 13; i++) {
+            dst->b7[i] = src->b7[i];
+        }
+        dst->h16 = src->h16;
+        dst->b6 = src->b6;
+    } else {
+        dst->h14 = c->h2C6;
+        for (i = 0; i < 13; i++) {
+            dst->b7[i] = c->b2C8[i];
+        }
+        dst->h16 = c->h2D6;
+        dst->b6 = c->b300;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcCommand);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcDamage);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C1368);
+int func_001C1368(int id1, int id2) {
+    int start;
+    int i;
+    int end;
+    int best_val;
+    int best_id;
+
+    if (MsGetRamChrMonster(id2) != 0) {
+        start = 20;
+        end = 28;
+    } else {
+        start = 0;
+        end = 18;
+    }
+    best_val = -1;
+    best_id = -1;
+    for (i = start; i < end; i++) {
+        BtlChr *c = MsGetChr(i);
+        if (i != id1) {
+            if (i != id2 && c->fA88 != 0 && (((c->f2D6 >> 12) & 1) || ((c->f2D6 >> 13) & 1)) && c->fA8C == 0 && MsAutoCommandStatusCheck(c, 1, 1, 1) != 0) {
+                int val = c->f290;
+                val <<= (c->f2D6 >> 13) & 1;
+                if (id2 == 0) {
+                    val += MsAddLoveParam(i, 0) / 2;
+                }
+                if (i == 0) {
+                    val += MsAddLoveParam(id2, 0) / 2;
+                }
+                if (best_val < val) {
+                    best_val = val;
+                    best_id = i;
+                }
+            }
+        }
+    }
+    return (best_id < 0) ? id2 : best_id;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C14F0);
 
@@ -43,7 +114,45 @@ int func_001C2500(int unused, BtlChr *c, Q4Act *act, int *q, int force) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcMagic);
+int MsCalcMagic(GsEnt48 *e, int idx) {
+    int sp0;
+    if (e != 0) {
+        int id = e->id;
+        BtlChr *c = MsGetChr(id);
+        OfsTbl *t;
+        int mp;
+        int lim;
+
+        if (c->f39E != 0) {
+            sp0 = 0x3028;
+            t = MsGetCommand(id, 0, -1, 0, &sp0);
+            mp = MsCheckUseCommand(id, t, 0);
+            if (e->f2 != 0) {
+                mp = 0;
+            }
+        } else {
+            t = MsGetCommand(id, 0, 0x305F, &e->f8[idx], &sp0);
+            mp = MsCheckUseCommand(id, t, 0);
+        }
+        lim = 0;
+        if (D_0031732C == 0) {
+            if (t != 0) {
+                lim = t->b26;
+            }
+        }
+        if (t != 0 && t->b26 != 0) {
+            c->f280 = 1;
+        } else {
+            c->f280 = 0;
+        }
+        if (c->f294 >= mp && mp >= 0 && c->f27C >= lim && lim >= 0) {
+            c->f38C = mp;
+            c->f38D = lim;
+            return -1;
+        }
+    }
+    return 0;
+}
 
 void MsUseChrMpLimit(int id) {
     BtlChr *c = MsGetChr(id);
@@ -126,9 +235,98 @@ int MsCheckUseCommand(int id, OfsTbl *t, int add) {
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsGetCommandMP);
+int MsGetCommandMP(int id, OfsTbl *t) {
+    int mp = 0;
+    if (t != 0) {
+        BtlChr *c = MsGetChr(id);
+        int mul;
+        int div;
+        int add;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsGetCommand);
+        if (c->pad38E[0] == 0) {
+            mp = t->b25;
+        }
+        mul = 1;
+        div = 1;
+        add = 0;
+        if ((c->f37C >> 14) & 1) {
+            div = 2;
+            add = 1;
+        }
+        if ((c->f37C >> 15) & 1) {
+            if (mp != 0) {
+                mp = 1;
+                div = 1;
+                add = 0;
+            }
+        }
+        if (func_001C2800(c, t, 0, 0) != 0) {
+            mul = 2;
+            add = 0;
+        }
+        mp = (mp * mul + add) / div;
+        if ((c->f300 >> 2) & 1) {
+            mp = 0;
+        }
+    }
+    return mp;
+}
+
+void *MsGetCommand(int id, int a, int stop_cmd, void *cmd_list, int *io_cmd) {
+    int count = (cmd_list != 0) ? 2 : 1;
+    int found_cmd = 0;
+    int i = 0;
+    OfsTbl *res = 0;
+
+    for (; i < count; i++) {
+        int cmd;
+        OfsTbl *t;
+        int sub;
+
+        if (cmd_list != 0) {
+            cmd = ((u16 *)cmd_list)[i];
+        } else {
+            cmd = 0xFF;
+            if (io_cmd != 0) {
+                cmd = *io_cmd;
+            }
+        }
+        sub = cmd & 0xFFF;
+        t = 0;
+        switch (cmd >> 12) {
+        case 3:
+            t = MsGetRomPlyCommand(sub, 0);
+            break;
+        case 4:
+            t = MsGetRomMonCommand1(sub, 0);
+            break;
+        case 6:
+            t = MsGetRomMonCommand2(sub, 0);
+            break;
+        case 2:
+            t = MsGetRomItem(sub, 0);
+            break;
+        }
+        if (t != 0) {
+            int kind = t->b16 & 0xF8;
+            if (res == 0 || (kind != 8 && kind != 0x10)) {
+                res = t;
+                found_cmd = cmd;
+            }
+        }
+        if (cmd == 0x311E || cmd == 0x3024 || cmd == 0x302A || cmd == stop_cmd) {
+            break;
+        }
+    }
+    if (io_cmd != 0) {
+        if (res != 0) {
+            *io_cmd = found_cmd;
+        } else {
+            *io_cmd = 0;
+        }
+    }
+    return res;
+}
 
 /* DEBT(CAST) */
 s32 func_001C2C98(s32 id, s32 a, s32 b) {
@@ -476,7 +674,28 @@ void func_001C3EE8(int unused, Q4Act *a, int b, int *p, int *cnt, int *arr) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C3F58);
+int func_001C3F58(int a, int b, Q4Act *act, int dmg) {
+    Ent4 *p1 = &((Ent4 *)D_0031F988)[a];
+    Ent4 *p2 = &((Ent4 *)D_0031F988)[b];
+    int m = act->h20 & 3;
+
+    if (m == 1) {
+        if (p1->b0 != 0) {
+            dmg += dmg * p1->b0 / 100;
+        }
+        if (p2->b2 != 0) {
+            dmg -= dmg * p2->b2 / 100;
+        }
+    } else if (m == 2) {
+        if (p1->b1 != 0) {
+            dmg += dmg * p1->b1 / 100;
+        }
+        if (p2->v != 0) {
+            dmg -= dmg * p2->v / 100;
+        }
+    }
+    return dmg;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C4008);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C0C98/rodata", jtbl_0056E640);

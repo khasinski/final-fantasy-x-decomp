@@ -1,10 +1,21 @@
 /* tu_194 0x1c5e90-0x1c8c80: medium; ~Ms (config/tu_map.tsv) */
+#define MsCalcMotionSpeed _hdr_MsCalcMotionSpeed
+#define Ch_SetMotionSpeed _hdr_Ch_SetMotionSpeed
+#define MsThreatProcess _hdr_MsThreatProcess
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/s3.h"
 #include "ffx/u2.h"
+#undef MsCalcMotionSpeed
+#undef Ch_SetMotionSpeed
+#undef MsThreatProcess
+
+int MsThreatProcess(int id, BtlChr *c);
+int func_001C7D60(int id);
+void Ch_SetMotionSpeed(Chr *chr, int v);
+int func_00117D58(Chr *chr, int v);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", func_001C5E90);
 
@@ -109,7 +120,18 @@ int MsCheckInputCueExe(int id, BtlChr *c) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsSetDeathProcess);
+void MsSetDeathProcess(int id, BtlChr *c) {
+    float pos[4];
+
+    c->fA8C = 2;
+    func_001B6790(id, pos);
+    *(float *)((u8 *)c + 0xC30) = pos[1];
+    MsAtelRequestCamera(0, id, 0x3F, 0xFFFF, 0, 1, 0, 0);
+    c->f1CE = 0;
+    c->f1CF = 0;
+    msSetChrBodyHit(c, 3, 0);
+    c->fDC = 0;
+}
 
 void MsDeathTerminate(int a, BtlChr *c) {
     if (c->fB7 == 0) {
@@ -262,7 +284,48 @@ void func_001C7928(int id, BtlChr *c) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsThreatProcess);
+int MsThreatProcess(int id, BtlChr *c) {
+    float pos1[4];
+    float pos2[4];
+    int ret;
+    int t;
+    BtlChr *d;
+
+    if ((c->f2C6 >> 11) & 1) {
+        t = c->pad285[0];
+        ret = 1;
+        d = MsGetChr(t);
+        MsGetChrBtlPos(id, pos1);
+        MsVectorRect2Polar(pos2, pos1, (int)&c->f1D4[2], 0, 0);
+        MsSetDirThetaMode(c);
+        if (t != 0xFF) {
+            MsGetChrBtlPos(t, pos2);
+            MsVectorRect2Polar(pos1, pos2, (int)&d->f1D4[2], 0, 0);
+            d->f286 = id;
+            d->f2C6 |= 0x800;
+            MsSetDirThetaMode(d);
+        }
+    } else {
+        t = c->pad285[0];
+        ret = 0;
+        if (t == 0xFF) {
+            t = c->f286;
+        }
+        d = MsGetChr(t);
+        c->pad285[0] = 0xFF;
+        c->f286 = 0xFF;
+        MsSetDirThetaMode(c);
+        func_001C7928(id, c);
+        if (t != 0xFF) {
+            d->pad285[0] = 0xFF;
+            d->f286 = 0xFF;
+            d->f2C6 &= ~0x800;
+            MsSetDirThetaMode(d);
+            func_001C7928(t, d);
+        }
+    }
+    return ret;
+}
 
 void MsSetPartyRelifeTime(void) {
     int i;
@@ -323,7 +386,15 @@ u8 *MsOrderCalc(int *out) {
     return D_006625F0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", func_001C7D60);
+int func_001C7D60(int id) {
+    int r;
+    if ((MsGetRamChrMonster(id) == 1 && D_00317318 != 0) || (MsGetRamChrMonster(id) == 0 && D_00317319 != 0)) {
+        r = 0;
+    } else {
+        r = 1;
+    }
+    return r;
+}
 
 void func_001C7DC0(int a, BtlChr *c, int n, int x, int y, int flags) {
     if ((flags & 1) != 0) {
@@ -352,11 +423,100 @@ void MsSubCTB(int a, BtlChr *c, int n, int x, int y, int z) {
     c->f31C = MsCheckRange(c->f31C + n, 0, 0xFF);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsCalcCostCTB);
+int MsCalcCostCTB(GsEnt48 *e) {
+    struct GsEnt48Sub sp0;
+    OfsTbl *t = 0;
+
+    if (e != 0) {
+        struct GsEnt48Sub *p = e->f8;
+        int id = e->id;
+        BtlChr *c;
+        u16 *cmd_p;
+        int done;
+        int i;
+
+        sp0.h2 = 0xFF;
+        sp0.targets = p->targets;
+        c = MsGetChr(id);
+        cmd_p = &p->h0;
+        done = 0;
+        for (i = 0; i < 2; i++, cmd_p++) {
+            u16 cmd = *cmd_p;
+            if (cmd != 0xFF) {
+                OfsTbl *res;
+                if (c->f39E != 0) {
+                    cmd = 0x3028;
+                }
+                sp0.h0 = cmd;
+                res = MsGetCommand(id, 0, -1, &sp0, 0);
+                switch (cmd) {
+                case 0x3029:
+                    done = 1;
+                    break;
+                case 0x305F:
+                    done = 1;
+                    break;
+                case 0x311E:
+                    done = 1;
+                    break;
+                }
+                if (res != 0) {
+                    t = res;
+                }
+                if (done != 0) {
+                    break;
+                }
+            }
+        }
+    }
+    if (t != 0 && t->b24 != 0) {
+        return t->b24;
+    }
+    return 3;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsCalcDamageCTB);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsCalcMotionSpeed);
+int MsCalcMotionSpeed(BtlChr *c) {
+    int mul = 8;
+    Chr *chr = c->chr;
+    int spd;
+
+    if (c->f12 != 0) {
+        mul = MsGetChr(c->f14)->padC6[0];
+    } else if (c->fA8E != 0) {
+        mul = 0;
+    } else if (((c->f2C6 >> 11) & 1) && c->f286 == 0xFF) {
+        if (c->fF2 == 0) {
+            if (c->f1C8 == 0) {
+                mul = 0;
+            }
+        }
+    } else if (c->f2D3 != 0) {
+        mul = 16;
+    } else if (c->f2D4 != 0) {
+        if ((u32)(c->fB0 - 0x10) <= 0x1A) {
+            mul = 4;
+        }
+    }
+    c->padC6[0] = mul;
+    if (c->fC4 == 1) {
+        spd = *(u16 *)&c->fC2;
+    } else {
+        spd = (c->fBC * mul) / 8;
+    }
+    if (chr != 0 && spd != c->fC0 && c->f38 != 0) {
+        if (c->fC0 == 0 && spd != 0) {
+            func_00117D58(chr, 1);
+        }
+        if (c->fC0 != 0 && spd == 0) {
+            func_00117D58(chr, 0);
+        }
+        Ch_SetMotionSpeed(chr, spd);
+        c->fC0 = spd;
+    }
+    return spd;
+}
 
 int MsCalcEscape(int id) {
     s8 k = D_003172F0.f212F;
@@ -405,11 +565,57 @@ void func_001C8740(int id, int bit, int c, int h, int a) {
     MsInsertBtlCommand(&e, a, 1, c);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", func_001C87D8);
+int func_001C87D8(int id, BtlChr *c, int arg2) {
+    int sub = 0;
+    int item = 0;
+
+    if ((u32)c->f290 <= (u32)c->f254 / 2 && func_001D8C78(id, 0x20) != 0 && MsAutoCommandStatusCheck(c, 1, 1, 1) != 0) {
+        if (func_001BFE30(0x2000) > 0) {
+            sub = 1;
+            item = 0x2000;
+        } else if (func_001BFE30(0x2001) > 0) {
+            sub = 2;
+            item = 0x2001;
+        } else if (func_001BFE30(0x2002) > 0) {
+            sub = 3;
+            item = 0x2002;
+        }
+        if (item > 0) {
+            func_001C86A8(id, id, arg2, item, sub | 0x20);
+        }
+    }
+    return item;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", func_001C88D8);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsAutoPhenixProcess);
+int MsAutoPhenixProcess(int id, int b, int c) {
+    int r = 0;
+    int i;
+    int end;
+    int ok;
+    if (MsGetRamChrMonster(id) == 0) {
+        ok = func_001BFE30(0x2006);
+        i = 0;
+        end = 0x14;
+    } else {
+        i = 0x14;
+        end = 0x1C;
+        ok = 1;
+    }
+    if (ok > 0) {
+        for (; i < end; i++) {
+            BtlChr *chr = MsGetChr(i);
+            if (chr->fA8C == 0 && ((chr->f37C >> 12) & 1) &&
+                MsAutoCommandStatusCheck(chr, 1, 1, 1) != 0) {
+                r = 0x2006;
+                func_001C86A8(i, id, c, 0x2006, 0x30);
+                break;
+            }
+        }
+    }
+    return r;
+}
 
 int func_001C8C40(int a, BtlChr *c, int d, u32 flags) {
     int r = -1;

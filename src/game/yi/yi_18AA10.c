@@ -6,7 +6,30 @@
 #include "ffx/v2.h"
 #undef func_0018AAC8
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18AA10", func_0018AA10);
+extern s32 D_0065FD1C;
+extern s32 D_0065FD20;
+extern u32 D_0065FD24;
+extern u32 D_0065FD2C;
+
+void func_0018AA10(int mode)
+{
+    switch (mode) {
+    case 2:
+        D_0065FD1C = D_0065FD20 = 0xB4000;
+        D_0065FD24 = 0x20;
+        break;
+    case 3:
+        D_0065FD1C = D_0065FD20 = 0x18000;
+        D_0065FD24 = 0x20;
+        break;
+    case 4:
+        D_0065FD1C = D_0065FD20 = 0x82000;
+        D_0065FD24 = 0x10;
+        break;
+    }
+    D_0065FD28 = 0;
+    D_0065FD2C = 0;
+}
 
 int func_0018AAB8(void) {
     return D_0065FD28;

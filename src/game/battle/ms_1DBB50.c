@@ -53,7 +53,7 @@ int func_001DBCB8(u32 i) {
                 return -1;
             }
             func_0011D590(r->f8, 5);
-            MsStructClear(&r, 0xC); /* DEBT(FAKE): clears the local pointer, not the record (as compiled) */
+            MsStructClear(&r, 0xC); /* clears the local pointer, not the record (as compiled) */
             return 0;
         }
     }
@@ -179,7 +179,42 @@ u16 func_001DC340(u8 id)
     return MsGetChr(id)->f31A;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DBB50", MsCheckLeftWindow);
+typedef struct {
+    u8 pad0[0x26];
+    u8 f26;
+} ComData26;
+
+typedef struct {
+    u8 pad0[0x28];
+    u16 cmd[8];
+    u8 pad38[0x478 - 0x38];
+} PlyWin478;
+
+ComData26 *_CheckLeft_MsGetComData(int, int) __asm__("MsGetComData");
+
+int MsCheckLeftWindow(int id)
+{
+    int ret = 0;
+    BtlChr *c = MsGetChr(id);
+    int i;
+
+    for (i = 0; i < 8; i++) {
+        u16 cmd = ((PlyWin478 *)btl_ply_win)[id].cmd[i];
+        if (cmd != 0xFF) {
+            ComData26 *com = _CheckLeft_MsGetComData(cmd, 0);
+            if (MsGetCommandUse(id, cmd) == 0) {
+                if (com->f26 != 0) {
+                    if (c->f27C >= c->f27D || D_003172F0.f3C != 0) {
+                        ret |= 2;
+                    }
+                } else {
+                    ret |= 1;
+                }
+            }
+        }
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DBB50", MsGetMenuChrInfo);
 

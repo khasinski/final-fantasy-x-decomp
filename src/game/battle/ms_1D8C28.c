@@ -286,7 +286,7 @@ void MsBattleSpecialFree(void) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsBattleSpecial);
 
-void func_001DAB28(int a, int b, BtlChr *c)
+void func_001DAB28(Chr *a, int b, BtlChr *c)
 {
     func_001089E0(a, b, 0, c->f7C0);
     func_001AC230(c->f7C0, c->f7C0);

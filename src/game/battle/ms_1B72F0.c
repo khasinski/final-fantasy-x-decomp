@@ -325,7 +325,8 @@ int func_001B8198(int a, int b, int c, int d) {
     return -1;
 }
 
-int func_001B81E8(u8 id, int mask) {
+int func_001B81E8(int id, int mask) {
+    id &= 0xFF;
     if (MsBtlChrNumCheck(id) != 0) {
         int i;
         int n;

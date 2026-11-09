@@ -215,7 +215,26 @@ u16 *func_002A1680(ScriptThread *th, u16 *pc) {
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1698);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1778);
+#include "vu0.h"
+
+void func_002A1778(u8 *a, u8 *b)
+{
+    int rgba;
+
+    __asm__ volatile(
+        "lqc2        $vf31, 0x40(%1)\n"
+        "lui         $2, (0x437F0000 >> 16)\n"
+        "ctc2.ni     $2, $vi21\n"
+        "vsub.xyzw   $vf30, $vf0, $vf0\n"
+        "vminii.xyzw $vf31, $vf31, I\n"
+        "vmax.xyzw   $vf31, $vf31, $vf30\n"
+        "vftoi0.xyzw $vf31, $vf31\n"
+        "qmfc2.ni    %0, $vf31\n"
+        "ppach       %0, $0, %0\n"
+        "ppacb       %0, $0, %0\n"
+        : "=&r"(rgba) : "r"(a) : "$2", "memory");
+    func_002B2FF0(rgba, b[2], b[3]);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", ope_anm_sippo);
 

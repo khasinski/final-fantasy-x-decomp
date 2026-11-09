@@ -139,14 +139,14 @@ typedef struct {
 
 typedef struct {
     u8 b[0x40];
-} Blk64;
+} StatBlk64;
 
 typedef struct {
     s32 sema;
     s32 *res;
     s32 size;
     s32 mask;
-    Blk64 stat;
+    StatBlk64 stat;
     u8 name[0x400];
 } PktChstat;
 
@@ -1278,7 +1278,7 @@ s32 func_002FE048(u8 *a, void *buf) {
     return sp30;
 }
 
-s32 func_002FE1E8(u8 *arg0, Blk64 *arg1, s32 arg2) {
+s32 func_002FE1E8(u8 *arg0, StatBlk64 *arg1, s32 arg2) {
     PktChstat *pkt = (PktChstat *)&D_00793DC0;
     SemaParam sp10;
     s32 sp30;

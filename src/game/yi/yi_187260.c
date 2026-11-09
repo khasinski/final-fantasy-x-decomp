@@ -69,20 +69,20 @@ void func_00187578(Obj187260 *o) {
 s32 _m2c_yiAnimInfo_init_Sg_GetKeepFps() __asm__("Sg_GetKeepFps");
 void _m2c_yiAnimInfo_init_func_00187578(s32) __asm__("func_00187578");
 extern s32 _m2c_yiAnimInfo_init_D_0065FD18 __asm__("D_0065FD18");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void yiAnimInfo_init(void *arg0) {
-    register s32 *var_2 __asm__("$2");
-    register s32 *var_3 __asm__("$3");
-    register s32 *var_4 __asm__("$4");
-    register s32 *var_5 __asm__("$5");
-    register s32 *var_6 __asm__("$6");
-    register s32 *s7 __asm__("$23");
-    register s32 *s6 __asm__("$22");
-    register s32 *s5 __asm__("$21");
-    register s32 *s4 __asm__("$20");
-    register s32 *s3 __asm__("$19");
+    s32 *var_2;
+    s32 *var_3;
+    s32 *var_4;
+    s32 *var_5;
+    s32 *var_6;
+    s32 *s7;
+    s32 *s6;
+    s32 *s5;
+    s32 *s4;
+    s32 *s3;
     s32 var_16;
-    register s32 var_18 __asm__("$18");
+    s32 var_18;
 
     s7 = arg0 + 0xA0C;
     s6 = arg0 + 0xB0C;

@@ -62,7 +62,28 @@ int func_00227EF0(void) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_227C88", TkSetLegendAbility);
+extern char D_005713E0[];
+extern char D_00571400[];
+u16 *_m2c_MsGetSaveWeaponList(int, int, int, s32 *) __asm__("MsGetSaveWeaponList");
+
+Unk1BFED8 *TkSetLegendAbility(int id)
+{
+    s32 count;
+    s32 idx;
+    u16 *list;
+    Unk1BFED8 *w;
+
+    list = _m2c_MsGetSaveWeaponList(id, -1, 0, &count);
+    for (; count > 0; count--, list++) {
+        w = MsGetSaveWeapon(*list, &idx);
+        if (((w->b3 >> 2) & 1) && w->b4 == id) {
+            func_002EF240(D_005713E0, id);
+            return w;
+        }
+    }
+    func_002EF240(D_00571400, id);
+    return 0;
+}
 
 int func_00227FD8(int id, int sel)
 {

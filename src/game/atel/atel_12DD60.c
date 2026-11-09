@@ -123,7 +123,7 @@ int func_0012E0A0(Actor *a, void *op, ScriptCtx *ctx)
     int b23 = AtelPopStackInteger(a, ctx);
     int b22 = AtelPopStackInteger(a, ctx);
     int id = AtelPopStackInteger(a, ctx);
-    V0EffectW *e = (V0EffectW *)AtelGetMesWinWork(id);
+    Effect *e = AtelGetMesWinWork(id);
 
     e->b22 = b22;
     e->b23 = b23;
@@ -153,7 +153,7 @@ s32 func_0012E1A8(void)
 
 int func_0012E1C8(Actor *a, void *op, ScriptCtx *ctx)
 {
-    V0GameFlags *g = (V0GameFlags *)AtelGetCurCtrlWork();
+    EvGameState *g = AtelGetCurCtrlWork();
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
     int t = 0;
@@ -162,16 +162,16 @@ int func_0012E1C8(Actor *a, void *op, ScriptCtx *ctx)
     if (x) {
         t = 1;
     }
-    g->b17 = t;
+    g->flags.b.b17 = t;
     if (!y) {
         r = 0;
     }
-    g->b18 = r;
+    g->flags.b.b18 = r;
     return r;
 }
 
 int func_0012E270(Actor *a, void *op, ScriptCtx *ctx) {
-    s32 *w = (s32 *)AtelGetCurCtrlWork(); /* DEBT(CAST): flag word of the event state */
+    s32 *w = &AtelGetCurCtrlWork()->flags.w;
     int on = AtelPopStackInteger(a, ctx) != 0;
 
     *w = (*w & ~0x80000) | (on << 19);
@@ -183,7 +183,7 @@ s32 func_0012E2D8(Actor *a, void *op, ScriptCtx *ctx)
     s32 v = AtelPopStackInteger(a, ctx);
     Actor *e = AtelGetBasicWork(v);
 
-    OFF_W(e, 0x34) = (OFF_W(e, 0x34) & 0xF9FFFFFF) | 0x02000000;
+    e->flags34.w = (e->flags34.w & 0xF9FFFFFF) | 0x02000000;
     return v;
 }
 
@@ -192,7 +192,7 @@ s32 func_0012E330(Actor *a, void *op, ScriptCtx *ctx)
     s32 v = AtelPopStackInteger(a, ctx);
     Actor *e = AtelGetBasicWork(v);
 
-    OFF_W(e, 0x34) = (OFF_W(e, 0x34) & 0xF9FFFFFF) | 0x04000000;
+    e->flags34.w = (e->flags34.w & 0xF9FFFFFF) | 0x04000000;
     return v;
 }
 
@@ -201,7 +201,7 @@ s32 func_0012E388(Actor *a, void *op, ScriptCtx *ctx)
     s32 v = AtelPopStackInteger(a, ctx);
     Actor *e = AtelGetBasicWork(v);
 
-    OFF_W(e, 0x34) = ((OFF_W(e, 0x34) | 0x10000000) & 0xF9FFFFFF) | 0x02000000;
+    e->flags34.w = ((e->flags34.w | 0x10000000) & 0xF9FFFFFF) | 0x02000000;
     return v;
 }
 
@@ -374,7 +374,7 @@ int func_0012EA30(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_0012EA90(Actor *a, void *op, ScriptCtx *ctx) {
-    s32 *w = (s32 *)AtelGetCurCtrlWork(); /* DEBT(CAST): flag word of the event state */
+    s32 *w = &AtelGetCurCtrlWork()->flags.w;
     int on = AtelPopStackInteger(a, ctx) != 0;
 
     *w = (*w & ~0x400000) | (on << 22);
@@ -452,11 +452,8 @@ int func_0012EC50(Actor *a, void *op, ScriptCtx *ctx)
     return n;
 }
 
-int func_0012ECE8(Actor *a, void *op, ScriptCtx *ctx)
+static inline int Clamp8(int i)
 {
-    int v = AtelPopStackInteger(a, ctx);
-    int i = AtelPopStackInteger(a, ctx);
-    Rec124828 *p;
     int k;
 
     if (i >= 0) {
@@ -468,8 +465,18 @@ int func_0012ECE8(Actor *a, void *op, ScriptCtx *ctx)
     } else {
         k = 0;
     }
-    i = k; /* DEBT(FAKE): clamping through k steers register allocation */
+    return k;
+}
+
+int func_0012ECE8(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int v = AtelPopStackInteger(a, ctx);
+    int i = AtelPopStackInteger(a, ctx);
+    Rec124828 *p;
+
+    i = Clamp8(i);
     p = func_00124828();
+
     if (v < 0) {
         v = 0;
     }

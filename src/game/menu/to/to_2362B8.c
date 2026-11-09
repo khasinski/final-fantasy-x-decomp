@@ -17,7 +17,7 @@ int func_00236560(text, a, b, c)
 {
     Task *t = func_00243400();
 
-    D_00326038 = (int)t; /* DEBT(CAST): D_00326038 is declared int in q6.h */
+    D_00326038 = t;
     t->cb = 0;
     t->x1C = 0;
     t->x0C = (s32)func_00236090; /* DEBT(CAST): Task callbacks are typed s32 */
@@ -47,7 +47,7 @@ int func_00236640(int text, int a, int b, int c)
 {
     Task *t = func_00243400();
 
-    D_00326038 = (int)t; /* DEBT(CAST): D_00326038 is declared int in q6.h */
+    D_00326038 = t;
     t->cb = 0;
     t->x1C = 0;
     t->x0C = (s32)func_00236090; /* DEBT(CAST): Task callbacks are typed s32 */
@@ -78,7 +78,7 @@ int func_00236808(int text, int a, int b, int c)
 {
     Task *t = func_00243400();
 
-    D_00326038 = (int)t; /* DEBT(CAST): D_00326038 is declared int in q6.h */
+    D_00326038 = t;
     t->cb = 0;
     t->x1C = 0;
     t->x0C = (s32)func_00236090; /* DEBT(CAST): Task callbacks are typed s32 */
@@ -106,12 +106,11 @@ int func_00236808(int text, int a, int b, int c)
 
 void TOMenuCloseYesNoWindow(void)
 {
-    /* DEBT(CAST): D_00326038 is declared int in q6.h */
     if (D_00326038 != 0) {
-        if (((Task *)D_00326038)->ext[15] == 2) {
+        if (D_00326038->ext[15] == 2) {
             TOSeqStopScene(1, D_005723C0);
         }
-        ((Task *)D_00326038)->b41 = 1;
+        D_00326038->b41 = 1;
         D_00326038 = 0;
     }
 }
@@ -127,7 +126,7 @@ int func_002369A0(int a0, int a1, int a2) { return func_00236808(a0, a1, a2, 0);
 int func_002369C0(void) { return func_00236560(); }
 
 Task *TOMenuGetYesNoWindow(void) {
-    return (Task *)D_00326038; /* DEBT(CAST): D_00326038 is declared int in q6.h */
+    return D_00326038;
 }
 
 void func_002369F0(void)

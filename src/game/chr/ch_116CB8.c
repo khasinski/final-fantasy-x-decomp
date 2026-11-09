@@ -1,5 +1,9 @@
 /* tu_023 0x116cb8-0x117d38: medium; ~Ch (config/tu_map.tsv) */
 #define Ch_ClutCreate _hdr_Ch_ClutCreate
+#define Ch_TexDataMapping _hdr_Ch_TexDataMapping
+#define func_00117140 _hdr_func_00117140
+#define func_00117700 _hdr_func_00117700
+#define Ch_ClutMapping _hdr_Ch_ClutMapping
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -7,15 +11,83 @@
 #include "ffx/s0.h"
 #include "ffx/v0.h"
 #undef Ch_ClutCreate
+#undef Ch_TexDataMapping
+#undef func_00117140
+#undef func_00117700
+#undef Ch_ClutMapping
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", Ch_TexDataMapping);
+void func_00117140(void *arg0, void *arg1);
+
+typedef struct {
+    s32 w00;
+    u16 h04;
+    u16 pad06;
+    u16 h08;
+    u16 pad0A;
+    u16 h0C;
+    u16 pad0E;
+    u16 h10;
+    u16 pad12;
+    s32 w14;
+    ChrAnimPair *pairs;
+    V0TexHdr *ents;
+    s32 w20;
+} TexSubHdr;
+
+void Ch_TexDataMapping(TexSubHdr *s)
+{
+    s32 diff;
+    s32 i;
+
+    if (s == 0 || s->h10 < 0x1029) {
+        return;
+    }
+    diff = (s32)s - s->w00;
+    if (diff == 0) {
+        return;
+    }
+    s->w14 += diff;
+    s->pairs = (ChrAnimPair *)((s32)s->pairs + diff);
+    s->ents = (V0TexHdr *)((s32)s->ents + diff);
+    s->w00 = (s32)s;
+    if (s->h10 >= 0x1126 && s->w20 != 0) {
+        s->w20 += diff;
+    }
+    for (i = 0; i < s->h08; i++) {
+        s->pairs[i].b += diff;
+        if (((u8 *)s->pairs[i].b)[0] == 0 && ((u8 *)s->pairs[i].b)[1] == 0xFF && ((u8 *)s->pairs[i].b)[2] == 0) {
+            u8 *p = (u8 *)s->pairs[i].b;
+            p[0] = p[1] = p[2] = p[3] = 0;
+        }
+        if (((u8 *)s->pairs[i].b)[0] == 0xFF && ((u8 *)s->pairs[i].b)[1] == 0 && ((u8 *)s->pairs[i].b)[2] == 0) {
+            u8 *p = (u8 *)s->pairs[i].b;
+            p[0] = p[1] = p[2] = p[3] = 0;
+        }
+    }
+    for (i = 0; i < s->h0C; i++) {
+        if (s->ents[i].data != 0) {
+            s->ents[i].data += diff;
+        }
+    }
+}
 
 void Sg_GsloadSetBase(V0TexUpload *t)
 {
     t->pk.bitbltbuf.DBP = t->tbp;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", func_00116E50);
+R0Pkt *func_00116E50(R0Pkt *pkt, V0TexUpload *t)
+{
+    R0Pkt *ret;
+
+    pkt->w4 = 0;
+    pkt->q8 = 0;
+    pkt->w0 = 0x10000006;
+    pkt++;
+    ret = pkt + 6;
+    *(V0GsLoadPk *)pkt = t->pk;
+    return ret;
+}
 
 void func_00116EB0(V0GsLoadPk *p, int dbw, int dpsm, int dsax, int dsay, int rrw, int rrh)
 {
@@ -61,6 +133,26 @@ void func_001170E8(int *in, V0TexUpload *t)
     t->h66 = t->n.h;
     func_00116EB0(&t->pk, 1, 0, 0, 0, 16, rrh);
 }
+
+typedef struct {
+    unsigned long TBP0 : 14;
+    unsigned long TBW : 6;
+    unsigned long PSM : 6;
+    unsigned long TW : 4;
+    unsigned long TH : 4;
+    unsigned long TCC : 1;
+    unsigned long TFX : 2;
+    unsigned long CBP : 14;
+    unsigned long CPSM : 4;
+    unsigned long CSM : 1;
+    unsigned long CSA : 5;
+    unsigned long CLD : 3;
+} GsTex0Bits;
+
+typedef struct {
+    u8 pad00[0x18];
+    GsTex0Bits tex0;
+} TexInfo7B0;
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", func_00117140);
 
@@ -141,14 +233,89 @@ s32 func_001175D8(Chr *chr, int i, s32 *out)
     return b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", func_00117608);
+typedef struct {
+    u8 pad00[0x14];
+    void *p14;
+    int *p18;
+    V0TexHdr *p1C;
+} TexResourceSet;
+
+extern TexResourceSet *D_00307EA8;
+extern V0TexUpload D_0057F6D0;
+extern V0TexUpload D_0057F740;
+
+void func_00117608(void)
+{
+    TexResourceSet *s = D_00307EA8;
+
+    Ch_TexDataMapping((TexSubHdr *)s);
+    func_001170E8(s->p18, &D_0057F740);
+    func_001170A8(s->p1C, &D_0057F6D0);
+    func_00117140(s->p14, &D_0057F7B0);
+    D_0057F6D0.tbp = 0x2EA0;
+    D_0057F740.tbp = 0x2EF8;
+    Sg_GsloadSetBase(&D_0057F6D0);
+    Sg_GsloadSetBase(&D_0057F740);
+    ((TexInfo7B0 *)&D_0057F7B0)->tex0.TBP0 = D_0057F6D0.tbp;
+    ((TexInfo7B0 *)&D_0057F7B0)->tex0.CBP = D_0057F740.tbp;
+}
 
 s32 *func_001176F0(void)
 {
     return &D_0057F7B0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", func_00117700);
+typedef struct {
+    u8 pad[0x7FEC];
+    u32 vif1;
+    u32 gif;
+} TexDataHdr;
+
+typedef union {
+    struct {
+        u32 w0;
+        u32 w4;
+        u64 q8;
+    } s;
+    s16 h[8];
+} Pkt16;
+
+Pkt16 *func_00117700(Pkt16 *pkt)
+{
+    V0TexUpload *t;
+    s32 d;
+
+    t = &D_0057F6D0;
+    pkt->s.w0 = 0x30000006;
+    pkt->s.w4 = (u32)t;
+    pkt->s.q8 = 0;
+    pkt++;
+    {
+        TexDataHdr *h;
+        d = t->data;
+        h = (TexDataHdr *)(d - 0x8000);
+        h->vif1 = (u16)h->vif1 | 0x51000000;
+        pkt->s.w0 = ((h->gif & 0x7FFF) + 2) | 0x30000000;
+    }
+    pkt->s.w4 = t->data - 0x20;
+    pkt->s.q8 = 0;
+    pkt++;
+    t = &D_0057F740;
+    pkt->s.w0 = 0x30000006;
+    pkt->s.w4 = (u32)t;
+    pkt->s.q8 = 0;
+    pkt++;
+    {
+        TexDataHdr *h;
+        d = t->data;
+        h = (TexDataHdr *)(d - 0x8000);
+        h->vif1 = (u16)h->vif1 | 0x51000000;
+        pkt->s.w0 = ((h->gif & 0x7FFF) + 2) | 0x30000000;
+    }
+    pkt->s.w4 = t->data - 0x20;
+    pkt->s.q8 = 0;
+    return pkt + 1;
+}
 
 /* DEBT(CAST): integer-width views follow the existing shared interfaces. */
 void Ch_TextureSetup(Chr *chr)
@@ -179,7 +346,7 @@ void Ch_ClutEnable(Chr *chr, int v)
 
     if (p) {
         for (i = 0, chr->b714 = v; i < chr->h6F4; i++) {
-            d[i].w60 = v ? p[i].w0 : p[i].w4;
+            d[i].w60 = v ? p[i].w0 : p[i].u4.w4;
         }
     }
 }
@@ -195,7 +362,44 @@ void Ch_ClutDispose(void *p)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", Ch_ClutMapping);
+typedef struct {
+    void *p0;
+    s32 w4;
+    s32 w8;
+    s32 wC;
+} ClutRec16;
+
+void Ch_ClutMapping(Chr *chr, s32 copy)
+{
+    u8 unused[0x20];
+    ChrParamSub *sub = chr->param->sub14;
+    ClutRec16 *tbl = (ClutRec16 *)chr->p710;
+    s32 i, off, off20;
+
+    if (tbl != 0) {
+        off = chr->h6F4 * sizeof(ClutRec16);
+        for (i = 0; i < chr->h6F4; i++) {
+            ClutRec16 *r;
+            ChrAnimPair *p;
+            u32 src;
+
+            for (off20 = off + 0x20; off20 & 0x7F; off20 = off + 0x20) {
+                off++;
+            }
+            p = (ChrAnimPair *)(i * 8 + (s32)sub->pairs);
+            src = p->b;
+            r = (ClutRec16 *)(i * 16 + (s32)tbl);
+            r->p0 = (u8 *)tbl + off20;
+            r->w8 = ((*(u32 *)(src - 0x10) & 0x7FFF) + 2) << 4;
+            r->w4 = src;
+            r->wC = p->a;
+            if (copy != 0) {
+                func_002EEF1C((u8 *)r->p0 - 0x20, (void *)(src - 0x20), r->w8);
+            }
+            off = off20 + r->w8;
+        }
+    }
+}
 
 s32 _m2c_Ch_ClutCreate_Ch_ClutDispose(void *) __asm__("Ch_ClutDispose");
 s32 _m2c_Ch_ClutCreate_Ch_ClutEnable(void *, s32) __asm__("Ch_ClutEnable");
@@ -262,7 +466,7 @@ s32 Ch_ClutGetSize(Chr *chr, s32 i)
 
 s32 Ch_ClutGetPtr(Chr *chr, s32 i)
 {
-    Quad4 *tbl = CHR_PTR(chr, 0x710, Quad4); /* DEBT(CAST) */
+    R0Rec16 *tbl = chr->p710;
 
     if (tbl == 0) {
         return 0;
@@ -270,14 +474,34 @@ s32 Ch_ClutGetPtr(Chr *chr, s32 i)
     return tbl[i].w0;
 }
 
-void *func_00117C18(s32 a, s32 i)
+void *func_00117C18(Chr *chr, s32 i)
 {
-    Quad4 *tbl = CHR_PTR((Chr *)a, 0x710, Quad4); /* DEBT(CAST)/DEBT(TYPE): arg is a Chr */
+    R0Rec16 *tbl = chr->p710;
 
     if (tbl == 0) {
         return 0;
     }
-    return tbl[i].w4;
+    return tbl[i].u4.p4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", rcefChgChrClut);
+void rcefChgChrClut(Chr *chr)
+{
+    int i, j;
+    int n = func_00117BB8(chr);
+
+    for (i = 0; i < n; i++) {
+        int size = Ch_ClutGetSize(chr, i);
+        u8 *dst = (u8 *)Ch_ClutGetPtr(chr, i);
+        u8 *src = (u8 *)func_00117C18(chr, i);
+
+        for (j = 0; j < size; j++) {
+            int v = (src[0] + src[1] + src[2]) / 3;
+
+            src += 4;
+            dst[2] = v;
+            dst[1] = v;
+            dst[0] = v;
+            dst += 4;
+        }
+    }
+}

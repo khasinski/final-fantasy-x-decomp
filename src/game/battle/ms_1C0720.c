@@ -5,7 +5,23 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0720", MsGetFirstAttack);
+int MsGetFirstAttack(int rate) {
+    int r = 2;
+    int rnd = (u8)brnd(1);
+    int i;
+
+    for (i = 0; i < 0x12; i++) {
+        if (MsGetChr(i)->fA88 != 0 && ((MsGetSavePlayerPtr(i)->h4A >> 2) & 1)) {
+            int t = rnd - 1;
+            rnd = t - rate;
+            break;
+        }
+    }
+    if (rnd < 0xFF - rate) {
+        r = rnd < rate;
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0720", MsSetFirstCTB);
 

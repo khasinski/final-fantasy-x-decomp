@@ -1,10 +1,12 @@
 /* tu_013 0x10ea50-0x110158: low; ~Sg (config/tu_map.tsv) */
+#define func_0010EF98 _hdr_func_0010EF98
 #define func_0010F060 _hdr_func_0010F060
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_0010EF98
 #undef func_0010F060
 
 /* DEBT(TYPE): global type guessed from the access width only */
@@ -104,6 +106,13 @@ void func_0010EBC0(void)
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EBD8);
 
+typedef union {
+    u_long128 q;
+    u64 d[2];
+    u32 w[4];
+    float f[4];
+} QwPkt;
+
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EF98);
 
 s32 _m2c_func_0010F060_func_0010EBD8(s32) __asm__("func_0010EBD8");
@@ -127,7 +136,24 @@ void *func_0010F0A8(void *arg0) {
     return (u8 *)arg0 + 0x10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F0D8);
+void *func_0010F0D8(QwPkt *pkt, s32 idx)
+{
+    u8 *p = ((u8 **)D_0057EB7C)[idx];
+    QwPkt unused;
+
+    pkt->d[0] = 0x10000002;
+    pkt->w[2] = 0x10000000;
+    pkt->w[3] = 0x6C010023;
+    pkt++;
+    pkt->f[0] = (float)p[4] * D_0057EB80 * 2.0f;
+    pkt->f[1] = (float)p[5] * D_0057EB84 * 2.0f;
+    pkt->f[2] = (float)p[6] * D_0057EB88 * 2.0f;
+    pkt->f[3] = (float)D_0057EB8C;
+    pkt++;
+    pkt->d[0] = 0x14000000;
+    pkt->d[1] = 0;
+    return pkt + 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F1A0);
 

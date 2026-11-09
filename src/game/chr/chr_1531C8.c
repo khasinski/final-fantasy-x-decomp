@@ -390,25 +390,25 @@ int func_00153CC8(Actor *a, void *op, ScriptCtx *ctx)
     return 0;
 }
 
-int func_00153D40(int a, int b, int c)
+int func_00153D40(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 2, 0);
     return 0;
 }
 
-int func_00153D68(int a, int b, int c)
+int func_00153D68(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 2, 1);
     return 0;
 }
 
-int func_00153D90(int a, int b, int c)
+int func_00153D90(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 2, 0);
     return 0;
 }
 
-int func_00153DB8(int a, int b, int c)
+int func_00153DB8(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 2, 1);
     return 0;

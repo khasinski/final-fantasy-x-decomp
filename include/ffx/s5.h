@@ -60,7 +60,7 @@ void func_00242B18(void);
 void func_00242AE0(void);
 void func_00225500(int a, s32 *b, s32 *c, s32 *d, s32 *e);
 
-int TkMn2CalcStatusBGRatio(void);
+void TkMn2CalcStatusBGRatio(void);
 void TMn2SetStatusBGDiff(s16 v);
 void TkMenuCloseStatusPageWindow(int a);
 Task *TkMenuOpenStatusPageWindow(int a0, int idx, int a2, int a3);

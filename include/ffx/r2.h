@@ -18,7 +18,7 @@ void func_0018F260(float *m, float x, float y, float z);
 void func_2038588(void);
 
 /* 0x58-byte record initialised by func_001A1780 */
-typedef struct R2Rec1A17 { int f0; int f4; u8 pad8[0x18]; void *f20; u8 pad24[0x24]; int f48; int f4C; u8 f50[1]; } R2Rec1A17;
+typedef struct R2Rec1A17 { int f0; int f4; u8 pad8[0x18]; void *f20; u8 pad24[0x24]; void *f48; void *f4C; u8 f50[1]; } R2Rec1A17;
 
 typedef struct R2Pair08 { int f0; int f4; int f8; } R2Pair08;
 typedef struct R2Obj6C { u8 pad0[0x6C]; float f6C; } R2Obj6C;
@@ -54,7 +54,7 @@ void func_00190408(int a, float *v, int n, int b);
 
 /* ---- batch 7 ---- */
 typedef struct R2Tbl50 { u8 pad0[0x20]; struct { u8 b[0x50]; } ent[1]; } R2Tbl50;
-typedef struct R2Obj1A14D0 { int f0, f4, f8; void *fC; u8 pad10[0x60]; float f70, f74, f78; u8 pad7C[0x14]; int f90, f94, f98; } R2Obj1A14D0;
+typedef struct R2Obj1A14D0 { int f0, f4, f8; void *fC; u8 pad10[0x60]; float f70, f74, f78; u8 pad7C[0x14]; void *f90, *f94, *f98; } R2Obj1A14D0;
 typedef struct R2Hdr0 { int w0; int w4; int w8; int wC; u8 pad10[8]; int w18; int w1C; } R2Hdr0;
 typedef struct R2Ptr20 { u8 pad0[0x20]; void *p20; void *p24; } R2Ptr20;
 typedef struct R2Mark { u8 pad0[0x3A]; s8 b3A; } R2Mark;
@@ -125,8 +125,6 @@ void MsSetCheckChange(int a, int b, int c, int d);
 
 void *_rcRealloc(void *p, int size, const char *file, int line);
 
-/* DEBT(CAST): calls a function whose prototype declares a parameter the original caller does not pass */
-#define R2_CALL0_BTL() (((BtlChr *(*)(void))MsGetMon)()) /* DEBT(CAST): funcs.h declares a u8 id parameter the original caller does not pass */
 #define R2_CALL0(f) (((int (*)(void))(f))())
 int AtelGetCtrlworkActorTotal(); /* DEBT(TYPE): q1.h takes char *; this caller passes nothing */
 int AtelDecodeCommand(int id, int c);

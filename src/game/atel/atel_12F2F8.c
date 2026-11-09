@@ -87,4 +87,58 @@ s32 func_0012F5D0(Actor *a, Triple *op, ScriptCtx *ctx)
     op->w0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F2F8", func_0012F608);
+typedef struct {
+    int x0;
+    int x4;
+    int (*fn8)(int);
+} CdObj12F608;
+
+typedef struct {
+    u8 pad0[0x48];
+    int x48;
+    u8 pad4C[0x204 - 0x4C];
+    int x204;
+} CtrlWork12F608;
+
+int func_002D6768(void);
+void AtelSndTransSepSPKDataGroup(int a, int b, int c);
+void SndStandbySepWave(void);
+
+int func_0012F608(Actor *a, Triple *op)
+{
+    int ret = 0;
+    CtrlWork12F608 *ctrl = (CtrlWork12F608 *)AtelGetCurCtrlWork();
+    int state = op->w0;
+    int val = op->w4;
+
+    switch (state) {
+    case 0:
+        {
+            CdObj12F608 *cd = (CdObj12F608 *)GetCD();
+
+            if (func_002D6768() == 0 && cd->fn8(1) == 0) {
+                AtelSndTransSepSPKDataGroup(ctrl->x48, ctrl->x204, val);
+                state = 1;
+            }
+        }
+        break;
+    case 1:
+        if (func_002D6768() == 0) {
+            SndStandbySepWave();
+            state = 2;
+        }
+        break;
+    case 2:
+        if (func_002D6768() == 0) {
+            state = 3;
+        }
+        break;
+    case 3:
+        if (--op->w8 <= -1) {
+            ret = 1;
+        }
+        break;
+    }
+    op->w0 = state;
+    return ret;
+}

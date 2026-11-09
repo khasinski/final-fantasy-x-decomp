@@ -1,11 +1,35 @@
 /* tu_009 0x10ad70-0x10d0a0: low; ~Ch (config/tu_map.tsv) */
+#define func_0010B358 _hdr_func_0010B358
+#define func_0010B558 _hdr_func_0010B558
+#define func_0010BE38 _hdr_func_0010BE38
+#define func_0010BFA0 _hdr_func_0010BFA0
+#define Sg_GsloadSetBase _hdr_Sg_GsloadSetBase
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_0010B358
+#undef func_0010B558
+#undef func_0010BE38
+#undef func_0010BFA0
+#undef Sg_GsloadSetBase
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", Ch_Check);
+s32 Sg_GsloadSetBase(V0TexUpload *t);
+
+extern char D_00308100[];
+extern char D_00569600[];
+
+void Ch_Check(s32 a, s32 b)
+{
+    Chr *p;
+
+    for (p = D_00300664; p != D_00300664 + D_00300668; p++) {
+        if (p->active && p->hdr->h06 == 0) {
+            func_002F0008(D_00308100, D_00569600, p->w04, a, b);
+        }
+    }
+}
 
 void func_0010AE48(void) {
 }
@@ -72,7 +96,47 @@ s8 func_0010B348(void)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B358);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B558);
+s32 func_0010B358(Chr *chr, void *m);
+void func_002DD900(void *out, void *m, void *v, s32 w);
+extern float D_0057EA10[4][4];
+
+s32 func_0010B558(Chr *chr)
+{
+    u8 pad0[0x10];
+    U0Vec v;
+    U0Vec cam;
+    u8 unused[0x80];
+    s32 out[4];
+    float d;
+    s32 r;
+
+    chr->b18C &= 0xD7;
+    chr->flags &= ~0x10000000L;
+    v = *(U0Vec *)&chr->v6A0;
+    MsCameraGetPosNow(1, &cam.x);
+    v.x -= cam.x;
+    v.y -= cam.y;
+    v.z -= cam.z;
+    d = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    *(float *)((u8 *)chr + 0x184) = d;
+    if (chr->b18C != 0) {
+        return 1;
+    }
+    r = func_0010B358(chr, D_0057EA10);
+    func_002DD900(out, D_0057EA10, &chr->v6A0, 0);
+    chr->w6E0 = out[2];
+    if (FLAGS_BIT(chr, 11)) {
+        if (r != 0) {
+            chr->b18C |= 0x8;
+            return 1;
+        }
+        if (chr->f180 < d) {
+            chr->b18C |= 0x20;
+            return 1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B6D0);
 
@@ -172,7 +236,28 @@ s8 Sg_GuiGetTextureAnim(void)
     return D_0057EAE8;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010BA08);
+s32 func_0010BA08(s32 a, s32 b, s32 c, s32 d)
+{
+    if (a == b) {
+        return 1;
+    }
+    if (a < b) {
+        if (c >= a && c < b) {
+            return 2;
+        }
+        if (d >= a && d < b) {
+            return 4;
+        }
+    } else {
+        if (c >= a || c < b) {
+            return 3;
+        }
+        if (d >= a || d < b) {
+            return 5;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010BA90);
 
@@ -181,9 +266,84 @@ s8 func_0010BE28(void)
     return D_0057EAE9;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010BE38);
+typedef struct {
+    u8 pad[0x7FEC];
+    u32 vif1;
+    u32 gif;
+} TexDataHdr;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010BFA0);
+typedef union {
+    struct {
+        u32 w0;
+        u32 w4;
+        u64 q8;
+    } s;
+    s16 h[8];
+} Pkt16;
+
+Pkt16 *func_0010BE38(Chr *chr, Pkt16 *pkt)
+{
+    V0TexUpload *t;
+    s32 i;
+
+    if (!D_0057EA08) {
+        D_003036A8 = 0;
+        return pkt;
+    }
+    D_003036A8 = chr->w6EC;
+    if (D_003036A8 != 0) {
+        Ch_TextureSetImageBase(chr, 1, 0x3400);
+        D_0057EAE9 = 1;
+        t = (V0TexUpload *)chr->w6F8;
+        for (i = 0; i < chr->h6FC; i++, t++) {
+            if ((s16)t->h68 != -1) {
+                t->tbp = t->h68;
+                Sg_GsloadSetBase(t);
+                if (t->data != 0) {
+                    TexDataHdr *h;
+
+                    pkt->s.w0 = 0x30000006;
+                    pkt->s.w4 = (u32)t;
+                    pkt->s.q8 = 0;
+                    pkt++;
+                    h = (TexDataHdr *)(t->data - 0x8000);
+                    h->vif1 = (u16)h->vif1 | 0x51000000;
+                    pkt->s.w0 = ((h->gif & 0x7FFF) + 2) | 0x30000000;
+                    pkt->s.w4 = t->data - 0x20;
+                    pkt->s.q8 = 0;
+                    pkt++;
+                }
+            }
+        }
+        func_002F8660(0);
+    }
+    return pkt;
+}
+
+typedef struct {
+    u16 h0;
+    u16 h2;
+    u16 h4;
+} ChrSlotDataH4;
+
+void func_0010BFA0(Chr *chr)
+{
+    s32 i, j;
+    register float max_y __asm__("$f1") = 0.0f;
+
+    for (i = 0; i < chr->hdr->h06; i++) {
+        ChrEnt *e = &chr->ents[i];
+
+        for (j = 0; j < ((ChrSlotDataH4 *)e->data)->h4; j++) {
+            float y = ((Vec4 *)e->w08)[j].y;
+
+            max_y = (max_y < y) ? y : max_y;
+        }
+    }
+    max_y /= 1000.0f;
+    max_y = -max_y;
+    chr->f74 = max_y;
+}
 
 void Ch_DrawSetCull(Chr *chr, s32 v)
 {
@@ -304,26 +464,56 @@ void Ch_DrawCalcShade(Chr *chr, float *x, float *y, float *z)
     float s;
 
     if (EnableClothSystem) {
-        s = chr->f358 * chr->f364;
+        s = chr->t358.cur * chr->t364.cur;
     } else {
-        s = chr->f358;
+        s = chr->t358.cur;
     }
-    *x = chr->f328 * s * chr->fC0;
-    *y = chr->f334 * s * chr->fC4;
-    *z = chr->f340 * s * chr->fC8;
+    *x = chr->t328.cur * s * chr->fC0;
+    *y = chr->t334.cur * s * chr->fC4;
+    *z = chr->t340.cur * s * chr->fC8;
 }
 
 float Ch_DrawGetModelAlpha(Chr *chr, s32 i)
 {
     if (i == -1) {
-        return chr->f34C;
+        return chr->t34C.cur;
     }
-    return chr->ents[i].f14 * chr->f34C;
+    return chr->ents[i].f14 * chr->t34C.cur;
 }
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010C278);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010C6B0);
+void func_0011EA68(s32 a);
+void func_0011E490(void *a);
+void func_0011E788(void *a, float b);
+
+typedef struct ChrDrawView {
+    u8 pad000[0x178];
+    float f178;
+    u8 pad17C[0x378];
+    float f4F4;
+    u8 pad4F8[0x1A8];
+    U0Vec v6A0;
+    U0Vec v6B0;
+} ChrDrawView;
+
+void func_0010C6B0(Chr *chr)
+{
+    ChrDrawView *c = (ChrDrawView *)chr;
+    U0Vec tmp;
+
+    if (D_0057EABC != 0) {
+        func_0011EA68(4);
+        func_0011E420();
+        func_0011E490(&c->v6B0);
+        func_0011E490(&c->v6A0);
+        func_0011EA68(6);
+        func_0011E788(&c->v6B0, c->f4F4);
+        tmp = c->v6A0;
+        tmp.y = c->f178;
+        func_0011E788(&tmp, c->f4F4);
+    }
+}
 
 void Ch_DrawInitAll(void)
 {

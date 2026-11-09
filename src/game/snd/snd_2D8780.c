@@ -70,7 +70,29 @@ void func_002D88D8(void)
     func_00251A58();
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D8780", func_002D88E0);
+int func_20645B0(void);
+int func_2064500(W11SoundDevice *state, int len);
+
+void func_002D88E0(char *s)
+{
+    int i;
+
+    if (TkIsDebug()) {
+        W11SoundDevice *p;
+        func_002F072C(D_00565F50.buf0C, s);
+        p = &D_00565F50;
+        p->h0A = func_002F0840(D_00565F50.buf0C);
+        while (func_20645B0() != 0)
+            ;
+        for (i = 0; i < 0x80; i++) {
+            if (func_2064500(&D_00565F50, 0x10C) >= 0) {
+                break;
+            }
+            while (func_20645B0() != 0)
+                ;
+        }
+    }
+}
 
 /* DEBT(ORDER): independent byte clears retain the original instruction schedule. */
 void func_002D8978(void)

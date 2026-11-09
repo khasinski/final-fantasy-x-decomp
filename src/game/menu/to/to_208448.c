@@ -220,7 +220,7 @@ int func_00208A60(UiWidget *w)
     f.box.y0 = w->cur[1];
     f.box.x1 = w->cur[2];
     f.box.y1 = w->cur[3];
-    f.col = *(UiRgba *)w->col; /* DEBT(CAST): UiWidget keeps the colour as an array */
+    f.col = *w->col;
     TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
     func_001FA548(f.box.x0, f.box.y0, f.box.x1 - f.box.x0, f.box.y1 - f.box.y0);
     func_001F1D60(f.box.x0 + 12, f.box.y0 + 4, f.box.x1 - 12, f.box.y1 - 4);
@@ -303,7 +303,7 @@ int func_00208CE0(UiWidget *w)
     f.box.y0 = w->cur[1];
     f.box.x1 = w->cur[2];
     f.box.y1 = w->cur[3];
-    f.col = *(UiRgba *)w->col; /* DEBT(CAST): UiWidget keeps the colour as an array */
+    f.col = *w->col;
     TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
     func_001FA548(f.box.x0, f.box.y0, f.box.x1 - f.box.x0, f.box.y1 - f.box.y0);
     func_001F1D60(f.box.x0 + 12, f.box.y0 + 4, f.box.x1 - 12, f.box.y1 - 4);
@@ -386,7 +386,7 @@ int func_00208F58(UiWidget *w)
     f.box.y0 = w->cur[1];
     f.box.x1 = w->cur[2];
     f.box.y1 = w->cur[3];
-    f.col = *(UiRgba *)w->col; /* DEBT(CAST): UiWidget keeps the colour as an array */
+    f.col = *w->col;
     TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
     func_001FA548(f.box.x0, f.box.y0, f.box.x1 - f.box.x0, f.box.y1 - f.box.y0);
     func_001F1D60(f.box.x0 + 12, f.box.y0 + 4, f.box.x1 - 12, f.box.y1 - 4);
@@ -469,7 +469,7 @@ int func_002091D8(UiWidget *w)
     f.box.y0 = w->cur[1];
     f.box.x1 = w->cur[2];
     f.box.y1 = w->cur[3];
-    f.col = *(UiRgba *)w->col; /* DEBT(CAST): UiWidget keeps the colour as an array */
+    f.col = *w->col;
     TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
     func_001FA548(f.box.x0, f.box.y0, f.box.x1 - f.box.x0, f.box.y1 - f.box.y0);
     func_001F1D60(f.box.x0 + 12, f.box.y0 + 4, f.box.x1 - 12, f.box.y1 - 4);
@@ -482,10 +482,10 @@ int func_002092B8(UiWidget *w)
     w->cur[2] = 0x1FF;
     w->cur[3] = 0x1C;
     w->cur[0] = 0;
-    w->col[0] = 0x80;
-    w->col[1] = 0x80;
-    w->col[2] = 0x80;
-    w->col[3] = 0x80;
+    w->col->r = 0x80;
+    w->col->g = 0x80;
+    w->col->b = 0x80;
+    w->col->a = 0x80;
     return 0;
 }
 

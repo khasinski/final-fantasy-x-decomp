@@ -47,7 +47,7 @@ void func_001DC850(void)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", MsBtlGetTerm);
 
-void func_001DC968(int id, int n, R5Buf *s) {
+void func_001DC968(int id, int n, W5Buf *s) {
     if (id != 0 && n > 0) {
         int cnt = s->bD0;
         int i;

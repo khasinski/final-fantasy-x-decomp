@@ -44,7 +44,7 @@ void func_001B60F8(s32 h);
 /* c_1B0528, c_1E2968 */
 int MsBtlReadCueRegistWeapon(int p);
 void MsBtlReadCueRegist(int a, int b, int c, int d, int e);
-OfsTbl *MsGetCommand(int id, int a, int b, void *c, int *d);
+void *MsGetCommand(int id, int a, int b, void *c, int *d);
 void TOBtlInitTidusLimitWindow(void);
 void TOBtlOpenTidusLimitWindow(int a);
 void TOBtlInitAuronLimitWindow(void);
@@ -53,7 +53,7 @@ void TOBtlInitLuluLimitWindow(void);
 void func_0021BAB8(int a);
 
 /* c_1E8F58, c_1E9F68 */
-int func_001B81E8(u8 id, int mask);
+int func_001B81E8(int id, int mask);
 
 /* c_1DAF08 */
 int MsDamageCheckDeath(int a, int b, int c, int d);
@@ -130,13 +130,11 @@ int func_001E5538(int id);
 void MsStatusEffect(int id, BtlChr *c, Ent4 *e, int on, s32 *w);
 int MsGetColorStatus(int id);
 void op_et_astatus_effect_change(Chr *chr, int v);
-typedef struct U2Act { u8 b0; u8 pad1[7]; u16 key[2]; u8 padC[4]; s32 w10; } U2Act; /* DEBT(NAME): argument of MsCalcCostCTB */
-typedef struct U2Key { u16 key; u16 h2; u8 pad4[4]; s32 w8; } U2Key; /* DEBT(NAME): lookup key handed to MsGetCommand */
 
 /* c_1B0528 */
 extern char D_0056E248[];
 void func_001B07A8();
-s32 *func_001E4A30(u32 i);
+void *func_001E4A30(u32 i);
 
 /* c_1BF2B8, c_1CB4E0 */
 u8 *MsSaveItemTypeBuffer(int *n);

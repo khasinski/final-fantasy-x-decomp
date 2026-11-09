@@ -137,7 +137,56 @@ s32 op_md_packet_size_check(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_vn_index);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7128);
+typedef struct OpMdVnHdr {
+    u16 idx[3];
+    u8 pad6[0xE];
+    u16 val[3];
+} OpMdVnHdr;
+
+void func_002B7128(OpMdVnHdr *a, u8 *b)
+{
+    s16 *list;
+    s16 n;
+    s16 *p;
+    int i;
+
+    i = 0;
+    list = (s16 *)(b + (a->idx[0] << 6));
+    n = list[0];
+    p = list + 1;
+    for (; i < n; i++, p++) {
+        if (*p == a->val[0]) {
+            goto next1;
+        }
+    }
+    *p = a->val[0];
+    list[0] = n + 1;
+next1:
+    i = 0;
+    list = (s16 *)(b + (a->idx[1] << 6));
+    n = list[0];
+    p = list + 1;
+    for (; i < n; i++, p++) {
+        if (*p == a->val[1]) {
+            goto next2;
+        }
+    }
+    *p = a->val[1];
+    list[0] = n + 1;
+next2:
+    i = 0;
+    list = (s16 *)(b + (a->idx[2] << 6));
+    n = list[0];
+    p = list + 1;
+    for (; i < n; i++, p++) {
+        if (*p == a->val[2]) {
+            goto next3;
+        }
+    }
+    *p = a->val[2];
+    list[0] = n + 1;
+next3:;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7208);
 

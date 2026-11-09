@@ -10,7 +10,7 @@ float func_0021AA88(void);
 int func_002EEE88(const void *a, const void *b, int n);
 void func_002EEFCC(void *dst, const void *src, int n);
 
-/* stick-rotation patterns (c_21A660). DEBT(FAKE): copied from the rodata object; the original was likely a local
+/* stick-rotation patterns (c_21A660): copied from the rodata object; the original was likely a local
    initialiser, which would put a gcc .rodata block into a switch chunk */
 typedef struct DirSeq8 {
     s8 d[8];
@@ -247,7 +247,7 @@ typedef struct R4AnimRoot {
 int func_0020FA50(u8 *root, R4AnimGrp *grp, R4Anim *an, s32 *ofs);
 int TkMenuExecScene(int a, int idx);
 int TkMenuGetSceneHandle(int a, const char *name);
-int func_002F05E8(int a, u8 *b);
+int func_002F05E8(const void *a, const void *b);
 
 /* window frame drawn by the UiWidget draw callbacks (c_208588) */
 typedef struct UiBox {
@@ -256,12 +256,6 @@ typedef struct UiBox {
     s16 x1;
     s16 y1;
 } UiBox;
-typedef struct UiRgba {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} UiRgba;
 typedef struct UiFrame {
     UiRgba col;
     UiBox box;

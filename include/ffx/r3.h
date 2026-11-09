@@ -18,7 +18,6 @@ extern s8 D_00317319;
 void MsGetChrBtlPos(int id, float *v);
 int MsSetChrPosReset(int id, float *v);
 void func_00104EA8(void);
-typedef struct Q4Slot2D8 { u8 pad0[2]; u8 b2; u8 pad3[0x2D5]; } Q4Slot2D8; /* DEBT(NAME) */
 void MsNumberRegist(); /* DEBT(TYPE): callers pass 6 or 7 arguments */
 extern u8 D_00662CC8[];
 extern s32 D_00662CC0;
@@ -43,7 +42,6 @@ int func_001EB898(Actor *a, int b, int c);
 int func_001EC1B8(int id, int a, int b);
 int func_001D8CD0(int id);
 typedef struct Q4ActB { u8 pad0[0x1E]; u16 h1E; } Q4ActB; /* DEBT(NAME): upper half of Q4Act.w1C */
-typedef struct Q4Arg4 { u8 id; u8 kind; u8 pad2[2]; } Q4Arg4; /* DEBT(NAME): 4-byte struct passed by value */
 void MsGetDamageInfo(int a, int b, int *x, int *y, int *z);
 int func_001D53E0(int id, int a, int b);
 int MsSetVoiceCheck(int a, int b, int c, int d, int e);
@@ -52,7 +50,6 @@ int MsAtelRequestCamera(int a, int b, int c, int d, int e, int f, void *g, void 
 #ifndef ABS
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #endif
-typedef struct Q4Rec16 { u8 b0; u8 b1; u8 pad2[0x14]; } Q4Rec16; /* DEBT(NAME) */
 void yiAssert(int a, const char *b, const char *c, int d);
 extern char D_0056E930[];
 extern char D_0056E948[];
@@ -98,7 +95,7 @@ int func_001CF4B0(int id, int a, int b);
 void MsSetTargetDir(int a, int b);
 extern char D_0056FA90[];
 extern char D_0056FAB0[];
-void MsSetChrTransparentVisible(int id, float f1, float f2, int a, int b);
+int MsSetChrTransparentVisible(int id, float f1, float f2, int a, int b);
 int func_001E1020(int id, int a, int b);
 int func_001B2DF0(int a, int b, Actor *act, int *out);
 int ms_motion_trans(BtlChr *c, int v);

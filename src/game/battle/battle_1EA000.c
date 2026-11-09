@@ -6,21 +6,13 @@
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
-#define func_001B81E8 u2_func_001B81E8 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define MsGetCommand u2_MsGetCommand /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/u2.h"
-#undef func_001B81E8
-#undef MsGetCommand
 #include "ffx/v3.h"
 #include "ffx/u3.h"
 #include "ffx/v4.h"
-#define func_001E4A30 q5_func_001E4A30 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q5.h"
-#undef func_001E4A30
 #include "ffx/w5.h"
-#define MsGetChrInfo r4_MsGetChrInfo /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/r4.h"
-#undef MsGetChrInfo
 #include "ffx/s4.h"
 #undef func_001EBF18
 #undef func_001EA718

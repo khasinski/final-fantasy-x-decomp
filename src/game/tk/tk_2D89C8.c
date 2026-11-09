@@ -25,7 +25,31 @@ int func_002D8A00(int i)
     return D_0078BC10[i];
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D89C8", func_002D8A18);
+int func_002D8A18(int mode, int a, int b)
+{
+    int v0;
+    int v1;
+    int r;
+    int t;
+
+    if (TkGetTGS() != 0) {
+        return 1;
+    }
+    r = func_002DF8F0(mode, &v0, &v1);
+    if (r == 1 && v0 == 1 && v1 < 0) {
+        if (func_002D8A00(D_0078BC08) >= 0) {
+            func_002D89E8(D_0078BC08, -1);
+        }
+    }
+    t = v0;
+    if (a != 0) {
+        *(int *)a = t;
+    }
+    if (b != 0) {
+        *(int *)b = v1;
+    }
+    return r;
+}
 
 int func_002D8AC8(int mode, int a, int b)
 {

@@ -41,7 +41,66 @@ void func_00251260(int cmd, int nowait, void *endfunc, int efarg)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00251360);
+extern char D_00573680[];
+typedef struct {
+    int w0, w4, w8, wC, w10, w14, w18, w1C;
+} SqsCmdPkt;
+extern SqsCmdPkt *_pkt_D_0032702C __asm__("D_0032702C");
+
+void func_00251360(int cmd, int a, int b, int c, int d, int e, int f, int g)
+{
+    int i;
+    u16 *src;
+    u16 *dst;
+
+    switch (cmd) {
+    case 0x34:
+        if ((int *)(_pkt_D_0032702C + 4) > &D_0069CD40) {
+            if (D_00327008 & 1) {
+                func_002EF240(D_00573680);
+            }
+            SqsIopCommandSend();
+        }
+        _pkt_D_0032702C->w0 = cmd;
+        _pkt_D_0032702C->w4 = b;
+        _pkt_D_0032702C->w8 = c;
+        func_002F072C((char *)&_pkt_D_0032702C->wC, (const char *)a);
+        _pkt_D_0032702C += 4;
+        break;
+    case 0xE:
+        if ((int *)(_pkt_D_0032702C + 2) > &D_0069CD40) {
+            if (D_00327008 & 1) {
+                func_002EF240(D_00573680);
+            }
+            SqsIopCommandSend();
+        }
+        _pkt_D_0032702C->w0 = cmd;
+        src = (u16 *)a;
+        dst = (u16 *)(_pkt_D_0032702C + 1);
+        for (i = 0xF; i >= 0; i--) {
+            *dst++ = *src++;
+        }
+        _pkt_D_0032702C += 2;
+        break;
+    default:
+        if ((int *)(_pkt_D_0032702C + 1) > &D_0069CD40) {
+            if (D_00327008 & 1) {
+                func_002EF240(D_00573680);
+            }
+            SqsIopCommandSend();
+        }
+        _pkt_D_0032702C->w0 = cmd;
+        _pkt_D_0032702C->w4 = a;
+        _pkt_D_0032702C->w8 = b;
+        _pkt_D_0032702C->wC = c;
+        _pkt_D_0032702C->w10 = d;
+        _pkt_D_0032702C->w14 = e;
+        _pkt_D_0032702C->w18 = f;
+        _pkt_D_0032702C->w1C = g;
+        _pkt_D_0032702C++;
+        break;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", SqsIopCommandSend);
 
@@ -448,7 +507,17 @@ void func_00252560(int a, int b, int c, int d, int e, int f, int g, int h)
     func_00251178(0xA, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00252598);
+void func_00252598(int *a)
+{
+    if (a[3] > 0 && a[3] <= 0x10000) {
+        func_002519A0();
+        func_00251720(1, (int)a, D_0069BFC0, a[3]);
+        func_00251360(0x26, 0, 0, 0, 0, 0, 0, 0);
+        SqsIopCommandSend();
+    } else if (D_00327008 & 1) {
+        func_002EF240(D_00573770, D_005736D8, a[3]);
+    }
+}
 
 int func_00252650(int a)
 {
@@ -457,7 +526,19 @@ int func_00252650(int a)
     return *D_00327020;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", SqsSeSeparateDataSend);
+extern char D_005737A0[];
+
+void SqsSeSeparateDataSend(int a, int b, int c)
+{
+    if (b > 0 && b <= 0x10000) {
+        func_002519A0();
+        func_00251720(1, a, D_0069BFC0, b);
+        func_00251360(0x27, b, c, 0, 0, 0, 0, 0);
+        SqsIopCommandSend();
+    } else if (D_00327008 & 1) {
+        func_002EF240(D_005737A0, D_005736D8, b);
+    }
+}
 
 void func_00252768(int a, int b)
 {
@@ -665,7 +746,34 @@ int func_00253050(int a)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", SqsStraightStreamingDataEnableStatus);
+extern int D_0069C8F0;
+extern int _arr_D_0069C8D0[] __asm__("D_0069C8D0");
+
+int SqsStraightStreamingDataEnableStatus(void)
+{
+    int r;
+
+    _arr_D_0069C8D0[6] = 0;
+    D_0069C8C4 = D_0069BF90;
+    if (D_00327008 & 2) {
+        func_002EF240(D_005737C8, D_005736D8, D_0069C8C4);
+    }
+    _arr_D_0069C8D0[0] = D_0069C8C4;
+    if (D_0069C8CC != 0) {
+        if (D_0069C8F0 != D_0069C8C4) {
+            if ((D_0069C8EC >> (D_0069C8C4 & 1)) & 1) {
+                _arr_D_0069C8D0[6] = 1;
+            }
+        }
+        D_0069C8F0 = D_0069C8C4;
+        D_0069C8EC |= 1 << (D_0069C8C4 & 1);
+    }
+    r = D_0069C8EC;
+    if (D_0069C8CC != 0) {
+        r &= ~(1 << (D_0069C8C4 & 1));
+    }
+    return r;
+}
 
 int *func_002531B0(void)
 {
@@ -695,7 +803,45 @@ void func_00253600(int a, int b)
     func_00251360(0x3F, a, b & 0x7F, 0, 0, 0, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00253628);
+extern int D_0069BFC4;
+
+void func_00253628(int a, int b)
+{
+    S6Rpc *p;
+    int n;
+    int r;
+
+    if (a != 0 || b != 0) {
+        if (D_0069BF74 & 1) {
+            D_0069BF78 |= 1;
+            return;
+        }
+        func_002F8660(0);
+        n = 0;
+        p = &D_0069BF00;
+        if (a != 0) {
+            D_0069BF00.w0 = a;
+            p->w4 = D_0069BFC4;
+            n = 1;
+            p->w8 = ((int *)a)[3] << 11;
+            p->wC = 0;
+        }
+        if (b != 0) {
+            if (n != 0) {
+                p++;
+            }
+            p->w0 = b;
+            p->w4 = D_0069BFC4 + 0x10000;
+            n++;
+            p->w8 = ((int *)b)[3] << 11;
+            p->wC = 0;
+        }
+        do {
+            r = func_002F87A0(&D_0069BF00, n);
+        } while (r == 0);
+        D_0069C8C0 = r;
+    }
+}
 
 void SqsBattleStreamingStart(int a, int b, int c)
 {
@@ -776,7 +922,20 @@ void func_00253940(int bit, int set)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00253988);
+int func_00253988(int *out)
+{
+    int i;
+
+    while (func_002FB6B8(D_0069BF20) != 0) {
+        for (i = 0x10000; i != -1; i--) {
+        }
+    }
+    while (func_002FB4C8(D_0069BF20, 0x18, 0, D_00327018, 0, out, 0x840, 0, 0) < 0) {
+        for (i = 0x10000; i != -1; i--) {
+        }
+    }
+    return *out;
+}
 
 int func_00253A60(int a)
 {

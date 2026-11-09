@@ -11,12 +11,41 @@ void Ch_SoundSetId(Chr *chr, s8 v)
     chr->b190 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_106DC8", func_00106DD0);
+void Ch_OptposGet(Chr *chr, int i, void *dst);
+void func_00299860(Chr *chr, void *pos, int a, int b);
+
+void func_00106DD0(Chr *chr)
+{
+    float a[4];
+    float b[4];
+
+    Ch_OptposGet(chr, 8, a);
+    Ch_OptposGet(chr, 7, b);
+    if (a[1] > b[1]) {
+        func_00299860(chr, a, 0, 0);
+    } else {
+        func_00299860(chr, b, 0, 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_106DC8", func_00106E58);
 INCLUDE_RODATA("build/ee_asm/game/chr/ch_106DC8/rodata", jtbl_00569570);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_106DC8", func_00107210);
+void func_00107210(Chr *chr, Chr *other, s32 v)
+{
+    float *p;
+
+    chr->p1A8 = other;
+    if (other) {
+        chr->w1C4 = other->w19C;
+    } else {
+        chr->w1C4 = -1;
+    }
+    chr->w1AC = v;
+    p = chr->v1B0;
+    p[0] = p[1] = p[2] = 0.0f;
+    chr->v1B0[3] = 1.0f;
+}
 
 void func_00107250(Chr *chr, Chr *other, s32 v, float x, float y, float z)
 {
@@ -43,14 +72,13 @@ void Ch_BindToElem(Chr *chr, Chr *target, s32 v)
     chr->p1A8 = target;
     if (target) {
         chr->w1C4 = target->w19C;
-        Ch_ElemGetAttr((int)target, v, &chr->w1AC, (int)chr->v1B0); /* DEBT(TYPE): prototype takes ints */
+        Ch_ElemGetAttr(target, v, &chr->w1AC, chr->v1B0);
     } else {
         chr->w1C4 = -1;
     }
 }
 
-/* DEBT(TYPE): declared with a return type (shared header) but no value is returned; callers ignore it */
-s32 func_001072F8(Chr *chr, int i, void *dst)
+void func_001072F8(Chr *chr, int i, void *dst)
 {
     ChrSlot *s = &chr->slots[i];
 

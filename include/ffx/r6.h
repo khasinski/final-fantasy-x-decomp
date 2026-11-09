@@ -219,7 +219,7 @@ void func_002607D8(int a, int b);
 typedef struct R6Ent8 { int w0; int w4; } R6Ent8;
 extern R6Ent8 D_006EA550[32];
 
-typedef struct R6W8 { u8 pad0[8]; int *p8; } R6W8;
+typedef struct R6W8 { u8 pad0[8]; int *p8; int hC; } R6W8;
 
 /* Request block built on the stack by the 0x28C310 family. DEBT(NAME): guessed */
 typedef struct R6Req5 {
@@ -251,8 +251,8 @@ typedef struct R6EmitB {    /* DEBT(NAME): object handed to func_0027F960 */
     int w58;
 } R6EmitB;
 extern u8 D_006A3A70[];
-void func_0027FD60(R6Req5 *req, int n);
-void func_0027F960(R6Req6 *req, int n);
+void func_0027FD60(void *req, int n);
+void func_0027F960(void *req, int n);
 
 
 

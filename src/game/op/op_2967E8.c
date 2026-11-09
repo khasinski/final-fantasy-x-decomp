@@ -1,5 +1,7 @@
 /* tu_316 0x2967e8-0x29a8a8: medium; ~op (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#define op_et_bindeff2 _hdr_op_et_bindeff2
+#define op_et_weapon_afterimage _hdr_op_et_weapon_afterimage
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -9,6 +11,22 @@
 #include "ffx/g4.h"
 #include "ffx/v6.h"
 #include "ffx/u5.h"
+#undef op_et_bindeff2
+#undef op_et_weapon_afterimage
+
+extern s8 D_00373550;
+extern char D_00373560[];
+extern char D_00764A30[];
+extern char D_00704130[];
+extern char D_005750E8[];
+extern char D_00575280[];
+extern u8 D_00703FF5;
+
+R6Obj *opu_init(int a0, void *a1, void *a2, void *a3, int a4, int a5, int a6);
+void *op_heap_init(void *buf, int size);
+void func_00298BB8(void);
+void func_00299D40(R6Obj *o);
+void func_0029A1F8(void);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_002967E8);
 
@@ -173,7 +191,32 @@ void func_00297BC0(void) {
 void op_et_weapon_effect_on(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_weapon_afterimage);
+int op_et_weapon_afterimage(Chr *key)
+{
+    int i = opus_get_chr_status_index(key, 0, 0);
+    ResEntry *e;
+    int h;
+    int idx;
+    int base;
+    int id;
+
+    if (i < 0) {
+        return 0;
+    }
+    e = &owu_chr_status[i];
+    h = func_002964F0(e->hE);
+    if (h != 0) {
+        idx = opus_get_weapon_index(h);
+    } else {
+        h = e->w8;
+        idx = 0;
+    }
+    base = i + 0x30000000;
+    id = (D_00703E20.b68[idx] << 8) + base;
+    D_00703E20.b68[idx]++;
+    opu_et_unit(h, 0, 9, id);
+    return id;
+}
 
 void func_00297CE8(Chr *key) {
     func_00298230(key, 0x8000);
@@ -519,7 +562,27 @@ int func_00298A80(Chr *key)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298AF0);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298BB8);
+void func_00298BB8(void)
+{
+    u16 map[0xF0];
+    u8 back[0xF0];
+    u8 drawoff[0xF0];
+    int i;
+
+    if (func_00298AF0(map) != 0) {
+        for (i = 0; i < 0xF0; i++) {
+            back[i] = owu_chr_drawoff_back[i];
+            drawoff[i] = owu_chr_drawoff[i];
+        }
+        for (i = 0; i < 0xF0; i++) {
+            if (owu_chr_status[i].chr != 0) {
+                owu_chr_drawoff_back[i] = back[owu_chr_status[i].hE];
+                owu_chr_drawoff[i] = drawoff[owu_chr_status[i].hE];
+                owu_chr_status[i].hE = map[owu_chr_status[i].hE];
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298CA0);
 
@@ -688,7 +751,38 @@ void func_00299558(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_bindeff2);
+int _op_et_bindeff2_func_00299E68(V6Keys *o, int key, int add) __asm__("func_00299E68");
+
+void op_et_bindeff2(Chr *key)
+{
+    int h;
+    int idx;
+    int i;
+    int id;
+    ResEntry *e;
+
+    if (D_00703FF5 == 0) {
+        h = D_00703E28;
+        idx = _op_et_bindeff2_func_00299E68((V6Keys *)D_0054D5E8[0], h, 1);
+        if (idx != 0xFF) {
+            i = opus_get_chr_status_index(key, 0, 0);
+            if (i >= 0) {
+                id = i + 0x50001800;
+                if (opus_get_eff_status_index((Chr *)id, 0, 0) <= 0) {
+                    if (opus_get_eff_status_index((Chr *)id, idx, 1) > 0) {
+                        e = &owu_chr_status[i];
+                        func_00120108(D_00575280, e->key, key);
+                        opu_et_unit(h, 0, 0x18, id);
+                        e->flags |= 0x10;
+                        op_et_bindeff2_walk_on(key);
+                        func_002999B8(key);
+                        ((int (*)(Chr *))func_00299A48)(key);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_002996E0(Chr *key)
 {
@@ -896,7 +990,51 @@ void func_00299CE8(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00299D40);
+typedef struct R6Obj10 {
+    u8 pad0[0x10];
+    s16 *p10;
+    s16 *p14;
+    s16 *p18;
+    int w1C;
+    u8 *p20;
+} R6Obj10;
+
+void func_00299D40(R6Obj *arg)
+{
+    R6Obj10 *o = (R6Obj10 *)arg;
+    u16 map[0xF0];
+    s16 *p;
+    int idx;
+    u8 *sub;
+    u32 v;
+
+    if (func_00298AF0(map) != 0) {
+        for (p = o->p10; (idx = *p) >= 0; p++) {
+            sub = o->p20 + (idx << 8);
+            v = map[sub[0x18]];
+            if (v >= 0xFF) {
+                v = 0xFF;
+            }
+            sub[0x18] = v;
+        }
+        for (p = o->p14; (idx = *p) >= 0; p++) {
+            sub = o->p20 + (idx << 8);
+            v = map[sub[0x18]];
+            if (v >= 0xFF) {
+                v = 0xFF;
+            }
+            sub[0x18] = v;
+        }
+        for (p = o->p18; (idx = *p) >= 0; p++) {
+            sub = o->p20 + (idx << 8);
+            v = map[sub[0x18]];
+            if (v >= 0xFF) {
+                v = 0xFF;
+            }
+            sub[0x18] = v;
+        }
+    }
+}
 
 void func_00299E60(void) {
 }
@@ -988,7 +1126,24 @@ void func_0029A1A8(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_0029A1F8);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_0029A2E8);
+void func_0029A2E8(void)
+{
+    int i;
+
+    for (i = 0x20; i < 0x100; i++) {
+        if (owu_chr_hd[i] != 0) {
+            Ch_Dispose(owu_chr_hd[i]);
+        }
+    }
+    for (i = 0; i < 0x20; i++) {
+        owu_chr_hd[i] = 0;
+    }
+    if (MsBattleGetStatus() != 0) {
+        for (i = 0; i < 0x20; i++) {
+            owu_chr_hd[i] = (Chr *)MsGetChrHandle(i);
+        }
+    }
+}
 
 void func_0029A3A0(void) {
     int i;

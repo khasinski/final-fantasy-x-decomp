@@ -45,7 +45,44 @@ s32 func_0017E558(s32 arg0) {
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E5A8);
 INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C860);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E688);
+extern u8 D_0065FC10;
+
+int func_0017E688(Q3Res *a, YiImage *b) {
+    u32 diff = (u32)(D_0030ECF4 - D_0030ECEC) >> 8;
+
+    if (diff < b->h) {
+        return 0;
+    }
+    if (D_0030ECF0 == D_0030ECEC) {
+        D_0065FC10 = 0;
+        switch (a->psm) {
+        case 0x14:
+            D_0065FC10 = 1;
+            a->psm = 0x2C;
+            break;
+        case 0x13:
+            a->psm = 0x1B;
+            break;
+        default:
+            return 0;
+        }
+        a->h = diff;
+        a->bp = (u32)D_0030ECEC >> 6;
+        D_0030ECF0 = D_0030ECF4;
+    } else {
+        if (D_0065FC10 != 0) {
+            switch (a->psm) {
+            case 0x14:
+                a->psm = 0x24;
+                a->bp = (u32)D_0030ECEC >> 6;
+                a->h = diff;
+                D_0065FC10 = 0;
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
 
 extern s32 _m2c_func_0017E758_D_0030ECA0 __asm__("D_0030ECA0");
 void func_0017E758(s32 arg0, s32 arg1) {
@@ -221,7 +258,7 @@ int func_0017EDC8(Sys597F00 *s, YiImage *img) {
     default:
         yiAssert(0, D_0056C960, D_0056C978);
         return 0;
-    case SCE_GS_PSMCT32: /* DEBT(FAKE): size is never used; it keeps one table entry per mode */
+    case SCE_GS_PSMCT32: /* size is never used; it keeps one table entry per mode */
         size = 256 * 256 * 4;
         break;
     case SCE_GS_PSMCT24:

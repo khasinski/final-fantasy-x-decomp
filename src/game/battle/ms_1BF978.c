@@ -1,10 +1,29 @@
 /* tu_191 0x1bf978-0x1c0720: low; ~Ms (config/tu_map.tsv) */
+#define GameState _hdr_GameState
+#define D_003172F0 _hdr_D_003172F0
+#define D_0031D96C _hdr_D_0031D96C
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/g2.h"
+#undef GameState
+#undef D_003172F0
+#undef D_0031D96C
+
+typedef struct GameState {
+    u8 pad0[0x1C56];
+    u16 h1C56[0xC8];
+    u16 h1DE6[0x70];
+    u16 h1EC6[0x70];
+    u8 pad1FA6[0x2078 - 0x1FA6];
+    u16 h2078;
+} GameState;
+
+extern GameState D_003172F0;
+extern Unk1BFED8 D_0031D96C[200];
+extern u16 D_00318F46[];
 
 int MsSetSaveCommandUse(int id, int cmd, int on) {
     if ((cmd >> 12) == 3 && id < 18) {
@@ -142,7 +161,39 @@ void *func_001BFEC8(void) {
     return D_0031D6BC;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", MsGetSaveWeapon);
+Unk1BFED8 *MsGetSaveWeapon(int id, s32 *name_out) {
+    Unk1BFED8 *p;
+    int raw;
+    if (id == 0xFF) {
+        return 0;
+    }
+    raw = id;
+    id &= 0xFFF;
+    switch (raw >> 12) {
+    case 7:
+        if ((u32)id >= 8) {
+            id = 0;
+        }
+        p = &D_0031FCEE[id];
+        break;
+    case 0xB:
+        if ((u32)id >= 8) {
+            id = 0;
+        }
+        p = &D_0031FE9E[id];
+        break;
+    default:
+        if ((u32)id >= 200) {
+            id = 0;
+        }
+        p = &D_0031D96C[id];
+        break;
+    }
+    if (name_out != 0) {
+        *name_out = func_001C0040(raw);
+    }
+    return p;
+}
 
 void MsEquipSaveWeapon(int arg, int which, int id) {
     u8 slot = arg;
@@ -213,7 +264,38 @@ int MsGetSaveWeaponAmount(int *out) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", MsInitSaveWeaponEquipFlag);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", MsGetSaveWeaponList);
+u16 *MsGetSaveWeaponList(int chr, int kind, int unequipped, int *out) {
+    Unk1BFED8 *p = D_0031D96C;
+    int n = 0;
+    int i;
+    for (i = 0; i < 200; i++, p++) {
+        int ok = 1;
+        if (p->b2 != 0) {
+            if (((p->b3 >> 1) & 1) && chr < 8) {
+                continue;
+            }
+            if (p->b4 != chr && chr >= 0) {
+                ok = 0;
+            }
+            if (unequipped != 0 && p->b6 != 0xFF) {
+                ok = 0;
+            }
+            if (kind == 0 && p->b5 != 0) {
+                ok = 0;
+            }
+            if (kind == 1 && p->b5 != 1) {
+                ok = 0;
+            }
+        }
+        if (ok != 0) {
+            D_003172F0.h1C56[n++] = 0x5000 + i;
+        }
+    }
+    if (out != 0) {
+        *out = n;
+    }
+    return D_00318F46;
+}
 
 int func_001C0318(int id) {
     Unk1BFED8 *e;
@@ -237,7 +319,19 @@ int func_001C0318(int id) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", func_001C03B0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", func_001C0598);
+int func_001C0598(Unk1BFED8 *src) {
+    Unk1BFED8 *p = D_0031D96C;
+    int i;
+    for (i = 0; i < 200; i++, p++) {
+        if (p->b2 == 0) {
+            *p = *src;
+            p->b2 = 1;
+            p->b6 = 0xFF;
+            return 0x5000 + i;
+        }
+    }
+    return 0;
+}
 
 int func_001C0618(int a, int b) {
     int i = 0;

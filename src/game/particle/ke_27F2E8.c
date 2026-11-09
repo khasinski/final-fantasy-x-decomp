@@ -9,7 +9,7 @@
 #include "ffx/g4.h"
 
 void func_0027F2E8(R6Hb *dst, DataRef **p) {
-    dst->h0 = (*p)->h12;
+    dst->h0 = (*p)->keys[0].dur;
     dst->b2 = 0;
 }
 
@@ -56,7 +56,7 @@ void func_0027F928(void *p)
 {
     WkM40fAC *w = p;
 
-    func_002DD128((struct W3Whole *)w->m40); /* DEBT(CAST): W3Whole embedded at 0x40 */
+    func_002DD128(w->m40);
     w->fAC = 1.0f;
 }
 

@@ -8,7 +8,7 @@
 #include "ffx/v6.h"
 #include "ffx/q6.h"
 
-void func_0028FDD8(char *base, void *ev, ScriptCtx *ctx)
+void func_0028FDD8(ScriptWork *base, void *ev, ScriptCtx *ctx)
 {
     WkRing *w;
     Vec4 *p;
@@ -17,9 +17,9 @@ void func_0028FDD8(char *base, void *ev, ScriptCtx *ctx)
 
     if (D_006A3BC4 == 0) {
         w = SLOT_WORK(WkRing, base, ctx, 0);
-        if (((ScriptWork *)base)->owner == 0) { /* DEBT(CAST): base is the script memory header */
+        if (base->owner == 0) {
             p = w->v;
-            func_002DD0B0(&v, base + 0x40);
+            func_002DD0B0(&v, &base->f40);
             v.w = 1.0f;
             for (n = w->count; n > 0; n--) {
                 func_002DD0B0(p, &v);
@@ -30,7 +30,7 @@ void func_0028FDD8(char *base, void *ev, ScriptCtx *ctx)
             w->cur = w->count;
         }
         w->cur--;
-        func_00282798(&w->v[w->cur], base + 0x40);
+        func_00282798(&w->v[w->cur], &base->f40);
     }
 }
 

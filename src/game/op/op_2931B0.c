@@ -6,9 +6,7 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/r6.h"
-#define func_00294408 func_00294408_orig /* DEBT(TYPE): t6.h has void return */
 #include "ffx/t6.h"
-#undef func_00294408
 #include "ffx/g4.h"
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_init_ffx);
@@ -32,7 +30,42 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_loop_ffx_after);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", func_00293740);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_heap_init);
+#ifndef MMI_SQ_ZERO
+#define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
+#endif
+
+typedef struct OpHeapSeg {
+    u8 *start;
+    u8 *end;
+    union {
+        struct {
+            s16 prev;
+            s16 next;
+        } s;
+        s32 link;
+    } u;
+    s16 max_idx;
+    u16 count;
+} OpHeapSeg;
+
+u8 *op_heap_init(u8 *buf, int size)
+{
+    int off;
+    u8 *end;
+
+    if (size == 0) {
+        return 0;
+    }
+    for (off = size - 0x10; off >= 0; off -= 0x10) {
+        *(u_long128 *)(buf + off) = 0;
+    }
+    end = buf + size;
+    MMI_SQ_ZERO(-0x10, end);
+    MMI_SQ_ZERO(-0x20, end);
+    *(u8 **)(end - 0xC) = buf;
+    *(u8 **)(end - 0x10) = buf;
+    return end;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_malloc);
 
@@ -188,7 +221,6 @@ int func_00294180(void) {
 
 int func_00294188(R6W8 *o, int flags)
 {
-    T6_R6W8C *oc = (T6_R6W8C *)o; /* DEBT(CAST): see T6_R6W8C */
     R6Ent8 *e;
     int *p;
     int i;
@@ -201,13 +233,13 @@ int func_00294188(R6W8 *o, int flags)
             if (e->w0 == 0) {
                 e->w0 = p[2];
                 e->w4 |= flags;
-                SndSepTransSepOnly((int)p, p[3]); /* DEBT(CAST): funcs.h takes the record as int */
+                SndSepTransSepOnly(p, p[3]);
                 goto done; /* DEBT(GOTO): break gives a different loop layout */
             }
         }
     done:
     }
-    h = oc->hC;
+    h = o->hC;
     if (h <= 0) {
         return 0;
     }
@@ -222,7 +254,7 @@ void op_oef2_sep_wave_load_all(T6_ResHdr *res, int flags)
     R6W8 *o;
 
     for (i = 0; i < n; i++) {
-        o = (R6W8 *)op_oef2_a_get((int)res, 6, i); /* DEBT(CAST): op_oef2_a_get takes the header as int */
+        o = op_oef2_a_get((int)res, 6, i); /* DEBT(CAST): op_oef2_a_get takes the header as int */
         if (o != 0) {
             func_00294188(o, flags);
         }
@@ -235,7 +267,7 @@ void func_002942B8(PtrHolder8 *ent, int ch)
 
     if (ent != 0) {
         p = ent->p8;
-        if (*(u8 *)ent == 2) { /* DEBT(CAST): first byte is the entry kind */
+        if (ent->type == 2) {
             D_00704013 = 1;
             if (ch == 0) {
                 V6_D76F0((int)p, 0);
@@ -318,7 +350,7 @@ int op_oef2_sound_cue_multi(T6_ResHdr *res, u16 from, u16 to, int arg)
 {
     u16 end;
     int i;
-    u8 *p;
+    QueueReq *p;
 
     if (res->count == 0) {
         return 0;
@@ -328,8 +360,8 @@ int op_oef2_sound_cue_multi(T6_ResHdr *res, u16 from, u16 to, int arg)
         end = res->count;
     }
     for (i = from; i < end; i++) {
-        p = (u8 *)op_oef2_a_get((int)res, 6, i); /* DEBT(CAST): op_oef2_a_get takes the header as int */
-        if (p != 0 && *p == 1) {
+        p = op_oef2_a_get((int)res, 6, i); /* DEBT(CAST): op_oef2_a_get takes the header as int */
+        if (p != 0 && p->type == 1) {
             func_00294408(p, arg);
         }
     }
@@ -391,14 +423,14 @@ int op_oef2_se_3d_on(PtrHolder8 *ent, int a, int b)
         pan = b * 127 / 256;
         vol = 64;
     }
-    if (*(u8 *)ent == 1) { /* DEBT(CAST): first byte is the entry kind */
+    if (ent->type == 1) {
         h = func_002943B8(ent);
         if (h >= 0) {
             SndSepPlay(h, vol, pan);
         }
         return 1;
     }
-    if (*(u8 *)ent == 2) {
+    if (ent->type == 2) {
         n = 0;
         D_00704013 = 1;
         SndStopBattleStream();
@@ -430,7 +462,7 @@ int op_oef2_se_3d_move(PtrHolder8 *ent, int a, int b)
         pan = b * 127 / 256;
         vol = 64;
     }
-    if (*(u8 *)ent == 1) { /* DEBT(CAST): first byte is the entry kind */
+    if (ent->type == 1) {
         h = func_002943B8(ent);
         if (h >= 0) {
             if (SndIsSepPlay(h) == 0) {
@@ -441,7 +473,7 @@ int op_oef2_se_3d_move(PtrHolder8 *ent, int a, int b)
             return 1;
         }
     }
-    if (*(u8 *)ent == 2) {
+    if (ent->type == 2) {
         SndVagStreamVolumeDirect(pan);
         func_002D8508(vol);
         return 1;
@@ -455,14 +487,14 @@ int op_oef2_se_on(PtrHolder8 *ent, int vol, int b)
     int h;
     int n;
 
-    if (*(u8 *)ent == 1) { /* DEBT(CAST): first byte is the entry kind */
+    if (ent->type == 1) {
         h = func_002943B8(ent);
         if (h >= 0) {
             SndSepPlay(h, vol, pan);
         }
         return 1;
     }
-    if (*(u8 *)ent == 2) {
+    if (ent->type == 2) {
         n = 0;
         D_00704013 = 1;
         SndStopBattleStream();
@@ -484,7 +516,7 @@ int op_oef2_se_on(PtrHolder8 *ent, int vol, int b)
 
 void op_oef2_se_fade_out(PtrHolder8 *h, int a)
 {
-    if (*(u8 *)h == 1) { /* DEBT(CAST): first byte of the holder is a kind tag */
+    if (h->type == 1) {
         SndSepVolumeTranslate(func_002943B8(h), a, 0);
     }
 }

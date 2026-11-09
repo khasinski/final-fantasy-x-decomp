@@ -15,6 +15,7 @@ litodp = 0x2EC1E8;
 dptoli = 0x2EC2A0;
 dptoul = 0x2EC338;
 dptofp = 0x2EC440;
+fptoui = 0x2ECF38;
 fptodp = 0x2ED038;
 sqrtf = 0x2E9708;
 SECTIONS

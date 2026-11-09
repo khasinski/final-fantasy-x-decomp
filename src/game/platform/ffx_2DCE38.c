@@ -33,7 +33,7 @@ void func_002DCEA0(u32 a0, u32 a1, float f0)
         :  : "r"(a0), "r"(a1) : "$2");
 }
 
-void func_002DCEC8(s32 a, s32 b)
+void func_002DCEC8(void *a, void *b)
 {
     __asm__ volatile(
         "lqc2       $vf4, 0x0($5)\n"
@@ -270,7 +270,7 @@ void func_002DD118(u32 a0, u32 a1)
         :  : "r"(a0), "r"(a1));
 }
 
-void func_002DD128(struct W3Whole * w)
+void func_002DD128(void *w)
 {
     __asm__ volatile(
         "vsub.xyzw  $vf4, $vf0, $vf0\n"
@@ -314,17 +314,16 @@ void func_002DD410(u32 a0, u32 a1, float f12, float f13)
         :  : "r"(a0), "r"(a1) : "$8", "$9");
 }
 
-typedef struct { s64 q[8]; } Blk64;
-void func_002DD438(s32 arg0, float *arg1, s32 arg2, s32 *arg3) {
+void func_002DD438(s32 arg0, float *arg1, void *arg2, s32 *arg3) {
     u8 sp[0x10];
     u8 sp10[0x10];
     u8 sp20[0x20];
     u8 sp40[0x10];
 
     func_002DD128(sp);
-    func_002DCE80(sp40, arg3, arg2);
-    func_002DCEC8((s32) sp, (s32) sp40);
-    func_002DCEC8((s32) sp20, arg2);
+    func_002DCE80(sp40, arg3, (u32) arg2);
+    func_002DCEC8(sp, sp40);
+    func_002DCEC8(sp20, arg2);
     func_002DCE80(sp10, sp20, (s32) sp);
     func_002DD080((Blk64 *) sp, (Blk64 *) sp, arg1);
     func_002DCF48(arg0, sp);

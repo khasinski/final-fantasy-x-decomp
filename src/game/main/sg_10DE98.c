@@ -72,7 +72,12 @@ s32 func_0010E280(s32 a)
     return Sg_GetSpadPtr();
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", func_0010E2B0);
+void func_0010E2B0(void)
+{
+    if (D_0057EB38 < 4) {
+        *(volatile s32 *)&D_0057EB3C;
+    }
+}
 
 void func_0010E2D0(void)
 {
@@ -90,8 +95,52 @@ void func_0010E308(void)
     do { } while (DMA_FROM_SPR_CHCR & 0x100);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", Sg_MFIFOSync);
+extern char D_00569628[];
+void func_00120108(char *fmt, ...);
+extern u16 D_0057EB2C;
+extern struct { u16 x0; u16 x2; u16 x4; u16 x6; } *D_0057EB28;
+extern struct { u16 x0; u16 x2; u16 x4; u16 x6; } D_0057EB10[];
+void Ch_EffectPacketStorePoly(void *a, void *b, void *c, int d);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", func_0010E430);
+void Sg_MFIFOSync(void)
+{
+    volatile int cnt = 0x1234;
+    volatile int j;
+
+    while ((*(volatile s32 *)0x10009000 & 0x100) && cnt != 0) {
+        j = 0x4D2;
+        do {
+            j--;
+        } while (j != -1);
+        cnt--;
+    }
+    if (cnt == 0) {
+        *(volatile s32 *)0x10003C10 = 9;
+        ((struct { s32 x; } *)0x10009000)->x &= ~0x100;
+        func_00120108(D_00569628, D_00307F2C);
+    }
+    *(volatile s32 *)0x1000E000 &= ~0xC;
+}
+
+void func_0010E430(u16 *p)
+{
+    if (p == 0) {
+        D_0057EB2C = 0;
+        return;
+    }
+    D_0057EB28 = &D_0057EB10[D_0057EB2C % 3];
+    D_0057EB28->x0 = (p[0] & 0x8000) ? p[-((p[0] & 0x7FFF) * 4) / 3] : p[0];
+    D_0057EB28->x2 = (p[1] & 0x8000) ? p[-((p[1] & 0x7FFF) * 4) / 3 - 1] : p[1];
+    D_0057EB28->x4 = p[2];
+    D_0057EB28->x6 = p[3];
+    if (D_0057EB2C >= 2) {
+        if (D_0057EB2C & 1) {
+            Ch_EffectPacketStorePoly(&D_0057EB10[(D_0057EB2C - 2) % 3], &D_0057EB10[(D_0057EB2C - 1) % 3], D_0057EB28, 3);
+        } else {
+            Ch_EffectPacketStorePoly(&D_0057EB10[(D_0057EB2C - 1) % 3], &D_0057EB10[(D_0057EB2C - 2) % 3], D_0057EB28, 3);
+        }
+    }
+    D_0057EB2C++;
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", Ch_EffectPacketCreateMain);

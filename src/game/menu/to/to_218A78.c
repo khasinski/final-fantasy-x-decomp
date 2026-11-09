@@ -400,7 +400,30 @@ void func_0021AD80(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_0021AEB0);
+void func_0021AEB0(int kind)
+{
+    int sel = 0;
+
+    switch (kind) {
+    case 0x22:
+        sel = 0;
+        break;
+    case 0x32:
+        sel = 1;
+        break;
+    case 0x42:
+        sel = 2;
+        break;
+    case 0x52:
+        sel = 3;
+        break;
+    }
+    func_0021A7C0(func_00265F30(sel));
+    D_00692678.w10 = (u16 *)func_00265F48(sel);
+    for (D_00692678.wC = 0; D_00692678.w10[D_00692678.wC] != 0xFFFF; D_00692678.wC++) {
+    }
+    D_00692678.state = 1;
+}
 
 void func_0021AF88(void)
 {
@@ -726,7 +749,7 @@ void TOBtlDrawWakkaLimitWindow(void)
         TOSetPktBuffAdrs(0x1F00000, 0x100000, 0xF0000);
         func_001EF940();
         TOSeqDraw(2, 4);
-        if (TOSeqGetSceneStatus(2, (int)D_00571138) == 3) { /* DEBT(CAST): name passed as int */
+        if (TOSeqGetSceneStatus(2, D_00571138) == 3) {
             text = MsGetRomBtlText(0x3013, 0);
             _TOGetMessageWH(0, (u8 *)text, &size[0], &size[1], 0, 0); /* DEBT(CAST): message text comes as int */
             func_001F3808(text, (0x200 - size[0]) / 2, D_00692656, 0);

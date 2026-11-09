@@ -9,6 +9,10 @@
 typedef long s64; /* EE: long is 64 bit */
 typedef unsigned long u64;
 
+typedef struct Blk64 {
+    u64 d[8];
+} Blk64;
+
 typedef struct Pt16 {
     u16 x, y;
 } Pt16;
@@ -18,21 +22,33 @@ typedef struct Vec4 {
     float x, y, z, w;
 } Vec4;
 
+typedef struct W3Whole {
+    float m[4][4];
+} W3Whole;
+
 typedef struct Unk78E498 { /* DEBT(NAME): callback table and resource handles at D_0078E498 */
-    int (*f00)(int, int, int, int);
-    int (*f04)(int);
-    int (*f08)(int);
-    u8 pad0C[4];
-    void (*f10)(int);
-    int (*f14)(int);
+    int (*f00)();
+    int (*f04)();
+    int (*f08)();
+    int (*f0C)();
+    int (*f10)();
+    int (*f14)();
     u8 pad18[0x10];
     int f28; /* DEBT(NAME): loaded resource handle, paired with f2C/f30. */
     int f2C;
     int f30;
-    u8 pad34[0x5C - 0x34];
+    u8 pad34[0x54 - 0x34];
+    int (*f54)();
+    int (*f58)();
     int fd5C; /* file of the async read job (hd_file_read_th_main) */
-    u8 pad60[0x68 - 0x60];
-    void (*f68)(void);
+    int (*f60)();
+    u8 pad64[4];
+    void (*f68)();
+    u8 pad6C[0xC];
+    int (*f78)();
+    u8 pad7C[0xC];
+    int (*f88)();
+    int (*f8C)();
 } Unk78E498;
 
 
@@ -67,7 +83,24 @@ typedef struct { float f; u8 pad[12]; } ChrFx; /* 16-byte stride record at Chr+0
 
 typedef struct ChrHdr ChrHdr;
 
-typedef struct { s32 w0; s32 w4; s32 w8; u8 padC[4]; } R0Rec16; /* DEBT(NAME): 16-byte records behind Chr.p710, only +8 known */
+typedef struct { s32 w0; union { s32 w4; void *p4; } u4; s32 w8; u8 padC[4]; } R0Rec16; /* DEBT(NAME): 16-byte records behind Chr.p710, only +8 known */
+
+typedef struct { float cur, dst; s32 frames; } FloatTween; /* DEBT(NAME): guessed from func_00110390 */
+
+typedef struct GsPt {
+    union {
+        struct {
+            s16 x;
+            s16 y;
+            s32 z;
+        } v;
+        s64 raw;
+    } q;
+    union {
+        s64 d;
+        s32 w[2];
+    } id;
+} Cmd16, GsPt; /* DEBT(NAME): 16-byte command record, guessed */
 
 typedef struct ChrParam ChrParam;
 
@@ -105,7 +138,9 @@ struct ChrParam {
     u8 pad18[4];
     float f1C;
     float f20;
-    u8 pad24[0xC];
+    float f24;
+    float f28;
+    float f2C;
     float f30;
     u8 pad34[0x4];
     float f38;
@@ -162,7 +197,8 @@ struct Chr {
     float f174;
     float f178;
     float f17C;
-    u8 pad180[0x8];
+    float f180;
+    u8 pad184[0x4];
     float f188;
     s8 b18C;
     s8 b18D;
@@ -192,28 +228,30 @@ struct Chr {
     u8 pad270[0xB0];
     ChrSlot * slots;
     u8 pad324[0x4];
-    float f328;
-    u8 pad32C[0x8];
-    float f334;
-    u8 pad338[0x8];
-    float f340;
-    u8 pad344[0x8];
-    float f34C;
-    u8 pad350[0x8];
-    float f358;
-    u8 pad35C[0x8];
-    float f364;
-    u8 pad368[0x9C];
+    FloatTween t328;
+    FloatTween t334;
+    FloatTween t340;
+    FloatTween t34C;
+    FloatTween t358;
+    FloatTween t364;
+    FloatTween t370;
+    u8 pad37C[0x88];
     s32 w404;
     u8 pad408[0x9];
     s8 b411;
-    u8 pad412[0x16];
+    u8 pad412[0x12];
+    float f424;
     float f428;
     float f42C;
     u8 pad430[0xA0];
-    float f4D0;
-    float f4D4;
-    u8 pad4D8[0x8];
+    union {
+        struct {
+            float f4D0;
+            float f4D4;
+        } f;
+        s32 w4D0;
+        Cmd16 cmd;
+    } u4D0;
     s8 b4E0;
     u8 pad4E1[0xF];
     float f4F0;
@@ -286,9 +324,14 @@ struct Chr {
     s16 h81C;
     s16 h81E;
     u8 pad820[0x8];
-    float f828;
-    u8 pad82C[0x2];
-    s16 h82E;
+    union {
+        u64 flags2;
+        struct {
+            float f828;
+            u8 pad82C[0x2];
+            s16 h82E;
+        } s;
+    } u828;
     s32 w830;
     u8 pad834[0xC];
 };
@@ -314,12 +357,9 @@ struct ChrEnt { /* size 0x30 */
     s32 w08; /* DEBT(NAME): saved by func_00123878. */
     u8 pad0C[8];
     float f14;
-    u8 pad18[0x18];
+    s8 b18;
+    u8 pad19[0x17];
 };
-
-typedef struct { float cur, dst; s32 frames; } FloatTween; /* DEBT(NAME): guessed from func_00110390 */
-
-typedef struct { s64 a, b; } Cmd16; /* DEBT(NAME): 16-byte command record, guessed */
 
 typedef struct { s32 w0, w4, w8; } Triple; /* DEBT(NAME) */
 
@@ -339,7 +379,13 @@ typedef struct Handle { /* size 0x10 */
     u8 b5;
     s8 b6;
     s8 b7;
-    s32 w8;
+    union {
+        s32 w;
+        struct {
+            unsigned char st : 3;
+            unsigned char rest : 5;
+        } b;
+    } u8;
     s32 wC;
 } Handle; /* DEBT(NAME): resource handle record, guessed from func_001111xx users */
 
@@ -352,7 +398,7 @@ typedef struct {
     /* 0x24 */ float f24;
     /* 0x28 */ s8 flag;
     /* 0x29 */ s8 flag2;
-    /* 0x2A */ u8 unk2A[6];
+    /* 0x2A */ u8 pad2A[6];
 } TblEntry30; /* size 0x30 */
 
 
@@ -413,7 +459,9 @@ typedef struct ActorFlags {
     unsigned b15 : 1;
     unsigned b16 : 1;
     unsigned f17 : 2;
-    unsigned b19 : 8;
+    unsigned b19 : 3;
+    unsigned b22 : 1;
+    unsigned b23 : 4;
     unsigned b27 : 1;
     unsigned b28 : 3;
     unsigned b31 : 1;
@@ -425,22 +473,50 @@ typedef union ActorFlagWord {
     s32 w; /* whole word, for updates of bits that have no single member (bit 7 lies inside b6) */
 } ActorFlagWord;
 
-typedef struct GameFlags {
-    unsigned b0 : 7;
-    unsigned b7 : 1;
-    unsigned b8 : 3;
-    unsigned b11 : 1;
-    unsigned b12 : 1;
-    unsigned b13 : 19;
+typedef union GameFlags {
+    struct {
+        unsigned b0 : 7;
+        unsigned b7 : 1;
+        unsigned b8 : 3;
+        unsigned b11 : 1;
+        unsigned b12 : 1;
+        unsigned b13 : 3;
+        unsigned b16 : 1;
+        unsigned b17 : 1;
+        unsigned b18 : 1;
+        unsigned b19 : 7;
+        unsigned b26 : 1;
+        unsigned b27 : 5;
+    } b;
+    s32 w;
+    u32 u;
+    u8 byte;
 } GameFlags;
 
 typedef struct ActorHdr {
     u8 type;
+    u8 pad01[0x13];
+    int o14;
+    u8 p18[8];
+    int o20;
+    int o24;
+    int o28;
+    int o2C;
+    int o30;
 } ActorHdr;
+
+typedef struct ScrBlobQ {
+    u8 p00[0x20];
+    int o20;
+    u8 p24[0xC];
+    int o30;
+} ScrBlobQ;
 
 typedef struct Actor {
     /* 0x000 */ ActorHdr *hdr;
-    /* 0x004 */ u8 pad4[0x2E - 4];
+    /* 0x004 */ ScrBlobQ *blob;
+    /* 0x008 */ u8 pad8[0x2C - 8];
+    /* 0x02C */ u16 h2C;
     /* 0x02E */ u16 id;
     /* 0x030 */ u8 pad30[2];
     /* 0x032 */ u8 slotIdx;
@@ -498,15 +574,28 @@ typedef struct BindInfo {
 } BindInfo;
 
 typedef struct ActorBind {
-    u8 pad0[0x44];
+    u8 p00[0x10];
+    u16 h10[4];
+    char *p18;
+    u8 b1C;
+    s8 b1D;
+    u8 b1E;
+    u8 b1F;
+    u8 pad20[8];
+    int pending;
+    u8 pad2C[0x10];
+    u16 h3C;
+    u16 h3E;
+    u16 h40;
+    u8 pad42[2];
     ActorSlot *slotInfo44;
     BindInfo *info;
 } ActorBind;
 
 typedef struct ActorState {
     float x, y, z;
-    int w0C;
-    u8 pad10[0xC];
+    float f0C;
+    float px, py, pz;
     float f1C;
     float f20;
     float f24;
@@ -531,15 +620,20 @@ typedef struct Effect {
     /* 0x06 */ s16 h06;
     /* 0x08 */ int w08;
     /* 0x0C */ int w0C;
-    /* 0x10 */ u8 pad10[4];
+    /* 0x10 */ int w10;
     /* 0x14 */ u16 kind;
-    /* 0x16 */ s16 h16;
+    /* 0x16 */ u16 h16;
     /* 0x18 */ int w18;
     /* 0x1C */ u8 b1C;
     /* 0x1D */ u8 b1D;
     /* 0x1E */ s8 b1E;
     /* 0x1F */ s8 b1F;
     /* 0x20 */ s8 b20;
+    /* 0x21 */ u8 pad21;
+    /* 0x22 */ u8 b22;
+    /* 0x23 */ u8 b23;
+    /* 0x24 */ int w24;
+    /* 0x28 */ int w28;
 } Effect;
 
 /* DEBT(TYPE): per-opcode state blocks; the real layout is probably one union */
@@ -564,17 +658,46 @@ typedef struct CamInfo {
     float f14;
 } CamInfo;
 
+typedef struct Pair32 {
+    s32 w0, w4;
+} Pair32;
+
 typedef struct EvGameState {
     GameFlags flags;
     u16 h4;
     u16 h6;
-    u8 pad8[0x1A - 8];
+    u8 pad8[4];
+    u16 hC;
+    u8 padE[6];
+    u16 h14;
+    u16 h16;
+    u16 h18;
     u16 h1A;
-    u8 pad1C[0x1F4 - 0x1C];
+    int w1C;
+    void *p20;
+    u8 pad24[8];
+    int w2C;
+    u8 pad30[0x44 - 0x30];
+    int w44;
+    int w48;
+    void *p4C;
+    u8 pad50[8];
+    void *p58;
+    void *p5C;
+    void *p60;
+    u8 pad64[0x1A4 - 0x64];
+    Pair32 pairs1A4[8];
+    u8 pad1E4[0x1F0 - 0x1E4];
+    float f1F0;
     int w1F4;
-    u8 pad1F8[0x210 - 0x1F8];
-    u32 w210; /* flag bits */
+    int *a1F8;
+    int *a1FC;
+    u8 pad200[0x208 - 0x200];
+    float f208;
+    u8 pad20C[4];
+    s32 w210; /* flag bits */
     int w214;
+    u8 pad218[0x238 - 0x218];
 } EvGameState;
 
 /* Script VM context shared by the three opcode-handler families (0x127880.., 0x24DCD0.., 0x278000..).
@@ -601,15 +724,23 @@ typedef struct ScriptWork128 { /* work area at slot[2] (script memory), only wor
 
 typedef struct ScriptCtx {
     int argc;
-    int unk4;
-    int unk8;
+    int v[2];
     SlotInfo *info;
+    int v_rest[0x11];
+    u8 tag[0x14];
 } ScriptCtx;
 
 /* script memory block header; work areas follow at slot offsets */
 typedef struct ScriptWork {
     u8 pad0[0xC];
     int owner;
+    u8 m10[0x30];
+    float f40;
+    float f44;
+    float f48;
+    float f4C;
+    float m50[4][4];
+    struct T6_LtPt *pts;
 } ScriptWork;
 
 
@@ -804,8 +935,8 @@ typedef struct W3Pool {
 } W3Pool;
 
 typedef struct W3Core {
-    int unk0;
-    W3Pool *unk4;
+    int npool;
+    W3Pool *pools;
     W3Pool *pool;
     void *buf0C; /* 64 KiB buffer allocated by rcbgPreInit */
     int w10;
@@ -824,7 +955,7 @@ typedef struct W3Owner {
 /* Cooperative task (script-thread like) with a small stack of handler functions. DEBT(NAME): guess. */
 struct W3Task;
 
-typedef void (*W3TaskFn)(struct W3Task *t);
+typedef void (*W3TaskFn)();
 
 typedef struct W3Frame {
     int count;   /* e.g. remaining wait ticks */
@@ -1356,7 +1487,10 @@ typedef struct PartySlot {
     u16 h4A;
     u16 h4C;
     u16 h4E;
-    u8 pad50[0x60 - 0x50];
+    s32 v50;
+    s32 v54;
+    s32 v58;
+    u8 pad5C[4];
     u16 h60[20];
     s32 v88;
     u8 pad8C[0x94 - 0x8C];
@@ -1820,7 +1954,12 @@ typedef struct W5Buf { /* btlgetdata */
     u8 pad0[0x38];
     s32 cur[18];
     s32 next[18];
-    u8 padC8[0xEE - 0xC8];
+    u8 padC8[0xD0 - 0xC8];
+    s8 bD0;
+    u8 padD1[3];
+    u16 hD4[8];
+    u8 bE4[8];
+    u8 padEC[2];
     u16 h[8];
     u8 padFE[0x1B0 - 0xFE];
 } W5Buf;
@@ -1857,6 +1996,13 @@ typedef struct {
     s32 w[4];
 } Quad32;
 
+typedef struct UiRgba {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} UiRgba;
+
 /* UI slide/animation widget (c_208588 .. c_209xxx). DEBT(NAME): every member name is a guess from
  * how the animation callbacks use it (rects are x,y,w,h; phase 2 = open, 4 = close). */
 typedef struct UiWidget {
@@ -1877,7 +2023,7 @@ typedef struct UiWidget {
     /* 0x2A */ u8 pad2A[2];
     /* 0x2C */ s16 f2C;
     /* 0x2E */ s16 cur[4];
-    /* 0x36 */ u8 col[4];
+    /* 0x36 */ UiRgba col[1];
     /* 0x3A */ u8 pad3A[0x0E];
     /* 0x48 */ s32 onOpen;
     /* 0x4C */ u8 pad4C[4];
@@ -2030,7 +2176,7 @@ typedef struct SlotRec {
 /* 4-byte table entry (DEBT(NAME): name guessed) */
 typedef struct SysEntry { u16 h0; u8 b2; u8 b3; } SysEntry;
 
-/* record returned by func_00124828; DEBT(NAME)/DEBT(TYPE): only the member at 0xBC is known */
+/* record returned by func_00124828; DEBT(NAME): save/event state block at D_00580CB8 */
 typedef struct Rec124828 {
     /* 0x00 */ u16 x00;
     /* 0x02 */ u16 x02;
@@ -2041,13 +2187,22 @@ typedef struct Rec124828 {
     /* 0x0C */ u8 x0C;
     /* 0x0D */ u8 x0D;
     /* 0x0E */ u16 x0E;
-    /* 0x10 */ union { u32 flags; u8 bytes[4]; } control10;
+    /* 0x10 */ union {
+        u32 flags;
+        u8 bytes[4];
+        struct {
+            unsigned lo : 25;
+            unsigned b25 : 1;
+            unsigned b26 : 1;
+            unsigned hi : 5;
+        } b;
+    } control10;
     /* 0x14 */ u8 pad14[4];
-    /* 0x18 */ u32 w18[2];
+    /* 0x18 */ s32 w18[2];
     /* 0x20 */ u8 x20;
     /* 0x21 */ u8 pad21[0x07];
     /* 0x28 */ u8 x28;
-    /* 0x29 */ u8 pad29;
+    /* 0x29 */ u8 x29;
     /* 0x2A */ u8 x2A;
     /* 0x2B */ u8 x2B;
     /* 0x2C */ s32 w2C[8];
@@ -2058,10 +2213,12 @@ typedef struct Rec124828 {
     /* 0xB8 */ u16 xB8;
     /* 0xBA */ u16 xBA;
     /* 0xBC */ s32 vBC;
-    /* 0xC0 */ u8 padC0[0x10];
+    /* 0xC0 */ u16 hC0, hC2, hC4, hC6, hC8, hCA, hCC;
+    /* 0xCE */ union { u16 h; u8 b; } vCE;
     /* 0xD0 */ u8 xD0;
     /* 0xD1 */ u8 xD1;
-    /* 0xD2 */ u8 padD2[2];
+    /* 0xD2 */ u8 xD2;
+    /* 0xD3 */ u8 padD3;
     /* 0xD4 */ u16 xD4;
     /* 0xD6 */ u8 xD6;
     /* 0xD7 */ u8 xD7;
@@ -2071,7 +2228,8 @@ typedef struct Rec124828 {
     /* 0xE4 */ s32 xE4;
     /* 0xE8 */ u16 xE8;
     /* 0xEA */ u16 xEA;
-    /* 0xEC */ u8 padEC[0xBEC - 0xEC];
+    /* 0xEC */ u8 padEC[0x1EC - 0xEC];
+    /* 0x1EC */ u8 buf1EC[0xBEC - 0x1EC];
     /* 0xBEC */ u16 xBEC;
     /* 0xBEE */ u8 padBEE[0x3D48 - 0xBEE];
     /* 0x3D48 */ u8 blk3D48[1];
@@ -2138,7 +2296,10 @@ typedef struct ListNode {
 
 /* DEBT(NAME): guess, 0x340-byte character slot, array pointed to by D_006A391C */
 typedef struct ChrSub {
-    u8 pad[12];
+    int id;
+    u8 off;
+    u8 pad5[3];
+    u32 arg;
 } ChrSub;
 
 typedef struct ChrWork {
@@ -2206,7 +2367,8 @@ typedef struct WorkEnt2 {
     u16 h2;
     u8 pad04[0xA];
     u8 f0E;
-    u8 pad0F[0x14 - 0xF];
+    u8 f0F;
+    int seed;
 } WorkEnt2;
 
 typedef struct WorkEnt3 {
@@ -2224,7 +2386,9 @@ typedef struct GlobalWork {
     WorkEnt ents[100];
     u8 pad_ents[0xA808 - 0x808 - 100 * 0x28];
     WorkEnt2 ents2[100];
-    u8 pad_ents2[0x110D4 - 0xA808 - 100 * 0x14];
+    u8 pad_ents2[0xF808 - 0xA808 - 100 * 0x14];
+    s16 ptsF808[8][2];
+    u8 padF828[0x110D4 - 0xF828];
     WorkEnt3 ents3[14];       /* DEBT(NAME): 0x50-byte records, count guessed from the gap up to 0x11558 */
     u8 pad_ents3[0x11558 - 0x110D4 - 14 * 0x50];
     void (*cb_a)(void);       /* 0x11558 */
@@ -2260,9 +2424,15 @@ typedef struct GlobalWork {
     u8 f115E8;
     u8 pad115E9[0x11600 - 0x115E9];
     u8 f11600;
-    u8 pad11601[0x1161A - 0x11601];
+    u8 pad11601[0x11608 - 0x11601];
+    s32 f11608;
+    s32 f1160C;
+    s32 f11610;
+    s32 f11614;
+    s16 f11618;
     s16 f1161A;
-    u8 pad1161C[0x11622 - 0x1161C];
+    s32 f1161C;
+    u16 f11620;
     u16 f11622;               /* button bits tested by func_00263DE8 */
 } GlobalWork;
 
@@ -2295,7 +2465,7 @@ typedef struct Slot80 {
     u8 f1D;
     u16 h1E;                  /* index into D_006EA8B0 (func_002B1D88) */
     u8 pad20[0x30 - 0x20];
-    struct T6_PrObj *objs;    /* 0x30: chain released by _pppAllFreePObject */
+    void *objs;               /* 0x30: chain released by _pppAllFreePObject */
     u8 pad34[0x3C - 0x34];
     void *buf;                /* 0x3C: heap block released by _pppAllFreePObject */
     u8 pad40[0x80 - 0x40];
@@ -2354,13 +2524,29 @@ typedef struct ObjGroup {
 /* DEBT(NAME): guess, system vtable returned by GetCD */
 typedef struct SysVt {
     int (*f0)();
-    u8 pad4[4];
+    int (*f04)(int);
     int (*f8)();
     u8 padC[4];
     int (*f10)();
     int (*f14)();
     u8 pad18[0x20 - 0x18];
     int f20;
+    int f24;
+    int f28;
+    int f2C;
+    int f30;
+    u8 pad34[0x54 - 0x34];
+    int (*f54)();
+    int (*f58)();
+    int fd5C;
+    int (*f60)();
+    u8 pad64[4];
+    void (*f68)(void);
+    u8 pad6C[0xC];
+    int (*f78)();
+    u8 pad7C[0xC];
+    int (*f88)(int a, int b);
+    int (*f8C)(int a);
 } SysVt;
 
 
@@ -2596,17 +2782,80 @@ typedef struct ScriptMsg {
     int idx;
 } ScriptMsg;
 
+typedef struct PtKey {      /* one frame of a particle animation */
+    u8 pad0[2];
+    s16 dur;
+    s8 flags;               /* 0x80: loop */
+    u8 pad5[3];
+} PtKey;
+
+typedef struct Particle {   /* 0xA0 bytes */
+    u32 flags;              /* bit 0: alive */
+    u16 time;
+    u16 frame;
+    u32 age;
+    u8 padC[4];
+    Vec4 v10;
+    Vec4 vel;
+    Vec4 pos;
+    Vec4 acc;
+    u8 pad50[0x50];
+} Particle;
+
 typedef struct DataRef {
-    u8 pad0[0x12];
-    u16 h12;
-} DataRef;
+    u8 pad0[6];
+    s16 frames;
+    u8 pad8[8];
+    PtKey keys[1];
+} DataRef, PtAnim;
+
+typedef struct T6_PKey {
+    u8 pad0[4];
+    u32 id;
+    int count;
+    union {                 /* DEBT(TYPE): union guessed; the load must alias the float stores */
+        u16 h;
+        float f;
+    } speed;
+    u8 pad10[0x40];
+    Vec4 velB;
+    Vec4 vel;
+    u8 pad70[0x20];
+    Vec4 accB;
+    Vec4 acc;
+} T6_PKey, PtEmitter, PtEmitterB;
+
+typedef struct T6_PRec { u16 h[4]; } T6_PRec;
+
+typedef struct T6_PSysW {
+    u8 pad0[0x40];
+    Particle *parts;            /* 0xA0-byte particles, flag word first */
+    void *aux;
+    int w48;
+    int w4C;
+    T6_PRec *rec;
+    u32 nrec;
+    int done;
+} T6_PSysW, PtOwner;
+
+typedef struct T6_PSysB {
+    u8 pad0[0x40];
+    Particle *parts;
+    int w44;
+    int w48;
+    T6_PRec *rec;
+    u32 nrec;
+    int done;
+} T6_PSysB, PtOwnerB;
 
 /* Heap manager object at D_006A3924. DEBT(NAME): merged from w3 "W3Heap" (sub allocator at +0x10, passed by address
    to pppMemAlloc/func_00267028) and w9 "DataCache" (tbl at +0x24); the unused w8 "HeapHead" guess is dropped. */
 typedef struct HeapMgr {
     u8 pad00[0x10];
-    u8 sub[0x14];
+    u8 sub[0x10];
+    struct T6_LtRes *res;
     DataRef **tbl;
+    struct T6_LtGrp *grp;
 } HeapMgr;
 
 typedef struct AttachWork {
@@ -2671,7 +2920,7 @@ typedef struct IntBox { int pad[2]; int v8; } IntBox;
 
 typedef struct HalfBox { short pad; short v2; } HalfBox;
 
-typedef struct PtrHolder8 { int pad[2]; IntBox *p8; } PtrHolder8;
+typedef struct PtrHolder8 { u8 type; u8 pad[7]; IntBox *p8; } PtrHolder8;
 
 typedef struct PtrHolderC { int pad[3]; HalfBox *pC; } PtrHolderC;
 
@@ -2767,18 +3016,18 @@ typedef struct W10Actor {
     u8 pad00[0x19];
     u8 flags19;
     u8 pad1A[0x8E];
-    s16 unkA8;
+    s16 hA8;
     u8 padAA[0xE];
-    u16 unkB8;
+    u16 hB8;
     u8 padBA;
-    u8 unkBB;
+    u8 bBB;
 } W10Actor;
 
 typedef struct W10Ctx {
     u8 pad000[0x214];
-    s16 unk214;
+    s16 h214;
     u8 pad216[4];
-    s16 unk21A;
+    s16 h21A;
     u8 pad21C[4];
     W10Actor *actor;        /* 220 */
     u8 pad224[0xDC];
@@ -2922,7 +3171,7 @@ typedef struct W11Ring {
 } W11Ring;
 
 typedef struct {
-    int unk0;
+    int w0;
     u8 *base;
     int cols;
     int rows;
@@ -2981,5 +3230,119 @@ typedef union Qword {
     u64 ul64[2];
     u32 ui32[4];
 } Qword;
+
+/* Menu command object, one per slot of D_00668740 (state machine driven through the
+   handler slots h[]). DEBT(NAME): member names are guesses from use. */
+typedef s32 (*MenuFn)();
+typedef struct MenuCmd {
+    /* 0x00 */ s16 w00;
+    /* 0x02 */ u8 pad02[2];
+    /* 0x04 */ s16 id;
+    /* 0x06 */ u8 pad06[0x08 - 0x06];
+    /* 0x08 */ s32 x08;
+    /* 0x0C */ s16 h0C;
+    /* 0x0E */ u8 pad0E[2];
+    /* 0x10 */ u16 h10;
+    /* 0x12 */ s16 w12;
+    /* 0x14 */ s16 h14;
+    /* 0x16 */ s16 h16;
+    /* 0x18 */ s16 h18;
+    /* 0x1A */ s16 h1A;
+    /* 0x1C */ s16 w1C;
+    /* 0x1E */ s16 w1E;
+    /* 0x20 */ u8 pad20[0x2C - 0x20];
+    /* 0x2C */ s16 state;
+    /* 0x2E */ s16 sub;
+    /* 0x30 */ s16 x;
+    /* 0x32 */ s16 y;
+    /* 0x34 */ s16 x1;
+    /* 0x36 */ s16 y1;
+    /* 0x38 */ s16 w;
+    /* 0x3A */ s16 h;
+    /* 0x3C */ s16 h3C;
+    /* 0x3E */ s16 h3E;
+    /* 0x40 */ u8 pad40[0x4B - 0x40];
+    /* 0x4B */ u8 b4B;
+    /* 0x4C */ u8 pad4C[0x84 - 0x4C];
+    /* 0x84 */ s32 x84;
+    /* 0x88 */ u8 *text;
+    /* 0x8C */ s32 x8C;
+    /* 0x90 */ s32 x90;
+    /* 0x94 */ s32 x94;
+    /* 0x98 */ s32 x98;
+    /* 0x9C */ s32 x9C;
+    /* 0xA0 */ u8 padA0[0xA4 - 0xA0];
+    /* 0xA4 */ s32 xA4;
+    /* 0xA8 */ u8 padA8[0xD0 - 0xA8];
+    /* 0xD0 */ struct SlotZ *slot;
+    /* 0xD4 */ MenuFn fD4;
+    /* 0xD8 */ MenuFn fD8;
+    /* 0xDC */ MenuFn fDC;
+    /* 0xE0 */ MenuFn fn[10];
+    /* 0x108 */ MenuFn f108;
+    /* 0x10C */ MenuFn f10C;
+} MenuCmd;
+
+/* Smaller menu slot object of D_0066B508. */
+typedef struct MenuSlot {
+    /* 0x00 */ s16 w00;
+    /* 0x02 */ s16 h2;
+    /* 0x04 */ s16 w04;
+    /* 0x06 */ s16 w06;
+    /* 0x08 */ s16 state;
+    /* 0x0A */ u8 pad0A[0x10 - 0x0A];
+    /* 0x10 */ s16 w;
+    /* 0x12 */ u8 pad12[2];
+    /* 0x14 */ s16 h;
+    /* 0x16 */ u8 pad16[0x1E - 0x16];
+    /* 0x1E */ s16 x;
+    /* 0x20 */ s16 y;
+    /* 0x22 */ s16 x1;
+    /* 0x24 */ s16 y1;
+    /* 0x26 */ u8 pad26[0x2E - 0x26];
+    /* 0x2E */ s16 h2E;
+    /* 0x30 */ s16 h30;
+    /* 0x32 */ s16 h32;
+    /* 0x34 */ s16 h34;
+    /* 0x36 */ u8 b36;
+    /* 0x37 */ u8 b37;
+    /* 0x38 */ u8 b38;
+    /* 0x39 */ u8 b39;
+    /* 0x3A */ u8 pad3A[0x40 - 0x3A];
+    /* 0x40 */ MenuFn fn[7];
+} MenuSlot;
+
+/* Slot object of D_00669AE0. DEBT(NAME): member names are offsets. */
+typedef struct SlotZ {
+    /* 0x00 */ s8 b0;
+    /* 0x01 */ s8 b1;
+    /* 0x02 */ s8 b2;
+    /* 0x03 */ s8 b3;
+    /* 0x04 */ s8 b4;
+    /* 0x05 */ s8 b5;
+    /* 0x06 */ s8 b6;
+    /* 0x07 */ s8 b7;
+    /* 0x08 */ u8 pad08[4];
+    /* 0x0C */ s32 wC;
+    /* 0x10 */ s32 w10;
+    /* 0x14 */ u8 pad14[4];
+    /* 0x18 */ u8 x18[8];
+    /* 0x20 */ u8 pad20[0x38 - 0x20];
+    /* 0x38 */ struct { s16 h0; s16 h2; s16 h4; s16 h6; } ent[1]; /* DEBT(TYPE): count unknown, indexed up to b5 */
+} SlotZ;
+
+typedef struct R4Ptrs {
+    s16 w00;
+    u8 pad02[2];
+    s16 w04;
+    s16 w06;
+    s16 h8;
+    s16 hA;
+    s16 hC;
+    u8 pad0E[2];
+    MenuSlot *p10;
+    MenuCmd *p14;
+    SlotZ *p18;
+} R4Ptrs;
 
 #endif /* FFX_TYPES_H */

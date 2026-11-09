@@ -51,7 +51,45 @@ int func_001D83C8(int v, u8 **out) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8078", MsNumberCalcProcess);
+void MsNumberCalcProcess(void) {
+    int c1;
+    BtlEvt *e;
+    int total;
+    BtlEvt **prev;
+    int c2;
+
+    prev = (BtlEvt **)&D_00662D20;
+    c1 = 0;
+    e = (BtlEvt *)D_00662D20;
+    c2 = 0;
+    total = 0;
+    while (e != 0) {
+        s8 v6;
+        if (e->b5 > 0) {
+            e->b5--;
+        }
+        v6 = ++e->b6;
+        if (e->b7 < v6) {
+            e->b0 = 0;
+            *prev = e->next;
+        } else {
+            prev = &e->next;
+            switch (e->b0 & 0x7F) {
+            case 1:
+                c1++;
+            case 2:
+                c2++;
+                break;
+            }
+            total++;
+        }
+        e = e->next;
+    }
+    D_00662D24 = (s32 *)prev;
+    D_003172F0.f2103 = c1;
+    D_003172F0.f2104 = c2;
+    D_003172F0.f2105 = total;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8078", MsNumberDrawProcess);
 

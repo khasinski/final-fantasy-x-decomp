@@ -2,9 +2,13 @@
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
+#define MsGetDamageInfo _hdr_MsGetDamageInfo
 #include "ffx/r3.h"
+#undef MsGetDamageInfo
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+
+int MsGetDamageInfo(int a, int b, int *outA, int *outB, int *outC);
 
 int func_001BB380(int a, int b) {
     int v[3];
@@ -20,7 +24,42 @@ int func_001BB380(int a, int b) {
     return m;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BB380", MsGetDamageInfo);
+int MsGetDamageInfo(int a, int b, int *outA, int *outB, int *outC) {
+    u8 id = a;
+    int n = 0;
+    int z = 0;
+    int y = 0;
+    int x = 0;
+
+    if (MsBtlChrNumCheck(id)) {
+        int sub = MsGetChrCommand(id)->f2;
+        Obj436 *o = (Obj436 *)MsGetChr(b);
+        int i;
+        for (i = 0; i < 2; i++) {
+            struct Obj436Slot *s = &o->slot[i];
+            int k;
+            if (s->v != id || s->sub != sub) {
+                continue;
+            }
+            n += s->count - s->first;
+            for (k = s->first; k < s->count; k++) {
+                x += s->ent[k].w20;
+                y += s->ent[k].w24;
+                z += s->ent[k].w28;
+            }
+        }
+    }
+    if (outA) {
+        *outA = x;
+    }
+    if (outB) {
+        *outB = y;
+    }
+    if (outC) {
+        *outC = z;
+    }
+    return n;
+}
 
 int MsMergeDamage(int a, int b) {
     u8 id = a;
@@ -78,7 +117,41 @@ int MsMergeDamage(int a, int b) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BB380", func_001BB7F8);
+int func_001BB7F8(int a, int b, int *outA, int *outB, int *outC) {
+    u8 id = a;
+    int n = 0;
+    int z = 0;
+    int y = 0;
+    int x = 0;
+
+    if (MsBtlChrNumCheck(id)) {
+        int sub = MsGetChrCommand(id)->f2;
+        Obj436 *o = (Obj436 *)MsGetChr(b);
+        int i;
+        for (i = 0; i < 2; i++) {
+            struct Obj436Slot *s = &o->slot[i];
+            int k;
+            if (s->v != id || s->sub != sub) {
+                continue;
+            }
+            k = s->first;
+            n += s->count - k;
+            x += s->ent[k].w20;
+            y += s->ent[k].w24;
+            z += s->ent[k].w28;
+        }
+    }
+    if (outA) {
+        *outA = x;
+    }
+    if (outB) {
+        *outB = y;
+    }
+    if (outC) {
+        *outC = z;
+    }
+    return n;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BB380", func_001BB930);
 
@@ -197,7 +270,88 @@ OfsTbl *MsGetComData(int id, int *base) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BB380", MsSetAutoStatus);
+typedef struct {
+    u8 pad0[0x2C6];
+    u16 f2C6;
+    u8 f2C8[10];
+    u8 f2D2;
+    u8 f2D3;
+    u8 f2D4;
+    u8 pad2D5;
+    u16 f2D6;
+    u16 f2D8;
+    u8 f2DA[13];
+    u8 pad2E7;
+    u16 f2E8;
+    u16 f2EA;
+    u16 f2EC;
+    u16 f2EE;
+    u16 f2F0;
+    u16 f2F2;
+    u16 f2F4;
+    u16 f2F6;
+    u16 f2F8;
+    u16 f2FA;
+    u16 f2FC;
+    u8 f2FE;
+    u8 f2FF;
+    u8 pad300[0x392 - 0x300];
+    u8 f392;
+} BtlChrAuto;
+
+void MsSetAutoStatus(BtlChr *chr) {
+    BtlChrAuto *c = (BtlChrAuto *)chr;
+    u8 f2FE = c->f2FE;
+    u8 f2D2 = c->f2D2;
+    u8 f2D3 = c->f2D3;
+    u16 m, m1, v, dst;
+    int i;
+
+    c->f2EA = c->f2F0;
+    c->f2EC = c->f2F2;
+    c->f2EE = c->f2F4;
+    if ((u32)(f2FE - 1) < 2) {
+        c->f2EA |= c->f2F6;
+        c->f2EC |= c->f2F8;
+        c->f2EE |= c->f2FA;
+    }
+    c->f2FF = f2FE;
+    m = c->f2EA;
+    v = c->f2C6;
+    dst = c->f2D8;
+    m1 = c->f2EC;
+    for (i = 0; i < 12; i++) {
+        if ((m >> i) & 1) {
+            dst = (dst & ~(1 << i)) | (v & (1 << i));
+            v |= 1 << i;
+        }
+    }
+    c->f2C6 = v;
+    c->f2D8 = dst;
+    for (i = 0; i < 13; i++) {
+        if ((m1 >> i) & 1) {
+            c->f2DA[i] = c->f2C8[i];
+            c->f2C8[i] = 0xFF;
+        }
+    }
+    if (f2D3 == 0 && c->f2D3 != 0 && c->f2D4 < 0xFF) {
+        c->f2D4 = 0;
+    }
+    m = c->f2EE;
+    v = c->f2D6;
+    dst = c->f2E8;
+    for (i = 0; i < 16; i++) {
+        if ((m >> i) & 1) {
+            dst = (dst & ~(1 << i)) | (v & (1 << i));
+            v |= 1 << i;
+        }
+    }
+    c->f2D6 = v;
+    c->f2E8 = dst;
+    if (c->f2D2 != 0 && f2D2 == 0) {
+        c->f392 = 0;
+    }
+}
 
 void MsResetAutoStatus(BtlChr *c) {
     u16 m1 = c->f2EC;

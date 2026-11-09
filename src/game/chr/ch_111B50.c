@@ -14,7 +14,51 @@ s32 func_00111B50(Chr *chr)
 INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", func_00111B58);
 INCLUDE_RODATA("build/ee_asm/game/chr/ch_111B50/rodata", jtbl_00569720);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", func_00112100);
+typedef struct ChrUpdateLinkView {
+    struct ChrUpdateLinkView *next;
+    s16 h04;
+    u16 h06;
+    s8 *value08;
+    s8 *previous0C;
+    s32 w10;
+    s16 h14;
+    u16 flags16;
+    u16 previous18;
+    u16 saved1A;
+} ChrUpdateLinkView;
+
+void func_00112100(Chr *chr, int mode)
+{
+    ChrUpdateLinkView *link = (ChrUpdateLinkView *)chr->w758;
+    s32 i;
+
+    while (link != 0) {
+        for (i = 0; i < mode; i++) {
+            if (link->h06 != 0) {
+                link->h06--;
+            } else {
+                s8 c = *link->previous0C++;
+
+                if (c & 0x80) {
+                    s32 v = c & 0x3F;
+
+                    if (c & 0x40) {
+                        v |= *link->previous0C++ << 6;
+                        link->h14 = v;
+                    } else {
+                        link->h06 = v;
+                    }
+                } else {
+                    c = (c << 25) >> 25;
+                    link->h14 = c;
+                }
+            }
+            link->previous18 = link->flags16;
+            link->flags16 += link->h14;
+        }
+        link = link->next;
+    }
+}
 
 void func_001121C8(Chr *chr)
 {
@@ -86,7 +130,65 @@ INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_IncrementFrame);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_MotionApply);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", func_00112A70);
+typedef struct ChrFrameView {
+    u8 pad000[0x1A0];
+    union {
+        s64 flags;
+        s16 h;
+    } u1A0;
+    u8 pad1A8[0x5A4];
+    s32 w74C;
+    u8 pad750[0xE];
+    s16 h75E;
+    s16 h760;
+    u8 pad762[0x8A];
+    s32 w7EC;
+} ChrFrameView;
+
+typedef struct ChrVmSetupView {
+    s32 w00;
+    s32 w04;
+    s32 w08;
+    s32 w0C;
+    s32 w10;
+    s32 w14;
+    s16 h18;
+    s16 h1A;
+    s16 h1C;
+    u8 pad1E[0x10];
+    s16 h2E;
+} ChrVmSetupView;
+
+void Ch_MotionSetupFcurve(Chr *chr, void *arg);
+
+s32 func_00112A70(Chr *chr, void *arg, s32 id, s32 x, s32 y)
+{
+    ChrFrameView *fv = (ChrFrameView *)chr;
+    ChrVmSetupView *vm = (ChrVmSetupView *)((u8 *)chr + 0x718);
+
+    fv->w7EC = 0x1E00;
+    Ch_MotionSetupFcurve(chr, arg);
+    vm->w0C = x;
+    if (y < 0) {
+        y = *(s16 *)arg << 8;
+    }
+    vm->w14 = y - x;
+    vm->w10 = y - 1;
+    if (vm->h1A == -1) {
+        vm->h18 = id;
+    } else {
+        vm->h18 = vm->h1A;
+    }
+    vm->h1A = -1;
+    fv->h760 = 0x100;
+    fv->w74C = vm->w0C;
+    fv->h75E = vm->h2E;
+    if (fv->h75E == 0) {
+        fv->h75E = 1;
+    }
+    fv->u1A0.flags &= ~0x10000L;
+    vm->h1C = 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_AnimCopy2);
 

@@ -7,7 +7,28 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00232C88);
+extern U4Id4 D_00325BA8;
+extern U4Id4 D_00325BB0;
+
+U4Id4 *func_00232C88(void)
+{
+    if (D_00693E20 < 0) {
+        if (func_0020B850() == 0) {
+            if (func_001BD360() == 0) {
+                return &D_00325BA8;
+            }
+            return &D_00325BB0;
+        }
+        return &D_00325BB0;
+    }
+    if (func_0020B850() == 0) {
+        if (func_001BD360() == 0) {
+            return &D_00325B18[D_00693E20];
+        }
+        return &D_00325B18[D_00693E20];
+    }
+    return &D_00325B60[D_00693E20];
+}
 
 Pt16 *func_00232D30(void)
 {
@@ -31,15 +52,15 @@ Pt16 *func_00232D30(void)
 
 void func_00232DB8(void)
 {
-    TkMn2GetCommonPlate((FlagRec *)&D_00693F18, /* DEBT(CAST): declared Pt16s in q6.h */ (int)D_00572080, (int)D_00572090, (int)D_00572090, 0xDA, 0xDB); /* DEBT(CAST): names passed as int */
-    TkMn2GetCommonPlate((FlagRec *)&D_00693F30, /* DEBT(CAST): declared DrawArgs in u4.h */ (int)D_005720A0, (int)D_005720B0, (int)D_005720C0, 0, 0);
-    TkMn2GetCommonPlate(&D_00693F48, (int)D_005720D0, (int)D_005720E0, (int)D_005720E0, 0, 0);
-    D_00693ED4 = V5_TkMn2SeqGetNum_int((int)D_005720F0);
-    D_00693EEC = V5_TkMn2SeqGetNum_int((int)D_00572100);
-    D_00693EF0 = V5_TkMn2SeqGetNum_int((int)D_00572110);
-    D_00693EE4 = TkMn2SeqGetColor((int)D_00572120);
+    TkMn2GetCommonPlate(&D_00693F18, D_00572080, D_00572090, D_00572090, 0xDA, 0xDB);
+    TkMn2GetCommonPlate(&D_00693F30, D_005720A0, D_005720B0, D_005720C0, 0, 0);
+    TkMn2GetCommonPlate(&D_00693F48, D_005720D0, D_005720E0, D_005720E0, 0, 0);
+    D_00693ED4 = V5_TkMn2SeqGetNum_int(D_005720F0);
+    D_00693EEC = V5_TkMn2SeqGetNum_int(D_00572100);
+    D_00693EF0 = V5_TkMn2SeqGetNum_int(D_00572110);
+    D_00693EE4 = TkMn2SeqGetColor(D_00572120);
     func_00227460(D_00572130, D_00693EC8);
-    func_00227460(D_00572140, (s16 *)&D_00693ED0);
+    func_00227460(D_00572140, &D_00693ED0);
     func_00227460(D_00572150, D_00693EE0);
     func_00227460(D_00572160, D_00693EE8);
     func_00227460(D_00572170, D_00693EF8);
@@ -207,7 +228,21 @@ void func_002336E8(int a, int b) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233700);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233890);
+void func_00233890(void)
+{
+    int i = 0;
+
+    do {
+        if (D_00693E48[i].on == 0) {
+            break;
+        }
+        i++;
+    } while (1);
+    if (i != 0) {
+        i--;
+        D_00693E48[i].on = 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002338D0);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_232C88/rodata", jtbl_005721C0);

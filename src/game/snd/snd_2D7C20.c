@@ -1,8 +1,10 @@
 /* tu_342 0x2d7c20-0x2d81e8: low; ~Snd (config/tu_map.tsv) */
+#define func_002D7F88 _hdr_func_002D7F88
 #include "common.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
+#undef func_002D7F88
 
 void SndSepClearAll(void)
 {
@@ -61,9 +63,9 @@ void SndSepTransNonblock(int a, int b)
     D_0078BA1C |= D_0078BB70.pend;
 }
 
-void SndSepTransSepOnly(int a, int b)
+void SndSepTransSepOnly(void *a, int b)
 {
-    SqsSeSeparateDataSend(a, b, 0);
+    SqsSeSeparateDataSend((int)a, b, 0);
     D_0078BB70.pend |= 1;
     D_0078BA1C |= D_0078BB70.pend;
 }
@@ -74,7 +76,25 @@ void SndStandbySepWave(void)
     func_00251DC8();
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7C20", SndStandbyBattleWaveBlock);
+void SndStandbyBattleWaveBlock(s32 handle, u8 *end)
+{
+    D_0078BA1C = 1;
+    D_0078BA18 = 1;
+    if ((s32)end <= 0x2FFFF)
+    {
+        if ((D_0078BA10 | D_0078BA0C) != 0)
+        {
+            do
+            {
+                TkSndUpdateMain();
+                CALL_func_002D3FF0_INT(0);
+            } while ((D_0078BA10 | D_0078BA0C) != 0);
+        }
+        func_00251E08((void *)handle, (s32)end);
+        func_002D5DB8();
+        SndSyncWaveTrans(1);
+    }
+}
 
 /* DEBT(ORDER): the two busy flags share the original chained assignment. */
 /* DEBT(CAST): the sound handle carries the 32-bit address passed to the transfer helper. */
@@ -109,7 +129,22 @@ void func_002D7F70(void *p)
     func_00251D10((int)p); /* DEBT(CAST): the RPC argument slots of func_00251360 are plain ints */
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7C20", func_002D7F88);
+void func_002D7F88(s16 *arg0)
+{
+    int i;
+    s16 *p;
+
+    if (arg0 == 0) {
+        arg0 = (s16 *)D_00565F28;
+    }
+    D_0078BA1C = 1;
+    p = arg0;
+    for (i = 0; i < 16; i++, p++) {
+        if (*p != -1) {
+            func_00251D58(i, *p);
+        }
+    }
+}
 
 void func_002D8008(void *p)
 {
@@ -156,7 +191,7 @@ void SndInitWork(void)
     D_0078BB90.w8 = 0;
 }
 
-void SndMusicStandby(void)
+void SndMusicStandby(int a, int b)
 {
     D_0078BBA8 = SqsMusicDataSend();
 }

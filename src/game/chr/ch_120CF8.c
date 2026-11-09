@@ -16,12 +16,10 @@ s32 Sg_IdGetPtr(void)
 }
 
 extern s32 D_00580B28;
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_00120D18(s32 a) {
     Chr *var_3;
     void *temp_4;
-    register Chr *v0 __asm__("$2");
-    register Chr *temp_2 __asm__("$4");
 
     D_00580B34 = a;
     if (a != 0) {
@@ -36,22 +34,33 @@ void func_00120D18(s32 a) {
         D_00580B2C = 0;
         D_00580B30 = 1.0f;
     }
-    var_3 = D_00300664;
-    v0 = &var_3[D_00300668];
-    __asm__("" : "+r"(v0));
-    if (var_3 != v0) {
-        temp_2 = v0;
-        __asm__("" : "+r"(temp_2));
-        do {
-            if (var_3->active != 0) {
-                var_3->h82E = -1;
-            }
-            var_3 = (Chr *)((u8 *)var_3 + (0x840));
-        } while (var_3 != temp_2);
+    for (var_3 = D_00300664; var_3 != D_00300664 + D_00300668; var_3++) {
+        if (var_3->active != 0) {
+            var_3->u828.s.h82E = -1;
+        }
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00120DE8);
+void func_002DCE80(void *a, void *b, void *c);
+
+void func_00120DE8(u8 *a, u8 *b, u8 *c, int d)
+{
+    s16 *v0 = (s16 *)a;
+    s16 *v1 = (s16 *)b;
+    s16 *v2 = (s16 *)c;
+    float d1[4];
+    float d2[4];
+    float n[4];
+
+    d1[0] = v1[0] - v0[0];
+    d1[1] = v1[1] - v0[1];
+    d1[2] = v1[2] - v0[2];
+    d2[0] = v2[0] - v0[0];
+    d2[1] = v2[1] - v0[1];
+    d2[2] = v2[2] - v0[2];
+    func_002DCE80(n, d2, d1);
+    func_002DCEC8((void *)d, n);
+}
 
 int func_00120EB8(int a, int i)
 {
@@ -84,7 +93,38 @@ float func_001212E0(float x, float y, float z)
     return func_00121038(v) / D_00580B30;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00121328);
+typedef struct {
+    s16 v[6];
+    s32 w0C;
+} MapPoly16;
+
+int func_00121328(Chr *chr, int i)
+{
+    u32 v = ((MapPoly16 *)D_00308900)[i].w0C & 0x7F;
+
+again:
+    switch (v) {
+    case 1:
+        return 1;
+    case 2:
+        if (chr == (Chr *)Sg_GetPlayer()) {
+            return 0;
+        }
+        return 1;
+    case 14:
+        return chr == (Chr *)Sg_GetPlayer();
+    case 13:
+        return (u32)((u64)chr->flags >> 34) & 1;
+    case 0x30: case 0x31: case 0x32: case 0x33:
+    case 0x34: case 0x35: case 0x36: case 0x37:
+    case 0x38: case 0x39: case 0x3A: case 0x3B:
+    case 0x3C: case 0x3D: case 0x3E: case 0x3F:
+        v = D_00580B38[v - 0x30];
+        goto again;
+    default:
+        return 0;
+    }
+}
 
 void func_00121418(float v)
 {
@@ -245,7 +285,30 @@ float func_00121FE8(float *a, float *b)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00122050);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00122380);
+typedef struct SortEnt22380 {
+    s32 pad00[6];
+    float f18;
+} SortEnt22380;
+
+extern SortEnt22380 *D_00580BA8[];
+
+void func_00122380(s32 n)
+{
+    s32 i, j, k;
+    SortEnt22380 *tmp;
+
+    for (i = 0; i < n; i++) {
+        k = i;
+        for (j = i; j < n; j++) {
+            if (D_00580BA8[k]->f18 >= D_00580BA8[j]->f18) {
+                k = j;
+            }
+        }
+        tmp = D_00580BA8[i];
+        D_00580BA8[i] = D_00580BA8[k];
+        D_00580BA8[k] = tmp;
+    }
+}
 
 void func_00122430(s32 a, s32 b)
 {

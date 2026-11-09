@@ -78,9 +78,43 @@ void func_002B2730(s32 a) {
     func_002B24F8(0x2100, 0xD00, a, 0x31);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2748);
+extern u64 D_006F2D00;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2788);
+void func_002B2748(s32 a, s32 b)
+{
+    s32 v = D_006F2D00 & 0x1FF;
+
+    if (b == 0) {
+        if (v != 0) {
+            v = 0xD00;
+        }
+    } else {
+        if (v != 0) {
+            v = 0;
+        } else {
+            v = 0xD00;
+        }
+    }
+    func_002B24F8(v, 0xD00, a, 1);
+}
+
+void *func_002B3888(s32);
+void func_002B39C0(s32);
+
+void func_002B2788(void)
+{
+    u64 *p = (u64 *)func_002B3888(0x100);
+
+    p[0] = 0x70000002UL;
+    p[2] = 0x1000000000008001UL;
+    p[3] = 0xEUL;
+    p[4] = 0;
+    p[5] = 0x3FUL;
+    func_002DA610(0, 0);
+    func_002DBA28(D_003F395C, (s32)p | 0x80000000);
+    func_002DA610(0, 0);
+    func_002B39C0(0x100);
+}
 
 s32 _m2c_func_002B2810_func_002B2D50() __asm__("func_002B2D50");
 s32 _m2c_func_002B2810_func_002B2D48() __asm__("func_002B2D48");
@@ -126,10 +160,52 @@ void func_002B2810(void) {
     _m2c_func_002B2810_D_00551C88 = *(volatile s32 *)0x10000000 - temp_18;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2970);
-
 extern s32 _m2c_func_002B29D8_D_006F3A20 __asm__("D_006F3A20");
+extern u_long128 _m2c_func_002B2970_D_00703B20 __asm__("D_00703B20");
 extern u_long128 _m2c_func_002B29D8_D_00703C50 __asm__("D_00703C50");
+extern u_long128 _m2c_func_002B2970_D_00703D10 __asm__("D_00703D10");
+
+void func_002B2970(void)
+{
+    s32 *temp_2;
+    s32 *var_3;
+    register s32 var_4 __asm__("$4");
+    register u_long128 val __asm__("$5");
+    register u_long128 *p1 __asm__("$3");
+    register u_long128 end __asm__("$4");
+    register u_long128 *p2 __asm__("$2");
+    register u_long128 *p3 __asm__("$3");
+
+    var_3 = &_m2c_func_002B2810_D_006F3960;
+    val = 0x20000000;
+    __asm__("" : "+r"(val), "+r"(var_3));
+    var_4 = 0x103A;
+    do {
+        __asm__ volatile("");
+        (*(u_long128 *)((u8 *)(var_3) + (0))) = val;
+        __asm__ volatile("" : : : "memory");
+        temp_2 = (s32 *)((u8 *)var_3 + 0x10);
+        (*(s32 **)((u8 *)(var_3) + (8))) = var_3;
+        (*(s32 **)((u8 *)(var_3) + (4))) = temp_2;
+        var_4 -= 1;
+        __asm__ volatile("" : "+r"(var_4));
+        var_3 = temp_2;
+        __asm__ volatile("");
+    } while (var_4 >= 0);
+    p1 = &_m2c_func_002B2970_D_00703B20;
+    end = 0x70000000;
+    __asm__ volatile("" : "+r"(p1), "+r"(end));
+    *p1 = end;
+    __asm__ volatile("" : : : "memory");
+    p2 = &_m2c_func_002B29D8_D_00703C50;
+    __asm__ volatile("" : "+r"(p2));
+    *p2 = end;
+    __asm__ volatile("" : : : "memory");
+    p3 = &_m2c_func_002B2970_D_00703D10;
+    __asm__ volatile("" : "+r"(p3));
+    *p3 = end;
+}
+
 /* DEBT(CAST) */ /* DEBT(FAKE) */
 void func_002B29D8(void) {
     s32 *temp_2;
@@ -156,13 +232,141 @@ void func_002B29D8(void) {
     _m2c_func_002B29D8_D_00703C50 = 0x70000000;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2A28);
+typedef struct OpChain10 {
+    u32 tag;
+    void *next;
+    struct OpChain10 *last;
+    u32 padC;
+} OpChain10;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2A80);
+extern OpChain10 _chain_D_006F3A20[] __asm__("D_006F3A20");
+extern OpChain10 _chain_D_00703B60[] __asm__("D_00703B60");
+extern OpChain10 _chain_D_006F3B20[] __asm__("D_006F3B20");
+extern OpChain10 _chain_D_006F3960[] __asm__("D_006F3960");
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2AD8);
+void func_002B2A28(OpChain10 *pkt, int qwc, int prio)
+{
+    register int p __asm__("$3") = prio;
+    register int r_prio __asm__("$6") = prio;
+    register OpChain10 *head __asm__("$2");
+    register OpChain10 *last __asm__("$5");
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2B30);
+    __asm__("" : "+r"(p), "+r"(r_prio));
+    MMI_SQ_ZERO(0x0, pkt);
+    pkt->tag = (qwc - 1) | 0x20000000;
+    __asm__ volatile("" : : : "memory");
+    if (p <= 0) {
+        r_prio = 0;
+    }
+    p = r_prio;
+    __asm__("" : "+r"(p));
+    head = _chain_D_006F3A20;
+    if (p >= 0x10) {
+        p = 0xF;
+    }
+    p <<= 4;
+    head = (OpChain10 *)(p + (int)head);
+    __asm__("" : : "r"(p));
+    last = head->last;
+    last->next = pkt;
+    __asm__ volatile("" : : : "memory");
+    pkt->next = head + 1;
+    __asm__ volatile("" : : : "memory");
+    head->last = pkt;
+}
+
+void func_002B2A80(OpChain10 *pkt, int qwc, int prio)
+{
+    register int p __asm__("$3") = prio;
+    register int r_prio __asm__("$6") = prio;
+    register OpChain10 *head __asm__("$2");
+    register OpChain10 *last __asm__("$5");
+
+    __asm__("" : "+r"(p), "+r"(r_prio));
+    MMI_SQ_ZERO(0x0, pkt);
+    pkt->tag = (qwc - 1) | 0x20000000;
+    __asm__ volatile("" : : : "memory");
+    if (p <= 0) {
+        r_prio = 0;
+    }
+    p = r_prio;
+    __asm__("" : "+r"(p));
+    head = _chain_D_00703B60;
+    if (p >= 0xF) {
+        p = 0xE;
+    }
+    p <<= 4;
+    head = (OpChain10 *)(p + (int)head);
+    __asm__("" : : "r"(p));
+    last = head->last;
+    last->next = pkt;
+    __asm__ volatile("" : : : "memory");
+    pkt->next = head + 1;
+    __asm__ volatile("" : : : "memory");
+    head->last = pkt;
+}
+
+void func_002B2AD8(OpChain10 *pkt, int qwc, int prio)
+{
+    register int p __asm__("$3") = prio;
+    register int r_prio __asm__("$6") = prio;
+    register OpChain10 *head __asm__("$2");
+    register OpChain10 *last __asm__("$5");
+
+    __asm__("" : "+r"(p), "+r"(r_prio));
+    MMI_SQ_ZERO(0x0, pkt);
+    pkt->tag = (qwc - 1) | 0x20000000;
+    __asm__ volatile("" : : : "memory");
+    if (p <= 0) {
+        r_prio = 0;
+    }
+    p = r_prio;
+    __asm__("" : "+r"(p));
+    head = _chain_D_006F3B20;
+    if (p >= 0x1000) {
+        p = 0xFFF;
+    }
+    p <<= 4;
+    head = (OpChain10 *)(p + (int)head);
+    __asm__("" : : "r"(p));
+    last = head->last;
+    last->next = pkt;
+    __asm__ volatile("" : : : "memory");
+    pkt->next = head + 1;
+    __asm__ volatile("" : : : "memory");
+    head->last = pkt;
+}
+
+void func_002B2B30(OpChain10 *pkt, int qwc, int prio)
+{
+    register int p __asm__("$3") = prio;
+    register int r_prio __asm__("$6") = prio;
+    register OpChain10 *head __asm__("$2");
+    register OpChain10 *last __asm__("$5");
+
+    __asm__("" : "+r"(p), "+r"(r_prio));
+    MMI_SQ_ZERO(0x0, pkt);
+    pkt->tag = (qwc - 1) | 0x20000000;
+    __asm__ volatile("" : : : "memory");
+    if (p <= 0) {
+        r_prio = 0;
+    }
+    p = r_prio;
+    __asm__("" : "+r"(p));
+    head = _chain_D_006F3960;
+    if (p >= 0x103C) {
+        p = 0x103B;
+    }
+    p <<= 4;
+    head = (OpChain10 *)(p + (int)head);
+    __asm__("" : : "r"(p));
+    last = head->last;
+    last->next = pkt;
+    __asm__ volatile("" : : : "memory");
+    pkt->next = head + 1;
+    __asm__ volatile("" : : : "memory");
+    head->last = pkt;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2B88);
 

@@ -69,9 +69,84 @@ int func_0012CFC0(Actor *a, void *op, ScriptCtx *ctx) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12CE80", func_0012CFF8);
+int SndIsSepPlay(int a);
+int func_00138E90(ScrBlobQ *b);
+int func_00138ED8(ScrBlobQ *b, int i);
+int func_00138F30(ScrBlobQ *b, int i);
+void SndSepVolumeTranslate(int a, int b, int c);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12CE80", func_0012D0E8);
+int func_0012CFF8(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int v = AtelPopStackInteger(a, ctx);
+    int flag;
+    u8 b28;
+    int i;
+    int n;
+    int vol;
+
+    if (SndIsSepPlay(v) == 0) {
+        SndSepPlaySimple(v);
+    } else {
+        flag = 0;
+        b28 = ((u8 *)func_00124828())[0x28];
+        i = 0;
+        n = func_00138E90(a->blob);
+        for (; i < n; i++) {
+            int x = func_00138ED8(a->blob, i);
+            int y = func_00138F30(a->blob, i);
+            if (x == v) {
+                flag = y;
+                break;
+            }
+        }
+        vol = 0x7F;
+        if (b28 != 0) {
+            vol = 0x3F;
+        }
+        if ((flag & 0x40) == 0) {
+            SndSepVolumeTranslate(v, 0xC, vol);
+        }
+    }
+    return v;
+}
+
+void func_002D7B80(int a, int b, int c);
+
+int func_0012D0E8(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int vol = AtelPopStackInteger(a, ctx);
+    int pan = AtelPopStackInteger(a, ctx);
+    int v = AtelPopStackInteger(a, ctx);
+    int flag;
+    u8 b28;
+    int i;
+    int n;
+
+    if (SndIsSepPlay(v) == 0) {
+        SndSepPlay(v, pan, vol);
+    } else {
+        flag = 0;
+        b28 = ((u8 *)func_00124828())[0x28];
+        i = 0;
+        n = func_00138E90(a->blob);
+        for (; i < n; i++) {
+            int x = func_00138ED8(a->blob, i);
+            int y = func_00138F30(a->blob, i);
+            if (x == v) {
+                flag = y;
+                break;
+            }
+        }
+        if (b28 != 0) {
+            vol /= 2;
+        }
+        if ((flag & 0x40) == 0) {
+            SndSepVolumeTranslate(v, 0xC, vol);
+            func_002D7B80(v, 0xC, pan);
+        }
+    }
+    return v;
+}
 
 int func_0012D230(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);

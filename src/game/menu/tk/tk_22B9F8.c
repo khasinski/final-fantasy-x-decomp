@@ -119,12 +119,11 @@ void func_0022CCE0(void) { func_0022B9F8(); }
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22B9F8", func_0022CCE8);
 
-/* DEBT(CAST): message strings are passed to int parameters (prototype not yet typed) */
 void func_0022CE30(void)
 {
-    func_00227490((int)D_005719B0);
-    func_00227490((int)D_005719B8);
-    func_00227490((int)D_005719C0);
+    func_00227490(D_005719B0);
+    func_00227490(D_005719B8);
+    func_00227490(D_005719C0);
 }
 
 void func_0022CE68(void) {

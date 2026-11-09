@@ -24,16 +24,17 @@ extern s32 D_0058E3F4;
 extern char D_0056ADD8[];
 extern char D_0056AE90[];
 void func_00146180(void);
-void func_00147BA0(void);
 int func_00121038(float *v);
 int func_002F46B0(char *buf, char *fmt, char *ap);
 int func_002EF240(const char *fmt, ...);
 /* <stdarg.h> as ee-gcc's va-mips.h defines it for the EE EABI: the unnamed GPR arguments are saved
  * as 8-byte slots just below the incoming argument pointer. */
+#ifndef va_start
 typedef char *va_list;
 #define va_start(ap, last) \
     ((ap) = (char *)__builtin_next_arg(last) - (__builtin_args_info(0) >= 8 ? 0 : (8 - __builtin_args_info(0)) * 8))
 #define va_end(ap)
+#endif
 /* EE timer 0 counter (hardware register) */
 #define T0_COUNT (*(volatile u32 *)0x10000800)
 void func_2035A80(void);
@@ -65,7 +66,6 @@ extern char D_0056A1D8[];
 extern char D_0056A1E8[];
 typedef struct U0Tbl { s32 n; struct { s32 a; s32 b; } e[1]; } U0Tbl; /* DEBT(NAME): counted table behind Fmt138.wC */
 typedef struct U0TblH { s32 n; struct { s32 a; u16 h; u16 pad; } e[1]; } U0TblH; /* DEBT(NAME): counted table behind Fmt138.w18 */
-typedef struct U0Blk60 { u64 d[12]; } U0Blk60; /* DEBT(NAME): 0x60-byte block copied by func_00116E50 */
 int func_2065BA8(int a, int b, int c);
 int func_0012E998(Actor *a, void *op, ScriptCtx *ctx);
 void func_001478B8(void);
@@ -83,7 +83,6 @@ extern s32 D_00580E44;
 void func_00124E00(int v);
 void func_0014E638(void);
 void func_00124E70(void);
-#define CALL0_func_00124828() (((Rec124828 *(*)())func_00124828)()) /* DEBT(CAST): the callee reads no argument */
 extern s8 D_005661F4;
 extern char D_0056A320[];
 extern char D_0056A178[];

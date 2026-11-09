@@ -44,11 +44,11 @@ typedef struct V2SndReq {
 } V2SndReq;
 
 /* ======== 0x19Axxx-0x19Bxxx ======== */
-void func_0019B420(int a, int b, int c);
+void func_0019B420(int id, Chr *chr, int bone);
 typedef struct V2Obj7C { /* DEBT(NAME): scripted sequence object stepped by func_0019B4F8 */
     u8 pad00[0x10];
-    int chr;     /* 0x10: character handle */
-    int chr2;    /* 0x14 */
+    Chr *chr;    /* 0x10: character handle */
+    Chr *chr2;   /* 0x14 */
     int state;   /* 0x18: selects the step function */
     int time;    /* 0x1C: frames in the current state */
     int active;  /* 0x20 */
@@ -131,7 +131,9 @@ void func_00199510(W3Pool *p);
 void func_001994E0(W3Pool *p);
 
 void rcbgSceneFini(W3Pool *p);
+#ifndef FFX_V1_H
 void MsSetCameraMatrix(float f, int a, int b, int c, int d, int e);
+#endif
 
 void func_001991D8(W3Pool *p, W3Item *o);
 
@@ -239,10 +241,6 @@ extern char D_0056C408[];
 extern char D_0056C410[];
 extern char D_0056C418[];
 
-/* texture slot whose VRAM block is allocated by func_0017E5A8 (DEBT(NAME): guess) */
-typedef struct V2VramReq { u8 pad00[4]; u32 addr; u8 pad08[4]; u32 psm; } V2VramReq;
-
-
 void func_00110548(Chr *chr, float f, int b);
 int MsSetChrTransparent(int id, float f, int b);
 
@@ -253,9 +251,6 @@ int MsSetChrTransparentVisible(int id, float f1, float f2, int a, int flags);
 #ifndef FFX_Q2_H
 float Ch_SetClipZ(Chr *chr, float v);
 #endif
-
-/* 0x478-byte records at btl_ply_win (DEBT(NAME): guess): two lists of 0x5000-based command ids */
-typedef struct V2CmdSet { u8 pad000[0x158]; u16 list[2][200]; } V2CmdSet;
 
 /* command reference resolved by MsGetChrID (DEBT(NAME): guess) */
 typedef struct V2CmdRef { u8 pad00[4]; int w04; int w08; u8 pad0C[2]; u16 cmd; u8 pad10[0xD]; u8 b1D; } V2CmdRef;

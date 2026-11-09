@@ -40,7 +40,7 @@ int func_001559F0(int a)
 
 int func_00155A20(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
     float r = AtelPopStackFloat(a, ctx) * 3.1415927f / 180.0f;
 
     func_001A83F0(h, 1, 1, AtelGetRealVarAdrs(a, AtelPopStackInteger(a, ctx)), r);
@@ -49,7 +49,7 @@ int func_00155A20(Actor *a, void *op, ScriptCtx *ctx)
 
 int func_00155AD0(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
     float r = AtelPopStackFloat(a, ctx) * 3.1415927f / 180.0f;
 
     func_001A83F0(h, 1, 0, AtelGetRealVarAdrs(a, AtelPopStackInteger(a, ctx)), r);
@@ -58,7 +58,7 @@ int func_00155AD0(Actor *a, void *op, ScriptCtx *ctx)
 
 int func_00155B80(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
     float z = AtelPopStackFloat(a, ctx);
     float y = AtelPopStackFloat(a, ctx);
     float r = AtelPopStackFloat(a, ctx) * 3.1415927f / 180.0f;
@@ -69,7 +69,7 @@ int func_00155B80(Actor *a, void *op, ScriptCtx *ctx)
 
 int func_00155C68(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
     float z = AtelPopStackFloat(a, ctx);
     float y = AtelPopStackFloat(a, ctx);
     float r = AtelPopStackFloat(a, ctx) * 3.1415927f / 180.0f;
@@ -80,7 +80,7 @@ int func_00155C68(Actor *a, void *op, ScriptCtx *ctx)
 
 int func_00155D50(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
 
     func_001A6E10(h, 0, AtelPopStackInteger(a, ctx) ^ 0xFFFF);
     return h;
@@ -88,7 +88,7 @@ int func_00155D50(Actor *a, void *op, ScriptCtx *ctx)
 
 int func_00155DB8(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
 
     func_001A6E10(h, 1, AtelPopStackInteger(a, ctx) ^ 0xFFFF);
     return h;

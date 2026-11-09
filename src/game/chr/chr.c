@@ -7,13 +7,52 @@
 #include "ffx/r0.h"
 #include "ffx/s0.h"
 #include "ffx/u0.h"
-#define func_00101528 v0_func_00101528 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/v0.h"
-#undef func_00101528
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr", func_001008D8);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_ArcMapping);
+typedef struct {
+    s32 ptr;
+    u32 count;
+} ArcEnt;
+
+typedef struct {
+    s32 base;
+    u32 count;
+    s32 pad8;
+    s32 padC;
+    ArcEnt ents[5];
+} ArcHdr;
+
+void func_001001B8(s32);
+void Ch_TexDataMapping(s32);
+void func_001053C0(ArcEnt *, s32);
+
+void Ch_ArcMapping(ArcHdr *arc)
+{
+    s32 diff = (s32)arc - arc->base;
+    s32 i;
+
+    if (diff != 0) {
+        arc->base = (s32)arc;
+        for (i = 0; (u32)i < arc->count; i++) {
+            if (arc->ents[i].ptr != 0) {
+                arc->ents[i].ptr += diff;
+                switch (i) {
+                case 0:
+                    func_001001B8(arc->ents[0].ptr);
+                    break;
+                case 4:
+                    func_001053C0(&arc->ents[4], diff);
+                    break;
+                case 1:
+                    Ch_TexDataMapping(arc->ents[1].ptr);
+                    break;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_CbArcMapping);
 
@@ -301,7 +340,7 @@ void func_00102AC0(void)
 
 void Ch_Allocate2(s32 id, s32 v)
 {
-    CHR_S32(func_00102B98(id), 0x19C) = v; /* DEBT(CAST) */
+    func_00102B98(id)->w19C = v;
 }
 
 /* DEBT(CAST) */ /* DEBT(FAKE) */
@@ -501,7 +540,33 @@ void Sg_InitAll(void)
     Ch_DrawSetShadowMode(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_001039A0);
+u16 *func_00139440(s32);
+void func_00111158(void);
+s32 func_00111038(s32, s32);
+void func_00104D48(void);
+void func_00111AA0(void);
+void func_00104D58(void);
+
+void func_001039A0(void)
+{
+    u16 *list = func_00139440(0);
+    s32 i;
+
+    func_00111158();
+    for (i = list[0]; i != 0; i--) {
+        func_00111038(1, list[i]);
+        func_00111038(2, list[i]);
+    }
+    func_00104D48();
+    func_001110F0();
+    func_00111AA0();
+    func_00104D58();
+    for (i = list[0]; i != 0; i--) {
+        Ch_DataRead(list[i]);
+        ChN_ReadSystemMGRPstart(list[i], 0);
+    }
+    func_00113480(0);
+}
 
 void Sg_EventjumpDispose(void)
 {

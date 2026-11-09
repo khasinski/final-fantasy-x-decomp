@@ -8,16 +8,14 @@
 #include "ffx/u3.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
-#define func_001F8800 q6_func_001F8800 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q6.h"
 #undef func_002305B8
-#undef func_001F8800
 
 void func_0022FB30(void)
 {
     func_00227460(D_00571CE0, D_00693C08);
     func_002273A0(D_00571CF0, D_00693C10);
-    TkMn2GetCommonPlate(&D_00693C18, (int)D_00571D00, (int)D_00571D10, (int)D_00571D20, 0, 0); /* DEBT(CAST): names passed as int */
+    TkMn2GetCommonPlate(&D_00693C18, D_00571D00, D_00571D10, D_00571D20, 0, 0);
     func_00227460(D_00571D30, D_00693C30);
     func_00227460(D_00571D40, D_00693C38);
     func_002273A0(D_00571D50, D_00693C40);

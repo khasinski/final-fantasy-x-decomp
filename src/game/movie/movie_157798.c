@@ -5,13 +5,12 @@
 #include "ffx/q2.h"
 #include "ffx/w2.h"
 #include "ffx/r1.h"
-#define func_00159CD8 s1_func_00159CD8 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/s1.h"
-#undef func_00159CD8
 #include "ffx/b0.h"
 #include "ffx/q3.h"
 #include "ffx/u1.h"
 #include "ffx/v1.h"
+#include "ffx/g0.h"
 #undef func_00158FE8
 #undef func_00158410
 
@@ -27,7 +26,7 @@ void func_001577A8(void *a, void *b, int line)
     BREAK();
 }
 
-int func_001577D0(void)
+void *func_001577D0(void)
 {
     return func_002B3888(0x28F0);
 }

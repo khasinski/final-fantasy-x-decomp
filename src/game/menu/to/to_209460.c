@@ -23,11 +23,11 @@ void TOSetExeWindowArea(int a)
 
     if (a == 0) {
         for (i = 7; i >= 0; i--) {
-            D_0066B508[i] = (MenuSlot *)&D_0066AF48[i]; /* DEBT(CAST) */
+            D_0066B508[i] = &D_0066AF48[i];
         }
     } else {
         for (i = 7; i >= 0; i--) {
-            D_0066B508[i] = (MenuSlot *)&D_0066B228[i]; /* DEBT(CAST) */
+            D_0066B508[i] = &D_0066B228[i];
         }
     }
 }
@@ -143,15 +143,39 @@ void func_00209760(s32 i, u8 a, u8 b, u8 c, u8 d)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOInit);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOReset1);
+void TOReset1(void)
+{
+    int i;
+
+    TOInitPadData();
+    D_0068EEDC = 0;
+    D_0068EEE0 = 0;
+    TOSetExeMessageWindowArea(1);
+    for (i = 0; i < 8; i++) {
+        TOInitMessageWindow(i);
+    }
+    for (i = 0; i < 8; i++) {
+        TOInitMacroCmd(i);
+    }
+    TOSetExeMessageWindowArea(0);
+    for (i = 0; i < 8; i++) {
+        TOInitMessageWindow(i);
+    }
+    for (i = 0; i < 8; i++) {
+        TOInitMacroCmd(i);
+    }
+    TOMenuInit();
+    func_00214650();
+    TODapsInit();
+}
 
 void func_00209B68(void)
 {
     func_0020DD38();
     TkMenuInitSeq();
-    TkMenuSetSceneDataAdrs(0, (TblEntry *)D_0066B5A0); /* DEBT(CAST): table is typed as bytes elsewhere */
-    TkMenuSetSceneDataAdrs(1, (TblEntry *)D_0066BDA0); /* DEBT(CAST) */
-    TkMenuSetSceneDataAdrs(2, (TblEntry *)D_00670DA0); /* DEBT(CAST) */
+    TkMenuSetSceneDataAdrs(0, D_0066B5A0);
+    TkMenuSetSceneDataAdrs(1, D_0066BDA0);
+    TkMenuSetSceneDataAdrs(2, D_00670DA0);
     TOSeqInitParam();
 }
 
@@ -163,11 +187,11 @@ void TOSetExeMessageWindowArea(int a)
 
     if (a == 0) {
         for (i = 7; i >= 0; i--) {
-            D_0068F0A8[i] = (MenuSlot *)&D_0068EEE8[i]; /* DEBT(CAST) */
+            D_0068F0A8[i] = &D_0068EEE8[i];
         }
     } else {
         for (i = 7; i >= 0; i--) {
-            D_0068F0A8[i] = (MenuSlot *)&D_0068EFC8[i]; /* DEBT(CAST) */
+            D_0068F0A8[i] = &D_0068EFC8[i];
         }
     }
     func_0020A7A8(a);
@@ -205,11 +229,11 @@ void func_0020A7B8(void)
     int i;
 
     for (i = 0; i < 8; i++) {
-        R4PT(i)->p10->h0 = 0;
-        R4PT(i)->p14->h0 = 0;
+        R4PT(i)->p10->w00 = 0;
+        R4PT(i)->p14->w00 = 0;
         R4PT(i)->p18->b0 = 0;
-        R4PT(i)->p10->h8 = 0;
-        R4PT(i)->p14->h2C = 0;
+        R4PT(i)->p10->state = 0;
+        R4PT(i)->p14->state = 0;
         R4PT(i)->p18->b1 = 0;
     }
 }
@@ -220,13 +244,13 @@ void func_0020A818(void) {
 int TOInitMessageWindow(int i) /* DEBT(TYPE): declared int, no return value in the asm */
 {
     func_002EF0D0(D_0068F0A8[i], 0, 0x1C);
-    R4PT(i)->p10 = (R4Hdr *)func_00209538(i); /* DEBT(CAST): R4Hdr is the R4Ptrs view of MenuSlot */
-    R4PT(i)->p14 = (R4Cmd *)func_002043D0(i); /* DEBT(CAST): R4Cmd is the R4Ptrs view of MenuCmd */
-    R4PT(i)->p18 = (R4Info *)func_002043E8(i); /* DEBT(CAST): R4Info is the R4Ptrs view of SlotZ */
+    R4PT(i)->p10 = func_00209538(i);
+    R4PT(i)->p14 = func_002043D0(i);
+    R4PT(i)->p18 = func_002043E8(i);
     func_002EF0D0(R4PT(i)->p10, 0, 0x5C);
     func_00204168(i);
     R4PT(i)->p10->h2 = i;
-    R4PT(i)->p14->h4 = i;
+    R4PT(i)->p14->id = i;
     D_0068F0A8[i]->w04 = -1;
     R4PT(i)->p14->fDC = (MenuFn)func_00207AA0;
 }
@@ -246,11 +270,11 @@ void TOCloseMessageWindow(int i)
 
 void func_0020A948(int i)
 {
-    R4PT(i)->p10->h0 = 0;
-    R4PT(i)->p14->h0 = 0;
+    R4PT(i)->p10->w00 = 0;
+    R4PT(i)->p14->w00 = 0;
     R4PT(i)->p18->b0 = 0;
-    R4PT(i)->p10->h8 = 0;
-    R4PT(i)->p14->h2C = 0;
+    R4PT(i)->p10->state = 0;
+    R4PT(i)->p14->state = 0;
     R4PT(i)->p18->b1 = 0;
 }
 
@@ -265,7 +289,7 @@ void func_0020A998(void)
             r = TOControlWindow(i);
             TOControlMessage(i);
             if (r != 0) {
-                TOSetMessageFunc(i, R4PT(i)->p10->h8);
+                TOSetMessageFunc(i, R4PT(i)->p10->state);
             }
             if (D_0068F0A8[i]->w06 == 1) {
                 TOGetControlPadStatus(i);
@@ -291,13 +315,12 @@ void _m2c_TODrawMessageWindow_func_001FC3C8(s32, s32) __asm__("func_001FC3C8");
 void _m2c_TODrawMessageWindow_func_0020B520(void *) __asm__("func_0020B520");
 void _m2c_TODrawMessageWindow_func_0020E5F0() __asm__("func_0020E5F0");
 void _m2c_TODrawMessageWindow_func_0020EC88() __asm__("func_0020EC88");
-/* DEBT(CAST) */
 void TODrawMessageWindow(void) {
     u8 sp[0x10];
-    MenuSlot **var_17;
+    R4Ptrs **var_17;
     s16 temp_2;
     s32 var_16;
-    void *temp_4;
+    MenuCmd *temp_4;
 
     var_16 = 0;
     _m2c_TODrawMessageWindow_TOSetAddPkt();
@@ -309,12 +332,12 @@ void TODrawMessageWindow(void) {
     _m2c_TODrawMessageWindow_func_001EFB08();
     var_17 = D_0068F0A8;
     do {
-        if ((((s32) *_m2c_TODrawMessageWindow_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*(void **)((u8 *)(*var_17) + (0x14))), ((*(s32 *)((u8 *)(temp_4) + (8))) != 2)) || ((temp_2 = (*(s16 *)((u8 *)(temp_4) + (0x1A))), (temp_2 != 1)) && (temp_2 != 3)) || ((*(u16 *)((u8 *)(temp_4) + (0x10))) == 0x4000) || ((*(s16 *)((u8 *)(temp_4) + (0xC))) != 0) || (D_0068EEDC != 0)) {
+        if ((((s32) *_m2c_TODrawMessageWindow_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*var_17)->p14, (temp_4->x08 != 2)) || ((temp_2 = temp_4->h1A, (temp_2 != 1)) && (temp_2 != 3)) || (temp_4->h10 == 0x4000) || (temp_4->h0C != 0) || (D_0068EEDC != 0)) {
             _m2c_TODrawMessageWindow_TODrawWindow(var_16);
             _m2c_TODrawMessageWindow_TODrawMessage(var_16);
         }
         var_16 += 1;
-        var_17 = (MenuSlot **)((u8 *)var_17 + (4));
+        var_17++;
     } while (var_16 < 8);
     _m2c_TODrawMessageWindow_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
     _m2c_TODrawMessageWindow_TODrawBtlWindow();
@@ -341,7 +364,7 @@ void func_0020AC10(void)
             r = TOControlWindow(i);
             TOControlMessage(i);
             if (r != 0) {
-                TOSetMessageFunc(i, R4PT(i)->p10->h8);
+                TOSetMessageFunc(i, R4PT(i)->p10->state);
             }
             if (D_0068F0A8[i]->w06 == 1) {
                 TOGetControlPadStatus(i);
@@ -360,13 +383,12 @@ s32 _m2c_TODrawMessageWindowForMenu_func_001EF940() __asm__("func_001EF940");
 s32 _m2c_TODrawMessageWindowForMenu_func_001EF978() __asm__("func_001EF978");
 s32 _m2c_TODrawMessageWindowForMenu_func_001EFB08() __asm__("func_001EFB08");
 s32 _m2c_TODrawMessageWindowForMenu_func_0020B520(void *) __asm__("func_0020B520");
-/* DEBT(CAST) */
 void TODrawMessageWindowForMenu(void) {
     u8 sp[0x10];
-    MenuSlot **var_17;
+    R4Ptrs **var_17;
     s16 temp_2;
     s32 var_16;
-    void *temp_4;
+    MenuCmd *temp_4;
 
     var_16 = 0;
     _m2c_TODrawMessageWindowForMenu_TOSetPktBuffAdrs(0x01F00000, 0x100000, 0xF0000);
@@ -376,12 +398,12 @@ void TODrawMessageWindowForMenu(void) {
     _m2c_TODrawMessageWindowForMenu_func_001EFB08();
     var_17 = D_0068F0A8;
     do {
-        if ((((s32) *_m2c_TODrawMessageWindowForMenu_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*(void **)((u8 *)(*var_17) + (0x14))), ((*(s32 *)((u8 *)(temp_4) + (8))) != 2)) || ((temp_2 = (*(s16 *)((u8 *)(temp_4) + (0x1A))), (temp_2 != 1)) && (temp_2 != 3)) || ((*(u16 *)((u8 *)(temp_4) + (0x10))) == 0x4000) || ((*(s16 *)((u8 *)(temp_4) + (0xC))) != 0) || (D_0068EEDC != 0)) {
+        if ((((s32) *_m2c_TODrawMessageWindowForMenu_MsGetSaveMenu() >> 9) & 1) || (temp_4 = (*var_17)->p14, (temp_4->x08 != 2)) || ((temp_2 = temp_4->h1A, (temp_2 != 1)) && (temp_2 != 3)) || (temp_4->h10 == 0x4000) || (temp_4->h0C != 0) || (D_0068EEDC != 0)) {
             _m2c_TODrawMessageWindowForMenu_TODrawWindow(var_16);
             _m2c_TODrawMessageWindowForMenu_TODrawMessage(var_16);
         }
         var_16 += 1;
-        var_17 = (MenuSlot **)((u8 *)var_17 + (4));
+        var_17++;
     } while (var_16 < 8);
     _m2c_TODrawMessageWindowForMenu_TOMakePktScissor(0, 0, 0x1FF, 0x19F);
     _m2c_TODrawMessageWindowForMenu_func_001EF978();
@@ -404,11 +426,11 @@ void func_0020AE58(void)
     int i;
 
     for (i = 0; i < 8; i++) {
-        R4PT(i)->p10->h0 = 0;
-        R4PT(i)->p14->h0 = 0;
+        R4PT(i)->p10->w00 = 0;
+        R4PT(i)->p14->w00 = 0;
         R4PT(i)->p18->b0 = 0;
-        R4PT(i)->p10->h8 = 0;
-        R4PT(i)->p14->h2C = 0;
+        R4PT(i)->p10->state = 0;
+        R4PT(i)->p14->state = 0;
         R4PT(i)->p18->b1 = 0;
     }
 }
@@ -451,7 +473,7 @@ void TOSetMessageWindowPositionRect(int i, int align, int x, int y, int w, int h
 int func_0020B238(int font, u8 *text)
 {
     s16 size[2];
-    int k = R4PT(font)->p10->h4;
+    int k = R4PT(font)->p10->w04;
     s16 x = D_00323848[k].x + D_00323848[k].w;
     s16 y = D_00323848[k].y + D_00323848[k].h;
 
@@ -465,7 +487,7 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", func_0020B308);
 
 void TOSetSelectMessageWindow(int i, int a, int b, int c)
 {
-    R4PT(i)->p14->h1C = 1;
+    R4PT(i)->p14->w1C = 1;
     R4PT(i)->p18->b1 = 0;
     R4PT(i)->p18->b2 = a;
     R4PT(i)->p18->b3 = b;
@@ -678,7 +700,7 @@ s32 TOSwapInternationalEnvExec(void)
     func_0020CC20((s8 *) D_003238AC, 7, D_00323960);
     func_0020DC78(2);
     func_0020CC20((s8 *) D_003238AC, 0x16, D_00670DA0);
-    TkMenuSetSceneDataAdrs(2, (TblEntry *) D_00670DA0);
+    TkMenuSetSceneDataAdrs(2, D_00670DA0);
     TOSeqInitParam();
     MsBattleReadData();
     D_003238B4 = 0;
@@ -784,7 +806,7 @@ s32 TOSwapInternationalEnvExecNonBlock(void)
         }
         break;
     case 21:
-        TkMenuSetSceneDataAdrs(2, (TblEntry *)D_00670DA0); /* DEBT(CAST): table loaded into a byte buffer */
+        TkMenuSetSceneDataAdrs(2, D_00670DA0);
         TOSeqInitParam();
         *st = 22;
         break;

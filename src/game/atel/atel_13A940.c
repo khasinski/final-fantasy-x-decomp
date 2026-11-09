@@ -4,7 +4,33 @@
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", func_0013A940);
+void func_0013A940(void)
+{
+    if (func_00124B50 != 0) {
+        int i = TkGetLastSyncVCounter() - 1;
+        D_0058E98A = 0;
+        D_0058E988 = 0;
+        i = -i;
+        D_0058E98C = 0;
+        D_0058E98E = 0;
+        D_0058E990 = 0;
+        D_0058E992 = 0;
+        for (; i <= 0; i++) {
+            D_0058E98A |= TkGetControlerHist(1, 0, i);
+            D_0058E988 |= TkGetControlerHist(0, 0, i);
+            D_0058E98C |= TkGetControlerReptHist(0, 0, i);
+            D_0058E98E |= TkGetControlerRept2Hist(0, 0, i);
+            D_0058E990 |= TkGetControlerTrigHist(0, 0, i);
+            D_0058E992 |= TkGetControlerTrigRHist(0, 0, i);
+        }
+    } else {
+        D_0058E98A = 0;
+        D_0058E98C = 0;
+        D_0058E98E = 0;
+        D_0058E990 = 0;
+        D_0058E992 = 0;
+    }
+}
 
 int func_0013AAD8(void) {
     return D_0058E988;
@@ -49,7 +75,7 @@ s32 func_0013AB38(s32 a, s32 b) {
 Effect *AtelGetMesWinWork(int id)
 {
     id = id < 0 ? 0 : (id < 8 ? id : 7);
-    return (Effect *)&D_0058E630[func_00138C68()][id]; /* DEBT(CAST): EffectQ view of Effect */
+    return &D_0058E630[func_00138C68()][id];
 }
 
 int AtelGetCtrlworkActorTotal(char *p) {
@@ -330,7 +356,7 @@ float func_0013B5D8(Actor *a, float f)
     int i;
 
     for (i = 0; i < 9; i++) {
-        CALLV_func_0013B530(a, i, f);
+        func_0013B530(a, i, f);
     }
     return f;
 }
@@ -340,7 +366,7 @@ void func_0013B638(Actor *a, float f)
     int i;
 
     for (i = 0; i < 9; i++) {
-        ((R0SlotFn)func_0013B500)(a, i, f);
+        func_0013B500(a, i, f);
     }
 }
 
@@ -349,7 +375,7 @@ void func_0013B698(Actor *a, float f)
     int i;
 
     for (i = 0; i < 9; i++) {
-        ((R0SlotFn)func_0013B518)(a, i, f);
+        func_0013B518(a, i, f);
     }
 }
 
@@ -358,7 +384,7 @@ void func_0013B6F8(Actor *a, float f)
     int i;
 
     for (i = 0; i < 9; i++) {
-        ((R0SlotFn)func_0013B548)(a, i, f);
+        func_0013B548(a, i, f);
     }
 }
 
@@ -367,7 +393,7 @@ void func_0013B758(Actor *a, float f)
     int i;
 
     for (i = 0; i < 9; i++) {
-        ((R0SlotFn)func_0013B560)(a, i, f);
+        func_0013B560(a, i, f);
     }
 }
 
@@ -410,8 +436,8 @@ int func_0013B8C0(int id, int idx) {
 }
 
 void AtelSetPos(Actor *a, int flag, float x, float z) {
-    StateQ *st = STATEQ(AtelGetPosWorkAdrs(a));
-    StateQ *st2;
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ActorState *st2;
     Sys3D8 *g;
 
     st->x = x;
@@ -422,7 +448,7 @@ void AtelSetPos(Actor *a, int flag, float x, float z) {
         Ch_ClothReset(AQ(a)->ptr9C);
     }
     if (AQ(a)->id == D_0058E3D8->hA) {
-        st2 = STATEQ(AtelGetPosWorkAdrs(a));
+        st2 = AtelGetPosWorkAdrs(a);
         g = D_0058E3D8;
         g->prev[0] = g->cur[0];
         g->prev[1] = g->cur[1];
@@ -459,7 +485,7 @@ void graphicPreviousLevelGetNameHash(Chr *c, float x, float y, float z) {
 }
 
 void AtelSetPos3d(Actor *a, int flag, float x, float y, float z) {
-    StateQ *st = STATEQ(AtelGetPosWorkAdrs(a));
+    ActorState *st = AtelGetPosWorkAdrs(a);
     float v[4];
 
     if (st == 0) {
@@ -726,7 +752,92 @@ void func_0013C330(void) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", func_0013C340);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", func_0013C710);
+typedef struct CtrlWork13C710 {
+    struct {
+        unsigned b0 : 2;
+        unsigned b2 : 1;
+        unsigned b3 : 1;
+        unsigned rest : 28;
+    } flags;
+    u8 pad04[0x44];
+    char *p48;
+    u8 pad4C[0x20C - 0x4C];
+    int w20C;
+    struct {
+        unsigned b0 : 4;
+        unsigned b4 : 1;
+        unsigned rest : 27;
+    } w210;
+} CtrlWork13C710;
+
+extern char D_0056A810[];
+extern char D_0056A828[];
+extern char D_0056A838[];
+extern char D_0056A848[];
+extern int D_0058E3DC;
+extern int D_0058E3E0;
+void op_event_effect_init(void);
+void AtelClearPauseFlag(void);
+
+void func_0013C710(int *w_raw, int flag)
+{
+    CtrlWork13C710 *w = (CtrlWork13C710 *)w_raw;
+    char buf[0x80];
+    int total;
+    int i;
+    int done;
+    int trig;
+
+    if (flag != 0) {
+        MsBattleExeClear();
+    }
+    done = 1;
+    total = AtelGetCtrlworkActorTotal((char *)w);
+    w->flags.b2 = 0;
+    if (D_0058E3E0 < 2) {
+        trig = func_002D26C8(0, 0, func_0013AB18());
+    } else {
+        trig = 0;
+    }
+    if (trig & 0x20) {
+        if (func_00144CD0() == 1) {
+            w->flags.b2 = 1;
+        }
+    }
+    if (*(int *)(w->p48 + 0xC) != 0) {
+        func_0014D7B8(w->p48 + *(int *)(w->p48 + 0xC));
+    }
+    for (i = 0; i < total; i++) {
+        Actor *a;
+
+        D_0058E3DC = i;
+        func_002F0008(buf, D_0056A810, i, w->w20C);
+        AtelPs2DebugString(buf);
+        a = AtelGetBasicWork(D_0058E3DC);
+        if (!(a->flags34.w & 0x10)) {
+            func_00140B48(a, 0, 1);
+        }
+        if (!(a->flags34.w & 0x10)) {
+            done = 0;
+        }
+    }
+    w->flags.b3 = done;
+    if (done != 0) {
+        i = 0;
+        AtelPs2DebugString(D_0056A828);
+        for (; i < total; i++) {
+            AtelDecodeSignal(i, -1);
+        }
+        AtelPs2DebugString(D_0056A838);
+        op_event_effect_init();
+        AtelClearPauseFlag();
+        w->w210.b4 = 1;
+    } else {
+        func_002F0008(buf, D_0056A848, w->w20C);
+        AtelPs2DebugString(buf);
+        w->w20C++;
+    }
+}
 
 void func_0013C920(int *w) {
     if (*w & 8) {

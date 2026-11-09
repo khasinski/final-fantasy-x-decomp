@@ -182,7 +182,9 @@ void func_002271B0(int x, int y, int w, int h, int id, int e, int k)
     func_00226C78(x + 0xD3, y + 6, s[k], 0);
 }
 
-void TkMn2GetCommonPlate(FlagRec *o, int a1, int a2, int a3, int t0, int t1) {
+void TkMn2GetCommonPlate(void *o_, const void *a1, const void *a2, const void *a3, int t0, int t1) {
+    FlagRec *o = o_;
+
     func_002273A0(a1, o->rect);
     o->x08 = TkMn2SeqGetColor(a2);
     o->x0C = TkMn2SeqGetColor(a3);
@@ -190,7 +192,7 @@ void TkMn2GetCommonPlate(FlagRec *o, int a1, int a2, int a3, int t0, int t1) {
     o->x14 = t1;
 }
 
-void func_00227310(int a0, FlagRec *o, int a2, int a3, int t0, int t1, int t2) {
+void func_00227310(int a0, FlagRec *o, const void *a2, const void *a3, const void *t0, int t1, int t2) {
     func_002273C0(a0, a2, o->rect);
     o->x08 = func_002273F8(a0, a3);
     o->x0C = func_002273F8(a0, t0);
@@ -198,47 +200,93 @@ void func_00227310(int a0, FlagRec *o, int a2, int a3, int t0, int t1, int t2) {
     o->x14 = t2;
 }
 
-void func_002273A0(const char *name, s16 *rect) { TOSeqGetRect(1, name, rect, rect + 1, rect + 2, rect + 3); }
+void func_002273A0(const void *name, void *rect_) {
+    s16 *rect = rect_;
 
-void func_002273C0(int a0, int a1, s16 *rect) { TOSeqGetRect(a0, a1, rect, rect + 1, rect + 2, rect + 3); }
+    TOSeqGetRect(1, name, rect, rect + 1, rect + 2, rect + 3);
+}
 
-int TkMn2SeqGetColor(int id) {
+void func_002273C0(int a0, const void *a1, s16 *rect) { TOSeqGetRect(a0, a1, rect, rect + 1, rect + 2, rect + 3); }
+
+int TkMn2SeqGetColor(const void *id) {
     int v;
 
     TOSeqGetColor(1, id, &v);
     return v;
 }
 
-int func_002273F8(int a0, int a1) {
+int func_002273F8(int a0, const void *a1) {
     int v;
 
     TOSeqGetColor(a0, a1, &v);
     return v;
 }
 
-s16 TkMn2SeqGetNum(int id) {
+s16 TkMn2SeqGetNum(const void *id) {
     s16 v;
 
     TOSeqGetNum(1, id, &v);
     return v;
 }
 
-s16 TkMn2SeqGetNumCustom(int a0, int a1) {
+s16 TkMn2SeqGetNumCustom(int a0, const void *a1) {
     s16 v;
 
     TOSeqGetNum(a0, a1, &v);
     return v;
 }
 
-void func_00227460(const char *name, s16 *out) { TOSeqGetPoint(1, name, out, out + 1); }
+void func_00227460(const void *name, void *out_) {
+    s16 *out = out_;
 
-void func_00227478(int a0, int a1, s16 *out) { TOSeqGetPoint(a0, a1, out, out + 1); }
+    TOSeqGetPoint(1, name, out, out + 1);
+}
 
-void func_00227480(const char *name) { TOSeqStartScene(1, name); }
+void func_00227478(int a0, const void *a1, s16 *out) { TOSeqGetPoint(a0, a1, out, out + 1); }
 
-void func_00227490(const char *name) { TOSeqStopScene(1, name); }
+void func_00227480(const void *name) { TOSeqStartScene(1, name); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_226BF0", func_002274A0);
+void func_00227490(const void *name) { TOSeqStopScene(1, name); }
+
+void func_002274A0(int y, int h, int mode, int ratio)
+{
+    int y1;
+    int h1;
+    int dy;
+
+    switch (mode) {
+    case 1:
+        dy = (h * (ratio < 0 ? -ratio : ratio)) / 4096;
+        if (ratio >= 0) {
+            y1 = y + (h - dy);
+        } else {
+            y1 = y;
+        }
+        h1 = dy - 2;
+        if (h1 < 0) {
+            h1 = 0;
+        }
+        break;
+    case 2:
+        dy = (h * (ratio < 0 ? -ratio : ratio)) / 4096;
+        if (ratio >= 0) {
+            y1 = y;
+        } else {
+            y1 = y + dy + 2;
+        }
+        h1 = h - dy;
+        if (h1 < 0) {
+            h1 = 0;
+        }
+        break;
+    case 0:
+    default:
+        y1 = y;
+        h1 = h;
+        break;
+    }
+    func_00225800(0, y1, 0x200, h1 - 1);
+}
 
 void TkMn2DumpPlate(DrawArgs *a)
 {

@@ -40,15 +40,14 @@ void func_0027A3F0(T6TransformFrame *frame, int unused1, T6TransformInput *input
     T6_ColMgr *manager;
     float scaleX;
     float scaleY;
-    struct W3Whole *matrix;
+    float *matrix;
     u8 *flags;
     float *world;
     float *scale;
     float *position;
     int *offsets;
 
-    /* DEBT(CAST): identity helper uses the legacy W3Whole matrix view. */
-    matrix = (struct W3Whole *)frame->matrix;
+    matrix = frame->matrix[0];
     offsets = input->offsets;
     /* DEBT(CAST): offsets select byte flags and float vectors in the payload. */
     /* DEBT(ORDER): independent payload views preserve original load scheduling. */
@@ -130,7 +129,7 @@ void func_0027A8D0(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysW *s = SLOT_WORK(T6_PSysW, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w48 = 0;
     s->parts = 0;
     s->w4C = 0;
@@ -181,11 +180,10 @@ void func_0027A9D0(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->rec[n].h[0] = src->h[0];
         s->rec[n].h[1] = src->h[1];
         s->rec[n].h[2] = src->h[2];
-        i = 0; /* DEBT(FAKE): dead store, steers register allocation */
         s->rec[n].h[3] = src->h[3];
     }
     if (t >= life->len - 0x1000) {
-        p = (Particle *)s->parts; /* DEBT(CAST): parts is declared as a word pointer */
+        p = s->parts;
         n = k->count;
         for (i = 0; i < n; i++, p++) {
             if (p->flags & 1) {
@@ -197,12 +195,12 @@ void func_0027A9D0(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         }
         s->done = 1;
     }
-    if (D_006A3BC4 == 0 && ((u8 *)ppvMng)[0x1D] == 0) { /* DEBT(CAST): byte 0x1D of the manager */
+    if (D_006A3BC4 == 0 && ppvMng->b1D == 0) {
         func_0027AD60(o, k, ctx);
     }
     func_0027AE48(o, k, ctx, s);
     if (D_006A3BC4 == 0) {
-        func_0027BA78((PtEmitter *)k, (PtOwner *)s); /* DEBT(CAST): emitter/owner views of the key and work */
+        func_0027BA78(k, s);
     }
 }
 
@@ -214,7 +212,7 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_279F40", func_0027AE48);
 
 void func_0027BA78(PtEmitter *e, PtOwner *o)
 {
-    PtAnim *anim = (PtAnim *)D_006A3924->tbl[e->anim]; /* DEBT(CAST): tbl is declared as DataRef ** */
+    PtAnim *anim = D_006A3924->tbl[e->id];
     Particle *p = o->parts;
     PtKey *k;
     int i;
@@ -225,7 +223,7 @@ void func_0027BA78(PtEmitter *e, PtOwner *o)
         if (p->flags & 1) {
             p->age++;
             k = &anim->keys[p->frame];
-            if (p->age >= o->life) {
+            if (p->age >= o->nrec) {
                 p->flags &= ~1;
             }
             p->vel.x += e->vel.x;

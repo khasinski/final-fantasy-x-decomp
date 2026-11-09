@@ -95,13 +95,13 @@ int func_00151000(Actor *a, void *op, ScriptCtx *ctx)
     return 0;
 }
 
-int func_00151060(int a, int b, int c)
+int func_00151060(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 0, 0);
     return 0;
 }
 
-int func_00151088(int a, int b, int c)
+int func_00151088(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 1, 0);
     return 0;
@@ -469,17 +469,18 @@ int func_00151AB8(Actor *a, void *op, ScriptCtx *ctx)
     return Ch_GetSeqFrame(chr);
 }
 
-int Ch_OptposGet_(int a, int op, int ctx, int mode) /* DEBT(TYPE): q2.h declares ints for (Actor *, op, ScriptCtx *, mode) */
+int Ch_OptposGet_(Actor *actor, void *op, ScriptCtx *sc, int mode)
 {
-    Actor *actor = (Actor *)a;
-    ScriptCtx *sc = (ScriptCtx *)ctx;
     int bone = 0;
     int z;
     int y;
     int x;
     int id;
     Chr *c;
-    float pos[4];
+    union {
+        float f[4];
+        V128 v;
+    } pos;
 
     z = AtelPopStackInteger(actor, sc);
     y = AtelPopStackInteger(actor, sc);
@@ -498,40 +499,40 @@ int Ch_OptposGet_(int a, int op, int ctx, int mode) /* DEBT(TYPE): q2.h declares
     }
     switch (mode) {
     case 0:
-        Ch_OptposGet(c, bone, pos);
+        Ch_OptposGet(c, bone, pos.f);
         break;
     case 1:
-        Ch_OptposGet(c, 0, pos);
+        Ch_OptposGet(c, 0, pos.f);
         break;
     case 2:
-        *(V128 *)pos = c->v6C0; /* DEBT(CAST): v6C0 holds a position vector */
+        pos.v = c->v6C0;
         break;
     }
     if (x != 0) {
-        *(float *)x = pos[0]; /* DEBT(CAST): AtelGetRealVarAdrs returns the address as int */
+        *(float *)x = pos.f[0]; /* DEBT(CAST): AtelGetRealVarAdrs returns the address as int */
     }
     if (y != 0) {
-        *(float *)y = pos[1]; /* DEBT(CAST) */
+        *(float *)y = pos.f[1]; /* DEBT(CAST) */
     }
     if (z != 0) {
-        *(float *)z = pos[2]; /* DEBT(CAST) */
+        *(float *)z = pos.f[2]; /* DEBT(CAST) */
     }
     return 0;
 }
 
-int func_00151C68(int a, int b, int c)
+int func_00151C68(Actor *a, void *b, ScriptCtx *c)
 {
     Ch_OptposGet_(a, b, c, 0);
     return 0;
 }
 
-int func_00151C88(int a, int b, int c)
+int func_00151C88(Actor *a, void *b, ScriptCtx *c)
 {
     Ch_OptposGet_(a, b, c, 1);
     return 0;
 }
 
-int func_00151CA8(int a, int b, int c)
+int func_00151CA8(Actor *a, void *b, ScriptCtx *c)
 {
     Ch_OptposGet_(a, b, c, 2);
     return 0;
@@ -624,10 +625,8 @@ int func_00151F18(Actor *a, void *op, ScriptCtx *ctx)
     return 0;
 }
 
-int func_00151F68(int a, int ctx, int mode, int other) /* DEBT(TYPE): q2.h declares ints for (Actor *, ScriptCtx *, mode, other) */
+int func_00151F68(Actor *actor, ScriptCtx *sc, int mode, int other)
 {
-    Actor *actor = (Actor *)a;
-    ScriptCtx *sc = (ScriptCtx *)ctx;
     int v1;
     int v2;
     int v3;
@@ -662,37 +661,37 @@ int func_00151F68(int a, int ctx, int mode, int other) /* DEBT(TYPE): q2.h decla
     return 0;
 }
 
-int func_001520E8(int a, int b, int c)
+int func_001520E8(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 0, 0);
     return 0;
 }
 
-int func_00152110(int a, int b, int c)
+int func_00152110(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 1, 0);
     return 0;
 }
 
-int func_00152138(int a, int b, int c)
+int func_00152138(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 0, 1);
     return 0;
 }
 
-int func_00152160(int a, int b, int c)
+int func_00152160(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 1, 1);
     return 0;
 }
 
-int func_00152188(int a, int b, int c)
+int func_00152188(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 0, 1);
     return 0;
 }
 
-int func_001521B0(int a, int b, int c)
+int func_001521B0(Actor *a, void *b, ScriptCtx *c)
 {
     func_00151F68(a, c, 1, 1);
     return 0;

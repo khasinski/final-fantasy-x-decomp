@@ -41,9 +41,9 @@ s32 func_002DDDB8(void) {
 
 extern s32 D_00566340;
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 s32 func_002DDE58(void) {
-    register s32 a3 __asm__("$7");
+    s32 a3;
 
     (*(s32 *)((u8 *)(D_0078BF80) + (0))) = 0xF;
     if (func_002FB4C8(D_0078BC40, 1, 0, D_0078BF80, 0x80, D_0078BF80, 0x80, 0, 0) < 0) {

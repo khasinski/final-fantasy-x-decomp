@@ -12,7 +12,7 @@ TblEntry *func_0020EC90(int a)
     return D_00690268[a];
 }
 
-void TkMenuSetSceneDataAdrs(int i, TblEntry *e)
+void TkMenuSetSceneDataAdrs(int i, void *e)
 {
     D_00690268[i] = e;
 }

@@ -148,18 +148,18 @@ void func_00268CA8(void) {
     a[0] = base[4];
     a[1] = base[5];
     a[2] = base[6];
-    func_002DCEC8((s32)a, (s32)a); /* DEBT(CAST): funcs.h prototype takes ints */
+    func_002DCEC8(a, a);
     o = (u_long128 *)D_006A3A40;
     *o = *(u_long128 *)a;
     b[0] = a[1];
     b[1] = -a[0];
     b[2] = 0;
     b[3] = 0;
-    func_002DCEC8((s32)b, (s32)b);
+    func_002DCEC8(b, b);
     q = o - 1;
     q[0] = *(u_long128 *)b;
     func_002DCE80(c, b, a);
-    func_002DCEC8((s32)c, (s32)c);
+    func_002DCEC8(c, c);
     q[3] = *(u_long128 *)(D_006A3970 + 0x30);
     q[2] = *(u_long128 *)c;
 }
@@ -179,7 +179,7 @@ void func_00268EE8(s32 arg0) {
         return;
     case 1:
         func_002DD0C0(D_006A39B0, D_006A3930);
-        func_002DCE08(D_006A39B0 + 0x30, D_006A3970, D_006A3930 + 0x30);
+        func_002DCE08(D_006A39B0 + 0x30, D_006A3970, &D_006A3930[0].x);
         func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
         return;
     case 2:
@@ -493,7 +493,7 @@ void pppFpSetStickPos(int a, R6Vec3 *v) {
 
     pppFpGetMngPtr(a, 0, &o);
     if (o != 0) {
-        func_002DD128((struct W3Whole *)o->m); /* DEBT(CAST): prototype takes the W3Whole view */
+        func_002DD128(o->m);
         o->f40 = v->x;
         o->f44 = v->y;
         o->f48 = v->z;

@@ -1,10 +1,12 @@
 /* tu_145 0x18ef98-0x18fce0: medium; rcBBox (config/tu_map.tsv) */
+#define rcBBoxSet _hdr_rcBBoxSet
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
 #include "ffx/t2.h"
 #include "ffx/v2.h"
+#undef rcBBoxSet
 
 int rcLog2(int n) {
     int i;
@@ -107,7 +109,28 @@ void func_0018F310(W3Obj20 *o) {
     v[7] = 1.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcBBox", rcBBoxSet);
+typedef struct {
+    float min[4];
+    float max[4];
+} RcBBox;
+
+void rcBBoxSet(RcBBox *box, float (*v)[4], int n)
+{
+    int i;
+    int j;
+
+    func_0018F310((W3Obj20 *)box);
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < 3; j++) {
+            if (box->min[j] > v[i][j]) {
+                box->min[j] = v[i][j];
+            }
+            if (box->max[j] < v[i][j]) {
+                box->max[j] = v[i][j];
+            }
+        }
+    }
+}
 
 void func_0018F410(float *a, float *out) {
     float *b = a + 4;
@@ -152,8 +175,8 @@ void func_0018F6F8(Rsd *rsd) {
 }
 
 void func_0018F900(OmdH *h) {
-    OmdPrimSize size = D_0056D490; /* DEBT(FAKE): an initialised local array in the original; its initializer is in the existing rodata */
-    OmdPrimName type = D_0056D4E8; /* DEBT(FAKE): same */
+    OmdPrimSize size = D_0056D490; /* an initialised local array in the original; its initializer is in the existing rodata */
+    OmdPrimName type = D_0056D4E8; /* same */
     OmdPrimH *p = h->prim;
     u8 *data;
 

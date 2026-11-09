@@ -6,7 +6,7 @@
 int func_00137250(Actor *a, void *op, ScriptCtx *ctx) {
     int ok = 0;
     const char *s = (const char *)func_0013A8A0(AtelPopStackInteger(a, ctx)); /* DEBT(CAST): int returned, used as a string */
-    int room = CALL_func_001BDDC8(0);
+    int room = func_001BDDC8(0);
 
     if ((u32)func_002F0840(s) < (u32)room) {
         Rec14 *r = MsGetSaveChrName(0);
@@ -23,7 +23,7 @@ int func_001372D8(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
 
-    CALL_SndMusicStandby(AtelGetRealVarAdrs(a, y), x);
+    SndMusicStandby(AtelGetRealVarAdrs(a, y), x);
     return 1;
 }
 
@@ -86,7 +86,16 @@ int func_00137510(Actor *a, void *op, ScriptCtx *ctx) {
     return AtelPopStackInteger(a, ctx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_137250", func_00137530);
+int func_00137530(Actor *a, void *op, ScriptCtx *ctx)
+{
+    EvGameState *g = AtelGetCurCtrlWork();
+    float f = AtelPopStackFloat(a, ctx);
+    int on = AtelPopStackInteger(a, ctx) != 0;
+
+    g->f208 = f;
+    g->flags.b.b16 = on;
+    return on;
+}
 
 int func_001375B8(void) {
     EvGameState *g = AtelGetCurCtrlWork();

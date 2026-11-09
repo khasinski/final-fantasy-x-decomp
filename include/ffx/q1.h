@@ -9,21 +9,6 @@
 
 /* ======== 0x130AD8-0x145148: script-VM opcode handlers (continued) ======== */
 
-/* DEBT(NAME): view of the record returned by func_00124828 with the halfword members at 0xB4..0xBA (Rec124828 only
-   names 0xBC); the two types describe the same record. */
-typedef struct Rec124828H {
-    u8 padB4_0[0xB4];
-    s16 hB4;
-    s16 hB6;
-    s16 hB8;
-    s16 hBA;
-    u8 padBC[0x30];
-    u8 bEC[4];
-} Rec124828H;
-
-/* DEBT(CAST): the callee ignores its argument and these callers pass none, but funcs.h declares (int idx) */
-#define REC124828H() ((Rec124828H *)((Rec124828 *(*)())func_00124828)())
-
 void func_00124550(Rec124828 *r);
 void AtelSetEffectFlag(int v);
 void func_0014AA30(int v);
@@ -43,10 +28,6 @@ void func_0014D890(int v);
 void func_00138A58(int v);
 void func_00138A78(int v);
 
-/* DEBT(CAST): members the shared types leave as padding */
-#define ACTOR_HA8(a) (*(u16 *)((u8 *)(a) + 0xA8))
-typedef struct EvGameStateF { u8 pad0[0x1F0]; float f1F0; } EvGameStateF;
-
 void func_002D8490(int a, int b, int c);
 
 #define CLAMP_S8(v) ((v) < -128 ? -128 : ((v) < 128 ? (v) : 127))
@@ -59,22 +40,9 @@ void func_001747D0(int a, Vec4 *v);
 
 int func_0014ACC0(int v);
 
-/* DEBT(CAST): alternate bit-field view of Actor.flags34 (ActorFlags has no 1-bit members at 22 and 31) */
-typedef struct ActorFlagsQ {
-    unsigned lo : 22;
-    unsigned b22 : 1;
-    unsigned mid : 8;
-    unsigned b31 : 1;
-} ActorFlagsQ;
-
-
 /* DEBT(CAST): funcs.h declares the byte parameters as s8, the original callers pass them unextended (int) */
 #define CALL_func_002D8698 ((void (*)(int, int, int))func_002D8698)
 #define CALL_func_002D8700 ((void (*)(int, int, int, int))func_002D8700)
-
-/* DEBT(CAST): views of shared records whose members at these offsets are padding in types.h */
-typedef struct PartySlotV { u8 pad00[0x50]; s32 v50; s32 v54; s32 v58; } PartySlotV;
-typedef struct EvGameStateG { u8 pad00[0x210]; s32 w210; } EvGameStateG;
 
 /* DEBT(NAME): 0x10-byte per-opcode state block (fields named by offset) */
 typedef struct OpBlk {
@@ -104,8 +72,7 @@ void func_0014E068(void);
 void func_0014E028(void);
 void func_0014DCB8(int v);
 void func_0014DC70(int v);
-void SaveDataIsScreenClosed(u32 v);
-#define CALL_func_002D5E48 ((int (*)(int))func_002D5E48)
+int SaveDataIsScreenClosed(s32 v);
 
 /* DEBT(NAME): per-opcode state block of the 0x131F48 handler */
 typedef struct OpBlkH {
@@ -153,18 +120,9 @@ int func_0014F168(void);
 void AtelBindEff2On(Actor *a, int v);
 void func_00138970(Actor *a, int v);
 int func_0013A8C0(int v);
-int func_002F05E8(int a, u8 *b);
+int func_002F05E8(const void *a, const void *b);
 void func_002D8778(int v);
 void Ch_Vu1SetClipmode(Chr *chr, int v);
-
-/* DEBT(CAST): the system vtable of GetCD with the slots at 0x88/0x8C that SysVt leaves as padding */
-typedef struct SysVtQ {
-    u8 pad00[0x88];
-    int (*f88)(int a, int b);
-    int (*f8C)(int a);
-} SysVtQ;
-
-typedef struct EvGameStateK { u8 pad00[0x44]; int w44; } EvGameStateK;
 
 int func_0014D2F8(int a, int b, int c, int d, int e);
 void func_0014D468(int v);
@@ -184,13 +142,13 @@ void func_0014D610(int a, char *buf);
 
 int func_00173208(int id, float a, float b);
 void func_0014D7F0(float f);
-int func_0014D7E0(void);
+float func_0014D7E0(void);
 void TkMenuSetDummyControlerFlag(int v);
 void func_002415B8(int v);
 void func_001387D0(int a, int b, int c);
 int func_00220F10(void);
 int func_00220F20(void);
-int func_0014F380(int a, int b, int c);
+int func_0014F380();
 
 #define CALL_func_001BDE20 ((void (*)(int, int))func_001BDE20) /* DEBT(CAST): funcs.h declares (u8 id, int on) */
 
@@ -201,13 +159,9 @@ int func_0014AF40(int v);
 void AtelSetHelpEventFlag(int a, int b);
 int AtelGetHelpEventFlag(int v);
 typedef struct OpBlkR { int w0; int w4; int w8; u16 hC; u16 hE; } OpBlkR; /* DEBT(NAME): state block of the 0x134360 handler family */
-/* DEBT(CAST): bit view of EvGameState.flags (GameFlags has no member for bit 26) */
-typedef struct GameFlagsQ { unsigned lo : 26; unsigned b26 : 1; unsigned hi : 5; } GameFlagsQ;
 
 #define CALL_func_0012A7E0 ((int (*)(void))func_0012A7E0) /* DEBT(CAST): funcs.h declares (a, op, ctx); this caller passes nothing */
 
-typedef struct GameFlagsR { unsigned lo : 16; unsigned b16 : 1; unsigned hi : 15; } GameFlagsR;
-typedef struct EvGameStateX { GameFlagsR flags; u8 pad4[0x208 - 4]; float f208; } EvGameStateX; /* DEBT(CAST): overlay of EvGameState */
 int func_00227FD8(int a, int b);
 int func_0014F228(int a, int b, int c, int d);
 
@@ -224,7 +178,7 @@ int func_0014B240(void);
 void AtelSetDolby(int v);
 void MsSetSaveStartGame(void);
 void MsBattleReadData(void);
-void TkCdReadSync(int v);
+int TkCdReadSync(int v);
 void func_0014C828(int v);
 void MsChangeWeaponInvisible(int a, int b);
 void func_00299B90(void);
@@ -236,7 +190,6 @@ void TOSwapInternationalEnvInit(int v);
 int TOSwapInternationalEnvExec(void);
 void func_001382C0(int a, float f);
 int func_00138220(void);
-typedef struct EffectQ { u8 pad00[0x16]; u16 h16; u8 pad18[6]; s8 b1E; s8 b1F; u8 pad20[2]; u8 b22; u8 b23; u8 pad24[4]; int w28; } EffectQ; /* DEBT(CAST): view of Effect (AtelGetMesWinWork) with the member at 0x28 */
 /* DEBT(NAME): 16-byte entry of the two 16-entry callback queues at D_0058CF48 (fn, state word, 7-char name) */
 typedef struct CbEnt {
     int (*fn)(int *arg);
@@ -247,7 +200,6 @@ extern CbEnt D_0058CF48[2][16];
 extern char D_0056A510[];
 
 u16 *MsGetSaveWeaponList(int a, int b, int c, s32 *count);
-typedef struct Unk1BFED8Q { u8 pad0[3]; u8 b3; } Unk1BFED8Q; /* DEBT(CAST): view of Unk1BFED8 with the byte at 3 */
 
 char *func_002F032C(char *dst, const char *src);
 extern char D_0056A400[];
@@ -294,19 +246,13 @@ int func_001BCE30(void);
 int MsDebugFullCommand(void);
 
 /* DEBT(CAST): raw byte base of the record returned by func_00124828 (offsets are script-supplied) */
-#define REC124828_BASE() ((char *)((void *(*)())func_00124828)())
+#define REC124828_BASE() ((char *)func_00124828())
 int SndSepClearAll(void);
 int func_0015A550(void);
 int func_00158D60(void);
 
-#define CALL_func_002D41F0(v) (((void (*)(int))func_002D41F0)(v)) /* DEBT(CAST): funcs.h declares this without its argument */
-#define CALL_func_002D41E8(v) (((void (*)(int))func_002D41E8)(v)) /* DEBT(CAST): funcs.h declares this without its argument */
-
 void TOSetAlbhedFlg(int v);
 void func_00124528(int v);
-#define CALL_SndMusicStandby(a, b) (((void (*)(int, int))SndMusicStandby)(a, b)) /* DEBT(CAST): funcs.h declares this without its arguments */
-
-#define CALL_func_001BDDC8(v) (((int (*)(int))func_001BDDC8)(v)) /* DEBT(CAST): funcs.h declares this without its argument */
 
 int func_00148390(int a, int b, int c, int d);
 void func_001463F0(int v);
@@ -320,10 +266,8 @@ void func_2059B48(void);
 
 #define CALL_func_00124618(v) (((void (*)(int))func_00124618)(v)) /* DEBT(CAST): funcs.h declares a u8 parameter, the original caller passes a full int */
 
-#define CALL_func_001072F8(c, i, v) (((s32 (*)(Chr *, int, float *))func_001072F8)(c, i, v)) /* DEBT(CAST): funcs.h declares three ints */
-
-int TkMalloc(int v);
-int TkFree(int v);
+s32 TkMalloc(s32 size);
+void TkFree(s32 h);
 int MsGetSaveCommandMenuPanel(int v);
 void func_001BF888(int a, int b);
 int func_002F0008(char *buf, const char *fmt, ...);
@@ -354,12 +298,10 @@ extern s8 D_0058E930;
 
 extern char D_0056A5E0[];
 extern char D_0056A5F8[];
-int func_00125268(int a, int b, int c);
+void func_00125268(s32 a, s32 b, s32 c);
 
 void Sg_LightGetColor(int i, float *v);
 void Sg_LightGetDir(int i, float *v);
-#define CALL_func_001382E0(s, v) (((void (*)(const char *, float *))func_001382E0)(s, v)) /* DEBT(CAST): debug-print stub, declared without arguments */
-#define CALL_func_001382E8(s, v) (((void (*)(const char *, float *))func_001382E8)(s, v)) /* DEBT(CAST): debug-print stub, declared without arguments */
 extern float D_0058E5C0[4];
 extern float D_0058E5D0[4];
 extern float D_0058E5E0[4];
@@ -403,15 +345,19 @@ Fmt138 *func_00138D60(char *p);
 Sub138 *func_00138D78(char *p);
 float func_00138FC8(char *p);
 
-typedef struct Ent138 { int w0; int w4; } Ent138; /* DEBT(NAME): 8-byte table entry of the 0x138D60 data blob */
-
 extern int D_0058E40C;
 extern int D_0058E410;
 extern int D_0058E414;
 extern char D_0030B900[];
-typedef struct Flg210 { unsigned b0 : 1; unsigned rest : 31; } Flg210; /* DEBT(NAME): flag word at +0x210 of the block behind D_0058E3D8 */
+typedef union Flg210 {
+    int w;
+    struct {
+        unsigned b0 : 1;
+        unsigned rest : 31;
+    } b;
+} Flg210; /* DEBT(NAME): flag word at +0x210 of the block behind D_0058E3D8 */
 typedef struct Ent3D8 { int w0; int w4; int w8; u8 pC[2]; u8 bE; u8 bF; } Ent3D8; /* DEBT(NAME): four 16-byte entries at +0x64 of the block behind D_0058E3D8 */
-typedef struct Sys3D8 { u32 flags; u8 pad4[6]; u16 hA; u16 hC; u8 padE[0x14 - 0xE]; u16 h14; u16 h16; u16 h18; u16 h1A; u8 pad1C[0x2C - 0x1C]; int w2C; int w30; char *p34; char *p38; u8 pad3C[8]; int w44; char *p48; u8 pad4C[0x54 - 0x4C]; int (*f54)(Actor *a, u32 off); u8 pad58[8]; int (*f60)(void); Ent3D8 ent[4]; u8 padA4[0x1E4 - 0xA4]; u8 b1E4; u8 pad1E5; u8 b1E6; u8 pad1E7; u16 h1E8; u8 pad1EA[0x204 - 0x1EA]; int w204; u8 pad208[8]; Flg210 f210; u8 pad214[4]; float cur[4]; float prev[4]; } Sys3D8; /* DEBT(NAME): block at *D_0058E3D8, only the used members */
+typedef struct Sys3D8 { s32 flags; u8 pad4[6]; u16 hA; u16 hC; u8 padE[0x14 - 0xE]; u16 h14; u16 h16; u16 h18; u16 h1A; u8 pad1C[0x2C - 0x1C]; int w2C; int w30; char *p34; char *p38; u8 pad3C[8]; int w44; char *p48; u8 pad4C[0x54 - 0x4C]; int (*f54)(Actor *a, u32 off); u8 pad58[8]; int (*f60)(void); Ent3D8 ent[4]; u8 padA4[0x1E4 - 0xA4]; u8 b1E4; u8 pad1E5; u8 b1E6; u8 pad1E7; u16 h1E8; u8 pad1EA[0x204 - 0x1EA]; int w204; u8 pad208[8]; Flg210 f210; u8 pad214[4]; float cur[4]; float prev[4]; } Sys3D8; /* DEBT(NAME): block at *D_0058E3D8, only the used members */
 extern Sys3D8 *D_0058E3D8;
 void func_00172FC8(int a, int b);
 void func_00172F80(int a, int b);
@@ -419,12 +365,9 @@ void TkSetEventJumpMapNo(int a, int b);
 void func_00139700(int a, int b, int c);
 
 void func_001397F0(char *p, int b, int c);
-void func_00149080(int a, int b, int c, int d, int e);
+int func_00149080(int a, int b, int c, int d, int e);
 void func_00136430(float v);
 void func_00139A00(char *p, int b);
-
-typedef struct TblEnt138 { u16 a; u16 b; int pad; } TblEnt138; /* DEBT(NAME): 8-byte entry */
-typedef struct Tbl138 { int n; TblEnt138 e[1]; } Tbl138; /* DEBT(NAME): table returned by func_001392C8 */
 
 int func_00124BC8(void);
 int func_00124BE8(void);
@@ -442,13 +385,11 @@ void func_0013A510(u8 *d, const u8 *s);
 #define CALL0_AtelGetBasicWork() (((Actor *(*)(void))AtelGetBasicWork)()) /* DEBT(CAST): funcs.h declares an id parameter the original caller does not pass */
 char *func_0013A468(char *p);
 char *func_0013A470(void);
-void *AtelGetCtrlWork(int i);
 char *func_0013A7E0(char *p, int i);
 char *func_0013A7F8(char *p, int i);
 int func_0013A810(char *p, int i);
 
-typedef struct Q1D450 { u8 d[0x238]; } Q1D450; /* DEBT(NAME): 0x238-byte element of D_0058D450 */
-extern Q1D450 D_0058D450[];
+extern EvGameState D_0058D450[];
 
 typedef struct Ofs8 { u16 off; u16 h2; int w4; } Ofs8; /* DEBT(NAME): 8-byte offset-table entry */
 
@@ -462,7 +403,7 @@ extern int D_0058E994;
 extern int D_0058E99C;
 char *func_0013A820(int a, int b, int c);
 
-extern EffectQ D_0058E630[][8];
+extern Effect D_0058E630[][8];
 extern char D_0030B8C0[];
 
 int func_00138C68(void);
@@ -488,10 +429,6 @@ void func_00117E18(int v);
 void func_00117E08(int v);
 void func_00138B58(void);
 
-typedef struct EvGameStateW { int flags; u8 pad4[0x20C]; int w210; } EvGameStateW; /* DEBT(CAST): signed-flags view of the block at D_0058E3D8 */
-
-#define EVW() ((EvGameStateW *)D_0058E3D8) /* DEBT(CAST): see EvGameStateW */
-
 extern char D_0056A6A8[];
 extern char D_0056A6E0[];
 extern char D_0056A6C0[];
@@ -503,7 +440,23 @@ typedef struct ObjSlotBR { u16 h0; u16 h2; s16 h4; u16 h6; float f08; float fC; 
 typedef struct ObjBindR { u8 p00[0x44]; ObjSlotR *s44; ObjSlotBR *s48; } ObjBindR; /* DEBT(CAST): ActorBind members at 0x44/0x48 */
 #define OBJBIND(a, i) ((ObjBindR *)func_0013C9C8((a), (i)))
 typedef struct NodeQ { struct NodeQ *next; struct NodeQ *prev; } NodeQ; /* DEBT(NAME): doubly linked list node, next at 0 and prev at 4 */
-typedef struct ObjNodeR { struct ObjNodeR *next; u8 p04[4]; u16 h08; u16 h0A; u8 p0C[2]; u16 h0E; u16 h10; u16 h12; u16 h14; } ObjNodeR; /* DEBT(NAME): list node; byte 0xF aliases the high byte of h0E */
+typedef struct ObjNodeR {
+    struct ObjNodeR *next;
+    u8 p04[4];
+    u16 h08;
+    u16 h0A;
+    u8 p0C[2];
+    union {
+        u16 h;
+        struct {
+            u8 lo;
+            u8 hi;
+        } b;
+    } u0E;
+    u16 h10;
+    u16 h12;
+    u16 h14;
+} ObjNodeR; /* DEBT(NAME): list node; byte 0xF aliases the high byte of u0E */
 /* DEBT(NAME): free-node pool and slot metadata reconstructed from func_001440C8 / func_00143E18. */
 typedef struct ObjPoolNode { NodeQ link; u8 payload[0x10]; } ObjPoolNode;
 typedef struct ObjPoolSlot { u16 id; u16 count; u8 flags; u8 pad5[3]; } ObjPoolSlot;
@@ -588,41 +541,34 @@ void func_0013BF20(Actor *a, int n, int mask, int flags);
 
 void Ch_SetPos3(Chr *c, float x, float y, float z);
 
-/* DEBT(CAST): script-resource reader used by 0x13C9C8..0x13CE70: a header of table offsets plus the data blob it indexes */
-typedef struct ScrHdrQ { u8 p00[0x14]; int o14; u8 p18[8]; int o20; int o24; int o28; int o2C; int o30; } ScrHdrQ;
-typedef struct ScrBlobQ { u8 p00[0x20]; int o20; u8 p24[0xC]; int o30; } ScrBlobQ;
-typedef struct ScrQ { ScrHdrQ *hdr; ScrBlobQ *blob; } ScrQ;
-typedef struct ScrEntQ { u8 p00[0x10]; u16 h10[4]; char *p18; u8 b1C; s8 b1D; u8 b1E; } ScrEntQ;
-typedef ScrEntQ ScrEntQ2;
-typedef struct StkQ { int n; int v[0x14]; u8 tag[0x14]; } StkQ; /* DEBT(CAST): operand stack of the script VM, as seen from a ScriptCtx pointer */
 void func_0013C308(int v);
 void func_0013C330(void);
 void func_0013C340(int *w, int a, int b);
 void func_0013C710(int *w, int a);
 void func_0013C920(int *w);
-int func_0013CA30(ScrQ *s, int i);
+int func_0013CA30(Actor *s, int i);
 int func_0013CA50(int id, int i);
-int func_0013CA80(ScrQ *s, int i);
+int func_0013CA80(Actor *s, int i);
 int func_0013CAA0(int id, int i);
-void func_0013CAD0(ScrQ *s, ScrEntQ2 *e, int off);
-int func_0013CB48(ScrQ *s, ScrEntQ *e);
-char *func_0013CBF8(ScrQ *s, ScrEntQ *e);
-char *func_0013CC00(ScrQ *s, int off);
-char *func_0013CC18(ScrQ *s, int i);
-int func_0013CC40(ScrQ *s, int i);
-int func_0013CC60(ScrQ *s, int i);
-int func_0013CC80(ScrQ *s, int i);
+void func_0013CAD0(Actor *s, ActorBind *e, int off);
+int func_0013CB48(Actor *s, ActorBind *e);
+char *func_0013CBF8(Actor *s, ActorBind *e);
+char *func_0013CC00(Actor *s, int off);
+char *func_0013CC18(Actor *s, int i);
+int func_0013CC40(Actor *s, int i);
+int func_0013CC60(Actor *s, int i);
+int func_0013CC80(Actor *s, int i);
 int func_0013CCA0(int v);
 int func_0013CCA8(int flag, u8 *p);
-int func_0013CD18(ScrQ *s, ScrEntQ *e);
-int func_0013CE70(int a, StkQ *k);
+int func_0013CD18(Actor *s, ActorBind *e);
+int func_0013CE70(int a, ScriptCtx *k);
 int func_0013AB38(int a, int b);
 
 int func_0013CF40(Actor *a, ScriptCtx *ctx);
 
 void func_0013CAF0(int id, int slot, int off);
-void func_0013CB60(ScrQ *s, ScrEntQ *e, int i);
-void func_0013CD40(ScrQ *s, ScrEntQ *e, int c);
+void func_0013CB60(Actor *s, ActorBind *e, int i);
+void func_0013CD40(Actor *s, ActorBind *e, int c);
 void func_0013CDC8(int id, int off);
 
 int AtelCheckCallbackQue(int i);
@@ -643,13 +589,9 @@ int AtelGetCtrlworkActorTotal(char *p);
 
 extern float D_0058E590;
 int func_002D4850(float w, float x, float y, float z);
-void TkMtCalcSpline_f(int a, int *b, int c, float f) __asm__("TkMtCalcSpline"); /* DEBT(CAST): funcs.h omits the float argument; same symbol, distinct prototype */
-void func_002D5188_f(int a, int *b, int c, float f) __asm__("func_002D5188"); /* DEBT(CAST): funcs.h omits the float argument; same symbol, distinct prototype */
-void func_002D5450_f(int a, int *b, int c, float f) __asm__("func_002D5450"); /* DEBT(CAST): funcs.h omits the float argument; same symbol, distinct prototype */
-void func_002D5448_f(int a, int *b, int c, float f) __asm__("func_002D5448"); /* DEBT(CAST): funcs.h omits the float argument; same symbol, distinct prototype */
 int func_0013D068(Actor *a, int i);
-int func_0013D098(ScrQ *s, int i);
-int func_0013D0B8(ScrQ *s, int i);
+int func_0013D098(Actor *s, int i);
+int func_0013D0B8(Actor *s, int i);
 int func_0013D0D8(unsigned n);
 void func_0013D5D8(Actor *a, ScriptCtx *ctx, int idx, int v);
 void func_0013D680(Actor *a, ScriptCtx *ctx, int idx);
@@ -673,10 +615,8 @@ float func_0013D4C8(Actor *a, int idx, int v);
 int func_0013D410(Actor *a, int idx, int v);
 
 void func_0013D6D8(Actor *a, ScriptCtx *ctx, int idx);
-int func_0013D120(Actor *a, int idx, int n);
+void *func_0013D120(Actor *a, int idx, int n);
 
-typedef struct StateQ { float x, y, z; u8 p0C[4]; float px, py, pz; } StateQ; /* DEBT(CAST): ActorState members at 0x10..0x18 that the shared type leaves as padding */
-#define STATEQ(s) ((StateQ *)(s))
 void func_0013DA08(); /* DEBT(TYPE): defined as (Actor *a); func_00140468 passes a second argument */
 
 void Ch_SetPos(Chr *chr, float x, float z);
@@ -697,7 +637,7 @@ int AtelDecodeCommand(int id, int c);
 void func_00142190(NodeQ *p, NodeQ *n);
 void func_001421B0(NodeQ *p, NodeQ *n);
 void func_001421F8(NodeQ *n);
-void func_00142218(Actor *a, NodeQ *n);
+void func_00142218(Actor *a, void *n);
 void AtelDeleteSignal(int id, NodeQ *n);
 int func_001422A0(Req142 *r, int x);
 int AtelRegistSignal2(Req142 *r);
@@ -711,10 +651,6 @@ void func_001426F0(Actor *a, ObjNodeR *n);
 int AtelGetRequestLevel(int id);
 int func_00142748(int id, int x);
 
-
-
-int func_00142530_k() __asm__("func_00142530"); /* DEBT(CAST): same symbol without a prototype, so the five-argument call keeps its sibcall form */
-
 int func_00142988(Actor *a, int b, int c);
 void AtelSkipReqLevel(int id, int x);
 int AtelGetActorType(int id);
@@ -724,18 +660,14 @@ void func_00142F88(int id, int b, int c);
 
 void func_00142988_v(Actor *a, int b, int c) __asm__("func_00142988"); /* DEBT(CAST): same symbol seen as returning nothing, so the caller keeps its tail call */
 
-typedef struct SlotCQ { u8 p0[0x1D]; u8 b1D; u8 p1E; u8 b1F; u8 pad20[8]; int pending; u8 pad2C[0x10]; u16 h3C; u16 h3E; u16 h40; } SlotCQ; /* DEBT(CAST): bind-slot members at 0x3C..0x40 */
-typedef struct Res588Q { u8 p0[0x1F8]; int *a1F8; int *a1FC; } Res588Q; /* DEBT(CAST): resource returned by AtelGetCtrlWork, tables at 0x1F8/0x1FC */
 void func_001458B0(int id, int a, int b, int c);
-void func_00141FF0(Actor *a, SlotCQ *s);
+void func_00141FF0(Actor *a, ActorBind *s);
 
-void func_00142B50(Actor *a, SlotCQ *s, int n);
+void func_00142B50(Actor *a, ActorBind *s, int n);
 void func_00142070(Actor *a, ObjNodeR *n);
 
 void func_00142C40(Actor *a, ObjBindR *b, int n);
 
-typedef struct Rec124828F { u8 p0[0x10]; unsigned lo : 25; unsigned b25 : 1; unsigned b26 : 1; unsigned hi : 5; } Rec124828F; /* DEBT(NAME): flag word at +0x10 of the func_00124828 record */
-#define REC124828F() ((Rec124828F *)((Rec124828 *(*)())func_00124828)()) /* DEBT(CAST): funcs.h declares an index parameter the original caller does not pass */
 void func_00143270(int v);
 int func_001432B8(void);
 
@@ -774,9 +706,8 @@ void func_001436A8(int id, float x, float y, float z);
 void func_00143748(int id, int mode, float *a, float *b, float *c);
 void func_00143850(int id, int mode, float x, float y, float z);
 
-void *AtelGetCtrlWork_0(void) __asm__("AtelGetCtrlWork"); /* DEBT(CAST): the original caller passes no index */
+EvGameState *AtelGetCtrlWork_0(void) __asm__("AtelGetCtrlWork"); /* DEBT(CAST): the original caller passes no index */
 Effect *AtelGetMesWinWork_0(void) __asm__("AtelGetMesWinWork"); /* DEBT(CAST): the original caller passes no id */
-typedef struct ResQ2 { int w0; u8 p4[0x44]; int w48; } ResQ2; /* DEBT(CAST): resource returned by AtelGetCtrlWork, members at 0 and 0x48 */
 u8 *AtelGetBattleIdAdrs(int id);
 void func_00144938(void);
 void func_001449D0(int i);

@@ -55,7 +55,6 @@ typedef struct OpRes1406 {
 } OpRes1406;
 
 /* c_173EA0 */
-typedef struct Blk64 { u64 d[8]; } Blk64; /* DEBT(NAME): 64-byte block (4x4 float matrix?) copied as a whole */
 extern Blk64 D_005FFE50[5]; /* DEBT(TYPE): five matrices, handed to func_002DD0C0 / func_002DCE38 */
 extern Blk64 D_005FFE90, D_005FFED0, D_005FFF10, D_005FFF50; /* DEBT(CAST): D_005FFE50[1..4] as separate symbols, see func_00173370 */
 extern float D_00600150[4];

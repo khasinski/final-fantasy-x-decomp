@@ -1,4 +1,7 @@
 /* tu_241 0x216fa0-0x2180a0: low; ~inputSetInputInfoToCurrentFrame (config/tu_map.tsv) */
+#define TODrawMenuPlateXYWC2_Rfix _hdr_TODrawMenuPlateXYWC2_Rfix
+#define func_00216FA0 _hdr_func_00216FA0
+#define D_00692458 _hdr_D_00692458
 #include "common.h"
 #include "ffx/w6.h"
 #include "ffx/r4.h"
@@ -6,15 +9,53 @@
 #include "ffx/u3.h"
 #include "ffx/v4.h"
 #include "ffx/q5.h"
+#undef TODrawMenuPlateXYWC2_Rfix
+#undef func_00216FA0
+#undef D_00692458
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_00216FA0);
+int TODrawMenuPlateXYWC2_Rfix(int a, int b, int x, int y, int w, u32 c0, u32 c1);
+
+typedef struct {
+    s32 w0;
+    s32 w4;
+    u8 *w8;
+    s16 hC;
+    s16 hE;
+} R4Rec16Ptr;
+
+extern R4Rec16Ptr D_00692458[];
+
+void func_00216FA0(int i)
+{
+    D_00692458[i].w0 = 0;
+    D_00692458[i].w4 = 7;
+    D_00692458[i].w8 = 0;
+    D_00692458[i].hC = 0;
+    D_00692458[i].hE = 0;
+}
 
 void func_00216FD8(int a) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_00216FE0);
+void func_00216FE0(int i)
+{
+    if (D_00692458[i].w0 != 0) {
+        TODrawMenuPlateXYWC2_Rfix(0x45, 0x46, D_00324248, D_0032424A, D_0032424C, D_00324250, D_00324254);
+        TODrawMenuPlateXYWC2_Rfix(6, 7, D_0032425C, D_0032425E, D_00324260, 0x40000000, 0x40000000);
+        TOMkpShapeXY(0x3E, D_00324248 + 0x50, D_0032424A);
+        func_001F3A80(D_00692458[i].w4, (int)D_00692458[i].w8, (0x200 - D_00692458[i].hC) / 2, 0xC, 0, 1, 0x80, 0x80, 0x80, 0x80);
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_002170F8);
+int func_002170F8(int i, int text)
+{
+    func_00216FA0(i);
+    D_00692458[i].w0 = 1;
+    D_00692458[i].w4 = 7;
+    D_00692458[i].w8 = (u8 *)text;
+    _TOGetMessageWH(7, (u8 *)text, &D_00692458[i].hC, &D_00692458[i].hE, 1, 0);
+    return 1;
+}
 
 void func_00217180(int i)
 {

@@ -7,13 +7,16 @@
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015BBF8);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015BF00);
+void func_0015BF00(u64 *p, u32 a, u32 b, u32 c, u32 d, u32 e, u32 f)
+{
+    *p = ((((u64)a << 63) | ((u64)(b & 0xFFFFFFF0) << 32)) | ((u64)d << 28)) | ((((u64)f) | ((u64)e << 26)) | ((u64)c << 31));
+}
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_0015BF50(void *arg0, s64 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    register s64 v0 __asm__("$2");
-    register s32 a3 __asm__("$7");
-    register s32 t1 __asm__("$9");
+    s64 v0;
+    s32 a3;
+    s32 t1;
 
     (*(s32 *)((u8 *)(arg0) + (0xC))) = (s32)(arg1 >> 0x20);
     t1 = (arg5 << 0xE) | (arg2 << 0x1C);
@@ -56,11 +59,35 @@ void func_0015C058(int *p, u32 b) {
     func_0015BFA0(p, 0x53, b);
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015C068);
+void func_0015C068(int a)
+{
+    *(volatile int *)0x1000A030 = a;
+    *(volatile int *)0x1000A020 = 0;
+    *(volatile int *)0x1000A000 = 0x105;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015C098);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015C328);
+void func_0015C328(u32 tag_addr, u32 data_addr, int size)
+{
+    u32 data = data_addr;
+    u64 *tag = (u64 *)(tag_addr | 0x20000000U);
+
+    if (size > 0) {
+        do {
+            int chunk = (size > 0xFFFF0) ? 0xFFFF0 : size;
+            int id;
+            int qwc;
+
+            size -= chunk;
+            id = (size != 0) ? 3 : 0;
+            qwc = (chunk + 0xF) / 16;
+            *tag = ((u64)data << 32) | ((u64)id << 28) | (u32)qwc;
+            data += chunk;
+            tag += 2;
+        } while (size > 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", setLoadImageTagsTexAnim);
 

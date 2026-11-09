@@ -44,20 +44,19 @@ void func_001812C0(void)
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_001812C8);
 
 extern s32 _m2c_func_00181378_D_0030EE00 __asm__("D_0030EE00");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_00181378(void *arg0) {
     u8 sp[0x4090];
     s32 *var_17;
     s32 temp_2_2;
     s32 temp_3;
     s32 var_16;
-    register void *temp_2 __asm__("$2");
-    register void *var_18 __asm__("$18");
+    void *temp_2;
+    void *var_18;
 
     func_00180B70(sp);
     yiExecVIFpacket(sp, &_m2c_func_00181378_D_0030EE00, 4);
     temp_2 = (*(void **)((u8 *)(arg0) + (0x68868)));
-    __asm__("" : "+r"(temp_2));
     if (temp_2 != 0) {
         var_18 = temp_2;
         do {

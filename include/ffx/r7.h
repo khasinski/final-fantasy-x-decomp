@@ -134,12 +134,12 @@ typedef struct R7Thr {
     int idx;
 } R7Thr;
 
-void func_002B5348(int a, int b, int c, int d);
-void func_002B53D0(int a, int b, int c, int d);
-void func_002B5458(int a, int b, int c, int d);
-void op_rt_m_yxz(int a, int b, int c, int d);
-void func_002B5568(int a, int b, int c, int d);
-void func_002B55F0(int a, int b, int c, int d);
+void func_002B5348(void *a, void *b, void *c, void *d);
+void func_002B53D0(void *a, void *b, void *c, void *d);
+void func_002B5458(void *a, void *b, void *c, void *d);
+void op_rt_m_yxz(void *a, void *b, void *c, void *d);
+void func_002B5568(void *a, void *b, void *c, void *d);
+void func_002B55F0(void *a, void *b, void *c, void *d);
 
 
 int func_002E0360(int a, int b, int c, int d);

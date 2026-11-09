@@ -49,12 +49,35 @@ void func_00198908(W3Blk *n) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rc_198860", func_00198978);
-
-INCLUDE_ASM("build/ee_asm/game/rc/rc_198860", func_00198A68);
+typedef struct Copy400 {
+    int d[256];
+} Copy400;
 
 s32 _m2c_func_00198AE8_func_001988E8() __asm__("func_001988E8");
 s32 _m2c_func_00198AE8_func_00198CB0(void *) __asm__("func_00198CB0");
+
+void func_00198978(W3Blk *n) {
+    Copy400 *src;
+    Copy400 *dst;
+
+    src = (Copy400 *)_m2c_func_00198AE8_func_001988E8(n, *(s16 *)((u8 *)n + 8));
+    dst = (Copy400 *)_m2c_func_00198AE8_func_00198CB0(n);
+    *dst = *src;
+    func_0019A1A0(n->img, n->img->i30 - 1);
+}
+
+void func_00198A68(W3Blk *n) {
+    u32 *src;
+    u32 *dst;
+    int i;
+
+    src = (u32 *)_m2c_func_00198AE8_func_001988E8(n, *(s16 *)((u8 *)n + 8));
+    dst = (u32 *)_m2c_func_00198AE8_func_00198CB0(n);
+    for (i = 0; i < 0x100; i++) {
+        *dst++ = (*src++ & 0xFF000000) | 0x00FFFFFF;
+    }
+    func_0019A1A0(n->img, n->img->i30 - 1);
+}
 void _m2c_func_00198AE8_func_0019A1A0(void *, s32) __asm__("func_0019A1A0");
 void _m2c_func_00198AE8_func_002EEF1C(s32, s32, s32) __asm__("func_002EEF1C");
 /* DEBT(CAST) */ /* DEBT(FAKE) */

@@ -7,7 +7,7 @@ extern OfsTbl D_00662580;
 int func_001C0040(int a);
 int MsImportantName(int a);
 void MsSetDamageMotion(int id, int v, int z);
-int func_001CF458(int a, int b, int c, int d);
+int func_001CF458();
 void func_001E12C8(int id, BtlChr *c);
 void func_001E1120(int id, BtlChr *c, int a);
 void func_001E1418(int id, BtlChr *c, int a);

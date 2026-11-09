@@ -1,5 +1,8 @@
 /* tu_211 0x1e2360-0x1e4c30: medium; ~Ms (config/tu_map.tsv) */
 #define msResetHeadTarget _hdr_msResetHeadTarget
+#define func_001E2560 _hdr_func_001E2560
+#define MsMessageCueRegist _hdr_MsMessageCueRegist
+#define D_003172F0 _hdr_D_003172F0
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q4.h"
@@ -8,6 +11,29 @@
 #include "ffx/v3.h"
 #include "ffx/w5.h"
 #undef msResetHeadTarget
+#undef func_001E2560
+#undef MsMessageCueRegist
+#undef D_003172F0
+
+int MsMessageCueRegist(int a, int b, int c, int d, int e);
+int MsSetSaveCommand(int a, int b, int c);
+
+typedef struct {
+    u8 pad0[0x14];
+    s8 f14;
+    u8 pad15[0x1752 - 0x15];
+    u8 f1752;
+    u8 pad1753[0x175B - 0x1753];
+    u8 f175B;
+    u8 pad175C[0x207A - 0x175C];
+    u16 h207A;
+    u8 pad207C[0x2115 - 0x207C];
+    u8 f2115;
+    u8 pad2116[0x2133 - 0x2116];
+    s8 f2133;
+} GameStateLocal;
+
+extern GameStateLocal D_003172F0;
 
 int func_001E2360(void) {
     int i;
@@ -22,10 +48,35 @@ int func_001E2360(void) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeProcess);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", func_001E2560);
+typedef struct {
+    u8 pad0[0x3DAC];
+    s32 f3DAC;
+} SaveDataE2560;
+
+extern u16 D_00320068[];
+extern s32 D_00320070[];
+
+int func_001E2560(int id) {
+    int r = 0;
+    int i;
+
+    if (id == 0 && D_003172F0.f2115 != 2) {
+        MsGetChr(0);
+        ((SaveDataE2560 *)&D_003194D0)->f3DAC++;
+        for (i = 0; i < 4; i++) {
+            u16 cmd = D_00320068[i];
+            if (MsGetSaveCommand(id, cmd) == 0 && ((SaveDataE2560 *)&D_003194D0)->f3DAC >= D_00320070[i]) {
+                r = 1;
+                D_003172F0.h207A = cmd;
+                D_003172F0.f175B = 1;
+            }
+        }
+    }
+    return r;
+}
 
 int func_001E2658(int i, int k, int force) {
-    GameState *g = &D_003172F0;
+    GameStateLocal *g = &D_003172F0;
     int r = 0;
     BtlChr *c;
     s32 bits;
@@ -58,7 +109,44 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitUp);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeDamageCheck);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeStatusCheck);
+int MsLimitTypeStatusCheck(int source_id, BtlChr *source, int target_id, BtlChr *target, int a, int b) {
+    int count = 0;
+    int source_kind = MsGetRamChrMonster(source_id);
+    int target_kind = MsGetRamChrMonster(target_id);
+
+    if (source_kind == 1 && target_kind == 0) {
+        if (a > 0) {
+            count++;
+            func_001E2658(target_id, 5, 1);
+            if (target->f27B == 5) {
+                MsLimitUp(target_id, target, 0x10);
+            }
+        }
+        if (b & 1) {
+            count++;
+            func_001E2658(target_id, 6, 1);
+            if (target->f27B == 6) {
+                MsLimitUp(target_id, target, 0x10);
+            }
+        }
+        if (b & 2) {
+            count++;
+            func_001E2658(target_id, 10, 1);
+            if (target->f27B == 10) {
+                MsLimitUp(target_id, target, 10);
+            }
+        }
+    } else if (source_kind == 0 && target_kind == 1) {
+        if (a > 0) {
+            count++;
+            func_001E2658(source_id, 4, 0);
+            if (source->f27B == 4) {
+                MsLimitUp(source_id, source, 0x10);
+            }
+        }
+    }
+    return count;
+}
 
 /* DEBT(CAST): the final threshold comparison uses unsigned 32-bit values. */
 s32 MsLimitTypeDeathCheck(s32 source_id, BtlChr *source, s32 target_id, BtlChr *target)
@@ -150,7 +238,42 @@ s32 MsLimitTypeWinCheck(void)
     return count;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitCommandProcess);
+typedef struct {
+    u8 pad0[0x26];
+    u8 f26;
+} UnkCmd26;
+
+typedef struct {
+    u8 pad0[8];
+    struct {
+        u16 h[2];
+        u8 pad4[12];
+    } f8[4];
+} GsEnt48Arr;
+
+int MsLimitCommandProcess(int id, BtlChr *chr, GsEnt48 *ent, int idx) {
+    s8 flag = 0;
+    int i;
+    for (i = 0; i < 2; i++) {
+        int cmd = ((GsEnt48Arr *)ent)->f8[idx].h[i];
+        UnkCmd26 *t = (UnkCmd26 *)MsGetCommand(id, 0, -1, 0, &cmd);
+        if (t != 0) {
+            u8 v = t->f26;
+            if (v != 0) {
+                chr->f38D = v;
+                if (cmd == 0x3118) {
+                    flag = 1;
+                }
+            }
+        }
+    }
+    if (chr->f38F != 0) {
+        chr->f38F = 0;
+        chr->f38D = chr->f27D;
+    }
+    D_003172F0.f2133 = flag;
+    return 0;
+}
 
 void MsSummonLimitSave(BtlChr *c)
 {
@@ -335,7 +458,7 @@ u8 *MsGetTargetListWakka(int a, int *out1, int n, int *out2) {
         for (; i < n; i++) {
             off += ((u8 *)func_001E4A30(i))[1]; /* DEBT(CAST): the records are read as bytes */
         }
-        e = (u8 *)func_001E4A30(i); /* DEBT(CAST): the records are read as bytes */
+        e = func_001E4A30(i);
         if (out1 != 0) {
             *out1 = e[1];
         }
@@ -367,7 +490,7 @@ int func_001E49F8(u8 *p, int v)
     return n;
 }
 
-s32 *func_001E4A30(u32 i) {
+void *func_001E4A30(u32 i) {
     if (i < 4) {
         return &D_003188A0[i];
     }

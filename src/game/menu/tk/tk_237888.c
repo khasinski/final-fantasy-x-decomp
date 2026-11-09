@@ -34,18 +34,16 @@ void func_00237888(void)
 
 int TkMn2GetWShopPos(void) /* DEBT(TYPE): declared int in funcs.h, no value returned */
 {
-    /* DEBT(CAST): TkMn2GetCommonPlate takes the part names as int */
-    /* DEBT(CAST): several targets are declared with other types in shared headers */
     func_002273A0(D_00572420, D_003260B0);
     func_002273A0(D_00572430, D_00326108);
-    func_002273A0(D_00572440, (s16 *)&D_003260C0);
+    func_002273A0(D_00572440, &D_003260C0);
     func_002273A0(D_00572450, D_003260C8);
     func_002273A0(D_00572460, D_003260E8);
     func_002273A0(D_00572470, D_00326078);
     func_002273A0(D_00572480, D_00326088);
-    func_00227460(D_00572490, (s16 *)&D_00326110);
+    func_00227460(D_00572490, &D_00326110);
     func_00227460(D_005724A0, D_00326070);
-    func_00227460(D_005724B0, (s16 *)&D_003260B8);
+    func_00227460(D_005724B0, &D_003260B8);
     func_00227460(D_005724C0, D_00326080);
     func_00227460(D_005724D0, D_00326090);
     func_00227460(D_005724E0, D_00694098);
@@ -55,14 +53,14 @@ int TkMn2GetWShopPos(void) /* DEBT(TYPE): declared int in funcs.h, no value retu
     func_00227460(D_00572520, D_003260D8);
     func_00227460(D_00572530, D_003260F0);
     func_00227460(D_00572540, D_003260F8);
-    D_00694094 = TkMn2SeqGetColor((int)D_00572550);
-    D_0069409C = TkMn2SeqGetColor((int)D_00572560);
-    D_006940A0 = TkMn2SeqGetColor((int)D_00572570);
-    D_00326064 = TkMn2SeqGetColor((int)D_00572580);
-    D_00326068 = TkMn2SeqGetColor((int)D_00572590);
-    TkMn2GetCommonPlate(&D_00326098, (int)D_00572420, (int)D_00572580, (int)D_00572590, 0xd8, 0xd9);
-    TkMn2GetCommonPlate(&D_00326118, (int)D_00572440, (int)D_005725A0, (int)D_005725B0, 0, 0);
-    TkMn2GetCommonPlate(&D_00326130, (int)D_00572450, (int)D_00572550, (int)D_00572550, 0, 0);
+    D_00694094 = TkMn2SeqGetColor(D_00572550);
+    D_0069409C = TkMn2SeqGetColor(D_00572560);
+    D_006940A0 = TkMn2SeqGetColor(D_00572570);
+    D_00326064 = TkMn2SeqGetColor(D_00572580);
+    D_00326068 = TkMn2SeqGetColor(D_00572590);
+    TkMn2GetCommonPlate(&D_00326098, D_00572420, D_00572580, D_00572590, 0xd8, 0xd9);
+    TkMn2GetCommonPlate(&D_00326118, D_00572440, D_005725A0, D_005725B0, 0, 0);
+    TkMn2GetCommonPlate(&D_00326130, D_00572450, D_00572550, D_00572550, 0, 0);
     D_003260C0.y += 0x30;
 }
 
@@ -185,8 +183,7 @@ void _m2c_func_00238718_func_00238630(void *, s32, s16, s32, s32, s32) __asm__("
 void _m2c_func_00238718_func_002386D8(void *, s32, s32) __asm__("func_002386D8");
 void _m2c_func_00238718_func_002492F0() __asm__("func_002492F0");
 extern s16 _m2c_func_00238718_D_003260BA __asm__("D_003260BA");
-/* DEBT(CAST) */
-void func_00238718(void *arg0) {
+void func_00238718(Task *arg0) {
     s16 temp_17;
     s32 temp_18;
     s32 temp_2;
@@ -197,21 +194,21 @@ void func_00238718(void *arg0) {
     _m2c_func_00238718_func_00225920();
     temp_18 = _m2c_func_00238718_func_00228220(D_00694080, D_0069408C);
     temp_17 = _m2c_func_00238718_D_003260BA;
-    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
-        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 0, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        _m2c_func_00238718_func_00238630(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+    if (arg0->x32 == arg0->x34) {
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 0, arg0->x46);
+        _m2c_func_00238718_func_00238630(arg0, 0, arg0->x32, 0, -0x20, temp_18);
     } else {
-        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 1, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        _m2c_func_00238718_func_00238630(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
-        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0x120);
-        _m2c_func_00238718_func_00238630(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 1, arg0->x46);
+        _m2c_func_00238718_func_00238630(arg0, 1, arg0->x32, 0, -0x20, temp_18);
+        _m2c_func_00238718_func_002274A0(temp_17, 0x120, 2, arg0->x46);
+        temp_2 = -(arg0->x46 * 0x120);
+        _m2c_func_00238718_func_00238630(arg0, 2, arg0->x34, 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
     }
     _m2c_func_00238718_func_00225908();
     if (D_00326030->b45 > 0) {
         _m2c_func_00238718_func_002386D8(arg0, 0, 0);
     }
-    _m2c_func_00238718_func_00225E88((*(s16 *)((u8 *)(D_00326108) + (0))), D_00326108[1], D_00326108[2], D_00326108[3], (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (*(u16 *)((u8 *)(arg0) + (0x30))));
+    _m2c_func_00238718_func_00225E88(D_00326108[0], D_00326108[1], D_00326108[2], D_00326108[3], arg0->x32, arg0->x3A, arg0->x30);
     _m2c_func_00238718_func_00225B00();
 }
 
@@ -254,16 +251,16 @@ void func_00238968(Task *t)
 {
     s32 buf[4];
     Unk1BFED8 *r;
-    U4Id4 *tbl;
+    SysEntry *tbl;
 
     D_00694084 = -1;
     if (D_00326030->b45 > 0 && D_00326030->x48 != 2) {
         TkMenuCtrlSelFileWindow(t);
-        tbl = (U4Id4 *)0x1D57300; /* DEBT(CAST): table at a fixed address */
+        tbl = SYS_TBL;
         if (t->x48 >= 0) {
             tbl += t->x48;
-            if (tbl->id != 0) {
-                r = MsGetSaveWeapon(tbl->id, buf);
+            if (tbl->h0 != 0) {
+                r = MsGetSaveWeapon(tbl->h0, buf);
                 if (r->b2 != 0) {
                     D_00694084 = r->b4;
                 }
@@ -304,8 +301,7 @@ void _m2c_func_00238C48_func_00238B60(void *, s32, s16, s32, s32, s32) __asm__("
 void _m2c_func_00238C48_func_00238C08(void *, s32, s32) __asm__("func_00238C08");
 void _m2c_func_00238C48_func_002492F0() __asm__("func_002492F0");
 extern s16 _m2c_func_00238C48_D_003260BA __asm__("D_003260BA");
-/* DEBT(CAST) */
-void func_00238C48(void *arg0) {
+void func_00238C48(Task *arg0) {
     s16 temp_17;
     s32 temp_18;
     s32 temp_2;
@@ -316,21 +312,21 @@ void func_00238C48(void *arg0) {
     _m2c_func_00238C48_func_00225920();
     temp_18 = _m2c_func_00238C48_func_00228220(D_00694080, D_0069408C);
     temp_17 = _m2c_func_00238C48_D_003260BA;
-    if ((*(s16 *)((u8 *)(arg0) + (0x32))) == (*(s16 *)((u8 *)(arg0) + (0x34)))) {
-        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 0, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        _m2c_func_00238C48_func_00238B60(arg0, 0, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
+    if (arg0->x32 == arg0->x34) {
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 0, arg0->x46);
+        _m2c_func_00238C48_func_00238B60(arg0, 0, arg0->x32, 0, -0x20, temp_18);
     } else {
-        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 1, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        _m2c_func_00238C48_func_00238B60(arg0, 1, (*(s16 *)((u8 *)(arg0) + (0x32))), 0, -0x20, temp_18);
-        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 2, (*(s16 *)((u8 *)(arg0) + (0x46))));
-        temp_2 = -((*(s16 *)((u8 *)(arg0) + (0x46))) * 0x120);
-        _m2c_func_00238C48_func_00238B60(arg0, 2, (*(s16 *)((u8 *)(arg0) + (0x34))), 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 1, arg0->x46);
+        _m2c_func_00238C48_func_00238B60(arg0, 1, arg0->x32, 0, -0x20, temp_18);
+        _m2c_func_00238C48_func_002274A0(temp_17, 0x120, 2, arg0->x46);
+        temp_2 = -(arg0->x46 * 0x120);
+        _m2c_func_00238C48_func_00238B60(arg0, 2, arg0->x34, 0, (((s32)temp_2 / 4096)) - 0x20, temp_18);
     }
     _m2c_func_00238C48_func_00225908();
     if (D_00326030->b45 > 0) {
         _m2c_func_00238C48_func_00238C08(arg0, 0, 0);
     }
-    _m2c_func_00238C48_func_00225E88((*(s16 *)((u8 *)(D_00326108) + (0))), D_00326108[1], D_00326108[2], D_00326108[3], (*(s16 *)((u8 *)(arg0) + (0x32))), (*(u16 *)((u8 *)(arg0) + (0x3A))), (*(u16 *)((u8 *)(arg0) + (0x30))));
+    _m2c_func_00238C48_func_00225E88(D_00326108[0], D_00326108[1], D_00326108[2], D_00326108[3], arg0->x32, arg0->x3A, arg0->x30);
     _m2c_func_00238C48_func_00225B00();
 }
 
@@ -588,7 +584,7 @@ Task *func_002393D8(Task *src)
     int id;
 
     func_00228220(D_00694080, D_0069408C);
-    id = ((Pt16 *)0x1D57300)[src->x48].x; /* DEBT(CAST): 4-byte table at a fixed address */
+    id = SYS_TBL[src->x48].h0;
     t->ext[0] = (s32)src; /* DEBT(CAST): ext slots are typed s32 */
     t->x0C = (s32)func_002391C8; /* DEBT(CAST): Task callbacks are typed s32 */
     t->x10 = (s32)func_00239370;
@@ -634,7 +630,27 @@ void func_002395F8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00239638);
+void func_00239638(void)
+{
+    if (D_00693FD4 != 0) {
+        if (D_00693FD4->x48 >= (u16)D_00693FD4->x30) {
+            D_00693FD4->x48 = (u16)D_00693FD4->x30 - 1;
+        }
+        if (D_00693FD4->x48 < D_00693FD4->x32) {
+            D_00693FD4->x32 = D_00693FD4->x48;
+        }
+        if (D_00693FD4->x48 >= D_00693FD4->x32 + (u16)D_00693FD4->x3A) {
+            D_00693FD4->x32 = D_00693FD4->x48 - (u16)D_00693FD4->x3A - 1;
+            if (D_00693FD4->x32 < 0) {
+                D_00693FD4->x32 = 0;
+            }
+        }
+        D_00693FD4->x34 = D_00693FD4->x32;
+        ((int (*)(Task *))TkMenuRestartSelFileWindow)(D_00693FD4);
+        D_00693FD4->state = 0;
+        D_00693FD4->b45 = 0;
+    }
+}
 
 void func_002396F0(void) {
 }
@@ -699,15 +715,15 @@ void func_0023A150(void) { TkMn2GetIShopPos(); TkMn2GetWShopPos(); TkMn2GetStatu
 void func_0023A178(int a, int b) {
     D_00694080 = b;
     D_00694084 = -1;
-    func_00227480((int)D_005726A8); /* DEBT(CAST): address passed as int */
-    func_00227480((int)D_005726B0);
+    func_00227480(D_005726A8);
+    func_00227480(D_005726B0);
 }
 
 void func_0023A1B8(void) {
     func_002397B0();
     TkMsSetSaveParamAll();
-    func_00227490((int)D_005726A8); /* DEBT(CAST): address passed as int */
-    func_00227490((int)D_005726B0);
+    func_00227490(D_005726A8);
+    func_00227490(D_005726B0);
 }
 
 void func_0023A1F0(void) {

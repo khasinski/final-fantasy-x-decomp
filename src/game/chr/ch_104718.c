@@ -296,7 +296,29 @@ s32 ChN_ReadSystemMGRPsync(s32 a, s32 b)
     return r == 2 ? 0 : r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", ChN_ReadSystemMGRP);
+void ChN_ReadSystemMGRP(int a, int b)
+{
+    char buf[0x100];
+
+    if (func_00104948(0, b, a) == 0) {
+        s32 id = (b << 16) | a;
+        s32 r = Cache_CheckYet(2, id);
+        s32 mem;
+
+        if (r == 2) {
+            if (Ch_MgrpRead(a, b) != 0) {
+                return;
+            }
+            r = 1;
+        }
+        if (r == 1) {
+            func_00113480(0);
+        }
+        mem = Cache_Exist(2, id);
+        Cache_Use(2, id);
+        func_00104A88(mem, 0, b, a);
+    }
+}
 
 void Ch_DisposeAllMGRP(void)
 {
@@ -317,6 +339,43 @@ s32 func_00105180(s8 *p)
 {
     return (s16)((p[1] << 8) | p[0]);
 }
+
+typedef struct SysMotOldPair {
+    u16 id;
+    u16 seq;
+} SysMotOldPair;
+
+typedef struct MotionTblEntryOld {
+    u32 count;
+    SysMotOldPair *ptr;
+} MotionTblEntryOld;
+
+typedef struct MotionTblOld1 {
+    struct MotionTblOld1 *self;
+    s32 w4;
+    MotionTblEntryOld entries[4];
+} MotionTblOld1;
+
+typedef struct MotionTblOld2 {
+    struct MotionTblOld2 *self;
+    s32 count;
+    s32 w8;
+    s32 wC;
+    void *ptrs[1];
+} MotionTblOld2;
+
+typedef struct SysMotNewEntry {
+    s32 *seqs;
+    s32 w4;
+} SysMotNewEntry;
+
+typedef struct SysMotNewTbl {
+    u8 pad00[0x10];
+    SysMotNewEntry entries[1];
+} SysMotNewTbl;
+
+extern s8 D_003035A8[];
+int func_00117D38(Chr *chr, int a, int b);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_SetSysMotion);
 
@@ -354,13 +413,114 @@ void func_001053C0(OfsList *l, u32 base)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Chb_AttachMotionTBL_OLD);
+extern char D_00569498[], D_005694B0[];
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", func_00105500);
+void Chb_AttachMotionTBL_OLD(Rec12C *blk)
+{
+    char buf[0x100];
+    u8 *name = (u8 *)blk + 0xB8;
+    MotionTblOld1 *p1;
+    MotionTblOld2 *p2;
+    s32 diff;
+    s32 i;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", func_001055B0);
+    func_002F0008(buf, D_00569498, name);
+    p1 = (MotionTblOld1 *)Sg_PcRead((s32)buf);
+    blk->w108 = (s32)p1;
+    if (p1 != 0) {
+        diff = (s32)p1 - (s32)p1->self;
+        p1->self = p1;
+        if (diff != 0) {
+            for (i = 0; i < 4; i++) {
+                p1->entries[i].ptr = (SysMotOldPair *)((s32)p1->entries[i].ptr + diff);
+            }
+        }
+    }
+    func_002F0008(buf, D_005694B0, name);
+    p2 = (MotionTblOld2 *)Sg_PcRead((s32)buf);
+    blk->w10C = (s32)p2;
+    if (p2 != 0) {
+        diff = (s32)p2 - (s32)p2->self;
+        p2->self = p2;
+        if (diff != 0) {
+            for (i = 0; i < p2->count; i++) {
+                p2->ptrs[i] = (void *)((s32)p2->ptrs[i] + diff);
+            }
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", func_00105670);
+extern u8 D_003035B1;
+
+s32 func_00105500(Chr *chr, s32 seq, s32 unused, s32 id, s32 x, s32 y)
+{
+    ChrVmRec *rec;
+
+    Ch_ResetMotion((int)chr);
+    if (Ch_SetSequence((int)chr, seq) != 0) {
+        return -1;
+    }
+    rec = func_00105A88(chr);
+    if (rec == 0) {
+        return -1;
+    }
+    func_00112A70(chr, rec->arg, id, x << 8, y << 8);
+    chr->b742 = 1;
+    chr->w720 = (s32)&D_003035B1;
+    chr->pad744[0] = 1;
+    return 0;
+}
+
+s32 func_001055B0(Chr *chr, s32 seq, s32 unused, s32 id, s32 x, s32 y)
+{
+    ChrVmRec *rec;
+
+    Ch_ResetMotion((int)chr);
+    if (Ch_SetSequence((int)chr, seq) != 0) {
+        return -1;
+    }
+    rec = func_00105A88(chr);
+    if (rec == 0) {
+        return -1;
+    }
+    if (id != 1) {
+        if (y > 0) {
+            y++;
+        }
+    }
+    func_00112A70(chr, rec->arg, id, x << 8, y << 8);
+    chr->b742 = 1;
+    chr->w720 = (s32)&D_003035B1;
+    chr->pad744[0] = 1;
+    return 0;
+}
+
+s32 func_00105670(Chr *chr, s32 seq, s32 unused, s32 id, s32 idx1, s32 idx2)
+{
+    ChrVmRec *rec;
+    s32 x, y;
+
+    Ch_ResetMotion((int)chr);
+    if (Ch_SetSequence((int)chr, seq) != 0) {
+        return -1;
+    }
+    rec = func_00105A88(chr);
+    if (rec == 0) {
+        return -1;
+    }
+    x = rec->tab[idx1];
+    y = rec->tab[idx2];
+    if (id != 1) {
+        if (y > 0) {
+            y++;
+        }
+    }
+    func_00112A70(chr, rec->arg, id, x << 8, y << 8);
+    chr->b742 = 1;
+    chr->w720 = (s32)&D_003035B1;
+    chr->pad744[0] = 1;
+    return 0;
+}
 
 s32 func_00105750(Chr *chr, s8 v)
 {
@@ -521,7 +681,48 @@ ChrVmRec *func_00105A88(Chr *chr)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_SeqFrame);
+extern char D_00569530[];
+extern char D_00569540[];
+
+void Ch_SeqFrame(Chr *chr)
+{
+    s32 r;
+
+    for (;;) {
+        r = func_00105760(chr);
+        if (r == 0) {
+            continue;
+        }
+        if (r == 1) {
+            break;
+        }
+        if (r == 2) {
+            break;
+        }
+        if (r == 3) {
+            break;
+        }
+        if (r == -1) {
+            break;
+        }
+    }
+    if (r == -1) {
+        yiAssert(0, D_00569530, D_00569540);
+    }
+    if (r == 1) {
+        Ch_IncrementFrame(chr);
+    }
+    if (r == 2) {
+        Ch_IncrementFrame(chr);
+        if (chr->h734 == 0) {
+            chr->b742 = 0;
+        }
+    }
+    if (r == 3) {
+        chr->b742 = 0;
+        chr->pad740[0] = 1;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_MotionGetName);
 
@@ -544,8 +745,88 @@ s32 func_00105E48(Chr *chr)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_SetSequence);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", func_00106108);
+typedef struct ChrRelLink {
+    struct ChrRelLink *next;
+    s32 w4;
+    s32 w8;
+    s32 wC;
+} ChrRelLink;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", func_00106198);
+typedef struct ChrRelView {
+    u8 pad000[0x718];
+    s32 w718;
+    s32 w71C;
+    s32 w720;
+    u8 pad724[0x20];
+    s8 b744;
+    u8 pad745[0x13];
+    ChrRelLink *p758;
+    u8 pad75C[0x98];
+    s32 w7F4;
+    u8 pad7F8[0x8];
+    s32 w800;
+} ChrRelView;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_MemMoveEventMgrp);
+void func_00106108(ChrRelView *chr, s32 d)
+{
+    ChrRelLink *p;
+
+    chr->w7F4 += d;
+    chr->w718 += d;
+    chr->w71C += d;
+    if (chr->w720 != 0 && chr->b744 == 0) {
+        chr->w720 += d;
+    }
+    if (chr->w800 != 0) {
+        chr->w800 += d;
+    }
+    for (p = chr->p758; p != 0; p = p->next) {
+        p->w8 += d;
+        p->wC += d;
+    }
+}
+
+void func_00106198(s32 a, s32 b)
+{
+    s32 diff = a - b;
+    s32 i;
+    Chr *chr;
+
+    func_001049F8(a);
+    for (i = 0; i < 50; i++) {
+        if (D_0057E2B0[i].w0 == b) {
+            D_0057E2B0[i].w0 = a;
+            break;
+        }
+    }
+    for (i = 0; i < 100; i++) {
+        if (D_0057DAD8[i].w0 != 0 && D_0057DAD8[i].w10 == b) {
+            D_0057DAD8[i].w10 += diff;
+            D_0057DAD8[i].w0 = (RelObj *)((s32)D_0057DAD8[i].w0 + diff);
+        }
+    }
+    if (D_00300664 != 0) {
+        for (chr = D_00300664; chr != D_00300664 + D_00300668; chr++) {
+            if (chr->active != 0 && chr->w7F4 == b) {
+                func_00106108((ChrRelView *)chr, diff);
+            }
+        }
+    }
+}
+
+s32 Ch_MemMoveEventMgrp(void)
+{
+    s32 i;
+    s32 p;
+
+    for (i = 0; i < 50; i++) {
+        if (D_0057E2B0[i].w0 != 0 && D_0057E2B0[i].h4 == 1) {
+            p = D_0057E2B0[i].w0;
+            if (func_0011CDE8(&p, 0) != 0) {
+                func_00106198(p, D_0057E2B0[i].w0);
+                return 1;
+            }
+        }
+    }
+    return 0;
+}

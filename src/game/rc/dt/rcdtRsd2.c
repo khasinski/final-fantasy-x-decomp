@@ -11,7 +11,7 @@
 #undef func_0019DF68
 #undef func_0019DFB8
 
-void func_0019D688(W3Pair *p)
+void func_0019D688(W3Reader *p)
 {
     func_0019D6C8(p);
     func_0018FC10(p);
@@ -24,7 +24,7 @@ void rcdtParseInit(W3Reader *cs) {
     func_0019D768(cs);
 }
 
-void func_0019D6C8(W3Pair *p) {
+void func_0019D6C8(W3Reader *p) {
 }
 
 void rcdtParseSet(W3Reader *cs, W3Pair *p)
@@ -294,9 +294,24 @@ void func_0019DE78(W3Reader *r, void *dst, s32 n) {
     func_0019D878(r, n);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DEB8);
+float func_0019DEB8(W3Reader *r) {
+    u32 u;
+    V2Word w;
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtRsd2", func_0019DF10);
+    u = *(u32 *)r->cur;
+    func_0019D878(r, 4);
+    w.u = (u << 0x18) | ((u >> 0x18) | (((u >> 8) & 0xFF00) | ((u & 0xFF00) << 8)));
+    return w.f;
+}
+
+s64 func_0019DF10(W3Reader *r) {
+    u32 w;
+
+    w = *(u32 *)r->cur;
+    func_0019D878(r, 4);
+    w = (w << 0x18) | ((w >> 0x18) | (((w >> 8) & 0xFF00) | ((w & 0xFF00) << 8)));
+    return *(s64 *)&w;
+}
 
 void _m2c_func_0019DF68_func_0019D878() __asm__("func_0019D878");
 /* DEBT(CAST) */
@@ -471,7 +486,7 @@ int func_0019E248(RsdData *d, char *file) {
         }
     }
     if (rd != 0) {
-        func_0019D688((W3Pair *)rd); /* DEBT(CAST): declared with W3Pair, deletes the reader */
+        func_0019D688(rd);
     }
     if (blk != 0) {
         rcdtChunkDelete(blk);
@@ -540,7 +555,7 @@ void func_0019E550(RsdData *d, char *file) {
         p++;
     }
     if (rd != 0) {
-        func_0019D688((W3Pair *)rd); /* DEBT(CAST): declared with W3Pair, deletes the reader */
+        func_0019D688(rd);
     }
     if (blk != 0) {
         rcdtChunkDelete(blk);
@@ -662,7 +677,7 @@ void func_0019E960(RsdData *d, char *file) {
         p++;
     }
     if (rd != 0) {
-        func_0019D688((W3Pair *)rd); /* DEBT(CAST): declared with W3Pair, deletes the reader */
+        func_0019D688(rd);
     }
     if (blk != 0) {
         rcdtChunkDelete(blk);
@@ -727,7 +742,7 @@ void func_0019EEB0(RsdData *d, char *file) {
         p++;
     }
     if (rd != 0) {
-        func_0019D688((W3Pair *)rd); /* DEBT(CAST): declared with W3Pair, deletes the reader */
+        func_0019D688(rd);
     }
     if (blk != 0) {
         rcdtChunkDelete(blk);

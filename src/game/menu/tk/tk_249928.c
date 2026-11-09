@@ -6,9 +6,7 @@
 #include "ffx/s6.h"
 #include "ffx/u4.h"
 #include "ffx/r5.h"
-#define func_00249A08 v5_func_00249A08 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/v5.h"
-#undef func_00249A08
 
 int TkMenuGetCommandHelp(int id) {
     s32 pos;
@@ -42,11 +40,11 @@ int func_00249A08(void) {
 void TkMn2GetMainPos(void)
 {
     func_002273A0(D_00573090, D_00326DA8);
-    func_00227460(D_005730A0, (s16 *)&D_00326DA0); /* DEBT(CAST): S6Pt is an s16 pair */
+    func_00227460(D_005730A0, &D_00326DA0);
     func_00227460(D_005730B0, D_0069BE30);
     func_002273A0(D_005730C0, D_0069BE38);
-    D_00326D98 = TkMn2SeqGetColor((int)D_005730D0); /* DEBT(CAST): takes a name */
-    D_00326DA4 = TkMn2SeqGetColor((int)D_005730E0);
+    D_00326D98 = TkMn2SeqGetColor(D_005730D0);
+    D_00326DA4 = TkMn2SeqGetColor(D_005730E0);
 }
 
 int func_00249AA8(void)

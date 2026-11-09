@@ -8,17 +8,36 @@
 #include "ffx/v0.h"
 
 int func_0012D498(Actor *a, void *op, ScriptCtx *ctx) {
-    s32 *w = (s32 *)AtelGetCurCtrlWork(); /* DEBT(CAST): flag word of the event state */
+    s32 *w = &AtelGetCurCtrlWork()->flags.w;
     int on = AtelPopStackInteger(a, ctx) != 0;
 
     *w = (*w & ~0x800) | (on << 11);
     return on;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12D498", func_0012D500);
+int func_0012D500(Actor *a, void *op, ScriptCtx *ctx) {
+    int v3 = AtelPopStackInteger(a, ctx);
+    int v2 = AtelPopStackInteger(a, ctx);
+    int v1 = AtelPopStackInteger(a, ctx);
+
+    v3 = AtelGetRealVarAdrs(a, v3);
+    v2 = AtelGetRealVarAdrs(a, v2);
+    v1 = AtelGetRealVarAdrs(a, v1);
+    MsGetSavePartyMember((int *)v1, (int *)v2, (int *)v3);
+    if (*(int *)v1 == 0xFF) {
+        *(u32 *)v1 = 0xFFFFFFFF;
+    }
+    if (*(int *)v2 == 0xFF) {
+        *(u32 *)v2 = 0xFFFFFFFF;
+    }
+    if (*(int *)v3 == 0xFF) {
+        *(u32 *)v3 = 0xFFFFFFFF;
+    }
+    return 1;
+}
 
 int func_0012D5F8(Actor *a, void *op, ScriptCtx *ctx) {
-    s32 *w = (s32 *)AtelGetCurCtrlWork(); /* DEBT(CAST): flag word of the event state */
+    s32 *w = &AtelGetCurCtrlWork()->flags.w;
     int on = AtelPopStackInteger(a, ctx) != 0;
 
     *w = (*w & ~0x1000) | (on << 12);
@@ -26,7 +45,7 @@ int func_0012D5F8(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_0012D660(void) {
-    return AtelGetCurCtrlWork()->flags.b12;
+    return AtelGetCurCtrlWork()->flags.b.b12;
 }
 
 int func_0012D688(Actor *a) {

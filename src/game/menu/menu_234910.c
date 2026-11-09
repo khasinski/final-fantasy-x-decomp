@@ -36,8 +36,8 @@ void func_00234950(int a, int b)
 }
 
 void func_00234A00(void) {
-    func_00227490((int)&D_00572218); /* DEBT(CAST): address passed as int */
-    func_00227490((int)&D_00572220);
+    func_00227490(&D_00572218);
+    func_00227490(&D_00572220);
 }
 
 void func_00234A28(void) {

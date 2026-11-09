@@ -21,10 +21,10 @@ void func_00194530(void) {
     }
     g_pMainWork = _rcCalloc(1, 0x1C, D_0056D840, 46);
     g_pMainWork->sub = rcbgGuideNew();
-    func_002DD128((struct W3Whole *)D_00313850); /* DEBT(CAST): matrices are passed as the W3Whole view */
-    func_002DD128((struct W3Whole *)D_003138D0);
-    func_002DD128((struct W3Whole *)D_00313910);
-    func_002DD128((struct W3Whole *)D_00313950);
+    func_002DD128(D_00313850);
+    func_002DD128(D_003138D0);
+    func_002DD128(D_00313910);
+    func_002DD128(D_00313950);
     if (FFXIsDebug() && FFXIsPC()) {
         func_001910A0();
     }
@@ -150,9 +150,30 @@ void func_00194948(int id) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgMain", func_001949E0);
+void func_001949E0(void *a) {
+    if (G2_GetCore() == 0) {
+        rcbgPreDummyInit();
+    }
+    func_001991D8(G2_GetPool(), a);
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgMain", func_00194A50);
+extern int rcbgSceneAddObject(W3Pool *p, int a);
+
+int func_00194A50(int a) {
+    W3Core *c;
+    int ret;
+    W3Pool *p;
+
+    c = W3_CORE();
+    ret = 0;
+    if (c != 0) {
+        p = G2_GetPool();
+        if (p != 0) {
+            ret = rcbgSceneAddObject(p, a);
+        }
+    }
+    return ret;
+}
 
 void *func_00194AB0(int a, int b) {
     W3Core *c;
@@ -170,9 +191,34 @@ void *func_00194AB0(int a, int b) {
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgMain", func_00194B10);
+int func_00194B10(int a, int b) {
+    W3Core *c;
+    int ret;
+    W3Pool *p;
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgMain", func_00194BE8);
+    c = W3_CORE();
+    ret = 0;
+    if (c != 0) {
+        p = G2_GetPool();
+        if (p != 0) {
+            ret = (int)func_00199288(p, a, b);
+            if (ret == 0) {
+                for (i = 0; i < c->npool; i++) {
+                    ret = (int)func_00199288(&c->pools[i], a, b);
+                    if (ret != 0) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+}
+
+void func_00194BE8(void *a) {
+    func_001992F8(G2_GetPool(), a);
+}
 
 void func_00194C18(int id) {
     if (G2_GetCore() != 0 && G2_GetPool() != 0) {
@@ -212,7 +258,7 @@ void func_00194C80(YnChunk *c) {
             rcbgPreLoad(&rd);
             break;
         case 2:
-            pool = &W3_CORE()->unk4[npool++];
+            pool = &W3_CORE()->pools[npool++];
             rcbgSceneLoad(pool, &rd);
             break;
         case 5:
@@ -237,7 +283,7 @@ void func_00194C80(YnChunk *c) {
                 rcbgPreDummyInit();
                 core = W3_CORE();
             }
-            p = &core->unk4[h->index];
+            p = &core->pools[h->index];
             if (p->items[p->numItems] != 0) {
                 rcbgModelDelete(p->items[p->numItems]);
             }
@@ -255,7 +301,7 @@ void func_00194C80(YnChunk *c) {
             func_0018F5E8(D_0056D868);
             break;
         }
-        func_0019D6C8((W3Pair *)&rd); /* DEBT(CAST): declared with W3Pair, it is the reader destructor */
+        func_0019D6C8(&rd);
         c = (YnChunk *)((u8 *)c + size);
     }
 }

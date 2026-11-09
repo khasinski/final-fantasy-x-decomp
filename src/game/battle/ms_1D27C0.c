@@ -1,4 +1,6 @@
 /* tu_200 0x1d27c0-0x1d48d0: low; ~Ms (config/tu_map.tsv) */
+#define MsGetMoveTargetPos _hdr_MsGetMoveTargetPos
+#define MsNearRag _hdr_MsNearRag
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
@@ -6,6 +8,10 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/s2.h"
+#undef MsGetMoveTargetPos
+#undef MsNearRag
+float MsGetMoveTargetPos(int, BtlChr *, int, float *, int);
+float MsNearRag(float, float);
 
 int MsCheckStartEffect(int id, int mask) {
     int n = 0;
@@ -201,11 +207,46 @@ float func_001D3B10(int id, int v)
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetMoveTargetPos);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D27C0/rodata", jtbl_0056EB20);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetMoveTargetDist);
+float MsGetMoveTargetDist(int id, int v, int flag) {
+    float pos1[4];
+    float pos2[4];
+    BtlChr *c = MsGetChr(id);
+    float d = MsGetMoveTargetPos(id, c, v, pos2, 0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetEscapeDir);
+    func_001B6790(id, pos1);
+    func_001AC3E8(pos1, pos1, pos2);
+    if (flag != 0) {
+        pos1[1] = 0.0f;
+    }
+    return func_001AC2D0(pos1) - d;
+}
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetSummonDir);
+float MsGetEscapeDir(int id) {
+    float pos1[4];
+    float pos2[4];
+    float dir;
+
+    MsGetChrEscapePos(id, (int)pos2);
+    func_001B6790(id, pos1);
+    MsVectorRect2Polar(pos2, pos1, (int)&dir, 0, 0);
+    dir = MsNearRag(0.0f, dir);
+    return dir;
+}
+
+extern s8 D_00319408;
+
+float MsGetSummonDir(int id) {
+    float pos1[4];
+    float pos2[4];
+    float dir;
+    BtlChr *c = MsGetChr(D_00319408);
+
+    MsBtlGetPos(0, c, (s8)c->f1BC.a, (s8)c->f1BC.b, (s8)c->f1BC.c, (int)pos2);
+    func_001B6790(id, pos1);
+    MsVectorRect2Polar(pos2, pos1, (int)&dir, 0, 0);
+    dir = MsNearRag(0.0f, dir);
+    return dir;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsSetMove);
 

@@ -1,11 +1,10 @@
 /* tu_169 0x19fc00-0x1a21e0: low; ~rcef (config/tu_map.tsv) */
 #define func_001A1A68 _hdr_func_001A1A68
 #define func_001A1BE8 _hdr_func_001A1BE8
+#define Sg_Blur _hdr_Sg_Blur
 #include "common.h"
 #include "ffx/q3.h"
-#define func_001A1FF0 s2_func_001A1FF0 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/s2.h"
-#undef func_001A1FF0
 #include "ffx/v2.h"
 #include "ffx/r2.h"
 #include "ffx/w3.h"
@@ -13,22 +12,25 @@
 #include "vu0.h"
 #undef func_001A1A68
 #undef func_001A1BE8
+#undef Sg_Blur
+
+void Sg_Blur(int);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_0019FC00);
 
-/* DEBT(CAST) */
-void rcefMainProcRunAfter(W3ObjBig *o) {
+void rcefMainProcRunAfter(void *p) {
+    S2Obj1C *o = p;
     HeapMgr *temp_4;
     void *temp_6;
 
-    temp_4 = (*(HeapMgr **)((u8 *)(o) + (0x10)));
-    temp_6 = (*(void **)((u8 *)(o) + (0x18)));
+    temp_4 = o->w10;
+    temp_6 = o->w18;
     D_006A3924 = temp_4;
     if (temp_6 != 0) {
         func_00267028(temp_4, temp_4->sub, temp_6);
-        (*(void **)((u8 *)(o) + (0x18))) = 0;
+        o->w18 = 0;
     }
-    func_001A1F28((W3Sched *) &o->pad[0x1C]);
+    func_001A1F28(&o->sched);
 }
 
 void func_0019FE38(S2Obj1C *o)
@@ -47,7 +49,7 @@ void *func_0019FF48(S2Obj1C *o) {
     void *p = rcefObjNew();
 
     rcefObjInit(p);
-    func_001A1FF0(o->sub, p);
+    func_001A1FF0(&o->sched.head, p);
     return p;
 }
 
@@ -58,24 +60,21 @@ void *func_0019FF90(S2Obj1C *o, int fn) {
     return p;
 }
 
-s32 _m2c_rcefMainKickPar_func_001A14D0(s32, s32, s32, s32, s32, s32) __asm__("func_001A14D0");
-/* DEBT(CAST) */
-void rcefMainKickPar(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    _m2c_rcefMainKickPar_func_001A14D0(arg1 + 0x280, *(s32 *)((arg2 * 4) + (*(s32 *)((u8 *)(arg0) + (0x18)))), arg3, arg1 + 0x1F0, arg1 + 0x160, arg1 + 0x170);
+s32 _m2c_rcefMainKickPar_func_001A14D0(void *, void *, s32, void *, void *, void *) __asm__("func_001A14D0");
+void rcefMainKickPar(S2Obj1C *arg0, S2Obj1A *arg1, s32 arg2, s32 arg3) {
+    _m2c_rcefMainKickPar_func_001A14D0(arg1->b280, arg0->w18[arg2], arg3, arg1->m1F0, arg1->v160, arg1->v170);
 }
 
 int *_m2c_func_001A0000_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
-s32 _m2c_func_001A0000_func_001A1780(s32, s32 *, s32, s32) __asm__("func_001A1780");
-/* DEBT(CAST) */
-void func_001A0000(void *arg0, s32 arg1, s32 arg2) {
-    _m2c_func_001A0000_func_001A1780(arg1 + 0x330, _m2c_func_001A0000_op_oef2_a_get((*(s32 *)((u8 *)(arg0) + (8))), 4, arg2), arg1 + 0x1F0, arg1 + 0x170);
+s32 _m2c_func_001A0000_func_001A1780(void *, s32 *, void *, void *) __asm__("func_001A1780");
+void func_001A0000(S2Obj1C *arg0, S2Obj1A *arg1, s32 arg2) {
+    _m2c_func_001A0000_func_001A1780(arg1->b330, _m2c_func_001A0000_op_oef2_a_get(arg0->w8, 4, arg2), arg1->m1F0, arg1->v170);
 }
 
 int *_m2c_func_001A0040_op_oef2_a_get(int a, int b, int c) __asm__("op_oef2_a_get");
-s32 _m2c_func_001A0040_func_001A1A08(s32, s32 *, s32, s32) __asm__("func_001A1A08");
-/* DEBT(CAST) */
-void func_001A0040(void *arg0, s32 arg1, s32 arg2) {
-    _m2c_func_001A0040_func_001A1A08(arg1 + 0x3C0, _m2c_func_001A0040_op_oef2_a_get((*(s32 *)((u8 *)(arg0) + (8))), 4, arg2), arg1 + 0x1F0, arg1 + 0x170);
+s32 _m2c_func_001A0040_func_001A1A08(void *, s32 *, void *, void *) __asm__("func_001A1A08");
+void func_001A0040(S2Obj1C *arg0, S2Obj1A *arg1, s32 arg2) {
+    _m2c_func_001A0040_func_001A1A08(arg1->b3C0, _m2c_func_001A0040_op_oef2_a_get(arg0->w8, 4, arg2), arg1->m1F0, arg1->v170);
 }
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0080);
@@ -134,7 +133,27 @@ void func_001A0210(u8 *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0248);
+int func_001A0248(Chr *chr)
+{
+    int ret = -1;
+    int i;
+
+    for (i = 0; i < 15; i++) {
+        if (MsGetChrHandle(i) == chr) {
+            ret = i;
+            break;
+        }
+    }
+    if (ret == -1) {
+        for (i = 20; i < 28; i++) {
+            if (MsGetChrHandle(i) == chr) {
+                ret = i;
+                break;
+            }
+        }
+    }
+    return ret;
+}
 
 s32 _m2c_func_001A02D8_func_001A0308(s32 *) __asm__("func_001A0308");
 extern s32 _m2c_func_001A02D8_D_00313CB0 __asm__("D_00313CB0");
@@ -176,7 +195,34 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0700);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A08A8);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0A10);
+typedef struct RcefBlurCtx {
+    u8 pad0[0x224];
+    s32 w224;
+    s32 w228;
+    s32 w22C;
+    s32 w230;
+    s32 w234;
+} RcefBlurCtx;
+
+void func_001A0A10(RcefBlurCtx *o)
+{
+    int v;
+
+    if (o->w234 == 0 || o->w224 == 0) {
+        return;
+    }
+    v = o->w228;
+    if (o->w224 == 2 && o->w22C > 0) {
+        v = v * (o->w22C - o->w230) / o->w22C;
+    }
+    o->w230++;
+    if (o->w230 <= o->w22C) {
+        Sg_Blur(v);
+        return;
+    }
+    Sg_Blur(0);
+    o->w234 = 0;
+}
 
 s32 _m2c_func_001A0AB0_func_201E1B0(s32, s32, s32, s32) __asm__("func_201E1B0");
 s32 _m2c_func_001A0AB0_func_201E210(s32, s32) __asm__("func_201E210");
@@ -207,18 +253,18 @@ void rcefObjInit(void *p)
     S2Obj1A *o = p;
 
     func_002EF0D0(o, 0, 0x490);
-    rcefTaskInit((W3Task *)o); /* DEBT(CAST): the object is also a W3Task */
+    rcefTaskInit(&o->task);
     o->i13C = 0;
     o->i16C = 0;
-    o->fnB4 = rcefObjProc;
-    o->fnB0 = func_001A0C70;
+    o->task.fnCleanup = rcefObjProc;
+    o->task.fnExit = func_001A0C70;
     o->v130[2] = o->v130[1] = o->v130[0] = 1.0f;
     o->v160[2] = o->v160[1] = o->v160[0] = 1.0f;
     o->v170[2] = o->v170[1] = o->v170[0] = 1.0f;
     o->v170[3] = 1.0f;
-    func_002DD128((struct W3Whole *)o->m1B0); /* DEBT(CAST): matrices are passed as the W3Whole view */
-    func_002DD128((struct W3Whole *)o->m1F0);
-    func_002DD128((struct W3Whole *)o->m230);
+    func_002DD128(o->m1B0);
+    func_002DD128(o->m1F0);
+    func_002DD128(o->m230);
     rcefParInit(o->b280);
     rcefAnimeInit(o->b330);
     func_001A19F0(o->b3C0);
@@ -228,7 +274,7 @@ void rcefObjProc(S2Obj1A *o) {
     func_001A14C8(o->b280);
     func_001A1778(o->b330);
     func_001A1A00(o->b3C0);
-    func_001A1C40((W3Task *)o); /* DEBT(CAST): the object is also a W3Task */
+    func_001A1C40(&o->task);
 }
 
 void func_001A0C60(S2Obj1A *o) {
@@ -245,40 +291,58 @@ void func_001A0C70(S2Obj1A *o) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", rcefObjCalcLocalMatrix);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0F58);
+typedef struct {
+    u64 pad0[0x17];
+    u32 wB8;
+    u32 pad_b0 : 8;
+    u32 b8 : 1;
+    u32 pad_b9 : 3;
+    u32 b12 : 1;
+} RcefFlagsObj;
+
+extern void rcefObjCalcParentMatrix(S2Obj1A *o, float *m);
+
+void func_001A0F58(S2Obj1A *o)
+{
+    RcefFlagsObj *f = (RcefFlagsObj *)o;
+
+    if (!f->b12 || f->b8) {
+        rcefObjCalcParentMatrix(o, o->m230);
+        o->flagsBC |= 0x1000;
+    }
+    func_002DCE38(o->m1F0, o->m230, o->m1B0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", rcefObjCalcParentMatrix);
 
-/* DEBT(CAST) */
-void func_001A11F0(void *arg0, void *arg1) {
-    void *temp_4;
+void func_001A11F0(S2Obj1A *arg0, S2Obj1A *arg1) {
+    S2Obj1A *temp_4;
 
-    temp_4 = (*(void **)((u8 *)(arg0) + (0xC4)));
+    temp_4 = arg0->pC4;
     if (temp_4 == 0) {
-        (*(void **)((u8 *)(arg0) + (0xC4))) = arg1;
+        arg0->pC4 = arg1;
     } else {
         func_001A1238(temp_4, arg1);
     }
-    (*(void **)((u8 *)(arg1) + (0xC0))) = arg0;
+    arg1->pC0 = arg0;
 }
 
-/* DEBT(CAST) */
-void func_001A1238(void *arg0, void *arg1) {
-    void *temp_2;
-    void *var_3;
-    void *var_4;
+void func_001A1238(S2Obj1A *arg0, S2Obj1A *arg1) {
+    S2Obj1A *temp_2;
+    S2Obj1A *var_3;
+    S2Obj1A *var_4;
 
     var_4 = arg0;
-    var_3 = (*(void **)((u8 *)(var_4) + (0xCC)));
+    var_3 = var_4->pCC;
     if (var_3 != 0) {
         do {
             var_4 = var_3;
-            temp_2 = (*(void **)((u8 *)(var_4) + (0xCC)));
+            temp_2 = var_4->pCC;
             var_3 = temp_2;
         } while (temp_2 != 0);
     }
-    (*(void **)((u8 *)(var_4) + (0xCC))) = arg1;
-    (*(void **)((u8 *)(arg1) + (0xC8))) = var_4;
+    var_4->pCC = arg1;
+    arg1->pC8 = var_4;
 }
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1270);
@@ -290,7 +354,7 @@ void func_001A1378(S2Obj1A *o, int a, int b) {
 }
 
 void func_001A13A0(S2Obj1A *o, int a, int b) {
-    func_001A1378(o, a, Ch_OptposGetElement((s32)rcefGetChrHandle(a), b, 0)); /* DEBT(CAST): Chr pointer passed as s32 */
+    func_001A1378(o, a, Ch_OptposGetElement(rcefGetChrHandle(a), b, 0));
 }
 
 int func_001A1400(void *a) {
@@ -416,7 +480,51 @@ void func_001A17E8(u32 *o) {
     D_006A3BCC = func_002CD590(temp_19 + *temp_20, temp_18, temp_f0_2, temp_f0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1948);
+typedef struct {
+    s16 h0;
+    s16 dur;
+    s8 flags;
+    u8 pad5[3];
+} RcefAnimEnt;
+
+typedef struct {
+    u8 pad0[6];
+    s16 count;
+    u8 pad8[8];
+    RcefAnimEnt ent[1];
+} RcefAnimHdr;
+
+typedef struct {
+    u32 flags;
+    RcefAnimHdr *hdr;
+    u8 pad8[0x38];
+    s16 h40;
+    s16 h42;
+    s16 h44;
+} RcefAnime;
+
+void func_001A1948(u32 *p)
+{
+    RcefAnime *o = (RcefAnime *)p;
+    RcefAnimEnt *ent;
+
+    ent = &o->hdr->ent[o->h42];
+    o->h40 += o->h44;
+    if (o->h40 >= ent->dur) {
+        o->h40 -= ent->dur;
+        o->h42++;
+        if (o->h42 >= o->hdr->count) {
+            if (ent->flags & 0x80) {
+                o->h42 = 0;
+                o->h40 = 0;
+            } else {
+                o->h42--;
+                o->h40 = 0;
+                o->flags &= ~1;
+            }
+        }
+    }
+}
 
 void func_001A19F0(void *b) {
     func_002EF0D0(b, 0, 0xD0);

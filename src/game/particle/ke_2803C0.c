@@ -280,9 +280,73 @@ void func_00282850(u32 a0, u32 a1, u32 a2)
         :  : "r"(a0), "r"(a1), "r"(a2));
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282870);
+void func_00282870(u32 a0, u32 a1, u32 a2)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x0($6)\n"
+        "vadd.xy    $vf1, $vf1, $vf2\n"
+        "vftoi4.xy  $vf31, $vf1\n"
+        "vftoi0.zw  $vf31, $vf1\n"
+        "lui        $2, (0x45800000 >> 16)\n"
+        "dsll       $2, $2, 16\n"
+        "ori        $2, $2, 0x4580\n"
+        "dsll       $2, $2, 16\n"
+        "qmtc2.ni   $2, $vf29\n"
+        "ctc2.ni    $0, $vi16\n"
+        "vsub.xyw   $vf0, $vf1, $vf0\n"
+        "vsub.xy    $vf0, $vf29, $vf1\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "cfc2.ni    $2, $vi16\n"
+        "andi       $2, $2, 0xC0\n"
+        "beqz       $2, 1f\n"
+        " nop\n"
+        "addiu      $2, $0, 0x0\n"
+        "ori        $2, $0, 0x8000\n"
+        "ctc2.ni    $2, $vi1\n"
+        "vmfir.w    $vf31, $vi1\n"
+        "1:\n"
+        "sqc2       $vf31, 0x0($4)\n"
+        ".set reorder\n"
+        : : "r"(a0), "r"(a1), "r"(a2) : "$2");
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002828E0);
+void func_002828E0(u32 a0, u32 a1)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "lqc2       $vf1, 0x0($5)\n"
+        "vftoi4.xy  $vf2, $vf1\n"
+        "vftoi0.zw  $vf2, $vf1\n"
+        "lui        $2, (0x45800000 >> 16)\n"
+        "dsll       $2, $2, 16\n"
+        "ori        $2, $2, 0x4580\n"
+        "dsll       $2, $2, 16\n"
+        "qmtc2.ni   $2, $vf29\n"
+        "ctc2.ni    $0, $vi16\n"
+        "vsub.xyw   $vf0, $vf1, $vf0\n"
+        "vsub.xy    $vf0, $vf29, $vf1\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "cfc2.ni    $2, $vi16\n"
+        "andi       $2, $2, 0xC0\n"
+        "beqz       $2, 1f\n"
+        " nop\n"
+        "addiu      $2, $0, 0x0\n"
+        "ori        $2, $0, 0x8000\n"
+        "ctc2.ni    $2, $vi1\n"
+        "vmfir.w    $vf2, $vi1\n"
+        "1:\n"
+        "sqc2       $vf2, 0x0($4)\n"
+        ".set reorder\n"
+        : : "r"(a0), "r"(a1) : "$2");
+}
 
 void func_00282948(u32 a0, u32 a1)
 {
@@ -301,7 +365,45 @@ void func_00282948(u32 a0, u32 a1)
         :  : "r"(a0), "r"(a1));
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282978);
+int func_00282978(u32 a0, u32 a1, u32 a2)
+{
+    register int res __asm__("$2");
+
+    __asm__ volatile(
+        "lqc2       $vf1, 0x0($5)\n"
+        "lqc2       $vf2, 0x10($5)\n"
+        "lqc2       $vf3, 0x20($5)\n"
+        "lqc2       $vf4, 0x30($5)\n"
+        "lqc2       $vf5, 0x0($6)\n"
+        "vmulax.xyzw ACC, $vf1, $vf5x\n"
+        "vmadday.xyzw ACC, $vf2, $vf5y\n"
+        "vmaddaz.xyzw ACC, $vf3, $vf5z\n"
+        "vmaddw.xyzw $vf5, $vf4, $vf5w\n"
+        "vdiv       Q, $vf0w, $vf5w\n"
+        "lui        $2, (0x45800000 >> 16)\n"
+        "dsll       $2, $2, 16\n"
+        "ori        $2, $2, 0x4580\n"
+        "dsll       $2, $2, 16\n"
+        "qmtc2.ni   $2, $vf29\n"
+        "vwaitq\n"
+        "vmulq.xyz  $vf5, $vf5, Q\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "ctc2.ni    $0, $vi16\n"
+        "vsub.xyw   $vf0, $vf5, $vf0\n"
+        "vsub.xy    $vf0, $vf29, $vf5\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "vnop\n"
+        "cfc2.ni    $2, $vi16\n"
+        "andi       $2, $2, 0xC0\n"
+        "sqc2       $vf5, 0x0($4)\n"
+        "nop\n"
+        : "=r"(res) : "r"(a0), "r"(a1), "r"(a2));
+    return res;
+}
 
 void func_002829F8(u32 a0, u32 a1)
 {
@@ -451,7 +553,40 @@ void func_00283B60(char *base, ScriptCtx *ctx)
 void func_00283B98(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00283BA0);
+typedef struct Ke3BA0Key {
+    int owner;
+    float f4;
+    float f8;
+    float fC;
+    u32 idx;
+    int ofs;
+} Ke3BA0Key;
+
+typedef struct Ke3BA0Work {
+    u8 pad0[0x10];
+    float f10;
+    float f14;
+    float f18;
+    void *src;
+} Ke3BA0Work;
+
+void func_00283BA0(ScriptWork *base, Ke3BA0Key *k, ScriptCtx *ctx)
+{
+    Ke3BA0Work *w = SLOT_WORK(Ke3BA0Work, base, ctx, 0);
+
+    if (base->owner == k->owner) {
+        w->f10 = k->f8;
+        w->f18 = k->f4;
+        w->f14 = k->fC;
+        w->src = (k->idx != 0xFFFFFFFF) ? (void *)(ppvMng->p3C[k->idx].base + (k->ofs + 0xA0)) : (void *)D_006EA450;
+        if (w->src == D_006EA450) {
+            w->src = 0;
+        }
+    }
+    if (D_006A3BC4 == 0) {
+        func_00282798(w, (char *)base + 0x40);
+    }
+}
 
 void func_00283C50(char *base, ScriptCtx *ctx) {
     WkwCw1C *w = SLOT_WORK(WkwCw1C, base, ctx, 0);
@@ -739,7 +874,7 @@ void func_00284938(char *base, void *p, void *entry, int *out)
     func_002DCE08(&v, base + 0x10, &v);
     func_00282798(at, &v);
     func_002DD038(&v, &v, (Vec4 *)(base + 0x40)); /* DEBT(CAST): position inside the script memory header */
-    func_002DCEC8((s32)&v, (s32)&v); /* DEBT(CAST): funcs.h prototype takes ints */
+    func_002DCEC8(&v, &v);
     func_002DD068(&v, &v, ev->f8);
     func_00282798(dir, &v);
 }
@@ -822,7 +957,7 @@ void func_002851D8(char *base, void *p, void *entry, int *out)
     func_002DCE08(&v, base + 0x10, &v);
     func_00282798(at, &v);
     func_002DD038(&v, &v, (Vec4 *)(base + 0x40)); /* DEBT(CAST): position inside the script memory header */
-    func_002DCEC8((s32)&v, (s32)&v); /* DEBT(CAST): funcs.h prototype takes ints */
+    func_002DCEC8(&v, &v);
     func_002DD068(&v, &v, ev->f8);
     func_00282798(dir, &v);
 }

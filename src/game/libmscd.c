@@ -1,5 +1,6 @@
 /* tu_108 0x162618-0x165eb8: high; libmscd (config/tu_map.tsv) */
 #define func_00163FF0 _hdr_func_00163FF0
+#define func_001631F0 _hdr_func_001631F0
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
@@ -9,6 +10,7 @@
 #define D_0030DE34 v1_D_0030DE34 /* DEBT(TYPE): v1.h guesses another type for this datum */
 #include "ffx/v1.h"
 #undef func_00163FF0
+#undef func_001631F0
 #undef D_0030DE34
 
 int func_00162618(void) {
@@ -264,7 +266,20 @@ SysVt *GetCD(void) {
     return (SysVt *)&D_0078E498; /* DEBT(CAST): same address, two views of it */
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162E00);
+void func_00162E00(int i)
+{
+    if (D_0078E4B0 == 0) {
+        D_0078F330[i][0] = 0;
+    }
+    D_0078E530[i].w08 = 0;
+    D_0078E530[i].w04 = 0;
+    D_0078E530[i].w00 = 0;
+    D_0078E530[i].b30 = 0;
+    D_0078E530[i].used = 0;
+    D_0078E530[i].id = 0;
+    D_0078E530[i].flag = 0;
+    D_0078E530[i].b33 = 0;
+}
 
 
 void func_00162E68(void)
@@ -286,12 +301,18 @@ void func_00162E68(void)
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162ED8);
 
-
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162FC0);
 
+int func_001630B0(int i)
+{
+    int ret = 0;
+    u32 *p = (u32 *)((G1_VT78E498->w20 + i) * 4 + D_0078E498.f28);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_001630B0);
-
+    if (!(*p & 0x800000)) {
+        ret = (((p[1] & 0x3FFFFF) - (*p & 0x3FFFFF)) << 11) - ((*p >> 24) << 3);
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163110);
 
@@ -324,7 +345,23 @@ INCLUDE_ASM("build/ee_asm/game/libmscd", func_001632D8);
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", Sa_CdRead_task);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163710);
+int func_00163710(void)
+{
+    int s = func_0015B850();
+
+    if (s == 0) {
+        return 0;
+    }
+    if (s == -1) {
+        return 1;
+    }
+    if (func_002E1700(1) != 2) {
+        return -1;
+    }
+    func_002E1FB8();
+    func_001631F0(D_00595F54, D_00595F58, D_00595F5C, D_0030DE20);
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", cd_decode_data);
 
@@ -364,11 +401,82 @@ INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164340);
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164648);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164840);
+extern char D_0056BC00[];
+extern char D_0056BC18[];
+int TkSndIsStandbyVoice(void);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164918);
+static __inline__ int check_4840(void)
+{
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164990);
+    for (i = 0; i < 0x40; i++) {
+        if (D_0078E530[i].used != 0) {
+            if (TkSndIsStandbyVoice() != 0) {
+                func_001577A8(D_0056BC18, (char *)D_0056BB20, 0x642);
+            }
+            break;
+        }
+    }
+    return i;
+}
+
+void func_00164840(void)
+{
+    if (D_00595F64 == 0) {
+        func_001577A8(D_0056BC00, (char *)D_0056BB20, 0x63B);
+    }
+    while (check_4840() != 0x40) {
+        (*D_00595F64)();
+        func_002D3FF0(0);
+    }
+}
+
+typedef struct Vt78E498View {
+    u8 pad00[0x70];
+    s32 w70;
+    s32 w74;
+} Vt78E498View;
+
+int func_00164918(int a, int b)
+{
+    int i;
+
+    for (i = 0; i < 0x40; i++) {
+        if (D_0078E530[i].used != 0 && *(s32 *)&D_0078E530[i].pad28[0] == a && D_0078E530[i].w08 == b) {
+            if (((Vt78E498View *)&D_0078E498)->w70 != 0 && ((Vt78E498View *)&D_0078E498)->w74 == i) {
+                return 2;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
+
+extern char D_0056BC18[];
+int TkSndIsStandbyVoice(void);
+void func_00164840(void);
+
+int func_00164990(int mode)
+{
+    int i;
+
+    switch (mode) {
+    case 0:
+    default:
+        func_00164840();
+        return 0;
+    case 1:
+        for (i = 0; i < 0x40; i++) {
+            if (D_0078E530[i].used != 0) {
+                if (TkSndIsStandbyVoice() != 0) {
+                    func_001577A8(D_0056BC18, (char *)D_0056BB20, 0x67E);
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
 
 void *func_00164A30(void) {
     return D_0030DE38;

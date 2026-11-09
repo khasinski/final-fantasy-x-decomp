@@ -4,10 +4,10 @@
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 
-int func_0013CA30(ScrQ *s, int i) {
+int func_0013CA30(Actor *s, int i) {
     return ((int *)((char *)s->blob + s->hdr->o20))[i];
 }
 
 int func_0013CA50(int id, int i) {
-    return func_0013CA30((ScrQ *)AtelGetBasicWork(id), i); /* DEBT(CAST): AC10 result used as a script reader */
+    return func_0013CA30(AtelGetBasicWork(id), i);
 }

@@ -2,11 +2,7 @@
 #include "common.h"
 #include "ffx/w7.h"
 #include "ffx/q6.h"
-#define func_00242940 s5_func_00242940 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TOMenuGetFirstReadEndFlag s5_TOMenuGetFirstReadEndFlag /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/s5.h"
-#undef func_00242940
-#undef TOMenuGetFirstReadEndFlag
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #include "ffx/r5.h"
@@ -74,11 +70,11 @@ int TkMenuSummonEnableMask(void) {
     return D_0069BBF0;
 }
 
-s32 func_002423B0(int idx) { return func_00124828(idx)->vBC; }
+s32 func_002423B0(int idx) { return func_00124828()->vBC; }
 
 u8 TkMenuGetWeapon(int idx) { return MsGetSavePlayerPtr(idx)->f2D; }
 
-u8 *func_002423F0(int idx) { return func_00124828(idx)->blk3D48; }
+u8 *func_002423F0(int idx) { return func_00124828()->blk3D48; }
 
 int func_00242410(u16 *a0, int a1) { return (a0[a1 / 16] >> (a1 % 16)) & 1; }
 
@@ -206,7 +202,7 @@ void func_00242930(int v) {
     D_0069BBB4 = v;
 }
 
-u8 func_00242940(void) {
+int func_00242940(void) {
     return D_0069BBC8[D_0069BBE8];
 }
 
@@ -303,7 +299,7 @@ int func_00242BD0(int id)
     int a = TkMenuGetHP(id);
     int b = TkMenuGetMaxHP(id);
 
-    if (MsGetSavePlyJoin(id) == 0 && ((int (*)(int))MsGetSavePlyJoined)(id) == 1) { /* DEBT(CAST): called with an int id */
+    if (MsGetSavePlyJoin(id) == 0 && MsGetSavePlyJoined(id) == 1) {
         return 1;
     }
     return MsCalcWeakLevel(a, b) > 0 ? 2 : 0;
@@ -317,7 +313,7 @@ int func_00242C58(int id)
     if (MsGetSavePlyJoin(id) == 0 && func_00241FE0() == 0) {
         return 1;
     }
-    if (MsGetSavePlyJoin(id) == 0 && ((int (*)(int))MsGetSavePlyJoined)(id) == 1) { /* DEBT(CAST): called with an int id */
+    if (MsGetSavePlyJoin(id) == 0 && MsGetSavePlyJoined(id) == 1) {
         return 1;
     }
     return MsCalcWeakLevel(a, b) > 0 ? 2 : 0;
@@ -482,9 +478,34 @@ void func_00243548(int owner)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00243600);
+void func_00243600(int layer)
+{
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_002436D0);
+    if (D_0032643C != 1 || layer < 6) {
+        func_00124F08();
+        TOMenuOpenPktBuffTmp();
+        TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+        func_0020D830(1, layer);
+        TOMenuDrawKickTmp();
+        func_00124F08();
+        for (i = 0; i < 16; i++) {
+            if (D_0069A880[i].b3E == layer && D_0069A880[i].x10 != 0) {
+                ((void (*)(Task *))D_0069A880[i].x10)(&D_0069A880[i]);
+            }
+        }
+    }
+}
+
+void func_002436D0(void)
+{
+    int i;
+
+    for (i = 0; i < 32; i++) {
+        i = i < 0 ? 0 : (i < 32 ? i : 31);
+        func_00243298(&D_0069A880[i]);
+    }
+}
 
 int TkMenuMainRemoveMenu(int i) /* DEBT(TYPE): declared int, no value returned */
 {
@@ -793,7 +814,7 @@ void func_00244678(void) {
 
 void func_002446E8(void)
 {
-    U4Rec28 *r = (U4Rec28 *)Sg_GetDBuffDC(&D_0069A874); /* DEBT(CAST): Sg_GetDBuffDC is declared to return s32 * */
+    U4Rec28 *r = Sg_GetDBuffDC(&D_0069A874);
     int src;
     int dst = 0x1BD0000;
     int i;
@@ -835,7 +856,17 @@ void func_00244938(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_002449A8);
+void func_002449A8(U4DispEnv *env)
+{
+    unsigned long dispfb = env->dispfb;
+    unsigned long display;
+
+    dispfb += 0x8000UL << 31;
+    display = env->display;
+    GS_DISPFB2 = dispfb;
+    display |= 0x8000000;
+    GS_DISPLAY2 = display;
+}
 
 void func_002449E0(U4DispEnv *env, int i)
 {
@@ -873,8 +904,8 @@ u32 func_00245458(void) { return 0x1D4EB00; }
 
 u32 func_00245468(void) { return 0x1E00000; }
 
-int func_00245470(int *p) {
-    int r = Sg_GetDBuffDC(0);
+void *func_00245470(int *p) {
+    void *r = Sg_GetDBuffDC(0);
 
     if (p) {
         *p = D_0069BBF8;
@@ -882,6 +913,6 @@ int func_00245470(int *p) {
     return r;
 }
 
-s8 TOMenuGetFirstReadEndFlag(void) {
+int TOMenuGetFirstReadEndFlag(void) {
     return D_00326439;
 }

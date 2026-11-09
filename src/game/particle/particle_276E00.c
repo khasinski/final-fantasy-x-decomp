@@ -30,7 +30,7 @@ void func_00276EC8(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysB *s = SLOT_WORK(T6_PSysB, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w44 = 0;
     s->w48 = 0;
     s->parts = 0;
@@ -79,11 +79,10 @@ void func_00276FB8(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->rec[n].h[0] = src->h[0];
         s->rec[n].h[1] = src->h[1];
         s->rec[n].h[2] = src->h[2];
-        i = 0; /* DEBT(FAKE): dead store, steers register allocation */
         s->rec[n].h[3] = src->h[3];
     }
     if (t >= life->len - 0x1000) {
-        p = (Particle *)s->parts; /* DEBT(CAST): parts is declared as a word pointer */
+        p = s->parts;
         n = k->count;
         for (i = 0; i < n; i++, p++) {
             if (p->flags & 1) {
@@ -96,11 +95,11 @@ void func_00276FB8(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
         s->done = 1;
     }
     if (D_006A3BC4 == 0) {
-        if (((u8 *)ppvMng)[0x1D] == 0) { /* DEBT(CAST): byte 0x1D of the manager */
+        if (ppvMng->b1D == 0) {
             func_00277298(o, k, ctx);
         }
         func_002773A0(o, k, ctx, s);
-        func_00278000((PtEmitterB *)k, (PtOwnerB *)s); /* DEBT(CAST): emitter/owner views of the key and work */
+        func_00278000(k, s);
     }
 }
 
@@ -112,7 +111,7 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_276E00", func_002773A0);
 
 void func_00278000(PtEmitterB *e, PtOwnerB *o)
 {
-    PtAnim *anim = (PtAnim *)D_006A3924->tbl[e->anim]; /* DEBT(CAST): tbl is declared as DataRef ** */
+    PtAnim *anim = D_006A3924->tbl[e->id];
     Particle *p = o->parts;
     PtKey *k;
     int i;
@@ -123,16 +122,16 @@ void func_00278000(PtEmitterB *e, PtOwnerB *o)
         if (p->flags & 1) {
             p->age++;
             k = &anim->keys[p->frame];
-            if (p->age >= o->life) {
+            if (p->age >= o->nrec) {
                 p->flags &= ~1;
             }
-            p->vel.x += e->vel.x;
-            p->vel.y += e->vel.y;
-            p->vel.z += e->vel.z;
+            p->vel.x += e->velB.x;
+            p->vel.y += e->velB.y;
+            p->vel.z += e->velB.z;
             func_002DD020(&p->v10, &p->v10, &p->vel);
-            p->acc.x += e->acc.x;
-            p->acc.y += e->acc.y;
-            p->acc.z += e->acc.z;
+            p->acc.x += e->accB.x;
+            p->acc.y += e->accB.y;
+            p->acc.z += e->accB.z;
             p->pos.x += p->acc.x;
             p->pos.y += p->acc.y;
             p->pos.z += p->acc.z;

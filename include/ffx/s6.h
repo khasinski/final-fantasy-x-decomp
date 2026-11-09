@@ -12,14 +12,13 @@ ScriptSub *opus_no_get(void *obj300, ScriptSub *sub, int id); /* DEBT(TYPE): gue
 extern char D_005753E0[];
 extern char D_00575408[];
 extern char D_00575438[];
-int MsGetWeaponHandle(int id, int flag); /* DEBT(TYPE): guessed from call sites */
 
 extern int D_00326D98;
 extern int D_00326DA4;
 typedef struct S6Pt { s16 x; s16 y; } S6Pt; /* DEBT(NAME) */
 extern S6Pt D_00326DA0;
 extern s16 D_00326DAE;
-typedef struct S6Task { u8 pad0[0x1C]; int w1C; } S6Task; /* DEBT(NAME) */
+typedef struct S6Task { u8 pad0[0x1E]; u16 h1E; } S6Task; /* DEBT(NAME) */
 typedef struct S6Rpc { int w0; int w4; int w8; int wC; } S6Rpc; /* DEBT(NAME) */
 extern S6Rpc D_0069BF00;
 extern int D_0069C8C0;
@@ -71,8 +70,6 @@ void op_2point_shadow(void *list, void *a, void *b);
 void opus_get_bone_matrix(void *dst, Chr *chr, int id);
 void func_002B56D8(void *a, void *b, void *c);
 
-typedef struct S6Th300 { u8 pad00[0x24]; void *p24; u8 pad28[0xE]; u16 h36; u16 h38; u8 b3A; u8 pad3B[0x6D]; void *pA8; } S6Th300; /* DEBT(NAME) */
-
 extern int D_0069C8C4;
 extern int D_0069C8D0;
 extern char D_005737C8[];
@@ -94,10 +91,11 @@ extern char D_005738F8[];
 extern u8 D_006A3A70[];
 extern u8 D_006A3AB0[];
 extern int D_00327914;
-extern u8 D_006A3690[];
+typedef struct T6_LtCam { u8 pad0[0x30]; float x; float y; float z; } T6_LtCam; /* DEBT(NAME) */
+extern HeapMgr D_006A3690[];
 extern u8 D_006A39B0[];
 extern u8 D_006A3970[];
-extern u8 D_006A3930[];
+extern T6_LtCam D_006A3930[];
 int _pppRunPart(void *a, int b);
 void pppSetMatrix(void);
 
@@ -106,7 +104,7 @@ u8 *func_001F3B60(void *a, int b, int c, int d, int e, int f, int g, int h, int 
 typedef struct S6Pt50 { float x; float y; int w8; float wC; u8 pad10[0x2C]; float f3C; u8 pad40[4]; u16 h44; u8 pad46[0xA]; } S6Pt50; /* DEBT(NAME): 0x50-byte records at lpamng+0x11090 */
 typedef struct S6Hdr { u8 pad0[0xC]; s16 x; s16 y; } S6Hdr; /* DEBT(NAME) */
 extern u8 D_00327920[];
-int *op_oef2_a_get(int a, int b, int c);
+void *op_oef2_a_get(int a, int b, int c);
 int func_00259DB0(float a, float b, float c, float d);
 
 typedef struct S6Row { u8 pad0[0x7834]; u16 h7834; } S6Row; /* DEBT(NAME) */

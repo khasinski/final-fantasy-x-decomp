@@ -177,7 +177,7 @@ int func_00154F10(void) {
 
 int func_00154F30(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
 
     MsCameraSetRoll(h, AtelPopStackFloat(a, ctx) * 3.1415927f / 180.0f);
     return h;
@@ -296,7 +296,7 @@ int func_00155288(int a)
 
 int func_001552C8(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
 
     func_001A8DA0(h, 1, AtelPopStackInteger(a, ctx) & 1);
     return h;
@@ -478,7 +478,7 @@ int func_00155758(int a)
 
 int func_00155798(Actor *a, void *op, ScriptCtx *ctx)
 {
-    int h = func_00154218((int)a, 0, 0); /* DEBT(CAST): q2.h declares an int parameter */
+    int h = func_00154218(a, 0, 0);
 
     func_001A8DA0(h, 0, AtelPopStackInteger(a, ctx) & 1);
     return h;

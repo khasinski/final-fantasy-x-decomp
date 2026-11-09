@@ -10,7 +10,7 @@
 
 void pppKeLnsLpDraw(ScriptWork *base, void *p, ScriptCtx *ctx)
 {
-    T6_SWorkB480 *hdr = (T6_SWorkB480 *)base; /* DEBT(CAST): ScriptWork only describes the owner word */
+    ScriptWork *hdr = base;
     T6_MsgB480 *msg = p;
     T6_WkB480 *w = SLOT_WORK(T6_WkB480, base, ctx, 0);
     float v[4];
@@ -54,7 +54,8 @@ void func_0028B5B8(char *base, ScriptCtx *ctx) {
     w->wA8 = 0;
 }
 
-void func_0028B5D8(ScriptWork *base, ScriptMsg *msg, ScriptCtx *ctx) {
+void func_0028B5D8(ScriptWork *base, void *m, ScriptCtx *ctx) {
+    ScriptMsg *msg = m;
     AttachWork *w = SLOT_WORK(AttachWork, base, ctx, 0);
     DataRef **p;
 
@@ -66,7 +67,7 @@ void func_0028B5D8(ScriptWork *base, ScriptMsg *msg, ScriptCtx *ctx) {
             p = D_006A3924->tbl + msg->idx;
             if (p != w->cur) {
                 w->cur = p;
-                w->h8 = (*p)->h12;
+                w->h8 = (*p)->keys[0].dur;
                 w->a.b = 0;
             }
         }
@@ -78,7 +79,7 @@ void func_0028B658(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_ColReq req;
 
-    func_0028B5D8(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B5D8(base, msg, ctx);
     req.col[0] = (msg->col[0] * ppvMng->scale[0]) >> 12;
     req.col[1] = (msg->col[1] * ppvMng->scale[1]) >> 12;
     req.col[2] = (msg->col[2] * ppvMng->scale[2]) >> 12;
@@ -87,14 +88,15 @@ void func_0028B658(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     req.fC = msg->fC;
     req.sub = mgr->m60;
     req.self = SLOT_WORK(void, base, ctx, 0);
-    func_0027FD60((R6Req5 *)&req, 0); /* DEBT(CAST): see T6_ColReq */
+    func_0027FD60(&req, 0);
 }
 
 void func_0028B740(char *base, ScriptCtx *ctx) {
     func_0027FF00(base + (ctx->info->slot[0] + 0xA0));
 }
 
-void func_0028B758(ScriptWork *base, AttachMsg *msg, ScriptCtx *ctx) {
+void func_0028B758(ScriptWork *base, void *m, ScriptCtx *ctx) {
+    AttachMsg *msg = m;
     AttachWork *w = SLOT_WORK(AttachWork, base, ctx, 0);
     DataRef **p;
 
@@ -119,7 +121,7 @@ void func_0028B808(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_ColReq6 req;
 
-    func_0028B758(base, (AttachMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B758(base, msg, ctx);
     req.col[0] = (msg->col[0] * ppvMng->scale[0]) >> 12;
     req.col[1] = (msg->col[1] * ppvMng->scale[1]) >> 12;
     req.col[2] = (msg->col[2] * ppvMng->scale[2]) >> 12;
@@ -129,7 +131,7 @@ void func_0028B808(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     req.tbl = D_006A3A70;
     req.sub = mgr->m60;
     req.self = SLOT_WORK(void, base, ctx, 0);
-    func_0027F960((R6Req6 *)&req, 0);
+    func_0027F960(&req, 0);
 }
 
 void func_0028B900(char *base, ScriptCtx *ctx) {
@@ -139,7 +141,8 @@ void func_0028B900(char *base, ScriptCtx *ctx) {
     w->b8 = 4;
 }
 
-void func_0028B940(ScriptWork *base, ScriptMsg *msg, ScriptCtx *ctx) {
+void func_0028B940(ScriptWork *base, void *m, ScriptCtx *ctx) {
+    ScriptMsg *msg = m;
     AttachWork *w = SLOT_WORK(AttachWork, base, ctx, 0);
     DataRef **p;
 
@@ -161,7 +164,7 @@ void func_0028B9B8(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_ColReqH req;
 
-    func_0028B940(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B940(base, msg, ctx);
     req.col[0] = (msg->col[0] * ppvMng->scale[0]) >> 12;
     req.col[1] = (msg->col[1] * ppvMng->scale[1]) >> 12;
     req.col[2] = (msg->col[2] * ppvMng->scale[2]) >> 12;
@@ -179,7 +182,8 @@ void func_0028BAB0(char *base, ScriptCtx *ctx) {
     func_00280168(base + (ctx->info->slot[0] + 0xA0));
 }
 
-void func_0028BAC8(ScriptWork *base, ScriptMsg *msg, ScriptCtx *ctx) {
+void func_0028BAC8(ScriptWork *base, void *m, ScriptCtx *ctx) {
+    ScriptMsg *msg = m;
     AttachWork *w = SLOT_WORK(AttachWork, base, ctx, 0);
     DataRef **p;
 
@@ -191,7 +195,7 @@ void func_0028BAC8(ScriptWork *base, ScriptMsg *msg, ScriptCtx *ctx) {
             p = D_006A3924->tbl + msg->idx;
             if (p != w->cur) {
                 w->cur = p;
-                w->h8 = (*p)->h12;
+                w->h8 = (*p)->keys[0].dur;
                 w->a.b = 0;
             }
         }
@@ -203,7 +207,7 @@ void func_0028BB48(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_ColReqH req;
 
-    func_0028BAC8(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028BAC8(base, msg, ctx);
     req.col[0] = (msg->col[0] * ppvMng->scale[0]) >> 12;
     req.col[1] = (msg->col[1] * ppvMng->scale[1]) >> 12;
     req.col[2] = (msg->col[2] * ppvMng->scale[2]) >> 12;
@@ -237,7 +241,7 @@ void pppKeLnsLpTDraw(ScriptWork *base, T6_MsgBC58 *msg, ScriptCtx *ctx)
     v[1] = 0.0f;
     v[2] = 0.0f;
     v[3] = 1.0f;
-    func_002DCE08(v, (char *)base + 0x50, v); /* DEBT(CAST): matrix inside the script memory header */
+    func_002DCE08(v, base->m50, v);
     func_002DD068(w->mC0, v, 1.0f / v[3]);
     w->hCC = D_0036F1F0.hE;
 }
@@ -275,7 +279,7 @@ void func_0028C230(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_WkCol30 *w = SLOT_WORK(T6_WkCol30, base, ctx, 0);
 
-    func_0028B5D8(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B5D8(base, msg, ctx);
     if (msg->id == base->owner) {
         w->f30 = msg->fC;
     }
@@ -314,7 +318,7 @@ void func_0028C3D0(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_WkCol50 *w = SLOT_WORK(T6_WkCol50, base, ctx, 0);
 
-    func_0028B758(base, (AttachMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B758(base, msg, ctx);
     if (msg->id == base->owner) {
         w->f54 = msg->fC;
         w->f50 = msg->h14;
@@ -356,7 +360,7 @@ void func_0028C590(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_WkCol30 *w = SLOT_WORK(T6_WkCol30, base, ctx, 0);
 
-    func_0028B940(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028B940(base, msg, ctx);
     if (msg->id == base->owner) {
         w->f30 = msg->fC;
         w->f38 = msg->h10;
@@ -400,7 +404,7 @@ void func_0028C770(ScriptWork *base, T6_ColMsg *msg, ScriptCtx *ctx)
     T6_ColMgr *mgr = ppvMng;
     T6_WkCol30h *w = SLOT_WORK(T6_WkCol30h, base, ctx, 0);
 
-    func_0028BAC8(base, (ScriptMsg *)msg, ctx); /* DEBT(CAST): shared handler takes the base message type */
+    func_0028BAC8(base, msg, ctx);
     if (msg->id == base->owner) {
         w->f30 = msg->fC;
         w->f38 = msg->h10;
@@ -623,9 +627,9 @@ void func_0028D250(T6_MtxNode *o)
     float rot[4][4];
     Vec4 pos;
 
-    func_002DCEC8((s32)rot[0], (s32)p->m[0]); /* DEBT(CAST): funcs.h prototype takes ints */
-    func_002DCEC8((s32)rot[1], (s32)p->m[1]);
-    func_002DCEC8((s32)rot[2], (s32)p->m[2]);
+    func_002DCEC8(rot[0], p->m[0]);
+    func_002DCEC8(rot[1], p->m[1]);
+    func_002DCEC8(rot[2], p->m[2]);
     func_002DCE08(&pos, p->m, o->m[3]);
     func_002DCE38(o->m, rot, o->m);
     func_002DD0B0(o->m[3], &pos);

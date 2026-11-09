@@ -574,7 +574,29 @@ void func_001FCC88(int a, int b, int c, u32 rgba)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FCD48);
+typedef struct {
+    u8 pad0[0x60];
+    unsigned long f60 : 9;
+    unsigned long pad60 : 55;
+    u8 pad68[0x168];
+    unsigned long f1D0 : 9;
+    unsigned long pad1D0 : 55;
+} To1FCD48DBuff;
+
+extern s32 D_006672D4;
+
+void func_001FCD48(void)
+{
+    To1FCD48DBuff *p = Sg_GetDBuffDC(&D_006672D4);
+
+    if (D_006672D4 & 1) {
+        D_006672D0 = p->f1D0;
+    } else {
+        D_006672D0 = p->f60;
+    }
+    GIF_AD_TAG(1);
+    func_001FB210(0, 8, 0, 0);
+}
 
 void func_001FCDD8(void)
 {

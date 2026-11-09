@@ -59,7 +59,17 @@ void func_002184B8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", func_00218500);
+void func_00218500(u16 id)
+{
+    int base;
+    char *s;
+
+    s = (char *)(base + MsGetComData(id, &base)->a[2].x);
+    _TOGetMessageWH(0, (u8 *)s, D_00692478, &D_0069247A, 0, 0);
+    func_002EF0D0(D_00692480, 0, 0x80);
+    func_002F072C(D_00692480, s);
+    _TOGetMessageWH(0, (u8 *)D_00692480, D_00692478, &D_0069247A, 0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlSetTargetHelpMes);
 

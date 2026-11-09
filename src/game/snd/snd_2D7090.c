@@ -169,9 +169,8 @@ void SndStartShoutStream(s32 arg0, s32 arg1, s32 arg2) {
     D_0078BA0C |= temp_2;
 }
 
-/* DEBT(FAKE) */
 void SndStartStream(void) {
-    register u32 temp_3 __asm__("$3");
+    u32 temp_3;
     u32 temp_5;
 
     D_0078BA08 |= 1;
@@ -186,9 +185,8 @@ void SndStartStream(void) {
     D_0078BB70.pend = temp_3;
 }
 
-/* DEBT(FAKE) */
 void SndStartStream2(s32 a, s32 b) {
-    register u32 temp_3 __asm__("$3");
+    u32 temp_3;
     u32 temp_5;
 
     D_0078BA10 |= 1;

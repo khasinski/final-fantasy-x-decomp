@@ -86,7 +86,7 @@ s32 func_002D5E10(void) {
     return D_0078BB80.cur | D_0078BB80.pend;
 }
 
-s32 func_002D5E48(void) {
+s32 func_002D5E48(int v) {
     return func_002524B8();
 }
 
@@ -217,7 +217,23 @@ s32 SndGetNowPlayMusic(void) {
     return D_0078BAD8[0];
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D62F8);
+void func_002D62F8(s32 a) {
+    s32 slot = -1;
+    s32 i;
+
+    for (i = 0; i < 1; i++) {
+        if (D_0078BAD8[i] < 0) {
+            slot = i;
+        }
+        if (a == D_0078BAD8[i]) {
+            return;
+        }
+    }
+    if (slot < 0) {
+        slot = 0;
+    }
+    D_0078BAD8[slot] = a;
+}
 
 void SndEventClearPcToActorFoot(void) {
     s32 i;
@@ -259,9 +275,26 @@ s32 SndIsReadShoutVoiceStatus(void) {
     return D_0078BA0C;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D64E0);
+s32 _m2c_func_002D64E0_func_002518C8() __asm__("func_002518C8");
+s32 func_002D64E0(void) {
+    s32 v = _m2c_func_002D64E0_func_002518C8();
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D6528);
+    D_0078BA1C |= v;
+    D_0078BB70.pend |= v;
+    return v;
+}
+
+void func_002D6528(void)
+{
+    s32 s2 = func_002D5F20();
+    s32 s0 = func_002D5E10();
+
+    D_0078BA1C |= func_002D5EA8(0);
+    D_0078BA0C |= s0;
+    D_0078BA10 |= s2;
+    D_0078BA08 |= D_0078BA10 | D_0078BA0C;
+    D_0078BA18 |= SqsDataSendingCompleted(0);
+}
 
 void TkSndUpdateMain(void) {
     if (TkGetSoundSyncVFlag()) {

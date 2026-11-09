@@ -75,7 +75,23 @@ void func_002DCAD8(void)
     *(volatile u32 *)0x10003820 = 6;
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCB00);
+int func_002DCB00(int a)
+{
+    int s = func_002DCBD8();
+
+    if (s == 0) {
+        return 0;
+    }
+    if (s == 1) {
+        return 0;
+    }
+    if (a == 0) {
+        *(volatile u32 *)0x10003810 = 2;
+    } else if (a == 1) {
+        *(volatile u32 *)0x10003810 = 4;
+    }
+    return 1;
+}
 
 int func_002DCB68(void)
 {
@@ -95,7 +111,10 @@ u32 func_002DCBA8(u32 a, u32 b, u32 c)
     return value;
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCBC8);
+u32 func_002DCBC8(void)
+{
+    return *(volatile u32 *)0x10003820;
+}
 
 int func_002DCBD8(void)
 {

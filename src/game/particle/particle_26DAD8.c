@@ -7,13 +7,13 @@
 #include "ffx/u4.h"
 #include "ffx/q6.h"
 
-void func_0026DAD8(char *base, u32 *k, ScriptCtx *ctx)
+void func_0026DAD8(ScriptWork *base, u32 *k, ScriptCtx *ctx)
 {
     U4VecSrc *w;
 
     if (D_006A3BC4 == 0) {
         w = SLOT_WORK(U4VecSrc, base, ctx, 0);
-        if (k[0] == ((u32 *)base)[3]) { /* DEBT(CAST): owner id at 0xC of the script object */
+        if (k[0] == (u32)base->owner) {
             if (k[1] != 0xFFFFFFFF) {
                 w->src = (float *)(ppvMng->p3C[k[1]].base + (k[2] + 0xA0));
             } else {
@@ -33,7 +33,51 @@ void func_0026DB70(int base, ScriptCtx *ctx)
     w->bA1 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026DB88);
+typedef struct Db88Key {
+    int w0;
+    u32 idx;
+    int ofs;
+    u8 cnt;
+} Db88Key;
+
+typedef struct Db88Flags {
+    u8 b0;
+    u8 b1;
+} Db88Flags;
+
+void func_0026DB88(ScriptWork *base, Db88Key *k, ScriptCtx *ctx)
+{
+    float *w0 = SLOT_WORK(float, base, ctx, 0);
+    Db88Flags *w1 = SLOT_WORK(Db88Flags, base, ctx, 1);
+    T6_MemEnt *ent;
+    T6_Mem *mem;
+    float *dst;
+
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    if (w1->b1 == 0) {
+        if (k->idx == 0xFFFFFFFF) {
+            return;
+        }
+        ent = &ppvMng->p3C[k->idx];
+        if (ent == 0) {
+            mem = 0;
+        } else {
+            mem = func_00267320(ppvMng, ent);
+            if (mem == 0) {
+                return;
+            }
+            mem->user = base;
+        }
+        dst = (float *)((char *)mem + (k->ofs + 0xA0));
+        dst[0] = w0[0];
+        dst[1] = w0[1];
+        dst[2] = w0[2];
+        w1->b1 = k->cnt;
+    }
+    w1->b1--;
+}
 
 void func_0026DC70(int base, ScriptCtx *ctx)
 {

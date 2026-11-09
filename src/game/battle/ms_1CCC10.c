@@ -1,4 +1,5 @@
 /* tu_196 0x1ccc10-0x1ce8e0: low; ~Ms (config/tu_map.tsv) */
+#define func_001CE050 _hdr_func_001CE050
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -6,6 +7,7 @@
 #include "ffx/v3.h"
 #include "ffx/g2.h"
 #include "ffx/s3.h"
+#undef func_001CE050
 
 u32 MsGetEffID(int id, int lo, int hi) {
     PackedCmd c;
@@ -68,6 +70,37 @@ s32 func_001CCD38(s32 a, s32 b) {
     }
     return var_7;
 }
+
+void op_ovl_effect_init(void);
+extern char D_0056E8A0[];
+extern char D_0056E8F0[];
+extern s8 D_00576479;
+int MsStoneEffectCheck(void);
+int func_204E8D0(int a);
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 f20;
+    u8 pad24[0x30 - 0x24];
+    s8 f30;
+    u8 pad31;
+    s8 f32;
+    u8 pad33[0x55 - 0x33];
+    s8 f55;
+    u8 pad56[0x1754 - 0x56];
+    s32 f1754;
+    u8 pad1758[0x2018 - 0x1758];
+    s32 f2018;
+    s32 f201C;
+    u8 pad2020[0x2028 - 0x2020];
+    s32 f2028;
+    u8 pad202C[0x2107 - 0x202C];
+    s8 f2107;
+    s8 f2108;
+    u8 pad2109[0x213C - 0x2109];
+    s8 f213C;
+} GameStateEffRead;
+extern GameStateEffRead _gs_eff_read __asm__("D_003172F0");
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectRead);
 
@@ -150,7 +183,74 @@ void func_001CD8A0(int a, BtlChr *c) {
     MsEffectCameraCall(-1, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", func_001CD900);
+void MsLimitTypeStatusCheck(int id, BtlChr *c, int tid, BtlChr *t, int a, int b);
+void MsStatusEffectReflect(int tid);
+
+typedef struct {
+    u8 id, sub, f2, f3, f4;
+    u8 pad5[2];
+    u8 f7;
+    struct {
+        u16 h0, h2;
+        u8 pad4[4];
+        s32 targets;
+        s32 fC;
+    } f8[4];
+} GsEnt48_View;
+
+void func_001CD900(int id, BtlChr *c) {
+    if (c->fACD == 0) {
+        GsEnt48_View *cmd = (GsEnt48_View *)MsGetChrCommand(id);
+        s32 mask = cmd->f8[cmd->f2].fC;
+        int flag = 0;
+        int i;
+
+        if (c->fF2 == 0 || c->fE9 != 0) {
+            flag = 1;
+        }
+        if (flag != 0) {
+            if (mask != 0) {
+                switch (cmd->pad5[0]) {
+                case 0:
+                    for (i = 0; i < 0x1F; i++) {
+                        if ((mask >> i) & 1) {
+                            BtlChr *t = MsGetChr(i);
+                            msResetHeadTarget(t);
+                            MsLimitTypeStatusCheck(id, c, i, t, 0, 2);
+                            MsStatusEffectReflect(i);
+                            MsRegSEplay2(i, 0x3B);
+                        }
+                    }
+                    cmd->pad5[0] = 1;
+                    break;
+                case 1: {
+                    int count = 0;
+                    for (i = 0; i < 0x1F; i++) {
+                        if ((mask >> i) & 1) {
+                            if (MsGetChr(i)->fB64 != 0) {
+                                count++;
+                            }
+                        }
+                    }
+                    if (count == 0) {
+                        cmd->pad5[0] = 2;
+                        c->fACD = 1;
+                        if (c->padAD4 == 0) {
+                            func_001CD8A0(id, c);
+                        }
+                    }
+                    break;
+                }
+                }
+            } else {
+                c->fACD = 1;
+                if (c->padAD4 == 0) {
+                    func_001CD8A0(id, c);
+                }
+            }
+        }
+    }
+}
 
 int MsEffectMotionLevel(int arg) {
     int r = 0;
@@ -244,7 +344,73 @@ void func_001CDD38(int arg) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectTerminate);
+void MsEffectTerminate(int arg) {
+    u8 *p = (u8 *)&arg;
+    u8 id = p[0];
+    BtlChr *c;
+
+    if (MsGetChrTop() != 0) {
+        c = MsGetChr(id);
+    } else {
+        c = 0;
+    }
+    switch (p[1]) {
+    case 2:
+        if (c->fABB != 5) {
+            MsBattleError(D_0056E8F0);
+        } else {
+            c->fABB = 6;
+        }
+        break;
+    case 0x80:
+        D_00662618 = 6;
+        break;
+    case 4:
+        if (c->fB7 != 0 && c->fF6 != 0) {
+            c->fB7 = 0;
+            c->fF6 = 0;
+        }
+        break;
+    case 7:
+        if (c->fAD2 != 0) {
+            c->fAD2--;
+        }
+        break;
+    case 8:
+        if (c->fAD3 != 0) {
+            c->fAD3--;
+        }
+        break;
+    case 9:
+        if (arg == c->fB64) {
+            c->fB64 = 0;
+        }
+        break;
+    case 10:
+        if (_gs_eff_read.f1754 != 0) {
+            _gs_eff_read.f1754 = 0;
+        }
+        break;
+    case 14:
+        if (_gs_eff_read.f2028 != 0) {
+            _gs_eff_read.f2028--;
+        }
+        break;
+    case 15:
+        if (c->fB7 != 0 && c->fF6 != 0) {
+            if (_gs_eff_read.f213C != 0) {
+                _gs_eff_read.f213C--;
+            }
+            c->fB7 = 0;
+            c->fAD7 = 1;
+            c->fF6 = 0;
+        }
+        break;
+    }
+    if (_gs_eff_read.f2107 != 0 && _gs_eff_read.f20 == arg) {
+        _gs_eff_read.f2107 = 0;
+    }
+}
 
 int MsEffectCheck(void) {
     int i;
@@ -261,7 +427,52 @@ u8 MsGetEff2Chr(u8 x) {
     return x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", func_001CE050);
+int func_001E1C70(int id, BtlChr *c, int b, int b0);
+int Ch_MotionSetHokan(Chr *chr, int v);
+int Ch_GetSeqFrame(Chr *chr);
+
+int func_001CE050(int id, int b) {
+    int res = 0;
+    BtlChr *c;
+    Chr *chr;
+
+    id &= 0xFF;
+    c = MsGetChr(id);
+    chr = c->chr;
+    if (chr != 0 && c->f38 != 0 && c->fA8E == 0) {
+        int flag = b & 0x8000;
+        b &= 0xFFFF7FFF;
+        c->f10F = 0;
+        c->fB3 = 1;
+        c->fF2 = 1;
+        c->f1CD = 0;
+        c->fCA = 0;
+        c->f108 = 0;
+        c->fE9 = 0;
+        if (c->fC4 == 0) {
+            MsEffectSetSpeed(id, c->fBC);
+        }
+        Ch_ResetMotion(chr);
+        Ch_SetSysMotion((int)chr, c->f20, b);
+        if (flag != 0) {
+            Ch_MotionSetNextHokan(chr, 0);
+            Ch_MotionSetHokan(chr, 0);
+        } else {
+            if ((c->flags & 0x80) == 0) {
+                Ch_MotionSetNextHokan(chr, 0);
+            }
+            Ch_MotionSetHokan(chr, func_001E1C70(id, c, b, c->fB0));
+        }
+        c->fB0 = b;
+        res = Ch_GetSeqFrame(chr);
+        if (res <= 0) {
+            c->fF4 = 1;
+        } else {
+            c->fF4 = 0;
+        }
+    }
+    return res;
+}
 
 int MsEffectCheckMotion(int arg) {
     u8 id = arg;
@@ -407,7 +618,26 @@ void func_001CE5F0(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEventEffectRead);
+int MsEventEffectRead(int a) {
+    if (D_00662618 == 0) {
+        D_003172F0.f2018 = a;
+        if (D_003172F0.f33 != 0) {
+            a = 0;
+        }
+        GetCD()->f10(0x11);
+        a = func_001CCD38(a, -1);
+        if (GetCD()->f14(a) > 0) {
+            int addr = 0x1B00000;
+            D_00662618 = 1;
+            D_00662614 = addr;
+            op_ovl_effect_init();
+            GetCD()->f0(a, 0x1B00000, func_001CE5F0, 0);
+        }
+    } else {
+        MsBattleError(D_0056E8A0);
+    }
+    return D_00662618;
+}
 
 /* DEBT(CAST): D_00662614 remains declared as an integer callback-object handle. */
 void MsEventEffectProcess(void)
@@ -440,7 +670,26 @@ s8 MsEventEffectGetStat(void) {
     return D_00662618;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEventEffectStart);
+typedef struct {
+    int (*f0)(int);
+} Unk1CE800Cb;
+
+int MsEventEffectStart(int a) {
+    if (D_00662618 == 3) {
+        int id;
+        Unk1CE800Cb *cb;
+        D_00319419 = Sg_SetKeepFps(0);
+        id = MsGetEffID(D_0031FA14, 0x80, a);
+        D_00662620 = id;
+        D_00662618 = 4;
+        cb = (Unk1CE800Cb *)D_00662614;
+        func_002F8660(0);
+        func_002F8660(2);
+        cb->f0(id);
+        D_0031FA14++;
+    }
+    return D_00662618;
+}
 
 void MsEffectCameraCall(int v, int b) {
     if (v >= 0) {

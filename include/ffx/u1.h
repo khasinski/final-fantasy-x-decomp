@@ -7,11 +7,13 @@
 #include "ffx/funcs.h"
 
 /* <stdarg.h> of the EE toolchain (not shipped with the compiler copy used here) */
+#ifndef va_start
 typedef char *va_list;
 #define va_start(ap, last) \
     ((ap) = ((va_list)__builtin_next_arg(last) \
              - (__builtin_args_info(2) < 8 ? (8 - __builtin_args_info(2)) * 8 : 0)))
 #define va_end(ap) ((void)0)
+#endif
 
 /* ---- c_165320 ---- */
 
@@ -63,8 +65,8 @@ void func_00174A90(int a);
 void func_00174AF8(int a);
 void func_00159CE8(int a, int b, int c, int d, int e);
 int func_00158D60(void);
-int TkMalloc(int v);
-int TkFree(int v);
+s32 TkMalloc(s32 size);
+void TkFree(s32 h);
 void TkSetEventJumpMapNo(int a, int b);
 int TkGetNowEventJumpMapNo(void);
 
@@ -75,7 +77,7 @@ int TkCheckSoftWareReset(void);
 extern int D_0030BDCC;
 extern int D_0030BDE0[2]; /* DEBT(TYPE): cleared together with D_0030BDD0/D_0030BDD8 */
 extern char D_0058F950[];
-void *AtelGetCtrlWork(int i); /* same as q1.h */
+EvGameState *AtelGetCtrlWork(int i); /* same as q1.h */
 void func_0014D4F8(void);
 void func_0014D5D8(int *a, int *b);
 void func_0014D8C8(void);

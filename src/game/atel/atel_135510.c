@@ -42,7 +42,7 @@ int func_001355D8(Actor *a, void *op, ScriptCtx *ctx) {
 
 int func_00135640(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
-    EvGameStateG *g = (EvGameStateG *)AtelGetCurCtrlWork(); /* DEBT(CAST): see EvGameStateG */
+    EvGameState *g = AtelGetCurCtrlWork();
 
     g->w210 = (g->w210 & ~8) | (on << 3);
     return on;
@@ -50,7 +50,7 @@ int func_00135640(Actor *a, void *op, ScriptCtx *ctx) {
 
 int func_00135690(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
-    EvGameStateG *g = (EvGameStateG *)AtelGetCurCtrlWork(); /* DEBT(CAST): see EvGameStateG */
+    EvGameState *g = AtelGetCurCtrlWork();
 
     g->w210 = (g->w210 & ~0x40) | (on << 6);
     return on;
@@ -113,7 +113,7 @@ int func_00135850(Actor *a, void *op, ScriptCtx *ctx) {
     if ((AQ(a)->hB14 >> i) & 1) {
         if (AQ(a)->hB04[i] != 0xFF) {
             if (AQ(a)->arrAF4[i] != 0) {
-                graphicLevelGetNameHash((s32)AQ(a)->arrAF4[i], x); /* DEBT(TYPE): funcs.h takes s32 */
+                graphicLevelGetNameHash(AQ(a)->arrAF4[i], x);
             }
         }
     }
@@ -147,14 +147,14 @@ int func_00135950(Actor *a, void *op, ScriptCtx *ctx) {
 int func_001359D0(Actor *a, void *op, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);
 
-    ((EffectQ *)AtelGetMesWinWork(v))->w28 = 0x8000; /* DEBT(CAST): see EffectQ */
+    AtelGetMesWinWork(v)->w28 = 0x8000;
     return v;
 }
 
 int func_00135A10(Actor *a, void *op, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);
 
-    ((EffectQ *)AtelGetMesWinWork(v))->w28 = 0; /* DEBT(CAST): see EffectQ */
+    AtelGetMesWinWork(v)->w28 = 0;
     return v;
 }
 

@@ -123,7 +123,84 @@ void func_00267270(T6_PrObj *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", func_00267320);
+typedef struct PppObj {
+    struct PppObj *next;
+    u8 pad4[4];
+    struct PppCls *cls;
+    int wC;
+    u8 pad10[0x80];
+    int w90;
+    int w94;
+} PppObj;
+
+typedef struct PppDef {
+    u8 pad0[0x20];
+    int ofs;
+    s16 prio;
+    s16 n;
+} PppDef;
+
+typedef struct PppCls {
+    PppDef *def;
+    PppObj *last;
+    int w8;
+    u16 refs;
+} PppCls;
+
+typedef struct PppMgr {
+    u8 pad0[0x30];
+    PppObj *list;
+} PppMgr;
+
+T6_Mem *func_00267320(T6_ColMgr *mgr, T6_MemEnt *e)
+{
+    PppMgr *m = (PppMgr *)mgr;
+    PppCls *cls = (PppCls *)e;
+    PppDef *def = cls->def;
+    PppObj *o;
+    PppObj *cur;
+    PppObj **prev;
+    int prio;
+
+    o = pppMemAlloc(D_006A3924, &D_006A3924->sub, def->ofs + def->n * 4);
+    if (o == 0) {
+        return 0;
+    }
+    cur = m->list;
+    o->wC = 0;
+    o->w90 = 0;
+    o->w94 = 0;
+    o->cls = cls;
+    if (cur == 0) {
+        cls->last = o;
+        m->list = o;
+        o->next = 0;
+    } else if (cls->last != 0) {
+        *(PppObj **)o = cls->last->next;
+        cls->last->next = o;
+    } else {
+        prio = def->prio;
+        prev = &m->list;
+        cur = m->list;
+        do {
+            if (cur->cls->def->prio >= prio) {
+                cls->last = o;
+                *prev = o;
+                o->next = cur;
+                goto done;
+            }
+            prev = &cur->next;
+            cur = cur->next;
+        } while (cur != 0);
+        cls->last = o;
+        *prev = o;
+        o->next = 0;
+    }
+done:
+    cls->refs++;
+    func_00267270((T6_PrObj *)o);
+    return (T6_Mem *)o;
+}
 
 void pppDeletePObject(T6_PrObj *o)
 {
@@ -245,7 +322,52 @@ void func_00267F10(T6_ColMgr *m)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppRunPart);
+typedef struct PppRunMgr {
+    int w0;
+    int w4;
+    int w8;
+    int wC;
+    int w10;
+    int w14;
+    int w18;
+    u8 b1C;
+    u8 b1D;
+    u8 pad1E[0x30 - 0x1E];
+    void *p30;
+} PppRunMgr;
+
+void func_00267AC8(void *m);
+
+int _pppRunPart(void *a, int flags)
+{
+    PppRunMgr *m = (PppRunMgr *)a;
+
+    ppvMng = (T6_ColMgr *)m;
+    if (flags & 0x10) {
+        func_002670E0((ObjGroup *)m);
+    }
+    func_00267F10((T6_ColMgr *)m);
+    func_00267AC8(m);
+    if (flags & 0x20) {
+        func_00267150((ObjGroup *)m);
+    }
+    if (D_006A3BC4 != 0) {
+        return 0;
+    }
+    m->wC = m->w8;
+    m->w8 += m->w10;
+    if (m->b1C != 0) {
+        if (m->b1D != 0) {
+            return m->p30 == 0;
+        }
+        if (m->w8 > 0x6FFFFFFF) {
+            m->w8 = 0x70000000;
+            m->wC = 0x70000000 - m->w10;
+        }
+        return 0;
+    }
+    return m->w8 >= m->w4;
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", func_00268080);
 

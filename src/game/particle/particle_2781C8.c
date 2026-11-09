@@ -18,7 +18,7 @@ void func_002781D8(ScriptWork *base, T6_LtKey *k, ScriptCtx *ctx)
 {
     T6_LtRot *rot = SLOT_WORK(T6_LtRot, base, ctx, 1);
     float *pos = SLOT_WORK(float, base, ctx, 2);
-    T6_LtCam *cam = (T6_LtCam *)D_006A3930; /* DEBT(CAST): camera block type unknown */
+    T6_LtCam *cam = D_006A3930;
     float size;
     float x;
     float y;
@@ -74,7 +74,7 @@ void func_00278308(ScriptWork *base, T6_LtKey *k, ScriptCtx *ctx)
     int i;
 
     if (k->id != 0xFFFF) {
-        cam = (T6_LtCam *)D_006A3930; /* DEBT(CAST): camera block type unknown */
+        cam = D_006A3930;
         sc = (s16)rot->s >> 7;
         rx = rot->x * sc >> 14;
         ry = rot->y * sc >> 14;
@@ -83,7 +83,7 @@ void func_00278308(ScriptWork *base, T6_LtKey *k, ScriptCtx *ctx)
         x = pos[0] + cam->x;
         y = pos[1] + cam->y;
         z = pos[2] + cam->z;
-        shape = ((T6_LtHeap *)D_006A3924)->res[k->id].shape; /* DEBT(CAST): HeapMgr view */
+        shape = D_006A3924->res[k->id].shape;
         if (size == 0.0f) {
             size = 2.0f;
         }
@@ -130,7 +130,7 @@ void func_00278538(ScriptWork *base, T6_LtKey *k, ScriptCtx *ctx)
     int i;
 
     if (k->id != 0xFFFF) {
-        cam = (T6_LtCam *)D_006A3930; /* DEBT(CAST): camera block type unknown */
+        cam = D_006A3930;
         sc = (s16)rot->s >> 7;
         rx = rot->x * sc >> 14;
         ry = rot->y * sc >> 14;
@@ -139,7 +139,7 @@ void func_00278538(ScriptWork *base, T6_LtKey *k, ScriptCtx *ctx)
         x = pos[0] + cam->x;
         y = pos[1] + cam->y;
         z = pos[2] + cam->z;
-        shape = ((T6_LtHeap *)D_006A3924)->res[k->id].shape; /* DEBT(CAST): HeapMgr view */
+        shape = D_006A3924->res[k->id].shape;
         if (size == 0.0f) {
             size = 2.0f;
         }
@@ -168,7 +168,7 @@ void func_00278788(ScriptWork *base, T6_LtKeyG *k, ScriptCtx *ctx)
 {
     T6_LtRot *rot = SLOT_WORK(T6_LtRot, base, ctx, 1);
     float *pos = SLOT_WORK(float, base, ctx, 2);
-    T6_LtGrp *grp = &((T6_LtHeap *)D_006A3924)->grp[k->grp]; /* DEBT(CAST): HeapMgr view */
+    T6_LtGrp *grp = &D_006A3924->grp[k->grp];
     T6_LtCam *cam;
     T6_LtPt *pts;
     T6_LtPt *pt;
@@ -186,11 +186,11 @@ void func_00278788(ScriptWork *base, T6_LtKeyG *k, ScriptCtx *ctx)
     int i;
 
     if (grp != 0) {
-        pts = ((T6_LtWork *)base)->pts; /* DEBT(CAST): script work view */
+        pts = base->pts;
         if (pts == 0) {
-            pts = ((T6_LtHeap *)D_006A3924)->res[grp->res].pts; /* DEBT(CAST) */
+            pts = D_006A3924->res[grp->res].pts;
         }
-        cam = (T6_LtCam *)D_006A3930; /* DEBT(CAST): camera block type unknown */
+        cam = D_006A3930;
         sc = (s16)rot->s >> 7;
         rx = rot->x * sc >> 14;
         ry = rot->y * sc >> 14;
@@ -228,7 +228,7 @@ void func_002789E0(ScriptWork *base, T6_LtKeyG *k, ScriptCtx *ctx)
     T6_LtRot *rot = SLOT_WORK(T6_LtRot, base, ctx, 1);
     float *pos = SLOT_WORK(float, base, ctx, 2);
     float *scl = SLOT_WORK(float, base, ctx, 3);
-    T6_LtGrp *grp = &((T6_LtHeap *)D_006A3924)->grp[k->grp]; /* DEBT(CAST): HeapMgr view */
+    T6_LtGrp *grp = &D_006A3924->grp[k->grp];
     T6_LtCam *cam;
     T6_LtPt *pts;
     T6_LtPt *pt;
@@ -246,11 +246,11 @@ void func_002789E0(ScriptWork *base, T6_LtKeyG *k, ScriptCtx *ctx)
     int i;
 
     if (grp != 0) {
-        pts = ((T6_LtWork *)base)->pts; /* DEBT(CAST): script work view */
+        pts = base->pts;
         if (pts == 0) {
-            pts = ((T6_LtHeap *)D_006A3924)->res[grp->res].pts; /* DEBT(CAST) */
+            pts = D_006A3924->res[grp->res].pts;
         }
-        cam = (T6_LtCam *)D_006A3930; /* DEBT(CAST): camera block type unknown */
+        cam = D_006A3930;
         sc = (s16)rot->s >> 7;
         rx = rot->x * sc >> 14;
         ry = rot->y * sc >> 14;

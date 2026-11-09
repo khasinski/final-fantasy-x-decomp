@@ -22,7 +22,31 @@ s32 func_002D1DA0(void) {
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D1DB0);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D1E70);
+extern u8 D_00788C20[];
+extern u8 D_00584670[];
+void func_002D1DB0(void *);
+void D_002D1E68(int);
+
+void func_002D1E70(void)
+{
+    ThreadParam th;
+    SemaParam sem;
+    s32 sid;
+
+    sem.initCount = 0;
+    sem.maxCount = 1;
+    sem.option = 0;
+    sid = func_002F83E0(&sem);
+    th.stackSize = 0x1000;
+    th.gpReg = D_00584670;
+    th.entry = func_002D1DB0;
+    th.stack = D_00788C20;
+    th.initPriority = 1;
+    func_002F8200(func_002F81E0(&th), (void *)sid);
+    if (func_002D92B8() & 0x400) {
+        func_002E0B80(D_002D1E68, sid);
+    }
+}
 
 s32 func_002D1F18(s32 mode) {
     mode = W10_CLAMP_IDX(mode);
@@ -93,7 +117,14 @@ s32 func_002D2180(void) {
     return func_002F82E0(func_002F82D0(), &st);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D21A8);
+void func_002D21A8(ThreadParam *p) {
+    for (;;) {
+        func_002F8420(D_0078AC58[p->option]);
+        if (D_0078AC60[p->option] != 0) {
+            D_0078AC60[p->option]();
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D2210);
 

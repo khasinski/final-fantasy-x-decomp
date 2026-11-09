@@ -31,8 +31,8 @@ void rcbgModelInit(void *p) {
     func_002EF0D0(o->body20, 0, 0x70);
     func_0018F310(&o->v90);
     o->fB0 = o->fB4 = o->fB8 = o->fBC = 0.0f;
-    func_002DD128((struct W3Whole *)o->matC0); /* DEBT(CAST): matrices are passed as the W3Whole view */
-    func_002DD128((struct W3Whole *)o->mat100);
+    func_002DD128(o->matC0);
+    func_002DD128(o->mat100);
 }
 
 void func_00195078(void *p) {

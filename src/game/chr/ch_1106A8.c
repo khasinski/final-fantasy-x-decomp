@@ -13,12 +13,12 @@ s32 func_001106A8(Chr *chr, int on, int mask)
         chr->b18C |= mask;
     } else {
         chr->b18C &= ~mask;
-        *(u64 *)&chr->f828 |= 1L << 34; /* DEBT(CAST): 64-bit flag word at 0x828 overlaps f828/h82E */
+        chr->u828.flags2 |= 1L << 34;
     }
     return old;
 }
 
-s32 graphicLevelGetNameHash(s32 a, s32 b)
+s32 graphicLevelGetNameHash(Chr *a, s32 b)
 {
     return func_001106A8(a, b, 1);
 }
@@ -178,9 +178,9 @@ float Ch_SetWeight(Chr *chr, float v)
 
 float Ch_SetClipZ(Chr *chr, float v)
 {
-    float old = CHR_F32(chr, 0x180) / 10.0f; /* DEBT(CAST) */
+    float old = chr->f180 / 10.0f;
 
-    CHR_F32(chr, 0x180) = v * 10.0f;
+    chr->f180 = v * 10.0f;
     return old;
 }
 

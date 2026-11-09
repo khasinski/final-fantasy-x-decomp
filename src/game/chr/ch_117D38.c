@@ -8,14 +8,14 @@
 
 void func_00117D38(Chr *chr)
 {
-    if (CHR_S32(chr, 0x708) != 0) { /* DEBT(CAST) */
+    if (chr->w708 != 0) {
         tex_anim_no_set(chr->w70C);
     }
 }
 
 void func_00117D58(Chr *chr)
 {
-    if (CHR_S32(chr, 0x708) != 0) { /* DEBT(CAST) */
+    if (chr->w708 != 0) {
         tex_anim_timer(chr->w70C);
     }
 }

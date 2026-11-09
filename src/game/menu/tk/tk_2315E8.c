@@ -1,5 +1,6 @@
 /* tu_257 0x2315e8-0x232c88: medium; ~Tk (config/tu_map.tsv) */
 #define func_00232180 _hdr_func_00232180
+#define D_00693D64 _hdr_D_00693D64
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -8,15 +9,18 @@
 #include "ffx/v5.h"
 #include "ffx/s5.h"
 #undef func_00232180
+#undef D_00693D64
+
+extern int D_00693D64;
 
 void func_002315E8(void)
 {
-    TkMn2GetCommonPlate(&D_00325AD0, (int)D_00571E90, (int)D_00571EA0, (int)D_00571EB0, 0, 0); /* DEBT(CAST): names passed as int */
+    TkMn2GetCommonPlate(&D_00325AD0, D_00571E90, D_00571EA0, D_00571EB0, 0, 0);
     func_00227460(D_00571EC0, D_00693D68);
     func_002273A0(D_00571ED0, D_00693D70);
     func_002273A0(D_00571EE0, D_00693D78);
     func_00227460(D_00571EF0, D_00693D80);
-    func_00227460(D_00571F00, (s16 *)&D_00693D88); /* DEBT(CAST): Pt16s is an s16 pair */
+    func_00227460(D_00571F00, &D_00693D88);
     func_002273A0(D_00571F10, D_00693D90);
     func_002273A0(D_00571F20, D_00325B00);
     func_00227460(D_00571F30, D_00325AC8);
@@ -189,7 +193,28 @@ int func_00232360(int a, int i) {
     return func_002317C0(D_00693D60[i], 1) != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232398);
+void func_00232398(void)
+{
+    Task *t = func_00243400();
+
+    t->b3E = 1;
+    t->x48 = 0;
+    t->x32 = 0;
+    t->x34 = 0;
+    t->cb = func_00232350;
+    t->x0C = (s32)func_00231840;
+    t->x10 = (s32)func_00232180;
+    t->x14 = (s32)func_00232348;
+    t->x1C = (s32)func_00232360;
+    t->b3F = 1;
+    t->b42 = 1;
+    t->x30 = D_00693D64;
+    t->b36 = 3;
+    t->b37 = 0;
+    t->x3A = 9;
+    TkMenuMainRegistWindow(t);
+    D_00693D58 = t;
+}
 
 void func_00232448(void) {
     if (D_00693D58) {
@@ -329,16 +354,36 @@ void func_00232B28(void) { func_00225A38(); func_00225920(); func_00225B00(); }
 
 void func_00232B50(void) { func_002315E8(); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232B58);
+u16 *_m2c_MsGetSaveWeaponList(int, int, int, s32 *) __asm__("MsGetSaveWeaponList");
+
+void func_00232B58(Task *o)
+{
+    s32 count;
+    s32 idx;
+    int i;
+
+    o->x1C = 0;
+    D_00693D60 = _m2c_MsGetSaveWeaponList(-1, -1, 0, &count);
+    for (i = count - 1; i > 0; i--) {
+        if (MsGetSaveWeapon(D_00693D60[i], &idx)->b2 != 0) {
+            i++;
+            break;
+        }
+    }
+    D_00693D64 = i;
+    TkMn2InitStatusBG();
+    func_00227480(D_00572068);
+    func_00227480(D_00572070);
+}
 
 void func_00232C10(void) {
     TkMsSetSaveParamAll();
     func_00232468();
     AtelRegistCallbackQue2(0, TkMn2ArmsRefreshArms, D_00572078);
     TkMn2InitStatusBG();
-    func_00227490((int)D_00572068); /* DEBT(CAST): address passed as int */
-    func_00227490((int)D_00572070);
-    func_00227490((int)D_00571FA0);
+    func_00227490(D_00572068);
+    func_00227490(D_00572070);
+    func_00227490(D_00571FA0);
 }
 
 void func_00232C78(void) {

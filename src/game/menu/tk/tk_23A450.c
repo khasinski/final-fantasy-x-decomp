@@ -13,15 +13,13 @@
 
 int TkMn2GetIShopPos(void) /* DEBT(TYPE): declared int in funcs.h, no value returned */
 {
-    /* DEBT(CAST): TkMn2GetCommonPlate takes the part names as int */
-    /* DEBT(CAST): several targets are declared with other types in shared headers */
     func_002273A0(D_00572790, D_00326288);
     func_002273A0(D_005727A0, D_00326170);
     func_002273A0(D_005727B0, D_006940A8);
     func_002273A0(D_005727C0, D_006940B0);
     func_002273A0(D_005727D0, D_00326240);
     func_002273A0(D_005727E0, D_00326180);
-    func_002273A0(D_005727F0, (s16 *)&D_003261D8);
+    func_002273A0(D_005727F0, &D_003261D8);
     func_002273A0(D_00572800, D_006940B8);
     func_002273A0(D_00572810, D_006940C0);
     func_00227460(D_00572820, D_003261D0);
@@ -41,27 +39,27 @@ int TkMn2GetIShopPos(void) /* DEBT(TYPE): declared int in funcs.h, no value retu
     func_00227460(D_00572900, D_00326230);
     func_00227460(D_00572910, D_00326258);
     func_00227460(D_00572920, D_00326260);
-    D_006940DC = TkMn2SeqGetColor((int)D_00572930);
-    D_006940E0 = TkMn2SeqGetColor((int)D_00572940);
-    D_006940E4 = TkMn2SeqGetColor((int)D_00572950);
-    D_006940E8 = TkMn2SeqGetColor((int)D_00572960);
-    D_006940EC = TkMn2SeqGetColor((int)D_00572970);
-    D_006940F0 = TkMn2SeqGetColor((int)D_00572980);
-    D_006940F4 = TkMn2SeqGetColor((int)D_00572990);
-    D_006940F8 = TkMn2SeqGetColor((int)D_005729A0);
-    D_006940FC = TkMn2SeqGetColor((int)D_005729B0);
+    D_006940DC = TkMn2SeqGetColor(D_00572930);
+    D_006940E0 = TkMn2SeqGetColor(D_00572940);
+    D_006940E4 = TkMn2SeqGetColor(D_00572950);
+    D_006940E8 = TkMn2SeqGetColor(D_00572960);
+    D_006940EC = TkMn2SeqGetColor(D_00572970);
+    D_006940F0 = TkMn2SeqGetColor(D_00572980);
+    D_006940F4 = TkMn2SeqGetColor(D_00572990);
+    D_006940F8 = TkMn2SeqGetColor(D_005729A0);
+    D_006940FC = TkMn2SeqGetColor(D_005729B0);
     func_00227460(D_005729C0, D_00694138);
     func_00227460(D_005729D0, &D_00694140);
     func_002273A0(D_005729E0, D_00694148);
-    D_00694100 = TkMn2SeqGetColor((int)D_005729F0);
-    D_00694104 = TkMn2SeqGetColor((int)D_00572A00);
+    D_00694100 = TkMn2SeqGetColor(D_005729F0);
+    D_00694104 = TkMn2SeqGetColor(D_00572A00);
     func_00227460(D_00572A10, D_00326278);
     func_00227460(D_00572A20, D_00326280);
-    TkMn2GetCommonPlate(&D_00326188, (int)D_005727B0, (int)D_00572930, (int)D_00572940, 0, 0);
-    TkMn2GetCommonPlate(&D_003261A0, (int)D_005727F0, (int)D_00572950, (int)D_00572960, 0xda, 0xdb);
-    TkMn2GetCommonPlate(&D_003261E8, (int)D_00572800, (int)D_005729F0, (int)D_00572A00, 0, 0);
-    TkMn2GetCommonPlate(&D_00326200, (int)D_00572810, (int)D_00572990, (int)D_00572990, 0, 0);
-    TkMn2GetCommonPlate(&D_00326218, (int)D_005727C0, (int)D_00572970, (int)D_00572980, 0xda, 0xdb);
+    TkMn2GetCommonPlate(&D_00326188, D_005727B0, D_00572930, D_00572940, 0, 0);
+    TkMn2GetCommonPlate(&D_003261A0, D_005727F0, D_00572950, D_00572960, 0xda, 0xdb);
+    TkMn2GetCommonPlate(&D_003261E8, D_00572800, D_005729F0, D_00572A00, 0, 0);
+    TkMn2GetCommonPlate(&D_00326200, D_00572810, D_00572990, D_00572990, 0, 0);
+    TkMn2GetCommonPlate(&D_00326218, D_005727C0, D_00572970, D_00572980, 0xda, 0xdb);
 }
 
 void func_0023A8C8(void)
@@ -359,7 +357,7 @@ int func_0023B0B0(void) { return 1; }
 
 Task *func_0023B0B8(Task *src)
 {
-    Pt16 *e = (Pt16 *)0x1D57300; /* DEBT(CAST): 4-byte table at a fixed address */
+    SysEntry *e = SYS_TBL;
     Task *t;
 
     e = &e[src->x48];
@@ -372,9 +370,9 @@ Task *func_0023B0B8(Task *src)
     t->x0C = (s32)func_0023AE38; /* DEBT(CAST): Task callbacks are typed s32 */
     t->x10 = (s32)func_0023B040;
     t->x14 = (s32)func_0023B0B0;
-    t->ext[1] = e->x;
-    t->ext[2] = func_0023A9C0(e->x);
-    t->ext[3] = func_001BFE30(e->x);
+    t->ext[1] = e->h0;
+    t->ext[2] = func_0023A9C0(e->h0);
+    t->ext[3] = func_001BFE30(e->h0);
     t->ext[4] = MsGetGIL();
     t->x48 = 1;
     D_00694130 = t;
@@ -405,7 +403,15 @@ void func_0023B1C0(Task *t)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B238);
+int func_0023B238(int id)
+{
+    int price = func_0023A960(id);
+
+    if (func_001BFE30(id) >= 99 || MsGetGIL() < price) {
+        return 0;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B298);
 
@@ -505,7 +511,21 @@ void func_0023B940(int a, int b, int page, int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023BA20);
+void func_0023BA20(Task *t, int x, int y)
+{
+    int y0;
+
+    if (t->x48 & 1) {
+        int x0 = x + 0xC;
+        x = x0 + D_00694140;
+    } else {
+        int x1 = x + 0xC;
+        x = x1 + D_00694138[0];
+    }
+    y0 = y + 1;
+    y = y0 + D_00694138[1];
+    func_002270F8(x, y + ((t->x48 / 2 - t->x32) << 5), 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023BAA0);
 
@@ -552,7 +572,7 @@ void func_0023BD00(void) {
         t->b3E = 2;
         D_00694128 = 0;
         t->x10 = 0;
-        func_00227490((int)D_00572A78); /* DEBT(CAST): address passed as int */
+        func_00227490(D_00572A78);
     }
 }
 
@@ -620,15 +640,15 @@ void func_0023C428(void) { TkMn2GetIShopPos(); TkMn2GetWShopPos(); TkMn2GetStatu
 
 void func_0023C450(int a, int b) {
     D_00694110 = b;
-    func_00227480((int)D_00572B08); /* DEBT(CAST): address passed as int */
+    func_00227480(D_00572B08);
 }
 
 void func_0023C468(void) {
     func_0023BE40();
     func_00237818();
-    func_00227490((int)D_00572B08); /* DEBT(CAST): address passed as int */
-    func_00227490((int)D_00572A78);
-    func_00227490((int)D_00572A70);
+    func_00227490(D_00572B08);
+    func_00227490(D_00572A78);
+    func_00227490(D_00572A70);
 }
 
 void func_0023C4B0(void) {

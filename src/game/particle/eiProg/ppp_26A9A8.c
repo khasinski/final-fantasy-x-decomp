@@ -93,6 +93,7 @@ int pppFree(HHead *h, HBlk *p) /* DEBT(TYPE): returns no value, but func_0026702
 {
     HBlk *b = p - 1;
     HBlk *prev;
+    HBlk *next;
 
     b->used = 0;
     h->used -= (char *)b->next - (char *)b;
@@ -100,15 +101,15 @@ int pppFree(HHead *h, HBlk *p) /* DEBT(TYPE): returns no value, but func_0026702
     prev = b->prev;
     if (prev != 0 && prev->used == 0) {
         prev->next = b->next;
-        p = b->next; /* DEBT(FAKE): p reused as the neighbour cursor (register choice) */
-        p->prev = prev;
+        next = b->next;
+        next->prev = prev;
         b = prev;
     }
-    p = b->next;
-    if (p->used == 0) {
-        b->next = p->next;
-        p = p->next;
-        p->prev = b;
+    next = b->next;
+    if (next->used == 0) {
+        b->next = next->next;
+        next = next->next;
+        next->prev = b;
     }
 }
 

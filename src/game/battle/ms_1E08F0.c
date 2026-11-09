@@ -2,7 +2,9 @@
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
+#define MsMessageCueRegist _hdr_MsMessageCueRegist
 #include "ffx/r3.h"
+#undef MsMessageCueRegist
 #define MsSystemMessageOpen u2_MsSystemMessageOpen /* DEBT(TYPE): u2.h declares void return */
 #include "ffx/u2.h"
 #undef MsSystemMessageOpen
@@ -120,7 +122,49 @@ void MsChangeWeaponInvisible(int arg, int flag) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", func_001E0DE8);
+typedef struct {
+    u16 h0;
+    u8 b2;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 b6;
+    u8 pad7[15];
+} W5Ent16Local;
+
+typedef struct {
+    u8 pad0[0xD2];
+    s8 fD2;
+    u8 padD3[0xFE - 0xD3];
+    W5Ent16Local entFE;
+    u8 pad114[0x1B0 - 0x114];
+} W5BufLocal;
+
+int func_001E0DE8(int a) {
+    W5Ent16Local *p;
+    int i;
+    u16 h0;
+    u8 b2;
+    u8 b6;
+
+    for (i = 0; i < 200; i++) {
+        p = &((W5Ent16Local *)D_0031D96C)[i];
+        if (p->b2 != 0 && ((p->b3 >> 3) & 1) && !((p->b3 >> 1) & 1)) {
+            MsFieldItemGetMes(a);
+            if (((W5BufLocal *)&btlgetdata_mes)->fD2 > 0) {
+                h0 = p->h0;
+                b2 = p->b2;
+                b6 = p->b6;
+                *p = ((W5BufLocal *)&btlgetdata_mes)->entFE;
+                p->h0 = h0;
+                p->b2 = b2;
+                p->b6 = b6;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
 
 void MsMemCheckInit(void) {
     D_00662FE0 = 0x40;
@@ -344,7 +388,22 @@ void func_001E1528(void)
     D_003172F0.f2077 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", MsMessageCueRegist);
+int MsMessageCueRegist(int op, int a, int b, int b1, int b2) {
+    int r = 0;
+    if (D_003172F0.f2074 < 4) {
+        CmdEnt *c;
+        MsMenuCloseTitleWindow(0);
+        r = 1;
+        c = &D_003172F0.f2044[(D_003172F0.f2075 + D_003172F0.f2074) % 4];
+        c->op = op;
+        c->a = a;
+        c->b = b;
+        c->b1 = b1;
+        c->b2 = b2;
+        D_003172F0.f2074++;
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", MsMessageCueProcess);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E08F0/rodata", jtbl_0056F8B0);

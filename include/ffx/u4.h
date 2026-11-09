@@ -168,7 +168,7 @@ extern s16 D_0069BE30[4];
 extern s16 D_0069BE38[4];
 
 extern int D_0069A7CC;
-extern int D_0069A640;
+extern Task *D_0069A640;
 extern u8 D_0069A660[2];
 void func_0023ED40(void);
 
@@ -287,9 +287,9 @@ void func_0014D610(int a, char *buf); /* as in q1.h */
 
 void *func_001F7FC0(void *list, void *p, int a, int b, int c); /* as in r4.h */
 
-void *func_001F78C8(void *list, int a, int b, int c, int d); /* as in r4.h */
+void *func_001F78C8(void *list, void *a, int b, int c, int d); /* as in r4.h */
 
-void *func_001F41C0(void *list, int a, int b, int c, int d); /* as in q5.h */
+void *func_001F41C0(void *list, void *a, int b, int c, int d); /* as in q5.h */
 WorkEnt2 *func_00257BE8(WorkEnt2 *p, int id, u16 *out);
 void _pppAllFreePObject(Slot80 *s);
 

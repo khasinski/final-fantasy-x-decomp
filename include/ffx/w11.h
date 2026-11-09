@@ -100,7 +100,7 @@ typedef union {
     do { ieee_float_shape_type sf_u; sf_u.word = (i); (d) = sf_u.value; } while (0)
 
 /* DEBT(NAME): persistent sound-device record, with the two flags cleared by func_002D8978. */
-typedef struct W11SoundDevice { u8 pad0[8]; u8 b08, b09; } W11SoundDevice;
+typedef struct W11SoundDevice { u8 pad0[8]; u8 b08, b09; u16 h0A; char buf0C[0x100]; } W11SoundDevice;
 extern W11SoundDevice D_00565F50;
 int func_2064278(W11SoundDevice *state, int a, int b, int c, int d); /* DEBT(TYPE): external entry's call signature inferred from argument registers. */
 

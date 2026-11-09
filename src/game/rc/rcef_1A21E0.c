@@ -199,7 +199,20 @@ Chr *rcefGetChrHandle(int a)
     return func_0013B0F8(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", rcuiMotionProc);
+Chr *rcuiMotionProc(int a0)
+{
+    Chr *ret = 0;
+    Chr *c;
+
+    Ch_HandleRewind();
+    while ((c = (Chr *)func_00102A60()) != 0) {
+        if (func_00102A48(c) == a0) {
+            ret = c;
+            break;
+        }
+    }
+    return ret;
+}
 
 int _m2c_func_001A2B58_MsEffectReady(int id, int flag) __asm__("MsEffectReady");
 void func_001A2B58(s32 arg0) {
@@ -324,14 +337,14 @@ void func_001A2D10(u32 a0)
 }
 
 void func_001A2D58(float *p) {
-    func_002DD128((struct W3Whole *)p); /* DEBT(CAST): prototype takes the W3Whole view of this object */
+    func_002DD128(p);
     p[10] = 0.01f;
     p[5] = 0.01f;
     p[0] = 0.01f;
 }
 
 void func_001A2D98(float *p) {
-    func_002DD128((struct W3Whole *)p); /* DEBT(CAST): prototype takes the W3Whole view of this object */
+    func_002DD128(p);
     p[10] = 0.001f;
     p[5] = 0.001f;
     p[0] = 0.001f;
@@ -352,7 +365,7 @@ void func_001A2DD8(float *v)
 }
 
 void func_001A2E10(int a, int b, float *c) {
-    S2_func_001072F8(rcefGetChrHandle(a), b, c);
+    func_001072F8(rcefGetChrHandle(a), b, c);
     func_001A2CC8(c);
 }
 
@@ -373,7 +386,7 @@ void func_001A2F00(int a, int b, float *c)
 {
     float m[16];
 
-    ((void (*)(Chr *, int, float *))func_001072F8)(rcefGetChrHandle(a), b, m); /* DEBT(CAST) */
+    func_001072F8(rcefGetChrHandle(a), b, m);
     VU0_LQC2(31, 0, m + 12);
     VU0_SQC2(31, 0, c);
 }
@@ -396,7 +409,7 @@ void func_001A3040(int a, int b, float *c) {
 
 int func_001A3080(int a, int b)
 {
-    return Ch_OptposGetElement((s32)rcefGetChrHandle(a), b, 0); /* DEBT(CAST): Ch_OptposGetElement declared with s32 */
+    return Ch_OptposGetElement(rcefGetChrHandle(a), b, 0);
 }
 
 float func_001A30B8(int a)
@@ -462,13 +475,27 @@ float func_001A3348(float a)
     return 4.712389f - a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3360);
+extern int func_002EC198(double, double);
+
+float func_001A3360(float a, float b)
+{
+    double d = func_002ED038(a - b);
+    float r;
+
+    if (func_002EC198(d, 0.0) < 0) {
+        d = func_002EBC08(0.0, d);
+    }
+    r = func_002EC440(d);
+    if (r > 3.1415927f) {
+        r = 6.2831855f - r;
+    }
+    return r;
+}
 
 void func_001A33F0(s32 arg0, s32 arg1) {
     MsSetChrVisible(arg0, arg1);
 }
 
-int MsGetWeaponHandle(int id, int flag); /* DEBT(TYPE): guessed from call sites */
 void func_001A33F8(s32 arg0, s32 arg1) {
     s32 temp_2;
 
@@ -478,7 +505,6 @@ void func_001A33F8(s32 arg0, s32 arg1) {
     }
 }
 
-int MsGetWeaponHandle(int id, int flag); /* DEBT(TYPE): guessed from call sites */
 void func_001A3438(s32 arg0, s32 arg1) {
     s32 temp_2;
 
@@ -604,7 +630,7 @@ void func_001A3BB0(s32 arg0) {
 extern void func_001A2DD8(float *v);
 extern void func_001A2D58(float *m);
 
-void func_001A3BD8(int id, int dst, float *in)
+void func_001A3BD8(int id, void *dst, float *in)
 {
     float a[4];
     float b[4];
@@ -615,7 +641,7 @@ void func_001A3BD8(int id, int dst, float *in)
     func_001A2DD8(a);
     func_001B6790(id, b);
     func_001A2D58(m);
-    op_rt_m_yxz(dst, (int)m, (int)a, (int)b); /* DEBT(CAST): prototype takes four ints */
+    op_rt_m_yxz(dst, m, a, b);
 }
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3C50);
@@ -637,8 +663,8 @@ void func_001A40E0(int a, int b, float *out)
 
     c = rcefGetChrHandle(a);
     i = func_001A3080(a, 0);
-    ((void (*)(Chr *, int, float *))func_001072F8)(c, b, m0); /* DEBT(CAST) */
-    ((void (*)(Chr *, int, float *))func_001072F8)(c, i, m1);
+    func_001072F8(c, b, m0);
+    func_001072F8(c, i, m1);
     p = m0 + 12;
     q = m1 + 12;
     VU0_LQC2(31, 0, p);

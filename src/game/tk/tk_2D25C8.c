@@ -294,7 +294,24 @@ INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2C98);
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2F20);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D30E0);
+int func_002DEB70(int, int);
+int func_002DEBD0(int, int);
+
+int func_002D30E0(int port, int slot, int state, u8 *info)
+{
+    W10Pad *p = &D_0078ACC8[port][slot];
+
+    if (func_002DEB70(port, slot) == 1) {
+        if ((info[1] & 0xF) != 9) {
+            if (func_002DEBD0(port, slot) != 0) {
+                state = 7;
+            }
+        }
+    } else {
+        p->stat[2] = 0;
+    }
+    return state;
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3180);
 
@@ -385,10 +402,9 @@ void func_002D39D8(s32 port, s32 slot) {
     D_0078ACC0[port] |= r << slot;
 }
 
-/* DEBT(FAKE) */
 void func_002D3AA8(s32 a, s32 b) {
     s32 var_16;
-    register s32 var_17 __asm__("$17");
+    s32 var_17;
 
     if (a < 0) {
         var_17 = 0;

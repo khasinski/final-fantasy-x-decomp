@@ -491,7 +491,7 @@ int func_002E0188(int port, int slot, const char *name, McTblGetDir *info, u32 f
     }
     D_0078C0B0.port = port;
     D_0078C0B0.slot = slot;
-    flags &= 7; /* DEBT(FAKE): masks the parameter in place */
+    flags &= 7;
     D_0078C0B0.flags = flags;
     D_0078C040 = *info;
     D_0078C0B0.table = &D_0078C040;

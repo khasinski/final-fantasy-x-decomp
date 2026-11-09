@@ -6,69 +6,69 @@
 #include "ffx/s0.h"
 #include "ffx/v1.h"
 
-int func_0013CA80(ScrQ *s, int i) {
+int func_0013CA80(Actor *s, int i) {
     return ((int *)((char *)s->blob + s->hdr->o24))[i];
 }
 
 int func_0013CAA0(int id, int i) {
-    return func_0013CA80((ScrQ *)AtelGetBasicWork(id), i); /* DEBT(CAST): AC10 result used as a script reader */
+    return func_0013CA80(AtelGetBasicWork(id), i);
 }
 
-void func_0013CAD0(ScrQ *s, ScrEntQ2 *e, int off) {
+void func_0013CAD0(Actor *s, ActorBind *e, int off) {
     e->b1E = 0;
-    ((ScrEntQ *)e)->p18 = (char *)s->blob + s->blob->o30 + off;
+    e->p18 = (char *)s->blob + s->blob->o30 + off;
 }
 
 void func_0013CAF0(int id, int slot, int off) {
     Actor *x = AtelGetBasicWork(id);
 
-    func_0013CAD0((ScrQ *)x, (ScrEntQ *)func_0013C9C8(x, slot), off); /* DEBT(CAST): AC10/C9C8 results used as a script reader and entry */
+    func_0013CAD0(x, func_0013C9C8(x, slot), off);
 }
 
-int func_0013CB48(ScrQ *s, ScrEntQ *e) {
+int func_0013CB48(Actor *s, ActorBind *e) {
     return e->p18 - ((char *)s->blob + s->blob->o30);
 }
 
-void func_0013CB60(ScrQ *s, ScrEntQ *e, int i) {
+void func_0013CB60(Actor *s, ActorBind *e, int i) {
     if (e->b1D <= 0) {
         func_0013CAD0(s, e, func_0013CA80(s, i));
     } else {
-        func_0013CAD0(s, e, func_0013CA80((ScrQ *)AtelGetBasicWork(e->h10[e->b1D - 1]), i)); /* DEBT(CAST): AC10 result used as a script reader */
+        func_0013CAD0(s, e, func_0013CA80(AtelGetBasicWork(e->h10[e->b1D - 1]), i));
     }
 }
 
-char *func_0013CBF8(ScrQ *s, ScrEntQ *e) {
+char *func_0013CBF8(Actor *s, ActorBind *e) {
     return e->p18;
 }
 
-char *func_0013CC00(ScrQ *s, int off) {
+char *func_0013CC00(Actor *s, int off) {
     return (char *)s->blob + s->blob->o30 + off;
 }
 
-char *func_0013CC18(ScrQ *s, int i) {
-    ScrHdrQ *h = s->hdr;
+char *func_0013CC18(Actor *s, int i) {
+    ActorHdr *h = s->hdr;
     char *b = (char *)s->blob;
     char *t = b + h->o28;
     t += i * 4;
     return b + *(int *)t;
 }
 
-int func_0013CC40(ScrQ *s, int i) {
-    ScrHdrQ *h = s->hdr;
+int func_0013CC40(Actor *s, int i) {
+    ActorHdr *h = s->hdr;
     char *t = (char *)s->blob + h->o14;
     t += i * 8;
     return *(u16 *)(t + 4);
 }
 
-int func_0013CC60(ScrQ *s, int i) {
-    ScrHdrQ *h = s->hdr;
+int func_0013CC60(Actor *s, int i) {
+    ActorHdr *h = s->hdr;
     char *t = (char *)s->blob + h->o14;
     t += i * 8;
     return *(u16 *)(t + 6);
 }
 
-int func_0013CC80(ScrQ *s, int i) {
-    ScrHdrQ *h = s->hdr;
+int func_0013CC80(Actor *s, int i) {
+    ActorHdr *h = s->hdr;
     char *t = (char *)s->blob + h->o14;
     t += i * 8;
     return *(int *)t;
@@ -91,11 +91,11 @@ int func_0013CCA8(int flag, u8 *p) {
     return (c << 24) | v;
 }
 
-int func_0013CD18(ScrQ *s, ScrEntQ *e) {
+int func_0013CD18(Actor *s, ActorBind *e) {
     return func_0013CCA8(0, (u8 *)func_0013CBF8(s, e));
 }
 
-void func_0013CD40(ScrQ *s, ScrEntQ *e, int c) {
+void func_0013CD40(Actor *s, ActorBind *e, int c) {
     int ch;
     int pos;
     int step;
@@ -113,26 +113,25 @@ void func_0013CD40(ScrQ *s, ScrEntQ *e, int c) {
 void func_0013CDC8(int id, int off) {
     Actor *x = AtelGetBasicWork(id);
 
-    func_0013CD40((ScrQ *)x, (ScrEntQ *)func_0013C9C8(x, x->slotIdx), off); /* DEBT(CAST): AC10/C9C8 results used as a script reader and entry */
+    func_0013CD40(x, func_0013C9C8(x, x->slotIdx), off);
 }
 
 void func_0013CE10(Actor *a, ScriptCtx *ctx, float f) {
-    StkQ *k = (StkQ *)ctx; /* DEBT(CAST): see StkQ */
-    int n = k->n;
+    int n = ctx->argc;
 
     if (n >= 0x13) {
         func_0013AB38((int)a, 1);
         return;
     }
-    k->tag[n] = 2;
-    k->v[n++] = *(int *)&f; /* DEBT(CAST): float pushed as its bit pattern */
-    k->n = n;
+    ctx->tag[n] = 2;
+    ctx->v[n++] = *(int *)&f; /* DEBT(CAST): float pushed as its bit pattern */
+    ctx->argc = n;
 }
 
-int func_0013CE70(int a, StkQ *k)
+int func_0013CE70(int a, ScriptCtx *k)
 {
-    if (k->tag[k->n - 1] == k->tag[k->n - 2]) {
-        if (k->tag[k->n - 1] == 1) {
+    if (k->tag[k->argc - 1] == k->tag[k->argc - 2]) {
+        if (k->tag[k->argc - 1] == 1) {
             return 1;
         }
     }
@@ -140,21 +139,19 @@ int func_0013CE70(int a, StkQ *k)
 }
 
 void AtelPushStackInteger(Actor *a, ScriptCtx *ctx, int v) {
-    StkQ *k = (StkQ *)ctx; /* DEBT(CAST): see StkQ */
-    int n = k->n;
+    int n = ctx->argc;
 
     if (n >= 0x13) {
         func_0013AB38((int)a, 1);
         return;
     }
-    k->tag[n] = 1;
-    k->v[n++] = v;
-    k->n = n;
+    ctx->tag[n] = 1;
+    ctx->v[n++] = v;
+    ctx->argc = n;
 }
 
 int AtelPopStackInteger(Actor *a, ScriptCtx *ctx) {
-    StkQ *k = (StkQ *)ctx; /* DEBT(CAST): the ctx argument is the operand stack here */
-    int n = k->n;
+    int n = ctx->argc;
     int r;
 
     if (n <= 0) {
@@ -162,18 +159,17 @@ int AtelPopStackInteger(Actor *a, ScriptCtx *ctx) {
         return 0;
     }
     n--;
-    if (k->tag[n] == 1) {
-        r = k->v[n];
+    if (ctx->tag[n] == 1) {
+        r = ctx->v[n];
     } else {
-        r = (int)*(float *)&k->v[n];
+        r = (int)*(float *)&ctx->v[n];
     }
-    k->n = n;
+    ctx->argc = n;
     return r;
 }
 
 int func_0013CF40(Actor *a, ScriptCtx *ctx) {
-    StkQ *k = (StkQ *)ctx; /* DEBT(CAST): the ctx argument is the operand stack here */
-    int n = k->n;
+    int n = ctx->argc;
     int r;
 
     if (n <= 0) {
@@ -181,10 +177,10 @@ int func_0013CF40(Actor *a, ScriptCtx *ctx) {
         return 0;
     }
     n--;
-    if (k->tag[n] == 1) {
-        r = k->v[n];
+    if (ctx->tag[n] == 1) {
+        r = ctx->v[n];
     } else {
-        r = (int)*(float *)&k->v[n];
+        r = (int)*(float *)&ctx->v[n];
     }
     return r;
 }
@@ -192,14 +188,14 @@ int func_0013CF40(Actor *a, ScriptCtx *ctx) {
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", AtelPopStackFloat);
 
 int func_0013D068(Actor *a, int i) {
-    return AtelGetRealVarAdrs(a, func_0013CC80((ScrQ *)a, i)); /* DEBT(CAST): the actor used as a script reader */
+    return AtelGetRealVarAdrs(a, func_0013CC80(a, i));
 }
 
-int func_0013D098(ScrQ *s, int i) {
+int func_0013D098(Actor *s, int i) {
     return (unsigned)func_0013CC80(s, i) >> 28;
 }
 
-int func_0013D0B8(ScrQ *s, int i) {
+int func_0013D0B8(Actor *s, int i) {
     return func_0013CC40(s, i);
 }
 
@@ -225,10 +221,10 @@ int func_0013D0D8(unsigned int kind) {
     return r;
 }
 
-int func_0013D120(Actor *a, int idx, int n) {
-    int w = func_0013CC80((ScrQ *)a, idx); /* DEBT(CAST): the actor used as a script reader */
+void *func_0013D120(Actor *a, int idx, int n) {
+    int w = func_0013CC80(a, idx);
     int kind = (unsigned)w >> 28;
-    int cnt = func_0013CC40((ScrQ *)a, idx);
+    int cnt = func_0013CC40(a, idx);
     int addr = AtelGetRealVarAdrs(a, w);
 
     if (n < 0) {
@@ -237,13 +233,13 @@ int func_0013D120(Actor *a, int idx, int n) {
     if (n >= cnt) {
         n = cnt - 1;
     }
-    return addr + func_0013D0D8(kind) * n;
+    return (void *)(addr + func_0013D0D8(kind) * n);
 }
 
 void func_0013D1C0(Actor *a, int idx, int n, int val, int clamp)
 {
-    void *p = (void *)func_0013D120(a, idx, n); /* DEBT(CAST): address returned as int */
-    int kind = func_0013D098((ScrQ *)a, idx);
+    void *p = func_0013D120(a, idx, n);
+    int kind = func_0013D098(a, idx);
 
     switch (kind) {
     case 0:
@@ -306,8 +302,8 @@ void func_0013D1C0(Actor *a, int idx, int n, int val, int clamp)
 
 void func_0013D2E8(Actor *a, int idx, int n, int clamp, float f)
 {
-    void *p = (void *)func_0013D120(a, idx, n); /* DEBT(CAST): address returned as int */
-    int kind = func_0013D098((ScrQ *)a, idx);
+    void *p = func_0013D120(a, idx, n);
+    int kind = func_0013D098(a, idx);
     int val = (int)f;
 
     switch (kind) {
@@ -371,10 +367,10 @@ void func_0013D2E8(Actor *a, int idx, int n, int clamp, float f)
 
 int func_0013D410(Actor *a, int idx, int n)
 {
-    void *p = (void *)func_0013D120(a, idx, n); /* DEBT(CAST): address returned as int */
+    void *p = func_0013D120(a, idx, n);
     int r = 0;
 
-    switch (func_0013D098((ScrQ *)a, idx)) {
+    switch (func_0013D098(a, idx)) {
     case 0:
         r = *(u8 *)p;
         break;
@@ -400,8 +396,8 @@ int func_0013D410(Actor *a, int idx, int n)
 
 float func_0013D4C8(Actor *a, int idx, int n)
 {
-    void *p = (void *)func_0013D120(a, idx, n); /* DEBT(CAST): address returned as int */
-    int kind = func_0013D098((ScrQ *)a, idx);
+    void *p = func_0013D120(a, idx, n);
+    int kind = func_0013D098(a, idx);
     float r = 0;
 
     switch (kind) {
@@ -431,7 +427,7 @@ float func_0013D4C8(Actor *a, int idx, int n)
 }
 
 void func_0013D5D8(Actor *a, ScriptCtx *ctx, int idx, int v) {
-    if (((unsigned)func_0013CC80((ScrQ *)a, idx) >> 28) == 6) { /* DEBT(CAST): the actor used as a script reader */
+    if (((unsigned)func_0013CC80(a, idx) >> 28) == 6) {
         func_0013CE10(a, ctx, func_0013D4C8(a, idx, v));
     } else {
         AtelPushStackInteger(a, ctx, func_0013D410(a, idx, v));
@@ -447,10 +443,10 @@ void func_0013D688(Actor *a, ScriptCtx *ctx, int idx) {
 }
 
 void func_0013D6D8(Actor *a, ScriptCtx *ctx, int idx) {
-    int base = func_0013CC80((ScrQ *)a, idx); /* DEBT(CAST): the actor used as a script reader */
-    int kind = func_0013D098((ScrQ *)a, idx);
+    int base = func_0013CC80(a, idx);
+    int kind = func_0013D098(a, idx);
     int n = AtelPopStackInteger(a, ctx);
-    int cnt = func_0013CC40((ScrQ *)a, idx);
+    int cnt = func_0013CC40(a, idx);
 
     if (n < 0) {
         n = 0;
@@ -484,7 +480,7 @@ ObjNodeR *func_0013D7A8(Actor *a, u8 *op) {
 
     for (n = OBJR(a)->head80; n != 0; n = next) {
         next = n->next;
-        if (((u8 *)n)[0xF] == 3 && n->h0A == y && n->h08 == x && (n->h0E & 0xF) == z) {
+        if (n->u0E.b.hi == 3 && n->h0A == y && n->h08 == x && (n->u0E.h & 0xF) == z) {
             r = n;
         }
     }
@@ -522,7 +518,7 @@ void func_0013D928(int a, int *p, float f) {
     if (f > 1.0f) {
         f = 1.0f;
     }
-    TkMtCalcSpline_f(a, p + 4, p[0], f);
+    TkMtCalcSpline(a, p + 4, p[0], f);
 }
 
 void func_0013D960(int a, int *p, float f) {
@@ -532,7 +528,7 @@ void func_0013D960(int a, int *p, float f) {
     if (f > 1.0f) {
         f = 1.0f;
     }
-    func_002D5188_f(a, p + 4, p[0], f);
+    func_002D5188(a, p + 4, p[0], f);
 }
 
 void func_0013D998(int a, int *p, float f) {
@@ -542,7 +538,7 @@ void func_0013D998(int a, int *p, float f) {
     if (f > 1.0f) {
         f = 1.0f;
     }
-    func_002D5450_f(a, p + 4, p[0], f);
+    func_002D5450(a, p + 4, p[0], f);
 }
 
 void func_0013D9D0(int a, int *p, float f) {
@@ -552,14 +548,14 @@ void func_0013D9D0(int a, int *p, float f) {
     if (f > 1.0f) {
         f = 1.0f;
     }
-    func_002D5448_f(a, p + 4, p[0], f);
+    func_002D5448(a, p + 4, p[0], f);
 }
 
 /* old-style definition: callers in this file pass other argument counts (DEBT(TYPE)) */
 void func_0013DA08(a)
     Actor *a;
 {
-    StateQ *st = STATEQ(AtelGetPosWorkAdrs(a));
+    ActorState *st = AtelGetPosWorkAdrs(a);
     Sys3D8 *g;
 
     st->px = st->x;
@@ -711,7 +707,7 @@ void func_001402F8(Actor *a, void *op)
     case 5:
         bind = OBJBIND(a, a->slotIdx);
         st = AtelGetPosWorkAdrs(a);
-        speed = *(float *)&st->w0C; /* DEBT(CAST): ActorState.w0C holds a float here */
+        speed = st->f0C;
         if (a->stateAA != 4 && a->stateAA != 5) {
             speed *= func_00138C88();
         } else {
@@ -768,7 +764,7 @@ void func_00140558(Actor *a, void *op)
 {
     u16 id;
 
-    if (!(*(u32 *)&a->flags34 & 0x80)) { /* DEBT(CAST): bit 7 lies inside the 7-bit field b6 */
+    if (!(a->flags34.w & 0x80)) {
         return;
     }
     id = D_0058E3D8->hA;
@@ -792,7 +788,7 @@ void func_00140558(Actor *a, void *op)
     case 1:
         func_0013DB38(a, op);
         func_0013E150(a, op);
-        if (!(*(u32 *)&a->flags34 & 0x20)) { /* DEBT(CAST): bit test of b5 compiles to andi, not srl/andi */
+        if (!(a->flags34.w & 0x20)) {
             func_0013EC80(a, op);
             func_0013E968(a, op);
             func_0013E9B8(a, op);

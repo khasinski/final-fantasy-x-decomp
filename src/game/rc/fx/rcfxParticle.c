@@ -73,7 +73,26 @@ void func_001A4508(R2Obj1A44 *o, int n) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", rcfxParticleAddForce);
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", func_001A46E8);
+typedef struct RcfxForce {
+    int w0;
+    void (*fn4)(struct RcfxForce *);
+} RcfxForce;
+
+void func_001A46E8(void *p) {
+    R2Obj1A44 *o = p;
+    int i;
+
+    for (i = 0; i < o->w28; i++) {
+        RcfxForce *f = (RcfxForce *)o->p2C[i];
+        if (f->fn4 != 0) {
+            f->fn4(f);
+        }
+    }
+    if (o->p2C != 0) {
+        func_0018FC10(o->p2C);
+        o->p2C = 0;
+    }
+}
 
 void rcfxParticleResetForce(R2Obj1A44 *o) {
     int i;
@@ -94,4 +113,27 @@ void func_001A47F0(R2Obj1A44 *o) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", rcfxParticleCalcForce);
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", rcfxParticleSetTime);
+typedef struct {
+    float t;
+    float dt;
+    float end;
+} RcfxTime;
+
+extern void rcfxParticleCalcForce(struct R2Obj1A44 *o);
+
+void rcfxParticleSetTime(struct R2Obj1A44 *o, float f)
+{
+    RcfxTime *tm = (RcfxTime *)o;
+    int i = 0x20;
+    float end = tm->t + 0.5f;
+
+    tm->end = end;
+    while (tm->t < end) {
+        rcfxParticleCalcForce(o);
+        i--;
+        tm->t += tm->dt;
+        if (i <= 0) {
+            break;
+        }
+    }
+}

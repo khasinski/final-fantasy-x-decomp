@@ -1,5 +1,10 @@
 /* tu_179 0x1acfd8-0x1af9e8: low; ~Ms (config/tu_map.tsv) */
 #define MsBattleFree _hdr_MsBattleFree
+#define MsBtlListEncount _hdr_MsBtlListEncount
+#define MsFldGetScene _hdr_MsFldGetScene
+#define func_002D9868 _hdr_func_002D9868
+#define func_002D9880 _hdr_func_002D9880
+#define func_002D97C8 _hdr_func_002D97C8
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -8,6 +13,24 @@
 #include "ffx/u2.h"
 #include "ffx/g2.h"
 #undef MsBattleFree
+#undef MsBtlListEncount
+#undef MsFldGetScene
+#undef func_002D9868
+#undef func_002D9880
+#undef func_002D97C8
+
+int MsBtlListFieldNum(int a);
+u8 *MsBtlListEncount(int a);
+u8 *func_001B3448(int a, int b);
+int func_002D9868(void);
+int func_002D9880(void);
+void func_002D97C8(int a);
+int func_204CC78(void *a, int *b);
+extern u8 D_0056E020[];
+extern u8 D_0056E030[];
+extern u8 D_00319440[];
+extern u8 D_003172D0[];
+extern s32 D_00319460;
 
 void MsBattleMemInit(void) {
     D_0065FF40 = 0;
@@ -18,7 +41,23 @@ void MsBattleMemInit(void) {
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsSetCountryName);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1ACFD8/rodata", jtbl_0056E000);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsDebugInfoRead);
+void MsDebugInfoRead(void) {
+    int status;
+    D_00319460 = func_002D9868();
+    if (FFXIsDebug() != 0) {
+        func_002F0008((char *)D_00319440, (char *)D_0056E020, D_003172D0);
+        D_0065FF40 = func_204CC78(D_00319440, &status);
+        if (status != 0) {
+            func_002F0008((char *)D_00319440, (char *)D_0056E030, Sg_GetUserName(), D_003172D0);
+            D_0065FF40 = func_204CC78(D_00319440, &status);
+        }
+        if (func_002D9880() != 0) {
+            func_002D97C8(0);
+            MsSetSaveConfigEnglish(1);
+        }
+        ((int (*)(void *))MsSetCountryName)(D_00319438);
+    }
+}
 
 void MsEnvInit(void)
 {
@@ -57,9 +96,57 @@ s8 func_001ADA00(void) {
     return D_003193EE;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", func_001ADA10);
+void func_001ADA10(int a, int b) {
+    int fld = MsBtlListFieldNum(a);
+    int i;
+    int j;
+    u8 *enc;
+    if (fld >= 0) {
+        enc = MsBtlListEncount(fld);
+        for (i = 0; i < enc[1]; i++) {
+            u8 *p = func_001B3448(fld, i);
+            u8 *q = p + 5;
+            int sum = 0;
+            for (j = 0; j < p[0]; j++, q += 2) {
+                if (b == 0) {
+                    q[1] = (q[1] & 0xF) | ((q[1] & 0xF) << 4);
+                }
+                sum += q[1] >> 4;
+            }
+            p[4] = sum;
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsFldGetScene);
+u8 *MsFldGetScene(u32 a, int *out_fld, int *out_i, int *out_j) {
+    u16 target = a & 0xFFFF;
+    int fld = MsBtlListFieldNum(a >> 16);
+    int i;
+    int j;
+    u8 *enc;
+    if (fld >= 0) {
+        enc = MsBtlListEncount(fld);
+        for (i = 0; i < enc[1]; i++) {
+            u8 *p = func_001B3448(fld, i);
+            u8 *q = p + 5;
+            for (j = 0; j < p[0]; j++, q += 2) {
+                if (target == q[0]) {
+                    if (out_fld != 0) {
+                        *out_fld = fld;
+                    }
+                    if (out_i != 0) {
+                        *out_i = i;
+                    }
+                    if (out_j != 0) {
+                        *out_j = j;
+                    }
+                    return q;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 void MsBattleInitAtEvent(int a) {
     D_003172F0.f118 = 0;
@@ -186,7 +273,40 @@ s8 func_001AE520(void) {
     return D_003193EC;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", func_001AE530);
+int func_001AE530(int a, int *out) {
+    int r = -1;
+    int v = 0;
+    int x = func_0014AD88();
+    switch (a) {
+    case -1:
+        break;
+    case 1:
+    case 2:
+    case 3:
+        if (x == 0) {
+            r = 1;
+            v = 0x65;
+        } else {
+            r = 3;
+            v = 0x3F;
+        }
+        break;
+    case 0:
+    default:
+        if (x == 0) {
+            r = 0;
+            v = 0x31;
+        } else {
+            r = 2;
+            v = 0x31;
+        }
+        break;
+    }
+    if (out != 0) {
+        *out = v;
+    }
+    return r;
+}
 
 int func_001AE5D8(void) {
     switch (D_003172F0.f105) {
@@ -357,7 +477,20 @@ int func_001AF358(void) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsGetFileSize);
+int MsGetFileSize(int a, int b, int c) {
+    int sz2 = 0;
+    int sz1;
+    GetCD()->f10(a);
+    sz1 = GetCD()->f14(c);
+    if (MsGetCheckEnglish() != 0) {
+        GetCD()->f10(b);
+        sz2 = GetCD()->f14(c);
+        if (func_001BD360() == 0) {
+            GetCD()->f10(a);
+        }
+    }
+    return (sz1 > sz2) ? sz1 : sz2;
+}
 
 int MsBattleReadData(void) {
     int r = 0;

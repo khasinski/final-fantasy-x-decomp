@@ -325,8 +325,8 @@ void func_002227A0(void)
 {
     int i;
 
-    for (i = 0; i < U3_BUF->bD0; i++) {
-        MsSaveItemUse(U3_BUF->hD4[i], U3_BUF->bE4[i]);
+    for (i = 0; i < btlgetdata.bD0; i++) {
+        MsSaveItemUse(btlgetdata.hD4[i], btlgetdata.bE4[i]);
     }
 }
 
@@ -480,34 +480,54 @@ void func_00222F90(int y)
     TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223078);
+void func_00223078(void)
+{
+    extern s16 D_00693304, D_00693306;
+    int v;
+    int y;
+
+    if (D_00693304 != 0) {
+        if (D_00693304 != 0x1000) {
+            if (D_00693306 > 0) {
+                v = func_00125D90(D_00693304);
+            } else {
+                v = 0x1000 - func_00125D60(D_00693304);
+                v = (v * 5) / 4;
+            }
+        } else {
+            v = 0;
+        }
+        y = v / 8;
+        func_00222DB0(-y);
+        func_00222EB0(y);
+        func_00222F90(-y);
+    }
+}
 
 void *_m2c_func_00223140_MsGetSaveWeapon(u16, void *) __asm__("MsGetSaveWeapon");
 void _m2c_func_00223140_func_001F4EB0(s32, s32, s32) __asm__("func_001F4EB0");
 void _m2c_func_00223140_func_001F55C8(u16, s32, s32, s32) __asm__("func_001F55C8");
 extern s32 _m2c_func_00223140_D_00693320 __asm__("D_00693320");
 extern s32 _m2c_func_00223140_D_00693324 __asm__("D_00693324");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_00223140(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8 sp[0x10];
-    register s32 var_18 __asm__("$18");
     u16 temp_17;
     void *temp_2;
 
-    var_18 = arg2;
     if ((arg0 < _m2c_func_00223140_D_00693320) && (arg0 >= 0)) {
         temp_17 = D_003257B4[arg0];
         if (arg3 == 0) {
-            var_18 += ((s32)_m2c_func_00223140_D_00693324 / 128);
+            arg2 += ((s32)_m2c_func_00223140_D_00693324 / 128);
         }
         temp_2 = _m2c_func_00223140_MsGetSaveWeapon(temp_17, sp);
         if ((*(u8 *)((u8 *)(temp_2) + (2))) != 0) {
-            _m2c_func_00223140_func_001F4EB0(arg1, var_18, 1);
+            _m2c_func_00223140_func_001F4EB0(arg1, arg2, 1);
             if ((*(u8 *)((u8 *)(temp_2) + (6))) != 0xFF) {
-                _m2c_func_00223140_func_001F55C8(temp_17, arg1, var_18, 1);
+                _m2c_func_00223140_func_001F55C8(temp_17, arg1, arg2, 1);
                 return;
             }
-            _m2c_func_00223140_func_001F55C8(temp_17, arg1, var_18, 0);
+            _m2c_func_00223140_func_001F55C8(temp_17, arg1, arg2, 0);
         }
     }
 }
@@ -518,7 +538,29 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223468);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223620);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_002237B0);
+void func_002237B0(void)
+{
+    extern s16 D_00693308, D_0069330A;
+    int v;
+    int y;
+
+    if (D_00693308 != 0) {
+        if (D_00693308 != 0x1000) {
+            if (D_0069330A > 0) {
+                v = func_00125D90(D_00693308);
+            } else {
+                v = 0x1000 - func_00125D60(D_00693308);
+                v = (v * 5) / 4;
+            }
+        } else {
+            v = 0;
+        }
+        y = v / 8;
+        func_00223228(-y);
+        func_00223468(y);
+        func_00223620(-y);
+    }
+}
 
 void func_00223878(void)
 {

@@ -157,12 +157,6 @@ void func_00265F18(void);
 extern char D_0056AD50[];
 extern s32 D_0058E42C;
 
-/* DEBT(CAST)/DEBT(NAME): record returned by func_00124828, byte buffer of 0x1000 at +0x1EC */
-typedef struct Rec124828Buf { u8 pad0[0x1EC]; u8 buf[0x1000]; } Rec124828Buf;
-
-/* DEBT(CAST)/DEBT(NAME): resource returned by AtelGetCtrlWork, members at 0 and 0x1F4 */
-typedef struct Res588R1 { int w0; u8 pad4[0x1F0]; int w1F4; } Res588R1;
-
 /* DEBT(CAST)/DEBT(NAME): record returned by AtelGetBasicWork as func_001458B0 initialises it */
 typedef struct ActorH1 { char *p0; int w4; int w8; int wC[8]; } ActorH1;
 

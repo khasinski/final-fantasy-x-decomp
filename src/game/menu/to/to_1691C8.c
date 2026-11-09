@@ -43,25 +43,144 @@ INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C060);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016AA88);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016AB78);
+typedef struct {
+    u8 pad0[0x20];
+    s16 h20;
+    s16 h22;
+    u8 pad24[7];
+    s8 b2B;
+} To16AB78Arg;
+
+extern int (**D_0030E098)(int);
+
+int func_0016AB78(To16AB78Arg *p)
+{
+    int r;
+
+    if (p->h20 < 0) {
+        return 0;
+    }
+    r = D_0030E098[p->h20](p->h22);
+    switch (p->b2B) {
+    case 0:
+        if (r == 0) {
+            return 1;
+        }
+        break;
+    case 1:
+        if (r != 0) {
+            return 1;
+        }
+        break;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016AC00);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C080);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B4E0);
+void func_0016B4E0(void)
+{
+    extern s32 D_0030E05C, D_0030E0D0, D_0030E0D4, D_0030E0D8;
+    extern s32 dvd_hdd_copy_system_cnf_buff;
+    extern void (**D_0030E064)(void);
+
+    D_0030E0C8 = 0;
+    D_00597E30 = 0;
+    D_0030E0CC = 0;
+    D_0030E0A8 = 0;
+    D_00597A0C = 0;
+    D_0030E0AC = 0;
+    D_0030E0B0 = 0;
+    D_0030E0B8 = 0;
+    D_0030E0C0 = 0;
+    D_0030E0BC = 0;
+    D_0030E060 = 0;
+    D_0030E0D0 = 0;
+    D_0030E0D8 = 0;
+    D_0030E0D4 = 0;
+    dvd_hdd_copy_system_cnf_buff = 0;
+    D_0030E05C = 0;
+    if (D_0030E064 != 0) {
+        D_0030E064[1]();
+        D_0030E064 = 0;
+    }
+    D_0030E068 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B5B0);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C0A0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B7D8);
+void func_0016B7D8(void)
+{
+    s32 *hdr = (s32 *)D_0030E0C8;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B838);
+    if (hdr != 0) {
+        D_0030E0A8 = (u8 *)hdr + hdr[2];
+        D_00597A0C = hdr[1];
+        D_0030E0AC = (u8 *)hdr + hdr[3];
+        D_0030E0B0 = (u8 *)hdr + hdr[4];
+        D_0030E0B4 = (u8 *)hdr + hdr[5];
+    }
+}
+
+typedef struct {
+    s32 off;
+    s16 cnt;
+    s16 pad;
+} To16B838Hdr;
+
+typedef struct {
+    u8 pad0[0x114];
+    u16 h114;
+    u16 h116;
+    s32 w118;
+    s32 w11C;
+    u16 h120;
+    u16 h122;
+    u8 pad124[0x14];
+} To16B838Ent;
+
+extern s32 _m2c_D_0030E0A8 __asm__("D_0030E0A8");
+extern s32 _m2c_D_0030E0C8 __asm__("D_0030E0C8");
+
+void func_0016B838(void)
+{
+    To16B838Hdr *hdr = (To16B838Hdr *)((D_00597A14 * 8) + _m2c_D_0030E0A8);
+    int j;
+    int n = hdr->cnt;
+    To16B838Ent *p = (To16B838Ent *)(_m2c_D_0030E0C8 + hdr->off);
+
+    for (j = 0; j < n; j++, p++) {
+        p->h114 = p->h120;
+        p->h116 = p->h122;
+        p->w118 = 0;
+        p->w11C = 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B898);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BA00);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BB88);
+extern char D_0056C118[];
+
+int func_0016BB88(int a0, int a1)
+{
+    int max = func_00220808();
+    int ret;
+
+    if (a0 == 0) {
+        D_00597A24 = 0;
+    }
+    a1 = ((a1 + 0x3F) / 64) * 64;
+    ret = func_00220800() + D_00597A24;
+    D_00597A24 += a1;
+    if (D_00597A24 >= max) {
+        ((void (*)(int, char *, char *, int, int))yiAssert)(0, D_0056C020, D_0056C118, D_00597A24, max); /* DEBT(CAST) */
+    }
+    return ret;
+}
 
 void func_0016BC30(int a) {
     D_00597A24 -= ((a + 0x3F) / 64) * 64;
@@ -106,15 +225,15 @@ int func_0016CB18(void) {
 }
 
 int func_0016CB38(int id) {
-    return *(int *)((u8 *)func_0016CAC8(id) + 0x50); /* DEBT(CAST): PartySlot lacks this member */
+    return func_0016CAC8(id)->v50;
 }
 
 int func_0016CB58(int id) {
-    return *(int *)((u8 *)func_0016CAC8(id) + 0x58); /* DEBT(CAST): PartySlot lacks this member */
+    return func_0016CAC8(id)->v58;
 }
 
 int func_0016CB78(int id) {
-    return *(int *)((u8 *)func_0016CAC8(id) + 0x54); /* DEBT(CAST): PartySlot lacks this member */
+    return func_0016CAC8(id)->v54;
 }
 
 /* Character-record accessors: MsGetSaveCommand(chr, id) flag tests (ids 0x30xx) and ChrRec1D8 field getters (D_0030E0C0[i]). */

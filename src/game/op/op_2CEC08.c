@@ -1,8 +1,11 @@
 /* tu_332 0x2cec08-0x2ceff0: medium; unk_2CEC08 (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: bitfield/size helpers and wrappers (see w10.h). */
+#define func_002CEDD8 _hdr_func_002CEDD8
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
+#undef func_002CEDD8
+void func_002CEDD8(s32 arg0, s64 arg1, u16 arg2, u16 arg3);
 
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr)((u8 *)(expr) + (offset)))
 #define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")

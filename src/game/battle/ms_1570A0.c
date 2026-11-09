@@ -1,4 +1,5 @@
 /* tu_100 0x1570a0-0x157798: low; ~Ms (config/tu_map.tsv) */
+#define func_001574F8 _hdr_func_001574F8
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/w2.h"
@@ -7,6 +8,9 @@
 #include "ffx/b0.h"
 #include "ffx/q3.h"
 #include "ffx/u1.h"
+#undef func_001574F8
+
+void func_001574F8(int h, int which);
 
 int func_001570A0(int a)
 {
@@ -151,7 +155,29 @@ void func_001574A8(int h, int which)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1570A0", func_001574F8);
+typedef struct {
+    struct {
+        float v[3];
+        float fC;
+    } pt[33];
+} Rec58F9F0Pts;
+
+void func_001574F8(int h, int which) {
+    int cur = func_001A6738(h);
+    if (cur == h) {
+        which &= 1;
+        if (D_0058F9E0[which] < 32) {
+            int i;
+            float *dst = ((Rec58F9F0Pts *)D_0058F9F0)[which].pt[++D_0058F9E0[which]].v;
+            Unk314840 *u = &D_00314840[(u8)cur];
+            float *src = u->rec[which].v50;
+            for (i = 0; i < 3; i++) {
+                dst[i] = src[i];
+            }
+            dst[3] = MsNearRag(0.0f, u->fC9C);
+        }
+    }
+}
 
 int func_001575D8(Actor *a, void *op, ScriptCtx *ctx)
 {

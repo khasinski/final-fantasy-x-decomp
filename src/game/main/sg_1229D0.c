@@ -27,7 +27,46 @@ s8 Sg_IdExistShade(void)
     return D_00580C50;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", func_00122A40);
+typedef struct MapEnt16 {
+    u8 pad0[0xC];
+    s32 wC;
+} MapEnt16;
+
+typedef struct Map22A40 {
+    s32 base;
+    s16 ver;
+    s16 count;
+    u8 pad08[0x10];
+    s32 off18;
+    MapEnt16 *off1C;
+} Map22A40;
+
+void func_00122A40(s32 a)
+{
+    Map22A40 *m = (Map22A40 *)a;
+    s32 diff;
+    int i;
+
+    if (m == 0) {
+        func_00120D18(0);
+        return;
+    }
+    D_00580C50 = (m->ver >= 0x1203);
+    diff = (s32)m - m->base;
+    if (diff != 0) {
+        MapEnt16 *p;
+
+        i = 0;
+        p = (MapEnt16 *)((s32)m->off1C + diff);
+        m->base = diff;
+        m->off18 += diff;
+        m->off1C = p;
+        for (; i < m->count; i++) {
+            m->off1C[i].wC += diff;
+        }
+    }
+    func_00120D18((s32)m);
+}
 
 void Sg_MapSetPtr(s32 a)
 {
@@ -149,7 +188,32 @@ void func_00122D50(void) {
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", Sg_MapInit);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", func_00122F78);
+void func_002DD900(void *out, void *a, void *b, int c);
+
+int func_00122F78(Quad *out, void *a1, void *a2)
+{
+    s32 tmp[4];
+
+    func_002DD900(tmp, a2, a1, 0);
+    if (tmp[2] < 0) {
+        return 1;
+    }
+    if (tmp[0] < 0x6600) {
+        return 1;
+    }
+    if (tmp[0] > 0x9A00) {
+        return 1;
+    }
+    if (tmp[1] < 0x7000) {
+        return 1;
+    }
+    if (tmp[1] > 0x9000) {
+        return 1;
+    }
+    tmp[3] = 0;
+    *out = *(Quad *)tmp;
+    return 0;
+}
 
 void func_00123010(void)
 {

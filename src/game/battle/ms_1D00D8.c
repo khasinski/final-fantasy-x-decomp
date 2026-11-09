@@ -1,10 +1,30 @@
 /* tu_198 0x1d00d8-0x1d2170: low; ~Ms (config/tu_map.tsv) */
+#define D_0031FA50 _hdr_D_0031FA50
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef D_0031FA50
+
+typedef struct {
+    u16 h0;
+    u8 b2;
+    u8 pad3;
+    u16 h4;
+    u8 b6;
+    u8 pad7;
+    u16 h8;
+    u8 bA;
+    u8 padB;
+    u16 hC;
+    u8 bE;
+    u8 padF;
+} CmdUseEnt16;
+
+extern CmdUseEnt16 D_0031FA50[];
+void MsInsertChrCommand(int a, int b, int c);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsParseCommand);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D00D8/rodata", jtbl_0056EA20);
@@ -42,9 +62,59 @@ int MsCheckMegas(int x) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsExchangeChr);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsExchangeSummon);
+void MsExchangeSummon(int a, int b) {
+    int j;
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsEscapeAll);
+    D_00319407 = 1;
+    for (i = 0; i < 18; i++) {
+        BtlChr *c = MsGetChr(i);
+        c->padA89[0] = c->fA88;
+    }
+    for (i = 0; i < 17; i++) {
+        D_003172F0.pad1FCC[i + 24] = D_003172F0.pad1FCC[i + 7];
+    }
+    for (i = 0; i < 7; i++) {
+        u8 id = D_003172F0.f1FC5[i];
+        D_003172F0.f1FC5[i + 7] = id;
+        if (id != a && id != 0xFF) {
+            MsExchangeChr(id, 0xFF, 0, 0);
+        }
+    }
+    MsGetChr(b)->f391 = a;
+    if ((u32)(b - 15) < 3) {
+        MsExchangeChr(a, b, 1, 0);
+        i = 0;
+        for (j = 15; j < 18; j++, i++) {
+            D_003192B5[i] = j;
+            if (j != b) {
+                MsGetChr(j)->f391 = a;
+                MsExchangeChr(0xFF, j, 1, 0);
+            }
+        }
+    } else {
+        MsExchangeChr(a, b, 1, 0);
+    }
+    MsChangeMonsterDir();
+    MsInsertChrCommand(b, a, 0);
+}
+
+void MsEscapeAll(void) {
+    int i;
+    for (i = 0; i < 7; i++) {
+        u8 id = D_003192B5[i];
+        if (id != 0xFF) {
+            BtlChr *c = MsGetChr(id);
+            c->fDC = 0;
+            if (c->fA88 != 0 && c->fA8C == 0 && c->fA8E == 0) {
+                MsLimitTypeEscapeCheck(id, c);
+                c->f1BC.b += 3;
+                MsSetMotion(id, 0x12, 1, 1, 1, 0, 0);
+                MsPushBtlPos(c);
+            }
+        }
+    }
+}
 
 s32 func_001D1458(int id, int a, int h) {
     GsEnt48 e;
@@ -60,7 +130,44 @@ s32 func_001D1458(int id, int a, int h) {
     return D_003172F0.f2000;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", func_001D1510);
+int func_001D1510(int id, int cmd, int mode, int *out_a, int *out_b) {
+    CmdUseEnt16 *p = &D_0031FA50[id];
+    int val_a;
+    int val_b;
+    int ret = 0;
+    val_a = 0;
+    val_b = 0;
+
+    switch (mode) {
+    case 0:
+        if (((D_0031D1DC >> 11) & 1) || MsGetSaveCommandUse(id, cmd) == 0) {
+            ret = p->h0;
+            val_b = p->b2;
+        } else {
+            ret = p->h4;
+            val_b = p->b6;
+        }
+        val_a = 1;
+        break;
+    case 1:
+        ret = p->h8;
+        val_b = p->bA;
+        val_a = 3;
+        break;
+    case 2:
+        ret = p->hC;
+        val_b = p->bE;
+        val_a = 2;
+        break;
+    }
+    if (out_a != 0) {
+        *out_a = val_a;
+    }
+    if (out_b != 0) {
+        *out_b = val_b;
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsInsertChrCommand);
 
@@ -96,9 +203,43 @@ void MsReturnSummon(s32 reset)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsReturnParty);
+void MsReturnParty(void) {
+    int i;
+    if (D_003172F0.f2117 != 0) {
+        D_003172F0.f2117 = 0;
+        for (i = 0; i < 7; i++) {
+            u8 id = D_003172F0.f1FC5[i + 7];
+            D_003172F0.f1FC5[i] = id;
+            if (id != 0xFF) {
+                MsGetChr(id);
+            }
+        }
+        for (i = 0; i < 17; i++) {
+            D_003172F0.pad1FCC[i + 7] = D_003172F0.pad1FCC[i + 24];
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsExchangeParty);
+void MsExchangeParty(void) {
+    int i;
+
+    for (i = 0; i < 7; i++) {
+        u8 t = D_003172F0.pad1FA6[i + 0x26];
+        D_003172F0.pad1FA6[i + 0x26] = D_003172F0.pad1FA6[i + 0x1F];
+        D_003172F0.pad1FA6[i + 0x1F] = t;
+    }
+    for (i = 0; i < 17; i++) {
+        u8 t = D_003172F0.pad1FCC[i + 24];
+        D_003172F0.pad1FCC[i + 24] = D_003172F0.pad1FCC[i + 7];
+        D_003172F0.pad1FCC[i + 7] = t;
+    }
+    for (i = 0; i < 18; i++) {
+        BtlChr *c = MsGetChr(i);
+        s8 t = ((s8 *)c)[0xA89];
+        ((s8 *)c)[0xA89] = c->fA88;
+        c->fA88 = t;
+    }
+}
 
 void func_001D1A30(void) {
     int i;

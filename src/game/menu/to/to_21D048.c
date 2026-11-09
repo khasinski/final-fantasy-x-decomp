@@ -1,4 +1,5 @@
 /* tu_244 0x21d048-0x21f9a8: low; ~TOBtlMakeStatusBuff (config/tu_map.tsv) */
+#define func_0021D820 _hdr_func_0021D820
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -6,6 +7,7 @@
 #include "ffx/v4.h"
 #include "ffx/r5.h"
 #include "ffx/u3.h"
+#undef func_0021D820
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlMakeStatusBuff);
 
@@ -46,7 +48,19 @@ void func_0021D7A0(int a, int b)
     r->wC8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", func_0021D820);
+int func_0021D820(void)
+{
+    int i;
+
+    for (i = 0; i < D_00692008; i++) {
+        toTarget.w4 |= 1 << D_00692010[i];
+    }
+    for (i = 0; i < D_00692020; i++) {
+        toTarget.w8 |= 1 << D_00692028[i];
+    }
+    toTarget.wC = toTarget.w4 | toTarget.w8;
+    return D_00692008 + D_00692020;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlMakeTargetGroupBit);
 

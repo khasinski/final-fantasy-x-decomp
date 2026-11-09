@@ -1,13 +1,15 @@
 /* tu_197 0x1ce8e0-0x1d00d8: low; ~Ms (config/tu_map.tsv) */
+#define MsSetWeaponEffectAttribute _hdr_MsSetWeaponEffectAttribute
+#define MsCheckWrongStatus _hdr_MsCheckWrongStatus
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/g2.h"
-#define func_001CF458 s3_func_001CF458 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/s3.h"
-#undef func_001CF458
+#undef MsSetWeaponEffectAttribute
+#undef MsCheckWrongStatus
 
 s32 func_001CE8E0(void) {
     return D_00319308;
@@ -170,7 +172,34 @@ void MsEtEffectFree(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", MsStatusEffect);
+void MsStatusEffect(int id, BtlChr *c, Ent4 *e, int on, s32 *w) {
+    if (e->b0 != 0xFF) {
+        u8 k = e->b2;
+        u8 flags = e->v;
+        u32 eff = w[k];
+        if (on != 0) {
+            if (eff == 0) {
+                u8 b;
+                eff = MsGetEffID(*(u16 *)c->padAE0, 3, id);
+                (*(u16 *)c->padAE0)++;
+                if (D_003172F0.f20FE != 0) {
+                    b = e->b1;
+                } else {
+                    b = e->b0;
+                }
+                if ((flags & 0x10) == 0) {
+                    op_et_eff(D_003172F0.f8C, 0, b, eff);
+                    w[k] = eff;
+                }
+            }
+        } else {
+            if (eff != 0) {
+                op_et_eff_off_signal(eff);
+                w[k] = 0;
+            }
+        }
+    }
+}
 
 int MsStatusEffectReflect(int id) {
     int r = 0;
@@ -366,13 +395,12 @@ int func_001CF6D0(int a, int b) {
     return func_001CF600(a, 0, b == 0 ? 0x4C : 0x4D);
 }
 
-/* DEBT(FAKE) */
 s32 func_001CF6F8(s32 a, s32 b, s32 c, s32 d, s32 e) {
     BtlChr *temp_16;
     s32 var_4_2;
     u16 var_4;
-    register u32 temp_17 __asm__("$17");
-    register s32 r __asm__("$3");
+    u32 temp_17;
+    s32 r;
 
     if (a != 0xFF) {
         temp_16 = MsGetChr(a);
@@ -389,7 +417,6 @@ s32 func_001CF6F8(s32 a, s32 b, s32 c, s32 d, s32 e) {
             var_4_2 = temp_16->f4C;
         }
         r = op_et_eff(var_4_2, b, d, (s32) temp_17);
-        __asm__ volatile("" : "+r"(r));
         if (r > 0) {
             return (s32) temp_17;
         }
@@ -440,7 +467,53 @@ u8 MsCheckStat2(int i) {
     return D_0031FA88[i].v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", MsCheckWrongStatus);
+typedef struct {
+    u8 pad0[0x20];
+    u16 h20;
+    u8 pad22;
+    u8 b23;
+    u8 pad24[0x2E - 0x24];
+    u8 b2E[12];
+    u8 b3A[13];
+    u8 b47[13];
+    u16 h54;
+} Q4ActStatus;
+
+int MsCheckWrongStatus(Q4ActStatus *p) {
+    Ent4 *e = D_0031FA18;
+    int i;
+    u8 *b1;
+    int v1, v2;
+
+    if (((p->h20 >> 4) & 1) == 0) {
+        if ((p->b23 & 7) != 0) {
+            return -1;
+        }
+        b1 = p->b2E;
+        for (i = 0; i < 12; i++, e++) {
+            v1 = b1[i];
+            if (v1 > 0 && (e->v & 0x80)) {
+                return -1;
+            }
+        }
+        e = D_0031FA50;
+        b1 = p->b3A;
+        for (i = 0; i < 13; i++, e++) {
+            v1 = b1[i];
+            v2 = p->b47[i];
+            if (v1 > 0 && v2 > 0 && (e->v & 0x80)) {
+                return -1;
+            }
+        }
+        e = D_0031FA88;
+        for (i = 0; i < 16; i++, e++) {
+            if (((p->h54 >> i) & 1) > 0 && (e->v & 0x80)) {
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
 
 void MsMagicEffectSet(int a, BtlChr *c) {
     int x, y;
@@ -547,7 +620,45 @@ int func_001CFBC8(int id) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", MsSetWeaponEffectAttribute);
+int MsSetWeaponEffectAttribute(int id, BtlChr *c) {
+    int count = 0;
+    int i;
+
+    if (c->fA8D == 0) {
+        int attr = c->f299;
+        for (i = 0; i < 4; i++) {
+            int on = 0;
+            int eff_type = 0;
+            switch (i) {
+            case 0:
+                on = attr & 1;
+                eff_type = 0x3C;
+                break;
+            case 1:
+                on = (attr >> 1) & 1;
+                eff_type = 0x3D;
+                break;
+            case 2:
+                on = (attr >> 2) & 1;
+                eff_type = 0x3E;
+                break;
+            case 3:
+                on = (attr >> 3) & 1;
+                eff_type = 0x3F;
+                break;
+            }
+            if (on != 0 && c->fB50[i] == 0) {
+                u32 eff = MsGetEffID(*(u16 *)c->padAE8, 13, id);
+                (*(u16 *)c->padAE8)++;
+                if (op_et_eff(D_003172F0.f8C, 0, eff_type, eff) > 0) {
+                    c->fB50[i] = eff;
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
 
 int func_001CFDB0(int unused, BtlChr *c) {
     int n = 0;

@@ -115,7 +115,22 @@ void func_0023DB10(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023DB30);
+int func_0023DB30(int a, int i) {
+    int ret;
+
+    if (D_0069A688 != 0) {
+        i = D_0069A690[i];
+        if (i >= 0) {
+            if (i < 3 || i == 4) {
+                return 1;
+            }
+        }
+        ret = 0;
+    } else {
+        ret = D_0069A690[i] == 1;
+    }
+    return ret;
+}
 
 void func_0023DB90(void) {
 }
@@ -282,9 +297,39 @@ void func_00241248(void) {
 void func_00241270(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_00241278);
+void func_00241278(Task *t)
+{
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_00241308);
+    D_0069A7CC = 0;
+    func_002D89C8(1);
+    D_0069A640 = 0;
+    t->x1C = 0;
+    for (i = 0; i < 2; i++) {
+        D_0069A660[i] = 0;
+    }
+    func_0023ED40();
+    D_0069A688 = 1;
+    func_00241F70(0);
+    TkMn2SetMainFrameRatioDiff(-0x10);
+}
+
+void func_00241308(Task *t)
+{
+    int i;
+
+    D_0069A7CC = 0;
+    func_002D89C8(1);
+    D_0069A640 = 0;
+    t->x1C = 0;
+    for (i = 0; i < 2; i++) {
+        D_0069A660[i] = 0;
+    }
+    func_0023ED40();
+    D_0069A688 = 0;
+    func_00241F70(0);
+    TkMn2SetMainFrameRatioDiff(-0x10);
+}
 
 void func_00241390(void) {
 }

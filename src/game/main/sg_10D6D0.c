@@ -26,7 +26,29 @@ void func_0010D720(void)
     func_0010D6E8();
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10D6D0", Sg_PLightAllocate);
+extern char D_00569620[];
+
+typedef struct PLightEntry {
+    float x, y, z, f0C;
+    float color[3], f1C;
+    float f20, f24;
+    s8 flag, flag2;
+    u8 pad2A[6];
+} PLightEntry;
+
+void Sg_PLightAllocate(s32 n)
+{
+    s32 i;
+
+    func_0010D720();
+    D_0057EAFC = user_malloc(n * sizeof(PLightEntry), 6, D_00569620, 0x56F);
+    D_0057EB00 = n;
+    for (i = 0; i < n; i++) {
+        ((PLightEntry *)&D_0057EAFC[i])->flag = 0;
+        ((PLightEntry *)&D_0057EAFC[i])->f0C = 1.0f;
+        ((PLightEntry *)&D_0057EAFC[i])->f1C = 1.0f;
+    }
+}
 
 void func_0010D7C8(s32 idx, s32 mask, float x, float y, float z)
 {

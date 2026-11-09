@@ -1,6 +1,8 @@
 /* tu_281 0x256098-0x258140: low; ~abmap (config/tu_map.tsv) */
 #define func_002571B8 _hdr_func_002571B8
+#define func_00257E60 _hdr_func_00257E60
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/s6.h"
@@ -11,6 +13,7 @@
 #include "ffx/r6.h"
 #include "ffx/g4.h"
 #undef func_002571B8
+#undef func_00257E60
 
 void func_00256098(void)
 {
@@ -31,8 +34,7 @@ void func_002560D0(T6TransformRecord *o, int id,
     float x, float y, float z, float rx, float ry, float rz,
     float sx, float sy, float sz)
 {
-    /* DEBT(CAST): byte-declared backing storage is used as a HeapMgr here. */
-    D_006A3924 = (HeapMgr *)D_006A3690;
+    D_006A3924 = D_006A3690;
     _pppStartPart(o, 0x1000, D_00327980[id], 1);
     o->rotation[0] = (int)rx;
     o->rotation[1] = (int)ry;
@@ -52,13 +54,13 @@ void func_002560D0(T6TransformRecord *o, int id,
 
 void func_002561E0(S6Task *o)
 {
-    if (*(u16 *)((char *)o + 0x1E) != 0) { /* DEBT(CAST): h1E */
+    if (o->h1E != 0) {
         pppSetMatrix();
         func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
         func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
-        D_006A3924 = (HeapMgr *)D_006A3690; /* DEBT(CAST) */
+        D_006A3924 = D_006A3690;
         if (_pppRunPart(o, 0x30) != 0) {
-            *(u16 *)((char *)o + 0x1E) = 0;
+            o->h1E = 0;
         }
     }
 }
@@ -96,7 +98,43 @@ int func_00256440(char *s)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00256478);
+typedef struct AbmapView {
+    u8 pad0[0x114D0];
+    u_long128 q114D0[4];
+    u_long128 q11510[4];
+} AbmapView;
+
+typedef struct AbmapFloatView {
+    u8 pad0[0x114DC];
+    float f114DC;
+    u8 pad1[0xC];
+    float f114EC;
+    u8 pad2[0xC];
+    float f114FC;
+    u8 pad3[0xC];
+    float f1150C;
+} AbmapFloatView;
+
+void func_00256478(void)
+{
+    u_long128 *p1;
+    u_long128 *p2;
+
+    p1 = ((AbmapView *)lpamng)->q11510;
+    MMI_SQ_ZERO(0x0, p1);
+    MMI_SQ_ZERO(0x10, p1);
+    MMI_SQ_ZERO(0x20, p1);
+    MMI_SQ_ZERO(0x30, p1);
+    p2 = ((AbmapView *)lpamng)->q114D0;
+    MMI_SQ_ZERO(0x0, p2);
+    MMI_SQ_ZERO(0x10, p2);
+    MMI_SQ_ZERO(0x20, p2);
+    MMI_SQ_ZERO(0x30, p2);
+    ((AbmapFloatView *)lpamng)->f114DC =
+    ((AbmapFloatView *)lpamng)->f114EC =
+    ((AbmapFloatView *)lpamng)->f114FC =
+    ((AbmapFloatView *)lpamng)->f1150C = 1.0f;
+}
 
 int func_002564E8(WorkEnt *e)
 {
@@ -134,7 +172,7 @@ void func_00256650(s64 a, s64 b)
     int qwc;
 
     D_00327914 ^= 1;
-    p = (s64 *)D_006A3900[D_00327914]; /* DEBT(CAST): table of packet buffers */
+    p = D_006A3900[D_00327914];
     p[0] = 0x1000000000008001;
     p[1] = 0xE;
     qwc = 2;
@@ -155,7 +193,7 @@ void func_00256708(int x0, int y0, int x1, int y1, s64 rgba)
     int qwc;
 
     D_00327914 ^= 1;
-    p = (s64 *)D_006A3900[D_00327914]; /* DEBT(CAST): table of packet buffers */
+    p = D_006A3900[D_00327914];
     w = (int *)p;
     p[0] = 0x3000C00000008001;
     p[1] = 0x55E;
@@ -178,7 +216,30 @@ void func_00256708(int x0, int y0, int x1, int y1, s64 rgba)
     GIF_CHCR = 0x100;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_002567F0);
+void func_002567F0(int x0, int y0, int x1, int y1, s64 color)
+{
+    s64 *q = (s64 *)D_006A3BCC;
+    u32 *w = (u32 *)q;
+
+    D_006A3BCC = (u8 *)(q + 18);
+    q[2] = 0x7021400000008001;
+    q[3] = 0x55555EE;
+    q[4] = 0x44;
+    q[5] = 0x42;
+    q[6] = color;
+    q[7] = 1;
+    w[32] = w[16] = (x0 << 4) + 0x7000;
+    w[33] = w[17] = (y0 << 4) + 0x7300;
+    w[24] = (x1 << 4) + 0x7000;
+    w[25] = (y1 << 4) + 0x7300;
+    w[20] = (x1 << 4) + 0x7000;
+    w[21] = (y0 << 4) + 0x7300;
+    w[28] = (x0 << 4) + 0x7000;
+    w[29] = (y1 << 4) + 0x7300;
+    w[18] = w[22] = w[26] = w[30] = w[34] = 0xFFFF00;
+    w[19] = w[23] = w[27] = w[31] = w[35] = 0;
+    func_002B2A80(q, 9, 1, 0);
+}
 
 void func_002568C8(int x0, int y0, int x1, int y1, s64 color)
 {
@@ -308,44 +369,43 @@ void func_002571B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
 }
 
 void _m2c_func_00257288_func_00257108() __asm__("func_00257108");
-/* DEBT(CAST) */
 void func_00257288(s32 a) {
     s16 temp_4;
     s32 temp_4_2;
 
     if (lpamng->f1161A > 0) {
-        temp_4 = (*(s16 *)((u8 *)(lpamng) + (0x11618)));
+        temp_4 = lpamng->f11618;
         lpamng->f1161A = (u16) lpamng->f1161A - 1;
         switch (temp_4) {                           /* irregular */
         case 0:
             TOMenuSetMacroCommandType(7, 0, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandValue(7, 0, lpamng->f1160C);
             TOMenuSetMacroCommandType(7, 1, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            TOMenuSetMacroCommandValue(7, 1, lpamng->f11610);
             TOMenuSetMacroCommandType(7, 2, 1);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 2, (*(s32 *)((u8 *)(lpamng) + (0x11614))));
+            TOMenuSetMacroCommandValue(7, 2, lpamng->f11614);
             break;
         case 1:
             TOMenuSetMacroCommandType(7, 0, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandValue(7, 0, lpamng->f1160C);
             TOMenuSetMacroCommandType(7, 1, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            TOMenuSetMacroCommandValue(7, 1, lpamng->f11610);
             break;
         case 2:
             TOMenuSetMacroCommandType(7, 0, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 0, (*(s32 *)((u8 *)(lpamng) + (0x1160C))));
+            TOMenuSetMacroCommandValue(7, 0, lpamng->f1160C);
             TOMenuSetMacroCommandType(7, 1, 0);
     __asm__ volatile("" : : : "$3");
-            TOMenuSetMacroCommandValue(7, 1, (*(s32 *)((u8 *)(lpamng) + (0x11610))));
+            TOMenuSetMacroCommandValue(7, 1, lpamng->f11610);
             break;
         }
-        temp_4_2 = (*(s32 *)((u8 *)(lpamng) + (0x11608)));
+        temp_4_2 = lpamng->f11608;
         if (temp_4_2 != 0) {
             func_002571B8(temp_4_2, 0x28, 4, 0, 0x80, 0x80, 0x80, lpamng->f11569);
         }
@@ -439,7 +499,7 @@ int abmap_check_getpanel_other(int skip, int i)
         if (j == skip) {
             continue;
         }
-        if (((int (*)(int))MsGetSavePlyJoined)(j) != 1) { /* DEBT(CAST): called with an int id */
+        if (MsGetSavePlyJoined(j) != 1) {
             continue;
         }
         if ((bits >> j) & 1) {
@@ -473,7 +533,7 @@ void func_002579D0(void)
 
 int func_00257A08(int ch)
 {
-    if (((int (*)(int))MsGetSavePlyJoined)(ch) == 0) { /* DEBT(CAST): called with an int id */
+    if (MsGetSavePlyJoined(ch) == 0) {
         return -1;
     }
     return lpamng->ents3[ch].h0;
@@ -539,11 +599,10 @@ void func_00257D00(u16 id, int (*fn)(), T6_Req *req)
     }
 }
 
-/* DEBT(CAST): signed/width views follow the existing shared interfaces. */
 void func_00257DC0(void)
 {
     int out;
-    func_00256F08((s32) lpamng->ents[lpamng->ents3[lpamng->f1156C].h0].f06, &out);
+    func_00256F08(lpamng->ents[lpamng->ents3[lpamng->f1156C].h0].f06, &out);
 }
 
 Pt16 *func_00257E18(int a, int *out)
@@ -559,7 +618,24 @@ Pt16 *func_00257E18(int a, int *out)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00257E60);
+int abmap_special_sphere_select_check(int a, int b, Pt16 *c, int d);
+
+int func_00257E60(WorkEnt *e, T6_Req *req)
+{
+    int out;
+    Pt16 *p = func_00256F08(e->f06, &out);
+
+    if (((u8 *)req->tbl)[13] != 0) {
+        req->result |= abmap_special_sphere_select_check(((u8 *)req->tbl)[13], e - lpamng->ents, p, req->ch);
+    } else if ((e->flags & req->bit) == 0) {
+        u16 x = p[4].x;
+        u16 m = ((u16 *)req->tbl)[5];
+        if ((x & 0x8000) == 0) {
+            req->result |= x & m;
+        }
+    }
+    return req->result;
+}
 
 int func_00257F20(int ch, int idx, int id)
 {
@@ -573,7 +649,7 @@ int func_00257F20(int ch, int idx, int id)
     req.bit = 1 << ch;
     req.result = 0;
     req.tbl = func_00257E18(id, &out);
-    return func_00257E60((int)&lpamng->ents[idx], (int)&req); /* DEBT(TYPE): prototype takes ints */
+    return func_00257E60(&lpamng->ents[idx], &req);
 }
 
 int func_00257FB0(int ch, int idx, int id)
@@ -599,7 +675,7 @@ int func_00257FB0(int ch, int idx, int id)
 }
 
 int func_00258060(R6Fb *a, R6Req *b) {
-    if (func_00257E60((int)a, (int)b) != 0) { /* DEBT(TYPE): prototype takes ints */
+    if (func_00257E60(a, b) != 0) {
         a->b22 |= b->b10;
         b->wC = 0;
     }

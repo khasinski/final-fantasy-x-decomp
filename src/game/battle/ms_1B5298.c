@@ -171,7 +171,44 @@ int MsSetChrVisibleCamera(int a, int b) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B5298", func_001B5860);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B5298", MsSetChrVisibleBtl2Event);
+int MsSetChrVisibleBtl2Event(u8 id, int idx, int v) {
+    int r = 0;
+    int vis = 1;
+    int i;
+    BtlChr *c = MsGetChr(id);
+    Chr *chr;
+
+    c->f16[idx] = v;
+    for (i = 0; i < 4; i++) {
+        if (c->f16[i] == 0) {
+            vis = 0;
+        }
+    }
+    chr = c->chr;
+    if (chr != 0) {
+        func_00110738(chr, 0);
+        func_00110718(chr, 0);
+        if (vis == 0) {
+            c->f1B = 0;
+            graphicLevelGetNameHash(chr, 1);
+        }
+        r = 1;
+    }
+    for (i = 0; i < 2; i++) {
+        BtlChr *s = MsGetWeapon(id, i);
+        if (s != 0) {
+            chr = s->chr;
+            if (chr != 0) {
+                func_00110738(chr, 0);
+                func_00110718(chr, 0);
+                if (vis == 0) {
+                    graphicLevelGetNameHash(chr, 1);
+                }
+            }
+        }
+    }
+    return r;
+}
 
 int MsSetChrVisibleEvent(u8 id, s32 v) {
     int r = 0;
@@ -179,13 +216,13 @@ int MsSetChrVisibleEvent(u8 id, s32 v) {
     BtlChr *c;
     c = MsGetChr(id);
     if (c->chr != 0) {
-        graphicLevelGetNameHash((s32)c->chr, v); /* DEBT(CAST): funcs.h takes s32 */
+        graphicLevelGetNameHash(c->chr, v);
         r = 1;
     }
     for (i = 0; i < 2; i++) {
         c = MsGetWeapon(id, i);
         if (c != 0 && c->chr != 0) {
-            graphicLevelGetNameHash((s32)c->chr, v); /* DEBT(CAST) */
+            graphicLevelGetNameHash(c->chr, v);
         }
     }
     return r;

@@ -9,8 +9,8 @@
 
 void func_0022CE70(void)
 {
-    TkMn2GetCommonPlate(&D_00693B90, (int)D_005719D0, (int)D_005719E0, (int)D_005719F0, 0, 0);
-    TkMn2GetCommonPlate(&D_00325A40, (int)D_00571A00, (int)D_00571A10, (int)D_00571A20, 0, 0);
+    TkMn2GetCommonPlate(&D_00693B90, D_005719D0, D_005719E0, D_005719F0, 0, 0);
+    TkMn2GetCommonPlate(&D_00325A40, D_00571A00, D_00571A10, D_00571A20, 0, 0);
     func_00227460(D_00571A30, D_00325A58);
     func_00227460(D_00571A40, D_00325A60);
     func_00227460(D_00571A50, D_00325A68);
@@ -25,7 +25,7 @@ void func_0022CE70(void)
     func_00227460(D_00571AD8, D_00693BC0);
     func_00227460(D_00571AE8, D_00693BC8);
     func_00227460(D_00571AF8, D_00693BD0);
-    D_00693BC4 = V5_TkMn2SeqGetNum_int((int)D_00571B08);
+    D_00693BC4 = V5_TkMn2SeqGetNum_int(D_00571B08);
 }
 
 void func_0022D008(Task *o)
@@ -271,14 +271,13 @@ void func_0022DEC8(void)
     }
 }
 
-/* DEBT(CAST): string address passed to an int parameter */
 void func_0022DEE8(void)
 {
     Task *t = D_00693B80;
 
     if (t != 0) {
         t->b41 = 1;
-        func_00227490((int)D_00571BB0);
+        func_00227490(D_00571BB0);
     }
 }
 
@@ -348,7 +347,27 @@ int func_0022E280(int x) {
     return x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E2A0);
+void func_0022E2A0(int a0, int a1)
+{
+    PartySlot *chr = MsGetSavePlayerPtr(a1);
+    u8 *p;
+    R5Rec1C *d;
+    int n;
+    u32 val;
+
+    if (a0 < 10) {
+        p = (u8 *)func_0022E240(a0);
+        d = &D_00325900[a0];
+        n = func_0022E280((*(s32 (**)(s32, s32))((u8 *)d + 0x18))(a1, func_0022DF88((u8 *)chr, (FieldDesc *)d, 1)));
+        MsSaveItemUse(*(u16 *)(p + 4), -n);
+        val = func_0022DF88((u8 *)chr, (FieldDesc *)d, 0) + p[6];
+        if (val > *(u32 *)((u8 *)d + 0x14)) {
+            val = *(u32 *)((u8 *)d + 0x14);
+        }
+        func_0022E1F8((u8 *)chr, (FieldDesc *)d, 0, val);
+    }
+    TkMsSetSaveParam(a1);
+}
 
 s32 _m2c_func_0022E380_func_0022DF88(PartySlot *, R5Rec1C *, s32, s32) __asm__("func_0022DF88");
 /* DEBT(CAST) */ /* DEBT(FAKE) */
@@ -381,7 +400,26 @@ s32 func_0022E380(s32 arg0, s32 arg1, s32 *arg2, s32 *arg3) {
     return var_21;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E468);
+void func_0022E468(int a0)
+{
+    extern s32 D_00693BF0, D_00693BF4;
+    int sp0;
+    int sp4;
+    int i;
+    int ok;
+
+    D_00693BF0 = 0;
+    D_00693BF4 = 0;
+    for (i = 0; i < 10; i++) {
+        ok = func_0022E380(i, a0, &sp0, &sp4);
+        if (func_001BFE30(sp0) >= sp4) {
+            D_00693BF4 |= 1 << i;
+            if (ok != 0) {
+                D_00693BF0 |= 1 << i;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E538);
 
@@ -394,7 +432,6 @@ int func_0022E7B0(void) { return 1; }
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E7B8);
 
-/* DEBT(CAST): string address passed to an int parameter */
 void func_0022E8A8(void)
 {
     Task *t = D_00693B84;
@@ -402,7 +439,7 @@ void func_0022E8A8(void)
     if (t != 0) {
         t->b41 = 1;
         D_00693B84 = 0;
-        func_00227490((int)D_00571BB0);
+        func_00227490(D_00571BB0);
     }
 }
 

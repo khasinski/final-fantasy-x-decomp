@@ -84,7 +84,7 @@ extern s32 D_0058F920;
 void func_00159E80(int a, int *b, int *c);
 s32 TkCdSize(int a, int b);
 int sa_task_buff_size_get(int a);
-s32 func_00159CD8(int a);
+s32 func_00159CD8();
 int TkGetNowEventJumpMapIdNo();
 
 int yiFieldObjReadNB();

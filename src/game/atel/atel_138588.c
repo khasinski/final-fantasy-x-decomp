@@ -170,7 +170,7 @@ u32 func_00138A98(void) {
 
 void func_00138AA8(void)
 {
-    Rec124828 *r = CALL0_func_00124828();
+    Rec124828 *r = func_00124828();
     u32 limit;
     int v;
 
@@ -268,7 +268,7 @@ int func_00138C98(int bit) {
 }
 
 int func_00138D10(int n) {
-    int *w = (int *)(REC124828_BASE() + 0x18);
+    int *w = func_00124828()->w18;
 
     return (w[n / 32] >> n) & 1;
 }
@@ -658,7 +658,7 @@ void AtelEventRemoveSep(int a) {
 }
 
 int func_00139B30(int n) {
-    if (*(u8 *)(REC124828_BASE() + 0x28) != 0) {
+    if (func_00124828()->x28 != 0) {
         n = n / 2;
     }
     return n;
@@ -666,7 +666,44 @@ int func_00139B30(int n) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", AtelEventKickBGSep);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_00139D48);
+void func_00139D48(int a, int b, int c) {
+    Rec124828 *r = func_00124828();
+    int old = AtelChangeCurrentCtrl(0);
+
+    if (D_0058E3D8->flags & 1) {
+        int i = 0;
+        char *p = D_0058E3D8->p48;
+        int n = func_00138E90(p);
+
+        for (; i < n; i++) {
+            int id = func_00138ED8(p, i);
+            int flags = func_00138F30(p, i);
+
+            if ((flags & 0x30) == 0) {
+                int mask = flags & 2;
+
+                if (c != 0) {
+                    mask = flags & 0xA;
+                }
+                if (mask != 0) {
+                    int vol;
+
+                    if (flags & 0x80) {
+                        if (r->x28 != 0) {
+                            vol = (flags & 0x40) ? b : func_00139B30(b);
+                        } else {
+                            vol = 0;
+                        }
+                    } else {
+                        vol = func_00139B30(b);
+                    }
+                    SndSepVolumeTranslate(id, a, vol);
+                }
+            }
+        }
+    }
+    AtelSetCurrentCtrl(old);
+}
 
 void func_00139E98(int a, int b) {
     func_00139D48(a, b, 0);
@@ -690,31 +727,31 @@ int func_00139FD8(int n) {
 }
 
 int func_00139FE0(int v) { /* DEBT(TYPE): funcs.h declares int, but no value is returned */
-    *(u8 *)(REC124828_BASE() + 0x12) = v;
+    func_00124828()->control10.bytes[2] = v;
 }
 
 int func_0013A008(int v) { /* DEBT(TYPE): funcs.h declares int, but no value is returned */
-    *(u8 *)(REC124828_BASE() + 0x11) = v;
+    func_00124828()->control10.bytes[1] = v;
 }
 
 int func_0013A030(void) {
-    return *(u8 *)(REC124828_BASE() + 0x12);
+    return func_00124828()->control10.bytes[2];
 }
 
 int func_0013A050(void) {
-    return *(u8 *)(REC124828_BASE() + 0x11);
+    return func_00124828()->control10.bytes[1];
 }
 
 void AtelSetEventJump2(int a, int b, int c) {
     int s;
 
-    if (EVW()->flags & 0x80) {
+    if (D_0058E3D8->flags & 0x80) {
         AtelUcOff();
         func_00124CC8(a, b);
         func_00138B58();
         MsBattleExeClear();
-        EVW()->flags &= ~0x80;
-        EVW()->w210 |= 2;
+        D_0058E3D8->flags &= ~0x80;
+        D_0058E3D8->f210.w |= 2;
         func_00136440(-0.06666667f);
         if (c != 0) {
             s = func_0013A030();
@@ -868,7 +905,7 @@ EvGameState *AtelGetCurCtrlWork(void) {
     return (EvGameState *)D_0058E3D8; /* DEBT(CAST): same block seen through Sys3D8 */
 }
 
-void *AtelGetCtrlWork(int i) {
+EvGameState *AtelGetCtrlWork(int i) {
     return &D_0058D450[i];
 }
 

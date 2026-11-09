@@ -166,7 +166,36 @@ s32 func_001088E0(Chr *chr, s32 i)
     return chr->fx[i].f != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_OptposGet);
+typedef union {
+    V128 q;
+    Vec4 v;
+} OptVec;
+
+typedef struct {
+    u8 pad000[0x220];
+    Vec4 pos220;
+    u8 pad230[0x300];
+    OptVec opt530[1];
+} ChrOptView;
+
+void Ch_OptposGet(int a, int i, int b)
+{
+    ChrOptView *chr = (ChrOptView *)a;
+    OptVec *dst = (OptVec *)b;
+
+    if (chr->opt530[i].v.w == 0.0f) {
+        if (chr->opt530[0].v.w == 0.0f) {
+            dst->v.x = chr->pos220.x;
+            dst->v.y = chr->pos220.y;
+            dst->v.z = chr->pos220.z;
+            dst->v.w = 1.0f;
+        } else {
+            dst->q = chr->opt530[0].q;
+        }
+    } else {
+        dst->q = chr->opt530[i].q;
+    }
+}
 
 void func_00108990(Chr *chr, V128 *dst)
 {
@@ -178,20 +207,20 @@ void func_001089A8(int a, int b)
     Ch_OptposGet(a, 0, b);
 }
 
-s32 Ch_OptposGetElement(s32 a, s32 b, s32 c)
+s32 Ch_OptposGetElement(Chr *a, s32 b, s32 c)
 {
     s32 out;
 
-    Ch_ElemGetAttr(a, b, &out, c);
+    Ch_ElemGetAttr(a, b, &out, (void *)c);
     return out;
 }
 
-s32 func_001089E0(s32 a, s32 b, s32 c, s32 d)
+void func_001089E0(Chr *a, s32 b, s32 c, void *d)
 {
     s32 out;
 
-    Ch_ElemGetAttr(a, b, &out, c);
-    return func_001072F8(a, out, d);
+    Ch_ElemGetAttr(a, b, &out, (void *)c);
+    func_001072F8(a, out, d);
 }
 
 void func_00108A28(Chr *chr, V128 *dst)
@@ -271,9 +300,50 @@ void func_001091C8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_MoveChrBlk);
+void Ch_CbArcMapping(Rec12C *blk, s32 a);
+void func_00102AF8(Chr *chr, Rec12C *blk);
+void func_001603E0(s32 a, s32 b);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_ClothResetRelation);
+void Ch_MoveChrBlk(s32 a, s32 b)
+{
+    Rec12C *blk = 0;
+    s32 i;
+    Chr *chr;
+    s32 diff;
+
+    for (i = 0; i < 40; i++) {
+        if (chrblk[i].w0 != -1 && chrblk[i].w6C == b) {
+            blk = &chrblk[i];
+        }
+    }
+    if (blk != 0) {
+        Ch_CbArcMapping(blk, a);
+        diff = a - b;
+        for (chr = D_00300664; chr != D_00300664 + D_00300668; chr++) {
+            if (chr->active && (Rec12C *)chr->param == blk) {
+                func_00102AF8(chr, blk);
+                ((s32 (*)(Chr *))Ch_TextureReMapping)(chr);
+                if (chr->w708 != 0) {
+                    func_001603E0(((Rec12C *)chr->param)->w14, chr->w70C);
+                }
+                if (*(s32 *)&chr->pad75E[6] != 0) {
+                    *(s32 *)&chr->pad75E[6] += diff;
+                }
+            }
+        }
+    }
+}
+
+void Ch_ClothResetRelation(Chr *chr)
+{
+    Chr *p;
+
+    for (p = D_00300664; p != D_00300664 + D_00300668; p++) {
+        if (p->active && !FLAGS_BIT(p, 23) && p != chr && p->p1A8 == chr) {
+            Ch_ClothReset(p);
+        }
+    }
+}
 
 void func_00109430(void)
 {
@@ -286,7 +356,28 @@ void func_00109430(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", MoveChrBlk_);
+s32 Sg_MemGetSize(s32 a);
+void func_0011D590(s32 a, s32 b);
+extern char D_005695F8[];
+
+void MoveChrBlk_(void)
+{
+    s32 i;
+
+    for (i = 0; i < 40; i++) {
+        if (chrblk[i].w0 != -1) {
+            s32 old = chrblk[i].w6C;
+            s32 size = Sg_MemGetSize(old);
+            s32 mem;
+
+            func_0011C348(0x80);
+            mem = (s32)user_malloc(size, 6, D_005695F8, 0x4B8);
+            func_002EEF1C(mem, old, size);
+            func_0011D590(old, 6);
+            Ch_MoveChrBlk(mem, old);
+        }
+    }
+}
 
 void func_00109590(Chr *chr, float *out)
 {
@@ -386,11 +477,43 @@ void Ch_ElemCalcQuaternion(void *arg0) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_NeckSetEnable);
+typedef struct {
+    s8 b00;
+    s8 b01;
+    s8 b02;
+    u8 pad03[5];
+    float f08;
+    u8 pad0C[4];
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    float m20[4][4];
+    float m60[4][4];
+    float qA0[4];
+    float fB0;
+} ChrNeck;
+
+void Ch_NeckSetEnable(void *a, int v)
+{
+    ChrNeck *n = (ChrNeck *)((u8 *)a + 0x410);
+
+    n->b00 = v;
+    if (v != 0) {
+        n->f08 = 1.0f;
+        if (n->b02 != n->b01) {
+            _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion(n->m60, (s32 *)n->qA0);
+            n->fB0 = 1.0f;
+        }
+    } else {
+        n->f08 = 0.0f;
+    }
+    n->b02 = n->b01;
+}
 
 void Ch_NeckSetTarget(Chr *chr, s32 v)
 {
-    CHR_S32(chr, 0x4D0) = v; /* DEBT(CAST) */
+    chr->u4D0.w4D0 = v;
     chr->b411 = 2;
     Ch_NeckSetEnable(chr, 1);
 }
@@ -398,7 +521,7 @@ void Ch_NeckSetTarget(Chr *chr, s32 v)
 void func_0010A1F8(Chr *chr, Cmd16 *src)
 {
     chr->b411 = 3;
-    *(Cmd16 *)((u8 *)chr + 0x4D0) = *src; /* DEBT(CAST) */
+    chr->u4D0.cmd = *src;
     Ch_NeckSetEnable(chr, 1);
 }
 
@@ -411,8 +534,8 @@ void func_0010A220(Chr *chr)
 void func_0010A230(Chr *chr, float a, float b)
 {
     chr->b411 = 4;
-    chr->f4D0 = a;
-    chr->f4D4 = b;
+    chr->u4D0.f.f4D0 = a;
+    chr->u4D0.f.f4D4 = b;
     Ch_NeckSetEnable(chr, 1);
 }
 
@@ -421,7 +544,7 @@ void func_0010A250(Chr *chr, float v)
     if (v == 0.0f) {
         v = 6.0f;
     }
-    CHR_F32(chr, 0x424) = v; /* DEBT(CAST) */
+    chr->f424 = v;
 }
 
 void func_0010A270(Chr *chr, float x, float y)

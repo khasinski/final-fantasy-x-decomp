@@ -65,6 +65,9 @@ u16 func_001487D0(void)
     return r->x0E;
 }
 
+int func_0013A398(int a);
+u16 *func_00206ED8(int a);
+
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelGetSaveDicName);
 
 u8 func_00148870(void)
@@ -77,7 +80,34 @@ void AtelSetBattleSceneGroup(int v)
     func_00124828()->control10.bytes[0] = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelSetSaveDicIndex);
+typedef struct DicHdr148 {
+    u8 pad00[0x1E];
+    u16 h1E;
+    u8 pad20[8];
+    s32 off28;
+} DicHdr148;
+
+int AtelSetSaveDicIndex(int idx)
+{
+    int old = AtelChangeCurrentCtrl(0);
+    DicHdr148 *p = S1SYS()->p48;
+    u16 v;
+
+    if (p != 0) {
+        v = p->h1E;
+        if (v & 0x8000) {
+            v &= 0x7FFF;
+            if (idx >= v) {
+                idx = 0;
+            }
+            v = ((u16 *)((u8 *)p + p->off28))[idx];
+        }
+        func_00148758(v);
+    } else {
+        func_00148758(0);
+    }
+    AtelSetCurrentCtrl(old);
+}
 
 int AtelGetEventActorLinkWork(int id)
 {
@@ -196,7 +226,13 @@ u16 func_00148D78(s32 arg0, s32 arg1) {
     return temp_17;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelSetEventElemCharIDFromID);
+void AtelSetEventElemCharIDFromID(int id, int idx, int val)
+{
+    int old = AtelChangeCurrentCtrl(0);
+
+    AR(AtelGetBasicWork(id))->hB04[idx] = val;
+    AtelSetCurrentCtrl(old);
+}
 
 int AtelGetEventBindIdFromID(int id)
 {

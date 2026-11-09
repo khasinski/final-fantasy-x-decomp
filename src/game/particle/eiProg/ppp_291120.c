@@ -93,18 +93,17 @@ void pppKeOfsMatXYZ(u8 *s1, void *arg1, u8 *arg2) {
     *(float *)(s1 + 0x4C) = f20;
 }
 
-/* DEBT(CAST): ScriptWork supplies the owner field of the shared VM memory header. */
-void func_00291A70(char *base, ScriptAxisEvent *event, ScriptCtx *ctx)
+void func_00291A70(ScriptWork *base, ScriptAxisEvent *event, ScriptCtx *ctx)
 {
     SlotInfo *slots = ctx->info;
     ScriptAxisWork *work = SLOT_WORK(ScriptAxisWork, base, ctx, 0);
     float velocity;
 
     if (D_006A3BC4 == 0) {
-        if (event->owner == ((ScriptWork *)base)->owner) {
+        if (event->owner == base->owner) {
             work->axis.acceleration += event->delta[0][0];
-            work->velocitySource = base + (slots->slot[1] + 0xA0);
-            work->positionSource = base + (slots->slot[2] + 0xA0);
+            work->velocitySource = (char *)base + (slots->slot[1] + 0xA0);
+            work->positionSource = (char *)base + (slots->slot[2] + 0xA0);
             work->axis.velocity += event->delta[0][1];
             work->axis.position += event->delta[0][2];
         }
@@ -120,15 +119,14 @@ void func_00291B18(char *base, ScriptCtx *ctx) {
     w->f0 = w->f4 = w->f8 = 0.0f;
 }
 
-/* DEBT(CAST): ScriptWork supplies the owner field of the shared VM memory header. */
-void func_00291B40(char *base, ScriptAxisEvent *event, ScriptCtx *ctx)
+void func_00291B40(ScriptWork *base, ScriptAxisEvent *event, ScriptCtx *ctx)
 {
     ScriptAxisPair *work = SLOT_WORK(ScriptAxisPair, base, ctx, 0);
     float first;
     float second;
 
     if (D_006A3BC4 == 0) {
-        if (event->owner == ((ScriptWork *)base)->owner) {
+        if (event->owner == base->owner) {
             work->axis[0].acceleration += event->delta[0][0];
             work->axis[0].velocity += event->delta[0][1];
             work->axis[0].position += event->delta[0][2];

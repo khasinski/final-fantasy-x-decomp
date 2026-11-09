@@ -17,7 +17,7 @@ void func_00110160(Chr *chr, float v)
 
 void func_00110170(Chr *chr)
 {
-    chr->h82E = -1;
+    chr->u828.s.h82E = -1;
 }
 
 float Ch_GetJimen(Chr *chr)
@@ -30,7 +30,7 @@ void Ch_SetPos(Chr *chr, float x, float z)
     chr->f10 = x;
     chr->f18 = z;
     *(V128 *)&chr->f20 = *(V128 *)&chr->f10; /* DEBT(CAST): position vector copied as one quad */
-    chr->h82E = -1;
+    chr->u828.s.h82E = -1;
     chr->flags |= 0x2000000;
 }
 
@@ -49,7 +49,7 @@ void Ch_SetPos3(Chr *chr, float x, float y, float z)
     chr->f14 = y;
     chr->f18 = z;
     *(V128 *)&chr->f20 = *(V128 *)&chr->f10; /* DEBT(CAST): position vector copied as one quad */
-    chr->h82E = -1;
+    chr->u828.s.h82E = -1;
     chr->flags |= 0x2000000;
 }
 
@@ -136,22 +136,33 @@ void func_00110390(FloatTween *t, float v, s32 frames)
 
 void func_001103A8(Chr *chr, float v, s32 frames)
 {
-    func_00110390((FloatTween *)&chr->f358, v, frames); /* DEBT(CAST): tween record inside the pad */
+    func_00110390(&chr->t358, v, frames);
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_110158", func_001103B0);
+void func_00110478(Chr *chr, float v, s32 frames);
+
+void func_001103B0(Chr *chr, float v, s32 frames)
+{
+    Chr *p;
+
+    for (p = D_00300664; p != D_00300664 + D_00300668; p++) {
+        if (p->active && p != chr && p->p1A8 == chr) {
+            func_00110478(p, v, frames);
+        }
+    }
+}
 
 void func_00110478(Chr *chr, float v, s32 frames)
 {
-    func_00110390((FloatTween *)&chr->f364, v, frames); /* DEBT(CAST) */
+    func_00110390(&chr->t364, v, frames);
     func_001103B0(chr, v, frames);
 }
 
 void Ch_SetShadeCol(Chr *chr, s32 frames, float x, float y, float z)
 {
-    func_00110390((FloatTween *)&chr->f328, x, frames); /* DEBT(CAST): tweens at 0x328/0x334/0x340 */
-    func_00110390((FloatTween *)&chr->f334, y, frames);
-    func_00110390((FloatTween *)&chr->f340, z, frames);
+    func_00110390(&chr->t328, x, frames);
+    func_00110390(&chr->t334, y, frames);
+    func_00110390(&chr->t340, z, frames);
 }
 
 void func_00110530(Chr *chr, float x, float y, float z)
@@ -163,12 +174,12 @@ void func_00110530(Chr *chr, float x, float y, float z)
 
 void func_00110540(Chr *chr, float v, s32 frames)
 {
-    func_00110390((FloatTween *)&chr->f34C, v, frames); /* DEBT(CAST): tween record inside the pad */
+    func_00110390(&chr->t34C, v, frames);
 }
 
 void func_00110548(Chr *chr, float v, s32 frames)
 {
-    func_00110390((FloatTween *)((u8 *)chr + 0x370), v, frames); /* DEBT(CAST): tween record inside the pad */
+    func_00110390(&chr->t370, v, frames);
 }
 
 void Ch_SetMotionType(Chr *chr, s8 v)

@@ -248,7 +248,7 @@ Rec14 *MsGetSaveChrName(int id) {
     return 0;
 }
 
-int func_001BDDC8(void) {
+int func_001BDDC8(int v) {
     return 0x14;
 }
 
@@ -256,8 +256,8 @@ int MsGetSavePlyJoin(int id) {
     return D_0031EA9C[(u8)id].flags2C & 1;
 }
 
-int MsGetSavePlyJoined(u8 id) {
-    return (D_0031EA9C[id].flags2C >> 4) & 1;
+int MsGetSavePlyJoined(int id) {
+    return (D_0031EA9C[(u8)id].flags2C >> 4) & 1;
 }
 
 void func_001BDE20(u8 id, int on) {
@@ -323,7 +323,58 @@ void func_001BE388(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSaveData);
+typedef struct {
+    u8 pad0[0x52];
+    u8 item52[2];
+    u8 pad54[0x7B - 0x54];
+    u8 f7B;
+    u8 f7C;
+    u8 f7D;
+    u8 pad7E[0x90 - 0x7E];
+    s32 f90;
+    s32 f94;
+    u8 pad98[0x198 - 0x98];
+    u8 f198;
+} BtlChrSub200;
+
+void MsSetSaveData(void) {
+    int i;
+    PartySlot *s;
+
+    MsReturnParty();
+    func_001BE348();
+    func_001BE388();
+    s = D_0031EA9C;
+    for (i = 0; i < 18; i++, s++) {
+        BtlChrSub200 *c = (BtlChrSub200 *)((u8 *)MsGetChr(i) + 0x200);
+        int cnt;
+        s->f2D = c->item52[0];
+        s->f2E = c->item52[1];
+        cnt = c->f198;
+        if (c->f90 > 0 || cnt != 0) {
+            s->v1C = c->f90;
+        } else {
+            s->v1C = 1;
+        }
+        s->v20 = c->f94;
+        if (cnt != 0) {
+            if (--cnt <= 0) {
+                cnt = 0;
+                s->v1C = s->v24;
+                s->v20 = s->v28;
+            }
+        }
+        s->b3D = cnt;
+        s->v1C = MsCheckRange(s->v1C, 0, s->v24);
+        s->v20 = MsCheckRange(s->v20, 0, s->v28);
+        s->b38 = c->f7B;
+        s->b39 = c->f7C;
+        s->b3A = c->f7D;
+    }
+    for (i = 8; i < 18; i++) {
+        MsSetSaveParam(i);
+    }
+}
 
 s32 MsGetSaveBattleCount(void) {
     return D_0031D1E4;
@@ -372,7 +423,23 @@ s32 func_001BE5C0(int id) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsGetNextAP);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BE690);
+u32 func_001BE690(int a, int b) {
+    u8 i = a;
+    int add = MsCheckRange(b, 0, 999999999);
+    u32 next;
+    D_003194D0.slot[i].f14 = MsCheckRange(D_003194D0.slot[i].f14 + add, 0, 999999999);
+    D_003194D0.slot[i].f18 = MsCheckRange(D_003194D0.slot[i].f18 + add, 0, 999999999);
+    while (1) {
+        next = MsGetNextAP(i);
+        if ((u32)D_003194D0.slot[i].f18 >= next && (s32)next > 0 && D_003194D0.slot[i].f3B < 99) {
+            D_003194D0.slot[i].f18 -= next;
+            D_003194D0.slot[i].f3B = MsCheckRange(D_003194D0.slot[i].f3B + 1, 0, 99);
+            continue;
+        }
+        break;
+    }
+    return next;
+}
 
 u8 func_001BE7B8(int id) {
     return D_003194D0.slot[(u8)id].f3B;
@@ -523,12 +590,111 @@ void func_001BF4C0(int id, int add) {
     p->v20 = MsCheckRange(p->v20, 0, p->v28);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSaveCommand);
+int MsSetSaveCommand(int id, int cmd, int on) {
+    if ((cmd >> 12) == 3) {
+        int i;
+        int inv;
+        int m;
+        if (cmd < 0x3060) {
+            PartySlot *p;
+            cmd &= 0xFFF;
+            p = &D_0031EA9C[id];
+            i = cmd / 16;
+            cmd &= 15;
+            inv = (1 << cmd) ^ 0xFFFF;
+            m = 1 << cmd;
+            if (!on) {
+                m = 0;
+            }
+            p->h3E[i] = (p->h3E[i] & inv) | m;
+        } else {
+            SaveData *p;
+            cmd -= 0x3060;
+            cmd &= 0xFFF;
+            p = &D_003194D0;
+            i = cmd / 16;
+            cmd &= 15;
+            inv = (1 << cmd) ^ 0xFFFF;
+            m = 1 << cmd;
+            if (!on) {
+                m = 0;
+            }
+            p->h3D6C[i] = (p->h3D6C[i] & inv) | m;
+        }
+        if (MsGetChrTop() != 0) {
+            MsSetRamChrAbility(id, MsGetChr(id));
+        }
+        return 1;
+    }
+    return 0;
+}
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsGetSaveCommand);
+int MsGetSaveCommand(int id, int cmd) {
+    int r = 0;
+    if ((cmd >> 12) == 3) {
+        int i;
+        int m;
+        if (cmd < 0x3060) {
+            PartySlot *p;
+            cmd &= 0xFFF;
+            p = &D_0031EA9C[id];
+            i = cmd / 16;
+            cmd &= 15;
+            m = 1 << cmd;
+            if (p->h3E[i] & m) {
+                r = 1;
+            }
+        } else {
+            SaveData *p;
+            cmd -= 0x3060;
+            cmd &= 0xFFF;
+            p = &D_003194D0;
+            i = cmd / 16;
+            cmd &= 15;
+            m = 1 << cmd;
+            if (p->h3D6C[i] & m) {
+                r = 1;
+            }
+        }
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSaveAddInfoData);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsGetSaveCommandMenuPanel);
+typedef struct {
+    u16 a[6];
+    u16 b[10];
+} CmdMenuPanel;
+
+int MsGetSaveCommandMenuPanel(int cmd) {
+    int r = 0;
+    if ((cmd >> 12) == 3) {
+        CmdMenuPanel *p = func_001BF400();
+        int i;
+        int m;
+        if (cmd < 0x3060) {
+            cmd &= 0xFFF;
+            i = cmd / 16;
+            cmd &= 15;
+            m = 1 << cmd;
+            if (p->a[i] & m) {
+                r = 1;
+            }
+        } else {
+            cmd -= 0x3060;
+            cmd &= 0xFFF;
+            i = cmd / 16;
+            cmd &= 15;
+            m = 1 << cmd;
+            if (i < 10) {
+                if (p->b[i] & m) {
+                    r = 1;
+                }
+            }
+        }
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BF888);

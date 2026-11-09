@@ -9,13 +9,12 @@
 
 void func_00234A30(void)
 {
-    /* DEBT(CAST): TkMn2GetCommonPlate takes the part names as int */
     if (func_002D92C8() == 1) {
-        TkMn2GetCommonPlate(&D_00693F78, (int)D_00572230, (int)D_00572240, (int)D_00572250, 0xCC, 0xCD);
-        D_00693FBC = V5_TkMn2SeqGetNum_int((int)D_00572260);
+        TkMn2GetCommonPlate(&D_00693F78, D_00572230, D_00572240, D_00572250, 0xCC, 0xCD);
+        D_00693FBC = V5_TkMn2SeqGetNum_int(D_00572260);
     } else {
-        TkMn2GetCommonPlate(&D_00693F78, (int)D_00572270, (int)D_00572240, (int)D_00572250, 0xCC, 0xCD);
-        D_00693FBC = V5_TkMn2SeqGetNum_int((int)D_00572288);
+        TkMn2GetCommonPlate(&D_00693F78, D_00572270, D_00572240, D_00572250, 0xCC, 0xCD);
+        D_00693FBC = V5_TkMn2SeqGetNum_int(D_00572288);
     }
     func_002273A0(D_005722A0, D_00693F90);
     func_002273A0(D_005722B0, D_00693FA0);
@@ -23,10 +22,10 @@ void func_00234A30(void)
     func_00227460(D_005722D0, D_00693F98);
     func_00227460(D_005722E0, D_00693FB0);
     func_00227460(D_005722F0, D_00693FA8);
-    D_00693FB4 = TkMn2SeqGetColor((int)D_00572300);
-    D_00693FB8 = TkMn2SeqGetColor((int)D_00572310);
-    D_00693FC8 = TkMn2SeqGetColor((int)D_00572320);
-    D_00693FCC = TkMn2SeqGetColor((int)D_00572330);
+    D_00693FB4 = TkMn2SeqGetColor(D_00572300);
+    D_00693FB8 = TkMn2SeqGetColor(D_00572310);
+    D_00693FC8 = TkMn2SeqGetColor(D_00572320);
+    D_00693FCC = TkMn2SeqGetColor(D_00572330);
 }
 
 void func_00234B98(FlagRec *o) {
@@ -371,8 +370,8 @@ void func_00235AA8(void) {
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_234A30", func_00235B48);
 
 void func_00235C08(void) {
-    func_00227490((int)&D_00572370); /* DEBT(CAST): address passed as int */
-    func_00227490((int)&D_00572378);
+    func_00227490(&D_00572370);
+    func_00227490(&D_00572378);
 }
 
 void func_00235C30(void) {

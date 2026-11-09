@@ -41,14 +41,16 @@ extern int D_00597A04;
 extern u8 D_0056C1A0[]; /* DEBT(TYPE): element type unknown, only its address is used */
 
 typedef struct Q3Grp { /* DEBT(NAME): 0x720-byte group, walked by yiAnimAttachDefault */
+    u32 w00;
+    u32 w04;
     u32 n;
-    u32 id[0x1C7];
+    u32 id[0x1C5];
 } Q3Grp;
 
 typedef struct Q3Ent2 { /* DEBT(NAME): 0xC0-byte entries; entry count is read from Sys597F00.w687B8 */
     u64 d00; /* only known to make the entry 8-byte aligned (yiAnimAttachDefault addressing) */
     u8 pad_08[8];
-    u64 m10[8]; /* 64-byte block copied as a whole by yiGetMatrixDObj & co. (a Blk64, see ffx/v1.h) */
+    Blk64 m10[1]; /* 64-byte block copied as a whole by yiGetMatrixDObj & co. (a Blk64, see ffx/v1.h) */
     float v50[4];
     float v60[4];
     u8 pad_70[0x10];
@@ -140,9 +142,8 @@ typedef struct Sys597F00 { /* DEBT(NAME): named after D_00597F00; large object, 
     struct Q3Ent *p9F1EC;
     u8 pad_9F1F0[0xF18];
     u32 wA0108;   /* count of grp */
-    u8 pad_A010C[8];
     Q3Grp grp[64]; /* DEBT(PADDING): count guessed */
-    u8 pad_BC914[0x1FC];
+    u8 pad_BC90C[0x204];
     s32 wBCB10;
     s32 wBCB14;
     u8 pad_BCB18[0x4];
@@ -395,12 +396,16 @@ typedef struct Obj1A1740 { /* DEBT(NAME): named after its chunk */
 } Obj1A1740;
 
 typedef struct S58FE54 { /* DEBT(NAME): named after D_0058FE54; large object, only these words are known */
-    u8 pad_00000[0x2DDC0];
+    u8 pad_00000[0x10100];
+    s32 w10100[1];
+    u8 pad_10104[0x2DDC0 - 0x10104];
     u8 buf2DDC0[0x5051C - 0x2DDC0]; /* handed to func_0015ACC0 by func_0015E858 */
     s32 w5051C;
     u8 pad_50520[0x24];
     s32 w50544;
-    u8 pad_50548[0x54];
+    s32 w50548;
+    s32 w5054C[1];
+    u8 pad_50550[0x4C];
     u8 *p5059C;
     u8 pad_505A0[0x20];
     u32 w505C0;
@@ -412,7 +417,9 @@ typedef struct S58FE54 { /* DEBT(NAME): named after D_0058FE54; large object, on
     u8 pad_506D8[0xC];
     s32 w506E4;
     s32 w506E8;
-    u8 pad_506EC[0x1C];
+    u8 pad_506EC[0xC];
+    s32 w506F8;
+    u8 pad_506FC[0xC];
     s32 w50708;
     u8 pad_5070C[8];
     s32 w50714;
@@ -540,6 +547,7 @@ extern s32 D_00595F5C;
 /* DEBT(TYPE): reset globals; pointer views follow the existing m2c context. */
 extern s32 D_0030E0BC;
 extern s32 D_00597A0C;
+extern s32 D_00597A14;
 extern s32 D_0030E0CC;
 extern s32 D_0030E0B8;
 extern void *D_0030E0AC;

@@ -4,9 +4,7 @@
 #include "ffx/w2.h"
 #include "ffx/r1.h"
 #include "ffx/v1.h"
-#define MsSetCameraMatrix v2_MsSetCameraMatrix /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/v2.h"
-#undef MsSetCameraMatrix
 #include "ffx/r2.h"
 #include "ffx/s2.h"
 
@@ -182,7 +180,35 @@ INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001764A0);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001765D0);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001766D0);
+void func_001764A0(Sys597F00 *s, R2Qw *pkt, int n);
+
+void func_001766D0(Sys597F00 *s) {
+    R2Qw pkt[16];
+
+    {
+        u32 *p = (u32 *)&pkt[0];
+        p[1] = 0x10000000;
+        p[2] = 0xE;
+        p[3] = 0;
+    }
+    {
+        u32 *p = (u32 *)&pkt[1];
+        u64 v = (*(u32 *)((u8 *)s + 0x9F1F8) >> 11) | 0x1000000;
+        p[0] = v;
+        p[1] = v >> 32;
+        p[2] = 0x4F;
+        p[3] = 0;
+    }
+    {
+        u32 *p = (u32 *)&pkt[2];
+        p[0] = 0x70000;
+        p[1] = 0;
+        p[2] = 0x48;
+        p[3] = 0;
+    }
+    pkt[0].w[0] = 0x8002;
+    func_001764A0(s, pkt, 3);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176778);
 

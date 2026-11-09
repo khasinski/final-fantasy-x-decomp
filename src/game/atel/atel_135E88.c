@@ -5,7 +5,34 @@
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_135E88", AtelSetSndCameraPos);
+extern float D_0058D160[16];
+extern float D_0058D1A0[16];
+void func_002DCF48(void *dst, void *src);
+
+void AtelSetSndCameraPos(void)
+{
+    float mat[16];
+    int old;
+    Sys3D8 *ctrl;
+
+    func_001A9EE0(D_0058D1A0);
+    D_0058D1E0 = -1;
+    old = AtelChangeCurrentCtrl(0);
+    ctrl = (Sys3D8 *)AtelGetCurCtrlWork();
+    if (ctrl->hA != 0xFFFF) {
+        ActorState *st;
+
+        func_002DCF48(mat, D_0058D1A0);
+        st = AtelGetPosWorkAdrs(AtelGetBasicWork(ctrl->hA));
+        mat[12] = st->x;
+        mat[13] = st->y;
+        mat[14] = st->z;
+        func_002DCF48(D_0058D160, mat);
+    } else {
+        func_002DD0C0(D_0058D160, D_0058D1A0);
+    }
+    AtelSetCurrentCtrl(old);
+}
 
 void func_00135F50(void) {
     D_0058D1E0 = -1;

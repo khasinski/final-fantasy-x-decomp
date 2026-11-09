@@ -5,9 +5,7 @@
 #include "ffx/r1.h"
 #include "ffx/s1.h"
 #include "ffx/u0.h"
-#define va_list u1_va_list /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/u1.h"
-#undef va_list
 
 static inline int ClampU8(int i)
 {
@@ -46,7 +44,7 @@ void func_0014CE68(Ent24 *e)
     }
 }
 
-u8 func_0014CEB0(int i)
+int func_0014CEB0(int i)
 {
     return func_0014CE18(i)->x22;
 }
@@ -86,7 +84,33 @@ Ent24 *func_0014CF88(int i)
     return e;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/tk_14CE18", func_0014CFB8);
+u8 *func_0014CFB8(u32 a, int b, u8 *c)
+{
+    int off;
+    u8 *p;
+    u16 *q;
+
+    if (a >= 0x40 || c == 0) {
+        return 0;
+    }
+    off = ((s32 *)c)[a];
+    if (off == 0) {
+        return 0;
+    }
+    p = c + off;
+    if (*(u16 *)(p + (b << 1)) == 0) {
+        return 0;
+    }
+    if (b > 0) {
+        q = (u16 *)p;
+        do {
+            p += *q;
+            b--;
+            q++;
+        } while (b != 0);
+    }
+    return p + 4;
+}
 
 void func_0014D028(Rec14CE48 *r)
 {
@@ -187,7 +211,38 @@ int func_0014D260(Ent24 *e, int idx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/tk_14CE18", func_0014D2F8);
+void func_0014D2F8(int a, int idx, int v0, int v1, int dur)
+{
+    Ent24 *e = func_0014CF88(a);
+    Rec14CE48 *r;
+    int c0;
+    int c1;
+
+    idx = (idx < 0) ? 0 : ((idx >= 2) ? 1 : idx);
+    r = &e->rec[idx];
+    r->x0 = 0;
+    e->x22 = 2;
+    func_0014D028(r);
+    if (v0 < 0) {
+        v0 = r->xA;
+    }
+    if (v1 < 0) {
+        v1 = 0;
+    }
+    c0 = (v0 < 0) ? 0 : ((v0 >= 0x80) ? 0x7F : v0);
+    c1 = (v1 < 0) ? 0 : ((v1 >= 0x80) ? 0x7F : v1);
+    r->x4 = 0;
+    if (dur < 0) {
+        dur = -1;
+    }
+    r->x6 = dur;
+    if (r->x6 >= 0) {
+        r->x9 = c1;
+    } else {
+        r->x9 = c0;
+    }
+    r->x8 = c0;
+}
 
 void func_0014D3F0(int a, int b, int c)
 {
@@ -224,7 +279,37 @@ void func_0014D4E8(u8 v)
     D_0058F91A = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/tk_14CE18", func_0014D4F8);
+void func_0014D4F8(void)
+{
+    u32 m0 = 0;
+    u32 m1 = 0;
+    int i;
+
+    if (D_0058F91A == 0) {
+        for (i = 0; i < 8; i++) {
+            u32 v0 = 0;
+            u32 v1;
+
+            if ((D_0058F91C >> i) & 1) {
+                Ent24 *e = func_0014CE18(i);
+
+                func_0014D130(e);
+                v0 = func_0014D260(e, 0);
+                v1 = func_0014D260(e, 1);
+            } else {
+                v1 = 0;
+            }
+            if (m0 < v0) {
+                m0 = v0;
+            }
+            if (m1 < v1) {
+                m1 = v1;
+            }
+        }
+        D_0058F918 = m0;
+        D_0058F919 = m1;
+    }
+}
 
 void func_0014D5D8(int *a, int *b)
 {

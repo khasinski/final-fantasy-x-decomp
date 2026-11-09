@@ -47,11 +47,11 @@ void func_002457F8(int id, int x, int y, int w, int h)
     func_00247408(x + w - 0x10, y, id + 1);
     func_00247408(x, y + h - 0x10, id + 2);
     func_00247408(x + w - 0x10, y + h - 0x10, id + 3);
-    func_002476C8((int)func_00247F48(id + 4, D_003264A0), x + 0x10, y, w - 0x20); /* DEBT(CAST): sprite pointer passed as int */
-    func_00247640((int)func_00247F48(id + 5, D_003264A0), x, y + 0x10, h - 0x20);
-    func_00247750((int)func_00247F48(id + 6, D_003264A0), x + 0x10, y + 0x10, w - 0x20, h - 0x20);
-    func_00247640((int)func_00247F48(id + 7, D_003264A0), x + w - 0x10, y + 0x10, h - 0x20);
-    func_002476C8((int)func_00247F48(id + 8, D_003264A0), x + 0x10, y + h - 0x10, w - 0x20);
+    func_002476C8(func_00247F48(id + 4, D_003264A0), x + 0x10, y, w - 0x20);
+    func_00247640(func_00247F48(id + 5, D_003264A0), x, y + 0x10, h - 0x20);
+    func_00247750(func_00247F48(id + 6, D_003264A0), x + 0x10, y + 0x10, w - 0x20, h - 0x20);
+    func_00247640(func_00247F48(id + 7, D_003264A0), x + w - 0x10, y + 0x10, h - 0x20);
+    func_002476C8(func_00247F48(id + 8, D_003264A0), x + 0x10, y + h - 0x10, w - 0x20);
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00245978);
@@ -319,7 +319,7 @@ void func_00246348(char *s, int x, int y, int a)
 
     if (func_002F0840(s) != 0) {
         D_0069BCDC = (u8 *)(c + 1);
-        end = func_001F41C0(c + 1, (int)s, x, y, a); /* DEBT(CAST): text address */
+        end = func_001F41C0(c + 1, s, x, y, a);
         D_0069BCDC = end;
         n = (u32)(end - (u8 *)c + 15) / 16 - 1;
         c->b3 = 0x10;
@@ -338,7 +338,7 @@ void func_00246408(u8 *s, int y, int a, int b)
     int n;
 
     D_0069BCDC = (u8 *)(c + 1);
-    end = func_001F78C8(D_0069BCDC, (int)s, y - func_002454E0(s), a, b); /* DEBT(CAST): text address */
+    end = func_001F78C8(D_0069BCDC, s, y - func_002454E0(s), a, b);
     D_0069BCDC = end;
     n = (u32)(end - (u8 *)c + 15) / 16 - 1;
     c->b3 = 0x10;
@@ -468,7 +468,25 @@ void func_00246818(int a, int b, int c, int d)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_002468A8);
+void func_002468A8(int a, int b, int c)
+{
+    u8 *p;
+    CmdRec *tag;
+    u32 n;
+    u16 w = ((int (*)(int))func_00245500)(a);
+
+    p = D_0069BCDC;
+    tag = (CmdRec *)p;
+    D_0069BCDC = p + 0x10;
+    D_0069BCDC = (u8 *)func_001F7FC0(p + 0x10, a, b - w, c, 0);
+    n = ((u32)(D_0069BCDC - p) + 15) >> 4;
+    tag->b3 = 0x10;
+    tag->b2 = 0;
+    tag->w0 = n - 1;
+    tag->w4 = 0;
+    tag->w8 = 0;
+    tag->wC = 0x50000000 | (n - 1);
+}
 
 void func_00246958(int a, int b, int c, int d)
 {
@@ -791,7 +809,7 @@ void func_002475B0(int a, int b, int c, int d)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-void func_00247640(int a, int b, int c, int d)
+void func_00247640(void *a, int b, int c, int d)
 {
     u8 *p = D_0069BCDC;
     CmdRec *tag = (CmdRec *)p;
@@ -808,7 +826,7 @@ void func_00247640(int a, int b, int c, int d)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-void func_002476C8(int a, int b, int c, int d)
+void func_002476C8(void *a, int b, int c, int d)
 {
     u8 *p = D_0069BCDC;
     CmdRec *tag = (CmdRec *)p;
@@ -825,7 +843,7 @@ void func_002476C8(int a, int b, int c, int d)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-void func_00247750(int a, int b, int c, int d, int e)
+void func_00247750(void *a, int b, int c, int d, int e)
 {
     u8 *p = D_0069BCDC;
     CmdRec *tag = (CmdRec *)p;
@@ -953,7 +971,7 @@ void func_00247BC8(int x, int y, int z)
     u32 n;
 
     D_0069BCDC = p + 0x10;
-    D_0069BCDC = (u8 *)func_00248648((int)(p + 0x10), x, y, z); /* DEBT(CAST): packet pointer passed as int */
+    D_0069BCDC = (u8 *)func_00248648(p + 0x10, x, y, z);
     n = (u32)(D_0069BCDC - p);
     n += 15;
     n = (n >> 4) - 1; /* DEBT(FAKE): split keeps the original register use */
@@ -976,7 +994,7 @@ void func_00247CF8(int x, int y, int z, int w)
     u32 n;
 
     D_0069BCDC = p + 0x10;
-    D_0069BCDC = (u8 *)func_00248680((int)(p + 0x10), x, y, z, w); /* DEBT(CAST): packet pointer passed as int */
+    D_0069BCDC = (u8 *)func_00248680(p + 0x10, x, y, z, w);
     n = (u32)(D_0069BCDC - p);
     n += 15;
     n = (n >> 4) - 1; /* DEBT(FAKE): split keeps the original register use */
@@ -1042,37 +1060,37 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248168);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248350);
 
-int func_00248558(int a0, int a1, int a2, int a3) { return func_00247F70(a0, 0, a1, a2, a3, 0, 0, 0x80); }
+int func_00248558(void *a0, int a1, int a2, int a3) { return func_00247F70(a0, 0, a1, a2, a3, 0, 0, 0x80); }
 
-int func_00248590(int a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 0, a1, a2, a3, 0, 0, a4); }
+int func_00248590(void *a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 0, a1, a2, a3, 0, 0, a4); }
 
-int func_002485D0(int a0, int a1, int a2, int a3) { return func_00247F70(a0, 0, a1, a2, a3, 8, 0, 0x80); }
+int func_002485D0(void *a0, int a1, int a2, int a3) { return func_00247F70(a0, 0, a1, a2, a3, 8, 0, 0x80); }
 
-int func_00248608(int a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 0, a1, a2, a3, 8, 0, a4); }
+int func_00248608(void *a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 0, a1, a2, a3, 8, 0, a4); }
 
-int func_00248648(int a0, int a1, int a2, int a3) { return func_00247F70(a0, 1, a1, a2, a3, 0, 0, 0x80); }
+int func_00248648(void *a0, int a1, int a2, int a3) { return func_00247F70(a0, 1, a1, a2, a3, 0, 0, 0x80); }
 
-int func_00248680(int a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 1, a1, a2, a3, 0, 0, a4); }
+int func_00248680(void *a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 1, a1, a2, a3, 0, 0, a4); }
 
-int func_002486C0(int a0, int a1, int a2, int a3) { return func_00247F70(a0, 2, a1, a2, a3, 0, 0, 0x80); }
+int func_002486C0(void *a0, int a1, int a2, int a3) { return func_00247F70(a0, 2, a1, a2, a3, 0, 0, 0x80); }
 
-int func_002486F8(int a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 2, a1, a2, a3, 0, 0, a4); }
+int func_002486F8(void *a0, int a1, int a2, int a3, int a4) { return func_00247F70(a0, 2, a1, a2, a3, 0, 0, a4); }
 
-int func_00248738(int a0, int a1, int a2, int a3) { return func_00248168(a0, 0, a1, a2, a3, 0, 0, 0x80); }
+int func_00248738(void *a0, int a1, int a2, int a3) { return func_00248168(a0, 0, a1, a2, a3, 0, 0, 0x80); }
 
-int func_00248770(int a0, int a1, int a2, int a3, int a4) { return func_00248168(a0, 0, a1, a2, a3, 0, 0, a4); }
+int func_00248770(void *a0, int a1, int a2, int a3, int a4) { return func_00248168(a0, 0, a1, a2, a3, 0, 0, a4); }
 
-int func_002487B0(int a0, int a1, int a2, int a3) { return func_00248168(a0, 1, a1, a2, a3, 0, 0, 0x80); }
+int func_002487B0(void *a0, int a1, int a2, int a3) { return func_00248168(a0, 1, a1, a2, a3, 0, 0, 0x80); }
 
-int func_002487E8(int a0, int a1, int a2, int a3) { return func_00248168(a0, 2, a1, a2, a3, 0, 0, 0x80); }
+int func_002487E8(void *a0, int a1, int a2, int a3) { return func_00248168(a0, 2, a1, a2, a3, 0, 0, 0x80); }
 
-int func_00248820(int a0, int a1, int a2, int a3) { return func_00248350(a0, 0, a1, a2, a3, 0, 0, 0x80); }
+int func_00248820(void *a0, int a1, int a2, int a3) { return func_00248350(a0, 0, a1, a2, a3, 0, 0, 0x80); }
 
-int func_00248858(int a0, int a1, int a2, int a3, int a4) { return func_00248350(a0, 0, a1, a2, a3, 0, 0, a4); }
+int func_00248858(void *a0, int a1, int a2, int a3, int a4) { return func_00248350(a0, 0, a1, a2, a3, 0, 0, a4); }
 
-int func_00248898(int a0, int a1, int a2, int a3) { return func_00248350(a0, 0, a1, a2, a3, 8, 0, 0x80); }
+int func_00248898(void *a0, int a1, int a2, int a3) { return func_00248350(a0, 0, a1, a2, a3, 8, 0, 0x80); }
 
-int func_002488D0(int a0, int a1, int a2, int a3, int a4) { return func_00248350(a0, 0, a1, a2, a3, 8, 0, a4); }
+int func_002488D0(void *a0, int a1, int a2, int a3, int a4) { return func_00248350(a0, 0, a1, a2, a3, 8, 0, a4); }
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248910);
 

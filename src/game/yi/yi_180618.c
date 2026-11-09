@@ -16,7 +16,7 @@ int func_001807A8(char *name) {
     int n;
 
     n = 2;
-    __builtin_memcpy(path, D_0056CD10, 7); /* DEBT(FAKE): strcpy(path, "host0:") with the literal kept in rodata */
+    __builtin_memcpy(path, D_0056CD10, 7); /* strcpy(path, "host0:") with the literal kept in rodata */
     func_002F032C(path, name);
     func_002F8660(0);
     do {

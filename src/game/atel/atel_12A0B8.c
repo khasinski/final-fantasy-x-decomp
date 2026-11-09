@@ -1,11 +1,13 @@
 /* tu_049 0x12a0b8-0x12af80: low; unk_12A0B8 (config/tu_map.tsv) */
 /* Field-script opcode handlers (module name unknown; no source-file string found). See ffx/w1.h. */
+#define func_0012A5D8 _hdr_func_0012A5D8
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/w1.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
+#undef func_0012A5D8
 
 int func_0012A0B8(Actor *a, void *op, ScriptCtx *ctx) {
     int p = AtelPopStackInteger(a, ctx);
@@ -99,7 +101,34 @@ void func_0012A4E8(Actor *a, OpList *op, ScriptCtx *ctx) {
     AtelGetMesWinWork(n)->b1D |= 0x20;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12A0B8", func_0012A5D8);
+int func_0012A5D8(Actor *a, OpList *op)
+{
+    int h = -1;
+    int r = 0;
+    int id = op->v0;
+    int kind = AtelGetMesWinWork(id)->kind;
+
+    switch (kind) {
+    case 2:
+        if (TOGetMessageStatus(id) == 3 && func_00205DB8(id) == kind) {
+            u8 *p = (u8 *)func_00205AA0(id);
+
+            if (func_00205A68(id) > 0) {
+                h = *p;
+            }
+            op->h4 = h;
+            r = 1;
+        }
+        break;
+    case 0:
+    case 3:
+    case 4:
+        op->h4 = h;
+        r = 1;
+        break;
+    }
+    return r;
+}
 
 s32 func_0012A6B0(Actor *a, OpList *op, ScriptCtx *ctx)
 {
@@ -127,7 +156,33 @@ void func_0012A750(Actor *a, OpArgs *op, ScriptCtx *ctx) {
     AtelGetMesWinWork(n)->b1D |= 0x10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12A0B8", func_0012A7E0);
+int func_0012A7E0(Actor *a, void *op_, ScriptCtx *ctx)
+{
+    OpArgs *op = op_;
+    int r = 0;
+    int id = op->v0;
+
+    switch (AtelGetMesWinWork(id)->kind) {
+    case 2:
+        if (TOGetMessageStatus(id) == 3) {
+            EvGameState *g = AtelGetCurCtrlWork();
+
+            if (g->flags.w & 4) {
+                func_0013A6D8(id);
+                g->flags.w &= ~4;
+            }
+        }
+        break;
+    case 3:
+        r = op->v1 == 0;
+        break;
+    case 0:
+    case 4:
+        r = 1;
+        break;
+    }
+    return r;
+}
 
 int func_0012A8C0(Actor *a, void *op, ScriptCtx *ctx)
 {

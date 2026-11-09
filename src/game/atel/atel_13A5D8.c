@@ -32,8 +32,7 @@ void func_0013A6D8(int id) {
     }
 }
 
-int AtelSetUpMesWin(Effect *e, int flags) {
-    EffectQ *q = (EffectQ *)e; /* DEBT(CAST): see EffectQ */
+int AtelSetUpMesWin(Effect *q, int flags) {
     int lo;
     int hi;
 

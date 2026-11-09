@@ -15,7 +15,7 @@ int func_001365E0(Actor *a, void *op, ScriptCtx *ctx) {
 
 int func_00136618(void) {
     if (TkIsDebug()) {
-        void *rec = REC124828H();
+        void *rec = func_00124828();
         int h = func_2058538(D_0030B2C0);
 
         if (h >= 0) {
@@ -29,7 +29,7 @@ int func_00136618(void) {
 
 int func_00136690(void) {
     if (TkIsDebug()) {
-        void *rec = REC124828H();
+        void *rec = func_00124828();
         int h = func_2058460(D_0030B2C0);
 
         if (h >= 0) {
@@ -318,7 +318,7 @@ int func_001370C0(Actor *a, void *op, ScriptCtx *ctx) {
         *(float *)vy = 0;
         *(float *)vx = 0;
     } else {
-        CALL_func_001072F8(chr, joint, m);
+        func_001072F8(chr, joint, m);
         *(float *)vz = m[12];
         *(float *)vy = m[13];
         *(float *)vx = m[14];

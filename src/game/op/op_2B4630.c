@@ -18,7 +18,33 @@ void op_oef2_set2_16(char *a) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", op_oef2_a_get);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", func_002B4A58);
+int func_002B4A58(u8 *base, int arg1)
+{
+    int i;
+    u8 *p;
+
+    switch (arg1) {
+    case 2:
+        p = (u8 *)*(int *)(base + 8) + (int)base;
+        for (i = 0; i < *(u16 *)(base + 0x44); i++, p += 0x20) {
+            if (*(int *)(p + 0x10) != 0) {
+                return *(int *)(p + 0x14);
+            }
+        }
+        break;
+    case 3:
+        p = (u8 *)*(int *)(base + 0xC) + (int)base;
+        for (i = 0; i < *(u16 *)(base + 0x46); i++, p += 0x10) {
+            if (*(u16 *)(p + 2) != 0) {
+                return *(int *)(p + 4);
+            }
+        }
+        break;
+    case 6:
+        break;
+    }
+    return 0;
+}
 
 int op_oef2_obj_a_get(int a, int b, int c)
 {

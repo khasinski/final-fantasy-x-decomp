@@ -19,9 +19,6 @@ typedef struct W10AnimHdr {
     u8 data[1];
 } W10AnimHdr;
 
-/* DEBT(NAME): 14-bit field + dirty flag object, guessed */
-typedef struct W10Bits { u32 lo : 14; u32 hi : 18; u8 pad4[0xB]; u8 dirtyF; u8 pad10[0xF]; u8 dirty1F; } W10Bits;
-
 /* DEBT(NAME): 32-byte sound voice entry; the first word is also accessed by halfword. */
 typedef struct W10SoundVoice {
     union { u32 word; u16 half[2]; } header;

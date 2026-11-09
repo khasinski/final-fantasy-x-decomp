@@ -56,7 +56,24 @@ int FFXGetLang(void)
     return func_002D97B0();
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2D9730", FFXSetVideoMode);
+extern char D_00576468[];
+
+void FFXSetVideoMode(int a)
+{
+    if ((u32)a >= 2) {
+        a = 0;
+    }
+    D_00567EB1 = a;
+    switch (a) {
+    case 0:
+        func_002D63D8(0);
+        break;
+    case 1:
+        func_002D63D8(1);
+        break;
+    }
+    func_002EF240(D_00576468, (s8)D_00567EB1);
+}
 
 s8 func_002D9868(void)
 {

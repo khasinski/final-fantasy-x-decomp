@@ -52,9 +52,6 @@ extern char D_0056FD30[];
 
 void func_001FE7F8(int kind, int x, int y);
 
-/* DEBT(CAST): R5Buf view of btlgetdata (members at 0xD0.. that W5Buf leaves as padding) */
-#define U3_BUF ((R5Buf *)&btlgetdata)
-
 /* DEBT(TYPE): defined with a u8 id in c_1DF4E8.c, but the script callers in c_1ED130 pass the id unmasked */
 #define func_001E00A0_i(id, b) (((int (*)(int, int))func_001E00A0)(id, b))
 #define func_001E0290_i(id, b) (((int (*)(int, int))func_001E0290)(id, b))
@@ -79,10 +76,9 @@ extern CmdRec *D_00693850;
 #define U3_ID_CALL(f, id) (((u8 (*)(int))(f))(id))
 
 void TOMakePktSampleBlueWindowXY2(int x0, int y0, int x1, int y1);
-void TOMkpEasyMesFontLCenter(int a, int b, int c);
+void TOMkpEasyMesFontLCenter(void *a, int b, int c);
 void TOBtlDrawParamPlate(int a, int b, int c);
 int func_0021F940(int a);
-u8 *MsGetCommand(int id, int a, int b, int c, s32 *out); /* DEBT(TYPE): returns a record with flags at 0x1A */
 int MsGetCommandTarget(int id, int v, int flag, int d);
 
 /* DEBT(TYPE): funcs.h gives func_002DAB10 int parameters; func_0020C660 was compiled against a short-parameter prototype */
@@ -125,17 +121,10 @@ extern s16 D_006925B2;
 extern s16 D_006925B4;
 void TOBtlInitInfoWinMes(int a);
 
-/* Backing records the slot pointer tables are pointed at (D_0068F0A8 <- 0x1C-byte blocks, D_0066B508 <- 0x5C-byte blocks). DEBT(TYPE) */
-typedef struct U3Blk1C {
-    u8 pad[0x1C];
-} U3Blk1C;
-typedef struct U3Blk5C {
-    u8 pad[0x5C];
-} U3Blk5C;
-extern U3Blk1C D_0068EEE8[8];
-extern U3Blk1C D_0068EFC8[8];
-extern U3Blk5C D_0066AF48[8];
-extern U3Blk5C D_0066B228[8];
+extern R4Ptrs D_0068EEE8[8];
+extern R4Ptrs D_0068EFC8[8];
+extern MenuSlot D_0066AF48[8];
+extern MenuSlot D_0066B228[8];
 void TOGetPadStatus(void);
 void func_0020A7A8(int a);
 void TOSetExeWindowArea(int a);
@@ -193,7 +182,6 @@ extern FlagRec D_00693C18;
 extern s16 D_00693C40[];
 extern s16 D_00693C48[];
 int func_001CCA60(int a, int b, int c, int d);
-void func_001B81E8(int a, int b);
 struct MenuSlot *func_00209538(s32 idx);
 struct MenuCmd *func_002043D0(s32 idx);
 struct SlotZ *func_002043E8(s32 idx);

@@ -1,14 +1,23 @@
 /* tu_195 0x1c8c80-0x1ccc10: low; ~Ms (config/tu_map.tsv) */
 #define MsStructClear _hdr_MsStructClear
 #define func_001CB7A0 _hdr_func_001CB7A0
+#define MsInsertBtlCommand _hdr_MsInsertBtlCommand
+#define MsInsertInputCue _hdr_MsInsertInputCue
+#define MsInsertCommandCue _hdr_MsInsertCommandCue
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/u2.h"
 #include "ffx/g2.h"
+#undef MsInsertCommandCue
+#undef MsInsertInputCue
+#undef MsInsertBtlCommand
 #undef func_001CB7A0
 #undef MsStructClear
+
+int MsInsertInputCue(int id, int a, int b, int c, int d, int e);
+int MsInsertCommandCue(int id, GsEnt48 *e, int n, int a, int b, int c, int d);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C8C80);
 
@@ -125,7 +134,21 @@ int MsSetBtlCommand(u8 *p, int a, int b) { /* DEBT(CAST): p is a 0x48-byte actio
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsInsertBtlCommand);
+int MsInsertBtlCommand(GsEnt48 *e, int a, int b, int c) {
+    if (e != 0) {
+        int id = e->id;
+        BtlChr *chr = MsGetChr(id);
+        if (MsBtlChrNumCheck(id) != 0 && (u32)b < 2) {
+            if (MsInsertInputCue(id, a, 0, b, c, 1) != 0) {
+                if (MsInsertCommandCue(id, e, 0, a, b, 0, c) != 0) {
+                    return 0;
+                }
+                MsDeleteInputCue(id, chr->fAA4, 0, 0);
+            }
+        }
+    }
+    return -1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsGetEndBattleStatus);
 
@@ -276,7 +299,31 @@ void func_001CB8A8(int v) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsBattleProcess);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsSetBerserkCommand);
+int MsSetBerserkCommand(int id, BtlChr *c, GsEnt48 *e, int arg, int mode) {
+    int r = 0;
+    int k;
+    int cmd;
+    int t;
+    if (e != 0) {
+        k = c->f386;
+        t = MsGetCommandTarget(id, k, mode, 1);
+        if (k != 0 && t > 0) {
+            cmd = k;
+            r = -1;
+        } else {
+            r = -2;
+            cmd = 0xFF;
+            t = 0;
+        }
+        e->id = id;
+        e->f3 = 1;
+        e->f8[0].h0 = cmd;
+        e->f8[0].h2 = 0xFF;
+        e->f8[0].targets = t;
+        MsSetBtlCommand((u8 *)e, 0, arg);
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsSetProvokingCommand);
 

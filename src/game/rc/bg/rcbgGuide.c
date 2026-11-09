@@ -302,11 +302,11 @@ void _m2c_rcbgGuideSetModelSub_func_0018F410(void *, s32) __asm__("func_0018F410
 void _m2c_rcbgGuideSetModelSub_func_001956B0(void *, s32) __asm__("func_001956B0");
 void _m2c_rcbgGuideSetModelSub_func_00195FF8(void *) __asm__("func_00195FF8");
 void *_m2c_rcbgGuideSetModelSub_func_00197C90() __asm__("func_00197C90");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void rcbgGuideSetModelSub(void *arg0) {
     float temp_f0;
     float temp_f2;
-    register float var_f1 __asm__("$f1");
+    float var_f1;
     void *temp_17;
     void *temp_2;
 
@@ -318,18 +318,46 @@ void rcbgGuideSetModelSub(void *arg0) {
     temp_f2 = (*(float *)((u8 *)(temp_17) + (0x10))) - (*(float *)((u8 *)(temp_2) + (0x90)));
     (*(float *)((u8 *)(arg0) + (0x64))) = temp_f2;
     temp_f0 = (*(float *)((u8 *)(temp_17) + (0x18))) - (*(float *)((u8 *)(temp_17) + (8)));
-    var_f1 = temp_f0;
-    __asm__("" : "+f"(var_f1));
     (*(float *)((u8 *)(arg0) + (0x68))) = temp_f0;
-    if (temp_f0 < temp_f2) {
-        var_f1 = temp_f2;
-        __asm__("" : "+f"(var_f1));
-    }
+    var_f1 = temp_f0 < temp_f2 ? temp_f2 : temp_f0;
     (*(float *)((u8 *)(arg0) + (0x60))) = var_f1;
     _m2c_rcbgGuideSetModelSub_func_00195FF8(arg0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00195FF8);
+typedef struct {
+    s16 a[5];
+} GuideTbl5;
+
+typedef struct {
+    u8 pad0[0x10];
+    u32 w10;
+} GuideModelBits;
+
+extern GuideTbl5 D_0056D9D0;
+int _rcbgGuide_func_0013A278(void) __asm__("func_0013A278");
+GuideModelBits *_rcbgGuide_func_00197C90(void *g) __asm__("func_00197C90");
+
+void func_00195FF8(GuideMap *g) {
+    GuideTbl5 tbl = D_0056D9D0;
+    int idx = -1;
+    int id = _rcbgGuide_func_0013A278();
+    int i;
+    GuideModelBits *m;
+
+    for (i = 0; tbl.a[i] != 0; i++) {
+        if (id == tbl.a[i]) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx >= 0) {
+        m = _rcbgGuide_func_00197C90(g);
+        if (m != 0) {
+            m->w10 &= 0xFFFFFFFDL;
+        }
+        *(int *)((u8 *)g + 0x70) = func_001BE510() + (idx << 9);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001960D0);
 

@@ -4,9 +4,7 @@
 #include "ffx/v2.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
-#define MsSetChrTransparentVisible r3_MsSetChrTransparentVisible /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/r3.h"
-#undef MsSetChrTransparentVisible
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 
@@ -17,7 +15,16 @@ void func_001BADA8(int a, int b, PairU16 *src) {
     D_003172F0.slot[a].val = src[b].v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BA7D0", func_001BADD8);
+void func_001BADD8(int id, int a1, s32 *a2, u8 *a3, u8 *a4) {
+    BtlChr *c = MsGetChr(id);
+    a2[id] += MsGetNextCTB(c, a1, a3[id], a4[id]);
+    if ((u8)(a3[id] - 1) < 0xFD) {
+        a3[id]--;
+    }
+    if ((u8)(a4[id] - 1) < 0xFD) {
+        a4[id]--;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BA7D0", MsGetCTBlist);
 

@@ -177,12 +177,12 @@ u16 *func_002A3600(W10Ctx *c, u16 *pc) {
     W10Actor *a;
 
     a = c->actor;
-    switch (c->unk21A & 0xF000) {
+    switch (c->h21A & 0xF000) {
     case 0:
-        a->unkA8 = 0;
-        a->unkBB = 7;
+        a->hA8 = 0;
+        a->bBB = 7;
         pc++;
-        opus_draw_on(&c->list300, c->unk214);
+        opus_draw_on(&c->list300, c->h214);
         break;
     case 0x1000:
         pc++;
@@ -231,7 +231,7 @@ void func_002A3BD8(Chr *chr, T6_PackBuf *buf)
         for (i = 0; i < n; i++) {
             buf->len[i] = len = Ch_ClutGetSize(chr, i);
             if (len != 0) {
-                dst = func_002A3EC8(dst, func_00117C18((int)chr, i), len); /* DEBT(TYPE): funcs.h takes s32 */
+                dst = func_002A3EC8(dst, func_00117C18(chr, i), len);
             }
         }
     }

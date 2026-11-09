@@ -100,7 +100,21 @@ INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002B0BF0);
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002B0DC8);
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", opp_weapon_shadow);
+#include "vu0.h"
+
+int func_002A88F8(int, int, int, int, int, s16);
+
+void opp_weapon_shadow(AnimCtx *o, void *b)
+{
+    u8 *t = (u8 *)o->p220;
+    int b54 = *(int *)((u8 *)b + 0x54);
+    int v = *(int *)(t + 0x44);
+
+    VU0_QMTC2_NI(31, v);
+    VU0_OP("vftoi0.xyzw $vf31, $vf31");
+    VU0_QMFC2_NI(v, 31);
+    *(int *)((u8 *)b + 0x54) = func_002A88F8(*(int *)(t + 0xBC), v, b54, *(int *)(t + 0xC8), *(int *)(t + 0xA8), *(s16 *)(t + 0xC2));
+}
 
 void opp_et_ovl(void) {
 }

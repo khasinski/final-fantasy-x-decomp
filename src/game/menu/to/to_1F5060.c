@@ -391,9 +391,9 @@ void *func_001F7898(void *list, int a, int b, int c)
     return func_001F7920(list, a, b, c, 0, 0x80, 0x80, 0x80, 0x80);
 }
 
-void *func_001F78C8(void *list, int a, int b, int c, int d)
+void *func_001F78C8(void *list, void *a, int b, int c, int d)
 {
-    return func_001F7920(list, a, b, c, d, 0x80, 0x80, 0x80, 0x80);
+    return func_001F7920(list, (int)a, b, c, d, 0x80, 0x80, 0x80, 0x80);
 }
 
 void *func_001F78F8(void *list, int a, int b, int c, int d, int e)
@@ -441,5 +441,5 @@ void *func_001F8390(void *list, int v, int x, int y, int d)
     char buf[32];
 
     func_002F0008(buf, D_0056FF90, v);
-    return func_001F78C8(list, (int)buf, x - func_002F0840(buf) * 12, y, d); /* DEBT(CAST): text passed as int */
+    return func_001F78C8(list, buf, x - func_002F0840(buf) * 12, y, d);
 }

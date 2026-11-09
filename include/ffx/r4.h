@@ -100,7 +100,7 @@ extern R4Rec16 D_0066B530[];
 extern R4Rec16 D_00692458[];
 extern TblEntry *D_00690268[];
 extern R4Obj *D_0066AF00[];
-extern R4Vt *D_0068F420;
+extern SysVt *D_0068F420;
 extern u32 *D_006632B0;
 
 s8 func_001EE238(void);
@@ -122,12 +122,12 @@ void func_001EF910(void);
 void func_001F25D8(R4Quad *q, int x, int y, int w, int h);
 void func_001F2608(R4Quad *q, int x0, int y0, int x1, int y1);
 /* display-list builders: first argument is the write cursor (InvokedFromSelectCursor), returned advanced */
-void *TOAddPktBaseMesFontLClutTypeRGBA(void *list, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j);
+void *TOAddPktBaseMesFontLClutTypeRGBA(void *list, int a, void *b, int c, int d, int e, int f, int g, int h, int i, int j);
 void *func_001F46D0(void *list, int a, int b, int c, int d, int e, int f, int g, int h, int i);
 void *func_001F7920(void *list, int a, int b, int c, int d, int e, int f, int g, int h);
 void *func_001F7BC8(void *list, int a, int b, int c, int d, int e, int f, int g, int h, int i);
 void *func_001F7898(void *list, int a, int b, int c);
-void *func_001F78C8(void *list, int a, int b, int c, int d);
+void *func_001F78C8(void *list, void *a, int b, int c, int d);
 void *func_001F78F8(void *list, int a, int b, int c, int d, int e);
 void *func_001F7B38(void *list, int a, int b, int c, int d);
 
@@ -140,8 +140,8 @@ void *func_00201210(void *list, int a, int b, int c);
 void *func_00201230(void *list, int a, int b, int c);
 void *func_001F7B68(void *list, int a, int b, int c, int d, int e);
 void *func_001F7B98(void *list, int a, int b, int c, int d, int e, int f);
-void *func_001F4350(void *list, int a, int b, int c, int d, int e, int f, int g, int h, int i);
-void *func_001F4388(void *list, int a, int b, int c, int d, int e, int f, int g, int h, int i);
+void *func_001F4350(void *list, int a, void *b, int c, int d, int e, int f, int g, int h, int i);
+void *func_001F4388(void *list, int a, void *b, int c, int d, int e, int f, int g, int h, int i);
 int func_00203108(MenuCmd *m);
 int func_00205DB8(int a);
 void TODapsString(char *s);
@@ -200,14 +200,14 @@ TblEntry *func_0020EE38(int a, int idx);
 TblEntry *TkMenuIsTermScene(int a, int idx);
 u16 *func_0020F9D8(u16 *pc, R4Anim *a, int op, int flag);
 int func_001EED60(void);
-void *func_001F4178(void *list, int a, int b, int c);
+void *func_001F4178(void *list, void *a, int b, int c);
 void func_001F5538(int a, int b, int c, int d);
 void func_001F5580(int a, int b, int c, int d);
 int TOControlWindow(int i);
 extern u8 D_00324978[];
 
 void *TOAddPktMenuIconRGBA(void *list, int a, int b, int c, int d, int e, int f, int g);
-void *func_001F4260(void *list, int a, int b, int c, int d, int e, int f, int g, int h);
+void *func_001F4260(void *list, void *a, int b, int c, int d, int e, int f, int g, int h);
 void *func_001F5918(void *list, int a, int b, int c, int d, int e, int f, int g, int h);
 void func_001F5790(int a, int b, int c);
 void *func_001F5FF0(void *list, int a, int b, int c, int d, int e, int f, int g, int h);
@@ -228,12 +228,12 @@ void func_001F6558(int a, int b, int c, int d, int e);
 void func_001F69E8(int a, int b, int c, int d);
 void func_001F6A48(int a, int b, int c, int d, int e);
 void func_001FE298(int a, int b, int c, int d, int e, int f, int g);
-void func_001F38A0(int a, int b, int c, int d, int e, int f, int g, int h);
+void func_001F38A0(void *a, int b, int c, int d, int e, int f, int g, int h);
 void func_001F58A8(int a, int b, int c, int d, int e, int f, int g, int h);
 void func_001F5DC8(int a, int b, int c, int d, int e, int f, int g, int h);
 void func_001F65B8(int a, int b, int c, int d, int e, int f, int g, int h);
 void func_001F6AA8(int a, int b, int c, int d, int e, int f, int g, int h);
-void func_001F3A00(int a, int b, int c, int d, int e, int f, int g, int h, int i);
+void func_001F3A00(int a, void *b, int c, int d, int e, int f, int g, int h, int i);
 
 extern u32 D_0066B584;
 int func_001AF320(void);
@@ -246,7 +246,6 @@ int func_001CFA38(int id, int v);
 int MsCheckStartEffect(int id, int v);
 extern char D_0056FE48[];
 int func_002EF240(char *fmt, ...);
-int MsGetChrInfo(int a, int b, int c, float *out);
 float MsGetChrCamWidth(int id);
 extern const MenuFn D_00323710[][6];
 extern u8 D_006926D8[];
@@ -283,15 +282,7 @@ void func_0020DC20(int a);
 #define R4_VA_START(ap, last) ((ap) = (char *)__builtin_next_arg(last) - 56)
 int func_002F46B0(char *buf, char *fmt, char *ap);
 
-/* Ent32 (q5.h) with the halfword at +2 that q5.h pads over. DEBT(NAME): guessed */
-typedef struct R4Ent32 {
-    s16 h0;
-    s16 h2;
-    u8 pad4[4];
-    s8 b8;
-    u8 pad9[0x17];
-} R4Ent32;
-int TOSeqGetSceneStatus(int i, int name);
+int TOSeqGetSceneStatus(int i, const char *name);
 int func_0020DCC0(int i, int name);
 
 /* Same packet writers on an explicit list pointer (builders that take and return the cursor). */
@@ -325,61 +316,7 @@ typedef struct R4Msg {
     s16 h1C;
 } R4Msg;
 
-/* Entry of D_0068F0A8, which q5.h types as MenuSlot; the members at 0x10.. are pointers to three sub-records.
-   DEBT(TYPE): re-typed here, all member names are guesses */
-typedef struct R4Hdr {
-    s16 h0;
-    s16 h2;
-    s16 h4;
-    u8 pad06[2];
-    s16 h8;
-} R4Hdr;
-
-typedef struct R4Cmd {
-    s16 h0;
-    u8 pad02[2];
-    s16 h4;
-    u8 pad06[0x0E];
-    s16 h14;
-    s16 h16;
-    s16 h18;
-    s16 h1A;
-    s16 h1C;
-    u8 pad1E[0x2C - 0x1E];
-    s16 h2C;
-    u8 pad2E[0x38 - 0x2E];
-    s16 h38;
-    s16 h3A;
-    s16 h3C;
-    s16 h3E;
-    u8 pad40[0xDC - 0x40];
-    MenuFn fDC;
-} R4Cmd;
-
-typedef struct R4Info {
-    s8 b0;
-    s8 b1;
-    s8 b2;
-    s8 b3;
-    u8 pad04[2];
-    s8 b6;
-    s8 b7;
-    u8 pad08[4];
-    s32 wC;
-    s32 w10;
-} R4Info;
-
-typedef struct R4Ptrs {
-    u8 pad00[8];
-    s16 h8;
-    s16 hA;
-    s16 hC;
-    u8 pad0E[2];
-    R4Hdr *p10;
-    R4Cmd *p14;
-    R4Info *p18;
-} R4Ptrs;
-#define R4PT(i) ((R4Ptrs *)D_0068F0A8[i]) /* DEBT(CAST): D_0068F0A8 is typed MenuSlot * in q5.h */
+#define R4PT(i) (D_0068F0A8[i])
 s32 TOFuncPadMessageSelect();
 
 /* 0xCC-byte record of D_003249C0. DEBT(NAME): guessed */
@@ -405,7 +342,8 @@ extern R4Rec D_003249C0[];
 typedef struct R4Init {
     s16 h0;
     s16 h2;
-    u8 pad04[0x0C - 0x04];
+    s32 w4;
+    s32 w8;
     s32 wC;
     s32 w10;
     u8 pad14[0x84 - 0x14];
@@ -533,18 +471,6 @@ typedef struct R4Item {
     u8 b6;
 } R4Item;
 
-/* Slot16 (q5.h) with all its halfwords. DEBT(NAME): guessed from use */
-typedef struct R4Slot {
-    s16 h0;
-    s16 h2;
-    s16 h4;
-    s16 h6;
-    s16 h8;
-    s16 hA;
-    s16 hC;
-    s16 hE;
-} R4Slot;
-#define R4S(i) ((R4Slot *)&D_006672D8[i]) /* DEBT(CAST): Slot16 only names hE */
 int func_001CF4B0(int id, int b, int c);
 int func_001CF558(int id, int b, int c);
 float func_001B6AD0(int id, float a);

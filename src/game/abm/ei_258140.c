@@ -139,7 +139,38 @@ void func_00258618(u16 id, u16 n, int bit)
     func_002584C0(id, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258698);
+u16 func_00258698(u16 start, u16 cur, WorkEnt2 **out)
+{
+    u16 other;
+    u16 best_id;
+    u16 best_cost;
+    WorkEnt2 *p;
+
+    if (start == cur) {
+        return cur;
+    }
+    for (;;) {
+        best_id = 0xFFFF;
+        best_cost = 0xFFFF;
+        p = 0;
+        while ((p = func_00258140(cur, p, &other, 0, 0)) != 0) {
+            WorkEnt *e = (WorkEnt *)((u8 *)lpamng + other * 0x28);
+            if (*(u16 *)((u8 *)e + 0x82C) < best_cost) {
+                best_cost = *(u16 *)((u8 *)e + 0x82C);
+                best_id = other;
+                *out = p;
+            }
+        }
+        if (best_id == 0xFFFF) {
+            return 0xFFFF;
+        }
+        if (best_id == start) {
+            break;
+        }
+        cur = best_id;
+    }
+    return cur;
+}
 
 void func_00258780(void)
 {
@@ -147,7 +178,30 @@ void func_00258780(void)
     func_00258B48();
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002587A0);
+int func_00257F20(int ch, int idx, int id);
+int MsSaveItemUse(int item, int delta);
+Pt16 *func_00257E18(int a, int *out);
+void abmap_para_get_special(int a, int idx, int ch);
+void func_00257960(int ch, int idx);
+
+void func_002587A0(int ch, int idx, int item)
+{
+    int out;
+    u8 *p;
+
+    if ((lpamng->ents[idx].f22 & 3) != 0) {
+        if (func_00257F20(ch, idx, item) != 0) {
+            if (MsSaveItemUse(item, -1) == 0) {
+                p = (u8 *)func_00257E18(item, &out);
+                if (p[13] != 0) {
+                    abmap_para_get_special(p[13], idx, ch);
+                } else {
+                    func_00257960(ch, idx);
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", eiAbmParaGet);
 
@@ -162,7 +216,24 @@ void func_00258B48(void)
     func_001BE878();
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258B88);
+float func_00258B88(u16 id, float *out)
+{
+    if (id != 0xFFFF) {
+        WorkEnt *e = &lpamng->ents[id];
+        S6Row *row;
+        s16 v;
+
+        out[0] = e->x;
+        row = (S6Row *)((char *)lpamng + e->f06 * 0x30 + 0x8000);
+        out[1] = e->y;
+        out[2] = 0.0f;
+        out[3] = 1.0f;
+        v = row->h7834;
+        return v / 2;
+    }
+    out[3] = 1.0f;
+    return out[2] = out[0] = out[1] = 0.0f;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258C48);
 
@@ -170,25 +241,44 @@ INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258EA0);
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258FB8);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00259510);
+int func_00258EA0(int seed, float *v0, float *v1, float r0, float r1, u8 *p);
+int func_00258FB8(int seed, float *v0, float *v1, float *v2, float r0, float r1, u8 *p);
+
+int func_00259510(WorkEnt2 *l)
+{
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    int seed = l->seed;
+    float r0 = func_00258B88(l->h0, v0);
+    float r1 = func_00258B88(l->h2, v1);
+
+    if (((u16 *)l)[2] == 0xFFFF) {
+        seed = func_00258EA0(seed, v0, v1, r0, r1, &((u8 *)l)[13]);
+    } else {
+        func_00258B88(((u16 *)l)[2], v2);
+        seed = func_00258FB8(seed, v0, v1, v2, r0, r1, &((u8 *)l)[13]);
+    }
+    return seed;
+}
 
 void func_002595E8(void)
 {
-    T6_Link *l = (T6_Link *)lpamng->ents2; /* DEBT(CAST): see T6_Link */
+    WorkEnt2 *l = lpamng->ents2;
     int n = lpamng->count2;
-    int v = ((T6_GwSeed *)lpamng)->seed; /* DEBT(CAST): see T6_GwSeed */
+    int v = lpamng->f1161C;
 
     while (--n != -1) {
         l->seed = v;
         v = func_00259510(l);
         l++;
     }
-    ((T6_GwSeed *)lpamng)->seed = v;
+    lpamng->f1161C = v;
 }
 
 void func_00259678(void)
 {
-    ((T6_GwSeed *)lpamng)->seed = 0x1E52998; /* DEBT(CAST): see T6_GwSeed */
+    lpamng->f1161C = 0x1E52998;
     func_002595E8();
 }
 
@@ -289,7 +379,7 @@ void func_0025AA20(int a)
     s16 *dst;
 
     for (i = 0; i < 8; i++) {
-        dst = (s16 *)((char *)lpamng + 0xF808 + i * 4); /* DEBT(CAST) */
+        dst = lpamng->ptsF808[i];
         src = (S6Hdr *)op_oef2_a_get(a, 2, D_00327920[i]);
         dst[0] = src->x;
         dst[1] = src->y;

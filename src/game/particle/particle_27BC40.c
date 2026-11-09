@@ -88,7 +88,7 @@ void func_0027C588(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysC *s = SLOT_WORK(T6_PSysC, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w48 = 0;
     s->parts = 0;
     s->w4C = 0;
@@ -157,7 +157,7 @@ void func_0027DB50(T6_PObj *o, ScriptCtx *ctx)
     T6_PLife *life = *o->life;
     T6_PSysB *s = SLOT_WORK(T6_PSysB, o, ctx, 0);
 
-    func_002DD128((struct W3Whole *)s); /* DEBT(CAST): prototype takes the W3Whole view */
+    func_002DD128(s);
     s->w44 = 0;
     s->w48 = 0;
     s->parts = 0;

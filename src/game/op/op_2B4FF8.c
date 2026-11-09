@@ -12,7 +12,33 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B50E0);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_rot_m_z);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B52C0);
+void func_002B52C0(void *a, void *b, void *c)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf7\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $31, $vf7\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c));
+}
 
 void func_002B5318(u32 a0, u32 a1, u32 a2)
 {
@@ -30,19 +56,241 @@ void func_002B5318(u32 a0, u32 a1, u32 a2)
         :  : "r"(a0), "r"(a1), "r"(a2) : "$7", "$8", "$9");
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B5348);
+void func_002B5348(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B53D0);
+void func_002B53D0(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B5458);
+void func_002B5458(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_rt_m_yxz);
+void op_rt_m_yxz(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B5568);
+void func_002B5568(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B55F0);
+void func_002B55F0(void *a, void *b, void *c, void *d)
+{
+    __asm__ volatile(
+        ".set noreorder\n"
+        "qmtc2.ni   $31, $vf3\n"
+        "qmtc2.ni   $4, $vf4\n"
+        "qmtc2.ni   $5, $vf5\n"
+        "qmtc2.ni   $6, $vf6\n"
+        "lqc2       $vf7, 0x0($7)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf5\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B4FF8\n"
+        " lwc1      $f12, 0x0($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        func_002B50E0\n"
+        " lwc1      $f12, 0x4($6)\n"
+        "qmfc2.ni   $6, $vf6\n"
+        "qmfc2.ni   $5, $vf4\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "jal        op_rot_m_z\n"
+        " lwc1      $f12, 0x8($6)\n"
+        "qmfc2.ni   $4, $vf4\n"
+        "lqc2       $vf30, 0x30($4)\n"
+        "lq         $5, 0x0($4)\n"
+        "lq         $6, 0x10($4)\n"
+        "lq         $7, 0x20($4)\n"
+        "vadd.xyz   $vf30, $vf30, $vf7\n"
+        "sq         $5, 0x0($4)\n"
+        "sq         $6, 0x10($4)\n"
+        "sq         $7, 0x20($4)\n"
+        "sqc2       $vf30, 0x30($4)\n"
+        "qmfc2.ni   $31, $vf3\n"
+        ".set reorder\n"
+        : : "r"(a), "r"(b), "r"(c), "r"(d));
+}
 
-void op_rt_m_6(int a, int b, int c, int d, int sel)
+void op_rt_m_6(void *a, void *b, void *c, void *d, int sel)
 {
     switch (sel) {
     case 0:
@@ -314,7 +562,20 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_deg_get);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6278);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6358);
+int func_002B6358(float *a, void *b, void *c)
+{
+    int tmp[4];
+
+    __asm__ volatile(
+        "lui       $2, (0x3F800000 >> 16)\n"
+        "lqc2      $vf31, 0x0(%1)\n"
+        "lqc2      $vf30, 0x0(%2)\n"
+        "vsub.xyzw $vf31, $vf30, $vf31\n"
+        "sqc2      $vf31, 0x0(%0)\n"
+        "sw        $2, 0xC(%0)\n"
+        : : "r"(tmp), "r"(b), "r"(c) : "$2", "memory");
+    return func_002B6278(a, b, (float *)tmp);
+}
 
 /* DEBT(FAKE) */
 int op_deg_in_check(float v, float lo, float hi) {
@@ -365,14 +626,68 @@ void op_length_get(u32 a0, u32 a1, float f0)
         :  : "r"(a0), "r"(a1) : "$2", "$3");
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6440);
+void func_002B50E0(void *dst, void *src, float angle);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B64B0);
+void func_002B6440(void *a, void *b, float angle)
+{
+    int m[16];
+
+    __asm__ volatile(
+        "lui $2, (0x3F800000 >> 16)\n"
+        "sq  $0, 0x0(%0)\n"
+        "sq  $0, 0x10(%0)\n"
+        "sq  $0, 0x20(%0)\n"
+        "sq  $0, 0x30(%0)\n"
+        "sw  $2, 0x0(%0)\n"
+        "sw  $2, 0x14(%0)\n"
+        "sw  $2, 0x28(%0)\n"
+        "sw  $2, 0x3C(%0)\n"
+        : : "r"(m) : "$2", "memory");
+    func_002B50E0(m, m, angle);
+    func_002B5880((u32)a, (u32)m, (u32)b);
+}
+
+void func_002B64B0(void *a, void *b, void *c, float angle)
+{
+    int tmp[4];
+    int save[8];
+
+    __asm__ volatile(
+        "sqc2    $vf30, 0x0(%1)\n"
+        "sqc2    $vf31, 0x10(%1)\n"
+        "lqc2    $vf30, 0x0(%2)\n"
+        "lqc2    $vf31, 0x0(%3)\n"
+        "vsub.xz $vf31, $vf30, $vf31\n"
+        "sqc2    $vf31, 0x0(%0)\n"
+        : : "r"(tmp), "r"(save), "r"(b), "r"(c) : "memory");
+    func_002B6440(tmp, tmp, angle);
+    __asm__ volatile(
+        "lqc2    $vf30, 0x0(%2)\n"
+        "lqc2    $vf31, 0x0(%0)\n"
+        "vadd.xz $vf30, $vf30, $vf31\n"
+        "sqc2    $vf30, 0x0(%3)\n"
+        "lqc2    $vf31, 0x10(%1)\n"
+        "lqc2    $vf30, 0x0(%1)\n"
+        : : "r"(tmp), "r"(save), "r"(b), "r"(a), "r"(c) : "memory");
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_point_get_line_circle);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6768);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B68D0);
+double func_002E7B28(double);
+double func_002E8278(double);
+
+void func_002B68D0(float *px, float *py, float x0, float y0, float angle, float x1, float y1)
+{
+    float a = -angle;
+    float c = func_002EC440(func_002E7B28(func_002ED038(a)));
+    float dx = x1 - x0;
+    float dy = y1 - y0;
+    float s = func_002EC440(func_002E8278(func_002ED038(a)));
+
+    *px = dx * c + dy * s + x0;
+    *py = -dx * s + dy * c + y0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B69A8);

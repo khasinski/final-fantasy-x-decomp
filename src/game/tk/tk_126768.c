@@ -83,11 +83,8 @@ float func_00126B38(Actor *a, void *op, ScriptCtx *ctx)
     return sqrtf(z1 * z1 + y1 * y1 + x1 * x1);
 }
 
-Pair32 *func_00126C20(Actor *a, void *op, ScriptCtx *ctx)
+static inline int Clamp8(int i)
 {
-    int v = AtelPopStackInteger(a, ctx);
-    int i = AtelPopStackInteger(a, ctx);
-    Pair32 *p;
     int k;
 
     if (i >= 0) {
@@ -99,8 +96,18 @@ Pair32 *func_00126C20(Actor *a, void *op, ScriptCtx *ctx)
     } else {
         k = 0;
     }
-    i = k; /* DEBT(FAKE): clamping through k steers register allocation */
-    p = &((Pair32 *)((u8 *)AtelGetCurCtrlWork() + 0x1A4))[i]; /* DEBT(CAST): pair table inside EvGameState */
+    return k;
+}
+
+Pair32 *func_00126C20(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int v = AtelPopStackInteger(a, ctx);
+    int i = AtelPopStackInteger(a, ctx);
+    Pair32 *p;
+
+    i = Clamp8(i);
+    p = &AtelGetCurCtrlWork()->pairs1A4[i];
+
     if (v != 0) {
         v = AtelGetRealVarAdrs(a, v);
     }

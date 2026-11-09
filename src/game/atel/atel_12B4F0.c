@@ -91,7 +91,7 @@ s32 func_0012B8B8(Actor *a, void *op, ScriptCtx *ctx)
 {
     s32 v = AtelPopStackInteger(a, ctx);
 
-    OFF_W(AtelGetMesWinWork(AtelPopStackInteger(a, ctx)), 0x10) = v;
+    AtelGetMesWinWork(AtelPopStackInteger(a, ctx))->w10 = v;
     return v;
 }
 

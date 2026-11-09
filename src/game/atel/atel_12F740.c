@@ -5,11 +5,7 @@
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
-#define func_00125268 q1_func_00125268 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TOSetAlbhedFlg q1_TOSetAlbhedFlg /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q1.h"
-#undef func_00125268
-#undef TOSetAlbhedFlg
 #include "ffx/s0.h"
 #undef func_00133BB8
 
@@ -113,7 +109,7 @@ u32 func_0012FC28(Actor *a, void *op, ScriptCtx *ctx)
     if (v != 0) {
         v |= 0x80000000;
     }
-    ACTOR_W(a, 0xBC) = v;
+    a->wBC = v;
     return v;
 }
 
@@ -310,13 +306,35 @@ int func_00130370(Actor *a, void *op, ScriptCtx *ctx)
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00130400);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00130768);
+int func_00130768(Actor *a, OpBlkH *op, ScriptCtx *ctx)
+{
+    int r = 0;
+    int bits = func_0012A7E0(a, op, ctx);
+
+    switch (op->hA) {
+    case 0:
+        if (bits & 1) {
+            op->hA = 1;
+        }
+        break;
+    case 1:
+        if (op->h8 != 0) {
+            SaveDataIsScreenClosed(0x10001);
+        }
+        op->hA = 2;
+        break;
+    case 2:
+        r = 1;
+        break;
+    }
+    return r;
+}
 
 int func_00130810(void)
 {
     EvGameState *ev = AtelGetCurCtrlWork();
 
-    *(u32 *)ev &= ~0x4000000; /* DEBT(CAST): GameFlags has no member for bit 26 */
+    ev->flags.w &= ~0x4000000;
     func_00145400();
     return 1;
 }
@@ -404,33 +422,33 @@ int func_00130AD8(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_00130B48(Actor *a, void *op, ScriptCtx *ctx) {
-    Rec124828H *r = REC124828H();
+    Rec124828 *r = func_00124828();
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
 
-    r->hB4 = y;
-    r->hB6 = x;
+    r->xB4 = y;
+    r->xB6 = x;
     return 1;
 }
 
 int func_00130BB8(Actor *a, void *op, ScriptCtx *ctx) {
-    Rec124828H *r = REC124828H();
+    Rec124828 *r = func_00124828();
     int v = AtelPopStackInteger(a, ctx);
 
-    r->hB8 = v;
-    r->hBA = func_0013A238();
-    func_00124550((Rec124828 *)r);
+    r->xB8 = v;
+    r->xBA = func_0013A238();
+    func_00124550(r);
     return v;
 }
 
 int func_00130C20(Actor *a, void *op, ScriptCtx *ctx) {
-    Rec124828H *r = REC124828H();
+    Rec124828 *r = func_00124828();
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
 
-    r->hB8 = x;
-    r->hBA = y;
-    func_00124550((Rec124828 *)r);
+    r->xB8 = x;
+    r->xBA = y;
+    func_00124550(r);
     return x;
 }
 
@@ -456,7 +474,7 @@ int func_00130CE8(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_00130D30(Actor *a, void *op, ScriptCtx *ctx) {
-    ActorFlagsQ *f = (ActorFlagsQ *)&a->flags34; /* DEBT(CAST): see ActorFlagsQ */
+    ActorFlags *f = &a->flags34.b;
     int on = AtelPopStackInteger(a, ctx) != 0;
 
     f->b22 = on;
@@ -708,7 +726,7 @@ int func_00131540(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 void func_001315A8(Actor *a, void *op, ScriptCtx *ctx) {
-    EvGameStateF *g = (EvGameStateF *)AtelGetCurCtrlWork(); /* DEBT(CAST): see EvGameStateF */
+    EvGameState *g = AtelGetCurCtrlWork();
 
     g->f1F0 = AtelPopStackFloat(a, ctx);
 }
@@ -753,7 +771,7 @@ int func_00131738(Actor *a, void *op, ScriptCtx *ctx) {
     int y = AtelPopStackInteger(a, ctx);
 
     if (a->stateAA == 5) {
-        AtelPushStackInteger(a, ctx, ACTOR_HA8(a));
+        AtelPushStackInteger(a, ctx, a->hA8);
         AtelPushStackInteger(a, ctx, y);
         AtelPushStackInteger(a, ctx, x);
         return func_001316B0(a, op, ctx);
@@ -773,7 +791,7 @@ int func_00131858(Actor *a, void *op, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);
 
     if (a->stateAA == 5) {
-        AtelPushStackInteger(a, ctx, ACTOR_HA8(a));
+        AtelPushStackInteger(a, ctx, a->hA8);
         AtelPushStackInteger(a, ctx, v);
         return func_001317F8(a, op, ctx);
     }
@@ -795,7 +813,7 @@ int func_00131960(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
 
-    AtelPushStackInteger(a, ctx, ACTOR_HA8(a));
+    AtelPushStackInteger(a, ctx, a->hA8);
     AtelPushStackInteger(a, ctx, y);
     AtelPushStackInteger(a, ctx, x);
     return func_001318F0(a, op, ctx);
@@ -895,15 +913,15 @@ int func_00131FB8(Actor *a, OpBlk *op) {
 }
 
 int func_00131FE8(Actor *a, void *op, ScriptCtx *ctx) {
-    return ((PartySlotV *)MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx)))->v54; /* DEBT(CAST): see PartySlotV */
+    return MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx))->v54;
 }
 
 int func_00132010(Actor *a, void *op, ScriptCtx *ctx) {
-    return ((PartySlotV *)MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx)))->v50; /* DEBT(CAST): see PartySlotV */
+    return MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx))->v50;
 }
 
 int func_00132038(Actor *a, void *op, ScriptCtx *ctx) {
-    return ((PartySlotV *)MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx)))->v58; /* DEBT(CAST): see PartySlotV */
+    return MsGetSavePlayerPtr(AtelPopStackInteger(a, ctx))->v58;
 }
 
 int func_00132060(void) {
@@ -978,7 +996,7 @@ int func_001322C8(void) {
 }
 
 int func_001322E8(void) {
-    return CALL_func_002D5E48(0); /* DEBT(CAST): funcs.h declares (void) */
+    return func_002D5E48(0);
 }
 
 int func_00132308(Actor *a, void *op, ScriptCtx *ctx) {
@@ -1047,7 +1065,7 @@ int func_001324C0(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 void func_001324E0(Actor *a, OpBlk *op, ScriptCtx *ctx) {
-    EvGameStateG *g = (EvGameStateG *)AtelGetCurCtrlWork(); /* DEBT(CAST): see EvGameStateG */
+    EvGameState *g = AtelGetCurCtrlWork();
     int x;
     int y;
 
@@ -1071,7 +1089,7 @@ INCLUDE_RODATA("build/ee_asm/game/atel/atel_12F740/rodata", jtbl_0056A4A0);
 
 int func_00132CB8(Actor *a, OpMove *op)
 {
-    EvGameStateG *g = (EvGameStateG *)AtelGetCurCtrlWork(); /* DEBT(CAST): see EvGameStateG */
+    EvGameState *g = AtelGetCurCtrlWork();
     int r = op->mode;
 
     if (op->kind == 1) {
@@ -1291,7 +1309,7 @@ int func_00133328(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_001333D0(Actor *a, void *op, ScriptCtx *ctx) {
-    SysVtQ *vt = (SysVtQ *)GetCD(); /* DEBT(CAST): see SysVtQ */
+    SysVt *vt = GetCD();
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
 
@@ -1300,7 +1318,7 @@ int func_001333D0(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_00133448(Actor *a, void *op, ScriptCtx *ctx) {
-    SysVtQ *vt = (SysVtQ *)GetCD(); /* DEBT(CAST): see SysVtQ */
+    SysVt *vt = GetCD();
     int v = AtelPopStackInteger(a, ctx);
     s32 buf[2];
     u32 t;
@@ -1317,7 +1335,7 @@ int func_00133448(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_001334F0(Actor *a, void *op, ScriptCtx *ctx) {
-    SysVtQ *vt = (SysVtQ *)GetCD(); /* DEBT(CAST): see SysVtQ */
+    SysVt *vt = GetCD();
     int v = AtelPopStackInteger(a, ctx);
 
     vt->f8C(v);
@@ -1422,7 +1440,7 @@ int func_00133908(Actor *a, void *op, ScriptCtx *ctx) {
 int func_00133948(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);
     int y = AtelPopStackInteger(a, ctx);
-    int w = ((EvGameStateK *)AtelGetCurCtrlWork())->w44; /* DEBT(CAST): see EvGameStateK */
+    int w = AtelGetCurCtrlWork()->w44;
 
     if (w != 0) {
         func_0014D3F0(y, x, w);
@@ -1543,7 +1561,7 @@ float func_00133DF8(Actor *a, void *op, ScriptCtx *ctx) {
     return f;
 }
 
-int func_00133E30(void) {
+float func_00133E30(void) {
     return func_0014D7E0();
 }
 
@@ -1668,9 +1686,9 @@ int func_001345D0(Actor *a, OpBlkR *op) {
 int func_00134660(Actor *a, OpBlkR *op) {
     int h = op->w8;
     int k = op->hC;
-    GameFlagsQ *f = (GameFlagsQ *)&((EvGameState *)AtelGetCurCtrlWork())->flags; /* DEBT(CAST): see GameFlagsQ */
+    GameFlags *f = &AtelGetCurCtrlWork()->flags;
 
-    f->b26 = 0;
+    f->b.b26 = 0;
     func_00145400();
     return func_0014F380(h, k, 1);
 }
@@ -1753,7 +1771,16 @@ int func_001349A0(Actor *a, void *op, ScriptCtx *ctx) {
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_001349D8);
+int func_001349D8(Actor *a, void *op, ScriptCtx *ctx)
+{
+    EvGameState *g = AtelGetCurCtrlWork();
+    float f = AtelPopStackFloat(a, ctx);
+    int on = AtelPopStackInteger(a, ctx) != 0;
+
+    g->f208 = f;
+    g->flags.b.b16 = on;
+    return on;
+}
 
 int func_00134A60(Actor *a, void *op, ScriptCtx *ctx) {
     int x = AtelPopStackInteger(a, ctx);
@@ -1836,7 +1863,7 @@ int func_00134D80(void) {
     for (i = 0; i < buf[0]; i++, p++) {
         int id = *p;
 
-        if ((((Unk1BFED8Q *)MsGetSaveWeapon(id, &buf[1]))->b3 >> 3) & 1) { /* DEBT(CAST): see Unk1BFED8Q */
+        if ((MsGetSaveWeapon(id, &buf[1])->b3 >> 3) & 1) {
             MsEquipSaveWeapon(0, 0, id);
             r = 1;
             TkMsSetSaveParamAll();
@@ -1915,15 +1942,14 @@ void func_00135048(Actor *a, OpArgs *op) {
     op->v1 = 10;
 }
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
-s32 func_00135058(s32 arg0, void *arg1) {
-    register s32 var_16 __asm__("$16");
-    register s32 var_17 __asm__("$17");
+s32 func_00135058(s32 arg0, OpArgs *arg1) {
+    s32 var_16;
+    s32 var_17;
     s32 var_3;
 
     var_3 = 0;
-    var_17 = (*(s32 *)((u8 *)(arg1) + (0)));
-    var_16 = (*(s32 *)((u8 *)(arg1) + (4)));
+    var_17 = arg1->v0;
+    var_16 = arg1->v1;
     switch (var_17) {                               /* irregular */
     case 0:
         if (var_16 != 0) {
@@ -1936,8 +1962,8 @@ s32 func_00135058(s32 arg0, void *arg1) {
         var_3 = (func_00265ED0() == 0) ? 0 : 5;
         break;
     }
-    (*(s32 *)((u8 *)(arg1) + (0))) = var_17;
-    (*(s32 *)((u8 *)(arg1) + (4))) = var_16;
+    arg1->v0 = var_17;
+    arg1->v1 = var_16;
     return var_3;
 }
 int func_001350D8(Actor *a, void *op, ScriptCtx *ctx) {

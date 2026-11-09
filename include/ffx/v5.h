@@ -3,7 +3,7 @@
 
 void func_0022F720(int x, int y);
 u8 TkMenuGetCurrentPlayer(void);
-void func_00249A08(void);
+int func_00249A08(void);
 int abs(int x);
 void func_00238C48();
 void func_00237BE0(Task *t);
@@ -32,12 +32,12 @@ extern int D_0069BED4, D_0069BED8;
 extern char D_00573608[];
 Task *func_002500A0(int a);
 void TkMenuItemImportantRefresh(void);
-int func_00248680(int a0, int a1, int a2, int a3, int t0);
+int func_00248680(void *a0, int a1, int a2, int a3, int t0);
 extern FlagRec D_00325AD0;
 extern int D_003264A0[];
-void func_002476C8(int a, int b, int c, int d);
-void func_00247640(int a, int b, int c, int d);
-void func_00247750(int a, int b, int c, int d, int e);
+void func_002476C8(void *a, int b, int c, int d);
+void func_00247640(void *a, int b, int c, int d);
+void func_00247750(void *a, int b, int c, int d, int e);
 void *func_00247F48(u32 i, int *tbl);
 void func_00247408(int a, int b, int c);
 extern struct S6Pt D_00326DA0; /* s16 x, y (S6Pt, s6.h) */
@@ -91,7 +91,7 @@ typedef struct V5Proc {
 #define V5_CALL0_func_0013A398() (((int (*)(void))func_0013A398)()) /* DEBT(CAST): see funcs.h prototype */
 /* call a void(void) function through an int-returning type (caller compiled against an int prototype) */
 #define V5_INT0(f) ((int (*)(void))(f)) /* DEBT(TYPE) */
-#define V5_TkMn2SeqGetNum_int(n) (((int (*)(int))TkMn2SeqGetNum)(n)) /* DEBT(TYPE): defined returning s16, these callers were compiled against int */
+#define V5_TkMn2SeqGetNum_int(n) (((int (*)(const void *))TkMn2SeqGetNum)(n)) /* DEBT(TYPE): defined returning s16, these callers were compiled against int */
 #define V5_func_00225920_void() (((void (*)(void))func_00225920)()) /* DEBT(TYPE): funcs.h declares int, this caller uses it as void */
 
 /* resource tables filled by the loaders (TkMn2GetStatusPos, TkMn2GetWShopPos, TkMn2GetIShopPos, ...) */

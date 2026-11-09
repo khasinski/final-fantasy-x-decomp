@@ -45,7 +45,18 @@ void func_0018FD98(R2Pkt *a, R2Pkt *b) {
     b->cur = a->cur;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_0018FDD0);
+int func_0018FDD0(R2Pkt *b)
+{
+    u32 qwc;
+
+    b->cur->d.lo = 0x1000000000008000UL;
+    b->cur->d.hi = 0;
+    b->cur++;
+    qwc = (((u32)b->cur - (u32)b->base) >> 4) - 1;
+    b->base->q = 0;
+    b->base->w[0] = qwc | 0x70000000;
+    return qwc;
+}
 
 void func_0018FE28(R2Pkt *b) {
     u32 *p = func_002DB6D8(2);
@@ -65,7 +76,28 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190230);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190408);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190588);
+extern void func_00190408(int prim, float *v, int n, int a);
+
+void func_00190588(int a, float cx, float cy, float w, float h)
+{
+    float v[16];
+    float hw = w * 0.5f;
+    float hh = h * 0.5f;
+
+    v[0] = cx - hw;
+    v[1] = cy - hh;
+    v[2] = 256.0f;
+    v[4] = cx + hw;
+    v[5] = cy - hh;
+    v[6] = 256.0f;
+    v[8] = cx - hw;
+    v[9] = cy + hh;
+    v[10] = 256.0f;
+    v[12] = cx + hw;
+    v[13] = cy + hh;
+    v[14] = 256.0f;
+    func_00190408(0x44, v, 4, a);
+}
 
 void func_00190608(int a, float cx, float cy, float w, float h)
 {
@@ -92,7 +124,32 @@ void func_00190608(int a, float cx, float cy, float w, float h)
     func_00190408(0x42, v, 5, a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190698);
+typedef struct RcAng3 {
+    int a[3];
+} RcAng3;
+extern RcAng3 D_0056D600;
+
+void func_00190698(int a, float cx, float cy, float r, float rot)
+{
+    RcAng3 ang = D_0056D600;
+    float v[3][4];
+    int i;
+    int base_ang = (int)(rot * 65536.0f / 6.2831855f);
+    int *ap;
+    float *p;
+
+    for (i = 0, ap = ang.a, p = &v[0][0]; i < 3; i++, ap++, p += 4) {
+        unsigned int cur = base_ang + *ap;
+        p[0] = cx + eff_sin_t[(cur >> 4) & 0xFFF] * r;
+        p[1] = cy + eff_sin_t[((cur + 0x4000) >> 4) & 0xFFF] * r * (7.0f / 6.0f);
+        if (i == 0) {
+            p[2] = 256.0f;
+        } else {
+            p[2] = 176.0f;
+        }
+    }
+    func_00190408(0x4C, &v[0][0], 3, a);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_001907A8);
 
@@ -100,7 +157,23 @@ INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_001908B0);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190A00);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190B40);
+void func_00190B40(int a, float cx, float cy, float r) {
+    float v[18][4];
+    unsigned int ang = 0;
+    float *p = &v[1][0];
+    int i;
+
+    v[0][0] = cx;
+    v[0][1] = cy;
+    for (i = 0; i < 17; i++) {
+        p[0] = cx + eff_sin_t[(ang >> 4) & 0xFFF] * r;
+        p[1] = cy + eff_sin_t[((ang + 0x4000) >> 4) & 0xFFF] * r * (7.0f / 6.0f);
+        p[2] = 256.0f;
+        ang += 0x1000;
+        p += 4;
+    }
+    func_00190408(0x45, &v[0][0], 0x12, a);
+}
 
 void func_00190BF0(float cx, float cy, float r, int a3) {
     float v[17][4];
@@ -118,7 +191,41 @@ void func_00190BF0(float cx, float cy, float r, int a3) {
     func_00190408(0x42, &v[0][0], 0x11, a3);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190C98);
+void func_00190C98(int a, float cx, float cy, float r)
+{
+    float v[16];
+    float hw = r * 0.5f;
+    float x_in = hw * (2.0f / 3.0f);
+    float y_out = hw * (7.0f / 6.0f);
+    float y_in = x_in * (7.0f / 6.0f);
+
+    v[0] = cx - hw;
+    v[1] = cy - y_in;
+    v[2] = 256.0f;
+    v[4] = cx - x_in;
+    v[5] = cy - y_out;
+    v[6] = 256.0f;
+    v[8] = cx + x_in;
+    v[9] = cy + y_out;
+    v[10] = 256.0f;
+    v[12] = cx + hw;
+    v[13] = cy + y_in;
+    v[14] = 256.0f;
+    func_00190408(0x44, v, 4, a);
+    v[0] = cx + x_in;
+    v[1] = cy - y_out;
+    v[2] = 256.0f;
+    v[4] = cx + hw;
+    v[5] = cy - y_in;
+    v[6] = 256.0f;
+    v[8] = cx - hw;
+    v[9] = cy + y_in;
+    v[10] = 256.0f;
+    v[12] = cx - x_in;
+    v[13] = cy + y_out;
+    v[14] = 256.0f;
+    func_00190408(0x44, v, 4, a);
+}
 
 void func_00190DE8(int a, float x0, float y0, float x1, float y1) {
     float v[8];

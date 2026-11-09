@@ -10,10 +10,10 @@ void Sg_GsUV(int x, int y)
 {
     s32 i = D_00580920;
 
-    ((GsPt *)&D_00580928[i])->id.d = 3; /* DEBT(CAST): GsPt view as in Sg_GsXYZF2 */
-    ((GsPt *)&D_00580928[i])->q.v.x = x << 4;
-    ((GsPt *)&D_00580928[i])->q.v.y = y << 4;
-    ((GsPt *)&D_00580928[i])->q.v.z = 0;
+    D_00580928[i].id.d = 3;
+    D_00580928[i].q.v.x = x << 4;
+    D_00580928[i].q.v.y = y << 4;
+    D_00580928[i].q.v.z = 0;
     D_00580920 = i + 1;
 }
 
@@ -21,10 +21,10 @@ void Sg_GsUV2(int x, int y)
 {
     s32 i = D_00580920;
 
-    ((GsPt *)&D_00580928[i])->id.d = 3; /* DEBT(CAST): GsPt view as in Sg_GsXYZF2 */
-    ((GsPt *)&D_00580928[i])->q.v.x = (x << 4) + 0xF;
-    ((GsPt *)&D_00580928[i])->q.v.y = (y << 4) + 0xF;
-    ((GsPt *)&D_00580928[i])->q.v.z = 0;
+    D_00580928[i].id.d = 3;
+    D_00580928[i].q.v.x = (x << 4) + 0xF;
+    D_00580928[i].q.v.y = (y << 4) + 0xF;
+    D_00580928[i].q.v.z = 0;
     D_00580920 = i + 1;
 }
 
@@ -32,7 +32,7 @@ void Sg_GsTEXFLUSH(void)
 {
     s32 i = D_00580920;
 
-    ((GsPt *)&D_00580928[i])->id.d = 0x3F; /* DEBT(CAST): GsPt view as in Sg_GsXYZF2 */
+    D_00580928[i].id.d = 0x3F;
     D_00580920 = i + 1;
 }
 

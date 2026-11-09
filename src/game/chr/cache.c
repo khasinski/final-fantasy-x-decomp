@@ -33,7 +33,42 @@ s32 func_00110D38(void *p) /* DEBT(TYPE): returns nothing */
     h->wC = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_OverFlow);
+void func_00111AA0(void);
+
+s32 Cache_OverFlow(void)
+{
+    s32 i;
+    Handle *h;
+    s32 min_st = 100;
+    s32 min_wC = 0xFFFFFFF;
+    Handle *best = 0;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0) {
+            if (h->b6 == 0) {
+                if (h->b5 == 0) {
+                    if ((h->u8.w & 7) != 7) {
+                        if (h->u8.b.st < min_st) {
+                            best = h;
+                            min_st = h->u8.b.st;
+                        }
+                        if (h->u8.b.st == min_st && h->wC < min_wC) {
+                            best = h;
+                            min_wC = h->wC;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (best != 0) {
+        func_00110D38(best);
+        func_00111AA0();
+        return 0;
+    }
+    return 1;
+}
 
 s32 func_00110E38(s32 kind, s32 id, s32 force)
 {
@@ -80,9 +115,40 @@ void func_00110F48(void)
     func_00111AA0();
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", func_00110FA8);
+void func_00110FA8(void)
+{
+    s32 i;
+    Handle *h;
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", func_00111038);
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0 && h->b5 == 0 && (h->u8.w & 7) != 5 && (h->u8.w & 7) != 7) {
+            func_00110D38(h);
+        }
+    }
+    func_00111AA0();
+}
+
+int func_00111038(int a, int b)
+{
+    s32 i, j;
+    Handle *h;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0 && h->w0 == b && h->b4 == a) {
+            for (j = i; j < 99; j++) {
+                D_0057F2C0[j] = D_0057F2C0[j + 1];
+            }
+            D_0057F2C0[99] = h;
+            if ((h->u8.w & 7) != 7) {
+                h->u8.w = (h->u8.w & ~7) | 5;
+            }
+            return 0;
+        }
+    }
+    return 1;
+}
 
 void func_001110F0(void)
 {
@@ -91,7 +157,7 @@ void func_001110F0(void)
 
     for (i = 0; i < 100; i++) {
         h = D_0057F2C0[i];
-        if (h->wC != 0 && (h->w8 & 7) == 0) {
+        if (h->wC != 0 && (h->u8.w & 7) == 0) {
             func_00110D38(h);
         }
     }
@@ -100,12 +166,12 @@ void func_001110F0(void)
 void func_00111158(void)
 {
     s32 i;
-    HandleB *h;
+    Handle *h;
 
     for (i = 0; i < 100; i++) {
-        h = (HandleB *)D_0057F2C0[i]; /* DEBT(CAST) */
-        if (h->st != 0 && h->st != 7) {
-            h->st--;
+        h = D_0057F2C0[i];
+        if (h->u8.b.st != 0 && h->u8.b.st != 7) {
+            h->u8.b.st--;
         }
     }
 }
@@ -175,13 +241,31 @@ void Cache_Lock(s32 a, s32 b)
     for (i = 0; i < 100; i++) {
         h = D_0057F2C0[i];
         if (h->wC != 0 && h->w0 == b && h->b4 == a) {
-            h->w8 |= 7;
+            h->u8.w |= 7;
             return;
         }
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_Use);
+s32 Cache_Use(int a, int b)
+{
+    s32 i;
+    Handle *h;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0 && h->w0 == b && h->b4 == a) {
+            h->b5 = 1;
+            func_00111038(a, b);
+            if (h->b4 == 1) {
+                func_0011CFB8(h->wC, 2);
+            } else if (h->b4 == 2) {
+                func_0011CFB8(h->wC, 3);
+            }
+            return;
+        }
+    }
+}
 
 void func_00111500(s32 a, s32 b)
 {
@@ -192,16 +276,56 @@ void func_00111500(s32 a, s32 b)
         h = D_0057F2C0[i];
         if (h->wC != 0 && h->w0 == b && h->b4 == a) {
             h->b5 = 0;
-            h->w8 = (h->w8 & ~0xF8) | 0x40;
+            h->u8.w = (h->u8.w & ~0xF8) | 0x40;
             func_0011CFB8(h->wC, 4);
             return;
         }
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_Entry_NotYet);
+extern char D_00569658[], D_005696C8[], D_005696F0[], D_005696F8[], D_00569700[];
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_Entry);
+void Cache_Entry_NotYet(int a, int b, int c)
+{
+    s32 i;
+    Handle *h;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0 && h->w0 == b && h->b4 == a) {
+            h->b6 = c;
+            return;
+        }
+    }
+    ((s32 (*)(s32))Sg_MemDump)(0);
+    yiAssert(0, D_00569658, D_005696C8, c, ch_create_name(b), b >> 16, a == 1 ? D_00569700 : (a == 2 ? D_005696F0 : D_005696F8));
+}
+
+void Cache_Entry(s32 a, s32 b, s32 c)
+{
+    s32 i;
+    Handle *h;
+
+retry:
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC == 0) {
+            h->w0 = b;
+            h->b4 = a;
+            h->u8.b.st = 5;
+            h->u8.b.rest = 0;
+            h->wC = c;
+            h->b5 = 0;
+            h->b6 = 0;
+            h->b7 = 0;
+            func_0011CFB8(c, 4);
+            return;
+        }
+    }
+    if (Cache_OverFlow() == 0) {
+        goto retry;
+    }
+}
 
 void func_00111758(void)
 {

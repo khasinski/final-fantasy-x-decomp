@@ -37,14 +37,6 @@ void Sg_Assert(int a, int b, int c, int d, char *buf, int f);
 extern char D_0056AE28[];
 
 /* c_14B428 */
-typedef struct G0Res588 {
-    u8 pad0[0xC];
-    u16 hC;
-    u8 padE[6];
-    u16 h14;
-    u16 h16;
-    u16 h18;
-} G0Res588; /* DEBT(NAME): resource header fields used by AtelCharSetUp */
 extern char D_0056AF98[];
 
 /* c_14C478 */

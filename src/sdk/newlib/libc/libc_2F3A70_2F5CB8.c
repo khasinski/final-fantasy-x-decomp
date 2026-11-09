@@ -195,7 +195,7 @@ err:
 char *func_002F6268(W11Reent *p, int category, const char *locale)
 {
     if (locale) {
-        if (func_002F05E8((int)locale, (u8 *)D_005789C8) && func_002F05E8((int)locale, (u8 *)D_005789B8)) { /* DEBT(TYPE): strcmp prototype */
+        if (func_002F05E8(locale, D_005789C8) && func_002F05E8(locale, D_005789B8)) {
             return 0;
         }
         p->_current_category = category;

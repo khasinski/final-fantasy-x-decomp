@@ -6,97 +6,6 @@
 #include "ffx/globals.h"
 #include "ffx/funcs.h"
 
-/* Menu command object, one per slot of D_00668740 (state machine driven through the
-   handler slots h[]). DEBT(NAME): member names are guesses from use. */
-typedef s32 (*MenuFn)();
-typedef struct MenuCmd {
-    /* 0x00 */ s16 w00;
-    /* 0x02 */ u8 pad02[2];
-    /* 0x04 */ s16 id;
-    /* 0x06 */ u8 pad06[0x08 - 0x06];
-    /* 0x08 */ s32 x08;
-    /* 0x0C */ u8 pad0C[0x12 - 0x0C];
-    /* 0x12 */ s16 w12;
-    /* 0x14 */ u8 pad14[0x1C - 0x14];
-    /* 0x1C */ s16 w1C;
-    /* 0x1E */ s16 w1E;
-    /* 0x20 */ u8 pad20[0x2C - 0x20];
-    /* 0x2C */ s16 state;
-    /* 0x2E */ s16 sub;
-    /* 0x30 */ s16 x;
-    /* 0x32 */ s16 y;
-    /* 0x34 */ s16 x1;
-    /* 0x36 */ s16 y1;
-    /* 0x38 */ s16 w;
-    /* 0x3A */ s16 h;
-    /* 0x3C */ u8 pad3C[0x4B - 0x3C];
-    /* 0x4B */ u8 b4B;
-    /* 0x4C */ u8 pad4C[0x84 - 0x4C];
-    /* 0x84 */ s32 x84;
-    /* 0x88 */ u8 *text;
-    /* 0x8C */ s32 x8C;
-    /* 0x90 */ s32 x90;
-    /* 0x94 */ s32 x94;
-    /* 0x98 */ s32 x98;
-    /* 0x9C */ s32 x9C;
-    /* 0xA0 */ u8 padA0[0xA4 - 0xA0];
-    /* 0xA4 */ s32 xA4;
-    /* 0xA8 */ u8 padA8[0xD0 - 0xA8];
-    /* 0xD0 */ struct SlotZ *slot;
-    /* 0xD4 */ MenuFn fD4;
-    /* 0xD8 */ MenuFn fD8;
-    /* 0xDC */ MenuFn fDC;
-    /* 0xE0 */ MenuFn fn[10];
-    /* 0x108 */ MenuFn f108;
-    /* 0x10C */ MenuFn f10C;
-} MenuCmd;
-
-/* Smaller menu slot object of D_0066B508. */
-typedef struct MenuSlot {
-    /* 0x00 */ s16 w00;
-    /* 0x02 */ u8 pad02[2];
-    /* 0x04 */ s16 w04;
-    /* 0x06 */ s16 w06;
-    /* 0x08 */ s16 state;
-    /* 0x0A */ u8 pad0A[0x10 - 0x0A];
-    /* 0x10 */ s16 w;
-    /* 0x12 */ u8 pad12[2];
-    /* 0x14 */ s16 h;
-    /* 0x16 */ u8 pad16[0x1E - 0x16];
-    /* 0x1E */ s16 x;
-    /* 0x20 */ s16 y;
-    /* 0x22 */ s16 x1;
-    /* 0x24 */ s16 y1;
-    /* 0x26 */ u8 pad26[0x2E - 0x26];
-    /* 0x2E */ s16 h2E;
-    /* 0x30 */ s16 h30;
-    /* 0x32 */ s16 h32;
-    /* 0x34 */ s16 h34;
-    /* 0x36 */ u8 b36;
-    /* 0x37 */ u8 b37;
-    /* 0x38 */ u8 b38;
-    /* 0x39 */ u8 b39;
-    /* 0x3A */ u8 pad3A[0x40 - 0x3A];
-    /* 0x40 */ MenuFn fn[8];
-} MenuSlot;
-
-/* Slot object of D_00669AE0. DEBT(NAME): member names are offsets. */
-typedef struct SlotZ {
-    /* 0x00 */ u8 pad00;
-    /* 0x01 */ s8 b1;
-    /* 0x02 */ s8 b2;
-    /* 0x03 */ s8 b3;
-    /* 0x04 */ s8 b4;
-    /* 0x05 */ s8 b5;
-    /* 0x06 */ u8 pad06[1];
-    /* 0x07 */ s8 b7;
-    /* 0x08 */ u8 pad08[4];
-    /* 0x0C */ s32 wC;
-    /* 0x10 */ u8 pad10[8];
-    /* 0x18 */ u8 x18[8];
-    /* 0x20 */ u8 pad20[0x38 - 0x20];
-    /* 0x38 */ struct { s16 h0; s16 h2; s16 h4; s16 h6; } ent[1]; /* DEBT(TYPE): count unknown, indexed up to b5 */
-} SlotZ;
 extern SlotZ *D_00669AE0[];
 
 /* Cell reached through the 32-wide pointer table D_0066AB00. DEBT(NAME): guessed. */
@@ -286,7 +195,7 @@ void *func_001F9938(void *list, int a, int b, int c);
 
 void *func_001F9D50(void *list, int a, int b, int c);
 
-void *func_001F4178(void *list, int a, int b, int c);
+void *func_001F4178(void *list, void *a, int b, int c);
 
 void *func_001F6F88(void *list, int a, int b, int c, int d);
 
@@ -300,9 +209,9 @@ void *func_001F3DE8(void *list, int a, int b, int c, int d);
 
 void *func_001F3C58(void *list, int a, int b, int c, int d);
 
-void *func_001F41C0(void *list, int a, int b, int c, int d);
+void *func_001F41C0(void *list, void *a, int b, int c, int d);
 
-void *func_001F42B8(void *list, int a, int b, int c, int d);
+void *func_001F42B8(void *list, int a, void *b, int c, int d);
 
 void *func_001F4818(void *list, int a, int b, int c, int d, int e);
 
@@ -332,9 +241,9 @@ void *func_001F3F28(void *list, int a, int b, int c, int d, int e);
 
 void *func_001F40A0(void *list, int a, int b, int c, int d, int e);
 
-void *func_001F4210(void *list, int a, int b, int c, int d, int e);
+void *func_001F4210(void *list, void *a, int b, int c, int d, int e);
 
-void *func_001F42F0(void *list, int a, int b, int c, int d, int e);
+void *func_001F42F0(void *list, int a, void *b, int c, int d, int e);
 
 void *func_001F46A0(void *list, int a, int b, int c, int d, int e);
 
@@ -348,7 +257,7 @@ void *func_001F9B48(void *list, int a, int b, int c, int d, int e, int f, u8 g);
 
 void *func_001F9200(void *list, int a, int b, int c, int d, int e, int f, u8 g);
 
-void *func_001F4320(void *list, int a, int b, int c, int d, int e, int f);
+void *func_001F4320(void *list, int a, void *b, int c, int d, int e, int f);
 
 void *func_001F9960(void *list, int a, int b, int c, u8 d, u8 e, u8 f, u8 g);
 
@@ -528,7 +437,7 @@ extern s32 D_00693BEC;
 
 int msVoiceCheckStanby(int a);
 
-extern MenuSlot *D_0068F0A8[];
+extern R4Ptrs *D_0068F0A8[];
 
 void TOOpenWindow(int i);
 
@@ -594,8 +503,6 @@ extern s32 D_00693AA0;
 extern s32 D_00693ABC;
 
 void func_00228B90(s16 *out, int a);
-
-u8 *func_001E4A30(int i);
 
 void func_001CF0C0(int id, int v);
 

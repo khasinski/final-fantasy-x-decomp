@@ -79,7 +79,7 @@ int TOSeqStartScene(int i, const char *name)
     int j;
 
     for (j = 0; j < 8; j++) {
-        if (func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if (func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             return 0;
         }
     }
@@ -101,7 +101,7 @@ int TOSeqStartSceneNoErase(int i, const char *name)
     int j;
 
     for (j = 0; j < 8; j++) {
-        if (func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if (func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             return 0;
         }
     }
@@ -124,7 +124,7 @@ int TOSeqStartSceneDrawContinue(int i, const char *name)
     int j;
 
     for (j = 0; j < 8; j++) {
-        if (func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if (func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             return 0;
         }
     }
@@ -147,7 +147,7 @@ int TOSeqStopScene(int i, const char *name)
     int j;
 
     for (j = 0; j < 8; j++) {
-        if ((u16)(D_0068F440[i][j].h0 - 1) < 3 && func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if ((u16)(D_0068F440[i][j].h0 - 1) < 3 && func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             D_0068F440[i][j].h0 = 4;
             D_0068F440[i][j].b8 = 0;
             break;
@@ -158,7 +158,7 @@ int TOSeqStopScene(int i, const char *name)
 
 void func_0020DBC8(int i)
 {
-    R4Ent32 *p = (R4Ent32 *)D_0068F440[i]; /* DEBT(CAST): Ent32 hides h2 */
+    Ent32 *p = D_0068F440[i];
     int j;
 
     for (j = 0; j < 8; j++) {
@@ -172,7 +172,7 @@ void func_0020DBC8(int i)
 
 void func_0020DC20(int i)
 {
-    R4Ent32 *p = (R4Ent32 *)D_0068F440[i]; /* DEBT(CAST): Ent32 hides h2 */
+    Ent32 *p = D_0068F440[i];
     int j;
 
     for (j = 0; j < 8; j++) {
@@ -238,7 +238,7 @@ void TOSeqBuffFlashScene(int i)
     }
 }
 
-int TOSeqGetSceneStatus(int i, int name)
+int TOSeqGetSceneStatus(int i, const char *name)
 {
     int j;
 
@@ -256,7 +256,7 @@ int TOSeqCheckTermScene(int i, const char *name)
     int j;
 
     for (j = 0, ok = 1; j < 8; j++) {
-        if (func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if (func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             if (TkMenuIsTermScene(i, D_0068F440[i][j].w1C) == 0) {
                 ok = 0;
             }
@@ -271,7 +271,7 @@ void func_0020DF10(int i, const char *name, int c, int d)
     int j;
 
     for (j = 0; j < 8; j++) {
-        if (func_002F05E8((int)name, (u8 *)&D_0068F440[i][j].b8) == 0) { /* DEBT(CAST): the name starts at b8 */
+        if (func_002F05E8(name, &D_0068F440[i][j].b8) == 0) {
             func_00210010(i, D_0068F440[i][j].w1C, c, d);
         }
     }

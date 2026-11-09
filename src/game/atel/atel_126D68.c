@@ -207,21 +207,21 @@ int func_001273D8(Actor *a, void *op, ScriptCtx *ctx)
 
 s32 func_001274C8(Actor *a, void *op, ScriptCtx *ctx)
 {
-    ACTOR_H(a, 0xA8) = AtelPopStackInteger(a, ctx);
+    a->hA8 = AtelPopStackInteger(a, ctx);
     a->stateAA = 3;
     return 0;
 }
 
 s32 func_00127500(Actor *a, void *op, ScriptCtx *ctx)
 {
-    ACTOR_H(a, 0xA8) = AtelPopStackInteger(a, ctx);
+    a->hA8 = AtelPopStackInteger(a, ctx);
     a->stateAA = 4;
     return 0;
 }
 
 s32 func_00127538(Actor *a, void *op, ScriptCtx *ctx)
 {
-    ACTOR_H(a, 0xA8) = AtelPopStackInteger(a, ctx);
+    a->hA8 = AtelPopStackInteger(a, ctx);
     a->stateAA = 5;
     return 0;
 }

@@ -99,7 +99,7 @@ void func_002992B8(Chr *key, u16 v);
 
 /* ---- func_0025B050 ---- */
 /* DEBT(NAME): view of ChrSub (12-byte menu entry) */
-typedef struct T6_MenuEnt { int id; u8 off; u8 pad5[3]; u32 arg; } T6_MenuEnt;
+typedef ChrSub T6_MenuEnt;
 extern char D_005739D0[]; /* "addMenuPrim error!!!  menu->mprimn >= MAXMENUPRIM\n" */
 
 /* ---- func_002671C0 ---- */
@@ -137,18 +137,6 @@ int func_002EF240(char *fmt, ...);
 /* DEBT(NAME): particle emitter views (0x27A078 family) */
 typedef struct T6_PLife { u8 pad0[0x10]; int start; int len; int start2; int len2; } T6_PLife;
 typedef struct T6_PObj { u8 pad0[8]; T6_PLife **life; int t; } T6_PObj;
-typedef struct T6_PKey { u8 pad0[4]; u32 id; int count; } T6_PKey;
-typedef struct T6_PRec { u16 h[4]; } T6_PRec;
-typedef struct T6_PSysW {
-    u8 pad0[0x40];
-    u32 *parts;                 /* 0xA0-byte particles, flag word first */
-    void *aux;
-    int w48;
-    int w4C;
-    T6_PRec *rec;
-    u32 nrec;
-    int done;
-} T6_PSysW;
 
 /* ---- func_002781D8 ---- */
 /* DEBT(NAME): views used by the 0x278000 point-light emitters */
@@ -161,8 +149,6 @@ typedef struct T6_LtGrp { s16 res; s16 n; u16 *idx; } T6_LtGrp;
 typedef struct T6_LtHeap { u8 pad0[0x20]; T6_LtRes *res; u8 pad24[4]; T6_LtGrp *grp; } T6_LtHeap;
 typedef struct T6_LtKeyG { u8 pad0[4]; float f4; u8 b8; u8 pad9[3]; float size; s16 grp; } T6_LtKeyG;
 typedef struct T6_LtWork { u8 pad0[0x90]; T6_LtPt *pts; } T6_LtWork;
-typedef struct T6_LtCam { u8 pad0[0x30]; float x; float y; float z; } T6_LtCam;
-extern u8 D_006A3930[];
 void Sg_PLightDefine(float x, float y, float z, float w, int idx, int a, int b, int c, int d);
 
 /* ---- func_00279080 ---- */
@@ -194,7 +180,6 @@ void func_00279128(int a, R6Wvec *w);
 void func_00279248(int a, R6Fvec *v);
 
 /* ---- func_0027C478 ---- */
-typedef struct T6_PSysB { u8 pad0[0x40]; u32 *parts; int w44; int w48; T6_PRec *rec; u32 nrec; int done; } T6_PSysB;
 typedef struct T6_PSysC { u8 pad0[0x40]; u32 *parts; void *aux; int w48; int w4C; T6_PRec *rec; float (*vec)[4]; u32 nrec; int done; } T6_PSysC;
 
 /* ---- func_0026FC68 ---- */
@@ -246,7 +231,9 @@ typedef struct T6_ColMgr {
     int w8;                     /* age limit compared with T6_MemEnt.w8 (func_00267F10) */
     u8 padC[0x18 - 0xC];
     int count;                  /* 0x18: entries in p3C */
-    u8 pad1C[0x3C - 0x1C];
+    u8 pad1C;
+    u8 b1D;
+    u8 pad1E[0x3C - 0x1E];
     T6_MemEnt *p3C;
     u8 pad40[0x20];
     float m60[4];
@@ -300,15 +287,6 @@ typedef struct T6_WkB480 {
     u8 padA0[8];
     float fA8;
 } T6_WkB480;
-/* DEBT(NAME): script memory header as seen by pppKeLnsLpDraw */
-typedef struct T6_SWorkB480 {
-    u8 pad0[0xC];
-    int owner;
-    u8 m10[0x30];
-    float f40;
-    float f44;
-    float f48;
-} T6_SWorkB480;
 typedef struct T6_ReqB480 {
     void *self;
     void *pos;
@@ -453,17 +431,11 @@ typedef float T6_Row[4]; /* one matrix row / vector */
 extern s8 D_00703FF3;
 
 /* ---- func_00294188 ---- */
-/* DEBT(NAME): R6W8 with the grid handle at 0xC */
-typedef struct T6_R6W8C {
-    u8 pad0[8];
-    int *p8;
-    int hC;
-} T6_R6W8C;
 void SndStandbyBattleWave(int h, u8 *p);
 int func_00294130(R6W8 *o);
 
 /* ---- op_oef2_sep_wave_load_all ---- */
-int *op_oef2_a_get(int a, int b, int c);
+void *op_oef2_a_get(int a, int b, int c);
 int func_00294188(R6W8 *o, int flags);
 /* DEBT(NAME): resource header with an entry count at 0x4C */
 typedef struct T6_ResHdr {
@@ -472,7 +444,7 @@ typedef struct T6_ResHdr {
 } T6_ResHdr;
 
 /* ---- op_oef2_sound_cue_multi ---- */
-void func_00294408(u8 *ent, int arg);
+int func_00294408(QueueReq *ent, int arg);
 
 /* ---- op_oef2_sound_cue_check ---- */
 /* DEBT(CAST): SndDataSendSync is void but this caller tests the value left in v0 (SqsDataSendingCompleted's result) */
@@ -600,28 +572,7 @@ u16 *opu_unit(ScriptThread *th, u16 *pc);
 extern int D_0069CD40;
 
 /* ---- PcReadFunc_set ---- */
-/* DEBT(NAME): view of the callback table D_0078E498 (Unk78E498 only knows 0x10/0x14/0x30/0x68) */
-typedef struct T6_Vt {
-    int (*f00)();
-    int (*f04)();
-    int (*f08)();
-    int (*f0C)();
-    int (*f10)();
-    int (*f14)();
-    u8 pad18[0x3C];
-    int (*f54)();
-    int (*f58)();
-    u8 pad5C[4];
-    int (*f60)();
-    u8 pad64[4];
-    int (*f68)();
-    u8 pad6C[0xC];
-    int (*f78)();
-    u8 pad7C[0xC];
-    int (*f88)();
-    int (*f8C)();
-} T6_Vt;
-#define T6_VT ((T6_Vt *)&D_0078E498) /* DEBT(CAST): see T6_Vt */
+#define T6_VT (&D_0078E498)
 int CDfileSize_PC();
 int func_00255238();
 
@@ -648,10 +599,8 @@ void func_002584C0(u16 id, int a);
 
 /* ---- func_002595E8 ---- */
 /* DEBT(NAME): view of WorkEnt2 for the word at 0x10 */
-typedef struct T6_Link { u16 a; u16 b; u16 c; u8 pad06[7]; u8 flags[3]; int seed; } T6_Link;
-/* DEBT(NAME): view of GlobalWork for the word at 0x1161C */
-typedef struct T6_GwSeed { u8 pad[0x1161C]; int seed; } T6_GwSeed;
-int func_00259510(T6_Link *l);
+typedef WorkEnt2 T6_Link;
+int func_00259510(WorkEnt2 *l);
 
 /* ---- func_00260980 ---- */
 extern int D_006A38F8;

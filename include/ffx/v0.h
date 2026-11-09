@@ -140,7 +140,7 @@ extern Cmd16 *D_0058092C; /* the open GIF tag (NLOOP patched when the list is cl
 
 s32 func_0012E140(Actor *a, s32 unused, ScriptCtx *ctx);
 
-char *func_00101528(int kind); /* DEBT(TYPE): name string for a 4-bit kind, used as a %s argument */
+s32 func_00101528(int kind);
 
 extern char D_00569698[], D_005696B0[]; /* message strings of Cache_Exist2 */
 
@@ -164,22 +164,6 @@ int func_002D4850(float w, float x, float y, float z);
 float func_002D4338(float a);
 float func_002D4690(float a, float b);
 void func_0014C928(int v, int b, int c, int d); /* DEBT(TYPE): asm (c_14C478); argument roles unknown */
-
-/* DEBT(CAST): view of Effect (AtelGetMesWinWork) with the members at 0x22..0x27 */
-typedef struct V0EffectW {
-    /* 0x00 */ u8 pad0[0x22];
-    /* 0x22 */ u8 b22;
-    /* 0x23 */ u8 b23;
-    /* 0x24 */ int w24;
-} V0EffectW;
-
-/* DEBT(CAST): bit view of EvGameState.flags (GameFlags has no members for bits 17/18) */
-typedef struct V0GameFlags {
-    unsigned lo : 17;
-    unsigned b17 : 1;
-    unsigned b18 : 1;
-    unsigned hi : 13;
-} V0GameFlags;
 
 void func_002D4D58(int obj, float x, float y, float z); /* DEBT(TYPE): asm, argument roles from the caller */
 

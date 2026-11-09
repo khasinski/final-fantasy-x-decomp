@@ -15,7 +15,7 @@ int func_00137A20(void) {
 }
 
 int func_00137A40(Actor *a, void *op, ScriptCtx *ctx) {
-    CALL_func_002D41F0(AtelPopStackInteger(a, ctx));
+    func_002D41F0(AtelPopStackInteger(a, ctx));
     return 0;
 }
 
@@ -24,7 +24,7 @@ int func_00137A68(Actor *a, void *op, ScriptCtx *ctx) {
 }
 
 int func_00137A90(Actor *a, void *op, ScriptCtx *ctx) {
-    CALL_func_002D41E8(AtelPopStackInteger(a, ctx));
+    func_002D41E8(AtelPopStackInteger(a, ctx));
     return 0;
 }
 

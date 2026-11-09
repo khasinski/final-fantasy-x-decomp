@@ -275,7 +275,7 @@ int yiFieldObjReadNB(int a, int b)
 
 int func_00172F30(int a, int b)
 {
-    int r; /* DEBT(FAKE): never set; the original returns whatever is in s0 */
+    int r; /* never set; the original returns whatever is in s0 */
 
     yiObjReadNB(0x1A, a, b);
     D_00597F00.w67F20 |= 0x1000;
@@ -594,10 +594,10 @@ void yiAddRotTransDObj(u32 i, float *a, float *b)
         func_002DD020(v50, v50, a);
         v60 = D_00597F00.ent[i].v60;
         func_002DD020(v60, v60, b);
-        func_002DD128((struct W3Whole *)&t); /* DEBT(CAST): matrices are passed as the W3Whole view */
+        func_002DD128(&t);
         yiRotMatrixSeq(&t, v50, D_00597F00.ent[i].h86);
         func_002DD080(&t, &t, v60);
-        *(Blk64 *)D_00597F00.ent[i].m10 = t; /* DEBT(CAST): Q3Ent2.m10 is a Blk64 */
+        *D_00597F00.ent[i].m10 = t;
     }
 }
 
@@ -618,7 +618,7 @@ int yiGetMatrixDObj(u32 i, Blk64 *out)
     if (i >= D_00597F00.w687B8) {
         return -1;
     }
-    *out = *(Blk64 *)D_00597F00.ent[i].m10; /* DEBT(CAST): Q3Ent2.m10 is a Blk64 */
+    *out = *D_00597F00.ent[i].m10;
     return 0;
 }
 
@@ -628,7 +628,7 @@ int func_001742A0(int id, Blk64 *out)
 
     for (i = 0; i < D_00597F00.w687B8; i++) {
         if (D_00597F00.ent[i].h84 == id) {
-            *out = *(Blk64 *)D_00597F00.ent[i].m10; /* DEBT(CAST): Q3Ent2.m10 is a Blk64 */
+            *out = *D_00597F00.ent[i].m10;
             return 0;
         }
     }
@@ -640,7 +640,7 @@ int func_00174348(u32 i, Blk64 *in)
     if (i >= D_00597F00.w687B8) {
         return -1;
     }
-    *(Blk64 *)D_00597F00.ent[i].m10 = *in; /* DEBT(CAST): Q3Ent2.m10 is a Blk64 */
+    *D_00597F00.ent[i].m10 = *in;
     return 0;
 }
 
@@ -650,7 +650,7 @@ int func_001743D0(int id, Blk64 *in)
 
     for (i = 0; i < D_00597F00.w687B8; i++) {
         if (D_00597F00.ent[i].h84 == id) {
-            *(Blk64 *)D_00597F00.ent[i].m10 = *in; /* DEBT(CAST): Q3Ent2.m10 is a Blk64 */
+            *D_00597F00.ent[i].m10 = *in;
             return 0;
         }
     }
@@ -758,7 +758,15 @@ void func_001747D0(u32 i, float *v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00174810);
+void func_00174810(u32 i, u32 v)
+{
+    if (i < D_00597F00.wA0108) {
+        if (v < D_00597F00.grp[i].id[4]) {
+            D_00597F00.grp[i].w00 |= 1;
+            D_00597F00.grp[i].w04 = v;
+        }
+    }
+}
 
 void func_00174870(char *bin, char *pdt)
 {
@@ -860,9 +868,9 @@ void yiGetLightInfo(void)
     Sg_LightGetDir(0, axis[0]);
     Sg_LightGetDir(1, axis[1]);
     Sg_LightGetDir(2, axis[2]);
-    func_002DCEC8((s32)axis[0], (s32)axis[0]); /* DEBT(CAST): funcs.h prototype takes ints */
-    func_002DCEC8((s32)axis[1], (s32)axis[1]);
-    func_002DCEC8((s32)axis[2], (s32)axis[2]);
+    func_002DCEC8(axis[0], axis[0]);
+    func_002DCEC8(axis[1], axis[1]);
+    func_002DCEC8(axis[2], axis[2]);
     Sg_LightGetColor(0, col[0]);
     Sg_LightGetColor(1, col[1]);
     Sg_LightGetColor(2, col[2]);

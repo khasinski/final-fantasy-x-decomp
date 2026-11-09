@@ -4,8 +4,8 @@
 #include "ffx/r1.h"
 #include "ffx/u0.h"
 
-void func_00141FF0(Actor *a, SlotCQ *s) {
-    Res588Q *res = (Res588Q *)AtelGetCtrlWork(s->h40);
+void func_00141FF0(Actor *a, ActorBind *s) {
+    EvGameState *res = AtelGetCtrlWork(s->h40);
     int *tab = res->a1F8;
     int first;
     int second;
@@ -17,28 +17,28 @@ void func_00141FF0(Actor *a, SlotCQ *s) {
         } else {
             second = 0;
         }
-        func_001458B0(AQ(a)->id, first, second, s->h3C);
+        func_001458B0(a->id, first, second, s->h3C);
     }
 }
 
 void func_00142070(Actor *a, ObjNodeR *n) {
-    SlotCQ *s;
+    ActorBind *s;
     int slot;
     int w;
 
     if (n) {
-        slot = n->h0E & 0xF;
+        slot = n->u0E.h & 0xF;
         w = n->h08;
-        s = (SlotCQ *)func_0013C9C8(a, slot); /* DEBT(CAST): bind entry used as a slot */
+        s = func_0013C9C8(a, slot);
         a->slotIdx = slot;
-        AQ(a)->h2C = w;
-        ((SlotCQ *)func_0013C9C8(a, slot))->b1D = 0; /* DEBT(CAST): bind entry used as a slot */
+        a->h2C = w;
+        func_0013C9C8(a, slot)->b1D = 0;
         s->h3E = n->h12;
         s->h3C = n->h10;
         s->h40 = n->h14;
         func_00142B50(a, s, slot);
         func_00141FF0(a, s);
-        func_0013CAD0((ScrQ *)a, (ScrEntQ *)s, func_0013CA30((ScrQ *)a, w)); /* DEBT(CAST): the actor used as a script reader */
+        func_0013CAD0(a, s, func_0013CA30(a, w));
     }
 }
 
@@ -88,7 +88,8 @@ void func_001421F8(NodeQ *n) {
     }
 }
 
-void func_00142218(Actor *a, NodeQ *n) {
+void func_00142218(Actor *a, void *p) {
+    NodeQ *n = p;
     NodeQ *head;
     NodeQ *next;
 
@@ -136,7 +137,7 @@ int func_00142560(Req142 *r) {
         return 0;
     }
     for (n = OBJR(AtelGetBasicWork(r->w4))->head80; n != 0; n = n->next) {
-        if (((u8 *)n)[0xF] != 3 && (n->h0E & 0xF) == r->wC) {
+        if (n->u0E.b.hi != 3 && (n->u0E.h & 0xF) == r->wC) {
             return 0;
         }
     }
@@ -161,7 +162,7 @@ int func_00142610(Req142 *r) {
         return 0;
     }
     for (n = OBJR(AtelGetBasicWork(r->w4))->head80; n != 0; n = n->next) {
-        if (((u8 *)n)[0xF] != 3 && n->h08 == r->w10) {
+        if (n->u0E.b.hi != 3 && n->h08 == r->w10) {
             return 0;
         }
     }
@@ -180,14 +181,14 @@ int func_00142688(int a, int b, int c, int d, int e) {
 }
 
 void func_001426B8(Actor *a, ObjNodeR *n) {
-    if (n && ((u8 *)&n->h0E)[1] == 1) { /* DEBT(CAST): kind byte = high byte of h0E */
-        func_00142530(a->id, n->h0A, 3, n->h0E & 0xF, n->h08);
+    if (n && n->u0E.b.hi == 1) {
+        func_00142530(a->id, n->h0A, 3, n->u0E.h & 0xF, n->h08);
     }
 }
 
 void func_001426F0(Actor *a, ObjNodeR *n) {
-    if (n && ((u8 *)&n->h0E)[1] == 2) { /* DEBT(CAST): kind byte = high byte of h0E */
-        func_00142530(a->id, n->h0A, 3, n->h0E & 0xF, n->h08);
+    if (n && n->u0E.b.hi == 2) {
+        func_00142530(a->id, n->h0A, 3, n->u0E.h & 0xF, n->h08);
     }
 }
 
@@ -202,7 +203,7 @@ int func_00142748(int id, int x) {
 
     while (n != 0) {
         next = n->next;
-        if (((u8 *)n)[0xF] != 3 && n->h08 == x) {
+        if (n->u0E.b.hi != 3 && n->h08 == x) {
             r = 1;
             break;
         }
@@ -218,7 +219,7 @@ int func_001427A8(int id, int x) {
 
     while (n != 0) {
         next = n->next;
-        if (((u8 *)n)[0xF] != 3 && (n->h0E & 0xF) >= x) {
+        if (n->u0E.b.hi != 3 && (n->u0E.h & 0xF) >= x) {
             r = 1;
             break;
         }
@@ -246,7 +247,41 @@ int AtelGetActorType(int id) {
     return AtelGetBasicWork(id)->hdr->type;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", func_00142B50);
+void func_00142B50(Actor *a, ActorBind *s, int n) {
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ObjSlotR *temp_v0;
+    ObjSlotBR *temp_v1;
+
+    if (a->hdr->type == 1) {
+        temp_v0 = &OBJR(a)->slot[n];
+        temp_v1 = &OBJR(a)->slotB[n];
+        ((ObjBindR *)s)->s44 = temp_v0;
+        ((ObjBindR *)s)->s48 = temp_v1;
+        temp_v0->f08 = 0.0f;
+        temp_v0->fC = 0.0f;
+        temp_v0->h0 = 0;
+        temp_v1->h0 = 0;
+        temp_v0->h2 = 0;
+        temp_v1->h2 = 0;
+        temp_v0->f1C = st->x;
+        temp_v0->f20 = st->y;
+        temp_v0->f24 = st->z;
+        temp_v0->w14 = 0;
+        temp_v0->f28 = st->x;
+        temp_v0->f2C = st->y;
+        temp_v0->f30 = st->z;
+        temp_v0->f34 = 0.0f;
+        *(float *)temp_v0->p18 = 0.0f;
+        temp_v0->f44 = 0.0f;
+        temp_v0->f48 = 0.0f;
+        temp_v1->f20 = 0.0f;
+        temp_v1->f24 = 0.0f;
+        temp_v1->f28 = 0.0f;
+        temp_v1->f2C = 0.0f;
+        temp_v1->f30 = 0.0f;
+        temp_v1->f34 = 0.0f;
+    }
+}
 
 void func_00142C40(Actor *a, ObjBindR *b, s32 n) {
     ObjSlotR *temp_3;
@@ -270,15 +305,14 @@ void func_00142C40(Actor *a, ObjBindR *b, s32 n) {
     b->s48 = temp_4;
 }
 
-/* DEBT(CAST): SlotCQ is the existing subsystem view of the bind-slot record. */
 void func_00142CC0(Actor *a, int n)
 {
-    SlotCQ *slot;
+    ActorBind *slot;
 
-    ((SlotCQ *)func_0013C9C8(a, n))->b1D = 0;
-    slot = (SlotCQ *)func_0013C9C8(a, n);
+    func_0013C9C8(a, n)->b1D = 0;
+    slot = func_0013C9C8(a, n);
     func_00141FF0(a, slot);
-    func_0013CAD0((ScrQ *)a, (ScrEntQ *)slot, func_0013CA30((ScrQ *)a, 0));
+    func_0013CAD0(a, slot, func_0013CA30(a, 0));
     slot->b1F = 0;
     if (a->hdr->type == 1) {
         func_00142B50(a, slot, n);
@@ -293,8 +327,7 @@ void AtelExecReturn(s32 id, s32 b, s32 c)
 
     actor = AtelGetBasicWork(id);
     func_001426F0(actor, actor->node90);
-    /* DEBT(CAST): shared node has legacy helper views NodeQ/ScrEntQ/SlotCQ. */
-    func_00142218(actor, (NodeQ *) actor->node90);
+    func_00142218(actor, actor->node90);
     actor->node90 = 0;
     if (b >= 0)
     {
@@ -305,8 +338,8 @@ void AtelExecReturn(s32 id, s32 b, s32 c)
     {
         binding = func_0013C9C8(actor, (s32) actor->slotIdx);
         func_00142CC0(actor, (s32) actor->slotIdx);
-        func_00141FF0(actor, (SlotCQ *) binding);
-        func_0013CAD0((ScrQ *) actor, (ScrEntQ *) binding, func_0013CA30((ScrQ *) actor, 1));
+        func_00141FF0(actor, binding);
+        func_0013CAD0(actor, binding, func_0013CA30(actor, 1));
     }
     actor->flags34.w |= 0x10;
 }
@@ -324,8 +357,7 @@ void func_00142EA8(s32 arg0, s32 arg1, s32 arg2)
 
     actor = AtelGetBasicWork(arg0);
     func_001426F0(actor, actor->node90);
-    /* DEBT(CAST): shared node has legacy helper views NodeQ/ScrEntQ/SlotCQ. */
-    func_00142218(actor, (NodeQ *) actor->node90);
+    func_00142218(actor, actor->node90);
     actor->node90 = 0;
     if (arg1 >= 0)
     {
@@ -336,8 +368,8 @@ void func_00142EA8(s32 arg0, s32 arg1, s32 arg2)
     {
         binding = func_0013C9C8(actor, (s32) actor->slotIdx);
         func_00142CC0(actor, (s32) actor->slotIdx);
-        func_00141FF0(actor, (SlotCQ *) binding);
-        func_0013CAD0((ScrQ *) actor, (ScrEntQ *) binding, func_0013CA30((ScrQ *) actor, 1));
+        func_00141FF0(actor, binding);
+        func_0013CAD0(actor, binding, func_0013CA30(actor, 1));
     }
     actor->flags34.w |= 0x10;
 }
@@ -391,36 +423,36 @@ void func_001430B0(int id, float *a, float *b, float *c) {
 int func_00143170(int v) {
     int old = AtelChangeCurrentCtrl(0);
 
-    D_0058E3D8->f210.b0 = (v != 0);
+    D_0058E3D8->f210.b.b0 = (v != 0);
     AtelSetCurrentCtrl(old);
 }
 
 int func_001431C0(void) {
     int old = AtelChangeCurrentCtrl(0);
-    int r = D_0058E3D8->f210.b0;
+    int r = D_0058E3D8->f210.b.b0;
 
     AtelSetCurrentCtrl(old);
     return r;
 }
 
 int func_00143200(int v) {
-    REC124828F()->b25 = (v != 0);
+    func_00124828()->control10.b.b25 = (v != 0);
 }
 
 int func_00143248(void) {
-    return REC124828F()->b25;
+    return func_00124828()->control10.b.b25;
 }
 
 void func_00143270(int v) {
-    REC124828F()->b26 = (v != 0);
+    func_00124828()->control10.b.b26 = (v != 0);
 }
 
 int func_001432B8(void) {
-    return REC124828F()->b26;
+    return func_00124828()->control10.b.b26;
 }
 
 int func_001432E0(void) {
-    u8 *r = (u8 *)REC124828_BASE(); /* DEBT(CAST): byte member of the record at +0x29 */
+    Rec124828 *r = func_00124828();
     int v;
 
     if (MsBattleCheck() != 0) {
@@ -428,12 +460,33 @@ int func_001432E0(void) {
     }
     v = func_00173690();
     if (v >= 0) {
-        r[0x29] = v & 1;
+        r->x29 = v & 1;
     }
-    return r[0x29];
+    return r->x29;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", AtelUpdateWaterStatus);
+void func_00138BD8(int v);
+
+void AtelUpdateWaterStatus(void) {
+    float pos[4];
+    int old = AtelChangeCurrentCtrl(0);
+
+    if (func_001432E0() == 0) {
+        if (D_0058E3D8->flags & 0x10000) {
+            MsCameraGetPosNow(1, pos);
+            if (((EvGameState *)D_0058E3D8)->f208 <= pos[1]) {
+                func_00138BD8(1);
+            } else {
+                func_00138BD8(0);
+            }
+        } else {
+            func_00138BD8(0);
+        }
+    } else {
+        func_00138BD8(1);
+    }
+    AtelSetCurrentCtrl(old);
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", AtelUpdateBattleStatus);
 

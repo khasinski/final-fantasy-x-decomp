@@ -25,7 +25,38 @@ int func_00119F30(R0Sort *a, R0Sort *b)
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_119F30", func_00119F90);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_119F30", func_0011A330);
+typedef struct {
+    s32 w0;
+    u32 w4;
+    s32 w8;
+    s32 wC;
+} Rec16_119F30;
+
+extern char D_00569AC0[];
+extern s32 D_005804D4;
+extern s32 D_005804D8;
+extern Rec16_119F30 *D_005804DC;
+extern char *D_005804E0;
+
+char *func_0011A330(u32 a)
+{
+    Rec16_119F30 *p;
+    s32 n;
+
+    D_005804E8 = 0;
+    if (D_005804E4 == 0) {
+        return D_00569AC0;
+    }
+    p = &D_005804DC[D_005804D4];
+    n = D_005804D8;
+    for (n--; n != -1; n--, p++) {
+        if (a >= p->w4) {
+            D_005804E8 = (Triple *)p;
+            return D_005804E0 + p->w0;
+        }
+    }
+    return D_00569AC0;
+}
 
 s32 func_0011A3C8(void)
 {

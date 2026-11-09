@@ -17,10 +17,10 @@ void func_002D41D8(void) {
 void func_002D41E0(void) {
 }
 
-void func_002D41E8(void) {
+void func_002D41E8(int v) {
 }
 
-void func_002D41F0(void) {
+void func_002D41F0(int v) {
 }
 
 s32 TkGetSyncH(s32 i) {
@@ -48,7 +48,7 @@ float func_002D4278(float x, float y, float z) {
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D4290);
 
-void func_002D42C8(s32 a) {
+void func_002D42C8(void *a) {
     func_002DCEC8(a, a);
 }
 
@@ -121,7 +121,28 @@ s32 func_002D4500(s32 a) {
     return func_002D4458(a + 0x2000);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D4520);
+extern float D_00576040;
+float _m2c_func_002D4520_func_002E94A0(float, float) __asm__("func_002E94A0");
+
+float func_002D4520(float a, float b, float c, float d)
+{
+    float dx = c - a;
+    float dy = d - b;
+
+    if (__builtin_fabsf(dx) == 0.0f) {
+        if (dy >= 0.0f) {
+            return 1.5707964f;
+        }
+        return -1.5707964f;
+    }
+    if (__builtin_fabsf(dy) == 0.0f) {
+        if (dx >= 0.0f) {
+            return D_00576040;
+        }
+        return 3.1415927f;
+    }
+    return _m2c_func_002D4520_func_002E94A0(dy, dx);
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D45C0);
 
@@ -223,7 +244,21 @@ float func_002D49A8(int a)
     return func_002D4338((float)(a & 0xFFF) * 6.2831855f * 0.000244140625f);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D49E8);
+void func_002D49E8(float (*m)[4])
+{
+    int i;
+    int j;
+    float one = 1.0f;
+
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            m[i][j] = 0.0f;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        m[i][i] = one;
+    }
+}
 
 void func_002D4A68(float (*m)[4])
 {
@@ -338,22 +373,22 @@ void func_002D4D58(float *out, float a, float b, float c)
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D4E50);
 
-void TkMtCalcSpline(s32 a, s32 b, s32 c) {
-    func_002D4E50(a, b, c, 1);
+void TkMtCalcSpline(s32 a, void *b, s32 c, float f) {
+    func_002D4E50(a, b, c, 1, f);
 }
 
-void func_002D5188(s32 a, s32 b, s32 c) {
-    func_002D4E50(a, b, c, 0);
+void func_002D5188(s32 a, void *b, s32 c, float f) {
+    func_002D4E50(a, b, c, 0, f);
 }
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5190);
 
-void func_002D5448(s32 a, s32 b, s32 c) {
-    func_002D5190(a, b, c, 1);
+void func_002D5448(s32 a, void *b, s32 c, float f) {
+    func_002D5190(a, b, c, 1, f);
 }
 
-void func_002D5450(s32 a, s32 b, s32 c) {
-    func_002D5190(a, b, c, 0);
+void func_002D5450(s32 a, void *b, s32 c, float f) {
+    func_002D5190(a, b, c, 0, f);
 }
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5458);

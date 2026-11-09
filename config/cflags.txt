@@ -21,3 +21,8 @@ game/op/op_2B33F8 -Btools/cc/ee-as-delay/
 game/op/op_2B4FF8 -Btools/cc/ee-as-delay/
 game/rc/fx/rcfxWind -Btools/cc/ee-as-delay/
 game/platform/platform_2DC110 -Btools/cc/ee-as-delay/
+game/chr/cache -Btools/cc/ee-as-delay/
+game/movie/movie_15BBF8 -Btools/cc/ee-as-delay/
+game/movie/movie_str -Btools/cc/ee-as-delay/
+game/menu/tk/tk_228B08 -Btools/cc/ee-as-delay/
+game/menu/tk/tk_242040 -Btools/cc/ee-as-delay/

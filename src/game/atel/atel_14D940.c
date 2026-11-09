@@ -15,12 +15,12 @@ s32 AtelGetMusicNumber(void)
     return D_0058F940;
 }
 
-void func_0014D960(u8 v)
+void func_0014D960(int v)
 {
     D_0058F944 = v;
 }
 
-void func_0014D970(u8 v)
+void func_0014D970(int v)
 {
     D_0058F945 = v;
 }
@@ -35,7 +35,7 @@ u8 func_0014D990(void)
     return D_0058F945;
 }
 
-void func_0014D9A0(u8 v)
+void func_0014D9A0(int v)
 {
     D_0058F93C = v;
 }
@@ -360,17 +360,17 @@ void AtelExecSoftWareReset(void)
 
     save = AtelChangeCurrentCtrl(0);
     gs = AtelGetCurCtrlWork();
-    ok = *(u32 *)&gs->flags & 1; /* DEBT(CAST): GameFlags does not name these bits */
-    if (MsBattleCheck() || (*(u32 *)&gs->flags & 0x3000000)) {
+    ok = gs->flags.u & 1;
+    if (MsBattleCheck() || (gs->flags.u & 0x3000000)) {
         ok = 0;
     }
     if (((int (*)(int))func_0014A500)(0) == 0) { /* DEBT(CAST): s1.h declares no parameter, the caller passes 0 */
         ok = 0;
     }
-    if (*(u32 *)&gs->flags & 0x80000000) {
+    if (gs->flags.u & 0x80000000) {
         ok = 0;
     }
-    if ((gs->w210 >> 1) & 1) {
+    if (((u32)gs->w210 >> 1) & 1) {
         ok = 0;
     }
     if (func_0015A550()) {
@@ -383,7 +383,7 @@ void AtelExecSoftWareReset(void)
         ok = 0;
         break;
     }
-    if (((gs->w210 >> 4) & 1) == 0) {
+    if ((((u32)gs->w210 >> 4) & 1) == 0) {
         ok = 0;
     }
     if (func_0013A238() == 0x15C) {
@@ -395,7 +395,7 @@ void AtelExecSoftWareReset(void)
     if (func_0013A238() == 0x17) {
         ok = 0;
     }
-    if (((gs->w210 >> 6) & 1) == 0) {
+    if ((((u32)gs->w210 >> 6) & 1) == 0) {
         ok = 0;
     }
     if (TkSndIsStandbyVoice()) {
@@ -463,13 +463,13 @@ void AtelDrawSemiTrans(void)
     u32 flags;
     int on;
 
-    if (!(*(u32 *)&gs->flags & 1)) { /* DEBT(CAST): GameFlags does not name these bits */
+    if (!(gs->flags.u & 1)) {
         return;
     }
     if (MsBattleCheck()) {
         return;
     }
-    flags = *(u32 *)&gs->flags; /* DEBT(CAST) */
+    flags = gs->flags.u;
     on = 0;
     if (flags & 0x20000000) {
         on = 1;

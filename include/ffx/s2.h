@@ -78,8 +78,6 @@ extern void func_0018B558(S2Ctx *ctx, int a, int b);
 extern void func_0018B5A8(S2Ctx *ctx, int a, int b, int c);
 extern int func_002DA928(void *buf, short h, int a, int b, int c, int d, int e, int f);
 
-/* DEBT(CAST): funcs.h declares func_001072F8 with three ints; this is the (Chr *, int, float *) view the q1.h users take */
-#define S2_func_001072F8(c, i, v) (((s32 (*)(Chr *, int, float *))func_001072F8)(c, i, v))
 extern void func_001A2CC8(float *v);
 extern int func_001A3080(int a, int b);
 extern void func_001A2F00(int a, int b, float *c);
@@ -99,16 +97,16 @@ extern void func_0018F5E8(char *fmt, ...);extern void rcbgPreDummyInit(void);
 extern void rcbgFpSaveSub(void);
 extern void func_00194948(int a);
 extern int func_001AEBD8(void);
-typedef struct S2Obj1C { u8 pad0[0x10]; HeapMgr *w10; u8 pad14[8]; u8 sub[1]; } S2Obj1C;
+typedef struct S2Obj1C { u8 pad0[8]; s32 w8; u8 padC[4]; HeapMgr *w10; u8 pad14[4]; void **w18; W3Sched sched; } S2Obj1C;
 extern void *rcefObjNew(void);
 extern void rcefObjInit(void *p);
-extern void func_001A1FF0(void *sub, void *p);/* DEBT(CAST): the 32 twelve-byte command records at D_003172F0 + 0x15D0 (GameState.ent starts 8 bytes earlier) */
+extern void func_001A1FF0(W3Task *t, W3Task *n);/* DEBT(CAST): the 32 twelve-byte command records at D_003172F0 + 0x15D0 (GameState.ent starts 8 bytes earlier) */
 typedef struct S2Cmd { u8 b0, b1, b2, b3, b4, pad5; u16 h6; int w8; } S2Cmd;
 #define S2_CMDQ ((S2Cmd *)((u8 *)&D_003172F0 + 0x15D0))
 extern void MsBtlReadCueManage(void);typedef struct S2RecTail { u8 pad0[0x5B0]; struct { u8 b0; u8 pad1[0x23]; } e[3]; } S2RecTail;
 extern void func_001B3160(int a, int b, int c, int d);extern char D_0056D810[], D_0056DB00[];
 extern float eff_sin_t[];
-extern void rcbgSceneInit(W3Pool *p);extern float D_00313910[16];typedef struct S2Obj1A { u8 pad0[0xB0]; void *fnB0; void *fnB4; u8 padB8[4]; u32 flagsBC; u8 padC0[0x130 - 0xC0]; float v130[3]; int i13C; u8 pad140[0x160 - 0x140]; float v160[3]; int i16C; float v170[4]; u8 pad180[0x1B0 - 0x180]; float m1B0[16]; float m1F0[16]; float m230[16]; int f270; int f274; u8 pad278[8]; u8 b280[0xB0]; u8 b330[0x90]; u8 b3C0[1]; } S2Obj1A;
+extern void rcbgSceneInit(W3Pool *p);extern float D_00313910[16];typedef struct S2Obj1A { W3Task task; u32 flagsBC; struct S2Obj1A *pC0; struct S2Obj1A *pC4; struct S2Obj1A *pC8; struct S2Obj1A *pCC; u8 padD0[0x130 - 0xD0]; float v130[3]; int i13C; u8 pad140[0x160 - 0x140]; float v160[3]; int i16C; float v170[4]; u8 pad180[0x1B0 - 0x180]; float m1B0[16]; float m1F0[16]; float m230[16]; int f270; int f274; u8 pad278[8]; u8 b280[0xB0]; u8 b330[0x90]; u8 b3C0[1]; } S2Obj1A;
 extern void rcefObjCalcLocalMatrix(S2Obj1A *o);
 extern void func_001A0F58(S2Obj1A *o);
 extern void rcefParProc(void *b);
@@ -159,7 +157,6 @@ extern void func_0019B8F0(struct R2Vt2 *p);
 extern void func_0019ACF8(void *p);
 extern void func_0019B3F8(void *p);
 extern void func_0019B8C8(void *p);
-typedef struct S2W8 { u8 pad0[8]; int w8; } S2W8; /* DEBT(NAME): object with a value at 8 */
 extern void func_0019E128(void *p);
 typedef struct S2ChrB { u8 pad0[0x1BC]; s8 a1BC, a1BD, a1BE; } S2ChrB; /* DEBT(CAST): signed view of the byte triple Trio f1BC */
 extern void MsBtlGetPos(int a, BtlChr *c, int b, int d, int e, int f);

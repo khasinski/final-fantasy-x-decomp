@@ -94,7 +94,7 @@ T6_MenuEnt *func_0025B050(int slot, int id, int arg)
         func_002EF240(D_005739D0, 64);
         func_002EA328(0);
     } else {
-        e = (T6_MenuEnt *)&w->sub[w->f1E++]; /* DEBT(CAST): see T6_MenuEnt */
+        e = &w->sub[w->f1E++];
         if ((s16)w->f16 * w->f22 < w->f1E) {
             w->f28 = 1;
         } else {

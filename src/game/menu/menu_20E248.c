@@ -1,10 +1,13 @@
 /* tu_235 0x20e248-0x20e8a0: low; unk_20E248 (config/tu_map.tsv) */
+#define func_0020E508 _hdr_func_0020E508
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
 #include "ffx/r4.h"
 #include "ffx/t4.h"
 #include "ffx/u3.h"
+#include "ffx/v4.h"
+#undef func_0020E508
 
 void func_0020E248(s8 *s, u8 *d)
 {
@@ -76,7 +79,22 @@ void func_0020E388(u8 *s, s16 x, s16 y, int a)
 
 INCLUDE_ASM("build/ee_asm/game/menu/menu_20E248", func_0020E468);
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_20E248", func_0020E508);
+void func_0020E508(s8 *s, u8 *d)
+{
+    V4Rgba4 rep = D_00570A60;
+
+    while (*s != 0) {
+        if ((u8)(*s - '0') < 10) {
+            *d++ = *s++;
+        } else if (*s == ' ') {
+            *d++ = ':';
+            s++;
+        } else if ((u8)(*s - '-') < 3) {
+            *d++ = rep.c[*s++ - '-'];
+        }
+    }
+    *d = 0;
+}
 
 void func_0020E5B0(int a, int b, int c)
 {

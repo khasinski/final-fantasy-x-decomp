@@ -4,19 +4,21 @@
 #include "ffx/r0.h"
 
 typedef struct {
-    /* 0x00 */ u8 unk0[0x60];
+    /* 0x00 */ u8 pad00[0x60];
     /* 0x60 */ s32 val60;
-    /* 0x64 */ u8 unk64[6];
+    /* 0x64 */ u8 pad64[2];
+    /* 0x66 */ u16 val66;
+    /* 0x68 */ u16 val68;
     /* 0x6A */ u16 val6A;
-    /* 0x6C */ u8 unk6C[4];
+    /* 0x6C */ u8 pad6C[4];
 } TblEntry70; /* size 0x70 */
 
 /* two tables (pointer + count) live at 0x6F0 and 0x6F8 of the owner struct */
 typedef struct {
-    /* 0x000 */ u8 unk0[0x6F0];
+    /* 0x000 */ u8 pad000[0x6F0];
     /* 0x6F0 */ TblEntry70 *tblB;
     /* 0x6F4 */ s16 cntB;
-    /* 0x6F6 */ s16 unk6F6;
+    /* 0x6F6 */ s16 pad6F6;
     /* 0x6F8 */ TblEntry70 *tblA;
     /* 0x6FC */ s16 cntA;
 } TblOwner;
@@ -32,20 +34,20 @@ s32 func_0010D0A0(int arg0, int cnt, int base, int idx)
 
     if (idx == -1) {
         for (i = 0; i < cnt; i++, tbl++) {
-            *(u16 *)((u8 *)tbl + 0x68) = base;
+            tbl->val68 = base;
             tbl->val6A = base;
             Sg_GsloadSetBase(tbl);
             if (base != -1) {
-                base += *(u16 *)((u8 *)tbl + 0x66);
+                base += tbl->val66;
             }
         }
     } else {
         tbl += idx;
-        *(u16 *)((u8 *)tbl + 0x68) = base;
+        tbl->val68 = base;
         tbl->val6A = base;
         Sg_GsloadSetBase(tbl);
         if (base != -1) {
-            base += *(u16 *)((u8 *)tbl + 0x66);
+            base += tbl->val66;
         }
     }
     return base;

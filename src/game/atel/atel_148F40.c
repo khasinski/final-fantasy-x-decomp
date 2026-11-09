@@ -1,24 +1,83 @@
 /* tu_080 0x148f40-0x14b260: low; ~Atel (config/tu_map.tsv) */
+#define func_00149080 _hdr_func_00149080
 #define func_001496F0 _hdr_func_001496F0
 #define func_0014ACC0 _hdr_func_0014ACC0
 #define AtelGetHyoukaMenuEnable _hdr_AtelGetHyoukaMenuEnable
+#define AtelGetGuideMapActorInfo _hdr_AtelGetGuideMapActorInfo
+#define func_001499A8 _hdr_func_001499A8
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/r1.h"
 #include "ffx/s1.h"
 #include "ffx/u0.h"
 #include "ffx/actor_resources.h"
+#undef func_001499A8
+#undef AtelGetGuideMapActorInfo
 #undef AtelGetHyoukaMenuEnable
 #undef func_001496F0
 #undef func_0014ACC0
+#undef func_00149080
+int func_00148F40();
+int func_001390C8(char *p, int i);
+int func_00139120(char *p, int i);
+int func_00145558(void);
+float func_0013B7B8(int id);
+int func_00139B30(int v);
+
+extern struct { int id; int flags; } D_0058E8F0[];
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00148F40);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149080);
+int func_00149080(char *p, int *hdr, int sep_only, int idx, int flag)
+{
+    int ret = 0;
+    int saved_idx = idx;
+    int *q;
+
+    while (SndSyncTrans(0) != 0) {
+        func_002D3FF0(0);
+        TkSndUpdate2();
+    }
+    if (idx < 0) {
+        func_00148F40(p);
+    } else {
+        flag = 1;
+    }
+    if (hdr == 0) {
+        return 0;
+    }
+    q = hdr;
+    {
+        int w0 = *q++;
+
+        if ((w0 & 0xC0000000) != 0 && w0 >= 0) {
+            char *data = (char *)q + 0x1C;
+            int size = w0 & 0x3FFFFFFF;
+
+            while (idx > 0) {
+                data += size;
+                idx--;
+                size = *q++;
+            }
+            if (size != 0) {
+                ret = 1;
+                if (flag != 0 && sep_only != 0) {
+                    SndSepTransSepOnly((int)data, size);
+                } else {
+                    SndSepTransNonblock((int)data, size);
+                }
+            }
+        }
+    }
+    if (saved_idx >= 0) {
+        func_00138C38(saved_idx);
+    }
+    return ret;
+}
 
 int AtelSndTransSepSPKDataGroup(int a, int b, int c)
 {
-    int r = func_00149080(a, b, 1, c, 0);
+    int r = func_00149080((char *)a, (int *)b, 1, c, 0);
 
     SndSyncTrans(1);
     return r;
@@ -29,7 +88,36 @@ void func_00149200(void)
     D_0030B8C4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149210);
+int func_00149210(int id, int flags)
+{
+    int res = 1;
+
+    if (D_0030B8C4 < 8) {
+        int i;
+        int f;
+
+        for (i = 0; i < D_0030B8C4; i++) {
+            if (D_0058E8F0[i].id == id) {
+                return -1;
+            }
+        }
+        f = flags;
+        if ((flags & 0x7E0000) == 0) {
+            f = flags | 0x10000;
+        }
+        if (f & (func_00138C58() << 16)) {
+            int idx = D_0030B8C4;
+
+            D_0058E8F0[idx].id = id;
+            D_0058E8F0[idx].flags = flags | 0x8000;
+            res = 0;
+            D_0030B8C4 = idx + 1;
+        } else {
+            res = 1;
+        }
+    }
+    return res;
+}
 
 s32 _m2c_AtelGetHyoukaMenuEnable_AtelChangeCurrentCtrl(s32) __asm__("AtelChangeCurrentCtrl");
 void _m2c_AtelGetHyoukaMenuEnable_AtelSetCurrentCtrl(s32) __asm__("AtelSetCurrentCtrl");
@@ -93,7 +181,25 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetActorStartPos);
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetActorEndPos);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_001495A8);
+void func_001495A8(int id, float *px, float *py, float *pz)
+{
+    Actor *a = AtelGetBasicWork(id);
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    float x, y, z;
+
+    if (a->hdr->type == 2 || a->hdr->type == 5) {
+        x = (st->x + st->f30) * 0.5f;
+        y = (st->y + st->f34) * 0.5f;
+        z = (st->z + st->f38) * 0.5f;
+        *px = x;
+        *py = y;
+        *pz = z;
+    } else {
+        *px = st->x;
+        *py = st->y;
+        *pz = st->z;
+    }
+}
 
 float _m2c_func_00149678_func_00138FC8(char *p) __asm__("func_00138FC8");
 float func_00149678(void) {
@@ -129,10 +235,9 @@ float func_001496F0(s32 arg0) {
     return var_f20;
 }
 
-/* DEBT(FAKE) */
 s32 func_00149770(void) {
-    register s32 temp_17 __asm__("$17");
-    register s32 var_16 __asm__("$16");
+    s32 temp_17;
+    s32 var_16;
     s8 *temp_4;
 
     temp_17 = AtelChangeCurrentCtrl(0);
@@ -154,11 +259,67 @@ int func_001497E0(void)
     return func_00149770();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetGuideMapActorInfo);
+typedef struct GuideMapActorInfo {
+    int id;
+    int flags;
+    float x;
+    float y;
+    float z;
+    float dir;
+} GuideMapActorInfo;
 
-int func_001499A8(void)
+int AtelGetGuideMapActorInfo(int idx, GuideMapActorInfo *out)
 {
-    return AtelGetGuideMapActorInfo();
+    int res = 0;
+    int old = AtelChangeCurrentCtrl(0);
+
+    if ((D_0058E3D8->flags & 1) && D_0058E3D8->p48 != 0 && out != 0) {
+        if (idx < func_00139080(D_0058E3D8->p48)) {
+            int id = func_001390C8(D_0058E3D8->p48, idx);
+            int flags = func_00139120(D_0058E3D8->p48, idx);
+            Actor *a = AtelGetBasicWork(id);
+            int wBC;
+
+            res = (*(u32 *)&a->flags34 >> 27) & 1;
+            out->id = id;
+            wBC = *(int *)((u8 *)a + 0xBC);
+            if (wBC < 0) {
+                flags = wBC & 0x7FFFFFFF;
+            }
+            if (D_0058E3D8->flags & 0x800000) {
+                if (id == func_00145558()) {
+                    flags |= 0x800;
+                }
+            }
+            out->flags = flags;
+            func_001495A8(*(u16 *)((u8 *)a + 0x2E), &out->x, &out->y, &out->z);
+            switch (a->hdr->type) {
+            case 2:
+            case 3:
+            case 5:
+            case 6:
+                out->dir = 0.0f;
+                break;
+            default:
+                out->dir = func_0013B7B8(*(u16 *)((u8 *)a + 0x2E));
+                break;
+            }
+        } else {
+            out->id = 0;
+            out->flags = 0;
+            out->x = 0.0f;
+            out->y = 0.0f;
+            out->z = 0.0f;
+            out->dir = 0.0f;
+        }
+    }
+    AtelSetCurrentCtrl(old);
+    return res;
+}
+
+int func_001499A8(int idx, GuideMapActorInfo *out)
+{
+    return AtelGetGuideMapActorInfo(idx, out);
 }
 
 int func_001499C8(int v)
@@ -311,9 +472,71 @@ void AtelEventRegistFootInfo(void *p) {
     } while (var_18_4 < 0x10);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149E00);
+void _m2c_pppFpIDon(int) __asm__("pppFpIDon");
+void _m2c_pppFpIDdispOn(int) __asm__("pppFpIDdispOn");
+void _m2c_pppFpIDdispOff(int) __asm__("pppFpIDdispOff");
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00149E88);
+void func_00149E00(int on)
+{
+    int *p = D_0058E5A8;
+    int i;
+
+    for (i = 3; i >= 0; i--, p++) {
+        int id = *p;
+
+        if (id >= 0) {
+            if (on != 0) {
+                _m2c_pppFpIDon(id);
+                _m2c_pppFpIDdispOn(id);
+            } else {
+                _m2c_pppFpIDdispOff(id);
+            }
+        }
+    }
+}
+
+void func_00149E88(char *p, int on)
+{
+    int i = 0;
+    int n = func_00138E90(p);
+
+    for (; i < n; i++) {
+        int id = func_00138ED8(p, i);
+        int flags = func_00138F30(p, i);
+
+        if (flags & 2) {
+            int play = 0;
+
+            if ((D_0058E3D8->flags & 0x80000) && (u32)SYS()->w1F4 >= 4) {
+                if (flags & 0x100) {
+                    play = on ? play : 1;
+                }
+                if (flags & 0x200) {
+                    play = on ? 1 : play;
+                }
+            }
+            if (flags & 0x80) {
+                if (on != 0) {
+                    play = 1;
+                    if ((flags & 0x40) == 0) {
+                        func_00139B30(0x7F);
+                    }
+                } else {
+                    SndSepStop(id);
+                }
+            } else if (!play) {
+                int vol = (on != 0) ? 0x3F : 0x7F;
+
+                if ((flags & 0x40) == 0) {
+                    SndSepVolumeTranslate(id, 0xC, vol);
+                }
+            }
+            if (play) {
+                SndSepPlay(id, 0x3F, 0x7F);
+            }
+        }
+    }
+}
 
 void func_0014A000(int v)
 {
@@ -374,7 +597,38 @@ void AtelExecEventSound(void)
     AtelSetCurrentCtrl(table1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_0014A190);
+s32 func_0014A190(void)
+{
+    int member[3];
+    int i;
+    Rec124828 *r = func_00124828();
+    u8 prev = r->x20;
+    u8 *dst;
+    int *src;
+
+    MsGetSavePartyMember(&member[0], &member[1], &member[2]);
+    dst = &r->x20 + 1;
+    src = member;
+    for (i = 2; i >= 0; i--) {
+        if (*src == 0xFF) {
+            *dst = 0xFF;
+        } else {
+            *dst = *(u8 *)src;
+        }
+        dst++;
+        src++;
+    }
+    *(s32 *)(&r->x20 + 4) = 0;
+    for (i = 0; i < 7; i++) {
+        int j = MsGetSavePlyJoin(i);
+
+        if (j == 1) {
+            *(s32 *)(&r->x20 + 4) |= j << i;
+        }
+    }
+    r->x20 = 1;
+    return prev;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelPopMember);
 
@@ -467,9 +721,65 @@ int func_0014A500(void)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelBindFp);
+void AtelBindFp(Actor *a, int v, int c)
+{
+    if (a->hdr->type == 1) {
+        int i = 0;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_0014A650);
+        for (; i < 4; i++) {
+            Actor *p = (Actor *)((u8 *)a + i * 0x10);
+            u16 h = *(u16 *)((u8 *)p + 0xB18);
+
+            if ((h & ~0x8000) == 0) {
+                *(u16 *)((u8 *)p + 0xB1A) = c;
+                *(u16 *)((u8 *)p + 0xB18) = h | v;
+                switch (a->stateAA) {
+                case 1:
+                    if (a->ptr9C != 0) {
+                        pppFpSetStickChr(v, a->ptr9C, c);
+                    }
+                    return;
+                case 5:
+                    func_00269D60(v, c);
+                    return;
+                case 4:
+                    pppFpSetStickMap(v, c);
+                    return;
+                }
+                return;
+            }
+        }
+    }
+}
+
+void func_0014A650(Actor *a, int id, float x, float y, float z)
+{
+    float vec[4];
+
+    if (a->hdr->type == 1) {
+        Actor *p = a;
+        int mask = 0xFFFF7FFF;
+        int i = 3;
+
+        do {
+            u16 h = *(u16 *)((u8 *)p + 0xB18);
+
+            if ((h & mask) == id) {
+                *(float *)((u8 *)p + 0xB1C) = x;
+                *(float *)((u8 *)p + 0xB20) = y;
+                *(float *)((u8 *)p + 0xB24) = z;
+                *(u16 *)((u8 *)p + 0xB18) = h | 0x8000;
+                vec[0] = x;
+                vec[1] = y;
+                vec[2] = z;
+                vec[3] = 1.0f;
+                pppFpSetStickPos(id, vec);
+            }
+            i--;
+            p = (Actor *)((u8 *)p + 0x10);
+        } while (i >= 0);
+    }
+}
 
 /* DEBT(CAST) */ /* DEBT(FAKE) */
 void func_0014A730(Actor *a, s32 v) {
@@ -507,7 +817,18 @@ void func_0014A730(Actor *a, s32 v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", TkChPatchM160);
+void TkChPatchM160(Chr *chr, int v)
+{
+    if (chr != 0) {
+        if (v != 0) {
+            graphicCharacterInstanceSetMeshSegmentAlpha((s32)chr, 1, 1);
+            graphicCharacterInstanceSetMeshSegmentAlpha((s32)chr, 2, 0);
+        } else {
+            graphicCharacterInstanceSetMeshSegmentAlpha((s32)chr, 1, 0);
+            graphicCharacterInstanceSetMeshSegmentAlpha((s32)chr, 2, 1);
+        }
+    }
+}
 
 void TkChSetBattleChrNum(Actor *a)
 {
@@ -533,19 +854,16 @@ Chr *TkCh_Allocate(int id)
     return c;
 }
 
+Chr *_m2c_Ch_Allocate2(int id, int v) __asm__("Ch_Allocate2");
 void _m2c_TkCh_Allocate2_TkChPatchM160(Chr *chr, int v) __asm__("TkChPatchM160");
-/* DEBT(FAKE) */
-Chr *TkCh_Allocate2(s32 arg0) {
-    register Chr *temp_17 __asm__("$17");
+Chr *TkCh_Allocate2(int id, int v) {
+    Chr *c = _m2c_Ch_Allocate2(id, v);
 
-    temp_17 = Ch_Allocate2();
-    ChN_ReadSystemMGRP(arg0, 0);
-    if (temp_17 != 0) {
-        if (arg0 == 3) {
-            _m2c_TkCh_Allocate2_TkChPatchM160(temp_17, 1);
-        }
+    ChN_ReadSystemMGRP(id, 0);
+    if (c && id == 3) {
+        _m2c_TkCh_Allocate2_TkChPatchM160(c, 1);
     }
-    return temp_17;
+    return c;
 }
 
 /* DEBT(CAST): shared declarations retain untyped handles or buffers at these calls. */
@@ -604,7 +922,36 @@ void AtelEventLoadMusic(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelEventPlayMusic);
+void AtelEventPlayMusic(void)
+{
+    int v = func_00138DF0();
+
+    if (v < 0) {
+        int fade = ((u32)v >> 16) & 0x7FFF;
+
+        v &= 0xFFFF;
+        if ((u32)v < 0x100) {
+            if (SndGetNowPlayMusic() >= 0) {
+                if (SndGetNowPlayMusic() == v) {
+                    return;
+                }
+                if (SndGetNowPlayMusic() >= 0) {
+                    SndMusicCrossStart(v, fade);
+                } else {
+                    SndMusicStart(v);
+                }
+            } else {
+                SndMusicStart(v);
+            }
+            AtelRegistMusicNumber(v);
+        } else {
+            if (SndGetNowPlayMusic() >= 0) {
+                SndMusicVolumeFadeOut(SndGetNowPlayMusic(), fade);
+            }
+            AtelRegistMusicNumber(-1);
+        }
+    }
+}
 
 u8 func_0014ABB0(void)
 {
@@ -696,7 +1043,7 @@ void func_0014AD58(int v)
     r->xD7 = v;
 }
 
-u8 func_0014AD88(void)
+int func_0014AD88(void)
 {
     return func_00124828()->xD7;
 }

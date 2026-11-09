@@ -28,7 +28,7 @@ void *TODVDFileReadAuto(const char *name, int id)
 
 void func_0020CD30(int a, int b, int c)
 {
-    D_0068F420 = (R4Vt *)GetCD(); /* DEBT(CAST): R4Vt is a view of SysVt */
+    D_0068F420 = GetCD();
     D_0068F420->f10(a);
     if (D_0068F420->f14(b) != 0) {
         D_0068F420->f0(b, c, 0, 0);
@@ -37,7 +37,7 @@ void func_0020CD30(int a, int b, int c)
 
 int func_0020CDB8(void)
 {
-    return D_0068F420->fn8(1);
+    return D_0068F420->f8(1);
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/meswin", func_0020CDE0);

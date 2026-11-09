@@ -1,42 +1,10 @@
 /* tu_043 0x124440-0x126108: medium; tklib (config/tu_map.tsv) */
 #include "common.h"
-#define func_00125268 q0_func_00125268 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q0.h"
-#undef func_00125268
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
-#define func_00124530 q1_func_00124530 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124550 q1_func_00124550 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TkMalloc q1_TkMalloc /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TkFree q1_TkFree /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124BC8 q1_func_00124BC8 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124BE8 q1_func_00124BE8 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124C08 q1_func_00124C08 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124C28 q1_func_00124C28 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124C48 q1_func_00124C48 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TkGetNowEventJumpMapNo q1_TkGetNowEventJumpMapNo /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124C88 q1_func_00124C88 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00124CA8 q1_func_00124CA8 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00125268 q1_func_00125268 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TkCdReadSync q1_TkCdReadSync /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define TOSetAlbhedFlg q1_TOSetAlbhedFlg /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q1.h"
-#undef func_00124530
-#undef func_00124550
-#undef TkMalloc
-#undef TkFree
-#undef func_00124BC8
-#undef func_00124BE8
-#undef func_00124C08
-#undef func_00124C28
-#undef func_00124C48
-#undef TkGetNowEventJumpMapNo
-#undef func_00124C88
-#undef func_00124CA8
-#undef func_00125268
-#undef TkCdReadSync
-#undef TOSetAlbhedFlg
 
 void func_00124440(void)
 {
@@ -78,9 +46,9 @@ u8 TkGetTGS(void)
     return D_00567EB2;
 }
 
-s32 *TkGetFFXCofingAdrs(void)
+u8 *TkGetFFXCofingAdrs(void)
 {
-    return &D_00588E80;
+    return D_00588E80;
 }
 
 int TkMsImportantSet(int a) /* DEBT(TYPE): returns nothing */
@@ -96,7 +64,7 @@ void func_00124528(int i)
     func_001DD998(i);
 }
 
-u8 func_00124530(void)
+int func_00124530(void)
 {
     u8 old = D_00308935;
     D_00308935 = 0;
@@ -108,16 +76,16 @@ u8 func_00124540(void)
     return D_00308935;
 }
 
-void func_00124550(RecBackup *r)
+void func_00124550(Rec124828 *r)
 {
-    r->hC0 = r->h00;
-    r->hC2 = r->h02;
-    r->hC4 = r->h04;
-    r->hC6 = r->h06;
-    r->hC8 = r->h08;
-    r->hCA = r->h0A;
-    r->hCC = r->b0C;
-    r->vCE.h = r->b0D;
+    r->hC0 = r->x00;
+    r->hC2 = r->x02;
+    r->hC4 = r->x04;
+    r->hC6 = r->x06;
+    r->hC8 = r->x08;
+    r->hCA = r->x0A;
+    r->hCC = r->x0C;
+    r->vCE.h = r->x0D;
 }
 
 void TkSetEvSaveStatus(Rec124828 *r)
@@ -125,16 +93,16 @@ void TkSetEvSaveStatus(Rec124828 *r)
     r->x2A = 1;
 }
 
-void func_001245A8(RecBackup *r)
+void func_001245A8(Rec124828 *r)
 {
-    r->h02 = r->hC2;
-    r->b0D = r->vCE.b;
+    r->x02 = r->hC2;
+    r->x0D = r->vCE.b;
 }
 
-void func_001245C0(RecBackup *r)
+void func_001245C0(Rec124828 *r)
 {
-    r->h06 = r->hC6;
-    r->h0A = r->hCA;
+    r->x06 = r->hC6;
+    r->x0A = r->hCA;
 }
 
 s32 *func_001245D8(void)
@@ -179,7 +147,7 @@ int func_00124648(void)
 
 int func_00124668(int v)
 {
-    ((RecBackup *)func_00124828(v))->b2B = v; /* DEBT(CAST) */
+    func_00124828()->x2B = v;
 }
 
 void func_00124690(s32 v)
@@ -192,12 +160,12 @@ u8 func_001246A0(void)
     return D_00580E64;
 }
 
-void *TkMalloc(s32 size)
+s32 TkMalloc(s32 size)
 {
     s32 n = (size + 0x7FF) / 0x800 * 0x800;
 
     func_0011C348(0x40);
-    return user_malloc(n, 4, 0, -1);
+    return (s32)user_malloc(n, 4, 0, -1);
 }
 
 void func_00124708(void)
@@ -231,7 +199,7 @@ void TkSetMapGroupDrawStatus(s32 bit, s32 on)
     yiSetDrawMask(m);
 }
 
-Rec124828 *func_00124828(int idx)
+Rec124828 *func_00124828(void)
 {
     return func_001BE338();
 }
@@ -288,7 +256,7 @@ void func_00124A98(void)
     {
         value2 = func_2058630(value1);
         value0 = value2 + 4;
-        value3 = TkMalloc(value0);
+        value3 = (void *)TkMalloc(value0);
         func_002EF0D0(value3, 0, value0);
         func_20585B8(value1, value3, value2);
         func_2058698(value1);
@@ -304,7 +272,7 @@ s32 func_00124B50(void)
 
 void TkSetEventJumpMapNo(int a, int b)
 {
-    Rec124828 *r = CALL0_func_00124828();
+    Rec124828 *r = func_00124828();
 
     r->x06 = r->x04;
     r->x0A = r->x08;
@@ -316,49 +284,49 @@ void TkSetEventJumpMapNo(int a, int b)
     r->x2A = 0;
 }
 
-u16 func_00124BC8(s32 idx)
+int func_00124BC8(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h02; /* DEBT(CAST) */
+    return func_00124828()->x02;
 }
 
-u16 func_00124BE8(s32 idx)
+int func_00124BE8(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h06; /* DEBT(CAST) */
+    return func_00124828()->x06;
 }
 
-u16 func_00124C08(s32 idx)
+int func_00124C08(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h0A; /* DEBT(CAST) */
+    return func_00124828()->x0A;
 }
 
-u8 func_00124C28(s32 idx)
+int func_00124C28(void)
 {
-    return ((RecBackup *)func_00124828(idx))->b0D; /* DEBT(CAST) */
+    return func_00124828()->x0D;
 }
 
-u16 func_00124C48(s32 idx)
+int func_00124C48(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h00; /* DEBT(CAST) */
+    return func_00124828()->x00;
 }
 
-u16 TkGetNowEventJumpMapNo(s32 idx)
+int TkGetNowEventJumpMapNo(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h04; /* DEBT(CAST) */
+    return func_00124828()->x04;
 }
 
-u16 func_00124C88(s32 idx)
+int func_00124C88(void)
 {
-    return ((RecBackup *)func_00124828(idx))->h08; /* DEBT(CAST) */
+    return func_00124828()->x08;
 }
 
-u8 func_00124CA8(s32 idx)
+int func_00124CA8(void)
 {
-    return ((RecBackup *)func_00124828(idx))->b0C; /* DEBT(CAST) */
+    return func_00124828()->x0C;
 }
 
 void func_00124CC8(int a, int b)
 {
-    Rec124828 *r = CALL0_func_00124828();
+    Rec124828 *r = func_00124828();
     int old_a = a;
 
     if (old_a < 0) {
@@ -371,7 +339,7 @@ void func_00124CC8(int a, int b)
     r->x00 = a;
     r->x0C = b;
     if (old_a < 0) {
-        func_001245A8((RecBackup *)r); /* DEBT(CAST) */
+        func_001245A8(r);
     }
     D_00580E44 = 1;
 }
@@ -430,7 +398,7 @@ void TkCtrl(void)
 {
     if (D_00580E44) {
         if (D_00580E48 <= 0) {
-            func_00124E00(CALL0_func_00124828()->x00);
+            func_00124E00(func_00124828()->x00);
         } else {
             D_00580E48--;
         }
@@ -640,7 +608,7 @@ void func_001254E0(void) {
 
 void func_001254E8(s32 v)
 {
-    ((u8 *)TkGetFFXCofingAdrs())[0xC] = v; /* DEBT(CAST) */
+    TkGetFFXCofingAdrs()[0xC] = v;
 }
 
 void func_00125510(void)
@@ -684,7 +652,7 @@ void func_001255A8(void)
     func_00124478(0);
     func_00124668(0);
     func_001245F8(0);
-    save = CALL0_func_00124828();
+    save = func_00124828();
     save->control10.flags = (save->control10.flags | 0x2000000) & ~0x4000000;
 }
 

@@ -33,7 +33,22 @@ void func_00171648(s32 on) {
     } while (var_3 >= 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_00171680);
+int func_00171680(int n, int a, int b, int c)
+{
+    int ret;
+    s32 save98 = D_0057CB98;
+    G1SlotTaskCtx *ctx = (G1SlotTaskCtx *)D_00597E38[n];
+    s32 saveA0 = D_0057CBA0;
+
+    D_0057CBA4 = ctx->w0C;
+    D_0057CB98 = ctx->w10;
+    D_0057CBA8 = ctx->w14;
+    D_0057CBA0 = ctx->w18;
+    ret = func_00171004(a, b, c);
+    D_0057CB98 = save98;
+    D_0057CBA0 = saveA0;
+    return ret;
+}
 
 int func_00171718(int a, int b, int c)
 {
@@ -184,7 +199,21 @@ void func_001719F8(void)
     func_00171978(7);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_00171A00);
+int func_00171A00(G1SlotTaskCtx *ctx, int a, int b, int c)
+{
+    int ret;
+    s32 save98 = D_0057CB98;
+    s32 saveA0 = D_0057CBA0;
+
+    D_0057CBA4 = ctx->w0C;
+    D_0057CB98 = ctx->w10;
+    D_0057CBA8 = ctx->w14;
+    D_0057CBA0 = ctx->w18;
+    ret = func_00171004(a, b, c);
+    D_0057CB98 = save98;
+    D_0057CBA0 = saveA0;
+    return ret;
+}
 
 int func_00171A88(int a, int b, int c)
 {

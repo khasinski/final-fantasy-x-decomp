@@ -3,7 +3,11 @@
 #include "ffx/g3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
+#define func_001E5538 _hdr_func_001E5538
+#define MsGetTargetList _hdr_MsGetTargetList
 #include "ffx/u2.h"
+#undef MsGetTargetList
+#undef func_001E5538
 #include "ffx/v3.h"
 #include "ffx/s3.h"
 
@@ -21,13 +25,47 @@ void MsEffectChrMotionOut(u8 id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsEffectChrMotionIn);
+void MsEffectChrMotionIn(u8 id)
+{
+    float pos[4];
+    BtlChr *c = MsGetChr(id);
+
+    if (c->fABF != 0) {
+        c->fABF = 0;
+        c->f1BC.b -= 3;
+        c->f1C9.b = c->f1BC.b;
+        c->fB0 = 0xFF;
+        c->fDC = 1;
+        MsSetChrMoveFlag(id, 0);
+        MsGetChrEscapePos(id, (int)pos);
+        MsSetChrPosReset(id, pos);
+        MsStatusEffectCheck(id);
+        MsSetWeaponEffectAttribute(id, c);
+        MsSetMotion(id, 0x32, 1, 0, 1, 0, 0);
+    }
+}
 
 int func_001E4E08(u8 id) {
     return MsGetChr(id)->fF2 != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E4E30);
+int func_001E4E30(void) {
+    int best_id = -1;
+    int best_val = -1;
+    int i;
+    for (i = 0; i < 7; i++) {
+        if (MsGetRamChrFemale(i) != 0 && MsGetSavePlyJoin(i) != 0 &&
+            MsGetChrStatDeath(i) == 0 && MsGetChrStatStone(i) == 0 &&
+            (D_003172F0.f20FE == 0 || i == 6)) {
+            int val = D_003194D0.w2C[i];
+            if (best_val < val) {
+                best_val = val;
+                best_id = i;
+            }
+        }
+    }
+    return best_id;
+}
 
 int func_001E4F20(int *out)
 {
@@ -48,11 +86,107 @@ void func_001E4F50(void) {
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetBattleList);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E4CD0/rodata", jtbl_0056F9B0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetList);
+u8 *MsGetTargetList(u8 id, int *out) {
+    u8 *res = 0;
+    int total = 0;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E5538);
+    if (MsBtlChrNumCheck(id) != 0) {
+        int count = 0;
+        BtlChr *c = MsGetChr(id);
+        GsEnt48 *cmd = MsGetChrCommand2(id);
+        int mask;
+        int seen;
+        int i;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetLinkList);
+        res = c->fA00;
+        if (cmd != 0) {
+            mask = cmd->f8[cmd->f2].targets;
+        } else {
+            mask = c->fA80;
+        }
+        seen = 0;
+        for (i = 0; i < 7; i++) {
+            u8 chr_id = D_003192B5[i];
+            if (chr_id != 0xFF && ((mask >> chr_id) & 1)) {
+                res[count] = chr_id;
+                seen |= 1 << chr_id;
+                count++;
+            }
+        }
+        for (i = 0; i < 0x1F; i++) {
+            if ((mask >> i) & 1) {
+                if (!((seen >> i) & 1)) {
+                    res[count] = i;
+                    count++;
+                }
+            }
+        }
+        for (total = count; count < 0x1F; count++) {
+            res[count] = 0xFF;
+        }
+    }
+    if (out != 0) {
+        *out = total;
+    }
+    return res;
+}
+
+int func_001E5538(int id, int mask) {
+    if (!((mask >> id) & 1)) {
+        BtlChr *c = MsGetChr(id);
+        int parent = c->fFF;
+        mask |= 1 << id;
+        if (parent != 0xFF) {
+            mask = func_001E5538(parent, mask);
+        }
+        if (c->f100 != 0) {
+            int i;
+            for (i = 0; i < 31; i++) {
+                parent = MsGetChr(i)->fFF;
+                if (parent == id) {
+                    mask = func_001E5538(i, mask);
+                }
+            }
+        }
+    }
+    return mask;
+}
+
+u8 *MsGetTargetLinkList(u8 id, int *out) {
+    u8 *res = 0;
+    int sp0 = 0;
+
+    if (MsBtlChrNumCheck(id) != 0) {
+        u8 *list = MsGetTargetList(id, &sp0);
+        int mask1 = 0;
+        BtlChr *c = MsGetChr(id);
+        int i;
+        int mask2;
+
+        res = c->fA20;
+        mask2 = 0;
+        for (i = 0; i < 0x1F; i++) {
+            id = list[i];
+            if (id != 0xFF) {
+                mask1 |= 1 << id;
+                mask2 = func_001E5538(id, mask2);
+            }
+            res[i] = id;
+        }
+        for (i = 0; i < 0x1F; i++) {
+            if (!((mask1 >> i) & 1)) {
+                if ((mask2 >> i) & 1) {
+                    res[sp0] = i;
+                    sp0++;
+                }
+            }
+        }
+    }
+    if (out != 0) {
+        *out = sp0;
+    }
+    return res;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetRandomList);
 
@@ -71,7 +205,27 @@ u8 *func_001E58F8(u8 id, int *out)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetSortList);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E5B70);
+float sqrtf(float x);
+s32 _E5B70_func_002EC198(s64, s64) __asm__("func_002EC198");
+s64 _E5B70_func_002ED038(float) __asm__("func_002ED038");
+
+float func_001E5B70(int mode, float *a, float *b, float *c) {
+    float dx, dz, d, len;
+
+    if (mode != 0) {
+        dz = a[2] - b[2];
+        dx = b[0] - a[0];
+    } else {
+        dz = a[0] - b[0];
+        dx = a[2] - b[2];
+    }
+    d = -dx * a[0] + dz * a[2];
+    len = sqrtf(dz * dz + dx * dx);
+    if (_E5B70_func_002EC198(_E5B70_func_002ED038(len), 0) != 0) {
+        return (dx * c[0] - dz * c[2] + d) / len;
+    }
+    return 0.0f;
+}
 
 int MsGetYoujinbouCom(void)
 {
@@ -701,7 +855,23 @@ int func_001E74F0(void) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E7510);
+typedef struct {
+    float f0[4];
+    u8 pad10[0x212D - 0x10];
+    u8 f212D;
+} GameState7510;
+extern GameState7510 _gs_7510 __asm__("D_003172F0");
+extern char D_0056FB68[];
+
+int func_001E7510(Actor *a, void *unused, ScriptCtx *ctx) {
+    _gs_7510.f0[3] = 1.0f;
+    _gs_7510.f0[2] = AtelPopStackFloat(a, ctx);
+    _gs_7510.f0[1] = AtelPopStackFloat(a, ctx);
+    _gs_7510.f0[0] = AtelPopStackFloat(a, ctx);
+    _gs_7510.f212D = 1;
+    func_002EF240(D_0056FB68, _gs_7510.f0[0], _gs_7510.f0[1], _gs_7510.f0[2]);
+    return 0;
+}
 
 void func_001E75D8(Actor *ctx, void *unused, ScriptCtx *arg)
 {

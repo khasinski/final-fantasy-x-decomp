@@ -1,4 +1,5 @@
 /* tu_187 0x1b89d8-0x1ba7d0: low; ~Ms (config/tu_map.tsv) */
+#define MsGetExcelData _hdr_MsGetExcelData
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -8,6 +9,7 @@
 #include "ffx/v2.h"
 #include "ffx/g2.h"
 #include "ffx/w4.h"
+#undef MsGetExcelData
 
 float func_001B89D8(int a, int b) {
     float va[4];
@@ -21,7 +23,24 @@ float func_001B89D8(int a, int b) {
     return func_001AC348(va, vb) - ra - rb;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsGetExcelData);
+void *MsGetExcelData(int id, RangeTbl *tbl, void **strings_out) {
+    RangeEnt *ent = tbl->ent;
+    RangeEnt *e = ent;
+    int i;
+
+    for (i = 0; i < tbl->count; i++, e++) {
+        if (id >= e->start && id <= e->end) {
+            if (strings_out != 0) {
+                *strings_out = (u8 *)tbl + e->off + e->extra;
+            }
+            return (u8 *)tbl + e->off + (id - e->start) * e->stride;
+        }
+    }
+    if (strings_out != 0) {
+        *strings_out = (u8 *)tbl + ent->off + ent->extra;
+    }
+    return (u8 *)tbl + ent->off;
+}
 
 int MsGetExcelDataNum(RangeTbl *tbl, int i) {
     RangeEnt *e = tbl->ent;
@@ -178,7 +197,46 @@ int func_001B9578(int id) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsGetCommandUse);
+int func_001BFE30(int);
+
+int MsGetCommandUse(int id, int cmd)
+{
+    int i = cmd & 0xFFF;
+    int r = 0;
+    BtlChr *c;
+    int w;
+    int m;
+
+    switch (cmd >> 12) {
+    case 3:
+        c = MsGetChr(id);
+        w = i / 16;
+        m = 1 << (cmd & 0xF);
+        if (c->f350[w] & m) {
+            r = 1;
+        }
+        if (cmd == 0x30FF) {
+            for (i = 15; i < 18; i++) {
+                if (func_001B9578(i) != 0) {
+                    r = 1;
+                    break;
+                }
+            }
+        }
+        break;
+    case 0:
+        if (func_001B9578(i) != 0) {
+            r = 1;
+        }
+        break;
+    case 2:
+        if (cmd == *(u16 *)&D_00319368 && func_001BFE30(cmd) <= 0) {
+            r = 1;
+        }
+        break;
+    }
+    return r;
+}
 
 void func_001B96E8(int id, int cmd, int on)
 {

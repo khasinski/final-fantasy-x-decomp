@@ -15,17 +15,182 @@ typedef struct G0Slot16 {
     s32 wC;
 } G0Slot16; /* DEBT(NAME) */
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00113FF8);
+typedef struct ClothSpring {
+    s16 h0;
+    s16 h2;
+    float f4;
+    float f8;
+} ClothSpring;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114120);
+typedef struct ClothVec4 {
+    float x;
+    float y;
+    float z;
+    float w;
+} ClothVec4;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114270);
+float sqrtf(float x);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114398);
+static __inline__ void vu0_add(void *dst, void *a, void *b)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0(%1)\n"
+        "lqc2       $vf5, 0x0(%2)\n"
+        "vadd.xyz   $vf6, $vf4, $vf5\n"
+        "sqc2       $vf6, 0x0(%0)\n"
+        : : "r"(dst), "r"(a), "r"(b));
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_001144E8);
+static __inline__ void vu0_sub(void *dst, void *a, void *b)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0(%1)\n"
+        "lqc2       $vf5, 0x0(%2)\n"
+        "vsub.xyz   $vf6, $vf4, $vf5\n"
+        "sqc2       $vf6, 0x0(%0)\n"
+        : : "r"(dst), "r"(a), "r"(b));
+}
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114600);
+static __inline__ float vu0_dot(void *a, void *b)
+{
+    float ret;
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0(%1)\n"
+        "lqc2       $vf5, 0x0(%2)\n"
+        "vmul.xyz   $vf5, $vf4, $vf5\n"
+        "vaddy.x    $vf5, $vf5, $vf5y\n"
+        "vaddz.x    $vf5, $vf5, $vf5z\n"
+        "qmfc2.ni   $2, $vf5\n"
+        "mtc1       $2, %0\n"
+        : "=f"(ret) : "r"(a), "r"(b) : "$2");
+    return ret;
+}
+
+static __inline__ void vu0_scale(void *dst, void *src, float s)
+{
+    __asm__ volatile(
+        "lqc2       $vf4, 0x0(%1)\n"
+        "mfc1       $8, %2\n"
+        "qmtc2.ni   $8, $vf5\n"
+        "vmulx.xyz  $vf6, $vf4, $vf5x\n"
+        "sqc2       $vf6, 0x0(%0)\n"
+        : : "r"(dst), "r"(src), "f"(s) : "$8");
+}
+
+void func_00113FF8(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        if (d2 > c->f8) {
+            float d = sqrtf(d2);
+            vu0_scale(sp, sp, c->f4 / d);
+            vu0_add(v1, v0, sp);
+        }
+    }
+}
+
+void func_00114120(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        if (d2 > c->f8) {
+            float d = sqrtf(d2);
+            vu0_scale(sp, sp, ((d - c->f4) / d) * 0.5f);
+            vu0_add(v0, v0, sp);
+            vu0_sub(v1, v1, sp);
+        }
+    }
+}
+
+void func_00114270(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        if (d2 < c->f8) {
+            float d = sqrtf(d2);
+            vu0_scale(sp, sp, c->f4 / d);
+            vu0_add(v1, v0, sp);
+        }
+    }
+}
+
+void func_00114398(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        if (d2 < c->f8) {
+            float d = sqrtf(d2);
+            vu0_scale(sp, sp, ((d - c->f4) / d) * 0.5f);
+            vu0_add(v0, v0, sp);
+            vu0_sub(v1, v1, sp);
+        }
+    }
+}
+
+void func_001144E8(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+        float d;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        d = sqrtf(d2);
+        vu0_scale(sp, sp, c->f4 / d);
+        vu0_add(v1, v0, sp);
+    }
+}
+
+void func_00114600(ClothSpring *c, int n, ClothVec4 *verts)
+{
+    ClothVec4 *sp = (ClothVec4 *)0x70000000;
+
+    for (; n--; c++) {
+        ClothVec4 *v0 = &verts[c->h0];
+        ClothVec4 *v1 = &verts[c->h2];
+        float d2;
+        float d;
+
+        vu0_sub(sp, v1, v0);
+        d2 = vu0_dot(sp, sp);
+        d = sqrtf(d2);
+        vu0_scale(sp, sp, ((d - c->f4) / d) * 0.5f);
+        vu0_add(v0, v0, sp);
+        vu0_sub(v1, v1, sp);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", Ch_ClothReset2);
 
@@ -91,13 +256,13 @@ void func_001149A8(Chr *chr, float x, float y, float z)
 void func_001149C0(Chr *chr, float *x, float *y, float *z)
 {
     if (y != 0) {
-        *y = CHR_F32(chr, 0x810); /* DEBT(CAST) */
+        *y = chr->f810;
     }
     if (z != 0) {
-        *z = CHR_F32(chr, 0x814);
+        *z = chr->f814;
     }
     if (x != 0) {
-        *x = CHR_F32(chr, 0x818);
+        *x = chr->f818;
     }
 }
 
@@ -118,7 +283,20 @@ void func_001149F8(u32 a0, u32 a1, u32 a2)
 INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114A20);
 INCLUDE_RODATA("build/ee_asm/game/chr/ch_113FF8/rodata", jtbl_005697E0);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", Ch_ClothSetAtariJimenCheck);
+void Ch_ClothSetAtariJimenCheck(Chr *chr)
+{
+    chr->u828.flags2 &= ~(1UL << 35);
+    if (chr->h00 == 2 || chr->h00 == 0x66) {
+        switch (chr->w738) {
+        case 0x2113D:
+        case 0x2113E:
+        case 0x2113F:
+        case 0x6610CC:
+            chr->u828.flags2 |= (1UL << 35);
+            break;
+        }
+    }
+}
 
 void func_00114B30(s8 v)
 {
@@ -144,7 +322,7 @@ void func_00114B60(float v)
 
 void Ch_ClothEnableGrav(Chr *chr, int v)
 {
-    u64 *w = (u64 *)&chr->f828; /* DEBT(CAST): 64-bit flag word at 0x828 overlaps f828/h82E */
+    u64 *w = &chr->u828.flags2;
 
     *w = (*w & ~(1L << 32)) | ((u64)(v & 1) << 32);
 }

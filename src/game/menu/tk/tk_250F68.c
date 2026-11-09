@@ -25,7 +25,24 @@ void func_00250F90(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_250F68", TkMenuCtrlHdd);
+void TkMenuCtrlHdd(Task *t)
+{
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    switch (t->x1C) {
+    case 0:
+        func_00250F90();
+        t->x1C = 1;
+        break;
+    case 1:
+        if (*(volatile s32 *)&D_00326FFC != 0) {
+            TkMenuMainSleepMenu(0x14);
+            TkMenuMainActiveMenu(1, 0);
+        }
+        break;
+    }
+}
 
 /* DEBT(NAME): module guessed: event/command queue (func_00251360 posts a request, func_00251178 waits for the reply);
  * many tiny wrappers below only differ in the command id. No source file name found in the ELF strings. */

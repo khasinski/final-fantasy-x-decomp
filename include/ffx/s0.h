@@ -88,19 +88,6 @@ typedef struct OpVec3 {
 
 extern char D_00569C80[]; /* "src/main/mem.c" */
 
-/* c_11D178: 16-byte display-list command written at D_00580928[D_00580920++]: 64-bit tag whose upper word
- * is then overwritten with an argument, followed by a 64-bit command id. DEBT(CAST): Cmd16 is {s64 a, b}. */
-typedef struct GsCmd {
-    union {
-        u64 d;
-        struct { u32 lo; s32 w4; } w;
-    } q;
-    union {
-        s64 d;
-        s32 w[2];
-    } b;
-} GsCmd;
-
 /* c_117E18: 16-byte screen-effect slot of D_005803D8[5] (fades / ramps). DEBT(NAME): guessed names */
 typedef struct FxSlot {
     u8 kind;
@@ -174,20 +161,6 @@ char *ch_create_name(int v);
 void func_00111798(int n, int desc);
 
 /* c_11D178: command writers (DEBT(NAME): argument names guessed) */
-typedef struct GsPt {
-    union {
-        struct {
-            s16 x;
-            s16 y;
-            s32 z;
-        } v;
-        s64 raw;
-    } q;
-    union {
-        s64 d;
-        s32 w[2];
-    } id;
-} GsPt;
 void Sg_GsXYOFFSET2(int x, int y);
 void Sg_GsXYOFFSET(int x, int y);
 void Sg_GsSCISSOR2(int a, int b, int c, int d);

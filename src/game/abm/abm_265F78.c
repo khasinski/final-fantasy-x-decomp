@@ -260,8 +260,7 @@ int abmap_special_sphere_select_check(int a, int b, S6Ent *o, int ch)
     case 14:
         if (func_00257A08(ch) != b) {
             for (i = 0; i < 7; i++) {
-                /* DEBT(TYPE): this caller sees MsGetSavePlyJoined with an int parameter (no andi) */
-                if (ch != i && ((int (*)(int))MsGetSavePlyJoined)(i) != 0 && func_00257A08(i) == b) {
+                if (ch != i && MsGetSavePlyJoined(i) != 0 && func_00257A08(i) == b) {
                     return 1;
                 }
             }

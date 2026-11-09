@@ -215,8 +215,8 @@ extern s32 D_0057D680;
 extern s32 D_0057D684;
 extern s32 D_0057D688;
 extern u8 D_0057D690[];
-extern s32 D_0057E8B0; /* DEBT(TYPE): asm copies 0x40 bytes here (8x ld/sd in func_00106380), a 0x40-byte object (matrix?); only its address is taken in C */
-extern s32 D_0057E8F0; /* DEBT(TYPE): same as D_0057E8B0 (func_001063D0 copies 0x40 bytes) */
+extern Blk64 D_0057E8B0;
+extern Blk64 D_0057E8F0;
 extern s32 D_0057E970;
 extern s32 D_0057E9B0[];
 extern float D_0057E9D0;
@@ -357,7 +357,7 @@ extern u8 D_00580E67;
 extern u8 D_00580E68;
 extern s32 D_00580E6C;
 extern s32 D_00580E80;
-extern s32 D_00588E80;
+extern u8 D_00588E80[];
 extern s32 D_00588EC0;
 extern s32 D_0058CEC0;
 extern struct W3Whole D_0065FD40; /* DEBT(NAME): guess: global object operated on by func_002DD0C0 */
@@ -413,7 +413,7 @@ extern u8 D_006A3610[0x1E];
 extern u16 D_006A362E;
 extern void *D_006A38F0; /* table pointer for MsGetExcelData */
 extern void *D_006A38F4; /* table pointer for MsGetExcelData */
-extern int D_006A3900[2];
+extern void *D_006A3900[2];
 extern ChrWork *D_006A391C;
 extern HeapMgr *D_006A3924;
 extern int D_006A3BC4;

@@ -1,12 +1,37 @@
 /* tu_081 0x14b260-0x14c3a8: low; ~Atel (config/tu_map.tsv) */
+#define TkRefreshHDD _hdr_TkRefreshHDD
+#define SndMusicStop _hdr_SndMusicStop
+#define SndMusicClear _hdr_SndMusicClear
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/r1.h"
 #include "ffx/u0.h"
 #include "ffx/g0.h"
 #include "ffx/s1.h"
+#undef TkRefreshHDD
+#undef SndMusicStop
+#undef SndMusicClear
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", TkRefreshHDD);
+int get_hdd_inst_info(void);
+void TkRefreshHDDMode(void);
+void SndMusicStop(int id);
+void SndMusicClear(int id);
+extern s8 D_005661F4;
+
+void TkRefreshHDD(void)
+{
+    int one = 1;
+    s32 *save = MsGetSaveMenu();
+    u8 *cfg = (u8 *)TkGetFFXCofingAdrs();
+    s32 flag = (*save >> 13) & 1;
+
+    if (func_00167D50() == 3 || get_hdd_inst_info() != one) {
+        flag = 0;
+    }
+    cfg[0xE] = flag;
+    D_005661F4 = flag;
+    TkRefreshHDDMode();
+}
 
 void AtelSetDolby(int v)
 {
@@ -20,7 +45,43 @@ void AtelSetDolby(int v)
     TkRefreshSoundMode();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", AtelStopSoundAll);
+void func_002D3FF0(int);
+void func_002D6630(void);
+void func_002D88D8(void);
+
+void AtelStopSoundAll(void)
+{
+    int i;
+
+    for (i = 1; i < 0x78; i++) {
+        SndSepStop(i | 0x80000000);
+        if ((i & 0xF) == 0) {
+            func_002D3FF0(0);
+            func_002D6630();
+        }
+    }
+    SndMusicStop(-1);
+    SndMusicClear(-1);
+    func_002D3FF0(0);
+    func_002D6630();
+    for (i = 0; i < 0x100; i++) {
+        SndMusicStop(i);
+        SndMusicClear(i);
+        if ((i & 7) == 0) {
+            func_002D3FF0(0);
+            func_002D6630();
+        }
+    }
+    func_002D3FF0(0);
+    func_002D6630();
+    SndMusicStop(-1);
+    SndMusicClear(-1);
+    func_002D3FF0(0);
+    func_002D6630();
+    func_002D88D8();
+    func_002D3FF0(0);
+    func_002D6630();
+}
 
 s32 func_0014B428(Tbl *t, int i)
 {
@@ -156,7 +217,20 @@ int func_0014B780(int a, int b, int c, int d)
     return AtelEventSystemRequestDirectMain(a, b, c, 2, d);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", func_0014B7A0);
+s32 func_0014B7A0(s32 ptr)
+{
+    s32 i = 0;
+    EvGameState *ctrl = AtelGetCurCtrlWork();
+
+    for (; i < ctrl->hC; i++) {
+        Actor *a = AtelGetBasicWork(i);
+
+        if (a->stateAA == 1 && a->ptr9C == (Chr *)ptr) {
+            return a->id;
+        }
+    }
+    return -1;
+}
 
 s32 func_0014B838(s32 arg0, s32 arg1)
 {
@@ -247,11 +321,105 @@ void func_0014BA30(u32 opcode, void *arg, int b, int c)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", AtelCommonSetUp);
+typedef struct {
+    int count;
+    struct {
+        int x0;
+        int x4;
+        int x8;
+    } entries[1];
+} AtelDbgWork;
+
+typedef struct {
+    u8 pad0[0x34];
+    int x34;
+    int x38;
+    u8 pad3C[0x4C - 0x3C];
+    void *x4C;
+    int x50;
+} AtelCtrlWorkLocal;
+
+typedef struct {
+    int x0;
+    int x4;
+    int x8;
+    int xC;
+    int x10;
+    void *x14;
+    void *x18;
+    int x1C;
+} AtelBasicInitInfo;
+
+int AtelGetActorNumber(void *bin);
+int AtelGetNamespaceNumber(void *bin);
+void func_20594F8(int a, int b, int c, int d, int e);
+AtelCtrlWorkLocal *AtelRequireCtrlWork(int id, void *bin, int a, int b);
+void AtelSetUpCtrlWork(int id);
+void *AtelGetIndexWork(void *bin, int i);
+void AtelInitBasicWork(AtelBasicInitInfo *info, int a);
+void AtelInitSourceCodeDebugWork(int i, AtelDbgWork *dbg);
+void AtelInitActor(void);
+void AtelExecCtrlEvent(int *w);
+void func_00143DB8(void *bin);
+void AtelSetBattleSceneGroup(int i);
+extern char D_0056AFA8[];
+extern char D_0056AFB8[];
+
+void AtelCommonSetUp(int ctrl_id, int arg1, void *bin, int arg3, int arg4, AtelDbgWork *dbg)
+{
+    int actor_num = AtelGetActorNumber(bin);
+    int ns_num = AtelGetNamespaceNumber(bin);
+    int i;
+    AtelCtrlWorkLocal *ctrl;
+    AtelBasicInitInfo info;
+
+    if (dbg != 0) {
+        for (i = 0; i < dbg->count; i++) {
+            int x4 = dbg->entries[i].x4;
+            int x0 = dbg->entries[i].x0;
+            int x8 = dbg->entries[i].x8;
+
+            if (ctrl_id == 0) {
+                func_20594F8(x4, x8, arg4, x0, 0x100000);
+            } else {
+                func_20594F8(x4, x8, arg4, x0, 0x20000);
+            }
+        }
+    }
+    ctrl = AtelRequireCtrlWork(ctrl_id, bin, arg1, -1);
+    ctrl->x34 = arg3;
+    AtelSetUpCtrlWork(ctrl_id);
+    AtelChangeCurrentCtrl(ctrl_id);
+    info.x0 = 1;
+    info.x8 = ctrl_id;
+    info.xC = 0;
+    info.x18 = bin;
+    info.x1C = arg4;
+    for (i = 0; i < actor_num; i++) {
+        void *idx_work = AtelGetIndexWork(bin, i);
+
+        info.x4 = i;
+        info.x10 = i;
+        info.x14 = idx_work;
+        AtelInitBasicWork(&info, 1);
+        AtelInitSourceCodeDebugWork(i, dbg);
+    }
+    info.x0 = 0;
+    for (; i < ns_num; i++) {
+        void *idx_work = AtelGetIndexWork(bin, i);
+
+        info.x4 = i;
+        info.x10 = i;
+        info.x14 = idx_work;
+        AtelInitBasicWork(&info, 1);
+        AtelInitSourceCodeDebugWork(i, dbg);
+    }
+    AtelInitActor();
+}
 
 void AtelCharSetUp(char *p)
 {
-    G0Res588 *res = (G0Res588 *)AtelGetCtrlWork(0); /* DEBT(CAST) */
+    EvGameState *res = AtelGetCtrlWork(0);
     int n = res->hC;
 
     n -= res->h14 + res->h18 + res->h16;
@@ -264,7 +432,65 @@ void AtelCharSetUp(char *p)
     func_00103AA8(n);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", AtelActorSetUp2);
+void AtelActorSetUp2(int a, int b, int c, int d, int e, int f, int g)
+{
+    void *bin = (void *)b;
+    AtelDbgWork *dbg = (AtelDbgWork *)f;
+    int x = d ? d : c;
+    int actor_num = AtelGetActorNumber(bin);
+    int ns_num = AtelGetNamespaceNumber(bin);
+    int i;
+    AtelCtrlWorkLocal *ctrl;
+    AtelBasicInitInfo info;
+
+    if (dbg != 0) {
+        for (i = 0; i < dbg->count; i++) {
+            int x4 = dbg->entries[i].x4;
+            int x0 = dbg->entries[i].x0;
+            int x8 = dbg->entries[i].x8;
+
+            func_20594F8(x4, x8, e, x0, 0x100000);
+        }
+    }
+    ctrl = AtelRequireCtrlWork(0, bin, a, g);
+    ctrl->x4C = AtelExecCtrlEvent;
+    ctrl->x34 = c;
+    ctrl->x38 = x;
+    ctrl->x50 = 0;
+    AtelSetUpCtrlWork(0);
+    AtelChangeCurrentCtrl(0);
+    info.x0 = 1;
+    info.x8 = 0;
+    info.xC = 0;
+    info.x18 = bin;
+    info.x1C = e;
+    for (i = 0; i < actor_num; i++) {
+        void *idx_work = AtelGetIndexWork(bin, i);
+
+        info.x4 = i;
+        info.x10 = i;
+        info.x14 = idx_work;
+        AtelInitBasicWork(&info, 1);
+        AtelInitSourceCodeDebugWork(i, dbg);
+    }
+    info.x0 = 0;
+    for (; i < ns_num; i++) {
+        void *idx_work = AtelGetIndexWork(bin, i);
+
+        info.x4 = i;
+        info.x10 = i;
+        info.x14 = idx_work;
+        AtelInitBasicWork(&info, 1);
+        AtelInitSourceCodeDebugWork(i, dbg);
+    }
+    AtelPs2DebugString(D_0056AFA8);
+    AtelCharSetUp(bin);
+    AtelPs2DebugString(D_0056AFB8);
+    func_00143DB8(bin);
+    AtelSetSaveDicIndex(0);
+    AtelSetBattleSceneGroup(0);
+    AtelInitActor();
+}
 
 void AtelActorSetUp(int a, int b, int c, int d, int e, int f)
 {
@@ -288,4 +514,38 @@ u8 *func_0014BF70(U0Args *p, int off)
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", AtelBattleSetUp);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14B260", AtelActorRemove);
+void AtelSetUpCtrlWork(int a);
+void TkCh_Dispose(int v);
+
+void AtelActorRemove(void)
+{
+    int i = 0;
+    int old = AtelChangeCurrentCtrl(0);
+    EvGameState *ctrl;
+    int n;
+
+    AtelSetUpCtrlWork(0);
+    ctrl = AtelGetCurCtrlWork();
+    n = ctrl->hC;
+    for (; i < n; i++) {
+        Actor *a = AtelGetBasicWork(i);
+
+        if (a->stateAA == 1) {
+            int j;
+            Chr **p = &AR(a)->arrAF4[0];
+
+            for (j = 1; j >= 0; j--, p++) {
+                if (*p != 0) {
+                    TkCh_Dispose((int)*p);
+                    *p = 0;
+                }
+            }
+            if (a->ptr9C != 0) {
+                TkCh_Dispose((int)a->ptr9C);
+                a->ptr9C = 0;
+                a->w38 &= ~0x10;
+            }
+        }
+    }
+    AtelSetCurrentCtrl(old);
+}

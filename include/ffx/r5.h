@@ -86,14 +86,6 @@ extern FlagRec **D_00693F70;
 /* 4-byte records ended by b0 == 0xFF */
 typedef struct R5Rec4 { u8 b0; u8 b1; u8 b2; u8 b3; } R5Rec4;
 
-/* DEBT(CAST): view of btlgetdata (W5Buf) with the members at 0xD0..0xEC that W5Buf leaves as padding; names offset-derived */
-typedef struct R5Buf {
-    u8 pad00[0xD0];
-    s8 bD0;
-    u8 padD1[3];
-    u16 hD4[8];
-    u8 bE4[8];
-} R5Buf;
 typedef struct R5Rec1C { u8 pad00[4]; int w4; u8 pad08[0x14]; } R5Rec1C;
 extern R5Rec1C D_00325900[];
 extern u8 D_006930B0;

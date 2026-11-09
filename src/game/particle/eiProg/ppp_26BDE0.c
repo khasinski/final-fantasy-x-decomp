@@ -12,10 +12,10 @@
 
 extern s32 eff_sin_t;
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_0026BDE0(void *arg0, u32 arg1) {
-    register float temp_f2 __asm__("$f2");
-    register float temp_f3 __asm__("$f3");
+    float temp_f2;
+    float temp_f3;
 
     temp_f3 = *(float *)(((arg1 >> 2) & 0x3FFC) + (u8 *)&eff_sin_t);
     temp_f2 = *(float *)((((u32)(arg1 + 0x4000) >> 2) & 0x3FFC) + (u8 *)&eff_sin_t);
@@ -50,10 +50,10 @@ void func_0026BE48(void *arg0, u32 arg1) {
     (*(float *)((u8 *)(arg0) + (0x3C))) = 1.0f;
 }
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_0026BEB0(void *arg0, u32 arg1) {
-    register float temp_f2 __asm__("$f2");
-    register float temp_f3 __asm__("$f3");
+    float temp_f2;
+    float temp_f3;
 
     temp_f3 = *(float *)(((arg1 >> 2) & 0x3FFC) + (u8 *)&eff_sin_t);
     temp_f2 = *(float *)((((u32)(arg1 + 0x4000) >> 2) & 0x3FFC) + (u8 *)&eff_sin_t);

@@ -24,12 +24,12 @@ void rcbgPreFini(void)
 
     core = W3_CORE();
     if (core != 0) {
-        for (i = 0; i < core->unk0; i++) {
-            rcbgSceneFini(&core->unk4[i]);
+        for (i = 0; i < core->npool; i++) {
+            rcbgSceneFini(&core->pools[i]);
         }
-        if (core->unk4 != 0) {
-            func_0018FC10(core->unk4);
-            core->unk4 = 0;
+        if (core->pools != 0) {
+            func_0018FC10(core->pools);
+            core->pools = 0;
         }
         if (core->buf0C != 0) {
             func_0018FC10(core->buf0C);
@@ -55,10 +55,10 @@ void rcbgPreDummyInit(void) {
             g_pMainWork->core = core;
         }
     }
-    if (core->unk0 == 0) {
-        core->unk0 = 1;
-        core->unk4 = _rcAlloc(sizeof(W3Pool), D_0056DB00, 0x54);
-        rcbgSceneInit(core->unk4);
-        core->pool = core->unk4;
+    if (core->npool == 0) {
+        core->npool = 1;
+        core->pools = _rcAlloc(sizeof(W3Pool), D_0056DB00, 0x54);
+        rcbgSceneInit(core->pools);
+        core->pool = core->pools;
     }
 }

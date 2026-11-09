@@ -156,7 +156,27 @@ void func_0012CCA0(Actor *a, OpArgs *op)
     g->w214 = -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12C788", func_0012CD10);
+int func_0012CD10(Actor *a, OpArgs *op)
+{
+    int r = 0;
+    SysVt *cd = GetCD();
+    int v = func_002D87A0();
+
+    switch (op->v1) {
+    case 0:
+        if (!(v & 0x10000) && cd->f8(1) == 0 && TkSndReportStatus() == 0 && func_0015A550() == 0) {
+            op->v1 = 1;
+        case 1:
+            if (op->v0 <= 0) {
+                r = 5;
+            } else {
+                op->v0--;
+            }
+        }
+        break;
+    }
+    return r;
+}
 
 s32 func_0012CDD8(Actor *a, void *op, ScriptCtx *ctx)
 {

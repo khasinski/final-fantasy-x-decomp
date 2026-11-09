@@ -16,7 +16,27 @@ INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002ACD20);
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", opp_anm_yodare);
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AD890);
+int func_002B2F30(int, int, u8, u8);
+
+void func_002AD890(AnimCtx *o, void *b)
+{
+    u8 *t = (u8 *)o->p220;
+    int rgba;
+
+    __asm__ volatile(
+        "lqc2        $vf31, 0x40(%1)\n"
+        "lui         $2, (0x437F0000 >> 16)\n"
+        "ctc2.ni     $2, $vi21\n"
+        "vsub.xyzw   $vf30, $vf0, $vf0\n"
+        "vminii.xyzw $vf31, $vf31, I\n"
+        "vmax.xyzw   $vf31, $vf31, $vf30\n"
+        "vftoi0.xyzw $vf31, $vf31\n"
+        "qmfc2.ni    %0, $vf31\n"
+        "ppach       %0, $0, %0\n"
+        "ppacb       %0, $0, %0\n"
+        : "=&r"(rgba) : "r"(t) : "$2", "$4", "$5", "memory");
+    *(int *)((u8 *)b + 0x54) = func_002B2F30(*(int *)((u8 *)b + 0x54), rgba, t[0xA8], t[0xA9]);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", opp_dtt);
 
@@ -39,7 +59,30 @@ char *func_002AE228(s32 a, s32 b, s16 *p) {
     return (char *)p + p[1]; /* DEBT(CAST): s16 table whose second entry is a byte offset */
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE238);
+u8 *func_002AE238(AnimCtx *o, int b, u8 *p)
+{
+    register int v __asm__("$8") = o->h21A >> 8;
+    register int out __asm__("$9");
+
+    __asm__ volatile(
+        "qmtc2.ni    %1, $vf30\n"
+        "lui         $3, (0x3F800000 >> 16)\n"
+        "lui         $5, (0x3FF19120 >> 16)\n"
+        "ori         $5, $5, (0x3FF19120 & 0xFFFF)\n"
+        "vrnext.xyzw $vf31, R\n"
+        "vitof0.x    $vf30, $vf30\n"
+        "qmtc2.ni    $3, $vf29\n"
+        "qmtc2.ni    $5, $vf27\n"
+        "vsub.x      $vf31, $vf31, $vf29\n"
+        "vsubx.w     $vf25, $vf31, $vf27x\n"
+        "vmul.x      $vf30, $vf31, $vf30\n"
+        "vftoi0.x    $vf30, $vf30\n"
+        "qmfc2.ni    %0, $vf30\n"
+        "vrinit      R, $vf25w\n"
+        : "=r"(out) : "r"(v) : "$2", "$3", "$4", "$5");
+    o->b210 = out;
+    return p + 2;
+}
 
 /* DEBT(CAST): bytecode stream and table offsets read as raw bytes */
 u8 *opp_anmm_anm(AnimCtx *o, G4AnimRes *r, u8 *p, G4AnimWork *w)
@@ -231,7 +274,15 @@ u8 *func_002AECB8(AnimCtx *o, R6Obj *r, u8 *p, AnimWork *w)
     return p + 2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", opp_anmm_gw_wscale);
+float opus_cwidth_scale_get(int id, int v);
+
+u8 *opp_anmm_gw_wscale(ScriptThread *o, AnimRes *r, u8 *p, AnimWork *w)
+{
+    u8 ofs = p[2];
+
+    *(float *)((u8 *)w + ofs) *= opus_cwidth_scale_get(((ScriptSub *)(r->p20 + (w->h4C << 8)))->b18, o->b21E);
+    return p + 4;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AEDC0);
 

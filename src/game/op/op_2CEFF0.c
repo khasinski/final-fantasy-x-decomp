@@ -43,7 +43,26 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF388);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", op_oef2_texture_load);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", op_oef2_clut_load);
+typedef struct Oef2Clut {
+    u16 h0;
+    u8 pad2[2];
+    int w4;
+    u8 b8;
+    u8 b9;
+} Oef2Clut;
+
+extern char D_00575FB0[];
+void func_002EA328(int) __attribute__((noreturn));
+void func_002CF388(int, int, int, int);
+
+void op_oef2_clut_load(Oef2Clut *p, int a)
+{
+    if (p->w4 == 0) {
+        func_00120108(D_00575FB0);
+        func_002EA328(1);
+    }
+    func_002CF388(p->w4, p->b9, p->h0, a);
+}
 
 int func_002CF850(W10SoundVoice *voice, int value)
 {
@@ -56,7 +75,14 @@ int func_002CF850(W10SoundVoice *voice, int value)
     return previous;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF880);
+int func_002CF880(W10SoundVoice *voice, int value)
+{
+    int v = (value & 0x3FFF) + (voice->header.half[0] & 0xFC);
+
+    voice->active = 1;
+    voice->header.word = (voice->header.word & 0xFFFFC000) | v;
+    return v;
+}
 
 /* DEBT(CAST) */
 u16 func_002CF8B8(void *arg0, s32 arg1) {
@@ -113,9 +139,61 @@ int func_002D0570(int mask)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D05F0);
+typedef struct EvSlotsFull {
+    u16 h00;
+    u8 pad02[0xE];
+    u32 w10[64];
+    u8 b110[64];
+    void *p150[64];
+} EvSlotsFull;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0698);
+void op_oef2_texture_load(void *p, int a);
+
+void func_002D05F0(int a)
+{
+    EvQueue *q = &D_00764430;
+    int i;
+    u32 *pb = q->b;
+    u32 *pa = q->a;
+    u32 *pc = q->c;
+
+    for (i = 0; i < 64; i++, pa++, pb++, pc++) {
+        u32 va = *pa;
+        u32 vb = *pb;
+
+        if (va != 0) {
+            op_oef2_texture_load((void *)va, 1);
+        }
+        if (vb != 0) {
+            op_oef2_clut_load((Oef2Clut *)vb, 1);
+        }
+        *pa = 0;
+        *pb = 0;
+        *pc = 0;
+    }
+    q->h300 = 0;
+    q->h302 = 0;
+}
+
+void func_002D0698(u32 mask)
+{
+    if (D_00703FF6 != 0) {
+        EvSlotsFull *d = (EvSlotsFull *)&D_00764740;
+        int i;
+
+        if (d->h00 != 0) {
+            for (i = 0; i < d->h00; i++) {
+                if (d->w10[i] & mask) {
+                    if (d->b110[i] == 0) {
+                        op_oef2_texture_load(d->p150[i], 1);
+                    } else {
+                        op_oef2_clut_load((Oef2Clut *)d->p150[i], 1);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void op_oef2_tex_clut_ovl_clear(u32 mask)
 {

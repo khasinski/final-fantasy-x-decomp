@@ -55,11 +55,11 @@ void func_00198F88(int i)
     if (g_pMainWork != 0) {
         core = g_pMainWork->core;
     }
-    if (core != 0 && i >= 0 && i < core->unk0) {
-        core->pool = &core->unk4[i];
+    if (core != 0 && i >= 0 && i < core->npool) {
+        core->pool = &core->pools[i];
         rcbgSceneChkSortLayer((S2Table *)core->pool); /* DEBT(TYPE): s2.h declares the pool as S2Table */
-        if (core->unk0 >= 2) {
-            pool = core->unk4;
+        if (core->npool >= 2) {
+            pool = core->pools;
         } else {
             pool = core->pool;
         }
@@ -228,7 +228,30 @@ void func_00199620(W3Pool *p) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", func_00199630);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", func_001998D0);
+int func_001999A0(void);
+
+void func_001998D0(W3Pool *p)
+{
+    float v[4];
+    Chr *chr;
+    W3Core *core;
+
+    if (p->i10C != 0 || func_001999A0() != 0) {
+        chr = Sg_GetPlayer();
+        if (chr != 0) {
+            Ch_GetPos(chr, &v[0], &v[1], &v[2]);
+            v[3] = 1.0f;
+            func_002DCE08(v, D_003142A0, v);
+            *(float *)&p->pad100[8] = (v[2] / v[3]) * 0.1f;
+        } else {
+            *(float *)&p->pad100[8] = 98.0f;
+        }
+    } else {
+        *(float *)&p->pad100[8] = 0.0f;
+    }
+    core = W3_CORE();
+    core->w10 = 0;
+}
 
 int func_001999A0(void)
 {

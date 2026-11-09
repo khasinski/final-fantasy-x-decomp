@@ -14,7 +14,27 @@ void func_0015B350(void) {
     D_00591EC4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_cd", func_0015B368);
+int func_0015B368(S58FE54 *s)
+{
+    if (s->b5075D != 0) {
+        return 0;
+    }
+    if (func_002E1F00() == 1) {
+        D_00591EB0 = 1;
+        audioStop(s);
+        for (;;) {
+            if (func_002E1700(1) == 2) {
+                if (func_002E1F00() != 1) {
+                    return 0;
+                }
+            }
+            func_001631E0(1);
+            func_0015C808();
+            func_0015DDB8();
+        }
+    }
+    return 1;
+}
 
 int func_0015B418(int a)
 {
@@ -87,7 +107,29 @@ int movieOpenCd(S58FE54 *s)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_cd", func_0015B918);
+int func_0015B918(int n, u8 *buf, int *out, S58FE54 *s)
+{
+    int sectors;
+
+    if (D_00591E9C != 0) {
+        int tmp = n + 0x800;
+        *out = 0x800 - D_00591E9C;
+        n = tmp - D_00591E9C;
+        D_00591E78[0]--;
+    } else {
+        *out = 0;
+    }
+    sectors = n / 0x800;
+    if (n & 0x7FF) {
+        D_00591E9C = 0x800 - (n % 0x800);
+        sectors++;
+    } else {
+        D_00591E9C = 0;
+    }
+    func_0015B4B0(D_00591E78[0], sectors, (int)buf, D_0030DCE0, s);
+    D_00591E78[0] += sectors;
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_cd", func_0015B9E8);
 

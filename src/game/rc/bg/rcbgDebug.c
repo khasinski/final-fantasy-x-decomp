@@ -4,6 +4,7 @@
 #define func_001921B0 _hdr_func_001921B0
 #define rcbgFpSaveSub _hdr_rcbgFpSaveSub
 #define func_00191A70 _hdr_func_00191A70
+#define rcbgIDLoad _hdr_rcbgIDLoad
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -17,6 +18,7 @@
 #undef func_001921A8
 #undef func_001921B0
 #undef rcbgFpSaveSub
+#undef rcbgIDLoad
 
 R2AnimFrame *func_00190F20(R2Anim *a) {
     u32 flags = a->flags;
@@ -117,7 +119,75 @@ void func_001910B8(void) {
     func_0018F5E8(&_m2c_func_001910B8_D_0056D690);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001911A0);
+typedef struct R2DbgWorkFull {
+    u8 pad0[0x34];
+    int w34;
+    int w38;
+    int w3C;
+    u8 pad40[8];
+    int w48;
+    int w4C;
+    u8 pad50[0x174 - 0x50];
+    char dir[0x828 - 0x174];
+    int w828;
+    u8 pad82C[0x874 - 0x82C];
+    void *arr874[16];
+    int w8B4;
+    int w8B8;
+    u8 pad8BC[0xAEC - 0x8BC];
+    int wAEC;
+    u8 padAF0[0xB14 - 0xAF0];
+    int wB14;
+} R2DbgWorkFull;
+
+typedef struct DbgRegs6 {
+    u64 r[6];
+} DbgRegs6;
+
+extern DbgRegs6 D_0056D780;
+extern s32 D_0056D6A8;
+extern s32 D_0056D6E0;
+extern s32 D_0056D708;
+extern s32 D_0056D730;
+extern s32 D_0056D740;
+extern s32 D_0056D760;
+int func_2025BF0(int a, char *b);
+void func_20233D0(void);
+void func_00191388(void);
+void func_001914C0(R2Pkt *pkt, void *item);
+void func_001916D0(R2Pkt *pkt, void *item);
+void func_00191920(R2Pkt *pkt, void *item);
+void func_00191BF0(void);
+void func_00191BF8(int a);
+void func_00191ED0(void);
+void func_001921B8(void);
+void func_00192708(u64 *regs);
+void func_001927F8(void);
+
+void func_001911A0(void)
+{
+    char sp[0x100];
+    char buf[0x10];
+    W3Pair *chunk;
+
+    if (func_2025BF0(func_0013A278(), buf) != 0) {
+        func_002F0008(sp, &D_0056D6A8, buf[0], buf[1], buf[2], buf[3], buf);
+        if (g_pMainWork->buf14 != 0) {
+            func_0018F5E8(&D_0056D6E0, &D_0056D708, &D_0056D730, 0x93);
+        }
+        func_0018F5E8(&D_0056D740);
+        chunk = rcdtChunkNew();
+        if (rcdtChunkLoadFromFile(chunk, sp) != 0) {
+            func_0018F5E8(&_m2c_func_001910B8_D_0056D688, sp);
+            func_00194C80(chunk->ptr);
+            g_pMainWork->buf14 = chunk;
+            rcbgGuideSetModelFromIdMap(g_pMainWork->sub, W3_CORE()->pool->items[0]);
+        } else if (chunk != 0) {
+            rcdtChunkDelete(chunk);
+        }
+        func_0018F5E8(&D_0056D760);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001912B8);
 
@@ -239,7 +309,7 @@ u32 func_00192458(float z)
         v[3] = 1.0f;
     }
     func_002DCE08(v, D_00314260, v);
-    return func_002ECF38(v[2] / v[3]); /* DEBT(FAKE): the (u32) conversion libcall (fptoui) is not linkable by its own name */
+    return (u32)(v[2] / v[3]);
 }
 
 int func_00192508(float z)

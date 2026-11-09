@@ -17,9 +17,69 @@ s32 Sg_PcReadGetLen(void)
     return D_00580B00;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11EE40", Sg_PcReadL);
+extern char D_00569D78[];
+extern char D_00569D88[];
+extern char D_00569D98[];
+extern char D_00569DC0[];
+extern char D_00569DD0[];
+extern char D_00569DE8[];
+int func_002FC8E8(int fd, int offset, int whence);
+int func_002FCB20(int fd, void *buf, int len);
+void *func_0011D4B8(s32 size, s32 heap, const char *file, s32 line);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11EE40", _Sg_PcRead);
+void *Sg_PcReadL(char *filename, void *buf, int offset, int len)
+{
+    char path[0x80];
+    int fd = 0;
+
+    if (ffx_debugmode == 0 || (func_002F0008(path, D_00569D78, filename), (fd = func_002FC4E0(path, 1)) < 0)) {
+        if (D_00307FA0 != 0) {
+            D_00307FA0 = 1;
+            return 0;
+        }
+        yiAssert(0, D_00569D88, D_00569D98, filename, offset, len);
+    }
+    func_002FC8E8(fd, offset, 0);
+    func_002FCB20(fd, buf, len);
+    func_002FC768(fd);
+    D_00307FA0 = 1;
+    return buf;
+}
+
+s32 _Sg_PcRead(s32 filename, s32 mode)
+{
+    char path[0x80];
+    int fd;
+    s32 buf;
+
+    func_002F0008(path, D_00569D78, filename);
+    fd = func_002FC4E0(path, 1);
+    if (fd < 0) {
+        if (D_00307FA0 != 0) {
+            D_00307FA0 = 1;
+            return 0;
+        }
+        yiAssert(0, D_00569DC0, D_00569DD0, filename);
+    }
+    D_00580B00 = func_002FC8E8(fd, 0, 2);
+    buf = 0;
+    func_002FC8E8(fd, 0, 0);
+    switch (mode) {
+    case 2:
+        buf = (s32)func_0011D4B8(D_00580B00, 6, D_00569DE8, 0x93);
+        break;
+    case 1:
+        buf = (s32)func_0011D420(D_00580B00, 6, D_00569DE8, 0x94);
+        break;
+    case 0:
+        buf = (s32)user_malloc(D_00580B00, 6, D_00569DE8, 0x95);
+        break;
+    }
+    func_002FCB20(fd, (void *)buf, D_00580B00);
+    func_002FC768(fd);
+    D_00307FA0 = 1;
+    return buf;
+}
 
 s32 Sg_PcRead(s32 a)
 {

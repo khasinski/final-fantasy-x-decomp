@@ -140,7 +140,60 @@ int ms_motion_trans(BtlChr *c, int v) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E7D80);
+int func_001E1C70(int id, BtlChr *c, int mot, int old_mot);
+int Ch_MotionSetHokan(Chr *chr, int v);
+
+int func_001E7D80(Actor *a, void *unused, ScriptCtx *ctx, int flag) {
+    int r = 1;
+    int mot = AtelPopStackInteger(a, ctx);
+    u8 id = *func_00144158(a);
+
+    if (id != 0xFF) {
+        BtlChr *c = MsGetChr(id);
+        Chr *w = c->chr;
+        c->fF4 = 1;
+        if (w != 0 && c->f38 != 0) {
+            int hi = mot & 0x8000;
+            mot = ms_motion_trans(c, mot & ~0x8000);
+            if (c->fB3 == 0 && mot >= 0) {
+                Ch_ResetMotion(w);
+                Ch_SetSysMotion((int)w, c->f20, mot);
+                if (hi != 0) {
+                    Ch_MotionSetNextHokan(w, 0);
+                    Ch_MotionSetHokan(w, 0);
+                } else {
+                    if ((c->flags & 0x80) == 0) {
+                        Ch_MotionSetNextHokan(w, 0);
+                    }
+                    Ch_MotionSetHokan(w, func_001E1C70(id, c, mot, c->fB0));
+                }
+                if (c->fC5 != 0) {
+                    c->fC5 = 0;
+                    func_001D48D0(c);
+                }
+                c->fB0 = mot;
+                c->fCA = flag;
+                MsCalcMotionSpeed(c);
+                r = Ch_GetSeqFrame(w);
+                if (r > 0) {
+                    int div;
+                    if (c->fC4 == 1) {
+                        div = (u16)c->fC2;
+                    } else {
+                        div = (c->fBC * c->padC6[0]) / 8;
+                    }
+                    if (div != 0) {
+                        r = (r << 8) / div;
+                    }
+                    c->fF4 = 0;
+                } else {
+                    r = 1;
+                }
+            }
+        }
+    }
+    return r;
+}
 
 int func_001E7F58(Actor *a, void *u, ScriptCtx *c) {
     return func_001E7D80(a, u, c, 0);
@@ -313,7 +366,15 @@ s32 func_001E8550(Actor *arg0, s32 arg1, ScriptCtx *arg2) {
     return (s32) func_001AC348(sp, &sp10);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8620);
+int func_001E8620(Actor *a, void *b, ScriptCtx *c) {
+    u8 id = *func_00144158(a);
+    int v;
+    float f;
+    MsGetChr(id);
+    v = func_001B8198(id, AtelPopStackInteger(a, c), 0, 1);
+    f = func_002EC440(func_002EBF18(func_002ED038(func_001D3B10(v, 12)), 2.5));
+    return f;
+}
 
 float func_001E86B8(BtlChr *c) {
     float f = c->f194;
@@ -325,7 +386,36 @@ float func_001E86B8(BtlChr *c) {
     return f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8700);
+int func_001E8700(Actor *a, void *b, ScriptCtx *ctx) {
+    u8 id = *func_00144158(a);
+    int v = func_001B8198(id, AtelPopStackInteger(a, ctx), 0, 1);
+    float dist = func_001D3B10(v, 12);
+    BtlChr *c = MsGetChr(v);
+    int r = func_001D5790(c);
+    int count = c->padCC[2];
+
+    if (c->fBC < c->fC0) {
+        count = (count * c->fBC) / c->fC0;
+    }
+    if (r & 3) {
+        float step;
+        float max_step;
+        float accel;
+        dist -= c->f17C;
+        step = c->f18C;
+        max_step = func_001E86B8(c);
+        accel = c->f190;
+        while ((double)dist > 0.0) {
+            step += accel;
+            if (max_step < step) {
+                step = max_step;
+            }
+            dist -= step;
+            count++;
+        }
+    }
+    return count;
+}
 
 int func_001E8838(Actor *a, void *unused, ScriptCtx *ctx) {
     int id = *func_00144158(a);
@@ -335,7 +425,21 @@ int func_001E8838(Actor *a, void *unused, ScriptCtx *ctx) {
     return (int)(func_001D3B10(h, 12) / d);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E88E0);
+int func_001E88E0(Actor *a, void *b, ScriptCtx *ctx) {
+    int y = AtelPopStackInteger(a, ctx);
+    float f = 0.0f;
+    int x = AtelPopStackInteger(a, ctx);
+    int id = func_001B8198(*func_00144158(a), x, 0, 1);
+
+    if (id != 0xFF) {
+        f = MsGetMoveTargetDist(id, y, 0);
+    }
+    f = func_002EC440(func_002EBBB0(func_002EBF18(func_002ED038(f), 20.0), 4.0));
+    if (f > 20.0f) {
+        f = 20.0f;
+    }
+    return f;
+}
 
 int func_001E89C8(Actor *ctx, void *unused, ScriptCtx *arg)
 {
@@ -447,7 +551,34 @@ s32 MsGetDirDivide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8DF0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8F58);
+int func_001E8F58(Actor *a, void *unused, ScriptCtx *ctx) {
+    float p1[4];
+    float p2[4];
+    int r = 0;
+    int x = AtelPopStackInteger(a, ctx);
+    int y = AtelPopStackInteger(a, ctx);
+    u8 id = *func_00144158(a);
+    BtlChr *c;
+
+    if (id != 0xFF) {
+        c = MsGetChr(id);
+        if (c->f10E != 0 && x < 0) {
+            if (c->f10E < 0) {
+                r = 1;
+            } else {
+                r = 0;
+            }
+        } else {
+            if (x < 0) {
+                x = -x;
+            }
+            func_001B6790(id, p1);
+            MsGetMoveTargetPos(id, c, y, p2, 0);
+            r = MsGetDirDivide((s32)p2, (s32)p1, id, x, 0);
+        }
+    }
+    return r;
+}
 
 int func_001E9050(Actor *a, int unused, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);

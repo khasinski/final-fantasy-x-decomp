@@ -925,8 +925,8 @@ void func_002503B8(void) {
     func_0024C8C0();
     func_0024C8E8();
     func_0024C898();
-    TOSeqStopScene(1, (int)D_005733A8); /* DEBT(CAST): address passed as int */
-    TOSeqStopScene(1, (int)D_00573610);
+    TOSeqStopScene(1, D_005733A8);
+    TOSeqStopScene(1, D_00573610);
     func_0024E358();
     func_0024C8E8();
     func_0024E358();
@@ -971,7 +971,7 @@ void func_00250CB8(void) {
     func_0024C8E8();
     func_0024E358();
     func_00237818();
-    TOSeqStopScene(1, (int)D_00573618); /* DEBT(CAST): address passed as int */
+    TOSeqStopScene(1, D_00573618);
 }
 
 void func_00250CF8(void) {

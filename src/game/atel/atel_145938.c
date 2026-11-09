@@ -1,41 +1,17 @@
 /* tu_078 0x145938-0x148660: low; ~Atel (config/tu_map.tsv) */
+#define func_001478B8 _hdr_func_001478B8
+#define func_00146B40 _hdr_func_00146B40
+#define func_00147A28 _hdr_func_00147A28
 #include "common.h"
-#define func_001387D0 q1_func_001387D0 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_001449D0 q1_func_001449D0 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00149080 q1_func_00149080 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014AD88 q1_func_0014AD88 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014CEB0 q1_func_0014CEB0 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D7B8 q1_func_0014D7B8 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D7E0 q1_func_0014D7E0 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D890 q1_func_0014D890 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D960 q1_func_0014D960 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D970 q1_func_0014D970 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014D9A0 q1_func_0014D9A0 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_0014F380 q1_func_0014F380 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define func_00173190 q1_func_00173190 /* DEBT(TYPE): this header's guess conflicts with the TU */
-#define SaveDataIsScreenClosed q1_SaveDataIsScreenClosed /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/q1.h"
-#undef SaveDataIsScreenClosed
-#undef func_001387D0
-#undef func_001449D0
-#undef func_00149080
-#undef func_0014AD88
-#undef func_0014CEB0
-#undef func_0014D7B8
-#undef func_0014D7E0
-#undef func_0014D890
-#undef func_0014D960
-#undef func_0014D970
-#undef func_0014D9A0
-#undef func_0014F380
-#undef func_00173190
 #include "ffx/r1.h"
-#define func_00147BA0 u0_func_00147BA0 /* DEBT(TYPE): this header's guess conflicts with the TU */
 #include "ffx/u0.h"
-#undef func_00147BA0
 #include "ffx/q2.h"
 #include "ffx/s1.h"
 #include "ffx/g0.h"
+#undef func_001478B8
+#undef func_00146B40
+#undef func_00147A28
 
 void func_00145938(void) {
     D_0058E3F8 = 0x10001;
@@ -45,8 +21,8 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00145950);
 
 void func_00145C10(void)
 {
-    Rec124828Buf *r = (Rec124828Buf *)func_00124828(); /* DEBT(CAST): record layout unknown */
-    u8 *p = &r->buf[0xFFF];
+    Rec124828 *r = func_00124828();
+    u8 *p = &r->buf1EC[0xFFF];
     int i;
 
     for (i = 0xFFF; i >= 0; i--) {
@@ -139,7 +115,7 @@ void func_00145EC0(Actor *a, int v)
         if ((AR(a)->hB14 >> i) & 1) {
             if (AR(a)->hB04[i] != 0xFF) {
                 if (AR(a)->arrAF4[i]) {
-                    graphicLevelGetNameHash((s32)AR(a)->arrAF4[i], v);
+                    graphicLevelGetNameHash(AR(a)->arrAF4[i], v);
                     func_001108B8(AR(a)->arrAF4[i], 0);
                 }
             }
@@ -162,7 +138,7 @@ void func_00145F78(Actor *actor, s32 arg1, s32 arg2)
         flags = actor->b33;
         if (chr != 0 && (flags & 0x40))
         {
-            graphicLevelGetNameHash((s32)chr, 1);
+            graphicLevelGetNameHash(chr, 1);
             func_00145EC0(actor, 1);
             func_001108B8(actor->ptr9C, 0);
             chr = actor->ptr9C;
@@ -174,7 +150,7 @@ void func_00145F78(Actor *actor, s32 arg1, s32 arg2)
             if (actor->w38 & 0x1000)
             {
                 func_002EF240(D_0056AD50, actor->id);
-                graphicLevelGetNameHash((s32) actor->ptr9C, 0);
+                graphicLevelGetNameHash(actor->ptr9C, 0);
                 func_00145EC0(actor, 0);
             }
         }
@@ -187,13 +163,12 @@ void func_00145F78(Actor *actor, s32 arg1, s32 arg2)
             {
                 if (((s32) D_0058E42C >> slot) & 1)
                 {
-                    /* DEBT(CAST): legacy character helpers use integer handles. */
-                graphicLevelGetNameHash((s32) chrForMask, 0);
+                    graphicLevelGetNameHash(chrForMask, 0);
                     func_00145EC0(actor, 0);
                 }
                 else
                 {
-                    graphicLevelGetNameHash((s32) chrForMask, 1);
+                    graphicLevelGetNameHash(chrForMask, 1);
                     func_00145EC0(actor, 1);
                 }
             }
@@ -244,7 +219,58 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00146A68);
 void func_00146B38(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00146B40);
+extern u8 D_0058D430;
+
+int func_00146B40(s32 *state)
+{
+    int ret = 0;
+
+    switch (*state) {
+    case 0:
+        *state = 1;
+        break;
+    case 1:
+        if (func_002D6768() == 0) {
+            if (func_00147E00() != 0) {
+                *state = 2;
+            } else if (SndGetNowPlayMusic() >= 0) {
+                ret = 1;
+                if (func_00147E18() != 0) {
+                    break;
+                }
+                goto fade;
+            } else {
+                ret = 1;
+            }
+        } else {
+            D_0058D430++;
+        }
+        break;
+    case 2:
+        if (AtelGetMusicNumber() >= 0) {
+            SndMusicRead(AtelGetMusicNumber());
+        }
+        *state = 3;
+        break;
+    case 3:
+        if (SndSyncMusicStandby(0) == 0) {
+            if (func_00147DD0() != 0) {
+                ret = 1;
+            } else if (func_00147E18() != 0) {
+                ret = 1;
+            } else if (AtelGetMusicNumber() >= 0) {
+                SndMusicCrossStart(AtelGetMusicNumber(), 0x78);
+                ret = 1;
+            } else {
+            fade:
+                SndMusicVolumeFadeOut(SndGetNowPlayMusic(), 0x78);
+                ret = 1;
+            }
+        }
+        break;
+    }
+    return ret;
+}
 
 int func_00146CB8(s32 *state)
 {
@@ -368,7 +394,7 @@ void func_00146FB8(int a)
         AtelRegistCallbackQue2(0, func_00146E60, D_0056AE28);
     } else {
         func_00174E28();
-        ((void (*)(int))func_0014D890)(func_00124C88()); /* DEBT(CAST): q2.h declares u8 parameter */
+        func_0014D890(func_00124C88());
         Yn_GuideMapSetMapNo(D_0058E418);
         pppFpLoadStat(D_0058E490);
         yiSetDrawMask(D_0058E428);
@@ -392,7 +418,21 @@ void func_001478A8(void)
     func_00139D48(0x78, 0x7F, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_001478B8);
+int func_001478B8(void)
+{
+    int saved = AtelChangeCurrentCtrl(0);
+
+    D_0058E3D8->flags &= ~0x03000000;
+    func_001478A8();
+    D_0058E3D8->prev[0] = D_0058E3D8->cur[0];
+    D_0058E3D8->prev[1] = D_0058E3D8->cur[1];
+    D_0058E3D8->prev[2] = D_0058E3D8->cur[2];
+    D_0058E3D8->prev[3] = D_0058E3D8->cur[3];
+    AtelClearMenuOtakaraFlag();
+    AtelSetCurrentCtrl(saved);
+    func_001387D0(-1, 0, 0);
+    return 1;
+}
 
 int func_00147950(void)
 {
@@ -419,7 +459,50 @@ void func_001479E8(int a, int b)
     AtelSetCurrentCtrl(v1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147A28);
+int func_00147A28(s32 *state)
+{
+    int ret = 0;
+    int s = *state;
+
+loop:
+    switch (s) {
+    case 0:
+        *state = 1;
+    case 1:
+        if (((int (**)(int))GetCD())[2](1) == 0 && func_002D6730() == 0) {
+            *state = 2;
+            s = 2;
+            goto loop;
+        }
+        break;
+    case 2:
+        func_001596C8(D_0058E3E8, D_0058E3EC);
+        func_00159C88();
+        *state = 3;
+        break;
+    case 3:
+        {
+            int v = func_0015A120();
+            int t = func_00158958();
+            if (D_0058E434 > 0 && t >= D_0058E434) {
+                if (D_0058E43C != 0) {
+                    func_00117E08(D_0058E438);
+                } else {
+                    func_00117E18(D_0058E438);
+                }
+                D_0058E434 = -1;
+            }
+            if (v & 1) {
+                func_00158D60();
+                ret = 1;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    return ret;
+}
 
 void func_00147B78(s32 a, s32 b)
 {
@@ -584,7 +667,21 @@ int func_00147E50(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", TkCheckSoftWareReset);
+int TkCheckSoftWareReset(void)
+{
+    int ret = 1;
+    int i;
+
+    if (TkGetTGS() != 0) {
+        return 0;
+    }
+    for (i = 0; i < 6; i++) {
+        if (TkGetControlerHist(0, 0, -(i + 1)) != 0x90F) {
+            ret = 0;
+        }
+    }
+    return ret;
+}
 
 void func_00147EE0(void)
 {
@@ -594,7 +691,23 @@ void func_00147EE0(void)
     func_00173190();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147F10);
+void func_00147F10(void)
+{
+    int old = func_00138240();
+
+    if (func_00138220() != 0) {
+        MsSetSaveConfigEnglish(1);
+    } else {
+        MsSetSaveConfigEnglish(0);
+    }
+    if (old != func_00138240()) {
+        TOSwapInternationalEnvInit(func_00138240());
+        while (TOSwapInternationalEnvExec() == 0) {
+            func_002D3FF0(0);
+            func_001656D8();
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147FA8);
 
@@ -605,7 +718,7 @@ s32 _m2c_func_001481F0_func_0013A1B0(s32, s32) __asm__("func_0013A1B0");
 s32 _m2c_func_001481F0_func_00147F10() __asm__("func_00147F10");
 s32 _m2c_func_001481F0_func_0014D4B0() __asm__("func_0014D4B0");
 s32 _m2c_func_001481F0_func_00209B68() __asm__("func_00209B68");
-/* DEBT(CAST) */
+
 void func_001481F0(void) {
     s32 temp_16;
 
@@ -631,7 +744,7 @@ void func_001481F0(void) {
     func_0014DB70(6);
     temp_16 = AtelChangeCurrentCtrl(0);
     D_0058E3D8->flags |= 0x80;
-    (*(s32 *)((u8 *)(D_0058E3D8) + (0x210))) = (s32) ((*(s32 *)((u8 *)(D_0058E3D8) + (0x210))) | 2);
+    D_0058E3D8->f210.w |= 2;
     func_00147EE0();
     _m2c_func_001481F0_func_00147F10();
     _m2c_func_001481F0_func_00209B68();

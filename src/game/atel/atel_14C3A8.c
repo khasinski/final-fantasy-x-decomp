@@ -54,7 +54,19 @@ void func_0014C3A8(void) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014C478);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014C4E0);
+extern u64 D_006F2CE0[];
+u64 *func_0014C4E0(int a, u64 *p)
+{
+    u64 *next;
+
+    p[2] = 0x1000000000000001ULL;
+    p[3] = 0xE;
+    next = p + 6;
+    p[4] = D_006F2CE0[14];
+    p[5] = D_006F2CE0[15];
+    func_002B2B30((int)p, 3, a, 0);
+    return next;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", AtelExecDrawShape);
 

@@ -61,9 +61,9 @@ void func_001A4EA0(S2Four *p) {
 }
 
 s32 _m2c_func_001A4F20__rcRealloc(s32, s32, s8 *, s32) __asm__("_rcRealloc");
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_001A4F20(void *arg0, s32 arg1) {
-    register s32 temp_17 __asm__("$17");
+    s32 temp_17;
 
     (*(s32 *)((u8 *)(arg0) + (0x1C))) = arg1;
     (*(s32 *)((u8 *)(arg0) + (0x20))) = _m2c_func_001A4F20__rcRealloc((*(s32 *)((u8 *)(arg0) + (0x20))), arg1 * 4, D_0056DE40, 0x3D);

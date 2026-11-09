@@ -58,7 +58,29 @@ int MsAtelGetCameraID(int a, int kind, u32 i)
     return h;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_153EA0", func_00154010);
+void func_00154010(int kind, u32 i)
+{
+    if (i < 3) {
+        switch (kind) {
+        case 0:
+            MsCameraFree(D_0058FE20[i]);
+            D_0058FE20[i] = 0;
+            break;
+        case 1:
+            MsCameraFree(D_0058FE10[i]);
+            D_0058FE10[i] = 0;
+            break;
+        case 2:
+            MsCameraFree(D_0058FE30[i]);
+            D_0058FE30[i] = 0;
+            break;
+        case 3:
+            MsCameraFree(D_0058FE40[i]);
+            D_0058FE40[i] = 0;
+            break;
+        }
+    }
+}
 
 void func_001540C0(int kind)
 {
@@ -92,20 +114,20 @@ void func_001540C0(int kind)
     }
 }
 
-int func_00154218(int a, int kind, int i) /* DEBT(TYPE): a is an Actor * (q2.h and the callers use int) */
+int func_00154218(void *a, int kind, int i)
 {
     int *h = (int *)func_0013A468((char *)a); /* DEBT(CAST): per-actor effect handle */
 
     if (*h == 0) {
         if (kind == 0) {
-            kind = func_00143D78() == func_00145628((Actor *)a);
+            kind = func_00143D78() == func_00145628(a);
         }
         *h = MsAtelGetCameraID(5, kind, i);
     }
     return *h;
 }
 
-int MsBindCamera(int a, int kind, int i)
+int MsBindCamera(void *a, int kind, int i)
 {
     int r = 0;
 

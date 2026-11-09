@@ -92,7 +92,7 @@ int func_00107428(Chr *chr, int bone, Vec4 *in, Vec4 *out); /* in may be 0 */
 void op_m_copy(void *dst, void *src);
 
 void func_2067600(void);
-int *op_oef2_a_get(int a, int b, int c);
+void *op_oef2_a_get(int a, int b, int c);
 int func_002BCB60(int a, void *req);
 
 typedef struct SlotTbl18 { /* DEBT(NAME): object with a table at +0x18, either absolute pointer or offset from the object */

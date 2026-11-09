@@ -4,7 +4,11 @@
 #define func_002B3888 _hdr_func_002B3888
 #define func_002B3938 _hdr_func_002B3938
 #define func_002B39C0 _hdr_func_002B39C0
+#define func_002B3A48 _hdr_func_002B3A48
+#define func_002B3C88 _hdr_func_002B3C88
+#define func_002B40E8 _hdr_func_002B40E8
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/g4.h"
@@ -12,6 +16,9 @@
 #undef func_002B3888
 #undef func_002B3938
 #undef func_002B39C0
+#undef func_002B3A48
+#undef func_002B3C88
+#undef func_002B40E8
 #undef func_002B3EA8
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_spline_draw_path3);
@@ -51,7 +58,47 @@ void func_002B37C0(void)
 void func_002B37F0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_pad_set);
+typedef struct OpPadState {
+    int now;
+    int last;
+    int pressed;
+    int repeat;
+    int timer;
+} OpPadState;
+
+typedef struct OpHwRegs {
+    u8 pad0[8];
+    s8 b8;
+} OpHwRegs;
+
+extern s8 D_007649A0;
+extern OpPadState D_00551CA8[];
+
+void op_pad_set(int pad, int unused_arg, u16 in)
+{
+    u8 unused_stack[0x20];
+    OpHwRegs *hw = (OpHwRegs *)&D_2008250;
+    OpPadState *p;
+
+    if (D_007649A0 != 0) {
+        p = &D_00551CA8[pad];
+        if (hw->b8 == 0) {
+            in = 0;
+        }
+        p->last = p->now;
+        if (in != p->now) {
+            p->repeat = in;
+            p->timer = 12;
+        } else if (--p->timer != 0) {
+            p->repeat = 0;
+        } else {
+            p->repeat = in;
+            p->timer = 1;
+        }
+        p->now = in;
+        p->pressed = (in ^ p->last) & in;
+    }
+}
 
 extern s8 _m2c_func_002B3888_D_004F3F80 __asm__("D_004F3F80");
 extern s8 _m2c_func_002B3888_D_004F4110 __asm__("D_004F4110");
@@ -125,7 +172,23 @@ void func_002B39C0(s32 n) {
     func_002EA328(1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3A48);
+extern s8 _m2c_func_002B3A48_D_004F4110 __asm__("D_004F4110");
+extern s8 _m2c_func_002B3A48_D_00575BA0[] __asm__("D_00575BA0");
+void _m2c_func_002B3A48_func_00120108(void *) __asm__("func_00120108");
+void func_002B3A48(s32 n) {
+    s32 idx = _m2c_func_002B3A48_D_004F4110;
+    s32 prev;
+    if (idx > 0) {
+        prev = idx - 1;
+        if ((s32)((&D_00764130)[prev] - (&D_00764130)[idx]) == n) {
+            _m2c_func_002B3A48_D_004F4110 = prev;
+            return;
+        }
+    }
+    __asm__ volatile("sw $31, 0x0(%0)\n\tnop" : : "r"(0x70003F00));
+    _m2c_func_002B3A48_func_00120108(_m2c_func_002B3A48_D_00575BA0);
+    *(s32 *)0 = 0;
+}
 
 extern s8 _m2c_func_002B3AC8_D_004F4110 __asm__("D_004F4110");
 s32 func_002B3AC8(s32 arg0) {
@@ -154,7 +217,25 @@ void func_002B3B48(const char *path, void *buffer)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_file_read);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3C88);
+extern char D_00575BC0[];
+int func_002B3C88(int a)
+{
+    u8 unused[0x400];
+    int fd;
+    int size;
+
+    if (D_007649A0 == 0) {
+        return 0;
+    }
+    fd = func_002FC4E0(a, 1);
+    if (fd < 0) {
+        func_00120108(D_00575BC0, a);
+        return 0;
+    }
+    size = func_002FC8E8(fd, 0, 2);
+    func_002FC768(fd);
+    return size;
+}
 
 void func_002B3D10(u32 a0)
 {
@@ -250,12 +331,9 @@ void func_002B3DF8(float f12, float f0)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B3E38);
 
-#ifndef MMI_SQ_ZERO
-#define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
-#endif
-/* DEBT(CAST) */ /* DEBT(FAKE) */
+/* DEBT(CAST) */
 void func_002B3EA8(void *arg0, u16 arg1, u16 arg2, s32 arg3) {
-    register s32 ffff __asm__("$2");
+    s32 ffff;
     MMI_SQ_ZERO(0, arg0);
     __asm__("ori %0, $0, 0xffff" : "=r"(ffff));
     (*(s16 *)((u8 *)(arg0) + (0))) = arg1;
@@ -275,7 +353,17 @@ void func_002B3ED0(ObjH4 *o, int q, u16 r)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_mfifo_set);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B40E8);
+extern char D_00575C00[];
+extern char D_00575C28[];
+void func_002B40E8(int *p, int b, int size)
+{
+    int n = size / 32;
+
+    func_00120108(D_00575C00, size, b, p);
+    for (; n > 0; n--, p += 8) {
+        func_00120108(D_00575C28, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+    }
+}
 
 void func_002B4190(s32 a, s32 b) {
     func_002B40E8(a, b, 0x100);

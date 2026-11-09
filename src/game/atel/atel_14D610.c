@@ -34,9 +34,9 @@ void AtelPs2DebugString(const char *a)
     func_0014D7A8((int)a, 0);
 }
 
-void func_0014D7B8(int a)
+void func_0014D7B8(char *a)
 {
-    func_0014D7A8(a, 0x12);
+    func_0014D7A8((int)a, 0x12);
 }
 
 s32 func_0014D7C0(void)
@@ -77,7 +77,7 @@ void AtelRecoverPreBgPage(void)
     }
 }
 
-void func_0014D890(u8 v)
+void func_0014D890(int v)
 {
     D_0058F930 = 2;
     D_0058F932 = v;

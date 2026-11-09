@@ -1,10 +1,16 @@
 /* tu_318 0x29dc40-0x2a0618: low; ~opu; split at 0x2a0618: flag split: 0x2A0618-0x2A0718 needs -Btools/cc/ee-as-delay/ -Wa,-mips4 (config/cflags.txt), func_0029FD20 does not (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#define opu_v_get _hdr_opu_v_get
+#define opus_v_en_all _hdr_opus_v_en_all
+#define opus_v_chara_all _hdr_opus_v_chara_all
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/r6.h"
 #include "ffx/s6.h"
 #include "ffx/t6.h"
+#undef opu_v_get
+#undef opus_v_en_all
+#undef opus_v_chara_all
 
 u16 *func_0029DC40(ScriptThread *th, u16 *pc)
 {
@@ -245,11 +251,73 @@ INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", func_0029F2B8);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opu_r_en);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", func_0029F5F8);
+float _opu_op_deg_get(ScriptThread *th, float x1, float z1, float x2, float z2) __asm__("op_deg_get");
+int _opu_op_deg_in_check(float a, float min, float max) __asm__("op_deg_in_check");
+
+u16 *func_0029F5F8(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    ScriptSub *tgt = opus_no_get(th->obj300, sub, (s16)pc[1]);
+    float deg = _opu_op_deg_get(th, sub->f90, sub->f98, tgt->f90, tgt->f98);
+    u8 ofs1 = ((u8 *)pc)[4];
+    u8 ofs2 = ((u8 *)pc)[5];
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0x0000:
+        if (th->flags & 0x800) {
+            deg += 2048.0f;
+        }
+        *(float *)((char *)sub + ofs1) = deg;
+        pc += 3;
+        break;
+    case 0x1000:
+        if (th->flags & 0x800) {
+            deg += 2048.0f;
+        }
+        *(float *)((char *)sub + ofs1) = deg;
+        *(float *)((char *)sub + ofs2) = *(float *)th * 16.0f;
+        pc += 3;
+        break;
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opu_v_etc);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", func_0029FAC0);
+u16 *func_0029FAC0(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    u8 ofs;
+    s16 d_i;
+    float f;
+    float d;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0x0000:
+        ofs = ((u8 *)pc)[3];
+        d_i = pc[2];
+        f = *(float *)((char *)sub + ofs);
+        d = d_i;
+        if (_opu_op_deg_in_check(*(float *)((char *)sub + ((u8 *)pc)[2]), f - d, f + d) != 0) {
+            pc = SCRIPT_JUMP_AT(pc, 3);
+        } else {
+            pc += 4;
+        }
+        break;
+    case 0x1000:
+        ofs = ((u8 *)pc)[3];
+        d_i = pc[2];
+        f = *(float *)((char *)sub + ofs);
+        d = d_i;
+        if (_opu_op_deg_in_check(*(float *)((char *)sub + ((u8 *)pc)[2]), f - d, f + d) != 0) {
+            pc = SCRIPT_JUMP_AT(pc, 3);
+        } else {
+            pc += 4;
+        }
+        break;
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opu_v_scale);
 
@@ -378,6 +446,53 @@ u16 *opu_length(ScriptThread *th, u16 *pc)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opu_v_2d);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opus_v_en_all);
+int _opu_MsEffectGetTargetFlag(int id) __asm__("MsEffectGetTargetFlag");
+void _opu_func_002A06A0(int id, float *out) __asm__("func_002A06A0");
+s8 *_opu_MsGetBattleList(int a, int *cnt) __asm__("MsGetBattleList");
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29DC40", opus_v_chara_all);
+void opus_v_en_all(SlotEntry *e, float *out, int check_flag)
+{
+    int i;
+    int n = 0;
+    float x;
+    float y;
+    float z;
+
+    x = y = z = 0.0f;
+    for (i = 0; i < e->b8; i++) {
+        if (check_flag == 0 || _opu_MsEffectGetTargetFlag(e->list[i]) != 0) {
+            _opu_func_002A06A0(e->list[i], out);
+            n++;
+            x += out[0];
+            y += out[1];
+            z += out[2];
+        }
+    }
+    out[0] = x / (float)n;
+    out[1] = y / (float)n;
+    out[2] = z / (float)n;
+}
+
+void opus_v_chara_all(float *out)
+{
+    int cnt;
+    int i;
+    int n = 0;
+    float x;
+    float y;
+    float z;
+    s8 *list;
+
+    x = y = z = 0.0f;
+    list = _opu_MsGetBattleList(0x10, &cnt);
+    for (i = 0; i < cnt; i++) {
+        _opu_func_002A06A0(*list++, out);
+        n++;
+        x += out[0];
+        y += out[1];
+        z += out[2];
+    }
+    out[0] = x / (float)n;
+    out[1] = y / (float)n;
+    out[2] = z / (float)n;
+}

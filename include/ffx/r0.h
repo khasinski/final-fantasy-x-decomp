@@ -48,7 +48,6 @@ extern char D_00569B78[], D_00569B90[];
 int func_0011C000(); /* DEBT(TYPE): takes the block header (Sg_MemCheckPtr); _Sg_MemCheckMCBerr passes nothing */
 void yiAssert(int a, char *b, char *c, ...); /* DEBT(TYPE): some callers pass a 4th argument, some do not */
 void func_00138BF8(int v);
-typedef struct R0Cmd16 { s16 h0; s16 h2; s32 w4; s64 d8; } R0Cmd16; /* DEBT(NAME): same record as Cmd16, fields as written by the ring-buffer writers */
 typedef struct R0Pkt { u32 w0; u32 w4; u64 q8; } R0Pkt; /* DEBT(NAME): 16-byte packet header written by func_0010B978 */
 
 int func_00104A88(int a, int b, int c, int d);
@@ -75,13 +74,6 @@ void Sg_MainLoop(void);
 /* the original caller passes a second argument that func_0011CB08 ignores */
 void func_0011CB08(); /* DEBT(TYPE): defined with one AllocHdr * parameter in c_11C0B0.c; func_0011C140 passes a second argument */
 
-typedef struct R0Slot16 { s8 b0; s8 b1; s16 h2; s32 w4; s32 w8; s32 wC; } R0Slot16; /* DEBT(NAME): 16-byte pool entry behind D_0057F60C */
-
-/* func_0013B530 is declared int (script handlers return it) but func_0013B5D8 ignores a void-looking result */
-#define CALLV_func_0013B530(a, i, f) (((void (*)(Actor *, int, float))func_0013B530)((a), (i), (f))) /* DEBT(CAST) */
-
-typedef void (*R0SlotFn)(Actor *, int, float); /* DEBT(CAST): callers ignore the int result of func_0013B500..B560 */
-typedef struct R0ArgStack { s32 n; s32 v[20]; u8 tag[19]; } R0ArgStack; /* DEBT(NAME): script argument stack that ScriptCtx starts; value i at 4+4i, tag i at 0x54+i */
 void func_001385F8(void);
 int func_001458A8(void);
 void func_002D3AA8(int a, int b);
