@@ -880,7 +880,43 @@ int func_00131CB8(Actor *a, void *op, ScriptCtx *ctx) {
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00131D18);
+int func_00131D18(void) {
+    int party[3];
+    int mask = 0;
+    int i;
+    int j;
+
+    MsGetSavePartyMember(&party[0], &party[1], &party[2]);
+    for (i = 0; i < 8; i++) {
+        if (MsGetSavePlyJoin(i) == 1) {
+            mask |= 1 << i;
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        if (party[i] != 0xFF) {
+            mask &= ~(1 << party[i]);
+        }
+    }
+    j = 0;
+    for (i = 0; i < 3; i++) {
+        if (party[i] == 0xFF) {
+            if (mask == 0) {
+                goto out;
+            }
+            for (; ; j++) {
+                if ((mask >> j) & 1) {
+                    party[i] = j;
+                    mask &= ~(1 << j);
+                    j++;
+                    break;
+                }
+            }
+        }
+    }
+out:
+    MsSetSavePartyMember(party[0], party[1], party[2]);
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00131E60);
 

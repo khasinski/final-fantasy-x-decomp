@@ -80,6 +80,36 @@ void func_001A23C8(void *obj)
     func_00267028(D_006A3924, D_006A3924->sub, obj);
 }
 
+typedef struct RcefSub10 {
+    s32 w00;
+    s32 w04;
+    u8 b08;
+    u8 pad09[0xF];
+    u8 b18;
+    u8 b19;
+    u8 b1A;
+    u8 b1B;
+    u8 pad1C[4];
+    void *p20;
+    s32 *p24;
+    s32 *p28;
+    void *p2C;
+    u8 pad30[0x1C];
+    u8 b4C;
+    u8 b4D;
+    u8 pad4E[0x22];
+} RcefSub10;
+
+typedef struct RcefObj100 {
+    s32 w00;
+    Chr *chr;
+    void *buf;
+    u8 pad0C[4];
+    RcefSub10 sub;
+    float m80[16];
+    float mC0[16];
+} RcefObj100;
+
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2400);
 
 /* DEBT(CAST) */
@@ -96,7 +126,25 @@ void func_001A24C8(void *obj) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2530);
+int func_002A7120(Chr *chr, int a, int b);
+
+void func_001A2530(RcefObj100 *o, int id, int a2, int a3)
+{
+    int size;
+
+    o->chr = rcefGetChrHandle(id);
+    size = func_002A7120(o->chr, a2, a3);
+    o->buf = pppMemAlloc(D_006A3924, D_006A3924->sub, size);
+    Ch_TextureSetImageBase(o->chr, -1, 0x3C00);
+    Ch_TextureSetClutBase(o->chr, -1, 0x2EE0);
+    if (a3 == 0) {
+        func_002A72F8((s32)o->buf, (s32)o->chr, a2, D_00303550); /* DEBT(CAST) */
+    } else {
+        func_002A7308((s32)o->buf, (s32)o->chr, a2, D_00303550); /* DEBT(CAST) */
+    }
+    Ch_GetRootGlobalMatrix(o->chr, o->mC0);
+    Ch_DrawEnEffect(o->chr, 1);
+}
 
 int _m2c_func_001A2608_Ch_TextureLoadImage(int, int) __asm__("Ch_TextureLoadImage");
 s32 _m2c_func_001A2608_func_0010D4D8(s32, s32) __asm__("func_0010D4D8");
@@ -117,18 +165,29 @@ void func_001A2608(void *arg0) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2698);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2880);
-
 typedef struct RcefSlot30 {
     u16 flags;
     s16 timer;
-    u8 pad04[0x2C];
+    u8 pad04[0x1C];
+    float v20[4];
 } RcefSlot30;
 
+typedef struct RcefWork3F30 {
+    RcefSlot30 slots[16];
+    s16 count;
+    s16 init_timer;
+} RcefWork3F30;
+
 extern RcefSlot30 D_00313F30[16];
+extern RcefWork3F30 D_00313F30_work __asm__("D_00313F30");
 extern s16 D_00314230;
 extern s16 D_00314232;
 extern float D_00314234;
+extern double D_0056DE08;
+float func_0018F0E8(float *a, float *b);
+void func_001A32F8(float *out, float a);
+
+INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2880);
 
 s32 func_001A29A0(s32 arg0) {
     s32 _bit_v;
@@ -268,7 +327,32 @@ void func_001A2B90(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2C20);
+typedef struct RcefShuffleCtx {
+    u8 pad0[0x19C];
+    s32 count;
+    s32 arr[25];
+} RcefShuffleCtx;
+
+extern RcefShuffleCtx D_00313CB0_shuf __asm__("D_00313CB0");
+
+void func_001A2C20(void)
+{
+    RcefShuffleCtx *ctx = &D_00313CB0_shuf;
+    int n = ctx->count;
+    int last = n - 1;
+    int half = n / 2;
+    int i;
+    int j;
+    int t1, t2;
+
+    for (i = 0; i < half; i++) {
+        j = last - i;
+        t1 = ctx->arr[i];
+        t2 = ctx->arr[j];
+        ctx->arr[i] = t2;
+        ctx->arr[j] = t1;
+    }
+}
 
 void _m2c_func_001A2C80_MsSetChrPos(int id, float *pos) __asm__("MsSetChrPos");
 void func_001A2C80(s32 arg0, float *arg1) {
@@ -514,7 +598,16 @@ void func_001A3438(s32 arg0, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3478);
+void func_001A3478(float *v)
+{
+    do {
+        v[0] = (float)func_002EFD78() * 4.656612873077393e-10f * 2.0f - 1.0f;
+        v[1] = (float)func_002EFD78() * 4.656612873077393e-10f * 2.0f - 1.0f;
+        v[2] = (float)func_002EFD78() * 4.656612873077393e-10f * 2.0f - 1.0f;
+        v[3] = 0.0f;
+        rcVec3fNormalize((Vec4 *)v); /* DEBT(CAST) */
+    } while (v[0] == 0.0f && v[1] == 0.0f && v[2] == 0.0f);
+}
 
 typedef struct RcefCtx238 {
     u8 pad0[0x204];
@@ -611,7 +704,38 @@ void func_001A3870(s32 arg0) {
     _m2c_func_001A3870_Ch_ClutCreate(rcefGetChrHandle(arg0));
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3890);
+u8 *Ch_ClutGetPtr(Chr *chr, int i);
+
+void func_001A3890(int id, float *add, float *mul)
+{
+    int i;
+    Chr *chr;
+    int count;
+    int size;
+    u8 *src;
+    u8 *dst;
+    int j;
+    int k;
+    int v;
+
+    chr = rcefGetChrHandle(id);
+    count = func_00117BB8(chr);
+    for (i = 0; i < count; i++) {
+        size = Ch_ClutGetSize(chr, i);
+        src = func_00117C18(chr, i);
+        dst = Ch_ClutGetPtr(chr, i);
+        for (j = 0; j < size; j++, src += 4, dst += 4) {
+            for (k = 0; k < 4; k++) {
+                v = (src[k] + add[k]) * mul[k];
+                if (v >= 0) {
+                    dst[k] = v < 0x100 ? v : 0xFF;
+                } else {
+                    dst[k] = 0;
+                }
+            }
+        }
+    }
+}
 
 void func_001A39F0(s32 arg0) {
     Ch_ClutDispose(rcefGetChrHandle(arg0));

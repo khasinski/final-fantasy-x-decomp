@@ -29,7 +29,43 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_00184F50);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_00185408);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_001854D8);
+typedef struct YiMesh1854D8 {
+    s32 w00;
+    s32 w04;
+    s32 v_ofs;
+    s32 w0C;
+    u16 h10;
+    s16 v_cnt;
+} YiMesh1854D8;
+
+extern float D_0056CF64;
+extern float D_0056CF68;
+
+int func_001854D8(YiMesh1854D8 *m, float *min, float *max)
+{
+    int i;
+    int j;
+    float *v;
+
+    v = (float *)((u8 *)m + m->v_ofs);
+    for (i = 0; i < 3; i++) {
+        min[i] = D_0056CF64;
+        max[i] = D_0056CF68;
+    }
+    min[3] = 1.0f;
+    max[3] = 1.0f;
+    for (i = 0; i < m->v_cnt; i++) {
+        for (j = 0; j < 3; j++) {
+            if (min[j] > v[j]) {
+                min[j] = v[j];
+            }
+            if (max[j] < v[j]) {
+                max[j] = v[j];
+            }
+        }
+        v += 4;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_001855C0);
 

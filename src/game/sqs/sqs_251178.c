@@ -322,7 +322,40 @@ void func_00251DC8(void)
     SqsIopCommandSend();
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00251E08);
+typedef struct SqsBankHdr {
+    int w0;
+    int w4;
+    int w8;
+    int wC;
+} SqsBankHdr;
+extern char D_005736A8[];
+extern char D_005736F0[];
+extern char D_005736F8[];
+extern int D_0069BFC4;
+
+void func_00251E08(SqsBankHdr *p)
+{
+    int w8;
+    int bf;
+    int w4;
+    int v0;
+    int size;
+
+    func_002519A0();
+    w8 = (p->w8 + 3) & 0xFFFFFFFC;
+    bf = D_0069BF74;
+    w4 = p->w4 + (p->wC << 5);
+    v0 = w8 * 4 + 0x20;
+    size = w4 + v0;
+    D_0069BF74 = bf | 1;
+    if (size > 0x31000) {
+        func_002EF240(D_005736A8, D_005736D8, D_005736F0, size, D_005736F8);
+        size = 0x31000;
+    }
+    func_00251720(1, (int)p, D_0069BFC4, size);
+    func_00251360(0x11, 0, 0, 0, 0, 0, 0, 0);
+    SqsIopCommandSend();
+}
 
 void func_00251EE8(int src, int unused, int v)
 {

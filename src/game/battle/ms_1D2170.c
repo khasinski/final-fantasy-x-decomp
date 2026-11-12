@@ -91,7 +91,35 @@ void MsMotionProcess(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D2170", func_001D2420);
+int func_001D2420(int id, BtlChr *c) {
+    float pos1[4];
+    float pos2[4];
+    int r = -1;
+    int check = 1;
+
+    if (c->fAB0 != 0 || ((D_003172F0.f2004 >> id) & 1) || (D_003172F0.f14 != 0 && D_003172F0.f1511 == 0) || D_003172F0.f10 == 0x1B) {
+        check = 0;
+    }
+    if (check != 0) {
+        int i;
+        float w1 = MsGetChrWidth(id);
+        MsGetChrBtlPos(id, pos1);
+        for (i = 0; i < 28; i++) {
+            BtlChr *t = MsGetChr(i);
+            if (t->chr != 0 && t->f2D != 0 && id != i) {
+                float w = MsGetChrWidth(i) + w1;
+                func_001B6790(i, pos2);
+                if (func_001AC348(pos1, pos2) < w) {
+                    r = 0;
+                    D_003172F0.f2138 = i;
+                    D_003172F0.f2139 = 0xFC;
+                    break;
+                }
+            }
+        }
+    }
+    return r;
+}
 
 void MsSetBtlPosReset(int id) {
     float v[4];

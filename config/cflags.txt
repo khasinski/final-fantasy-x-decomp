@@ -6,7 +6,7 @@ game/atel/atel_141FF0 -fno-thread-jumps
 game/op/opu/opu_2A43D8 -fno-strict-aliasing
 # Period assembler with corrected INSN_SYNC delay-slot scheduling test.
 game/menu/to/to_1F5060 -Btools/cc/ee-as-delay/
-game/platform/ffx_2DC580 -Btools/cc/ee-as-delay/
+game/platform/ffx_2DC580 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/platform/ffx_2DCE38 -Btools/cc/ee-as-delay/
 # Assemble compiler-emitted angle conversions without extra coprocessor move delays.
 game/op/opu/opu_29DC40_2A0618 -Btools/cc/ee-as-delay/ -Wa,-mips4
@@ -20,7 +20,7 @@ game/op/opf_2B0FC0 -Btools/cc/ee-as-delay/
 game/op/op_2B33F8 -Btools/cc/ee-as-delay/
 game/op/op_2B4FF8 -Btools/cc/ee-as-delay/
 game/rc/fx/rcfxWind -Btools/cc/ee-as-delay/
-game/platform/platform_2DC110 -Btools/cc/ee-as-delay/
+game/platform/platform_2DC110 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/chr/cache -Btools/cc/ee-as-delay/
 game/movie/movie_15BBF8 -Btools/cc/ee-as-delay/
 game/movie/movie_str -Btools/cc/ee-as-delay/

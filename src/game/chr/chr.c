@@ -56,7 +56,48 @@ void Ch_ArcMapping(ArcHdr *arc)
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_CbArcMapping);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00101210);
+typedef struct {
+    s32 w0;
+    u8 pad04[0x6C];
+    s32 w70;
+    u8 pad74[0xAC];
+    s32 w120;
+    s32 w124;
+    s32 w128;
+} Rec12CView;
+
+extern char D_00308100[];
+extern char D_00568F50[];
+void Ch_CbArcMapping(Rec12C *r, s32 arc);
+s32 Sg_MemGetSize(s32 a);
+
+Rec12C *func_00101210(s32 id, s32 arc)
+{
+    Rec12CView *r = 0;
+    s32 i;
+
+    for (i = 0; i < 40; i++) {
+        if (chrblk[i].w0 == -1) {
+            r = (Rec12CView *)&chrblk[i];
+            break;
+        }
+    }
+    CALL_func_002ED0E0_INT((u8 *)r, sizeof(Rec12C));
+    r->w0 = id;
+    r->w70 |= 1;
+    Ch_CbArcMapping((Rec12C *)r, arc);
+    if (r->w120 != 0) {
+        s32 size = Sg_MemGetSize(arc) - (r->w120 - arc);
+
+        r->w128 = size;
+        r->w124 = (s32)user_malloc(size, 6, D_00568F00, 0x19E);
+        func_002F0008(D_00308100, D_00568F50, ch_create_chrname(id));
+        func_0011BB08((void *)r->w124, D_00308100, -1);
+        func_0011CFB8(r->w124, 5);
+        func_002EEF1C(r->w124, r->w120, r->w128);
+    }
+    return (Rec12C *)r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00101368);
 
@@ -130,7 +171,31 @@ s32 func_00101528(int i)
     return '-';
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00101590);
+extern s32 D_0057CD88;
+extern char *D_0057CD90[];
+char *func_0011D6D0(char *s);
+
+s32 func_00101590(char *s4, char *s2)
+{
+    s32 i;
+    char *p;
+
+    for (i = 0; i < D_0057CD88; i++) {
+        if (func_002F05E8(D_0057CD90[i * 3], s2) == 0 &&
+            func_002F05E8(D_0057CD90[i * 3 + 2], s4) == 0) {
+            return i + 0xF000;
+        }
+    }
+    i = D_0057CD88++;
+    D_0057CD90[i * 3] = func_0011D6D0(s2);
+    p = func_0011D6D0(s2);
+    D_0057CD90[i * 3 + 1] = p;
+    if ((u32)(p[0] - 'a') < 26) {
+        p[0] -= 0x20;
+    }
+    D_0057CD90[i * 3 + 2] = func_0011D6D0(s4);
+    return i + 0xF000;
+}
 
 Rec12C *Ch_BlkGetHandleFast(s32 id)
 {
@@ -470,7 +535,42 @@ s32 Ch_MemMove_Over(void)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_InitAll);
+extern s32 D_0057CD48[];
+extern s32 D_0057CD68[];
+extern char D_005693A0[];
+void Ch_RomDataReadInit(void);
+void Ch_DrawInitAll(void);
+void Sg_InitLight(void);
+void Sg_InitCamera(void);
+
+void Ch_InitAll(void)
+{
+    char buf[100];
+    s32 i;
+
+    func_002ED0E0((u8 *)chrblk, 40 * sizeof(Rec12C));
+    for (i = 0; i < 40; i++) {
+        chrblk[i].w0 = -1;
+    }
+    Ch_RomDataReadInit();
+    D_00300664 = 0;
+    D_00300668 = 0;
+    D_0057CD88 = 0;
+    Ch_DrawInitAll();
+    for (i = 0; i < 7; i++) {
+        if (ffx_debugmode) {
+            func_002F0008(buf, D_005693A0, sg_getdbname(i));
+            D_0057CD48[i] = Sg_PcReadD((s32)buf);
+            D_0057CD68[i] = (u32)Sg_PcReadGetLen() >> 7;
+        } else {
+            D_0057CD48[i] = 0;
+            D_0057CD68[i] = 0;
+        }
+    }
+    Ch_DisposeAll();
+    Sg_InitLight();
+    Sg_InitCamera();
+}
 
 void func_00103788(void)
 {

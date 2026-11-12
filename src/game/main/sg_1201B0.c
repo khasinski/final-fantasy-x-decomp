@@ -9,7 +9,39 @@
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", func_001201B0);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", Sg_VectorToMatrix2);
+void func_002DCE80(void *a, void *b, void *c);
+
+void Sg_VectorToMatrix2(float (*m)[4], float *v)
+{
+    float tmp[4];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    float up[4];
+
+    up[0] = 0.0f;
+    up[1] = -1.0f;
+    up[2] = 0.0f;
+    tmp[0] = v[0];
+    tmp[1] = v[1];
+    tmp[2] = v[2];
+    tmp[3] = 1.0f;
+    func_002DCEC8(v2, tmp);
+    func_002DCE80(tmp, up, v2);
+    func_002DCEC8(v1, tmp);
+    func_002DCE80(tmp, v1, v2);
+    func_002DCEC8(v3, tmp);
+    func_002DD128(m);
+    m[0][0] = v2[0];
+    m[0][1] = v2[1];
+    m[0][2] = v2[2];
+    m[1][0] = v3[0];
+    m[1][1] = v3[1];
+    m[1][2] = v3[2];
+    m[2][0] = v1[0];
+    m[2][1] = v1[1];
+    m[2][2] = v1[2];
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", Sg_MatrixToQuaternion);
 

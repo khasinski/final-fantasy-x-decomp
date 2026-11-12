@@ -226,7 +226,64 @@ void func_00279558(ScriptWork *base, T6_VKeyF *k, ScriptCtx *ctx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_278C40", func_00279600);
+typedef struct P279600Src {
+    int w0;
+    int id;
+    float f8;
+    float fC;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    u8 b20;
+    u8 b21;
+    u8 b22;
+    u8 b23;
+} P279600Src;
+
+typedef struct P279600Dst {
+    P279600Src *src;
+    float f4;
+    float f8;
+    float fC;
+    float f10;
+    float f14;
+    float f18;
+    s8 b1C;
+    u8 b1D;
+    s8 b1E;
+    s8 b1F;
+} P279600Dst;
+
+typedef struct P279600Shape {
+    int w0;
+    int ofs4;
+} P279600Shape;
+
+void func_00279600(P279600Src *s, P279600Dst *d)
+{
+    P279600Shape *shape;
+    int h;
+
+    shape = (P279600Shape *)D_006A3924->res[s->id].shape;
+    d->f4 = s->f8;
+    d->f10 = s->f14;
+    d->f8 = d->fC = d->f14 = d->f18 = 0.0f;
+    d->b1C = 0;
+    d->src = s;
+    if (s->fC != 0.0f || s->f10 != 0.0f || s->f18 != 0.0f || s->f1C != 0.0f) {
+        d->b1C = 1;
+    }
+    d->b1D = s->b23;
+    d->b1E = d->b1F = 0;
+    if (s->b21 != 0) {
+        h = func_0019CFE0(s->b22);
+        if (h != 0) {
+            func_0019D030(h, *(u64 *)((char *)shape + shape->ofs4 + 8));
+            d->b1F = d->b1E = func_0019D010(h);
+        }
+    }
+}
 
 void func_00279728(char *base, ScriptCtx *ctx) {
     Wkw0w4w8 *w = SLOT_WORK(Wkw0w4w8, base, ctx, 2);
@@ -252,6 +309,34 @@ void func_00279BF0(char *base, ScriptCtx *ctx) {
     w->h2 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_278C40", func_00279C10);
+void func_00279C10(ScriptWork *base, V6EvRefC *ev, T6_LtPt *pt)
+{
+    T6_MemEnt *e;
+    T6_Mem *m;
+    R6Vec3 *dst;
+    Vec4 v;
+
+    if (ev->idx != 0xFFFFFFFF) {
+        e = &ppvMng->p3C[ev->idx];
+        if (e == 0) {
+            m = 0;
+        } else {
+            m = func_00267320(ppvMng, e);
+            if (m == 0) {
+                return;
+            }
+            m->user = base;
+        }
+        v.x = pt->x;
+        v.y = pt->y;
+        v.z = pt->z;
+        v.w = 1.0f;
+        func_002DCE08(&v, base->m10, &v);
+        dst = (R6Vec3 *)((char *)m + (ev->ofs + 0xA0));
+        dst->x = v.x - D_006A3930->x;
+        dst->y = v.y - D_006A3930->y;
+        dst->z = v.z - D_006A3930->z;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_278C40", func_00279D28);

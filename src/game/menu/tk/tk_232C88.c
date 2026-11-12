@@ -1,4 +1,5 @@
 /* tu_258 0x232c88-0x234910: low; ~Tk (config/tu_map.tsv) */
+#define func_00225E70 _hdr_func_00225E70
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -6,6 +7,7 @@
 #include "ffx/s5.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
+#undef func_00225E70
 
 extern U4Id4 D_00325BA8;
 extern U4Id4 D_00325BB0;
@@ -110,7 +112,24 @@ void func_00233198(void) {
 void func_002331A0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002331A8);
+void func_002331A8(void)
+{
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    ((void (*)(void))func_00225920)();
+    func_002297A0(func_00228B80(), 4);
+    if (D_00693E20 >= 0) {
+        if (D_00693E20 < 8) {
+            func_00225E70(0);
+            func_002299A8(D_00693EC8[0], D_00693EC8[1], D_003258C8, D_003258CC, D_003258D0);
+        } else {
+            func_00225E70(1);
+            func_00229BE8(D_00693EC8[0], D_00693EC8[1], D_003258C8, D_003258CC, D_003258D0);
+        }
+    }
+    func_00225B00();
+}
 
 int func_00233278(void) { return 1; }
 

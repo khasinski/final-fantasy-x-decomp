@@ -6,7 +6,26 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2416C0", func_002416C0);
+float func_002E93A0(float a);
+
+void func_002416C0(s16 *arr, int n, int scale)
+{
+    int i;
+    s16 *base = arr;
+
+    for (i = 0; i < n; i++, arr++) {
+        float x = ((float)i * 2.0f - ((float)n - 1.0f)) / ((float)n - 1.0f);
+        if (x > 1.0f) {
+            x = 1.0f;
+        }
+        if (x < -1.0f) {
+            x = -1.0f;
+        }
+        *arr = (s16)(func_002E89C0(func_002E93A0(x)) * (float)scale * 16.0f);
+    }
+    base[0] = 0;
+    base[n - 1] = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2416C0", func_002417D8);
 

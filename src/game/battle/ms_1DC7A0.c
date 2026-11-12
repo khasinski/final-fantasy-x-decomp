@@ -45,7 +45,33 @@ void func_001DC850(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", MsBtlGetTerm);
+typedef struct W5BufTerm {
+    s8 b0[18];
+    s8 b12[18];
+    s8 b24[18];
+    u8 pad36[2];
+    s32 cur[18];
+    s32 next[18];
+    s32 wC8;
+} W5BufTerm;
+
+extern W5BufTerm _btlgetdata_term __asm__("btlgetdata");
+
+void MsBtlGetTerm(void) {
+    int i;
+    for (i = 0; i < 18; i++) {
+        BtlChr *c = MsGetChr(i);
+        if (_btlgetdata_term.b24[i] == 0 || c->fA8C != 0 || c->fA8E != 0) {
+            _btlgetdata_term.next[i] = _btlgetdata_term.cur[i];
+        }
+        if (_btlgetdata_term.b0[i] != 0) {
+            MsSaveAddInfoData(i, 0);
+        }
+    }
+    for (i = 0; i < 8; i++) {
+    }
+    _btlgetdata_term.wC8 = 0;
+}
 
 void func_001DC968(int id, int n, W5Buf *s) {
     if (id != 0 && n > 0) {

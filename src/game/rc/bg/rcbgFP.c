@@ -388,4 +388,55 @@ void func_0019B950(R2Vt2 *arg0) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019B990);
+typedef struct {
+    float f00;
+    float f04;
+    float f08;
+    float f0C;
+    float f10;
+    u8 pad14[0xA4];
+    float fB8;
+    u8 padBC[0x8];
+    float fC4;
+    u8 padC8[0x1D];
+    u8 bE5;
+} FpWork565;
+
+void pppSetMatrix(void *mng);
+extern float D_006A3930[];
+
+void func_0019B990(void) {
+    float sp00[16];
+    Slot80 *mng;
+    S2EntObj *obj;
+    void *m;
+    FpWork565 *p1;
+    FpWork565 *p2;
+    S2Ent *e;
+    int i;
+
+    m = (void *)Yn_SeaGetMatrix();
+    if (m != 0) {
+        p1 = (FpWork565 *)func_0019AB50(0x5A, 6, 2);
+        p2 = (FpWork565 *)rcbgFpGetWork2(0x5A, 1, 6, 2);
+        if (p1 != 0 && p2 != 0) {
+            func_002DD0C0(p1, m);
+            p1->bE5 = 1;
+            func_002DD0C0(sp00, m);
+            sp00[12] = sp00[13] = sp00[14] = 0.0f;
+            p2->f04 = 32768.0f - p1->fB8;
+            p2->f10 = 32768.0f - p1->fC4;
+            e = (S2Ent *)&_m2c_func_0019B950_D_00313BD0;
+            for (i = 0; i < 3; i++, e++) {
+                if (e->type == 5) {
+                    pppFpGetMngPtr(e->id, &mng, &obj);
+                    if (mng != 0) {
+                        pppSetMatrix(mng);
+                        func_002DCE38(obj->sub, m, D_006A3930);
+                    }
+                }
+            }
+            func_00174348(10, sp00);
+        }
+    }
+}

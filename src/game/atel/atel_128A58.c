@@ -102,7 +102,37 @@ int func_00128DB8(Actor *a) {
     return id;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_128A58", func_00128DE8);
+int func_00128DE8(Actor *a, void *op, ScriptCtx *ctx)
+{
+    EvGameState *g = AtelGetCurCtrlWork();
+    int v = AtelPopStackInteger(a, ctx);
+    int z;
+    int s;
+
+    if (a->hdr->type == 1) {
+        a->w40 = v;
+        TkChSetBattleChrNum(a);
+    }
+    z = 0;
+    if (v == 0) {
+        z = 1;
+    }
+    func_001454C8(a, z);
+    func_00145470();
+    if (v < 0 || v >= 8) {
+        s = 0xF;
+    } else {
+        s = v;
+    }
+    if (g->h1A == 0) {
+        if (a->stateAA == 1 && a->ptr9C != 0) {
+            ((void (*)(Chr *, int))Ch_SoundSetId)(a->ptr9C, s);
+        }
+        a->bAF = s;
+        SndEventSetPcToActorFoot(s, a->id);
+    }
+    return v;
+}
 
 int func_00128EC8(Actor *a, void *op, ScriptCtx *ctx)
 {
@@ -251,7 +281,22 @@ s32 func_001293D0(Actor *a, void *op, ScriptCtx *ctx)
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_128A58", func_00129408);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_128A58", func_00129528);
+int func_00129528(Actor *a, void *op, ScriptCtx *ctx)
+{
+    float *p2 = (float *)AtelPopStackInteger(a, ctx);
+    int i1 = AtelPopStackInteger(a, ctx);
+    float *p1;
+
+    p1 = (float *)AtelGetRealVarAdrs(a, i1);
+    p2 = (float *)AtelGetRealVarAdrs(a, (int)p2);
+    func_0013CE10(a, ctx, *p1++);
+    func_0013CE10(a, ctx, *p1++);
+    func_0013CE10(a, ctx, *p1);
+    func_0013CE10(a, ctx, *p2++);
+    func_0013CE10(a, ctx, *p2++);
+    func_0013CE10(a, ctx, *p2);
+    return func_00129408(a, op, ctx);
+}
 
 int func_00129628(Actor *a, void *op, ScriptCtx *ctx)
 {

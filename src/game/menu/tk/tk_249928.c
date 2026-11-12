@@ -8,6 +8,19 @@
 #include "ffx/r5.h"
 #include "ffx/v5.h"
 
+typedef struct {
+    s8 c[2];
+} ColonStr;
+
+extern ColonStr D_00573288;
+extern char D_00573290[];
+extern char D_00573298[];
+extern s16 D_0069BE08[];
+extern s16 D_0069BE18[];
+extern s16 D_0069BE28;
+int TkMenuMainGetMenuActiveMask(void);
+void func_0024AF68(int a, int b, int c, int d, int e);
+
 int TkMenuGetCommandHelp(int id) {
     s32 pos;
     int sel = func_0013A398(id) != 0;
@@ -160,7 +173,25 @@ void func_0024ACD8(void) {
 
 int func_0024ACF8(void) { return TkMenuGetPlayerFromIndex2(TkMenuGetCurrentPlayerPos()); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024AD20);
+void func_0024AD20(u32 val, int x, int y, int c1, int c2)
+{
+    char buf1[16];
+    ColonStr buf2 = D_00573288;
+    u32 mins;
+    u32 hrs;
+
+    x -= 0x12;
+    mins = (val / 60) % 60;
+    hrs = val / 3600;
+    hrs = hrs < 1000 ? hrs : 999;
+    func_002F0008(buf1, D_00573290, mins);
+    func_001F64F8(buf1, x, y, c1);
+    x -= 0xA;
+    func_001F64F8((char *)&buf2, x, y, c2);
+    x -= 0x1E;
+    func_002F0008(buf1, D_00573298, hrs);
+    func_001F64F8(buf1, x, y, c1);
+}
 
 int func_0024AE38(int i) {
     return D_0069BD08[i].w0;
@@ -178,11 +209,56 @@ int func_0024AE78(int i) {
     return D_0069BD08[i].h6;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024AE90);
+void func_0024AE90(void)
+{
+    int i;
+
+    if (D_0069BCF4 != 0) {
+        D_0069BCF8 += 0x155;
+        if (D_0069BCF8 > 0x1000) {
+            D_0069BCF8 = 0x1000;
+        }
+        D_0069BE28 = 0x1000;
+        for (i = 0; i < 8; i++) {
+            if (D_0069BE08[i] != 0) {
+                D_0069BE08[i]--;
+            } else {
+                D_0069BE18[i] += 0xE3;
+                if (D_0069BE18[i] > 0x1000) {
+                    D_0069BE18[i] = 0x1000;
+                }
+            }
+            D_0069BE28 &= D_0069BE18[i];
+        }
+    } else {
+        D_0069BCF8 -= 0x155;
+        if (D_0069BCF8 < 0) {
+            D_0069BCF8 = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024AF68);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024B140);
+void func_0024B140(void)
+{
+    int i;
+
+    if ((TkMenuMainGetMenuActiveMask() & 0x80800) == 0) {
+        func_00124F08();
+        TOMenuOpenPktBuffTmp();
+        if (D_0069BCF8 != 0) {
+            for (i = 0; i < func_0024AE68(); i++) {
+                if (i != D_0069BCE8) {
+                    func_0024AF68(i, 0, 0, -0x14, D_0069BCF8);
+                }
+            }
+        }
+        func_0024AF68(D_0069BCE8, 0, 0, -0x14, D_0069BCF8);
+        TOMenuDrawKickTmp();
+        func_00124F08();
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", TkMenuAppearMainCmdWindow);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_249928/rodata", jtbl_005732A0);

@@ -30,8 +30,28 @@ INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC5F0);
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC638);
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC650);
-INCLUDE_RODATA("build/ee_asm/game/platform/ffx_2DC580/rodata", jtbl_005769F0);
+int func_002DC650(void)
+{
+    int r = 0;
+
+    switch (func_002DC780()) {
+    case 4: {
+        u32 v;
+
+        VU0_CFC2_NI(v, 28);
+        VU0_CTC2_NI(28, v | 0x100);
+    }
+    /* fallthrough */
+    case 0:
+    case 3:
+        r = 1;
+        break;
+    case 1:
+    case 2:
+        break;
+    }
+    return r;
+}
 
 int func_002DC6B0(void)
 {
@@ -51,9 +71,21 @@ INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC700);
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC730);
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC760);
+u32 func_002DC760(void)
+{
+    u32 v;
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC770);
+    VU0_CFC2_NI(v, 28);
+    return (v >> 10) & 1;
+}
+
+u32 func_002DC770(void)
+{
+    u32 v;
+
+    VU0_CFC2_NI(v, 28);
+    return (v >> 11) & 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC780);
 
@@ -132,7 +164,56 @@ int func_002DCBD8(void)
     return (s & 0x3000) ? 3 : 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DCC28);
+typedef struct Vif1RegisterState {
+    u32 r0;
+    u32 r1;
+    u32 r2;
+    u32 r3;
+    u32 c0;
+    u32 c1;
+    u32 c2;
+    u32 c3;
+    u32 code;
+    u32 itops;
+    u32 stat;
+    u16 itop;
+    u16 tops;
+    u16 mark;
+    u16 num;
+    u8 err;
+    u8 cl;
+    u8 wl;
+    u8 mode;
+} Vif1RegisterState;
+
+int func_002DCC28(Vif1RegisterState *state)
+{
+    u32 cycle = *(volatile u32 *)0x10003840;
+
+    if ((u32)func_002DCBD8() >= 2) {
+        return 0;
+    }
+    state->r0 = *(volatile u32 *)0x10003900;
+    state->r1 = *(volatile u32 *)0x10003910;
+    state->r2 = *(volatile u32 *)0x10003920;
+    state->r3 = *(volatile u32 *)0x10003930;
+    state->c0 = *(volatile u32 *)0x10003940;
+    state->c1 = *(volatile u32 *)0x10003950;
+    state->c2 = *(volatile u32 *)0x10003960;
+    state->c3 = *(volatile u32 *)0x10003970;
+    state->code = *(volatile u32 *)0x10003870;
+    state->itops = *(volatile u32 *)0x10003880;
+    state->stat = *(volatile u32 *)0x10003800;
+    state->itop = *(volatile u32 *)0x100038D0;
+    state->tops = *(volatile u32 *)0x10003890;
+    state->mark = *(volatile u32 *)0x10003830;
+    state->num = *(volatile u32 *)0x10003860;
+    state->err = *(volatile u32 *)0x10003820;
+    state->cl = cycle;
+    state->wl = cycle >> 8;
+    state->mode = *(volatile u32 *)0x10003850;
+    return 1;
+}
 
 int func_002DCDA8(u_long128 *src, int n)
 {

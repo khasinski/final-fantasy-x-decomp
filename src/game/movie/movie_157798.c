@@ -1,6 +1,8 @@
 /* tu_101 0x157798-0x15a560: low; ~movie (config/tu_map.tsv) */
 #define func_00158410 _hdr_func_00158410
 #define func_00158FE8 _hdr_func_00158FE8
+#define func_00158D60 _hdr_func_00158D60
+#define func_0011A5A0 _hdr_func_0011A5A0
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/w2.h"
@@ -11,8 +13,12 @@
 #include "ffx/u1.h"
 #include "ffx/v1.h"
 #include "ffx/g0.h"
+#undef func_0011A5A0
+#undef func_00158D60
 #undef func_00158FE8
 #undef func_00158410
+
+void func_0011A5A0(int, int);
 
 u8 *func_00157798(void)
 {
@@ -202,7 +208,28 @@ void func_00158758(int *p) {
     p[1] = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158768);
+void func_001600B8(void);
+
+void func_00158768(void)
+{
+    D_0058FE60->bF715D = 1;
+    do {
+        D_0030D418->f0();
+    } while (D_0058FE60->bF715D != 0);
+    func_001600B8();
+    if (D_0058FE60->bF715C != 0) {
+        func_0011D590(D_0058FE5C, 10);
+        func_0011D590(D_0058FE58, 10);
+    }
+    D_0030D418->f4();
+    D_0030D418 = 0;
+    D_0058FE58 = 0;
+    D_0058FE5C = 0;
+    D_0058FE60 = 0;
+    D_0030D408 = 0;
+    D_0030D410 = 0;
+    D_0030D3E8 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158868);
 
@@ -262,7 +289,40 @@ void func_00158A68(void) {
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158AA8);
 INCLUDE_RODATA("build/ee_asm/game/movie/movie_157798/rodata", jtbl_0056B5E0);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158D60);
+void mpegstrendsub(void *, int);
+
+void func_00158D60(void)
+{
+    switch (D_0030D410) {
+    case 1:
+        if (D_0058FE50 == 0 || D_0030D3EC == 0) {
+            return;
+        }
+        D_0058FE54->b50772 = 0;
+        mpegstrendsub(D_0058FE54, 0);
+        if (D_0030D400 != 0) {
+            func_0011A5A0(0, 0);
+            D_0030D400 = 0;
+            func_00158660();
+            func_001585D0();
+        } else {
+            func_00158660();
+            func_001585D0();
+        }
+        if (D_0030D3FC & 0x1000000) {
+            yiRenderEnable(0x1000000);
+        }
+        break;
+    case 2:
+        if (D_0058FE58 == 0 || D_0058FE5C == 0) {
+            return;
+        }
+        func_00158768();
+        break;
+    }
+    D_0030D3EC = 0;
+    D_0030D410 = 0;
+}
 
 int func_00158E80(int a, int b, Arg68 r)
 {
@@ -431,7 +491,50 @@ void func_00159E80(int c, int *a, int *b)
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159EC8);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_0015A120);
+int func_0015A120(void)
+{
+    int f;
+
+    switch (D_0030D410) {
+    case 1:
+        if (D_0058FE50 == 0) {
+            return 1;
+        }
+        if (D_0058FE54->w505C0 & 0x8000) {
+            if (D_0030D400 != 0) {
+                func_0011A5A0(0, 0);
+                D_0030D400 = 0;
+                func_00158660();
+                func_001585D0();
+                if (D_0030D3FC & 0x1000000) {
+                    yiRenderEnable(0x1000000);
+                }
+                return 0;
+            }
+            func_00158660();
+            func_001585D0();
+            if (D_0030D3FC & 0x1000000) {
+                yiRenderEnable(0x1000000);
+            }
+            return 1;
+        }
+        return 0;
+    case 2:
+        if (D_0058FE58 == 0) {
+            return 1;
+        }
+        f = D_0058FE60->wF7140;
+        if (f & 0x80) {
+            return 0;
+        }
+        if (f & 0x2000) {
+            func_00158768();
+            return 1;
+        }
+        return 0;
+    }
+    return 1;
+}
 
 void func_0015A258(void) {
 }
@@ -452,7 +555,47 @@ void func_0015A360(int a, int *p) {
     *p = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_0015A368);
+int func_0015A368(int a, int *p)
+{
+    int f;
+
+    switch (D_0030D410) {
+    case 1:
+        if (D_0058FE50 == 0) {
+            return 5;
+        }
+        if (*p == 0) {
+            if (D_0058FE54->w505C0 & 0x8000) {
+                *p = 1;
+                if (D_0030D400 != 0) {
+                    func_0011A5A0(0, 0);
+                    D_0030D400 = 0;
+                }
+                func_00158660();
+                func_001585D0();
+            }
+            return 0;
+        }
+        if (D_0030D3FC & 0x1000000) {
+            yiRenderEnable(0x1000000);
+        }
+        return 5;
+    case 2:
+        if (D_0058FE58 == 0) {
+            return 5;
+        }
+        f = D_0058FE60->wF7140;
+        if (f & 0x80) {
+            return 0;
+        }
+        if (f & 0x2000) {
+            func_00158768();
+            return 5;
+        }
+        return 0;
+    }
+    return 5;
+}
 
 int func_0015A488(int a, int b, Arg68 r)
 {

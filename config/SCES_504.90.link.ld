@@ -1232,9 +1232,9 @@ SECTIONS
         . = 0x5769b0 - 0x568f00;
         build/asm/data/rodata/piece_005769B0.s.o(.rodata)
         . = 0x5769d0 - 0x568f00;
-        build/src/game/platform/platform_2DC110.c.o(.rodata.jtbl_005769D0)
+        build/src/game/platform/platform_2DC110.c.o(.rodata.cjt0)
         . = 0x5769f0 - 0x568f00;
-        build/src/game/platform/ffx_2DC580.c.o(.rodata.jtbl_005769F0)
+        build/src/game/platform/ffx_2DC580.c.o(.rodata.cjt0)
         . = 0x576a08 - 0x568f00;
         build/asm/data/rodata/piece_00576A08.s.o(.rodata)
         . = 0x5781e0 - 0x568f00;

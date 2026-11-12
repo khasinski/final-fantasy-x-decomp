@@ -126,6 +126,29 @@ void func_00258478(u16 val)
     }
 }
 
+typedef struct EiWorkEnt {
+    s16 x;
+    s16 y;
+    u8 pad04[2];
+    u16 f06;
+    u8 pad08[4];
+    WorkEnt2 *links[5];
+    u8 pad20;
+    u8 flags;
+    u8 f22;
+    u8 pad23;
+    u16 f24;
+    u8 pad26[2];
+} EiWorkEnt;
+
+typedef struct EiGlobalWork {
+    u8 pad0[2];
+    s16 count;
+    s16 count2;
+    u8 pad6[0x808 - 6];
+    EiWorkEnt ents[100];
+} EiGlobalWork;
+
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002584C0);
 
 void func_00258618(u16 id, u16 n, int bit)
@@ -295,11 +318,145 @@ float func_002596D8(int i)
     return func_00259698(lpamng->ents[i].f06);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00259708);
+typedef struct {
+    float x;
+    float y;
+    s32 w8;
+    float wC;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    s32 w20;
+    s32 w24;
+    s32 w28;
+    s32 w2C;
+    u16 h30;
+    u16 h32;
+    u8 pad34[8];
+    float f3C;
+    float f40;
+    u16 h44;
+    u16 h46;
+    u16 h48;
+    u16 h4A;
+    u16 h4C;
+    u8 b4E;
+    u8 pad4F;
+} EiPt50;
+
+EiPt50 *func_00259708(int i, int idx, float f, int a2, int a3, int a4)
+{
+    EiPt50 *p = (EiPt50 *)((char *)lpamng + 0x11090 + i * 0x50);
+    WorkEnt *e = &lpamng->ents[idx];
+    int w;
+    int h;
+
+    p->h44 = idx;
+    p->x = e->x;
+    p->y = e->y;
+    p->w8 = 0;
+    p->wC = 1.0f;
+    p->f3C = func_002596D8(idx);
+    p->f40 = f;
+    p->w20 = a2;
+    p->w24 = a3;
+    p->w28 = a4;
+    p->b4E = 0;
+    if (i < 7) {
+        if (FFXGetLang() == 0 && func_001BD360() == 0) {
+            p->w2C = (s32)MsGetSaveChrName(i);
+        } else {
+            p->w2C = TOGetSaveChrName(i);
+        }
+        if (FFXGetLang() == 0 && func_001BD360() == 0) {
+            w = func_00205E78((u8 *)p->w2C, 1);
+            if (w < 0x20) {
+                w = 0x20;
+            }
+            p->h30 = w;
+            p->h32 = 15;
+        } else {
+            TOGetEasyMesWHFontL((u8 *)p->w2C, &w, &h);
+            if (w < 0x20) {
+                w = 0x20;
+            }
+            p->h30 = w;
+            switch (FFXGetLang()) {
+            case 0:
+            case 1:
+                p->h32 = 15;
+                break;
+            default:
+                p->h32 = 18;
+                break;
+            }
+        }
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002598C8);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002599C0);
+void func_002598C8(EiPt50 *p);
+extern float eff_sin_t[];
+extern s32 D_0032793C;
+extern s32 D_00327940;
+extern s32 D_00327944;
+extern s32 D_00327948;
+extern u16 D_0032794C;
+extern u16 D_00327950;
+extern u16 D_00327954;
+extern u16 D_00327958;
+extern u16 D_0032792C;
+
+EiPt50 *func_002599C0(int i)
+{
+    EiPt50 *p = (EiPt50 *)((char *)lpamng + 0x11090 + i * 0x50);
+    u32 ang = ((p->b4E & 3) << 14) | 0x2000;
+    s32 dx;
+    s32 dy;
+
+    func_002598C8(p);
+    p->f10 = eff_sin_t[((ang + 0x4000) & 0xFFFF) >> 4] * p->f3C + p->x;
+    p->f14 = -eff_sin_t[ang >> 4] * p->f3C + p->y;
+    p->f18 = 0.0f;
+    p->f1C = 1.0f;
+    if ((p->b4E & 4) == 0) {
+        dx = D_0032793C;
+        dy = D_00327940;
+    } else {
+        dx = D_00327944;
+        dy = D_00327948;
+    }
+    switch (p->b4E & 3) {
+    case 0:
+        p->h46 = dx;
+        p->h48 = -dy;
+        p->h4A = D_0032794C;
+        p->h4C = D_00327954;
+        break;
+    case 1:
+        p->h46 = -dx;
+        p->h48 = -dy;
+        p->h4A = -D_00327950 - D_0032792C;
+        p->h4C = D_00327954;
+        break;
+    case 2:
+        p->h46 = -dx;
+        p->h48 = dy;
+        p->h4A = -D_00327950 - D_0032792C;
+        p->h4C = D_00327958;
+        break;
+    case 3:
+        p->h46 = dx;
+        p->h48 = dy;
+        p->h4A = D_0032794C;
+        p->h4C = D_00327958;
+        break;
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00259BA8);
 
@@ -351,9 +508,111 @@ void func_0025A158(u8 *a, int b)
     vt->f8(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A1C8);
+typedef struct {
+    s16 x;
+    s16 y;
+    u8 pad04[2];
+    u16 idx06;
+    u8 pad08[8];
+} EiEnt10;
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A340);
+typedef struct {
+    u8 pad00[0xC];
+    u8 f0C;
+    u8 pad0D[7];
+} EiWorkEnt2;
+
+typedef struct {
+    s16 count0;
+    s16 count;
+    s16 count2;
+    u8 pad06[2];
+    EiEnt10 ents08[128];
+    WorkEnt ents[100];
+    u8 pad_ents[0xA808 - 0x808 - 100 * 0x28];
+    EiWorkEnt2 ents2[100];
+    u8 pad_ents2[0xF808 - 0xA808 - 100 * 0x14];
+    s16 ptsF808[8][2];
+    u8 padF828[0x11330 - 0xF828];
+    s32 w11330;
+    u8 pad11334[0xC];
+    float f11340;
+    float f11344;
+    u8 pad11348[0x1157B - 0x11348];
+    u8 f1157B;
+    u8 f1157C;
+    u8 pad1157D[0x115AC - 0x1157D];
+    float f115AC;
+    float f115B0;
+    float f115B4;
+    float f115B8;
+    float f115BC;
+    float f115C0;
+    float f115C4;
+    float f115C8;
+} EiBoundsWork;
+
+void func_0025A1C8(void)
+{
+    EiEnt10 *e = ((EiBoundsWork *)lpamng)->ents08;
+    int n = ((EiBoundsWork *)lpamng)->count0;
+
+    ((EiBoundsWork *)lpamng)->f115AC = ((EiBoundsWork *)lpamng)->f115B0 = ((EiBoundsWork *)lpamng)->f115B4 = ((EiBoundsWork *)lpamng)->f115B8 = 0.0f;
+    while (--n != -1) {
+        s16 *pt = lpamng->ptsF808[e->idx06];
+        int hw = pt[0] / 2;
+        int hh = pt[1] / 2;
+        float x0 = e->x - hw;
+        float y0 = e->y - hh;
+        float x1 = e->x + hw;
+        float y1 = e->y + hh;
+
+        if (x0 < ((EiBoundsWork *)lpamng)->f115AC) {
+            ((EiBoundsWork *)lpamng)->f115AC = x0;
+        }
+        if (y0 < ((EiBoundsWork *)lpamng)->f115B0) {
+            ((EiBoundsWork *)lpamng)->f115B0 = y0;
+        }
+        if (x1 > ((EiBoundsWork *)lpamng)->f115B4) {
+            ((EiBoundsWork *)lpamng)->f115B4 = x1;
+        }
+        if (y1 > ((EiBoundsWork *)lpamng)->f115B8) {
+            ((EiBoundsWork *)lpamng)->f115B8 = y1;
+        }
+        e++;
+    }
+    ((EiBoundsWork *)lpamng)->f115BC = ((EiBoundsWork *)lpamng)->f115AC;
+    ((EiBoundsWork *)lpamng)->f115C4 = ((EiBoundsWork *)lpamng)->f115B4;
+    ((EiBoundsWork *)lpamng)->f115C0 = ((EiBoundsWork *)lpamng)->f115B0;
+    ((EiBoundsWork *)lpamng)->f115C8 = ((EiBoundsWork *)lpamng)->f115B8;
+}
+
+extern char D_005739A8[];
+
+void func_0025A340(void)
+{
+    int i;
+    int j;
+    u16 other;
+    EiWorkEnt *e;
+    WorkEnt2 *p;
+
+    for (i = 0, e = ((EiGlobalWork *)lpamng)->ents; i < lpamng->count; e++, i++) {
+        if (e->f06 != 0xFFFF) {
+            j = 0;
+            p = 0;
+            while ((p = func_00258140(i, p, &other, 0, 0)) != 0) {
+                if (j >= 5) {
+                    func_002EF240(D_005739A8, 5);
+                }
+                e->links[j++] = p;
+            }
+            for (; j < 5; j++) {
+                e->links[j] = 0;
+            }
+        }
+    }
+}
 
 u8 *func_0025A478(u8 *dst, u8 *src, int n)
 {
@@ -365,12 +624,79 @@ u8 *func_0025A478(u8 *dst, u8 *src, int n)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A4B0);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A730);
+typedef struct {
+    u8 b0;
+    u8 b1;
+} SaveAbmNode;
+
+typedef struct {
+    SaveAbmNode nodes[0x500];
+    u8 links[0x500];
+    u16 pos[12];
+    u8 bF18;
+    u8 bF19;
+} SaveAbmMap;
+
+float func_00260D50(void);
+float func_00260B68(void);
+
+void func_0025A730(void)
+{
+    SaveAbmMap *save = (SaveAbmMap *)MsGetSaveAbilityMap();
+    int i;
+    int j;
+    int k;
+
+    for (i = 0; i < lpamng->count; i++) {
+        WorkEnt *e = &lpamng->ents[i];
+        if (e->f06 != 0xFFFF) {
+            SaveAbmNode *sn = &save->nodes[i];
+            if (sn->b0 == 0xFF) {
+                e->f06 = 0xFFFF;
+            } else {
+                e->f06 = sn->b0;
+            }
+            e->flags = sn->b1;
+        }
+    }
+    for (j = 0; j < lpamng->count2; j++) {
+        EiWorkEnt2 *e = &((EiBoundsWork *)lpamng)->ents2[j];
+        e->f0C = save->links[j];
+    }
+    for (k = 0; k < 7; k++) {
+        lpamng->ents3[k].h0 = save->pos[k];
+    }
+    lpamng->f1157B = save->bF18;
+    lpamng->f1157C = save->bF19;
+    ((EiBoundsWork *)lpamng)->w11330 = func_00260D50();
+    ((EiBoundsWork *)lpamng)->f11340 = ((EiBoundsWork *)lpamng)->f11344 = func_00260B68();
+}
 
 /* DEBT(NAME): module guessed: character slots (D_006A391C, 12 slots of 0x340 bytes; slot 12 doubles as a request block).
  * Related ELF strings: src/chr/chr.c, src/chr/cache.c. */
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A8D0);
+void func_0025A8D0(void)
+{
+    SaveAbmMap *save = (SaveAbmMap *)MsGetSaveAbilityMap();
+    int i;
+    int j;
+
+    for (i = 0; i < lpamng->count; i++) {
+        WorkEnt *e = &lpamng->ents[i];
+        SaveAbmNode *sn = &save->nodes[i];
+        sn->b0 = e->f06;
+        sn->b1 = e->flags;
+    }
+    for (i = 0; i < lpamng->count2; i++) {
+        EiWorkEnt2 *e = &((EiBoundsWork *)lpamng)->ents2[i];
+        save->links[i] = e->f0C;
+    }
+    for (j = 0; j < 7; j++) {
+        save->pos[j] = lpamng->ents3[j].h0;
+    }
+    save->bF18 = lpamng->f1157B;
+    save->bF19 = lpamng->f1157C;
+}
 
 void func_0025AA20(int a)
 {
@@ -388,7 +714,43 @@ void func_0025AA20(int a)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025AAB8);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025AD00);
+void func_0025AAB8(void);
+
+void func_0025AD00(void)
+{
+    s32 *save;
+
+    save = (s32 *)MsGetSaveMenu();
+    if (FFXGetLang() != 0) {
+        if (((*save >> 14) & 3) == 2) {
+            func_0025A158((u8 *)0xC, D_003F3940);
+        } else {
+            func_0025A158(0, D_003F3940);
+        }
+    } else if (FFXGetLang() == 0 && func_001BD360() == 0) {
+        if (((*save >> 14) & 3) == 2) {
+            func_0025A158((u8 *)0xC, D_003F3940);
+        } else {
+            func_0025A158(0, D_003F3940);
+        }
+    } else {
+        if (((*save >> 14) & 3) == 2) {
+            func_0025A158((u8 *)0xE, D_003F3940);
+        } else {
+            func_0025A158((u8 *)0xD, D_003F3940);
+        }
+    }
+    D_006A38F8 = D_003F3940;
+    op_oef2_set2((char *)D_006A38F8);
+    func_002D02E8(D_006A38F8, 0, 0x23, 0x100);
+    func_002D05F0(0x100);
+    func_002D02E8(D_006A38F8, 0x24, 1000, 0x100);
+    func_002D05F0(0x100);
+    func_002D0698(0x100);
+    op_oef2_tex_clut_ovl_clear(0x100);
+    func_0025AA20(D_006A38F8);
+    func_0025AAB8();
+}
 
 void func_0025AE38(void)
 {

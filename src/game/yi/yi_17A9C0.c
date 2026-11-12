@@ -7,7 +7,61 @@
 #include "ffx/r2.h"
 #undef func_0017AB10
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017A9C0);
+typedef struct YiMat17A9C0 {
+    u64 d[8];
+} YiMat17A9C0;
+
+typedef struct YiObj17A9C0 {
+    int w00;
+    int w04;
+    int w08;
+    int w0C;
+    YiMat17A9C0 m10;
+    float v50[4];
+    float v60[4];
+    float v70[4];
+    u16 h80;
+    u16 h82;
+    u16 h84;
+    u16 h86;
+    int w88;
+    int w8C;
+    u16 h90[4];
+    int w98;
+    u8 pad9C[0x10];
+    int wAC;
+} YiObj17A9C0;
+
+void func_002DD128(void *m);
+
+void func_0017A9C0(YiObj17A9C0 *o)
+{
+    YiMat17A9C0 m;
+    float v[4];
+    int i;
+
+    func_002EF0D0(v, 0, 0x10);
+    v[3] = 1.0f;
+    o->h84 = 0;
+    o->h82 = 0;
+    o->h80 = 0;
+    for (i = 0; i < 4; i++) {
+        o->v50[i] = o->v60[i] = o->v70[i] = v[i];
+    }
+    o->wAC = 0;
+    o->w98 = 0;
+    o->h86 = 0;
+    o->w8C = 0;
+    for (i = 0; i < 4; i++) {
+        o->h90[i] = 0;
+    }
+    o->w00 = 0;
+    o->w04 = 0;
+    o->w08 = 0;
+    o->w0C = 0x6C040014;
+    func_002DD128(&m);
+    o->m10 = m;
+}
 
 void func_0017AAE8(Obj17A110 *o) {
     o->h30 = 0;

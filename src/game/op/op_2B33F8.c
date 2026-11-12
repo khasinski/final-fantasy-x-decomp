@@ -152,6 +152,7 @@ s32 func_002B3938(s32 arg0) {
 extern s8 _m2c_func_002B39C0_D_004F3F80 __asm__("D_004F3F80");
 extern s8 _m2c_func_002B39C0_D_00575B88[] __asm__("D_00575B88");
 void _m2c_func_002B39C0_func_00120108(void *) __asm__("func_00120108");
+void func_002EA328(int) __attribute__((noreturn));
 /* DEBT(FAKE) */
 void func_002B39C0(s32 n) {
     register s32 ra __asm__("$31");
@@ -215,9 +216,34 @@ void func_002B3B48(const char *path, void *buffer)
     D_00764990.mode15 = saved;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", op_file_read);
-
 extern char D_00575BC0[];
+extern char D_00575BD8[];
+
+int op_file_read(const char *path, void *buffer)
+{
+    char msg[0x400];
+    int fd;
+    int size;
+
+    if (D_00764990.mirror == 0 || D_00764990.mode15 == 0) {
+        return 0;
+    }
+    fd = func_002FC4E0((int)path, 1);
+    if (fd < 0) {
+        func_00120108(D_00575BC0, path);
+        func_002EA328(1);
+    }
+    size = func_002FC8E8(fd, 0, 2);
+    func_002FC8E8(fd, 0, 0);
+    func_002F0008(msg, D_00575BD8, path, buffer, size);
+    func_00120108(msg);
+    if (size != func_002FCB20(fd, buffer, size)) {
+        size = 0;
+    }
+    func_002FC768(fd);
+    func_002F8660(0);
+    return size;
+}
 int func_002B3C88(int a)
 {
     u8 unused[0x400];

@@ -1,5 +1,7 @@
 /* tu_256 0x22fb30-0x2315e8: high; ~Tk (config/tu_map.tsv) */
 #define func_002305B8 _hdr_func_002305B8
+#define func_00226AD0 _hdr_func_00226AD0
+#define func_00226FC0 _hdr_func_00226FC0
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -9,7 +11,19 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #include "ffx/q6.h"
+#undef func_00226FC0
+#undef func_00226AD0
 #undef func_002305B8
+
+void func_00226770(int id, int x, int y, int f);
+int TkMenuGetCommandOffset(void *p, int flag, int a2, int a3);
+int func_00226AD0(int text);
+void func_00226FC0(FlagRec *r);
+void func_00230700(Task *t);
+int func_00230820(void);
+void func_00230830(Task *o);
+extern u16 D_00693CD8[32];
+extern u16 D_00693D18[32];
 
 void func_0022FB30(void)
 {
@@ -125,7 +139,7 @@ void _m2c_func_002305B8_func_00230480(void *, s32, s16, s32, s32) __asm__("func_
 void _m2c_func_002305B8_func_00230560(void *, s32, s32) __asm__("func_00230560");
 extern s16 _m2c_func_002305B8_D_00693C3A __asm__("D_00693C3A");
 /* DEBT(CAST) */
-void func_002305B8(void *arg0) {
+void func_002305B8(void *arg0, s32 arg1) {
     s16 temp_17;
     s16 temp_7;
     s32 temp_2;
@@ -149,7 +163,29 @@ void func_002305B8(void *arg0) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22FB30", func_00230700);
+void func_00230700(Task *t)
+{
+    int text;
+    int w;
+    u8 k = TkMenuGetCurrentPlayer();
+    u16 *e = (u16 *)MsMenuStatusNum(0, &text);
+
+    e += TkMenuGetCommandOffset(e, 5, k, 0x48) * 2;
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    V5_func_00225920_void();
+    if (t->ext[1] != 0) {
+        func_00226FC0(&D_00693C18);
+        text = TkMn2GetCommandName(e[1]);
+        w = func_00226AD0(text);
+        func_00226350(D_00693C18.rect[0] + (D_00693C18.rect[2] - w) / 2, D_00693C18.rect[1] + 4, text, 0);
+    } else {
+        func_00226210(D_00693C48[0], D_00693C48[1], 0);
+    }
+    func_002305B8(t, k);
+    func_00225B00();
+}
 
 int func_00230820(void) { return 1; }
 

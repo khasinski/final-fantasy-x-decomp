@@ -189,9 +189,63 @@ void func_001911A0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001912B8);
+extern R2DbgWorkFull *D_02000088 __asm__("0x02000088");
+#define R2_DBGWORK_FULL D_02000088
+void func_002B2DF0(void *fn, int a1, int a2, int a3);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191388);
+void func_001912B8(void)
+{
+    if (R2_DBGWORK_FULL == 0) {
+        return;
+    }
+    func_001921B8();
+    if (R2_DBGWORK_FULL->w3C != 0) {
+        func_002B2DF0(func_00191388, 0, 0, 1);
+    }
+    if (R2_DBGWORK_FULL->w34 != 0) {
+        func_002B2DF0(func_00191BF0, 0, 0, 1);
+    }
+    if (R2_DBGWORK_FULL->w48 != 0) {
+        func_00191BF8(R2_DBGWORK_FULL->wAEC);
+    }
+    if (R2_DBGWORK_FULL->w4C != 0) {
+        func_002B2DF0(func_00191ED0, 0, 0, 1);
+    }
+    if (R2_DBGWORK_FULL->wB14 != 0) {
+        func_20233D0();
+    }
+}
+
+void func_00191388(void)
+{
+    DbgRegs6 regs;
+    R2Pkt pkt;
+    R2DbgWorkFull *dbg;
+    int i;
+    void *item;
+
+    dbg = R2_DBGWORK_FULL;
+    regs = D_0056D780;
+    regs.r[0] = 0x3000F;
+    regs.r[2] = 0x44;
+    func_00192708(regs.r);
+    func_0018FCE0(&pkt);
+    func_0018FD88(&pkt, (void *)D_00303550); /* DEBT(TYPE) */
+    for (i = 0; i < dbg->w828; i++) {
+        item = dbg->arr874[i];
+        func_001914C0(&pkt, item);
+        if (i == dbg->w8B4) {
+            if (dbg->w8B8 == 0) {
+                func_001916D0(&pkt, item);
+            } else {
+                func_00191920(&pkt, item);
+            }
+        }
+    }
+    func_0018FDD0(&pkt);
+    func_0018FE28(&pkt);
+    func_001927F8();
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001914C0);
 
@@ -445,7 +499,27 @@ int func_001928C0(void) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", rcbgIDLoad);
+int rcbgIDLoad(void)
+{
+    char path[0x100];
+    int fd;
+    int size;
+    int ptr;
+
+    ptr = 0;
+    func_002F0008(path, D_0056D7F8, R2_DBGWORK_FULL->dir);
+    fd = func_002FC4E0(path, 1);
+    if (fd >= 0) {
+        size = func_002FC8E8(fd, 0, 2);
+        func_002FC8E8(fd, 0, 0);
+        ptr = func_0011D678(size);
+        func_002FCB20(fd, (void *)ptr, size); /* DEBT(CAST) */
+        func_002FC768(fd);
+        Sg_MapSetPtr(ptr);
+        Ch_EnMapID((Chr *)Sg_GetPlayer(), 1); /* DEBT(CAST) */
+    }
+    return ptr;
+}
 
 void func_00192990(W3Voice *v)
 {

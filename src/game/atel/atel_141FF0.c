@@ -230,7 +230,59 @@ int func_001427A8(int id, int x) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", AtelDecodeSignal);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", func_00142988);
+typedef struct ObjNodeR_Bits {
+    struct ObjNodeR_Bits *next;
+    u8 p04[8];
+    union {
+        u32 w0C;
+        struct {
+            unsigned pad0C : 16;
+            unsigned level : 4;
+            unsigned kind : 3;
+            unsigned flag : 1;
+            unsigned pad0F : 8;
+        } b;
+    } u0C;
+} ObjNodeR_Bits;
+
+int func_00142988(Actor *a, int b, int c) {
+    ObjNodeR_Bits *n = (ObjNodeR_Bits *)OBJR(a)->head80;
+    ObjNodeR_Bits *next;
+    int kind;
+
+    b++;
+    while (n != 0) {
+        next = n->next;
+        if (n->u0C.b.level >= b) {
+            kind = (n->u0C.w0C >> 20) & 7;
+            if (c != 2 || (n->u0C.w0C & 0x800000) == 0) {
+                switch (kind) {
+                case 1:
+                    func_001426B8(a, (ObjNodeR *)n);
+                    /* fallthrough */
+                case 2:
+                    if (c == 1) {
+                        goto check_kind;
+                    }
+                    func_001426F0(a, (ObjNodeR *)n);
+                    break;
+                }
+                if (c == 1) {
+                check_kind:
+                    if (kind == 2) {
+                        goto next_node;
+                    }
+                }
+                func_00142218(a, n);
+                if (a->node90 == (ObjNodeR *)n) {
+                    a->node90 = 0;
+                }
+            }
+        }
+    next_node:
+        n = next;
+    }
+}
 
 void AtelSkipReqLevel(int id, int x) {
     func_00142988(AtelGetBasicWork(id), x, 0);

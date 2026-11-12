@@ -79,7 +79,28 @@ int func_00120EB8(int a, int i)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00120F28);
+float func_00120F28(float *a, int i)
+{
+    s16 *t = D_00308900;
+    s16 *e;
+    s16 *p;
+    float v[4];
+    float n[4];
+
+    if (t == 0) {
+        return 0.0f;
+    }
+    if (i == -1) {
+        return 0.0f;
+    }
+    e = &t[i * 8];
+    func_00120DE8(D_00580B2C + e[0] * 8, D_00580B2C + e[1] * 8, D_00580B2C + e[2] * 8, (int)n);
+    p = (s16 *)(e[0] * 8 + (s32)D_00580B2C);
+    v[0] = p[0];
+    v[1] = p[1];
+    v[2] = p[2];
+    return ((v[0] * n[0] + v[1] * n[1] + v[2] * n[2]) - (a[0] * n[0] + a[2] * n[2])) / n[1];
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00121038);
 

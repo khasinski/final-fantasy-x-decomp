@@ -462,7 +462,28 @@ void func_00222DB0(s32 arg0) {
     TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00222EB0);
+void func_00222EB0(int x)
+{
+    s32 buf[4];
+    int i;
+    int px = x + 0x118;
+    int py = 0x46;
+    Unk1BFED8 *e;
+
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOMenuDrawKickTmp();
+    func_002243C0(6, x + 0x115, 0x2D);
+    TOMenuOpenPktBuffTmp();
+    for (i = 0; i < 8; i++, py += 0x20) {
+        e = MsGetSaveWeapon(btlgetdata.h[i], buf);
+        if (e->b2 != 0) {
+            func_001F4EB0(px, py, 1);
+            func_001F55C8(btlgetdata.h[i], px, py, 0);
+        }
+    }
+    TOMenuDrawKickTmp();
+}
 
 void func_00222F90(int y)
 {

@@ -1,5 +1,6 @@
 /* tu_109 0x165eb8-0x1691c8: medium; hddcopy (config/tu_map.tsv) */
 #define func_00165F70 _hdr_func_00165F70
+#define func_002FC768 _hdr_func_002FC768
 #define D_005661F4 _hdr_D_005661F4
 #define D_0030E0BC _hdr_D_0030E0BC
 #include "common.h"
@@ -12,7 +13,10 @@
 #include "ffx/w2.h"
 #undef D_0030E0BC
 #undef D_005661F4
+#undef func_002FC768
 #undef func_00165F70
+
+int func_002FC768(int fd);
 
 extern s8 D_005661F4;
 extern s8 D_0030DDFE;
@@ -255,7 +259,34 @@ int func_00166458(void)
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_001664D8);
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", hd_file_read_th);
+int hd_file_read_th(u32 sector, u8 *buf, int size, int i)
+{
+    int j;
+    char *path;
+
+    if (D_00597490[i].q08 == 0) {
+        return 0;
+    }
+    path = get_hdd_name(i);
+    D_005979D0 = (sector - D_00597490[i].q00) << 11;
+    j = 0;
+    D_00597988[0] = path[0];
+    while (path[j] != 0) {
+        j++;
+        D_00597988[j] = path[j];
+    }
+    D_005979C8 = buf;
+    D_005979CC = size;
+    while (D_0030DE34 != 0) {
+        func_0017135C(1);
+    }
+    D_0030DE34 = 3;
+    TkSignalSemaBGThread();
+    while (D_0030DE34 != 0) {
+        func_0017135C(1);
+    }
+    return 0;
+}
 
 void func_001667B8(char *path, u8 *buf, int size, s64 offset)
 {
@@ -279,7 +310,34 @@ void func_001667B8(char *path, u8 *buf, int size, s64 offset)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", hd_file_read_th_main);
+void hd_file_read_th_main(void)
+{
+    u8 *buf = D_005979C8;
+    int size = D_005979CC;
+    char *path = D_00597988;
+    s64 offset = D_005979D0;
+    int fd;
+    s64 r;
+
+    fd = func_002FC4E0(path, 1);
+    D_0078E498.fd5C = fd;
+    if (fd < 0) {
+        D_0030DE50 = 1;
+        return;
+    }
+    if (offset > 0x7FFFFFFF) {
+        r = func_002FEA60(fd, offset, 0) << 32;
+        __asm__("" : "+r"(r));
+        r >>= 32;
+    } else {
+        r = func_002FC8E8(fd, offset, 0);
+    }
+    if (r < 0 || func_002FCB20(D_0078E498.fd5C, (char *)buf, size) < 0) {
+        D_0030DE50 = 1;
+    }
+    func_002FC768(D_0078E498.fd5C);
+    D_0078E498.fd5C = -1;
+}
 
 int hd_file_read_no_wait(int unused, char *buf, int size, int i, int fd)
 {

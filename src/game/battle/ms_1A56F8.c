@@ -5,6 +5,7 @@
 #define func_001A65E0 _hdr_func_001A65E0
 #define func_001AA360 _hdr_func_001AA360
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
@@ -239,17 +240,100 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetRect);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetAct);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7A58);
+void func_001A7A58(Unk317120Rec *rec, R2Area *area) {
+    float sum[4];
+    float pos[3];
+    float *p = &sum[3];
+    float *src;
+    u16 *ids;
+    float *dst;
+    int count = 0;
+    int i;
+
+    for (i = 3; i >= 0; i--) {
+        *p-- = 0.0f;
+    }
+    ids = (u16 *)area->pad_0C;
+    for (i = 0; i < 2; i++, ids++) {
+        if (*ids != 0xFFFF) {
+            func_00142FF0(*ids, &pos[0], &pos[1], &pos[2]);
+            count++;
+            sum[0] += pos[0];
+            sum[1] += pos[1];
+            sum[2] += pos[2];
+        }
+    }
+    if (count >= 2) {
+        float c = count;
+
+        p = sum;
+        for (i = 0; i < 3; i++, p++) {
+            *p /= c;
+        }
+    }
+    dst = rec->v50;
+    src = area->v30;
+    p = sum;
+    for (i = 0; i < 3; i++) {
+        float s = *src;
+
+        *dst = *p + s;
+        src++;
+        p++;
+        dst++;
+    }
+    *(int *)rec->pad6C = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7BC0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7D28);
+void func_001A7D28(Unk317120Rec *rec, R2Area *area) {
+    float dummy;
+    float r;
+
+    MsVectorRect2Polar(area->v30, (void *)rec->w8C, (int)&rec->v60[0], (int)&dummy, (int)&r);
+    rec->v60[1] = area->v40[1];
+    if (area->v50[1] != 0.0) {
+        rec->v60[1] += r / area->v50[1];
+    }
+    rec->v60[2] = area->v40[2];
+    if (area->v50[2] != 0.0) {
+        rec->v60[2] += r / area->v50[2];
+    }
+    *(int *)rec->pad6C = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7E00);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7F88);
+void func_001A7F88(Unk317120Rec *rec, R2Area *area) {
+    float r;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8058);
+    MsVectorRect2Polar(area->v30, (void *)rec->w8C, (int)&rec->v60[0], (int)&rec->v60[1], (int)&r);
+    if (area->v50[1] != 0.0) {
+        rec->v60[1] += r / area->v50[1];
+    }
+    rec->v60[2] = area->v40[2];
+    if (area->v50[2] != 0.0) {
+        rec->v60[2] += r / area->v50[2];
+    }
+    *(int *)rec->pad6C = 0;
+}
+
+void func_001A8058(Unk317120Rec *rec, R2Area *area) {
+    float r;
+    float z;
+
+    MsVectorRect2Polar(area->v30, (void *)rec->w8C, (int)&rec->v60[0], (int)&rec->v60[1], (int)&r);
+    if (area->v50[1] != 0.0) {
+        rec->v60[1] += r / area->v50[1];
+    }
+    z = area->v40[2];
+    if (area->v50[2] != 0.0) {
+        z += r / area->v50[2];
+    }
+    rec->v60[2] = r - z;
+    *(int *)rec->pad6C = 0;
+}
 
 s32 _m2c_MsCameraSetRoll_MsCameraIDcheck() __asm__("MsCameraIDcheck");
 void _m2c_MsCameraSetRoll_MsSetCheckChange(s32, s32, s32, s32) __asm__("MsSetCheckChange");
@@ -446,14 +530,103 @@ void func_001A8DA0(int a, int b, int c) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8E28);
+void _m2c_spline_get_near_point_init(R2AreaObj *obj, float px, float py, float pz, int mode) __asm__("spline_get_near_point_init");
+float _m2c_spline_get_near_point(R2AreaObj *obj, float px, float py, float pz, float *x, float *y, float *z, int mode) __asm__("spline_get_near_point");
+int func_001A9040(Unk317120Rec *rec, R2Area *area);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8F40);
+int func_001A8E28(int unused, Unk317120Rec *rec, R2Area *area) {
+    float x, y, z;
+    int count = 0;
+    int i;
+
+    for (i = 0; i < area->nlim; i++) {
+        u32 type = area->lim[i].type;
+
+        if (type - 4 < 2U) {
+            int mode;
+
+            if (area->b00 == 1) {
+                func_001AC750(rec->v50, rec->w8C, rec->v60[0], rec->v60[1], rec->v60[2]);
+            }
+            area->b1D = 0;
+            count++;
+            _m2c_spline_get_near_point_init(area->obj, rec->v50[0], rec->v50[1], rec->v50[2], area->b1E);
+            mode = 0;
+            if (type != 4) {
+                mode = 1;
+            }
+            area->f24 = _m2c_spline_get_near_point(area->obj, rec->v50[0], rec->v50[1], rec->v50[2], &x, &y, &z, mode);
+        }
+    }
+    return count;
+}
+
+int func_001A8F40(Unk317120Rec *rec, R2Area *dst_area, R2Area *area, int flag) {
+    if (flag == 1) {
+        func_001AC750(rec->v50, rec->w8C, rec->v60[0], rec->v60[1], rec->v60[2]);
+    }
+    dst_area->v30[0] = rec->v50[0];
+    dst_area->v30[1] = rec->v50[1];
+    dst_area->v30[2] = rec->v50[2];
+    if (area->b1D != 0) {
+        area->b1D = 0;
+        _m2c_spline_get_near_point_init(area->obj, rec->v50[0], rec->v50[1], rec->v50[2], area->b1E);
+    }
+    if (area->nlim != 0 && area->b05 == 0) {
+        if (func_001A9040(rec, area) != 0) {
+            flag = 0;
+        }
+    }
+    if (dst_area->f6C != 0.0) {
+        flag = 0;
+        rec->v50[1] += dst_area->f6C;
+    }
+    return flag;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A9040);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DED0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetStartPos);
+void MsCameraSetStartPos(Unk314840 *cam, Unk317120Rec *rec, R2Area *area) {
+    int chg = 0;
+    int i;
+
+    if (area->b00 == 1) {
+        if (!(area->b07 & 1)) {
+            chg = 1;
+            rec->v80[0] = rec->v60[0];
+        }
+        if (!(area->b07 & 2)) {
+            chg++;
+            rec->v80[1] = rec->v60[1];
+        }
+        if (!(area->b07 & 4)) {
+            chg++;
+            rec->v80[2] = rec->v60[2];
+        }
+        if (chg != 0) {
+            func_001AC750(rec->v70, rec->w8C, rec->v60[0], rec->v60[1], rec->v60[2]);
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (!((area->b07 >> i) & 1)) {
+                chg++;
+                rec->v70[i] = rec->v50[i];
+            }
+        }
+        if (chg != 0) {
+            MsVectorRect2Polar(rec->v50, (void *)rec->w8C, (int)&rec->v80[0], (int)&rec->v80[1], (int)&rec->v80[2]);
+        }
+    }
+    if (cam != 0) {
+        if (!(area->b07 & 8)) {
+            cam->fCA0 = cam->fC9C;
+        }
+        if (!(area->b07 & 0x10)) {
+            cam->fCAC = cam->fCA8;
+        }
+    }
+}
 
 void func_001A9550(int id, int which, int c, int total, int mode) {
     int r;
@@ -746,7 +919,15 @@ void MsSetNormalUpVector(Vec4 *p) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraReset);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsEffectCameraInit);
+void MsEffectCameraInit(void) {
+    ms_effect_camera_flag = 0;
+    D_00317128 = 1024.0f;
+    D_0065FDF0 = 0;
+    MMI_SQ_ZERO(0x0, &D_0065FE10);
+    MMI_SQ_ZERO(0x0, &D_0065FE00);
+    MMI_SQ_ZERO(0x0, &D_0065FE20);
+    D_0065FE20.f[1] = -1.0f;
+}
 
 extern float _m2c_func_001AA360_D_00317128 __asm__("D_00317128");
 extern float _m2c_func_001AA360_D_0065FDF0 __asm__("D_0065FDF0");
@@ -954,7 +1135,14 @@ typedef struct {
         s16 h4;
         s16 h6;
         s32 w8;
-        u8 padC[0x18];
+        float fC;
+        s32 w10;
+        float f14;
+        float f18;
+        float f1C;
+        s8 b20;
+        s8 b21;
+        s16 h22;
     } e16C[2];
     u8 pad1B4[0x1C0 - 0x1B4];
 } Rec142F0Shake;
@@ -979,7 +1167,37 @@ void func_001AB668(u32 idx, int mask, int a, float f, int b, int c, int d) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB6D8);
+void func_001AB6D8(u32 idx, int mask, int a, int b, int c, float f1, int d, float f2, int e_arg) {
+    if (idx < 3 && c != 0) {
+        Rec142F0Shake *r = &((Rec142F0Shake *)ms_screen)[idx];
+        int i;
+        for (i = 0; i < 2; i++) {
+            if ((mask >> i) & 1) {
+                struct Rec142F0ShakeEnt *e = &r->e16C[i];
+                e->b20 = b;
+                e->b0 = a;
+                e->h4 = c;
+                e->h6 = c;
+                e->w10 = 0;
+                e->fC = f1;
+                e->h22 = d;
+                e->f1C = f2;
+                if (d < 0) {
+                    f1 = -f1;
+                    d = -d;
+                }
+                if (d != 0) {
+                    float scale = 0x100 - (brnd(9) % d);
+                    f1 = f1 * scale * 0.00390625f;
+                    f2 = f2 * scale * 0.00390625f;
+                }
+                e->f14 = f1;
+                e->f18 = f2;
+                e->b21 = e_arg;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB838);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DF30);

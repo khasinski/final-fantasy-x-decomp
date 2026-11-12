@@ -90,7 +90,39 @@ void func_0023D748(void) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D750);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D990);
+extern u16 D_0069A684;
+extern s32 D_00572CD8;
+extern s32 _m2c_func_0023E938_D_00572CE0 __asm__("D_00572CE0");
+extern s32 _m2c_func_0023E938_D_00572CE8 __asm__("D_00572CE8");
+extern s32 _m2c_func_0023E938_D_00572CF0 __asm__("D_00572CF0");
+
+void func_0023D990(Task *o)
+{
+    s16 w;
+    s16 h;
+    int text;
+    int i;
+    int tw;
+
+    if (D_0069A688 == 1) {
+        text = func_00220960(0x2000);
+    } else {
+        text = func_00220960(0x2000);
+    }
+    _TOGetMessageWH(0, (u8 *)text, &w, &h, 0, 0);
+    o->state = 0;
+    D_0069A684 = 0;
+    for (i = 0; i < 2; i++) {
+        tw = func_002454E0((u8 *)func_00220960(0x2001 + i));
+        if (D_0069A684 < tw) {
+            D_0069A684 = tw;
+        }
+    }
+    TOSeqStartScene(1, &D_00572CD8);
+    TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+    TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+    TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+}
 
 int func_0023DA88(void) { return 1; }
 
@@ -156,7 +188,36 @@ void func_0023DBF8(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023DC18);
+void func_002006E0(int text, int x, int y, int a3);
+void func_00200798(int text, int x, int y, int a3);
+
+void func_0023DC18(Task *o)
+{
+    s16 w;
+    s16 h;
+    int r;
+    int x;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    r = func_00242630();
+    if (r == 0) {
+        return;
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        x = (r * 0x19E + ((0x1000 - r) << 9)) / 4096;
+    } else {
+        _TOGetMessageWH(0, (u8 *)func_002493D0(o->ext[0] + 0x2001), &w, &h, 0, 0);
+        x = ((0x1E2 - w) * r + ((0x1000 - r) << 9)) / 4096;
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        func_002006E0(func_002493D0(o->ext[0] + 0x2001), x, 0x20, 0);
+    } else {
+        func_00200798(func_002493D0(o->ext[0] + 0x2001), x, 0x20, 0);
+    }
+    TOMenuDrawKickTmp();
+    func_00124F08();
+}
 
 Task *func_0023DD60(int v) {
     Task *t = func_00243400();

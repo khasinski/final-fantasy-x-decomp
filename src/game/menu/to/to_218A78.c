@@ -1,5 +1,7 @@
 /* tu_243 0x218a78-0x21d048: low; ~TOBtlDrawInfoWin (config/tu_map.tsv) */
 #define func_0021BAB8 _hdr_func_0021BAB8
+#define func_001FCB88 _hdr_func_001FCB88
+#define D_00692658 _hdr_D_00692658
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q5.h"
@@ -11,6 +13,34 @@
 #include "ffx/text.h"
 #include "ffx/t4.h"
 #undef func_0021BAB8
+#undef func_001FCB88
+#undef D_00692658
+
+int func_001FCB88(float f, int x, int y, u32 c);
+
+typedef struct InfoWinParam {
+    s16 h0;
+    s16 h2;
+    s16 h4;
+    s16 h6;
+    u16 h8[38];
+    s16 h54;
+    s16 h56;
+} InfoWinParam;
+
+typedef struct LimitTimerState {
+    s32 on;
+    s16 x4;
+    s16 x6;
+    s32 w8;
+    float fC;
+    float f10;
+    float f14;
+    float f18;
+} LimitTimerState;
+
+extern InfoWinParam D_00692508;
+extern LimitTimerState D_00692658;
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_00218A78);
 
@@ -97,7 +127,26 @@ void func_00219688(int id, int kind, int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_00219798);
+void func_00219798(int a, int x, int y)
+{
+    int w[2];
+    u8 *text;
+
+    if (--D_00692508.h2 == -1) {
+        D_00692508.h2 = 0x14;
+        if (++D_00692508.h4 == D_00692508.h6) {
+            D_00692508.h4 = 0;
+        }
+    }
+    text = (u8 *)MsMenuGetText(1, D_00692508.h8[D_00692508.h4], 1);
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        func_0020E788(text, &w[0]);
+        func_001F5790((int)text, x + (0xA9 - w[0]) / 2, y);
+    } else {
+        _TOGetMessageWH(0, text, (s16 *)&w[0], (s16 *)&w[1], 0, 0);
+        func_001F37C8((int)text, x + (0xA9 - w[0]) / 2, y);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_002198D8);
 
@@ -225,9 +274,37 @@ void func_0021A7C0(float f)
     D_00692658.on = 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlLimitTimer);
+void TOBtlCtrlLimitTimer(void)
+{
+    int r;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_0021A8F0);
+    if (D_00692658.on == 2) {
+        D_00692658.fC += 1.0f;
+        if (TOGetFFXVideoMode() == 0) {
+            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 30.0f;
+        } else {
+            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 25.0f;
+        }
+        if (D_00692658.f14 <= 0.0) {
+            D_00692658.f14 = 0.0f;
+            D_00692658.f18 = 0.0f;
+        } else {
+            r = func_001ACEA0() % 10;
+            D_00692658.f18 = (float)((int)(D_00692658.f14 * 10.0f) * 10 + r) / 100.0f;
+        }
+    }
+}
+
+int func_0021A8F0(void)
+{
+    if (D_00692658.on != 0) {
+        if (D_00692658.f18 < 1.0) {
+            return func_001FCB88(D_00692658.f18, D_00692658.x4, D_00692658.x6, 0x80008080);
+        } else {
+            return func_001FCB88(D_00692658.f18, D_00692658.x4, D_00692658.x6, 0x80808080);
+        }
+    }
+}
 
 void TOBtlStartLimitTimer(void)
 {

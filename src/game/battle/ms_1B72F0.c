@@ -1,15 +1,22 @@
 /* tu_186 0x1b72f0-0x1b89d8: low; ~Ms (config/tu_map.tsv) */
 #define MsGetChrBtlPosHeight _hdr_MsGetChrBtlPosHeight
 #define MsGetChrBtlPos _hdr_MsGetChrBtlPos
+#define MsGetChrInfo _hdr_MsGetChrInfo
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/t2.h"
 #include "ffx/u2.h"
+#undef MsGetChrInfo
 #undef MsGetChrBtlPos
 #undef MsGetChrBtlPosHeight
+
+void func_001ACB28(float *v, float f);
+int MsAtelChrInfo(int a, int b, float *out);
+int func_001B78B0(int id, int kind, int arg2, float f, float *out);
 
 s32 _m2c_MsGetChrBtlPos_MsBtlChrNumCheck(s32) __asm__("MsBtlChrNumCheck");
 void _m2c_MsGetChrBtlPos_MsBtlGetPos(s32, void *, s8, s8, s8, void *) __asm__("MsBtlGetPos");
@@ -132,7 +139,24 @@ void MsGetChrGroundPos(u8 id, s32 *a, s32 *b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsGetChrCenter);
+void MsGetChrCenter(int id, int count, float *out) {
+    float pos[4];
+    int n = 0;
+    int i;
+
+    id &= 0xFF;
+    MMI_SQ_ZERO(0, out);
+    for (i = 0; i < count; i++, id++) {
+        if (MsGetChr(id)->fA88 != 0) {
+            MsGetChrBtlPos(id, pos);
+            n++;
+            func_001AC3D0(out, out, pos);
+        }
+    }
+    if (n > 0) {
+        func_001ACB28(out, n);
+    }
+}
 
 void MsCalcChrDirAll(void) {
     int i;
@@ -145,12 +169,67 @@ void MsCalcChrDirAll(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsCalcChrDir);
+float MsCalcChrDir(int id, BtlChr *c) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float polar[4];
+
+    MsGetChrCenter(0, 18, v0);
+    MsGetChrCenter(20, 8, v1);
+    if (MsGetRamChrMonster(id) != 0) {
+        func_001AC3E8(v2, v0, v1);
+        func_001ACB10(v2, D_00318804);
+        func_001AC3D0(v0, v0, v2);
+        MsGetChrBtlPos(id, v1);
+        MsVectorRect2Polar(v0, v1, (int)polar, 0, 0);
+    } else {
+        func_001AC3E8(v2, v1, v0);
+        func_001ACB10(v2, D_00318804);
+        func_001AC3D0(v1, v1, v2);
+        MsGetChrBtlPos(id, v0);
+        MsVectorRect2Polar(v1, v0, (int)polar, 0, 0);
+    }
+    polar[0] = MsNearRag(0.0f, polar[0]);
+    return polar[0];
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", func_001B78B0);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B72F0/rodata", jtbl_0056E380);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsGetChrInfo);
+int MsGetChrInfo(int kind, int mask, int arg2, float *out) {
+    int count = 0;
+
+    if (out != 0) {
+        int is_atel = kind & 0x100;
+
+        kind &= 0xFF;
+        if (is_atel) {
+            count = MsAtelChrInfo(arg2, kind, out);
+        } else {
+            float f;
+            int first;
+            int i;
+
+            MMI_SQ_ZERO(0, out);
+            f = 0.0f;
+            first = 1;
+            for (i = 0; i < 31; i++) {
+                if ((mask >> i) & 1) {
+                    count += func_001B78B0(i, kind, arg2, f, out);
+                    if (first != 0) {
+                        f = out[0];
+                        first = 0;
+                    }
+                }
+            }
+            if (count > 0) {
+                func_001ACB28(out, count);
+            }
+        }
+    }
+    return count;
+}
 
 int MsGetChrBit(int id, int kind, int dead, int all) {
     int mask = 0;

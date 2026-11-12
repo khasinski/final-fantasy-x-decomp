@@ -16,15 +16,17 @@ INCLUDE_RODATA("build/ee_asm/game/chr/ch_111B50/rodata", jtbl_00569720);
 
 typedef struct ChrUpdateLinkView {
     struct ChrUpdateLinkView *next;
-    s16 h04;
+    s8 b04;
+    s8 b05;
     u16 h06;
     s8 *value08;
     s8 *previous0C;
     s32 w10;
     s16 h14;
-    u16 flags16;
-    u16 previous18;
-    u16 saved1A;
+    s16 flags16;
+    s16 previous18;
+    s16 saved1A;
+    s16 h1C;
 } ChrUpdateLinkView;
 
 void func_00112100(Chr *chr, int mode)
@@ -126,24 +128,94 @@ s8 Ch_GetWaitMotion(Chr *chr)
     return chr->b742;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_IncrementFrame);
-
-INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_MotionApply);
-
 typedef struct ChrFrameView {
     u8 pad000[0x1A0];
     union {
         s64 flags;
         s16 h;
     } u1A0;
-    u8 pad1A8[0x5A4];
+    u8 pad1A8[0x57C];
+    s32 w724;
+    s32 w728;
+    s32 w72C;
+    s16 h730;
+    s16 h732;
+    s16 h734;
+    u8 pad736[0x16];
     s32 w74C;
-    u8 pad750[0xE];
+    s32 w750;
+    s32 w754;
+    s32 w758;
+    s16 h75C;
     s16 h75E;
     s16 h760;
-    u8 pad762[0x8A];
+    s16 h762;
+    u8 pad764[0x84];
+    s32 w7E8;
     s32 w7EC;
 } ChrFrameView;
+
+INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_IncrementFrame);
+
+void Ch_MotionApply(Chr *chr)
+{
+    ChrFrameView *fv = (ChrFrameView *)chr;
+    s32 f74C = fv->w74C;
+    s32 frame = (f74C + 0x1FF) >> 8;
+    s32 end = (fv->w728 + 1) >> 8;
+    s32 diff;
+    ChrUpdateLinkView *link;
+
+    fv->w750 = f74C;
+    if (frame > end) {
+        if (fv->h730 == 1) {
+            frame = end;
+        } else {
+            frame -= fv->w72C >> 8;
+        }
+    }
+    diff = frame - fv->w7E8;
+    if (diff < 0) {
+        func_001121C8(chr);
+        diff = frame - 1;
+    }
+    if (fv->w7E8 < frame) {
+        func_00112100(chr, diff);
+        fv->w7E8 += diff;
+    }
+    f74C &= 0xFF;
+    link = (ChrUpdateLinkView *)fv->w758;
+    if (f74C != 0) {
+        while (link != 0) {
+            if (link->b05 != 0) {
+                s32 a = link->previous18;
+                s32 b = link->flags16;
+                s32 d;
+
+                a &= 0xFFF;
+                b &= 0xFFF;
+                d = b - a;
+                if (d >= 0x800) {
+                    a += 0x1000;
+                    d = b - a;
+                }
+                if (d < -0x7FF) {
+                    b += 0x1000;
+                    d = b - a;
+                }
+                link->h1C = a + ((d * f74C) >> 8);
+            } else {
+                link->h1C = link->previous18 + (((link->flags16 - link->previous18) * f74C) >> 8);
+            }
+            link = link->next;
+        }
+    } else {
+        while (link != 0) {
+            link->h1C = link->flags16;
+            link = link->next;
+        }
+    }
+}
 
 typedef struct ChrVmSetupView {
     s32 w00;

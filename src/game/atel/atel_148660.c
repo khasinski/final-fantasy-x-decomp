@@ -65,10 +65,20 @@ u16 func_001487D0(void)
     return r->x0E;
 }
 
-int func_0013A398(int a);
 u16 *func_00206ED8(int a);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelGetSaveDicName);
+u8 *AtelGetSaveDicName(int idx, int b)
+{
+    int lang = ((int (*)(void))func_0013A398)() != 0; /* DEBT(CAST): declared with an id the callee never reads */
+    u16 *p = func_00206ED8(b);
+    u8 *tbl = (u8 *)p;
+
+    if (idx >= (*p >> 2)) {
+        idx = 0;
+    }
+    p += idx * 2 + lang;
+    return tbl + *p;
+}
 
 u8 func_00148870(void)
 {
@@ -168,7 +178,17 @@ int AtelGetEventElemHandleFromID(int id, int i)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148660", AtelGetEventElemStatus);
+int AtelGetEventElemStatus(int id, int bit)
+{
+    int saved = AtelChangeCurrentCtrl(0);
+    int status = AtelGetBasicWork(id)->hB14 & (1 << bit);
+
+    AtelSetCurrentCtrl(saved);
+    if (status == 0) {
+        return 0;
+    }
+    return 1;
+}
 
 void AtelSetEventElemStatus(int id, int bit, int on)
 {

@@ -1,6 +1,11 @@
 /* tu_284 0x260a70-0x265f78: low; ~ei (config/tu_map.tsv) */
 #define func_00260A70 _hdr_func_00260A70
 #define func_00264248 _hdr_func_00264248
+#define func_002DD968 _hdr_func_002DD968
+#define func_001BE7B8 _hdr_func_001BE7B8
+#define func_00258618 _hdr_func_00258618
+#define func_00258410 _hdr_func_00258410
+#define SndSepPlaySimple _hdr_SndSepPlaySimple
 #include "common.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -9,19 +14,45 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/r6.h"
+#undef SndSepPlaySimple
+#undef func_00258410
+#undef func_00258618
+#undef func_001BE7B8
+#undef func_002DD968
 #undef func_00264248
 #undef func_00260A70
 
+int SndSepPlaySimple(int handle);
+
 void func_00264248(void);
+void func_002DD968(float *dst, float *src1, float *src2, float t);
+int func_001BE7B8(int id);
+void func_00258618(u16 id, u16 n, int bit);
+void func_00258410(u16 n, int mode);
 
 
 
 #define LPA(type, off) (*(type *)((char *)lpamng + (off)))
 extern u_long128 D_00327790[];
+extern float eff_sin_t[];
 
 /* local view of the float/byte members touched near the end of lpamng */
 typedef struct LpaView {
-    u8 pad0[0x114D8];
+    u8 pad0[0x11090];
+    S6Pt50 pts11090[7];
+    S6Pt50 pt112C0;
+    float f11310;
+    float f11314;
+    float f11318;
+    float f1131C;
+    u_long128 q11320;
+    s32 w11330;
+    u8 pad11334[0x11340 - 0x11334];
+    float f11340;
+    float f11344;
+    float f11348;
+    float f1134C;
+    u8 pad11350[0x114D8 - 0x11350];
     float f114D8;
     float f114DC;
     u8 pad114E0[0x11550 - 0x114E0];
@@ -29,19 +60,46 @@ typedef struct LpaView {
     float f11554;
     u8 pad11558[0x1156C - 0x11558];
     u8 f1156C;
-    u8 pad1156D[0x11575 - 0x1156D];
+    u8 f1156D;
+    u8 f1156E;
+    u8 f1156F;
+    u8 pad11570[0x11575 - 0x11570];
     u8 f11575;
     u8 f11576;
-    u8 pad11577[0x115CC - 0x11577];
+    u8 pad11577[0x1157E - 0x11577];
+    s16 f1157E;
+    s16 f11580;
+    u8 pad11582[2];
+    float f11584;
+    float f11588;
+    float f1158C;
+    float f11590;
+    u8 pad11594[0x115CC - 0x11594];
     int f115CC;
-    u8 pad115D0[0x11608 - 0x115D0];
+    u8 pad115D0[0x115F0 - 0x115D0];
+    float f115F0[4];
+    union {
+        u16 h11600;
+        struct {
+            u8 b11600;
+            u8 f11601;
+        } b;
+    } u11600;
+    u16 f11602;
+    u8 f11604;
+    u8 pad11605[3];
     int f11608;
     int f1160C;
     int f11610;
     int f11614;
     s16 f11618;
     s16 f1161A;
-    u8 pad1161C[0x1164C - 0x1161C];
+    int f1161C;
+    u16 f11620;
+    u16 f11622;
+    u16 f11624;
+    u16 f11626;
+    u8 pad11628[0x1164C - 0x11628];
     int f1164C;
     int f11650;
     int f11654;
@@ -113,7 +171,33 @@ INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260F88);
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261130);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261288);
+void func_00261288(void)
+{
+    float v0[4];
+    float v1[4];
+    S6Pt50 *p = &LPV->pt112C0;
+    WorkEnt *e = &lpamng->ents[lpamng->f115E4];
+
+    v0[0] = e->x;
+    v0[1] = e->y;
+    v0[2] = 0.0f;
+    v0[3] = 1.0f;
+    lpamng->f115D0 += lpamng->f115D4;
+    if (lpamng->f115D0 >= 1.0f) {
+        p->x = v0[0];
+        p->y = v0[1];
+        func_00260F60();
+        lpamng->cb_a = lpamng->next_a;
+        p->f3C = lpamng->f115DC;
+        lpamng->next_a = 0;
+    } else {
+        func_002DD968(v1, v0, LPV->f115F0, lpamng->f115D0);
+        p->x = v1[0];
+        p->y = v1[1];
+        p->f3C = (lpamng->f115DC - lpamng->f115D8) * lpamng->f115D0 + lpamng->f115D8;
+        func_00260F60();
+    }
+}
 
 /* header prototypes say (void); the real signature is (int, float) */
 void func_002613B8_impl(int a, float f) __asm__("func_002613B8");
@@ -163,7 +247,36 @@ void func_002614B8(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002614E0);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261728);
+void func_002560D0(void *o, int id, float x, float y, float z, float rx, float ry, float rz, float sx, float sy, float sz);
+void func_002614E0(int ch, int idx);
+void func_002618E0(void);
+void func_00259678(void);
+S6Pt50 *func_002599C0(int i);
+
+void func_00261728(int ch, int idx)
+{
+    WorkEnt *e = &lpamng->ents[idx];
+    s32 *save = (s32 *)MsGetSaveMenu();
+
+    pppCreateHeap((HHead *)D_006A3690, (HBlk *)0x1E81000, 0x7D000);
+    if (((*save >> 14) & 3) != 2) {
+        func_002560D0(D_006A3610, 0, e->x, e->y, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+    } else {
+        func_002560D0(D_006A3610, 4, e->x, e->y, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+    }
+    e->flags |= 1 << ch;
+    func_00258780();
+    func_00264578();
+    func_002614E0(ch, idx);
+    if (lpamng->next_b == 0) {
+        lpamng->next_b = lpamng->cb_b;
+        lpamng->cb_b = func_002614B8;
+    }
+    if (lpamng->next_a == 0) {
+        lpamng->next_a = lpamng->cb_a;
+        lpamng->cb_a = func_00261478;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002618E0);
 
@@ -176,7 +289,29 @@ void func_00261C08(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261C40);
+void func_00261C40(int ch, int idx)
+{
+    WorkEnt *e = &lpamng->ents[lpamng->ents3[ch].h0];
+
+    SndSepPlaySimple(0x80000070);
+    lpamng->f11600 = 0;
+    LPV->u11600.b.f11601 = 0;
+    LPV->f115F0[0] = LPV->f11310 = e->x;
+    LPV->f115F0[1] = LPV->f11314 = e->y;
+    lpamng->f115E4 = idx;
+    lpamng->f115D0 = 0.0f;
+    lpamng->f115E8 = ch;
+    pppCreateHeap((HHead *)D_006A3690, (HBlk *)0x1E81000, 0x7D000);
+    func_002560D0(D_006A3610, 2, e->x, e->y, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+    if (lpamng->next_b == 0) {
+        lpamng->next_b = lpamng->cb_b;
+        lpamng->cb_b = func_00261C08;
+    }
+    if (lpamng->next_a == 0) {
+        lpamng->next_a = lpamng->cb_a;
+        lpamng->cb_a = func_002618E0;
+    }
+}
 
 void func_00261DC8(int a, int b) __attribute__((register_precision(s3, 128)));
 void func_00261DC8(int a, int b)
@@ -194,11 +329,78 @@ void func_00261DC8(int a, int b)
     LPV->f11618 = 2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261E98);
+void func_00261E98(void)
+{
+    int i;
+    S6Pt50 *p;
+    float r;
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", abmap_cheng_panel);
+    p = LPV->pts11090;
+    r = LPV->f11604 / 40.0f;
+    r = (lpamng->f115DC - lpamng->f115D8) * r + lpamng->f115D8;
+    for (i = 0; i < 8; i++, p++) {
+        if (p->f3C > 0.0f && p->h44 == LPV->f11602) {
+            p->f3C = r;
+            func_002599C0(i);
+        }
+    }
+    if (++LPV->f11604 == 20) {
+        func_00258780();
+        lpamng->ents[LPV->f11602].f06 = LPV->u11600.h11600;
+        func_00259678();
+    }
+    if (((S6Task *)D_006A3610)->h1E == 0) {
+        p = LPV->pts11090;
+        for (i = 0; i < 8; i++, p++) {
+            if (p->f3C > 0.0f && p->h44 == LPV->f11602) {
+                p->f3C = lpamng->f115DC;
+                func_002599C0(i);
+            }
+        }
+        lpamng->cb_a = lpamng->next_a;
+        lpamng->cb_b = lpamng->next_b;
+        lpamng->next_a = 0;
+        lpamng->next_b = 0;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262258);
+void abmap_cheng_panel(int a0, int idx)
+{
+    WorkEnt *e = &lpamng->ents[idx];
+    s32 *save = (s32 *)MsGetSaveMenu();
+
+    pppCreateHeap((HHead *)D_006A3690, (HBlk *)0x1E81000, 0x7D000);
+    if (((*save >> 14) & 3) != 2) {
+        func_002560D0(D_006A3610, 3, e->x, e->y, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+    } else {
+        func_002560D0(D_006A3610, 5, e->x, e->y, 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+    }
+    lpamng->f115D8 = func_002596D8(idx);
+    lpamng->f115DC = func_00259698(a0);
+    LPV->f11604 = 0;
+    LPV->u11600.h11600 = a0;
+    LPV->f11602 = idx;
+    func_00261DC8(a0, idx);
+    if (lpamng->next_b == 0) {
+        lpamng->next_b = lpamng->cb_b;
+        lpamng->cb_b = func_002614B8;
+    }
+    if (lpamng->next_a == 0) {
+        lpamng->next_a = lpamng->cb_a;
+        lpamng->cb_a = func_00261E98;
+    }
+}
+
+void func_00262258(void)
+{
+    float f;
+
+    LPV->f11554 = f = eff_sin_t[(LPV->f1164C << 7) & 0xF80];
+    f += 1.0f;
+    f *= 8.0f;
+    LPV->f11575 = (int)f + 0x70;
+    LPV->f11575 = (LPV->f11575 * LPV->f11576) >> 7;
+}
 
 void func_002622D0(void)
 {
@@ -251,7 +453,22 @@ void func_002628F0(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262930);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262A40);
+void func_002638C0(void);
+
+void func_00262A40(void)
+{
+    u16 h0;
+
+    h0 = lpamng->ents3[lpamng->f1156C].h0;
+    lpamng->cb_a = (void (*)(void))func_002638C0;
+    lpamng->cb_b = func_0025C310;
+    func_00258618(h0, func_001BE7B8(lpamng->f1156C), lpamng->f1156C);
+    func_00258370(0xFC);
+    func_00258410(func_001BE7B8(lpamng->f1156C), 3);
+    LPV->f115CC = LPV->f11650 = LPV->f11654 = 0;
+    ((void (*)(int, float))func_00261430)(h0, 0.25f);
+    lpamng->f11573 = 1;
+}
 
 void func_00262B28(ChrWork *w)
 {
@@ -356,9 +573,79 @@ INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262F88);
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002632D8);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00263580);
+void func_00264578(void);
+void func_00264140(void);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002636B8);
+void func_00263580(void)
+{
+    if (lpamng->next_a != 0) {
+        return;
+    }
+    if (LPV->f11626 & 4) {
+        ((void (*)(void))func_002429F0)();
+        LPV->f1156E = 1;
+    changed:
+        LPV->f1156F = 0;
+        LPV->f1156D = LPV->f1156C;
+        LPV->f1156C = TkMenuGetCurrentPlayer();
+        if (LPV->f1156D == LPV->f1156C) {
+            LPV->f1156E = 0;
+        } else {
+            SndSepPlaySimple(0x80000004);
+        }
+        ((void (*)(int, float))func_00261430)(lpamng->ents3[LPV->f1156C].h0, 0.25f);
+        func_00264578();
+        func_00264140();
+    } else if (LPV->f11626 & 8) {
+        LPV->f1156E = 2;
+        ((void (*)(void))func_00242980)();
+        goto changed;
+    }
+    func_002622D0();
+}
+
+typedef struct {
+    u8 pad00[0xC];
+    u8 f0C;
+    u8 pad0D;
+    u8 f0E;
+    u8 pad0F[5];
+} EiWorkEnt2;
+
+void func_001BE7D8(int ch, int b);
+S6Pt50 *func_0025A0C8(int i);
+
+void func_002636B8(int a0, int a1, int sel)
+{
+    func_002628F0();
+    if (sel == 0) {
+        SndSepPlaySimple(0x80000052);
+        func_001BE7D8(lpamng->f1156C, LPV->f115CC);
+    } else if (sel == 1) {
+        EiWorkEnt2 *e = (EiWorkEnt2 *)lpamng->ents2;
+        int n = lpamng->count2;
+        S6Pt50 *p;
+
+        SndSepPlaySimple(0x80000004);
+        while (--n != -1) {
+            if (e->f0E & 8) {
+                e->f0C &= ~(1 << lpamng->f1156C);
+            }
+            e++;
+        }
+        p = &LPV->pts11090[lpamng->f115E8];
+        p->h44 = lpamng->f115E0;
+        func_0025A0C8(lpamng->f115E8);
+        func_002599C0(lpamng->f115E8);
+        lpamng->f11577 = 1;
+        func_002622D0();
+        ((void (*)(int, float))func_00261430)(p->h44, 0.5f);
+    }
+    func_002581D8(0xF0);
+    func_0025AFC0(9);
+    func_00262E10(7);
+    LPV->f115CC = 0;
+}
 
 void func_00263840(void)
 {
@@ -387,7 +674,44 @@ int func_002638B0(WorkEnt *p)
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002638C0);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002639B8);
+void func_002587A0(int ch, int idx, int item);
+
+void func_002639B8(void)
+{
+    func_002632D8((int)func_002638B0);
+    if (lpamng->f1157D != 0 || lpamng->next_a != 0 || D_006A391C[8].f34 != 0) {
+        return;
+    }
+    if (lpamng->f11622 & 0x20) {
+        ChrSub *sub = func_0025AFE0(8);
+        ChrWork *chr = &D_006A391C[8];
+        u32 arg = sub->arg;
+
+        func_0025AFC0(8);
+        func_00262E10(8);
+        func_002628F0();
+        func_002587A0(lpamng->f1156C, LPV->pt112C0.h44, (u16)arg);
+        func_00264400();
+        if (chr->f18 >= chr->f1E) {
+            chr->f18 = chr->f1E - 1;
+        }
+        if (chr->f18 < 0) {
+            chr->f18 = 0;
+        }
+        if (chr->f1A > chr->f1E - (s16)chr->f16) {
+            chr->f1A = chr->f1E - chr->f16;
+        }
+        if (chr->f1A < 0) {
+            chr->f1A = 0;
+        }
+        func_00258370(0xFC);
+    } else if (lpamng->f11622 & 0x40) {
+        func_00264248();
+        func_00262DC8(8);
+        func_00258370(0xFC);
+        SndSepPlaySimple(0x80000004);
+    }
+}
 
 void func_00263B30(ChrWork *w)
 {
@@ -778,7 +1102,25 @@ void func_00264938(int a, EvtObj *p, int c, int d, int e)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264988);
+void func_002DD610(void *a, float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8);
+
+void func_00264988(void)
+{
+    func_0025AEB0((ChrWork *)0x1E6A998);
+    lpamng = (GlobalWork *)0x1E6D0A0;
+    func_00256408((void *)0x1E6D0A0, 0, 0x4BD8);
+    func_002DD610((char *)lpamng + 0x11390, 512.0f, 1.0f, 1.0833334f, 2048.0f, 2048.0f, 1.0f, 16777215.0f, 1.0f, 65536.0f);
+    func_002DD610((char *)lpamng + 0x11450, 512.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 16777215.0f, 1.0f, 65536.0f);
+    func_002DD128((char *)lpamng + 0x11350);
+    LPV->f1131C = 1.0f;
+    LPA(u_long128, 0x11320) = LPA(u_long128, 0x11310);
+    LPV->f11340 = LPV->f11344 = LPV->f11348 = LPV->f1134C = 1.0f;
+    func_002628F0();
+    LPV->f11576 = 0x80;
+    lpamng->f1156C = func_0024ACF8();
+    LPV->f11624 = 0xFFFF;
+    lpamng->f1156A = lpamng->f1156B = 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00264B20);
 

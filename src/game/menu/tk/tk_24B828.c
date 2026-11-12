@@ -1,14 +1,19 @@
 /* tu_273 0x24b828-0x250d00: low; ~Tk (config/tu_map.tsv) */
+#define TkMsImportantGet _hdr_TkMsImportantGet
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
 #include "ffx/q6.h"
 #include "ffx/s5.h"
+#include "ffx/u2.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #include "ffx/w8.h"
 #include "ffx/r6.h"
 #include "ffx/s6.h"
+#undef TkMsImportantGet
+int TkMsImportantGet(int id);
+void func_002274A0(int a, int b, int c, int d);
 
 void func_0024B828(void)
 {
@@ -137,7 +142,32 @@ void func_0024C438(Task *o) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C458);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C670);
+void func_0024C670(Task *o)
+{
+    int y;
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    func_00225920();
+    y = D_003260B8.y;
+    func_0024C458(D_0069BE40);
+    if (o->x32 == o->x34) {
+        func_002274A0(y - 8, 0x128, 0, o->x46);
+        func_0024C398((s32)o, 0, o->x32, 0, -0x20);
+    } else {
+        func_002274A0(y - 8, 0x128, 1, o->x46);
+        func_0024C398((s32)o, 1, o->x32, 0, -0x20);
+        func_002274A0(y - 8, 0x128, 2, o->x46);
+        func_0024C398((s32)o, 2, o->x34, 0, (-(o->x46 * 0x120)) / 4096 - 0x20);
+    }
+    func_00225908();
+    if (o->b45 >= 0) {
+        func_0024C1F8(o, 0, 0);
+    }
+    func_00225E88(D_00326108[0], D_00326108[1], D_00326108[2], D_00326108[3], o->x32, (u16)o->x3A, (u16)o->x30);
+    func_00225B00();
+}
 
 int func_0024C7D0(void) { return 1; }
 
@@ -258,7 +288,31 @@ int TkCalcImportantListMax(void)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", TkMenuItemImportantRefresh);
+void TkMenuItemImportantRefresh(void)
+{
+    s32 pos;
+    u16 *p = (u16 *)0x1D56B00;
+    int i = 0;
+    int max = TkMenuImportantListMax();
+
+    for (; i < max; i++) {
+        *p++ = 0;
+    }
+    D_0069BE44 = 0;
+    p = (u16 *)0x1D56B00;
+    for (i = 0; i < max; i++) {
+        int id = i + 0xA000;
+
+        if (TkMsImportantGet(id)) {
+            OfsTbl *t = MsImportantPtr(id, &pos);
+
+            p[t->pad13] = id;
+            if (D_0069BE44 < t->pad13 + 1) {
+                D_0069BE44 = t->pad13 + 1;
+            }
+        }
+    }
+}
 
 int func_0024CD68(void) {
     return D_0069BE50;
@@ -552,7 +606,27 @@ void func_0024D450(s32 arg0) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D598);
+int func_0024D598(int a0, int a1, int a2)
+{
+    int r = 0;
+
+    switch (a0) {
+    case 0:
+        r = func_0024CF40(TkMenuGetHP(a2), TkMenuGetMaxHP(a2));
+        break;
+    case 1:
+        r = func_0024CF40(TkMenuGetMP(a2), TkMenuGetMaxMP(a2));
+        break;
+    case 2:
+        r = func_0024CF40(TkMenuGetHP(a2), TkMenuGetMaxHP(a2));
+        r |= func_0024CF40(TkMenuGetMP(a2), TkMenuGetMaxMP(a2));
+        break;
+    case 3:
+        r = 1;
+        break;
+    }
+    return r;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D6A0);
 
@@ -790,7 +864,32 @@ void func_0024ECE0(void) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024ECE8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024EFC8);
+void func_0024EFC8(Task *t, int x, int y)
+{
+    int draw;
+    int idx = t->b45;
+
+    if (idx >= t->b42) {
+        idx = t->b42 - 1;
+    }
+    if (!(((t->b45 >= t->b42 && t->b42 != 2) || t->b45 < 0) && D_0069BED8 == 0)) {
+        if (t->ext[idx] != 0) {
+            x += 0xFF;
+        }
+        y += (t->x48 - t->x32) << 5;
+        draw = 1;
+        if (D_0069BED8 == 2) {
+            if ((func_00242040() / 2) & 1) {
+                if (t->b45 > 0) {
+                    draw = 0;
+                }
+            }
+        }
+        if (draw) {
+            func_002270F8(x + 0xC, y + 1, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024F0E0);
 

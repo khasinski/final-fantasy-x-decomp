@@ -1,9 +1,14 @@
 /* tu_106 0x160780-0x161aa0: high; tex_anim (config/tu_map.tsv) */
+#define Sg_GetDBuffDC _hdr_Sg_GetDBuffDC
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
 #include "ffx/v1.h"
 #include "ffx/g1.h"
+#undef Sg_GetDBuffDC
+
+void func_00161A20(int a0, int a1, int a2, int a3);
+void Sg_GetDBuffDC(s32 *p);
 
 void tex_anim_pos_set(int a) {
     switch (D_0078D898[a].b0D) {
@@ -75,9 +80,34 @@ void func_00160978(void)
 void func_001609A8() {
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", func_001609B0);
+void func_0015A568(s32 a0, s32 a1);
+void func_0015BBF8(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10);
+void func_0015C068(s32 a0);
 
-void func_001609B0(s32, s32, u8, s32, s32);
+void func_001609B0(s32 x, s32 y, s32 c, s32 a3, s32 a4)
+{
+    s32 tbl[2];
+    s32 idx;
+    s32 p2 = a3 + 0x400;
+
+    tbl[0] = 0x1A0;
+    tbl[1] = 0;
+    if (a4 == 0) {
+        Sg_GetDBuffDC(&idx);
+        idx &= 1;
+        func_0015A568(a3, c);
+        func_0015BBF8(p2, a3, x, y + tbl[idx], 0x10, 0x10, 0x200, 0, 0, 0, 0);
+        func_0015C068(p2);
+        func_002DA610(0, 0);
+    } else {
+        for (idx = 0; idx < 2; idx++) {
+            func_0015A568(a3, c);
+            func_0015BBF8(p2, a3, x, y + tbl[idx], 0x10, 0x10, 0x200, 0, 0, 0, 0);
+            func_0015C068(p2);
+            func_002DA610(0, 0);
+        }
+    }
+}
 
 void func_00160B10(s32 x, s32 y, u8 *str, s32 a3, s32 a4)
 {
@@ -138,11 +168,11 @@ void tex_anim_timer(int i, s8 v) {
 }
 
 typedef struct {
-    u8 pad0[4];
+    s32 w00;
     s32 w04;
-    u8 pad08[0xC];
+    s16 h08, h0A, h0C, h0E, h10, h12;
     s16 h14, h16, h18, h1A, h1C, h1E;
-    u8 pad20[4];
+    s16 h20, h22;
     s32 w24, w28, w2C, w30;
 } TaSubEnt;
 
@@ -156,7 +186,8 @@ typedef struct {
     s32 w04;
     TaSubEnt ent[64];
     s8 bD08[32];
-    TaWord0 wD28[1];
+    TaWord0 wD28[8];
+    s32 wD48;
 } TexAnimWorkNew;
 
 void func_00160CB8(int a, int idx)
@@ -181,7 +212,55 @@ INCLUDE_RODATA("build/ee_asm/game/chr/tex_anim/rodata", jtbl_0056B970);
 INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", chr_texanim_main_sub_new);
 INCLUDE_RODATA("build/ee_asm/game/chr/tex_anim/rodata", jtbl_0056B990);
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", chr_texanim_draw_sub_new);
+u16 Ch_TextureGetImageBase(void *o, s32 i);
+s32 setLoadImageTagsTexAnim(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
+s32 Ch_GetName(Chr *chr);
+
+int chr_texanim_draw_sub_new(int index, int value)
+{
+    Rec78D898 *r = &D_0078D898[index];
+    int start = value;
+    TexAnimWorkNew *w;
+    int i;
+
+    if (r->p00 != 0) {
+        switch (*(s8 *)r->p00) {
+        case 1:
+            break;
+        case 2:
+            w = (TexAnimWorkNew *)r->w04;
+            if (w->wD48 == 0) {
+                for (i = 0; i < w->w00; i++) {
+                    if (w->bD08[i] != -1) {
+                        TaSubEnt *ent = &w->ent[i];
+
+                        if (ent->h1E == 0 && ent->h1C != 3 && ent->w00 != 0) {
+                            s32 base = Ch_TextureGetImageBase((void *)w->w04, ent->h20);
+
+                            value = setLoadImageTagsTexAnim(
+                                value,
+                                ent->w00,
+                                ent->h08,
+                                ent->h0A,
+                                ent->h0C,
+                                ent->h0E,
+                                ent->h10,
+                                base
+                            );
+                        }
+                    }
+                }
+            } else {
+                func_0020D540();
+            }
+            break;
+        }
+    }
+    if (value - start >= 0xA00) {
+        Ch_GetName(Ch_TextureAnimGetHandle(index));
+    }
+    return value;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", func_00161968);
 

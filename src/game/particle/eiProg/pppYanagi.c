@@ -147,7 +147,17 @@ void func_00270FA8(u64 tex0)
                   (int)((tex0 >> 56) & 0x1F), (int)(tex0 >> 61));
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", prcPrintMatrix);
+extern char D_005742D8[];
+extern char D_005742E8[];
+
+void prcPrintMatrix(float (*m)[4])
+{
+    func_002EF240(D_005742D8);
+    func_002EF240(D_005742E8, func_002ED038(m[0][0]), func_002ED038(m[0][1]), func_002ED038(m[0][2]), func_002ED038(m[0][3]));
+    func_002EF240(D_005742E8, func_002ED038(m[1][0]), func_002ED038(m[1][1]), func_002ED038(m[1][2]), func_002ED038(m[1][3]));
+    func_002EF240(D_005742E8, func_002ED038(m[2][0]), func_002ED038(m[2][1]), func_002ED038(m[2][2]), func_002ED038(m[2][3]));
+    func_002EF240(D_005742E8, func_002ED038(m[3][0]), func_002ED038(m[3][1]), func_002ED038(m[3][2]), func_002ED038(m[3][3]));
+}
 
 void prcPrintPacket(u64 *p, u64 *end)
 {
@@ -498,7 +508,51 @@ void func_002734B0(char *base, ScriptCtx *ctx)
     w->fBC = w->fC0 = w->fC8 = w->fCC = 0.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_002734D8);
+typedef struct Yanagi34D8Key {
+    int w0;
+    int id;
+} Yanagi34D8Key;
+
+typedef struct Yanagi34D8Work {
+    u8 pad0[0xD0];
+    T6_LtPt *pD0;
+    void *pD4;
+    void *pD8;
+    Yanagi34D8Key *pDC;
+} Yanagi34D8Work;
+
+void func_002734D8(char *base, ScriptCtx *ctx)
+{
+    Yanagi34D8Work *w = SLOT_WORK(Yanagi34D8Work, base, ctx, 2);
+    T6_LtShape *shape;
+    T6_LtPt *dst;
+    T6_LtPt *src;
+    int i;
+
+    if (w->pD0 != 0) {
+        src = w->pD0;
+        shape = D_006A3924->res[w->pDC->id].shape;
+        dst = (T6_LtPt *)((char *)shape + shape->ofs);
+        for (i = 0; i < shape->n; i++) {
+            dst[i].x = src[i].x;
+            dst[i].y = src[i].y;
+            dst[i].z = src[i].z;
+        }
+        if (w->pD0 != 0) {
+            func_00267028(D_006A3924, D_006A3924->sub, w->pD0);
+            w->pD0 = 0;
+        }
+    }
+    if (w->pD4 != 0) {
+        func_00267028(D_006A3924, D_006A3924->sub, w->pD4);
+        w->pD4 = 0;
+    }
+    if (w->pD8 != 0) {
+        func_00267028(D_006A3924, D_006A3924->sub, w->pD8);
+        w->pD8 = 0;
+    }
+    D_00372FF4 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_002735F8);
 

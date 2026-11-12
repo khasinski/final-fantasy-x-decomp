@@ -46,7 +46,12 @@ float func_002D4278(float x, float y, float z) {
     return x * x + y * y + z * z;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D4290);
+float sqrtf(float);
+
+float func_002D4290(float v)
+{
+    return sqrtf(v);
+}
 
 void func_002D42C8(void *a) {
     func_002DCEC8(a, a);
@@ -144,7 +149,20 @@ float func_002D4520(float a, float b, float c, float d)
     return _m2c_func_002D4520_func_002E94A0(dy, dx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D45C0);
+void func_002D45C0(float *out0, float *out1, float x1, float y1, float z1, float x2, float y2, float z2)
+{
+    float ox2 = x2;
+    float oz2 = z2;
+    float r0;
+    float r1;
+
+    x2 -= x1;
+    z2 -= z1;
+    r0 = func_002D4520(x1, z1, ox2, oz2);
+    r1 = func_002D4520(0.0f, y1, sqrtf(x2 * x2 + z2 * z2), y2);
+    *out0 = r0;
+    *out1 = r1;
+}
 
 float func_002D4690(float a, float b)
 {

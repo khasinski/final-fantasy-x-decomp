@@ -64,7 +64,29 @@ int TkMn2GetWShopPos(void) /* DEBT(TYPE): declared int in funcs.h, no value retu
     D_003260C0.y += 0x30;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00237BE0);
+void func_00237BE0(Task *t)
+{
+    int i = 0;
+    SysEntry *e = SYS_TBL;
+
+    for (; i < (u16)t->x30; i++, e++) {
+        if (e->b3 != 0) {
+            break;
+        }
+    }
+    if (i == (u16)t->x30) {
+        i = 0;
+    }
+    t->x48 = i;
+    t->x32 = i - (u16)t->x3A / 2;
+    if (t->x32 >= (u16)t->x30 - (u16)t->x3A) {
+        t->x32 = (u16)t->x30 - (u16)t->x3A;
+    }
+    if (t->x32 < 0) {
+        t->x32 = 0;
+    }
+    t->x34 = t->x32;
+}
 
 int func_00237C88(int a0) {
     s32 buf;
@@ -116,7 +138,43 @@ void *func_00237E00(int a)
     return func_00228220(a & 0xFFF, D_00694090);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00237E28);
+typedef struct WeaponRec {
+    u16 h0;
+    u8 b2;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 b6;
+    u8 pad7[4];
+    u8 bB;
+    u16 fC;
+    u16 fE[4];
+} WeaponRec;
+
+extern s32 D_00694088;
+int func_0014B0A0(void);
+int func_002664D8(int a, int b, int c);
+int func_00266DC8(int a, int b);
+void func_00226800(int a, int x, int y, int d);
+
+void func_00237E28(int x, int y, WeaponRec *w)
+{
+    int i = 0;
+    int cy = y;
+
+    for (; i < w->bB; i++) {
+        func_00226D88(x, cy, 0x10);
+        func_00226E10(x + D_00325878[0] + 0x58, cy + D_00325878[1], 0xD7);
+        cy += 0x20;
+    }
+    cy = y;
+    for (i = 0; i < 4; i++, cy += 0x20) {
+        u16 abil = w->fE[i];
+        if (abil != 0 && abil != 0xFF) {
+            func_00226800(abil, x, cy, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00237F28);
 

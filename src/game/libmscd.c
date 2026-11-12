@@ -299,9 +299,58 @@ void func_00162E68(void)
     func_0015B350();
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162ED8);
+extern u8 *_mscd_D_00595F68 __asm__("D_00595F68");
+int func_00165D90(int type, int id);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00162FC0);
+int func_00162ED8(int i)
+{
+    int idx = G1_VT78E498->w20 + i;
+    int off = idx * 3;
+    int ret = func_00165D90(G1_VT78E498->w24, i);
+    u32 *p;
+
+    if (ret != 0) {
+        return ret;
+    }
+    p = (u32 *)(idx * 4 + D_0078E498.f28);
+    if (!(*p & 0x800000)) {
+        if (*p & 0x400000) {
+            u8 *b = _mscd_D_00595F68 + off;
+            ret = b[0];
+            ret += b[1] << 8;
+            ret += b[2] << 16;
+            ret <<= 3;
+        } else {
+            ret = (((p[1] & 0x3FFFFF) - (*p & 0x3FFFFF)) << 11) - ((*p >> 24) << 3);
+        }
+    }
+    return ret;
+}
+
+int func_00162FC0(int a, int b)
+{
+    int idx = G1_VT78E498->p2C[a] + b;
+    int off = idx * 3;
+    int ret = func_00165D90(a, b);
+    u32 *p;
+
+    if (ret != 0) {
+        return ret;
+    }
+    p = (u32 *)(idx * 4 + D_0078E498.f28);
+    if (!(*p & 0x800000)) {
+        if (*p & 0x400000) {
+            u8 *b = _mscd_D_00595F68 + off;
+            ret = b[0];
+            ret += b[1] << 8;
+            ret += b[2] << 16;
+            ret <<= 3;
+        } else {
+            ret = (((p[1] & 0x3FFFFF) - (*p & 0x3FFFFF)) << 11) - ((*p >> 24) << 3);
+        }
+    }
+    return ret;
+}
 
 int func_001630B0(int i)
 {
@@ -373,7 +422,82 @@ INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163970);
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163D40);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163EB0);
+typedef struct Vt78E498View {
+    void *f00;
+    void *f04;
+    void *f08;
+    void *f0C;
+    void *f10;
+    void *f14;
+    s32 w18;
+    void *f1C;
+    u8 pad20[0x54 - 0x20];
+    void *f54;
+    void *f58;
+    s32 w5C;
+    void *f60;
+    void *f64;
+    void *f68;
+    void *f6C;
+    s32 w70;
+    s32 w74;
+    void *f78;
+    void *f7C;
+    void *f80;
+    void *f84;
+    void *f88;
+    void *f8C;
+    void *f90;
+} Vt78E498View;
+
+void func_00163970(SysVt *cd, G1Rec78E530 *rec, int idx);
+void func_00163D40(SysVt *cd, G1Rec78E530 *rec, int idx);
+
+void func_00163EB0(void)
+{
+    SysVt *cd = GetCD();
+    int i;
+
+    for (;;) {
+        for (i = 0; i < 0x40; i++) {
+            G1Rec78E530 *rec = &D_0078E530[i];
+
+            if (rec->used != 0) {
+                switch (rec->b30) {
+                case 0:
+                    if (rec->flag != 0) {
+                        while (func_002E1FB8() == 0) {
+                            func_0017135C(1);
+                        }
+                        rec->flag = 0;
+                        func_00162E00(((Vt78E498View *)cd)->w74);
+                        {
+                            int j;
+                            for (j = 0; j < 0x40; j++) {
+                                if (D_0078E530[j].used != 0) {
+                                    break;
+                                }
+                            }
+                            if (j == 0x40) {
+                                ((Vt78E498View *)cd)->w70 = 0;
+                                cd->fd5C = -1;
+                                func_0015B350();
+                            }
+                            ((Vt78E498View *)cd)->w74 = -1;
+                        }
+                    } else {
+                        func_00163970(cd, rec, i);
+                    }
+                    break;
+                case 1:
+                    func_00163D40(cd, rec, i);
+                    break;
+                }
+            }
+        }
+        func_0017135C(1);
+    }
+}
 
 s32 _m2c_func_00163FF0_func_001577A8(s32 *, u8 *, s32) __asm__("func_001577A8");
 extern s8 _m2c_func_00163FF0_D_0030DDFD __asm__("D_0030DDFD");
@@ -430,12 +554,6 @@ void func_00164840(void)
         func_002D3FF0(0);
     }
 }
-
-typedef struct Vt78E498View {
-    u8 pad00[0x70];
-    s32 w70;
-    s32 w74;
-} Vt78E498View;
 
 int func_00164918(int a, int b)
 {
@@ -600,7 +718,40 @@ int func_00165568(int a, int b) {
     return func_00165408(func_00163188(a, b), a, b);
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_001655A8);
+void PcReadFunc_set(void);
+void func_00164060(void);
+void func_00164340(void);
+
+#define VT78E498 ((Vt78E498View *)&D_0078E498)
+
+void func_001655A8(int a)
+{
+    VT78E498->w18 = a;
+    if (a == 0) {
+        PcReadFunc_set();
+    } else {
+        VT78E498->f14 = func_00162ED8;
+        VT78E498->f58 = func_00164A30;
+        VT78E498->f68 = func_00163EB0;
+        VT78E498->f54 = func_00162D50;
+        VT78E498->f60 = func_00162D38;
+        VT78E498->f04 = func_001631B8;
+        VT78E498->f78 = func_00164648;
+        VT78E498->f88 = func_00165568;
+        VT78E498->f8C = func_00165548;
+    }
+    VT78E498->f08 = func_00164990;
+    VT78E498->f1C = func_00165320;
+    D_0078E498.f00 = (int (*)())func_00164060;
+    VT78E498->f90 = func_00164340;
+    VT78E498->f64 = func_00162E68;
+    VT78E498->f0C = func_001655A8;
+    VT78E498->f10 = func_00163FF0;
+    VT78E498->f7C = func_00165398;
+    VT78E498->f84 = func_001653C0;
+    VT78E498->f80 = func_00164918;
+    VT78E498->f6C = func_00163188;
+}
 
 void func_001656D8(void) {
     (*D_00595F64)();

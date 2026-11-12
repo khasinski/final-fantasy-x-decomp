@@ -200,7 +200,46 @@ void func_00295D28(u_long128 *a, u_long128 *b)
     } while (--n >= 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295D58);
+typedef struct OpusPool {
+    u8 pad00[0x10];
+    s16 *lists[3];
+    s16 *draw_list;
+    u8 *subs;
+    u8 pad24[0x10];
+    u16 count;
+    u16 max_used;
+    u16 cur_used;
+} OpusPool;
+
+int func_00295D58(T6_BlkPool *pool, int key)
+{
+    OpusPool *o = (OpusPool *)pool;
+    u16 max = o->count - 1;
+    s16 *list = o->lists[key];
+    s16 i;
+    s16 j;
+
+    for (i = 0; i < max; i++) {
+        if (list[i] < 0) {
+            goto found_slot;
+        }
+    }
+    return -1;
+found_slot:
+    for (j = 0; j < max; j++) {
+        if (*(int *)(o->subs + (j << 8)) == 0) {
+            goto found_blk;
+        }
+    }
+    return -1;
+found_blk:
+    list[i] = j;
+    o->cur_used++;
+    if (o->max_used < o->cur_used) {
+        o->max_used = o->cur_used;
+    }
+    return j;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295E28);
 
@@ -228,7 +267,36 @@ INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_draw_off);
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_no_get);
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_get_osu_by_draw);
+ScriptSub *opus_get_osu_by_draw(OpusPool *o, ScriptSub *sub, u8 type, int any)
+{
+    s16 *p;
+    ScriptSub *cur;
+    s16 idx;
+    u8 id;
+
+    if (o == 0) {
+        o = (OpusPool *)D_0054D5E8[0];
+        any = 1;
+        sub = (ScriptSub *)o->subs;
+        goto start; /* DEBT(GOTO): return block sits between the default-arg block and the loop */
+    } else {
+        goto start;
+    }
+found:
+    return cur;
+start:
+    p = o->draw_list;
+    id = sub->b1E;
+    for (; (idx = *p) >= 0; p++) {
+        cur = (ScriptSub *)(o->subs + (idx << 8));
+        if (cur->bBB == type) {
+            if (any != 0 || cur->b1E == id) {
+                goto found;
+            }
+        }
+    }
+    return 0;
+}
 
 /* NAME guess: find slot index of thread's id in its list */
 int opus_en_index(ScriptSub *sub) {

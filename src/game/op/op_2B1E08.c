@@ -419,7 +419,36 @@ void func_002B2D50(void) {
     func_002B2C70(0x60);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2D58);
+s32 func_002B2D58(void (*fn)(s32, s32), s32 arg0, s32 arg1, u16 count, s32 bank)
+{
+    s8 *p = &D_006F2F60[bank];
+    s8 *end = p + 0x20;
+    W10Callback *e;
+    s8 id;
+
+    do {
+        if (*p < 0) {
+            goto search;
+        }
+        p++;
+    } while ((int)p < (int)end);
+    return -1;
+found:
+    e->fn = fn;
+    e->arg0 = arg0;
+    e->arg1 = arg1;
+    e->count = count;
+    *p = id;
+    return id;
+search:
+    e = &D_006F2FE0[bank];
+    for (id = 0; id < 0x20; id++, e++) {
+        if (e->fn == 0) {
+            goto found;
+        }
+    }
+    return -1;
+}
 
 s32 func_002B2DF0(void (*fn)(s32, s32), s32 arg0, s32 arg1, u16 count) {
     return func_002B2D58(fn, arg0, arg1, count, 0);

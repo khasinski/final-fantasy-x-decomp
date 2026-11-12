@@ -258,7 +258,77 @@ int func_001999A0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", func_001999A8);
+typedef struct {
+    u8 pad00[0x64];
+    int i64;
+    u8 pad68[8];
+    float v70[4];
+    float v80[4];
+    float v90[4];
+    u8 padA0[0x10];
+    float fB0;
+    float fB4;
+    float fB8;
+    float fBC;
+    float fC0;
+    float fC4;
+    int iC8;
+    float fCC;
+    int iD0;
+    int iD4;
+    int iD8;
+    float fDC;
+    int iE0;
+    int iE4;
+    float fE8;
+    int iEC;
+    float fF0;
+    float fF4;
+    int iF8;
+    float fFC;
+} RcbgScenePool;
+
+float rcbgSetProjectionMatrixSub(float *m, int a, float *fov, float b, float c, float d);
+void func_0019A718(float a, float b, float c, float d, float e);
+void rcbgSetViewMatrix(float *out, float *eye, float *tgt, float *up, float ang);
+
+void func_001999A8(W3Pool *pool)
+{
+    RcbgScenePool *p = (RcbgScenePool *)pool;
+    float s;
+    float f;
+    int odd;
+
+    if (p->iC8 != 0) {
+        odd = p->iC8 & 1;
+        s = eff_sin_t[(((u32)(int)(p->fDC * 65536.0f / 6.2831855f) + 0x4000) >> 4) & 0xFFF];
+        switch ((p->iC8 - 1) / 2) {
+        case 0:
+            break;
+        case 1:
+            if (p->iD0 > 0) {
+                s *= (float)(p->iD0 - p->iE0) / (float)p->iD0;
+            }
+            break;
+        }
+        if (p->iD8 > 0) {
+            f = (float)(p->iD4 + func_002EFD78() % p->iD8);
+        } else {
+            f = (float)p->iD4;
+        }
+        if (odd != 0) {
+            p->fC0 = s * f;
+        } else {
+            p->fC4 = s * f;
+        }
+        p->fDC += p->fCC;
+        p->iE0++;
+        if (p->iD0 > 0 && p->iE0 >= p->iD0) {
+            func_00199B30(pool);
+        }
+        rcbgSceneSetMatrix(pool);
+    }
+}
 
 void func_00199B30(W3Pool *pool)
 {
@@ -266,7 +336,31 @@ void func_00199B30(W3Pool *pool)
     pool->fC0 = pool->fC4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", func_00199B48);
+void func_00199B48(W3Pool *pool)
+{
+    RcbgScenePool *p = (RcbgScenePool *)pool;
+    float s;
+
+    if (p->iE4 != 0) {
+        s = eff_sin_t[((u32)(int)(p->fF4 * 65536.0f / 6.2831855f) >> 4) & 0xFFF];
+        switch (p->iE4) {
+        case 1:
+            break;
+        case 2:
+            if (p->iEC > 0) {
+                s *= (float)(p->iEC - p->iF8) / (float)p->iEC;
+            }
+            break;
+        }
+        p->fB4 = s * p->fF0;
+        p->fF4 += p->fE8;
+        p->iF8++;
+        if (p->iEC > 0 && p->iF8 >= p->iEC) {
+            func_00199C50(pool);
+        }
+        rcbgSceneSetMatrix(pool);
+    }
+}
 
 void func_00199C50(W3Pool *pool)
 {
@@ -284,4 +378,25 @@ void func_00199C60(W3Pool *pool)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", rcbgSceneSetMatrix);
+void rcbgSceneSetMatrix(W3Pool *pool)
+{
+    RcbgScenePool *p = (RcbgScenePool *)pool;
+    float m0[16];
+    float m1[16];
+    float fov;
+    Chr *chr;
+    Rec142F0 *scr = ms_screen;
+
+    if (p->fB0 != 0.0f) {
+        chr = Sg_GetPlayer();
+        if (chr != 0) {
+            Ch_SetClipZ(chr, 1000.0f);
+        }
+        p->fB8 = rcbgSetProjectionMatrixSub(m0, 1, &fov, p->fB0, p->fC0, p->fC4 + (float)p->i64);
+        p->fBC = p->fB8 * (7.0f / 6.0f);
+        func_0019A718(512.0f / p->fB8, 416.0f / p->fBC, scr->f1C, scr->f08, scr->f0C);
+        rcbgSetViewMatrix(m1, p->v70, p->v80, p->v90, p->fB4);
+        fov += 256.0f;
+        MsSetCameraMatrix(fov, 1, (int)m0, (int)m1, (int)p->v80, (int)p->v70);
+    }
+}

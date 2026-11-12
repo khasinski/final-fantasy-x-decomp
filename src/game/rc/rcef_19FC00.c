@@ -43,7 +43,64 @@ void func_0019FE48(S2Obj1C *o)
     D_006A3924 = o->w10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_0019FE58);
+typedef struct RcefMainCtx {
+    s32 w00;
+    s32 w04;
+    s32 w08;
+    u8 *p0C;
+    HeapMgr *w10;
+    s32 w14;
+    void **w18;
+    W3Sched sched;
+    u8 pad198[0x200 - 0x198];
+    s32 w200;
+    s32 w204;
+    float f208;
+    s32 w20C;
+    s32 w210;
+    s32 w214;
+    s32 w218;
+    float f21C;
+    s32 w220;
+    s32 w224;
+    s32 w228;
+    s32 w22C;
+    s32 w230;
+    s32 w234;
+    s32 w238;
+} RcefMainCtx;
+
+extern float D_006A3970[16];
+extern float D_006A3A70[16];
+extern float D_00313EF0[16];
+void func_002DCF48(void *dst, void *src);
+void MsEffectTerminate(int key);
+void func_001A0308(void *ctx);
+void func_001A08A8(RcefMainCtx *o);
+void func_001A0A10(void *o);
+
+void func_0019FE58(RcefMainCtx *o)
+{
+    W3Sched *sched = &o->sched;
+
+    D_006A3924 = o->w10;
+    func_001A9EE0(D_006A3970);
+    func_001AACA0(D_006A3A70);
+    func_002DD0C0(D_00313EF0, D_006A3970);
+    D_00313EF0[12] = D_00313EF0[13] = D_00313EF0[14] = 0.0f;
+    func_002DCF48(D_00313EF0, D_00313EF0);
+    D_006A3BCC = o->p0C;
+    rcefTaskCtrlProc(&sched->head);
+    if (func_001A2040(sched) != 0) {
+        MsEffectTerminate(o->w04);
+    }
+    if (o->w200 == 0) {
+        func_001A0308(o);
+    }
+    func_001A08A8(o);
+    func_001A0A10(o);
+    o->w238++;
+}
 
 void *func_0019FF48(S2Obj1C *o) {
     void *p = rcefObjNew();
@@ -193,8 +250,6 @@ void func_001A06A8(s32 arg0, s32 arg1) {
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0700);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A08A8);
-
 typedef struct RcefBlurCtx {
     u8 pad0[0x224];
     s32 w224;
@@ -204,8 +259,11 @@ typedef struct RcefBlurCtx {
     s32 w234;
 } RcefBlurCtx;
 
-void func_001A0A10(RcefBlurCtx *o)
+INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A08A8);
+
+void func_001A0A10(void *p)
 {
+    RcefBlurCtx *o = p;
     int v;
 
     if (o->w234 == 0 || o->w224 == 0) {
@@ -345,7 +403,56 @@ void func_001A1238(S2Obj1A *arg0, S2Obj1A *arg1) {
     arg1->pC8 = var_4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1270);
+void func_001A1270(S2Obj1A *o)
+{
+    S2Obj1A *cur;
+    S2Obj1A *next;
+    S2Obj1A *tmp;
+
+    cur = o->pC4;
+    if (cur != 0) {
+        if (o->pC0 != 0) {
+            if (o->pC0->pC4 == o) {
+                o->pC0->pC4 = cur;
+            }
+            do {
+                cur->pC0 = o->pC0;
+                cur = cur->pCC;
+            } while (cur != 0);
+        }
+        if (o->pC8 != 0) {
+            o->pC8->pCC = o->pC4;
+            o->pC4->pC8 = o->pC8;
+        }
+        if (o->pCC != 0) {
+            cur = o->pC4;
+            next = cur->pCC;
+            if (next != 0) {
+                do {
+                    cur = next;
+                    tmp = cur->pCC;
+                    next = tmp;
+                } while (tmp != 0);
+            }
+            o->pCC->pC8 = cur;
+            cur->pCC = o->pCC;
+        }
+    } else {
+        if (o->pC0 != 0 && o->pC0->pC4 == o) {
+            o->pC0->pC4 = o->pCC;
+        }
+        if (o->pC8 != 0) {
+            o->pC8->pCC = o->pCC;
+        }
+        if (o->pCC != 0) {
+            o->pCC->pC8 = o->pC8;
+        }
+    }
+    o->pC8 = 0;
+    o->pCC = 0;
+    o->pC4 = 0;
+    o->pC0 = 0;
+}
 
 void func_001A1378(S2Obj1A *o, int a, int b) {
     o->f270 = a;
@@ -533,6 +640,20 @@ void func_001A19F0(void *b) {
 void func_001A1A00(void *b)
 {
 }
+
+typedef struct RcefObj3C0 {
+    s32 w00;
+    void *p04;
+    u8 pad08[8];
+    V2GsSub sub;
+    void *p80;
+    void *p84;
+    u8 pad88[8];
+    float m90[16];
+} RcefObj3C0;
+
+extern u32 D_006A3B70[];
+extern u32 D_006A3B30[];
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1A08);
 

@@ -17,7 +17,11 @@
 #undef func_001496F0
 #undef func_0014ACC0
 #undef func_00149080
-int func_00148F40();
+void func_00148F40(char *p);
+void func_001387F0(void);
+void func_00138800(int a, int b);
+int func_00138E90(char *p);
+int func_00138ED8(char *p, int i);
 int func_001390C8(char *p, int i);
 int func_00139120(char *p, int i);
 int func_00145558(void);
@@ -26,7 +30,35 @@ int func_00139B30(int v);
 
 extern struct { int id; int flags; } D_0058E8F0[];
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", func_00148F40);
+void func_00148F40(char *p)
+{
+    int n = func_00138E90(p);
+    int i;
+
+    func_001387F0();
+    for (i = 0; i < D_0030B8C4; i++) {
+        int flags = D_0058E8F0[i].flags;
+        int id = D_0058E8F0[i].id;
+
+        if (flags & 0x8000) {
+            int found = 0;
+            int j;
+
+            for (j = 0; j < n; j++) {
+                if (func_00138ED8(p, j) == id) {
+                    found = 1;
+                    break;
+                }
+            }
+            if (!found) {
+                int arg = (flags & 0x2000) ? 0x78 : 0xF0;
+
+                func_00138800(D_0058E8F0[i].id, (flags & 0x4000) ? 0x168 : arg);
+                D_0058E8F0[i].flags &= ~0x8000;
+            }
+        }
+    }
+}
 
 int func_00149080(char *p, int *hdr, int sep_only, int idx, int flag)
 {
@@ -177,9 +209,45 @@ void AtelSetMoveHokanMode(Actor *a, s32 v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetActorStartPos);
+void AtelGetActorStartPos(int id, float *px, float *py, float *pz)
+{
+    Actor *a = AtelGetBasicWork(id);
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    float x, y, z;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelGetActorEndPos);
+    if (a->hdr->type == 2 || a->hdr->type == 5) {
+        x = st->x;
+        y = st->y;
+        z = st->z;
+        *px = x;
+        *py = y;
+        *pz = z;
+    } else {
+        *px = st->x;
+        *py = st->y;
+        *pz = st->z;
+    }
+}
+
+void AtelGetActorEndPos(int id, float *px, float *py, float *pz)
+{
+    Actor *a = AtelGetBasicWork(id);
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    float x, y, z;
+
+    if (a->hdr->type == 2 || a->hdr->type == 5) {
+        x = st->f30;
+        y = st->f34;
+        z = st->f38;
+        *px = x;
+        *py = y;
+        *pz = z;
+    } else {
+        *px = st->x;
+        *py = st->y;
+        *pz = st->z;
+    }
+}
 
 void func_001495A8(int id, float *px, float *py, float *pz)
 {

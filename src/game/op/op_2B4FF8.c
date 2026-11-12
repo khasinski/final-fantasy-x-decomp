@@ -554,7 +554,41 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B59B8);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_spline_xyz_table);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B5EC0);
+float func_002B5EC0(float *y, float *x, float *m, int n, float t)
+{
+    int lo;
+    int hi;
+    float x0;
+    float dx;
+
+    if (n == 1) {
+        return y[0];
+    }
+    if (n == 2) {
+        dx = y[1] - y[0];
+        return y[0] + dx * t;
+    }
+    lo = 0;
+    hi = n - 1;
+    while (lo < hi) {
+        int mid = (lo + hi) / 2;
+        if (x[mid] < t) {
+            lo = mid + 1;
+        } else {
+            hi = mid;
+        }
+    }
+    if (lo > 0) {
+        lo--;
+    }
+    x0 = x[lo];
+    dx = x[lo + 1] - x0;
+    t -= x0;
+    if (dx != 0.0f) {
+        return (((m[lo + 1] - m[lo]) * t / dx + m[lo] * 3.0f) * t + ((y[lo + 1] - y[lo]) / dx - (m[lo] * 2.0f + m[lo + 1]) * dx)) * t + y[lo];
+    }
+    return y[lo];
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_spline_xyz);
 

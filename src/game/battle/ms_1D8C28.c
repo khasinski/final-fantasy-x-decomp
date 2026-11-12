@@ -297,7 +297,51 @@ void func_001DAB28(Chr *a, int b, BtlChr *c)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", func_001DAB90);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsTransSpPos);
+extern s8 D_00317306;
+void func_001AC528(void *dst, void *src, float a);
+void func_001AC698(void *dst, void *src, float a);
+void func_001AC200(void *dst, void *mat, void *src);
+
+typedef struct Blk662D28_Sp {
+    u8 pad0[0x7C0];
+    float mat7C0[12];
+    float f7F0;
+    float f7F4;
+    float f7F8;
+    float f7FC;
+    float f800;
+    float f804;
+    float f808;
+    u8 pad80C[0x844 - 0x80C];
+    float f844;
+} Blk662D28_Sp;
+
+void MsTransSpPos(int a, int b) {
+    float mat[16];
+    float *pos = (float *)b;
+
+    switch (D_00317306) {
+    case 1:
+        func_002DD128(mat);
+        pos[1] -= ((Blk662D28_Sp *)D_00662D28)->f844;
+        if (a != 0) {
+            func_001AC528(mat, mat, -((Blk662D28_Sp *)D_00662D28)->f800);
+            func_001AC698(mat, mat, -((Blk662D28_Sp *)D_00662D28)->f808);
+        } else {
+            func_001AC698(mat, mat, ((Blk662D28_Sp *)D_00662D28)->f808);
+            func_001AC528(mat, mat, ((Blk662D28_Sp *)D_00662D28)->f800);
+        }
+        func_001AC200(pos, mat, pos);
+        break;
+    case 2:
+    case 3:
+        ((Blk662D28_Sp *)D_00662D28)->f7F0 = 0.0f;
+        ((Blk662D28_Sp *)D_00662D28)->f7F4 = 0.0f;
+        ((Blk662D28_Sp *)D_00662D28)->f7F8 = 0.0f;
+        func_001AC200(pos, ((Blk662D28_Sp *)D_00662D28)->mat7C0, pos);
+        break;
+    }
+}
 
 void MsSpCameraProcess(int a, int b, int c) {
     if (D_0031941C != 0) {
@@ -436,7 +480,26 @@ void MsPoisonProcess(int id, BtlChr *c) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsDefenseStartProcess);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsDefenseProcess);
+int MsDefenseProcess(void) {
+    int r = 1;
+    int i;
+    for (i = 0; i < 0x1F; i++) {
+        BtlChr *c = MsGetChr(i);
+        int t = c->f394;
+        if (t != 0xFF && c->fA88 != 0) {
+            D_003172F0.f2004 |= (1 << i) | (1 << t);
+            if (c->f1C8 != 0) {
+                r = 0;
+                break;
+            }
+            if (MsGetChr(t)->f1C8 != 0) {
+                r = 0;
+                break;
+            }
+        }
+    }
+    return r;
+}
 
 void MsDefenseEndProcess(void) {
     int i;

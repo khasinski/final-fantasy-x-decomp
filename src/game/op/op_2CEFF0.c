@@ -37,7 +37,71 @@ void func_002CF1D0(s16 *values, int destination)
     func_002F8660(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF258);
+typedef struct OpTim2Pic {
+    u32 totalSize;
+    u32 clutSize;
+    u32 imageSize;
+    u16 headerSize;
+    u16 clutColors;
+    u8 picFormat;
+    u8 mipMaps;
+    u8 clutType;
+    u8 imageType;
+    s16 width;
+    s16 height;
+    u16 gsTex0Lo;
+    u16 gsTex0Mid;
+    u32 gsTex0Hi;
+    u64 gsTex1;
+    u8 b28;
+    u8 b29;
+    u8 b2A;
+    u8 b2B;
+    u32 gsTexClut;
+} OpTim2Pic;
+
+typedef struct OpTim2 {
+    u8 fileHdr[0xF];
+    u8 bF;
+    OpTim2Pic pic;
+    u8 data[1];
+} OpTim2;
+
+extern u8 D_004F4600[];
+void func_002DA928(void *buf, int tbp, int bw, int psm, int x, int y, int w, int h);
+void func_002DAC50(void *dst, void *src);
+
+void func_002CF258(OpTim2 *tim2)
+{
+    u_long128 li1[6];
+    u_long128 li2[6];
+    OpTim2Pic *pic = &tim2->pic;
+    u8 *data;
+    int bw;
+
+    if (pic->imageSize != 0) {
+        int psm = D_004F4600[pic->imageType];
+        int tbp = pic->gsTex0Lo & 0x3FFF;
+
+        tim2->bF = 0x6F;
+        data = tim2->data;
+        bw = pic->b28;
+        func_002DA928(li1, tbp, bw / 4, psm,
+                      pic->b2A << 4, pic->b2B << 4, pic->width, pic->height);
+        /* DEBT(FAKE): keep tim2 live across call so it is allocated to $s0 */
+        __asm__("" : : "r"(tim2));
+        func_002DA610(0, 0);
+        func_002F8660(0);
+        func_002DAC50(li1, data);
+    }
+    if (pic->clutSize != 0) {
+        func_002DA928(li2, (pic->gsTex0Hi >> 5) & 0x3FFF, 1, D_004F4600[pic->clutType],
+                      0, 0, 0x10, (s16)(pic->clutSize / 64));
+        func_002DA610(0, 0);
+        func_002F8660(0);
+        func_002DAC50(li2, data + pic->imageSize);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF388);
 
@@ -45,7 +109,7 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", op_oef2_texture_load);
 
 typedef struct Oef2Clut {
     u16 h0;
-    u8 pad2[2];
+    u16 h2;
     int w4;
     u8 b8;
     u8 b9;
@@ -116,11 +180,55 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CFC70);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CFE38);
 
+typedef struct Oef2Tex {
+    u32 w0;
+    u8 pad4[0xC];
+    int w10;
+    int w14;
+} Oef2Tex;
+
+typedef struct Oef2Hdr {
+    u64 pad0[8];
+    u16 h40;
+    u16 h42;
+    u16 h44;
+    u16 h46;
+} Oef2Hdr;
+
+int func_002CFE38(void *p, int mask, int kind);
+void op_oef2_texture_load(void *p, int a);
+
+int func_002D0180(void *p, int mask);
+int func_002D0238(void *p, int mask);
+
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0180);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0238);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D02E8);
+int func_002D02E8(Oef2Hdr *p, u16 start, u16 end, int mask)
+{
+    u16 end1;
+    u16 end2;
+    int i;
+
+    if (p->h44 == 0 && p->h46 == 0) {
+        return 0;
+    }
+    end1 = end + 1;
+    end2 = end + 1;
+    if (end1 >= p->h44) {
+        end1 = p->h44;
+    }
+    if (end2 >= p->h46) {
+        end2 = p->h46;
+    }
+    for (i = start; i < end1; i++) {
+        func_002D0180(op_oef2_a_get((int)p, 2, i), mask);
+    }
+    for (i = start; i < end2; i++) {
+        func_002D0238(op_oef2_a_get((int)p, 3, i), mask);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0408);
 
@@ -253,7 +361,38 @@ void func_002D09D0(u8 a) {
     D_00703FF6 = a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D09E0);
+typedef struct HandlePoolTex {
+    u8 pad0[0x60];
+    s8 b60[8];
+    u8 pad68[0x18];
+    void *tex[8][2];
+    Oef2Clut *clut[8][2];
+} HandlePoolTex;
+
+extern u8 D_00703FF3;
+
+void func_002D09E0(void)
+{
+    int i;
+    int j;
+
+    if (D_00703FF3 != 0) {
+        HandlePoolTex *pool = (HandlePoolTex *)&D_00703E20;
+
+        for (i = 0; i < 8; i++) {
+            if (pool->b60[i] != 0) {
+                for (j = 0; j < 2; j++) {
+                    if (pool->tex[i][j] != 0) {
+                        op_oef2_texture_load(pool->tex[i][j], 1);
+                    }
+                    if (pool->clut[i][j] != 0) {
+                        op_oef2_clut_load(pool->clut[i][j], 1);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_002D0AD0(void)
 {

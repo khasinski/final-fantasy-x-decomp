@@ -1,4 +1,5 @@
 /* tu_255 0x22ce70-0x22fb30: high; ~Tk (config/tu_map.tsv) */
+#define func_0022F720 _hdr_func_0022F720
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -6,6 +7,7 @@
 #include "ffx/s5.h"
 #include "ffx/u3.h"
 #include "ffx/v5.h"
+#undef func_0022F720
 
 void func_0022CE70(void)
 {
@@ -421,6 +423,7 @@ void func_0022E468(int a0)
     }
 }
 
+void func_0022E538(Task *t);
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E538);
 
 void func_0022E7A0(void) {
@@ -460,7 +463,43 @@ void func_0022F1E8(void) { func_0022CE70(); }
 
 int func_0022F1F0(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F1F8);
+void func_002375F8(int a, int *b, int *c, int d, int e);
+void func_00237690(void);
+void func_00237790(int a);
+
+void func_0022F1F8(Task *t)
+{
+    int vals[4];
+    int maxs[4];
+    int n = 1;
+
+    t->x1C = 0;
+    vals[0] = func_00249520(0);
+    maxs[0] = func_002497A8(0);
+    D_00693B88[0] = 0;
+    if (MsImportantGet(0xA01E) != 0 || MsImportantGet(0xA022) != 0) {
+        vals[n] = func_00249520(1);
+        maxs[n] = func_002497A8(1);
+        D_00693B88[n] = 1;
+        n++;
+    }
+    if (MsImportantGet(0xA01F) != 0) {
+        vals[n] = func_00249520(2);
+        maxs[n] = func_002497A8(2);
+        D_00693B88[n] = 2;
+        n++;
+    }
+    D_00693BEC = n;
+    if (n >= 2) {
+        func_002375F8((int)func_0022F1F0, vals, maxs, n, 1);
+        func_00237690();
+        func_00237790(0);
+    }
+    D_003258C8 = 0;
+    D_003258CC = func_00242970();
+    D_003258D0 = func_00242970();
+    D_003258D4 = func_00242970();
+}
 
 void func_0022F340(void)
 {
@@ -545,7 +584,28 @@ void func_0022F3A8(Task *o)
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F5E8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F720);
+void func_0022F5E8(int x, int y, int id);
+u8 func_00242798(int i);
+
+void func_0022F720(int x, int y, int id)
+{
+    int hp = TkMenuGetHP(id);
+    int st = func_00242C58(id);
+    int flag = 0;
+
+    if (D_00326030 != 0) {
+        if (D_00693B88[D_00326030->x48] == 1 && id >= 14) {
+            st = 1;
+            flag = 1;
+        }
+    }
+    if (hp > 0) {
+        func_00226100(x, y, id, st);
+    } else {
+        func_00226188(x, y, id, flag ? st : 0x53);
+        func_0022F5E8(x, y, id);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F810);
 

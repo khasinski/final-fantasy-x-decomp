@@ -2,6 +2,7 @@
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
 #define op_et_bindeff2 _hdr_op_et_bindeff2
 #define op_et_weapon_afterimage _hdr_op_et_weapon_afterimage
+#define func_00295EB8 _hdr_func_00295EB8
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -11,22 +12,34 @@
 #include "ffx/g4.h"
 #include "ffx/v6.h"
 #include "ffx/u5.h"
+#undef func_00295EB8
 #undef op_et_bindeff2
 #undef op_et_weapon_afterimage
 
+void func_00295EB8(void *o, int idx);
+
 extern s8 D_00373550;
+extern int D_00303550;
 extern char D_00373560[];
 extern char D_00764A30[];
 extern char D_00704130[];
+extern char D_00574AD0[];
+extern char D_00574B10[];
+extern char D_00574B90[];
 extern char D_005750E8[];
 extern char D_00575280[];
 extern u8 D_00703FF5;
 
 R6Obj *opu_init(int a0, void *a1, void *a2, void *a3, int a4, int a5, int a6);
 void *op_heap_init(void *buf, int size);
+int func_00297A10(int h);
+int func_00298AF0(u16 *map);
 void func_00298BB8(void);
 void func_00299D40(R6Obj *o);
+void func_0029A1A8(void);
 void func_0029A1F8(void);
+void opus_free_eff_status(int key);
+void func_002EA328(int);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_002967E8);
 
@@ -47,7 +60,52 @@ void func_002973A8(int a) {
     func_00297210(D_0054D5E8[0], a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_002973B8);
+typedef struct R6Obj10 {
+    u8 pad0[0x10];
+    s16 *p10;
+    s16 *p14;
+    s16 *p18;
+    int w1C;
+    u8 *p20;
+} R6Obj10;
+
+typedef struct OpuEndUnit {
+    u8 pad0[0x14];
+    u16 h14;
+} OpuEndUnit;
+
+void func_002973B8(R6Obj *obj, int a)
+{
+    R6Obj10 *o = (R6Obj10 *)obj;
+    int eff = opus_get_eff_status_index((Chr *)a, 0, 0);
+    s16 *p;
+    int idx;
+
+    if (eff >= 0) {
+        opus_free_eff_status(a);
+        for (p = o->p10; (idx = *p) >= 0; p++) {
+            if (((OpuEndUnit *)(o->p20 + (idx << 8)))->h14 == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+        for (p = o->p14; (idx = *p) >= 0; p++) {
+            if (((OpuEndUnit *)(o->p20 + (idx << 8)))->h14 == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+        for (p = o->p18; (idx = *p) >= 0; p++) {
+            if (((OpuEndUnit *)(o->p20 + (idx << 8)))->h14 == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+    }
+}
 
 void func_00297520(int a) {
     func_002973B8(D_0054D5E8[0], a);
@@ -107,7 +165,55 @@ void func_00297650(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_monster_init);
+void op_et_monster_init(Chr *chr, int key)
+{
+    u16 hE_list[0xF0];
+    int i = opus_get_chr_status_index(chr, 0, 0);
+    ResEntry *e;
+    int j;
+
+    if (i >= 0) {
+        e = &owu_chr_status[i];
+        func_00120108(D_00574AD0, e->key, chr);
+    } else {
+        i = opus_get_chr_status_index(chr, key, 1);
+        if (i >= 0) {
+            for (j = 0; j < 0xF0; j++) {
+                hE_list[j] = owu_chr_status[j].hE;
+            }
+            j = 0;
+            do {
+                if (hE_list[j] == 0xFFFF) {
+                    goto found;
+                }
+                j++;
+            } while (j < 0xF0);
+            return;
+found:
+            e = &owu_chr_status[i];
+            Ch_EffectSetEffectLevel(e->chr, 1);
+            {
+                int d1, d2, d3;
+                int res = func_00297A10(e->w8);
+                /* DEBT(FAKE): occupy $v0..$a0 in local-alloc so res gets $a1 */
+                __asm__("" : "=r"(d1), "=r"(d2), "=r"(d3));
+                __asm__("" : : "r"(d1), "r"(d2), "r"(d3), "r"(d1), "r"(d2), "r"(d3));
+                __asm__("" : "+r"(res) : "r"(d1), "r"(d2), "r"(d3));
+
+                switch (res) {
+                case 1:
+                    func_00120108(D_00574B10, e->key, chr, e->w8);
+                    break;
+                case 0:
+                    func_00120108(D_00574B90, e->key, chr);
+                    break;
+                case -1:
+                    break;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_monster_free);
 
@@ -560,7 +666,37 @@ int func_00298A80(Chr *key)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298AF0);
+int func_00298AF0(u16 *map)
+{
+    int changed = 0;
+    int i;
+    ResEntry *e;
+    int j;
+
+    for (i = 0; i < 0xF0; i++) {
+        map[i] = 0xFFFF;
+    }
+    e = owu_chr_status;
+    for (i = 0; i < 0xF0; i++, e++) {
+        if (e->chr != 0) {
+            j = 0;
+            do {
+                if (e->chr == owu_chr_hd[j]) {
+                    goto found;
+                }
+                j++;
+            } while (j < 0xF0);
+            func_00120108(D_005750E8);
+            func_002EA328(1);
+found:
+            if (e->hE != j) {
+                changed++;
+            }
+            map[e->hE] = j;
+        }
+    }
+    return changed;
+}
 
 void func_00298BB8(void)
 {
@@ -584,9 +720,57 @@ void func_00298BB8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298CA0);
+void func_00298CA0(void)
+{
+    int i;
+    int j;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298D80);
+    for (i = 0; i < 0x20; i++) {
+        owu_chr_hd[i] = (Chr *)MsGetChrHandle(i);
+    }
+    for (i = 0; i < 0x20; i++) {
+        Chr *chr = owu_chr_hd[i];
+
+        if (chr != 0) {
+            j = 0;
+            do {
+                if (chr == owu_chr_hd[j + 0x20]) {
+                    owu_chr_hd[j + 0x20] = 0;
+                    break;
+                }
+                j++;
+            } while (j < 0xD0);
+        }
+    }
+    func_00299D40(D_0054D5E8[0]);
+    func_0029A1F8();
+    func_00298BB8();
+}
+
+void func_00298D80(void)
+{
+    int i;
+    int j;
+
+    for (i = 0; i < 0x20; i++) {
+        Chr *chr = owu_chr_hd[i];
+
+        if (chr != 0) {
+            owu_chr_hd[i] = 0;
+            j = 0;
+            do {
+                if (owu_chr_hd[j + 0x20] == 0) {
+                    owu_chr_hd[j + 0x20] = chr;
+                    break;
+                }
+                j++;
+            } while (j < 0xD0);
+        }
+    }
+    func_00299D40(D_0054D5E8[0]);
+    func_0029A1F8();
+    func_00298BB8();
+}
 
 void func_00298E30(void) {
     func_00298CA0();
@@ -990,15 +1174,6 @@ void func_00299CE8(void) {
     }
 }
 
-typedef struct R6Obj10 {
-    u8 pad0[0x10];
-    s16 *p10;
-    s16 *p14;
-    s16 *p18;
-    int w1C;
-    u8 *p20;
-} R6Obj10;
-
 void func_00299D40(R6Obj *arg)
 {
     R6Obj10 *o = (R6Obj10 *)arg;
@@ -1124,7 +1299,41 @@ void func_0029A1A8(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_0029A1F8);
+typedef struct SlotEntry2 {
+    int key;
+    ScriptSub *sub;
+    u8 b8;
+    u8 b9;
+    u8 padA[2];
+    int wC;
+    u8 list[8];
+    u8 list2[4];
+    u8 b1C;
+    u8 b1D;
+    u8 pad1E[2];
+} SlotEntry2;
+
+void func_0029A1F8(void)
+{
+    u16 map[0xF0];
+    SlotEntry2 *e;
+    int i;
+    int j;
+
+    if (func_00298AF0(map) != 0) {
+        e = (SlotEntry2 *)owu_eff_status;
+        for (i = 0; i < 0x200; e++, i++) {
+            if (e->key != 0xFFFFFFFF) {
+                for (j = 0; j < e->b8; j++) {
+                    e->list[j] = map[e->list[j]];
+                }
+                for (j = 0; j < e->b9; j++) {
+                    e->list2[j] = map[e->list2[j]];
+                }
+            }
+        }
+    }
+}
 
 void func_0029A2E8(void)
 {
@@ -1154,10 +1363,6 @@ void func_0029A3A0(void) {
 }
 
 /* DEBT(NAME): event host record; ffx-rust opu_end_all */
-typedef struct OpuEndUnit {
-    u8 pad0[0x14];
-    u16 h14;
-} OpuEndUnit;
 typedef struct OpuEndHost {
     u8 pad0[0x210];
     u8 b210;

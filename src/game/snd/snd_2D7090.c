@@ -33,7 +33,42 @@ void func_002D70D8(u32 a) {
     func_00252888(0, a & 0x7FFFFFFF, 0x3F, 0x7F);
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7090", func_002D70F8);
+extern char D_00576180[];
+extern char D_00576188[];
+extern char D_00576190[];
+char *func_002F032C(char *dst, const char *src);
+
+void func_002D70F8(u32 a, char *buf)
+{
+    int c1 = (a >> 6) & 0x1F;
+    int c2 = a & 0x1F;
+    u32 id = a >> 12;
+    int lang;
+
+    lang = FFXGetLang();
+    c1 += 0x60;
+    c2 += 0x60;
+    switch (lang) {
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+        __asm__("");
+    case 1:
+        __asm__("" : : "r"(id)); /* DEBT(FAKE): case split + reg weight */
+    case 0:
+        func_002F0008(buf, D_00576180, id);
+        break;
+    default:
+        func_002F0008(buf, D_00576188, id);
+        break;
+    }
+    buf[8] = c1;
+    buf[9] = c2;
+    buf[10] = 0;
+    func_002F032C(buf, D_00576190);
+}
 
 INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7090", func_002D71C0);
 

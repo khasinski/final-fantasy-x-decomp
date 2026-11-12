@@ -200,7 +200,57 @@ u16 func_0011C188(R0Blk *b)
     return sum;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", Sg_MemCheckHeap);
+typedef struct MemBlk {
+    struct MemBlk *end;
+    struct MemBlk *next;
+    u16 sum;
+    u16 hi16;
+    u32 kind : 4;
+    u32 pc : 22;
+    u32 chk : 1;
+    u32 heap_id : 2;
+    u32 top : 3;
+} MemBlk;
+
+typedef struct MemHeap {
+    s8 b00;
+    s8 flag01;
+    u8 pad02[6];
+    u8 *p08;
+    MemBlk *first;
+    MemBlk *last;
+    MemBlk *free_min;
+} MemHeap;
+
+void Sg_MemCheckHeap(struct R0Heap *h, void *b, s32 c)
+{
+    MemHeap *heap = (MemHeap *)h;
+    MemBlk *blk = heap->first;
+
+    if (heap->flag01 != 0 && blk != 0) {
+        do {
+            if (blk->chk) {
+                if (blk->sum != func_0011C188((R0Blk *)blk)) {
+                    func_0011CB08((AllocHdr *)blk, 0);
+                    Ch_FunctionHistoryDump();
+                    _Sg_MemDump(&D_005808C8[blk->heap_id]);
+                    func_0011CB08((AllocHdr *)blk, 0);
+                    yiAssert(0, D_00569BB0, D_00569BC0);
+                }
+            }
+            if (blk->end != 0) {
+                if (func_0011C000(blk->end) != 0) {
+                    func_0011CB08((AllocHdr *)blk, 0);
+                    Ch_FunctionHistoryDump();
+                    _Sg_MemDump(&D_005808C8[blk->heap_id]);
+                    func_0011CB08((AllocHdr *)blk, 0);
+                    yiAssert(0, D_00569BB0, D_00569BD8);
+                }
+            }
+            blk = blk->end;
+        } while (blk != 0);
+    }
+}
 
 void func_0011C328(s32 a, void *b, s32 c)
 {
@@ -259,18 +309,6 @@ void func_0011C7E8(u8 *p, int f)
         *(u16 *)&b->w08 = func_0011C188(b); /* DEBT(CAST): checksum in the low half of w08 */
     }
 }
-
-typedef struct MemBlk {
-    struct MemBlk *end;
-    struct MemBlk *next;
-    u16 sum;
-    u16 hi16;
-    u32 kind : 4;
-    u32 pc : 22;
-    u32 chk : 1;
-    u32 heap_id : 2;
-    u32 top : 3;
-} MemBlk;
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C838);
 

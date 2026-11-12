@@ -263,7 +263,41 @@ void func_00210010(int a, int idx, int v0, int v1)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", TkMenuGetSceneHandle);
+typedef struct {
+    /* 0x00 */ s32 param_hash[16];
+    /* 0x40 */ s32 scene_hash[16];
+} TkSceneBank;
+
+int TkMenuGetSceneHandle(int a, const char *name)
+{
+    TkSceneBank *root;
+    const u8 *c;
+    u8 ch;
+    u32 h;
+    s32 *p;
+    int n;
+
+    a = a < 0 ? 0 : (a < 8 ? a : 7);
+    root = (TkSceneBank *)func_0020EC90(a);
+    if (root == 0) {
+        return 0;
+    }
+    h = 0;
+    c = (const u8 *)name;
+    while ((ch = *c++) != 0) {
+        h ^= ch;
+    }
+    p = (s32 *)root->scene_hash[h & 0xF];
+    if (p != 0) {
+        p = (s32 *)((u8 *)p + (u32)root);
+        for (n = *p++; n != 0; n--, p += 3) {
+            if (func_002F05E8((u8 *)root + *p, name) == 0) {
+                return (u8 *)p - (u8 *)root;
+            }
+        }
+    }
+    return 0;
+}
 
 u32 func_00210158(int a, int idx)
 {
@@ -298,7 +332,41 @@ int TkMenuGetParamOffset(int a, int idx, int i)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", TkMenuGetParamHandle);
+int TkMenuGetParamHandle(int a, const char *name)
+{
+    TkSceneBank *root;
+    const u8 *c;
+    u8 ch;
+    u32 h;
+    u32 *p;
+    int n;
+    u32 w;
+    int step;
+
+    a = a < 0 ? 0 : (a < 8 ? a : 7);
+    root = (TkSceneBank *)func_0020EC90(a);
+    if (root == 0) {
+        return 0;
+    }
+    h = 0;
+    c = (const u8 *)name;
+    while ((ch = *c++) != 0) {
+        h ^= ch;
+    }
+    p = (u32 *)root->param_hash[h & 0xF];
+    if (p != 0) {
+        p = (u32 *)((u8 *)p + (u32)root);
+        for (n = *p++; n != 0; n--) {
+            w = *p;
+            if (func_002F05E8((u8 *)root + (w & 0xFFFFFF), name) == 0) {
+                return (u8 *)p - (u8 *)root;
+            }
+            step = (w >> 24) + 1;
+            p += step;
+        }
+    }
+    return 0;
+}
 
 void TkMenuInitSeq(void)
 {

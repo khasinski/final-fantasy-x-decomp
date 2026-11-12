@@ -190,6 +190,44 @@ void func_00187AB0(R2ResTbl *t) {
     }
 }
 
+typedef struct {
+    u8 pad0[8];
+    u16 h8;
+} YiAnimHdr;
+
+typedef struct {
+    s32 w00;
+    u32 w04;
+    u8 pad08[0x18];
+} YiAnimKey;
+
+typedef struct {
+    u16 h0;
+    u16 h2;
+    u16 h4;
+    u16 h6;
+    u16 h8;
+    u16 hA;
+    u8 padC[8];
+    u32 w14;
+    u32 w18;
+    u8 pad1C[8];
+    void *p24;
+} YiAnimEnt;
+
+typedef struct {
+    u8 pad0[0x9F200];
+    u32 cnt;
+    YiAnimEnt ent[0x40];
+    s32 w9FC04;
+    YiAnimHdr *p9FC08[0x40];
+    YiAnimKey *p9FD08[0x40];
+    u32 n9FE08[0x40];
+    u32 a9FF08[0x40];
+    u32 aA0008[0x40];
+    u32 wA0108;
+} YiAnimSys;
+
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", yiKeyFrame_attachDObj);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00187D40);
@@ -246,7 +284,44 @@ int func_001880A8(void *p, int id, int id2) { /* DEBT(TYPE): funcs.h declares in
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00188138);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", yiKeyFrame_main);
+void yiKeyFrame_main(YiAnimSys *s, YiAnimEnt *e, u32 t)
+{
+    YiAnimKey *k;
+
+    if (Sg_GetPause() != 0) {
+        u32 d = t - e->w18;
+        e->w18 = t;
+        e->w14 += d;
+        return;
+    }
+    if (t < e->w14) {
+        e->w14 = t;
+    }
+    k = s->p9FD08[e->h8];
+    e->w18 = t;
+    k += e->hA;
+    while (t >= (k->w04 << 1) + e->w14) {
+        e->hA++;
+        if (e->hA < s->n9FE08[e->h8]) {
+            e->w14 = (k->w04 << 1) + e->w14;
+            e->w18 = t;
+        } else if (e->h2 != 0) {
+            e->w14 = t;
+            e->w18 = t;
+            e->h0 = 0;
+            s->cnt--;
+            e->h8 = 0;
+            e->hA = 0;
+            e->h6 = 0;
+            e->p24 = 0;
+            return;
+        } else {
+            e->w14 = (k->w04 << 1) + e->w14;
+            e->w18 = t;
+            e->hA = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00188450);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_187260/rodata", jtbl_0056D120);

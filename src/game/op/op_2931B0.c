@@ -8,10 +8,64 @@
 #include "ffx/r6.h"
 #include "ffx/t6.h"
 #include "ffx/g4.h"
+#include "ffx/q7.h"
+
+extern int D_003730F8[];
+
+void func_002B3708(void);
+void func_002CEFF0(void);
+void func_00294038(void);
+void func_00293E08(void);
+void SndStandbySepWave(void);
+int func_00294188(R6W8 *o, int flags);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_init_ffx);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", ops_init_work);
+void ops_init_work(void)
+{
+    s8 primary;
+    u8 *p;
+    int i;
+    char *name;
+
+    if (FFXIsPC() != 0) {
+        primary = D_00764990.primary;
+    } else {
+        primary = 0;
+    }
+    func_002EF0D0(&D_00764990, 0, 0xA0);
+    D_00764990.primary = primary;
+    D_00764990.mode15 = 1;
+    func_002B37C0();
+    func_002EF0D0(&D_00703E20, 0, 0x100);
+    p = &D_00703E20.flags[3];
+    for (i = 3; i >= 0; i--, p--) {
+        *p = 0xFF;
+    }
+    func_0029A1A8();
+    func_0029A3A0();
+    func_00298708();
+    func_002EF0D0(&D_00703FF0, 0, 0x40);
+    D_00703FF0.b[3] = 1;
+    D_00703FF0.b[6] = 1;
+    D_00703FF0.b[4] = 1;
+    func_00299AD8();
+    func_002B3708();
+    func_002CEFF0();
+    func_00294038();
+    func_00293E08();
+    name = (char *)Sg_GetUserName();
+    D_00764990.pad0[0xD] = 0;
+    if (name != 0) {
+        for (i = 0; i < 7; i++) {
+            if (D_003730F8[i] != *name) {
+                return;
+            }
+            name++;
+        }
+        D_00764990.pad0[0xD] = 1;
+    }
+}
 
 void func_00293570(void)
 {
@@ -406,7 +460,65 @@ void op_oef2_sound_cue_trans(int a) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_oef2_sound_cue_loop);
+void op_oef2_sound_cue_loop(void)
+{
+    PtrSlots *q = &D_006EA790;
+    s8 state;
+    int idx;
+    R6W8 *obj;
+
+    if (q->count != 0) {
+        state = *(s8 *)q->pad104;
+        if (state == 2) {
+            if (SndSyncTrans(0) != 0) {
+                return;
+            }
+            *(s8 *)q->pad104 = 3;
+            SndStandbySepWave();
+            return;
+        }
+        if (state == 3) {
+            if (SndSyncWaveTrans(0) != 0) {
+                return;
+            }
+            *(s8 *)q->pad104 = 0;
+            q->head++;
+            if (--q->count != 0) {
+                goto do_next;
+            }
+            goto check_slots;
+        }
+        if (state != 1) {
+        do_next:
+            *(s8 *)q->pad104 = 2;
+            idx = q->head & 0x1F;
+            obj = q->objs[idx];
+            if (obj == 0) {
+                return;
+            }
+            if (func_00294188(obj, q->args[idx]) == 0) {
+                *(s8 *)q->pad104 = 3;
+            }
+            return;
+        }
+        *(s8 *)q->pad104 = 2;
+        return;
+    }
+check_slots:
+    if (q->slot[0] != 0) {
+        if (q->slot[0] != (void *)-1) {
+            ((void (*)(void *, int, int))func_002942B8)(q->slot[0], 0, 0); /* DEBT(CAST): caller passes an unused 3rd arg */
+            q->slot[0] = (void *)-1;
+        }
+        return;
+    }
+    if (q->slot[1] != 0) {
+        if (q->slot[1] != (void *)-1) {
+            ((void (*)(void *, int, int))func_002942B8)(q->slot[1], 1, 0); /* DEBT(CAST): caller passes an unused 3rd arg */
+            q->slot[1] = (void *)-1;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_3d_vol_pan_get);
 

@@ -1,17 +1,36 @@
 /* tu_339 0x2d5b90-0x2d6808: low; ~Snd (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: event flag pairs (cur,pend) (see w10.h). */
 #define SndSeqIopCommandSendMain _hdr_SndSeqIopCommandSendMain
+#define func_002D6030 _hdr_func_002D6030
 #include "common.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
+#undef func_002D6030
 #undef SndSeqIopCommandSendMain
 
 s32 func_002D5B90(void) {
     return D_0078BA20;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D5BA0);
+s32 func_002D5BA0(void)
+{
+    float v = (float)D_0078BA20;
+
+    if (func_002D9868() == 0) {
+        return 0;
+    }
+    if (v < 0.0f) {
+        return 0;
+    }
+    v = v * 2048.0f;
+    v = v - 32.0f;
+    v = v / 48000.0f;
+    v = v * 16.0f / 28.0f;
+    v = v * 2016.0f / 2048.0f;
+    v = v * 4.9699993f;
+    return (s32)v;
+}
 
 char *func_002D5C70(void) {
     if (D_0078BBA4 > 0) {
@@ -150,7 +169,7 @@ u8 func_002D6020(void) {
     return D_0078BB9F;
 }
 
-void func_002D6030(void) {
+void func_002D6030() {
     D_0078BB9C = 0;
 }
 
@@ -257,7 +276,30 @@ void func_002D63D8(int a) {
     func_00253E40(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D63E0);
+extern char D_00576050[];
+extern int D_0078BA54;
+
+s32 func_002D63E0(void)
+{
+    s32 r = func_00253E98(D_00576479);
+    s32 i;
+
+    func_002D6030(0);
+    SndSetSoundMode(0);
+    func_002D5FF8(1);
+    D_0078BA20 = 0;
+    SsSetProjectBase(D_00576050);
+    func_00253E40(0);
+    _m2c_SndSeqIopCommandSendMain_D_0078BBA3 = 0;
+    D_0078BBB0[0] = 0;
+    D_0078BBD0[0] = 0;
+    D_0078BA54 = 0;
+    for (i = 15; i >= 0; i--) {
+        D_0078BA58[i] = 0;
+    }
+    SndSepLock(0);
+    return r;
+}
 
 void func_002D64A0(s32 v) {
     D_0078BA4C = v;

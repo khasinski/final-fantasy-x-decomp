@@ -9,8 +9,6 @@ void func_0015C5A8(int v) {
     D_0030DDF4 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015C5B8);
-
 void func_0015F800(int a, int b, int c, int d);
 void audioInit(int a);
 
@@ -26,10 +24,8 @@ typedef struct {
     s32 w50514;
     s32 w50518;
     u8 pad5051C[0x505C4 - 0x5051C];
-    s8 b505C4;
-    u8 pad505C5[0x50644 - 0x505C5];
-    s8 b50644;
-    u8 pad50645[0x506E4 - 0x50645];
+    char b505C4[0x80];
+    char b50644[0xA0];
     s32 w506E4;
     s32 w506E8;
     s32 w506EC;
@@ -43,6 +39,41 @@ typedef struct {
 
 extern MovieStrWork *_mov_D_0030DDF0 __asm__("D_0030DDF0");
 
+int func_0015C5B8(char *a, char *b, int e, int f)
+{
+    int i;
+
+    if (f == 0) {
+        func_0015F800(e, 0x200, 0x1A0, 0);
+    } else {
+        func_0015F800(e, 0x280, 0x1C0, f);
+    }
+    audioInit(e);
+    _mov_D_0030DDF0->b5075C = 0;
+    for (i = 0; ; i++) {
+        _mov_D_0030DDF0->b505C4[i] = a[i];
+        if (a[i] == 0) {
+            break;
+        }
+    }
+    for (i = 0; ; i++) {
+        _mov_D_0030DDF0->b50644[i] = b[i];
+        if (b[i] == 0) {
+            break;
+        }
+    }
+    _mov_D_0030DDF0->w506E4 = 0;
+    _mov_D_0030DDF0->w506E8 = 0;
+    _mov_D_0030DDF0->w506EC = 0;
+    _mov_D_0030DDF0->w506F0 = 0;
+    _mov_D_0030DDF0->w503C0 = 0;
+    _mov_D_0030DDF0->w503C4 = 0;
+    _mov_D_0030DDF0->w503C8 = 0;
+    _mov_D_0030DDF0->w503CC = 0;
+    _mov_D_0030DDF0->w503D0 = 0;
+    return 0;
+}
+
 int func_0015C718(int a, int b, int c, int d, int e, int f)
 {
     if (f == 0) {
@@ -52,8 +83,8 @@ int func_0015C718(int a, int b, int c, int d, int e, int f)
     }
     audioInit(e);
     _mov_D_0030DDF0->b5075C = 1;
-    _mov_D_0030DDF0->b505C4 = 0;
-    _mov_D_0030DDF0->b50644 = 0;
+    _mov_D_0030DDF0->b505C4[0] = 0;
+    _mov_D_0030DDF0->b50644[0] = 0;
     _mov_D_0030DDF0->w506E4 = a;
     _mov_D_0030DDF0->w506E8 = b;
     _mov_D_0030DDF0->w506EC = c;
@@ -336,7 +367,44 @@ INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015E910);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015ED58);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015F028);
+typedef struct {
+    u8 *blk[4];
+    s32 w10;
+    s32 w14;
+    u8 pad18[0x58];
+    u8 buf70[0x300];
+    u8 buf370[1];
+} MovWork2;
+
+extern MovWork2 *_mov_D_0030DDF4 __asm__("D_0030DDF4");
+void func_00170D4C(void *p);
+void func_00170E14(void *p);
+void func_00170BC4(void *p);
+void func_0015F2C8(int a, int b, int c);
+
+void func_0015F028(int a, int b, int c, int d)
+{
+    if (d == 2) {
+        func_00170D4C(_mov_D_0030DDF4);
+    }
+    if (d == 3) {
+        func_00170E14(_mov_D_0030DDF4->buf70);
+    }
+    if (d & 1) {
+        b %= 16;
+        c %= 16;
+        if (b < 0) {
+            b += 16;
+        }
+        if (c < 0) {
+            c += 16;
+        }
+        _mov_D_0030DDF4->w10 = b;
+        _mov_D_0030DDF4->w14 = c;
+        func_00170BC4(_mov_D_0030DDF4);
+    }
+    func_0015F2C8(_mov_D_0030DDF0->w503CC + a * 0x180, (int)_mov_D_0030DDF4->buf370, 0x180);
+}
 
 void func_0015F140(u8 *dst, u8 *src, int alt)
 {
@@ -524,7 +592,74 @@ void func_001603E0(int a, int b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", chr_texanim_set);
+typedef struct {
+    s8 b00;
+    s8 b01;
+    s8 b02;
+} TexAnimHdr;
+
+typedef struct {
+    u8 pad00[0x20];
+    TexAnimHdr *p20;
+} ChrTexAnimArg;
+
+typedef struct {
+    TexAnimHdr *p00;
+    s32 w04;
+    s32 w08;
+    s8 b0C;
+    s8 b0D;
+    s8 b0E;
+    u8 pad0F[0x21];
+} TexAnimSlot;
+
+extern TexAnimSlot _texanim_D_0078D898[] __asm__("D_0078D898");
+extern s8 D_00591F48;
+extern s8 D_00591F49;
+extern char D_0056B918[];
+extern char D_0056B930[];
+extern char D_0056B938[];
+void func_00161B00(int i, int b, void *a);
+void func_00160D30(int i, int b, void *a);
+
+int chr_texanim_set(ChrTexAnimArg *a, int b)
+{
+    int i;
+    TexAnimSlot *p = _texanim_D_0078D898;
+
+    for (i = 0; i < 0x40; i++, p++) {
+        if (p->p00 == 0) {
+            TexAnimHdr *hdr;
+
+            p->p00 = a->p20;
+            hdr = a->p20;
+            p->b0D = hdr->b02;
+            p->b0C = hdr->b00;
+            switch (hdr->b00) {
+            case 1:
+                D_00591F48 = 1;
+                D_00591F49 = i;
+                break;
+            case 2:
+                switch (p->b0D) {
+                case 0:
+                    func_00161B00(i, b, a);
+                    break;
+                case 1:
+                    func_00160D30(i, b, a);
+                    break;
+                }
+                break;
+            }
+            return i;
+        }
+    }
+    if (i == 0x40) {
+        func_001577A8(D_0056B918, D_0056B848, 0xAFE);
+        return -1;
+    }
+    return -1;
+}
 
 /* DEBT(CAST) */ /* DEBT(FAKE) */
 void func_00160520(s32 *arg0, s32 *arg1) {
@@ -558,8 +693,6 @@ void func_00160520(s32 *arg0, s32 *arg1) {
     *arg1 = 0x40;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", chr_texanim_del);
-
 typedef union {
     struct {
         u8 pad0[0x460F4];
@@ -568,6 +701,38 @@ typedef union {
         s8 b460FC;
     } s;
 } ChrMovieBuf;
+
+void chr_texanim_del(int i)
+{
+    ChrMovieBuf *p;
+
+    if (i < 0) {
+        func_001577A8(D_0056B930, D_0056B848, 0xB0F);
+    }
+    if (i >= 0x40) {
+        func_001577A8(D_0056B938, D_0056B848, 0xB10);
+    }
+    switch (_texanim_D_0078D898[i].b0C) {
+    case 1:
+        p = (ChrMovieBuf *)_texanim_D_0078D898[i].w04;
+        if (p != 0) {
+            p->s.t460F8->leave();
+            func_0011D590(_texanim_D_0078D898[i].w04, 0xA);
+            _texanim_D_0078D898[i].w04 = 0;
+            D_00591F48 = 0;
+            D_00591F49 = -1;
+        }
+        break;
+    case 2:
+        if (_texanim_D_0078D898[i].w04 != 0) {
+            func_0011D590(_texanim_D_0078D898[i].w04, 0xA);
+            _texanim_D_0078D898[i].w04 = 0;
+        }
+        break;
+    }
+    _texanim_D_0078D898[i].w08 = 0;
+    _texanim_D_0078D898[i].p00 = 0;
+}
 
 void func_0011C348(s32 a);
 SaTaskGroup *sa_task_init(int n);

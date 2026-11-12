@@ -30,7 +30,18 @@ void func_00180B70(R2Big4000 *o) {
     o->b408D = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00180BE8);
+void func_00180BE8(void *unused) {
+    int i;
+    int j;
+
+    for (i = 0; i < 0x400; i++) {
+        for (j = 0; j < 4; j++) {
+        }
+        if ((i & 0xF) == 0) {
+            func_002DA578(0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00180C58);
 
@@ -41,7 +52,27 @@ void func_001812C0(void)
 {
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_001812C8);
+typedef struct {
+    u64 nloop : 15;
+    u64 pad : 45;
+    u64 nreg : 4;
+} YiGifTag;
+
+int func_001812C8(void *unused, int *arg1, u32 arg2) {
+    int *p = arg1;
+    int i;
+    int j;
+    YiGifTag *tag;
+
+    while ((u32)(p - arg1) < arg2) {
+        tag = (YiGifTag *)p;
+        p++;
+        for (i = 0; i < (int)tag->nloop; i++) {
+            for (j = 0; j < (int)tag->nreg; j++) {
+            }
+        }
+    }
+}
 
 extern s32 _m2c_func_00181378_D_0030EE00 __asm__("D_0030EE00");
 /* DEBT(CAST) */
@@ -76,7 +107,78 @@ void func_00181378(void *arg0) {
     func_00180BE8(sp);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00181428);
+typedef struct {
+    u8 b00;
+    s8 b01;
+    u16 h02;
+    u32 w04;
+    u32 w08;
+    u32 w0C;
+    u32 w10;
+    u32 w14;
+} YiOmdSub;
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 w0C;
+    u16 h10;
+    u16 h12;
+    u16 h14;
+    u8 b16;
+    u8 b17;
+    u32 w18;
+    u32 w1C;
+} YiOmdHdr;
+
+void func_00181428(YiOmdHdr *o) {
+    u8 *p;
+    YiOmdSub *s;
+
+    p = (u8 *)o + 0x20;
+    o->w00 = 0;
+    o->w1C = 0;
+    o->w04 = p - (u8 *)o;
+    o->w08 = 0x100;
+    o->w0C = 0x100;
+    o->h14 = 0;
+    o->h12 = 0;
+    o->b16 = 0;
+    o->b17 = 0;
+    o->h10 = 0;
+
+    s = (YiOmdSub *)p;
+    p += 0x20;
+    s->b01 = -1;
+    s->h02 = 0;
+    s->w08 = 0;
+    s->w0C = 0;
+    s->w10 = 0;
+    s->w14 = 0;
+    o->h10++;
+
+    s = (YiOmdSub *)p;
+    p += 0x40;
+    s->b01 = 0x22;
+    s->h02 = 0;
+    s->w08 = 0;
+    s->w0C = 0;
+    s->w10 = 0;
+    s->w14 = 0;
+    o->h10++;
+    s->h02++;
+
+    s = (YiOmdSub *)p;
+    p += 0x20;
+    s->w08 = 0;
+    o->h10++;
+    s->b01 = -1;
+    s->h02 = 0;
+    s->w0C = 0;
+    s->w10 = 0;
+    s->w14 = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", yiPacketConvToOMD);
 

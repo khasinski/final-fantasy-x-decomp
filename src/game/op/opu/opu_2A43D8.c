@@ -155,7 +155,33 @@ INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_2A43D8/rodata", jtbl_00575670);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opu_mdc);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", func_002A6758);
+u16 *func_002A6758(ScriptThread *th, u16 *pc)
+{
+    u_long128 buf[64];
+    ScriptSub *sub = th->sub;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0:
+        ((void (*)(Chr *, s16))Ch_DrawSetSituation)(owu_chr_hd[sub->b18], (s16)pc[1]);
+        pc += 2;
+        break;
+    case 0x1000:
+        func_00295CF8((u_long128 *)th, buf);
+        func_00103788((s16)pc[1]);
+        pc += 2;
+        func_00295D28((u_long128 *)th, buf);
+        break;
+    case 0x2000:
+        Ch_EnClip(owu_chr_hd[sub->b18], 1);
+        pc += 1;
+        break;
+    case 0x3000:
+        Ch_EnClip(owu_chr_hd[sub->b18], 0);
+        pc += 1;
+        break;
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", func_002A6878);
 
@@ -199,4 +225,32 @@ void func_002A6E70(Chr *chr)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opus_rt_m_chara);
+void func_002B52C0(void *a, void *b, void *c);
+void func_002B5318(void *a, void *b, void *c);
+void func_002B5348(void *a, void *b, void *c, void *d);
+
+void opus_rt_m_chara(void *dst, int id, float scale, void *a2, void *a3, int live)
+{
+    Vec4 v;
+    Chr *chr = owu_chr_hd[id];
+
+    if (live != 0 && id < 0x20) {
+        MsGetChrScale(id, &v);
+    } else {
+        v.x = Ch_GetScaleX(chr);
+        v.y = Ch_GetScaleY(chr);
+        v.z = Ch_GetScaleZ(chr);
+    }
+    func_002B5978((float *)&v, (float *)&v, func_00110AF0(chr) * scale * 0.001f * 0.00390625f);
+    op_unit_m_scale2(dst, &v);
+    if (a2 != 0) {
+        if (a3 != 0) {
+            func_002B5348(dst, dst, a2, a3);
+            return;
+        }
+        func_002B52C0(dst, dst, a2);
+    }
+    if (a3 != 0) {
+        func_002B5318(dst, dst, a3);
+    }
+}

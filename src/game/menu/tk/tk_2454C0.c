@@ -1,10 +1,35 @@
 /* tu_270 0x2454c0-0x249328: low; ~Tk (config/tu_map.tsv) */
+#define func_002455C0 _hdr_func_002455C0
+#define func_00245978 _hdr_func_00245978
+#define func_002471B8 _hdr_func_002471B8
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
 #include "ffx/q6.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
+#undef func_002455C0
+#undef func_00245978
+#undef func_002471B8
+
+void func_00245978(int x, int y, int w, int h);
+void func_002471B8(Task *o, int mode, int v);
+
+typedef struct TkSprPart {
+    u8 u;
+    u8 v;
+    s8 dx;
+    s8 dy;
+    u16 tw;
+    u16 th;
+    u16 w;
+    u16 h;
+} TkSprPart;
+
+typedef struct TkSpr {
+    u32 count;
+    TkSprPart parts[1];
+} TkSpr;
 
 u32 func_002454C0(void) { return 0x1D57B00; }
 
@@ -37,7 +62,36 @@ void func_00245598(void)
     p->wC = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_002455C0);
+void func_002455C0(void)
+{
+    u8 *p = D_0069BCDC;
+    CmdRec *tag = (CmdRec *)p;
+    GsAdPacket *q = (GsAdPacket *)(p + 0x10);
+    int n;
+
+    q[0].data = 0x1000000000008004UL;
+    q[0].reg = 0xE;
+    q[1].data = 5;
+    q[1].reg = 8;
+    q[2].data = 0x3000D;
+    q[2].reg = 0x47;
+    q[3].data = 0x44;
+    q[3].reg = 0x42;
+    q[4].data = 0;
+    q[4].reg = 0x49;
+    q += 5;
+    n = (u32)((u8 *)q - p + 15) / 16 - 1;
+    {
+        u32 wC = 0x50000000;
+        tag->b3 = 0x10;
+        tag->b2 = 0;
+        tag->w0 = n;
+        tag->w4 = 0;
+        tag->w8 = 0;
+        tag->wC = n | wC;
+        D_0069BCDC = (u8 *)q;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00245658);
 
@@ -54,9 +108,100 @@ void func_002457F8(int id, int x, int y, int w, int h)
     func_002476C8(func_00247F48(id + 8, D_003264A0), x + 0x10, y + h - 0x10, w - 0x20);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00245978);
+void func_00245978(int x, int y, int w, int h)
+{
+    u8 *p;
+    CmdRec *tag;
+    GsAdPacket *q;
+    int dx, dy;
+    int x0, x1, y0, y1;
+    int n;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", TkMenuDrawRect);
+    dx = w + x;
+    dy = h + y;
+    if (x >= 0) {
+        x0 = x < 0x200 ? x : 0x1FF;
+    } else {
+        x0 = 0;
+    }
+    if (dx >= 0) {
+        x1 = dx < 0x200 ? dx : 0x1FF;
+    } else {
+        x1 = 0;
+    }
+    if (y >= 0) {
+        y0 = y < 0x1A0 ? y : 0x19F;
+    } else {
+        y0 = 0;
+    }
+    if (dy >= 0) {
+        if (dy >= 0x1A0) {
+            y1 = 0x19F;
+        } else {
+            y1 = dy;
+        }
+    } else {
+        y1 = 0;
+    }
+    p = D_0069BCDC;
+    tag = (CmdRec *)p;
+    q = (GsAdPacket *)(p + 0x10);
+    q[0].data = 0x2000000000008001UL;
+    q[0].reg = 0xEE;
+    q[1].data = ((u64)x0) | ((u64)x1 << 16) | ((u64)y0 << 32) | ((u64)y1 << 48);
+    q[1].reg = 0x40;
+    q[2].data = 0x3000C;
+    q[2].reg = 0x47;
+    q += 3;
+    n = (u32)((u8 *)q - p + 15) / 16 - 1;
+    {
+        u32 wC = 0x50000000;
+        tag->b3 = 0x10;
+        tag->b2 = 0;
+        tag->w0 = n;
+        tag->w4 = 0;
+        tag->w8 = 0;
+        tag->wC = n | wC;
+        D_0069BCDC = (u8 *)q;
+    }
+}
+
+void TkMenuDrawRect(int x, int y, int w, int h, u32 c0, u32 c1)
+{
+    u8 *p = D_0069BCDC;
+    CmdRec *tag = (CmdRec *)p;
+    GsAdPacket *q = (GsAdPacket *)(p + 0x10);
+    int x0 = (x + 0x700) << 4;
+    int y0 = (y + 0x730) << 4;
+    int x1 = (x + w + 0x700) << 4;
+    int y1 = (y + h + 0x730) << 4;
+    int n;
+
+    q[0].data = 0xA400000000008001UL;
+    q[0].reg = 0xF515151510UL;
+    q[1].data = 0x14C;
+    q[1].reg = c0;
+    q[2].data = x0 | ((u64)y0 << 16);
+    q[2].reg = c1;
+    q[3].data = x1 | ((u64)y0 << 16);
+    q[3].reg = c0;
+    q[4].data = x0 | ((u64)y1 << 16);
+    q[4].reg = c1;
+    q[5].data = x1 | ((u64)y1 << 16);
+    q[5].reg = 0;
+    q += 6;
+    n = (u32)((u8 *)q - p + 15) / 16 - 1;
+    {
+        u32 wC = 0x50000000;
+        tag->b3 = 0x10;
+        tag->b2 = 0;
+        tag->w0 = n;
+        tag->w4 = 0;
+        tag->w8 = 0;
+        tag->wC = n | wC;
+        D_0069BCDC = (u8 *)q;
+    }
+}
 
 void func_00245B68(int a, int b, int c)
 {
@@ -607,7 +752,31 @@ void func_00246CB8(int a, int b, int c)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00246D40);
+int func_00246D40(int x, int y, int w, int h)
+{
+    CmdRec *c = (CmdRec *)D_0069BCDC; /* DEBT(CAST): D_0069BCDC is u8 * elsewhere */
+    u8 *end;
+    int n;
+
+    D_0069BCDC = (u8 *)(c + 1);
+    end = func_001F6F88(c + 1, x, y, x + w - 1, y + h - 1);
+    D_0069BCDC = end;
+    n = (u32)(end - (u8 *)c + 15) / 16 - 1;
+    c->b3 = 0x10;
+    c->b2 = 0;
+    c->w0 = n;
+    c->w4 = 0;
+    c->w8 = 0;
+    c->wC = n | 0x50000000;
+    if (w >= 0x29) {
+        if (h >= 9) {
+            func_00245978(x + 0x14, y + 4, w - 0x28, h - 8);
+            return 1;
+        }
+        return 0;
+    }
+    return 0;
+}
 
 void func_00246E30(int x, int y, int w, int h)
 {
@@ -677,7 +846,31 @@ void func_00246FC8(int a, int b, int c)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00247050);
+int func_00247050(int x, int y, int w, int h)
+{
+    CmdRec *c = (CmdRec *)D_0069BCDC; /* DEBT(CAST): D_0069BCDC is u8 * elsewhere */
+    u8 *end;
+    int n;
+
+    D_0069BCDC = (u8 *)(c + 1);
+    end = (u8 *)func_001F8860(c + 1, x, y, w, h);
+    D_0069BCDC = end;
+    n = (u32)(end - (u8 *)c + 15) / 16 - 1;
+    c->b3 = 0x10;
+    c->b2 = 0;
+    c->w0 = n;
+    c->w4 = 0;
+    c->w8 = 0;
+    c->wC = n | 0x50000000;
+    if (w >= 0x25) {
+        if (h >= 0xB) {
+            func_00245978(x + 0x12, y + 5, w - 0x24, h - 0xA);
+            return 1;
+        }
+        return 0;
+    }
+    return 0;
+}
 
 void func_00247138(int a, int b) {
     u8 *p = D_0069BCDC;
@@ -695,7 +888,47 @@ void func_00247138(int a, int b) {
     tag->wC = 0x50000000 | (n - 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_002471B8);
+void func_002471B8(Task *o, int mode, int v)
+{
+    int y, h, d, t1, t2;
+
+    switch (mode) {
+    case 1:
+        y = o->x1C;
+        h = (y * (v < 0 ? -v : v)) / 4096;
+        if (v >= 0) {
+            t1 = y - h + 3;
+            y = o->x14 + t1;
+        } else {
+            y = o->x14;
+        }
+        h = h - 6;
+        if (h < 0) {
+            h = 0;
+        }
+        break;
+    case 2:
+        h = o->x1C;
+        d = (h * (v < 0 ? -v : v)) / 4096;
+        if (v >= 0) {
+            y = o->x14 + 3;
+        } else {
+            t2 = d + 3;
+            y = o->x14 + t2;
+        }
+        h = h - d - 6;
+        if (h < 0) {
+            h = 0;
+        }
+        break;
+    case 0:
+    default:
+        y = o->x14 + 3;
+        h = o->x1C - 6;
+        break;
+    }
+    func_00245978(0, y, 0x1FF, h);
+}
 
 void func_002472A8(Task *o) {
     int b = o->x14;
@@ -703,7 +936,7 @@ void func_002472A8(Task *o) {
 
     o->x1C = a - 10;
     o->x14 = b + 10;
-    func_002471B8(o);
+    ((void (*)(Task *))func_002471B8)(o); /* DEBT(CAST): passes mode/v through untouched registers */
     o->x14 = b;
     o->x1C = a;
 }
@@ -1104,7 +1337,36 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248ED8);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248F98);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00249108);
+void func_00249108(int x0, int y0, int x1, int y1, int x2, int y2)
+{
+    u8 *p = D_0069BCDC;
+    CmdRec *tag = (CmdRec *)p;
+    GsAdPacket *q = (GsAdPacket *)(p + 0x10);
+    int n;
+
+    q[0].data = 0x8400000000008001UL;
+    q[0].reg = 0xF5151510UL;
+    q[1].data = 0x14B;
+    q[1].reg = 0x80FFFFFFFFUL;
+    q[2].data = (x0 << 4) | ((u64)(y0 << 4) << 16);
+    q[2].reg = 0x80FFFFFFFFUL;
+    q[3].data = (x1 << 4) | ((u64)(y1 << 4) << 16);
+    q[3].reg = 0x80FFFFFFFFUL;
+    q[4].data = (x2 << 4) | ((u64)(y2 << 4) << 16);
+    q[4].reg = 0;
+    q += 5;
+    n = (u32)((u8 *)q - p + 15) / 16 - 1;
+    {
+        u32 wC = 0x50000000;
+        tag->b3 = 0x10;
+        tag->b2 = 0;
+        tag->w0 = n;
+        tag->w4 = 0;
+        tag->w8 = 0;
+        tag->wC = n | wC;
+        D_0069BCDC = (u8 *)q;
+    }
+}
 
 void func_002491D0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 (*arg6)(s32, s32, s32)) {
     s32 temp_3;

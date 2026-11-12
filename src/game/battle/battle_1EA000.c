@@ -965,7 +965,27 @@ s32 func_001ECA38(Actor *actor, int unused, ScriptCtx *script)
     return count;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001ECB50);
+void MsSetMove(int id, int a1, int a2, float f0, int a3, int a4, int a5, float x, float y, float z, float f1);
+
+BtlChr *func_001ECB50(Actor *a, void *b, ScriptCtx *c, float f)
+{
+    BtlChr *chr = 0;
+    float z = AtelPopStackFloat(a, c);
+    float y = AtelPopStackFloat(a, c);
+    float x = AtelPopStackFloat(a, c);
+    int a5 = AtelPopStackInteger(a, c);
+    int a4 = AtelPopStackInteger(a, c);
+    int a3 = AtelPopStackInteger(a, c);
+    float f0 = AtelPopStackFloat(a, c);
+    int a1 = AtelPopStackInteger(a, c);
+    u8 id = *func_00144158(a);
+
+    if (id != 0xFF && a3 > 0) {
+        chr = MsGetChr(id);
+        MsSetMove(id, a1, chr->padD6[0], f0, a3, a4, a5, x, y, z, f);
+    }
+    return chr;
+}
 
 int func_001ECCB0(Actor *a, void *b, ScriptCtx *c) {
     func_001ECB50(a, b, c, 0.0f);

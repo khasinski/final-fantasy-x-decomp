@@ -428,11 +428,107 @@ INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017FA08);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017FC80);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", yiImage_readonlyTIM1);
+typedef struct YiImgRec {
+    u32 flags;
+    char name[0x104];
+    u32 bp;
+    u16 psm;
+    u16 tbw;
+    u32 w110;
+    u32 w114;
+    s32 res;
+    s32 x;
+    s32 y;
+    u8 pad_124[8];
+    u32 cbp;
+    u8 pad_130[4];
+    u16 csa;
+    u8 pad_136[6];
+    u32 w;
+    u32 h;
+    u8 *texData;
+    int clutData;
+    u8 pad_14C[0x24];
+    struct YiImgRec *next;
+    u32 w174;
+} YiImgRec;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_001801A0);
+typedef struct YiImgMgr {
+    u8 pad_00000[0x9E7D0];
+    u32 n9E7D0;
+    YiImgRec *imgs9E7D4;
+} YiImgMgr;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180270);
+extern char D_0056CCE0[];
+extern char D_0056CCF8[];
+void func_0017EB28(Sys597F00 *s, YiImgRec *img);
+
+int yiImage_readonlyTIM1(Sys597F00 *s, YiImgRec *img)
+{
+    u8 buf[0x60];
+
+    if (!func_0017EDC8(s, (YiImage *)img)) { /* DEBT(CAST) */
+        img->flags |= 2;
+        yiAssert(0, D_0056CCE0, D_0056CCF8);
+        return -1;
+    }
+    func_002DA928(buf, (s16)img->bp, (s16)img->tbw, (s16)img->psm, (s16)img->x, (s16)img->y, (s16)img->w, (s16)img->h);
+    func_002F8660(0);
+    func_002DA610(0, 0);
+    func_002DAC50(buf, (int)img->texData);
+    func_0017E788((S2Ctx *)s, (S2Disp *)img, img->clutData); /* DEBT(CAST) */
+    func_002DA610(0, 0);
+    func_0017EB28(s, img);
+    img->flags |= 0x10;
+    return 0;
+}
+
+int func_001801A0(Sys597F00 *s, YiImgRec *img)
+{
+    u8 buf[0x60];
+
+    if (!yiImageRman_foecrentry(s, (YiImage *)img)) { /* DEBT(CAST) */
+        img->flags |= 2;
+        yiAssert(0, D_0056CCE0, D_0056CCF8);
+        return -1;
+    }
+    func_002DA928(buf, (s16)img->bp, (s16)img->tbw, (s16)img->psm, (s16)img->x, (s16)img->y, (s16)img->w, (s16)img->h);
+    func_002F8660(0);
+    func_002DA610(0, 0);
+    func_002DAC50(buf, (int)img->texData);
+    func_0017E788((S2Ctx *)s, (S2Disp *)img, img->clutData); /* DEBT(CAST) */
+    func_0017EB28(s, img);
+    img->flags |= 0x10;
+    return 0;
+}
+
+int func_00180270(Sys597F00 *s, YiImgRec *img)
+{
+    u8 *p;
+    u32 x;
+    u32 y;
+
+    switch (img->psm) {
+    case 0:
+        break;
+    case 0x14:
+        p = img->texData;
+        for (y = 0; y < img->h; y++) {
+            for (x = 0; x < img->w / 2; x++, p++) {
+                *p = (*p << 4) | (*p & 0xF);
+            }
+        }
+        break;
+    case 0x13:
+        p = img->texData;
+        for (y = 0; y < img->h; y++) {
+            for (x = 0; x < img->w / 2; x++, p += 2) {
+                p[1] = p[0];
+            }
+        }
+        break;
+    }
+}
 
 void func_00180370(void)
 {
@@ -444,4 +540,26 @@ void func_00180520(void)
 {
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180528);
+int func_00180528(YiImgMgr *s)
+{
+    u32 i;
+    u32 j;
+    u32 max_val;
+    u32 best_idx;
+
+    for (i = 0; i < s->n9E7D0; i++) {
+        max_val = 0;
+        for (j = 0; j < s->n9E7D0; j++) {
+            if (!(s->imgs9E7D4[j].flags & 0x10)) {
+                if (max_val < s->imgs9E7D4[j].w110) {
+                    max_val = s->imgs9E7D4[j].w110;
+                    best_idx = j;
+                }
+            }
+        }
+        if (max_val == 0) {
+            break;
+        }
+        yiImage_readonlyTIM1((Sys597F00 *)s, &s->imgs9E7D4[best_idx]); /* DEBT(CAST) */
+    }
+}

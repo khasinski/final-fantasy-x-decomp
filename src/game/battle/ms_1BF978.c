@@ -262,7 +262,27 @@ int MsGetSaveWeaponAmount(int *out) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", MsInitSaveWeaponEquipFlag);
+typedef struct SaveData1C01B8 {
+    u8 pad0[0x449C];
+    Unk1BFED8 wep[200];
+    PartySlot slot[18];
+} SaveData1C01B8;
+
+void MsInitSaveWeaponEquipFlag(void) {
+    int i;
+    for (i = 0; i < 200; i++) {
+        ((SaveData1C01B8 *)&D_003194D0)->wep[i].b6 = 0xFF;
+    }
+    for (i = 0; i < 18; i++) {
+        SaveData1C01B8 *s = (SaveData1C01B8 *)&D_003194D0;
+        if (s->slot[i].f2D != 0xFF) {
+            s->wep[s->slot[i].f2D].b6 = i;
+        }
+        if (s->slot[i].f2E != 0xFF) {
+            s->wep[s->slot[i].f2E].b6 = i;
+        }
+    }
+}
 
 u16 *MsGetSaveWeaponList(int chr, int kind, int unequipped, int *out) {
     Unk1BFED8 *p = D_0031D96C;

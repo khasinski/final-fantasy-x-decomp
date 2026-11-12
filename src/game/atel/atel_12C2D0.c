@@ -58,7 +58,30 @@ int func_0012C450(Actor *a, void *op, ScriptCtx *ctx) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_12C2D0", func_0012C488);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12C2D0", func_0012C610);
+int func_0012C610(Actor *a, void *op, ScriptCtx *ctx) {
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ActorSlotB *s = &a->slotB[a->slotIdx];
+    int v1 = AtelPopStackInteger(a, ctx);
+    int v2 = AtelPopStackInteger(a, ctx);
+    int v3 = AtelPopStackInteger(a, ctx);
+    float diff = __builtin_fabsf(func_002D4338(s->f20 - st->f34));
+    float res;
+
+    if (v3 & 2) {
+        diff /= 3.1415927f;
+        if (diff >= 1.0f) {
+            diff = 1.0f;
+        }
+        res = (float)v1 * diff;
+    } else {
+        diff /= 1.5707964f;
+        if (diff >= 1.0f) {
+            diff = 1.0f;
+        }
+        res = (float)v2 * diff;
+    }
+    return (int)res;
+}
 
 float func_0012C748(Actor *a, void *op, ScriptCtx *ctx) {
     return func_0013A378(a, AtelPopStackInteger(a, ctx))->h06;

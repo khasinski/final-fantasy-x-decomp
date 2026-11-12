@@ -8,7 +8,36 @@
 #include "ffx/v6.h"
 #include "ffx/t6.h"
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26B218", func_0026B218);
+typedef struct P26B218Key {
+    int w0;
+    u32 id;
+    int w8;
+    s16 grp;
+} P26B218Key;
+
+void func_0026B218(T6_MtxNode *base, P26B218Key *k, ScriptCtx *ctx)
+{
+    T6_LtGrp *grp;
+    T6_LtPt *pt;
+    R6Vec3 *dst;
+    u16 *idxp;
+    Vec4 v;
+
+    if (k->id != 0xFFFFFFFF && k->grp >= 0) {
+        idxp = SLOT_WORK(u16, base, ctx, 0);
+        grp = &D_006A3924->grp[k->grp];
+        pt = &D_006A3924->res[grp->res].pts[grp->idx[*idxp]];
+        dst = SLOT_WORK(R6Vec3, base, ctx, 1);
+        v.x = pt->x;
+        v.y = pt->y;
+        v.z = pt->z;
+        v.w = 1.0f;
+        func_002DCE08(&v, base->parent->m, &v);
+        dst->x = v.x;
+        dst->y = v.y;
+        dst->z = v.z;
+    }
+}
 
 void func_0026B318(char *base, ScriptCtx *ctx) {
     Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
@@ -16,7 +45,35 @@ void func_0026B318(char *base, ScriptCtx *ctx) {
     w->h2 = w->h0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26B218", func_0026B338);
+void func_0026B338(ScriptWork *base, V6EvRefC *ev, T6_LtPt *pt)
+{
+    T6_MemEnt *e;
+    T6_Mem *m;
+    R6Vec3 *dst;
+    Vec4 v;
+
+    if (ev->idx != 0xFFFFFFFF) {
+        e = &ppvMng->p3C[ev->idx];
+        if (e == 0) {
+            m = 0;
+        } else {
+            m = func_00267320(ppvMng, e);
+            if (m == 0) {
+                return;
+            }
+            m->user = base;
+        }
+        v.x = pt->x;
+        v.y = pt->y;
+        v.z = pt->z;
+        v.w = 1.0f;
+        func_002DCE08(&v, base->m10, &v);
+        dst = (R6Vec3 *)((char *)m + (ev->ofs + 0xA0));
+        dst->x = v.x;
+        dst->y = v.y;
+        dst->z = v.z;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26B218", func_0026B430);
 

@@ -5,7 +5,28 @@
 #include "ffx/u0.h"
 #include "ffx/g0.h"
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11FC58", func_0011FC58);
+typedef struct {
+    u64 dispfb1;
+    u64 pad08;
+    u64 display1;
+    u64 dispfb2;
+} GsDispEnv;
+
+void func_0011FC58(GsDispEnv *env)
+{
+    u64 dispfb2 = env->dispfb2;
+    u64 dispfb1 = env->dispfb1;
+
+    if (D_00580B24 != 0) {
+        dispfb1 |= (D_00580B20 << 8) | 0x21;
+        *(volatile u64 *)0x12000000 = dispfb1;
+        *(volatile u64 *)0x12000070 = env->display1;
+        *(volatile u64 *)0x12000090 = env->display1;
+        *(volatile u64 *)0x120000A0 = dispfb2;
+        dispfb2 -= (D_00580B1C << 12) | D_00580B18;
+        *(volatile u64 *)0x12000080 = dispfb2;
+    }
+}
 
 void func_0011FCE8(void)
 {

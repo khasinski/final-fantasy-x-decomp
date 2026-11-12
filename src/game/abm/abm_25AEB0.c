@@ -1,5 +1,6 @@
 /* tu_283 0x25aeb0-0x260a70: low; unk_25AEB0 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/s6.h"
@@ -228,7 +229,42 @@ void func_002606E0(void)
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_00260758);
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_002607D8);
+void func_002607D8(int a, int b)
+{
+    s64 *p;
+    int *w;
+    int qwc;
+
+    func_002565C8();
+    D_00327914 ^= 1;
+    p = D_006A3900[D_00327914];
+    w = (int *)p;
+    p[0] = 0x6023400000008001;
+    p[1] = 0x55EEEE;
+    p[2] = 0x31000108;
+    p[3] = 0x4E;
+    p[4] = 0x30000;
+    p[5] = 0x47;
+    p[6] = 0x44;
+    p[7] = 0x42;
+    p[8] = (s64)a << 24;
+    p[9] = 1;
+    w[20] = 0x7000;
+    w[21] = 0x7300;
+    w[24] = 0x9000;
+    w[25] = 0x8D00;
+    w[26] = w[22] = b;
+    w[23] = 0;
+    w[27] = 0;
+    qwc = 7;
+    while (GIF_CHCR & 0x100) {
+    }
+    *(volatile u32 *)0x1000E010 = 4;
+    *(volatile u32 *)0x1000A010 = (u32)p | 0x80000000;
+    *(volatile u32 *)0x1000A020 = qwc;
+    GIF_CHCR = 0x100;
+    func_00256608();
+}
 
 void func_00260930(void) {
     float f = lpamng->f11598;

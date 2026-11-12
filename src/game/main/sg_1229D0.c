@@ -224,4 +224,32 @@ INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", func_00123028);
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", func_00123368);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", Sg_IdDrawMain);
+void func_00123368(s32 a0, MapEnt16 *a1, float (*a2)[4], s32 a3, s32 a4);
+
+void Sg_IdDrawMain(void)
+{
+    s32 pkt = Sg_PacketGetPtr();
+    Map22A40 *m = (Map22A40 *)Sg_IdGetPtr();
+    s32 i;
+    Blk64 *b2;
+    Blk64 *b1;
+    float m1[4][4];
+    float m2[4][4];
+
+    if (m != 0 && D_0030890C != 0) {
+        i = 0;
+        b2 = func_00106420();
+        b1 = func_00106430();
+        func_002EF0D0(m2, 0, sizeof(m2));
+        func_002DD128(m2);
+        m2[0][0] = m2[1][1] = m2[2][2] = func_002EC440(func_002EBF18(1.0, func_002ED038(func_00120CF8())));
+        func_002DCE38(m1, b1, b2);
+        func_002DCE38(m1, m1, m2);
+        for (; i < m->count; i++) {
+            func_00123368(m->off18, &m->off1C[i], m1, pkt, dmaGif);
+            func_002F8660(0);
+            func_002DBA28((void *)dmaGif, pkt);
+            func_002DA610(0, 0);
+        }
+    }
+}

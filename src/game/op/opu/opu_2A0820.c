@@ -61,7 +61,40 @@ void *opu_unit(void *arg0, void *arg1) {
     return arg1 + 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_unit_en);
+u16 *opu_unit_en(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    SlotEntry *e = &owu_eff_status[sub->h14];
+    u16 base;
+    int i;
+    u8 id;
+    T6_Blk *b;
+
+    switch ((s16)th->flags & 0xC000) {
+    case 0:
+        base = (((T6_BlkPool *)th->obj300)->serial + 0x10) & 0xFFF0;
+        if (base > 0xFF7F) {
+            base = 0x8000;
+        }
+        for (i = 0; i < e->b8; i++) {
+            opu_unit(th, pc);
+            b = ((T6_ThBlk *)th)->blk;
+            id = e->list[i];
+            b->serial = base + i;
+            b->b18 = id;
+        }
+        ((T6_BlkPool *)th->obj300)->serial = base + 0x10;
+        pc += 2;
+        break;
+    case 0x4000:
+        opu_unit(th, pc);
+        b = ((T6_ThBlk *)th)->blk;
+        b->serial = sub->h1A + pc[2];
+        pc += 3;
+        break;
+    }
+    return pc;
+}
 
 u16 *opu_unit_ex(ScriptThread *th, u16 *pc)
 {

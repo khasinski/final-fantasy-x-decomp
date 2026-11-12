@@ -1,9 +1,12 @@
 /* tu_185 0x1b63b8-0x1b72f0: low; ~Ms (config/tu_map.tsv) */
+#define func_001B69D0 _hdr_func_001B69D0
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
 #include "ffx/s2.h"
 #include "ffx/v2.h"
+#undef func_001B69D0
 
 /* DEBT(TYPE): q4.h declares func_00110540 (Chr *, int, float); this file was compiled against the (Chr *, float, int) order of q2.h */
 #define V2_SETF(chr, f, b) (((void (*)(Chr *, float, int))func_00110540)(chr, f, b))
@@ -168,7 +171,77 @@ int MsGetChrBottomPos(int id, float *pos) {
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B63B8", func_001B69D0);
+typedef struct Gs1B69D0 {
+    u8 pad0[0x20FE];
+    s8 f20FE;
+    u8 pad20FF[0x210D - 0x20FF];
+    s8 f210D;
+} Gs1B69D0;
+extern Gs1B69D0 _gs_1B69D0 __asm__("D_003172F0");
+
+typedef struct Chr1B69D0 {
+    Chr *chr;
+    u8 pad4[0x15 - 0x4];
+    s8 f15;
+    u8 pad16[0x40 - 0x16];
+    float f40;
+    u8 pad44[0xDB - 0x44];
+    u8 fDB;
+    u8 padDC[0xEB - 0xDC];
+    u8 fEB;
+    u8 fEC;
+    u8 fED;
+    u8 fEE;
+    u8 fEF;
+    u8 fF0;
+    u8 fF1;
+    u8 padF2[0x150 - 0xF2];
+    float f150;
+    float f154;
+    u8 pad158[0x1AC - 0x158];
+    float f1AC;
+    u8 pad1B0[0x1C5 - 0x1B0];
+    s8 f1C5;
+    u8 pad1C6[0x3D8 - 0x1C6];
+    u8 f3D8;
+    u8 f3D9;
+    u8 pad3DA[0xA8C - 0x3DA];
+    s8 fA8C;
+    u8 padA8D[0xC14 - 0xA8D];
+    s32 fC14;
+    s32 fC18;
+    u8 padC1C[0xC30 - 0xC1C];
+    float fC30;
+} Chr1B69D0;
+
+int func_001B69D0(int id, float *pos) {
+    id &= 0xFF;
+    if (MsBtlChrNumCheck(id) != 0) {
+        Chr1B69D0 *c = (Chr1B69D0 *)MsGetChr(id);
+        float *p;
+        if (c->chr != 0) {
+            p = (float *)func_00110840(c->chr);
+        } else {
+            p = 0;
+        }
+        if (p != 0) {
+            pos[0] = p[12];
+            pos[1] = p[13];
+            pos[2] = p[14];
+        } else {
+            func_001B66E0((BtlChr *)c, pos);
+            if (_gs_1B69D0.f210D != 0 && c->fA8C == 2) {
+                pos[1] = c->fC30;
+            }
+            if (c->f1C5 != 0 || _gs_1B69D0.f20FE != 0) {
+                pos[1] += MsGetChrHeight(id) * 0.5f;
+            }
+        }
+        pos[3] = 1.0f;
+        return -1;
+    }
+    return 0;
+}
 
 float func_001B6AD0(int id, float a) {
     float b = 0.0f;
@@ -337,9 +410,75 @@ int func_001B6FD8(u8 id, int v) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B63B8", func_001B7028);
+void *MsGetScreenMatrix(void);
+void func_001AC188(void *dst, void *a, void *b);
+float func_001AC458(void *dst, void *mat, void *src, int flag);
+float MsGetDirMode(int id, BtlChr *c, void *pos, int d, void *e, void *f);
+float MsGetChrGround(int id);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B63B8", MsSetChrDirTarget);
+int func_001B7028(int id) {
+    float m[16];
+    float pos[4];
+    int v50[4];
+    int x;
+    int y;
+    int r = 0;
+    Chr1B69D0 *c;
+
+    id &= 0xFF;
+    c = (Chr1B69D0 *)MsGetChr(id);
+    if (c->f3D8 != 0 && c->f3D9 != 0 && c->f15 != 0 && c->f40 != 0.0) {
+        float w;
+        r = 1;
+        func_001B6790(id, pos);
+        pos[1] = MsGetChrGround(id) - c->f1AC;
+        func_001AC188(m, MsGetScreenMatrix(), func_001A9ED0());
+        w = func_001AC458(v50, m, pos, 1);
+        func_001D8128(v50[0], v50[1], &x, &y);
+        if (w <= 0.0f) {
+            x = -0x200;
+        }
+        c->fC14 = x;
+        c->fC18 = y;
+        if (x < 0 || x > 0x200 || y < 0 || y > 0x1A0) {
+            r = 0;
+        }
+    }
+    return r;
+}
+
+int MsSetChrDirTarget(int id, int a, int b, int c, int d, int e) {
+    float zero_pos[4];
+    float dir;
+
+    id &= 0xFF;
+    if (MsBtlChrNumCheck(id) != 0) {
+        Chr1B69D0 *chr = (Chr1B69D0 *)MsGetChr(id);
+        if (chr->fDB == 0) {
+            chr->fEB = a;
+            if (d + e + d <= 0) {
+                e = 1;
+            }
+            chr->fF0 = e;
+            chr->fEC = b;
+            chr->fED = 0;
+            chr->fEE = d + e + d;
+            chr->fEF = d;
+            chr->fF1 = c;
+            func_001B6E48(id, &dir);
+            dir = MsNearRag(0.0f, dir);
+            chr->f150 = dir;
+            if (b == 0) {
+                float target;
+                MMI_SQ_ZERO(0, zero_pos);
+                target = MsGetDirMode(id, (BtlChr *)chr, zero_pos, 0, 0, 0);
+                chr->f154 = MsNearRag(dir, target) - dir;
+            }
+            return -1;
+        }
+    }
+    return 0;
+}
 
 void func_001B72A0(u8 id) {
     if (MsBtlChrNumCheck(id) != 0) {

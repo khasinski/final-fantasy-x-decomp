@@ -68,7 +68,16 @@ void func_002561E0(S6Task *o)
 void func_00256278(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", dumpMatrix);
+extern char D_00573880[];
+
+void dumpMatrix(char *name, float *m)
+{
+    func_002EF240(D_00573880, name,
+                  m[0], m[1], m[2], m[3],
+                  m[4], m[5], m[6], m[7],
+                  m[8], m[9], m[10], m[11],
+                  m[12], m[13], m[14], m[15]);
+}
 
 int *func_002563D0(int *dst, int *src, int n)
 {
@@ -264,7 +273,36 @@ void func_002568C8(int x0, int y0, int x1, int y1, s64 color)
     func_002B2A80(q, 6, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00256970);
+void func_002B2AD8(void *p, int qwc, int a, int b);
+
+void func_00256970(int x0, int y0, int x1, int y1, u64 c0, u64 c1, u64 c2, u64 c3, int z)
+{
+    s64 *q = (s64 *)D_006A3BCC;
+    u32 *w = (u32 *)q;
+
+    D_006A3BCC = (u8 *)(q + 22);
+    q[2] = 0x9026400000008001;
+    q[3] = 0x5E5E5E5EE;
+    q[5] = q[4] = 0x42;
+    q[6] = c0;
+    q[10] = c1;
+    q[14] = c2;
+    q[18] = c3;
+    q[19] = q[15] = q[11] = q[7] = 1;
+    w[16] = w[32] = (x0 << 4) + 0x7000;
+    w[17] = w[25] = (y0 << 4) + 0x7300;
+    w[24] = w[40] = (x1 << 4) + 0x7000;
+    w[33] = w[41] = (y1 << 4) + 0x7300;
+    w[18] = z << 4;
+    w[19] = 1;
+    w[26] = z << 4;
+    w[27] = 0;
+    w[34] = z << 4;
+    w[35] = 0;
+    w[42] = z << 4;
+    w[43] = 0;
+    func_002B2AD8(q, 11, 0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00256A90);
 
@@ -547,7 +585,60 @@ void abmap_snd_chg_panel1(void) {
     SndSepPlaySimple(0x8000006E);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abmap_256098", func_00257A78);
+typedef struct {
+    u16 h00;
+    u16 h02;
+    u16 h04;
+    u16 h06;
+    u16 h08;
+    u8 b0A[16];
+    u8 b1A[16];
+} AbmPad;
+
+u16 TOMenuGetControlPad2(void);
+
+void func_00257A78(int a, AbmPad *p)
+{
+    int i;
+    u16 bit;
+    u8 *p0A;
+    u8 *p1A;
+
+    p->h00 = TOMenuGetControlPad2();
+    if (a == 0) {
+        int raw = func_00220468(0, 0, 3, -1) + 0x80;
+        s8 v = raw;
+        if (v < -0x40) {
+            p->h00 |= 0x1000;
+        } else if (v > 0x40) {
+            p->h00 |= 0x4000;
+        }
+    }
+    p->h02 = p->h00 & ~p->h04;
+    p->h04 = p->h00;
+    p->h08 = 0;
+    p->h06 = 0;
+    for (bit = 1, p0A = p->b0A, p1A = p->b1A, i = 16; i != 0; bit <<= 1, p0A++, i--, p1A++) {
+        if (p->h02 & bit) {
+            p->h06 |= bit;
+            p->h08 |= bit;
+        } else if (p->h00 & bit) {
+            if (++(*p0A) >= 6) {
+                *p0A = 6;
+                p->h06 |= bit;
+                if (*p1A == 0) {
+                    p->h08 |= bit;
+                }
+                if (++(*p1A) >= 3) {
+                    *p1A = 0;
+                }
+            }
+        } else {
+            *p0A = 0;
+            *p1A = 0;
+        }
+    }
+}
 
 WorkEnt2 *func_00257BE8(WorkEnt2 *p, int id, u16 *out)
 {

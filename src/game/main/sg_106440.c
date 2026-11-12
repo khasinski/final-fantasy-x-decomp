@@ -39,7 +39,23 @@ void Sg_InitLight(void)
     func_002DD4E8(&D_0057E970, &D_003035C0, &D_003035D0, &D_003035E0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_106440", Sg_LightSetDir);
+s32 Sg_LightSetDir(int i, void *v)
+{
+    V128 *in = (V128 *)v;
+
+    switch (i) {
+    case 0:
+        D_003035C0 = *in;
+        break;
+    case 1:
+        D_003035D0 = *in;
+        break;
+    case 2:
+        D_003035E0 = *in;
+        break;
+    }
+    func_002DD4E8(&D_0057E970, &D_003035C0, &D_003035D0, &D_003035E0);
+}
 
 void Sg_LightGetDir(int i, V128 *v)
 {
@@ -56,7 +72,27 @@ void Sg_LightGetDir(int i, V128 *v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_106440", Sg_LightSetColor);
+s32 Sg_LightSetColor(int i, void *v)
+{
+    V128 unused[4];
+    V128 *in = (V128 *)v;
+
+    switch (i) {
+    case 0:
+        D_003035F0 = *in;
+        break;
+    case 1:
+        D_00303600 = *in;
+        break;
+    case 2:
+        D_00303610 = *in;
+        break;
+    case 3:
+        D_00303620 = *in;
+        break;
+    }
+    func_002DD5A8(&D_00303650, &D_003035F0, &D_00303600, &D_00303610, &D_00303620);
+}
 
 /* DEBT(CAST): the public vector pointer is copied as two 64-bit words. */
 void Sg_LightGetColor(int i, float *v)

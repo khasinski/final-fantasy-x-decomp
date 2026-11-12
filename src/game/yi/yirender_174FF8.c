@@ -133,7 +133,51 @@ INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setfogparam);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175468);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175C08);
+typedef struct YiRender5C08 {
+    u8 pad_00000[0x67BC0];
+    R2Qw pkt67BC0[6];
+    R2Qw pkt67C20[6];
+    R2Qw pkt67C80[6];
+    R2Qw pkt67CE0[6];
+    u8 pad_67D40[0x60];
+    R2Qw pkt67DA0[6];
+    R2Qw pkt67E00[6];
+    R2Qw pkt67E60[6];
+    R2Qw pkt67EC0[6];
+    u8 pad_67F20[0x30];
+    V2Blk40 m67F50;
+    V2Blk40 m67F90;
+    V2Blk40 m67FD0;
+    V2Blk40 m68010;
+    u8 pad_68050[0x40];
+    V2Blk40 m68090;
+    V2Blk40 m680D0;
+    V2Blk40 m68110;
+    u8 pad_68150[0xC0];
+    float f68210;
+    float f68214;
+    float f68218;
+} YiRender5C08;
+
+void func_001785A8(V2Blk40 *src, R2Qw *p, int addr);
+
+void func_00175C08(YiRender5C08 *s)
+{
+    float m[16];
+
+    func_001785A8(&s->m67F50, s->pkt67BC0, 8);
+    func_001785A8(&s->m67F90, s->pkt67C20, 0xC);
+    func_001785A8(&s->m67FD0, s->pkt67C80, 0xC);
+    func_001785A8(&s->m68010, s->pkt67CE0, 0xC);
+    func_001785A8(&s->m680D0, s->pkt67E00, 0x18);
+    func_001785A8(&s->m68110, s->pkt67E60, 0x1C);
+    func_001785A8(&s->m68090, s->pkt67EC0, 0x20);
+    func_002DD128(m);
+    m[0] = s->f68210;
+    m[5] = s->f68214;
+    m[10] = s->f68218;
+    func_001785A8((V2Blk40 *)m, s->pkt67DA0, 0x10); /* DEBT(CAST) */
+}
 
 void func_00175D50(Sys597F00 *s) {
     func_0017DC70(s->wBCB10);

@@ -271,11 +271,120 @@ void op_md_draw_map_test(int a, int b, int c)
     func_002BCB60(a, &req);
 }
 
+typedef struct OpMdDrawReq {
+    int w0;
+    int w4;
+    s16 h8;
+    u8 padA[2];
+    int wC;
+    u64 q10;
+    int w18;
+    int w1C;
+    void *w20;
+    u8 pad24[8];
+    void *w2C;
+    int w30;
+    int w34;
+} OpMdDrawReq;
+
+typedef struct OpMdcEntry {
+    u8 *md;
+    void *mtx;
+    s32 w8;
+    s32 wC;
+} OpMdcEntry;
+
+typedef struct OpMdcHdr {
+    s32 w0;
+    u16 count;
+    u16 h6;
+    s32 w8;
+    s32 wC;
+    OpMdcEntry entries[1];
+} OpMdcHdr;
+
+extern s32 D_004F4380;
+extern u8 D_004F3FD0[];
+extern u8 D_004F4010[];
+void func_002B56D8(void *a, void *b, void *c);
+int func_002C19A0(int a, void *req);
+int func_002C0068(int a, void *req);
+int func_002BAF68(int a, void *req);
+int func_002B7FB0(int a, void *req);
+int op_md_one8_fog(int a, void *req);
+int op_md_one8(int a, void *req);
+void func_002C9B78(void *md, void *req);
+void func_002CA930(void *md, void *req, void *a2, float f);
+
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op1_md_draw);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op1_mdc_draw);
+int op1_mdc_draw(OpMdcHdr *mdc, OpMdDrawReq *req, void *m2, void *m3, void *m4)
+{
+    u8 m0[0x40];
+    u8 m40[0x40];
+    u8 m80[0x40];
+    u8 pad[0x80]; /* DEBT(PADDING): unused stack space */
+    void *saved_20;
+    void *saved_2C;
+    OpMdcEntry *e;
+    int i;
+    int ret;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7CE8);
+    saved_20 = req->w20;
+    req->w20 = m40;
+    req->w2C = m80;
+    if (m3 == 0) {
+        m3 = D_004F3FD0;
+    }
+    if (m4 == 0) {
+        m4 = D_004F4010;
+    }
+    func_002B56D8(m0, m4, m3);
+    e = mdc->entries;
+    i = mdc->count;
+    ret = req->w34;
+    for (; i > 0; i--, e++) {
+        func_002B56D8(m80, m2, e->mtx);
+        func_002B56D8(m40, m0, m80);
+        func_002C9B78(e->md, req);
+    }
+    req->w20 = saved_20;
+    req->w2C = saved_2C;
+    return ret;
+}
+
+int func_002B7CE8(OpMdcHdr *mdc, OpMdDrawReq *req, void *m2, void *m3, void *m4, void *a5, float f, void *m6)
+{
+    u8 m0[0x40];
+    u8 m40[0x40];
+    u8 m80[0x40];
+    u8 pad[0x80]; /* DEBT(PADDING): unused stack space */
+    void *saved_20;
+    void *saved_2C;
+    OpMdcEntry *e;
+    int i;
+
+    saved_20 = req->w20;
+    req->w20 = m40;
+    req->w2C = m80;
+    if (m3 == 0) {
+        m3 = D_004F3FD0;
+    }
+    if (m4 == 0) {
+        m4 = D_004F4010;
+    }
+    func_002B56D8(m0, m4, m3);
+    e = mdc->entries;
+    for (i = mdc->count; i > 0; i--, e++) {
+        func_002B56D8(m80, m2, e->mtx);
+        func_002B56D8(m40, m0, m80);
+        func_002B56D8(m80, m6, e->mtx);
+        func_002CA930(e->md, req, a5, f);
+    }
+    req->w20 = saved_20;
+    req->w2C = saved_2C;
+    return req->w34;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7E18);
 

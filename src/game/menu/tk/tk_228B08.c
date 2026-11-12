@@ -166,11 +166,75 @@ void func_002297A0(int a, int b)
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229820);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_002299A8);
+void func_002299A8(int x, int y, int a, int b, int c)
+{
+    int alpha;
+    int x2;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229AC8);
+    b = TkMenuGetPlayerFromIndex(b);
+    c = TkMenuGetPlayerFromIndex(c);
+    func_00225800(x, y, D_00693A60, D_00693A64);
+    if (TOMenuGetFirstReadEndFlag() != 0) {
+        func_00225B40(x, y, b);
+    }
+    if (a != 0) {
+        alpha = (0x1000 - (a < 0 ? -a : a)) >> 5;
+        x2 = x + (a * D_00693A60) / 4096;
+        func_00225420();
+        func_002253F8(0x80, 0x80, 0x80, alpha);
+        if (TOMenuGetFirstReadEndFlag() != 0) {
+            func_00225B40(x2, y, c);
+        }
+        func_00225498();
+    }
+    func_00225908();
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229BE8);
+void func_00229AC8(int x, int y, int a, int b, int c)
+{
+    int alpha;
+    int x2;
+
+    b = func_00242798(b);
+    c = func_00242798(c);
+    func_00225800(x, y, D_00693A60, D_00693A64);
+    if (TOMenuGetFirstReadEndFlag() != 0) {
+        func_00225B40(x, y, b);
+    }
+    if (a != 0) {
+        alpha = (0x1000 - (a < 0 ? -a : a)) >> 5;
+        x2 = x + (a * D_00693A60) / 4096;
+        func_00225420();
+        func_002253F8(0x80, 0x80, 0x80, alpha);
+        if (TOMenuGetFirstReadEndFlag() != 0) {
+            func_00225B40(x2, y, c);
+        }
+        func_00225498();
+    }
+    func_00225908();
+}
+
+void func_00229BE8(int x, int y, int a, int b, int c)
+{
+    int alpha;
+    int x2;
+
+    func_00225800(x, y, D_00693A60, D_00693A64);
+    if (TOMenuGetFirstReadEndFlag() != 0) {
+        func_00225B40(x, y, b);
+    }
+    if (a != 0) {
+        alpha = (0x1000 - (a < 0 ? -a : a)) >> 5;
+        x2 = x + (a * D_00693A60) / 4096;
+        func_00225420();
+        func_002253F8(0x80, 0x80, 0x80, alpha);
+        if (TOMenuGetFirstReadEndFlag() != 0) {
+            func_00225B40(x2, y, c);
+        }
+        func_00225498();
+    }
+    func_00225908();
+}
 
 void func_00229CE8(int dx, int dy, U3Box *dst, U3Box *src, int size)
 {

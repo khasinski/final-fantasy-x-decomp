@@ -588,7 +588,54 @@ void func_00139588(void) {
     func_0019CD70(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_001395A8);
+typedef struct Sys3D8_1395A8 {
+    s32 flags;
+    u16 h4;
+    u16 h6;
+} Sys3D8_1395A8;
+
+void func_001395A8(int id, int b) {
+    Rec124828 *r;
+    int add;
+    int v;
+    int i;
+    int bit;
+
+    if (D_0058E3D8->flags & 0x400000) {
+        if (b != 0) {
+            return;
+        }
+        if (AtelIsBind(id) == 0) {
+            return;
+        }
+        r = func_00124828();
+        id = AtelGetBasicWork(id)->w40;
+        if ((u32)id >= 8) {
+            return;
+        }
+        if (((s32)func_00138598() >> id) & 1) {
+            return;
+        }
+        add = 0;
+        if (func_001BF390(id) == 1) {
+            add = ((Sys3D8_1395A8 *)D_0058E3D8)->h4;
+        }
+        if (func_001BF360(id) == 1) {
+            add = ((Sys3D8_1395A8 *)D_0058E3D8)->h6;
+        }
+        v = func_0013A238();
+        bit = v % 32;
+        i = v / 32;
+        if (i < 20) {
+            if (((s32)r->w4C[i] >> bit) & 1) {
+                return;
+            }
+            r->w4C[i] |= 1 << bit;
+            r->w2C[id] += add;
+            D_0058E3D8->pad1E7 = id;
+        }
+    }
+}
 
 void func_00139700(int a, int b, int c) {
     if (a > 0) {
@@ -716,7 +763,39 @@ void func_00139EA0(void) {
     AtelSetCurrentCtrl(v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", AtelGetMapIndex);
+int AtelGetMapIndex(char *p, int i) {
+    int v = *(int *)(p + 4);
+    Sub138 *s;
+
+    if (v == 0) {
+        func_002EF240(D_0056A6A8);
+        return -1;
+    }
+    v = *(s16 *)(p + v + i * 32);
+    s = func_00138D78(p);
+    if (s != 0) {
+        if (s->wC != 0) {
+            int lang = FFXGetLang();
+
+            if (func_00138240() != 0) {
+                lang = 1;
+            }
+            if (lang >= 16) {
+                lang = 0;
+            }
+            if (lang < 0) {
+                lang = 0;
+            }
+            v = ((int *)(p + s->wC))[lang];
+            func_002EF240(D_0056A6C0, v, lang);
+        } else {
+            func_002EF240(D_0056A6E0, v);
+        }
+    } else {
+        func_002EF240(D_0056A6E0, v);
+    }
+    return v;
+}
 
 int func_00139FC8(int n) {
     return (n << 1) | 1;
@@ -845,7 +924,23 @@ int func_0013A398(int id) { /* DEBT(TYPE): id is unused by the original too */
     return MsGetSaveConfigHiragana();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_0013A3B8);
+void func_0013A3B8(Actor *a, int b, int i, int v) {
+    u16 *p = (u16 *)AtelGetRealVarAdrs(a, b);
+
+    if (a->w44 == 0) {
+        u16 *src = func_0014B4F8(a->hdr->type);
+        int j;
+
+        for (j = 0; j < 8; j++) {
+            p[j] = src[j];
+        }
+    }
+    a->w44 = (int)p;
+    if (i >= 8) {
+        i = 7;
+    }
+    p[i] = v;
+}
 
 char *func_0013A468(char *p) {
     return p + 0x3C;

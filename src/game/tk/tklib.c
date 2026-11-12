@@ -716,9 +716,73 @@ void func_00125878(void)
     func_00125558(D_0056A1E8);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tklib", func_001258D0);
+extern s8 D_00576479;
+extern const char D_0056A200[];
+extern const char D_0056A220[];
+extern const char D_0056A238[];
+extern const char D_0056A250[];
+extern const char D_0056A268[];
+extern const char D_0056A280[];
+extern const char D_0056A298[];
+void func_00251EE8(int buf, int size, int addr);
+void func_00251F60(int buf, int size, int addr);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tklib", func_001259B8);
+void func_001258D0(int a)
+{
+    int buf;
+    int size;
+    SysVt *cd;
+    int addr;
+
+    if (D_00576479 == 0) {
+        func_00125558(D_0056A200);
+        if (*(u32 *)&a != 0) { /* DEBT(FAKE): ADDRESSOF suppresses sibling tail call to TkFree */
+            buf = func_001250E8(0x2C, 1);
+            size = TkCdSize(0x2C, 1);
+        } else {
+            buf = 0;
+            size = 0;
+        }
+        func_00125558(D_0056A220);
+        cd = GetCD();
+        cd->f10(0x2C);
+        addr = cd->f04(0);
+        func_00125558(D_0056A238);
+        func_00251EE8(buf, size, addr);
+        func_00125558(D_0056A250);
+        if (buf != 0) {
+            TkFree(buf);
+        }
+    }
+}
+
+void func_001259B8(int a)
+{
+    int buf;
+    int size;
+    SysVt *cd;
+    int addr;
+
+    if (D_00576479 == 0) {
+        func_00125558(D_0056A268);
+        if (*(u32 *)&a != 0) { /* DEBT(FAKE): ADDRESSOF suppresses sibling tail call to TkFree */
+            buf = func_001250E8(0x2D, 1);
+            size = TkCdSize(0x2D, 1);
+        } else {
+            buf = 0;
+            size = 0;
+        }
+        cd = GetCD();
+        cd->f10(0x2D);
+        addr = cd->f04(0);
+        func_00125558(D_0056A280);
+        func_00251F60(buf, size, addr);
+        func_00125558(D_0056A298);
+        if (buf != 0) {
+            TkFree(buf);
+        }
+    }
+}
 
 void WMainProc(void)
 {

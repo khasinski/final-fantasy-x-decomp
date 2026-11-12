@@ -214,7 +214,38 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_001463F0);
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", AtelEventRemoveForBattle);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00146A68);
+typedef struct Tbl146A68Ent {
+    int w0;
+    u16 h4;
+    u16 h6;
+    int w8;
+    int wC;
+} Tbl146A68Ent;
+
+typedef struct Tbl146A68 {
+    u32 count;
+    Tbl146A68Ent ent[1];
+} Tbl146A68;
+
+void func_00146A68(int a)
+{
+    char *p = D_0058E3D8->p48;
+    int off;
+
+    if (p != 0 && (off = *(int *)(p + 0x24)) != 0) {
+        Tbl146A68 *t = (Tbl146A68 *)(p + off);
+        u32 i;
+
+        for (i = 0; i < t->count; i++) {
+            if (t->ent[i].w0 == a || func_0014DC98() != 0) {
+                u16 id = t->ent[i].h4;
+
+                func_00142530(0xFFFF, id, 0, 8, t->ent[i].h6);
+                AtelDecodeSignal(id, -1);
+            }
+        }
+    }
+}
 
 void func_00146B38(void) {
 }

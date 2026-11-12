@@ -67,4 +67,42 @@ void func_0027F178(int a) {
     func_00270C80(a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27ED88", func_0027F180);
+#include "ffx/t6.h"
+
+int func_0027F180(char *base, void *ev, EvFrameCb cb, u16 *work, int a, int b, int c)
+{
+    int out[4];
+    T6_LtGrp *grp;
+    T6_LtPt *pts;
+    u8 rand_mode = b;
+    u8 count = c;
+    int idx;
+
+    pts = ((T6_LtWork *)base)->pts;
+    grp = &D_006A3924->grp[(s16)a];
+    if (pts == 0) {
+        pts = D_006A3924->res[grp->res].pts;
+    }
+    if (rand_mode != 0) {
+        idx = func_00282628() % grp->n;
+    } else {
+        idx = *work;
+    }
+    while (count != 0) {
+        cb(base, ev, &pts[grp->idx[idx]], out);
+        if (out[0] == 0) {
+            return 0;
+        }
+        if (rand_mode != 0) {
+            idx = func_00282628() % grp->n;
+        } else {
+            idx++;
+            if (idx >= grp->n) {
+                idx = 0;
+            }
+        }
+        count--;
+    }
+    *work = idx;
+    return 1;
+}

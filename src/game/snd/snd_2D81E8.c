@@ -59,7 +59,22 @@ void SndSepVolumeFadeOut(int handle, int a)
     SqsSeVolumeFadeOut(func_002D7090(handle), func_002D70A0(handle), a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D81E8", SndMusicCrossStart);
+void SndMusicCrossStart(u32 id, int a)
+{
+    if (id != (u32)SndGetNowPlayMusic()) {
+        if (id >= 0x100) {
+            SndMusicVolumeFadeOut(SndGetNowPlayMusic(), *(u32 *)&a);
+        } else {
+            if (SndGetNowPlayMusic() >= 0) {
+                SndGetNowPlayMusic();
+            }
+            func_002D6260(id);
+            SndSyncMusicStandby(1);
+            func_002D62F8(id);
+            func_002522A0(id, a);
+        }
+    }
+}
 
 void func_002D8478(int a)
 {

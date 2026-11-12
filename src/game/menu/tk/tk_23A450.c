@@ -492,7 +492,26 @@ void func_0023B810(void *a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B838);
+void func_0023B838(int a, int x, int y, int n, int b)
+{
+    U3Box box;
+    Task *t = (Task *)a;
+    SysEntry *e = SYS_TBL;
+
+    if (b == 0) {
+        y -= t->x46 / 128;
+    }
+    if (n >= 0 && n < (u16)t->x30) {
+        e += n;
+        func_00226D88(x, y, 10);
+        func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+        if (e->b3 != 0) {
+            func_00226C78(x + 0xD3, y + 6, func_001BFE30(e->h0), 0);
+            func_00226890(e->h0, x, y, 0);
+        }
+        graphicUiRemapY2_int();
+    }
+}
 
 void func_0023B940(int a, int b, int page, int x, int y)
 {

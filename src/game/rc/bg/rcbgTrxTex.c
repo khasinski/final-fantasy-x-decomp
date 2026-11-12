@@ -53,7 +53,40 @@ R2Qw *func_0019A1F8(W3Img *img, R2Qw *p)
     return p + 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgTrxTex", func_0019A2E0);
+void func_0019A2E0(W3Img *img)
+{
+    R2Qw *p = (R2Qw *)D_00303550;
+    int ch;
+
+    p->tag.qwc = 5;
+    p->tag.id = 0x1000;
+    p->tag.addr = 0;
+    p->tag.pad = 0;
+    p++;
+    p->d.lo = 0x1000000000008004;
+    p->d.hi = 0xE;
+    p++;
+    p->d.lo = img->reg18;
+    p->d.hi = 0x50;
+    p++;
+    p->d.lo = img->reg20;
+    p->d.hi = 0x51;
+    p++;
+    p->d.lo = img->reg28;
+    p->d.hi = 0x52;
+    p++;
+    p->d.lo = 0;
+    p->d.hi = 0x53;
+    p++;
+    p->tag.qwc = img->stride / 16;
+    p->tag.id = 0;
+    p->tag.addr = (u32)func_0019A3F0(img, img->i3C);
+    p->tag.pad = 0;
+    ch = func_002DB6D8(2);
+    func_002F8660(0);
+    func_002DBA28(ch, D_00303550);
+    func_002DBF78(ch, 0, 0);
+}
 
 u8 *func_0019A3F0(W3Img *img, int n)
 {

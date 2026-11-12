@@ -559,7 +559,47 @@ void func_00243880(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_002439A0);
+typedef struct HelpTask {
+    u8 pad0[8];
+    void (*cb)(void);
+    void (*x0C)(void);
+    void (*x10)(void);
+    void (*x14)(void);
+    void (*x18)(void);
+    void (*x1C)(void);
+    u8 pad20[0x16];
+    s8 b36;
+    u8 pad37[7];
+    s8 b3E;
+    u8 pad3F[0xB];
+    s16 x4A;
+    s16 x4C;
+    s16 x4E;
+} HelpTask;
+
+void func_002439A0(void)
+{
+    HelpTask *t = (HelpTask *)func_00243400();
+
+    D_0069BB88 = (Task *)t;
+    t->cb = 0;
+    t->x0C = func_00243800;
+    t->x10 = func_00243880;
+    t->x14 = 0;
+    t->x18 = 0;
+    t->x1C = 0;
+    t->b3E = 6;
+    t->b36 = 1;
+    t->x4A = 0;
+    t->x4C = 9;
+    t->x4E = 0x200;
+    TkMenuHelpMessage = 0;
+    D_0069BB90 = 0;
+    D_0069BB94 = 0;
+    D_0069BB98 = 0;
+    D_0069BB9C = 0;
+    TkMenuMainRegistWindow((Task *)t);
+}
 
 void func_00243A40(void) {
 }
@@ -700,7 +740,38 @@ void func_00243D58(int i, V5Proc *p)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", TkMenuMainActiveMenu);
+typedef struct ActiveProc {
+    void (*fn0)(struct ActiveProc *p);
+    u8 pad4[8];
+    void (*fnC)(struct ActiveProc *p, int b);
+    u8 pad10[8];
+    s8 b18;
+    s8 b19;
+} ActiveProc;
+
+int TkMenuMainActiveMenu(int i, int b)
+{
+    ActiveProc *p;
+
+    i = i < 0 ? 0 : (i > 24 ? 24 : i);
+    if (i == 1 && (D_0069A87C & 0xFFFF0000) == 0x800000) {
+        i = 0x16;
+    }
+    p = (ActiveProc *)D_0069A808[i];
+    if (p != 0) {
+        if (p->b18 == 0) {
+            if (p->fnC != 0) {
+                p->fnC(p, b);
+            }
+            if (p->fn0 != 0) {
+                p->fn0(p);
+            }
+        }
+        p->b18 = 1;
+        p->b19 = 1;
+        D_0069A86C |= 1 << i;
+    }
+}
 
 /* DEBT(CAST): the process table exposes object pointers as integer handles and flags as a byte view. */
 void func_00243EA8(void)

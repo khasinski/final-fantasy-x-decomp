@@ -141,7 +141,30 @@ void func_0019F658(Tim2Img *t, u8 *dst, int x, int y, int w, int h) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", func_0019F6F8);
+typedef struct {
+    u32 c[8];
+} Tim2Clut8;
+
+void func_0019F6F8(Tim2Img *t, int bp) {
+    u8 li[0x60];
+    u8 buf[0x400];
+    Tim2Pic *pic = &t->pic;
+
+    if (pic->clutColors == 0x100) {
+        func_002DA928(li, (short)bp, 1, 0, 0, 0, 0x10, pic->clutColors / 16);
+        func_002F8660(0);
+        func_002DAC50(li, (int)t->clut);
+        func_002DA610(0, 0);
+    } else if (pic->clutColors == 0x10) {
+        func_002EF0D0(buf, 0, 0x400);
+        *(Tim2Clut8 *)&buf[0] = ((Tim2Clut8 *)t->clut)[0];
+        *(Tim2Clut8 *)&buf[0x40] = ((Tim2Clut8 *)t->clut)[1];
+        func_002DA928(li, (short)bp, 1, 0, 0, 0, 0x10, 0x10);
+        func_002F8660(0);
+        func_002DAC50(li, (int)buf);
+        func_002DA610(0, 0);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/dt/rcdtTm2", func_0019F880);
 

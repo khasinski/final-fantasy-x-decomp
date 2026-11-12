@@ -15,7 +15,46 @@ void yiInit(void)
     Yn_BgInit();
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00171F50);
+void func_00171F50(void)
+{
+    int sync[16]; /* DEBT(PADDING): only 4 elements written, frame size 0x70 */
+    int i;
+
+    func_002DA610(0, 0);
+    func_002D41F0(5);
+    func_002D41E8(5);
+    Sg_MapSetPtr(0);
+    Yn_BgEnd();
+    Yn_BgInit();
+    Sg_MapSetPtr(0);
+    func_002D41F0(5);
+    sync[0] = TkGetSyncH(5);
+    func_002D41E8(5);
+    func_002D41F0(5);
+    sync[1] = TkGetSyncH(5);
+    func_002D41E8(5);
+    if (D_00597F00.w9F1E0 != 0) {
+        D_00597F00.w9F1E0 = 0;
+    }
+    if (D_00597F00.w9F1E4 != 0) {
+        func_002697B8();
+        D_00597F00.w9F1E4 = 0;
+    }
+    if (D_00597F00.p9F1E8 != 0) {
+        func_0017DC70(D_00597F00.p9F1E8);
+        D_00597F00.p9F1E8 = 0;
+    }
+    func_002D41F0(5);
+    sync[2] = TkGetSyncH(5);
+    func_002D41E8(5);
+    yiRender_resetobj(&D_00597F00);
+    func_002D41F0(5);
+    sync[3] = TkGetSyncH(5);
+    func_002D41E8(5);
+    func_00174A08(2);
+    for (i = 0; i < 4; i++) {
+    }
+}
 
 void func_001720A0(void) {
     func_002DA610(0, 0);
@@ -79,7 +118,38 @@ int func_001721E8(char *path) {
     return D_00597F00.wBCB10;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiMapSetup);
+extern char D_0056C1B8[];
+extern char D_0056C1C8[];
+void func_0017A800(char *path, char *dir, char *name, char *ext);
+
+void yiMapSetup(char *vpa, char *txa)
+{
+    char path[0x400];
+    char dir[0x400];
+    char name[0x400];
+    char ext[0x400];
+    struct Q3Ent *p;
+
+    yiReset();
+    func_0017A800(txa, dir, name, ext);
+    func_002F0008(path, D_0056C1B8, dir, name);
+    p = func_001720F8(path);
+    if (p != 0) {
+        func_0017B360(&D_00597F00, (int)p); /* DEBT(CAST) */
+        func_0017DC70(p);
+    }
+    func_0017A800(vpa, dir, name, ext);
+    func_002F0008(path, D_0056C1C8, dir, name);
+    p = func_001720F8(path);
+    if (p != 0) {
+        func_0017B360(&D_00597F00, (int)p); /* DEBT(CAST) */
+        D_00597F00.w67F20 |= 0x11;
+        D_00597F00.p9F1EC = p;
+        D_00597F00.w67F24 = 0xFFFFFFFF;
+        yiAnimAttachDefault(&D_00597F00);
+    }
+    func_00174A08(0);
+}
 
 int func_001723D8(struct Q3Ent *p, int n)
 {
@@ -226,7 +296,47 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiObjReadCallback);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiTexReadCallback);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiObjReadNB);
+typedef struct ObjLoadReq {
+    u8 pad0[0xC];
+    int wC;
+    void *buf;
+    int w14;
+    int n;
+    u8 pad1C[4];
+} ObjLoadReq;
+
+void yiObjReadCallback(void);
+
+int yiObjReadNB(int id, int n, int c)
+{
+    u8 unused[0x20]; /* DEBT(PADDING): unused stack space before req */
+    int file = n * 2 + 1;
+    SysVt *vt;
+    int size;
+    void *buf;
+    ObjLoadReq req;
+
+    vt = GetCD();
+    func_002DA610(0, 0);
+    func_00171F50();
+    func_00174A08(0);
+    if (id != D_00658D20 || file != D_00658D24) {
+        vt->f10(id);
+        size = vt->f14(file);
+        if (size == 0) {
+            return -1;
+        }
+        buf = func_0017DBC8(size);
+        D_00597F00.w67F20 |= 0xA0;
+        req.wC = 1;
+        req.w14 = c;
+        req.n = n;
+        req.buf = buf;
+        vt->f10(id);
+        return vt->f0(file, buf, yiObjReadCallback, &req);
+    }
+    /* DEBT(TYPE): no return value when already loaded */
+}
 
 int func_00172DA0(int id, int n)
 {
@@ -437,7 +547,35 @@ void func_00173450(float *m, float *n)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiGetBackColor);
+void yiGetBackColor(int *v)
+{
+    Sys597F00 *s = &D_00597F00;
+    float col[4];
+    int i;
+    int fl = s->w67F20; /* DEBT(FAKE): prevents fold_truthop from merging the two bit checks */
+
+    if ((fl & 1) && (s->w67F20 & 4)) {
+        col[0] = s->b683A8;
+        col[1] = s->b683A9;
+        col[2] = s->b683AA;
+        col[3] = s->b683AB;
+        for (i = 0; i < 4; i++) {
+            col[i] = col[i] * s->f68230[i] + s->f68240[i];
+            if (col[i] < 0.0f) {
+                col[i] = 0.0f;
+            }
+            if (col[i] > 255.0f) {
+                col[i] = 255.0f;
+            }
+            v[i] = col[i];
+        }
+    } else {
+        v[0] = s->b683A8;
+        v[1] = s->b683A9;
+        v[2] = s->b683AA;
+        v[3] = s->b683AB;
+    }
+}
 
 void func_00173650(void *src) {
     Q3Px *p = src;

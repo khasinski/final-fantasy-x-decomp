@@ -48,6 +48,9 @@ int func_0014D180(struct Ent24 *e, struct Rec14CE48 *r);
 typedef struct G0S58FE60 {
     u8 pad0[0xF7140];
     s32 wF7140;
+    u8 padF7144[0x18];
+    s8 bF715C;
+    s8 bF715D;
 } G0S58FE60; /* DEBT(NAME) */
 extern int D_0058FE58;
 extern int D_0058FE5C;

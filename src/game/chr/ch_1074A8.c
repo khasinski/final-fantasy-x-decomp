@@ -1,5 +1,6 @@
 /* tu_008 0x1074a8-0x10ad70: low; ~Ch (config/tu_map.tsv) */
 #define Ch_ElemCalcQuaternion _hdr_Ch_ElemCalcQuaternion
+#define tex_anim_no_set _hdr_tex_anim_no_set
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -7,6 +8,7 @@
 #include "ffx/g0.h"
 #include "ffx/v0.h"
 #undef Ch_ElemCalcQuaternion
+#undef tex_anim_no_set
 
 s32 func_001074A8(s32 i)
 {
@@ -133,7 +135,39 @@ void Ch_CalcNormalAutoInit(void)
     D_0057E9E0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107D80);
+s32 Sg_GetFuka(s32 a);
+
+void func_00107D80(void)
+{
+    s32 n = 500 - Sg_GetFuka(0);
+    Chr *p;
+
+    if (n < 39) {
+        return;
+    }
+    n /= 40;
+    if (D_0057E9E0 == 0) {
+        D_0057E9E0 = (s32)D_00300664;
+    }
+    p = (Chr *)D_0057E9E0;
+    while (n != 0) {
+        p++;
+        if (p >= D_00300664 + D_00300668) {
+            p = D_00300664;
+        }
+        if (p == (Chr *)D_0057E9E0) {
+            break;
+        }
+        if (p->active && (p->flags & 6) && ((s32)((u64)p->flags >> 38) & 1)) {
+            Ch_ReserveCalcNorm2(p);
+            n--;
+            D_0057E9E0 = (s32)p;
+        }
+    }
+    if (n != 0) {
+        D_0057E9E0 = 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107EC8);
 
@@ -267,7 +301,44 @@ void Ch_IdEnableShade(Chr *chr, s32 v)
     FLAGS_SET(chr, 18, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_IdShadeCalc);
+typedef struct {
+    u8 pad00[0x40];
+    float pos40[4];
+    u8 pad50[0x40];
+    float pos90[4];
+    float posA0[4];
+    float posB0[4];
+} ChrShadeView;
+
+s32 Ch_IdGetShade0(Chr *chr);
+s32 Ch_IdGetShade1(Chr *chr);
+s32 Ch_IdGetShade2(Chr *chr);
+void func_00110478(Chr *chr, float v, s32 frames);
+
+void Ch_IdShadeCalc(Chr *chr)
+{
+    ChrShadeView *sv = (ChrShadeView *)chr;
+    float v[4];
+
+    if (Sg_IdExistShade() == 0) {
+        return;
+    }
+    if (!FLAGS_BIT(chr, 18)) {
+        return;
+    }
+    v[0] = func_00108DD8(sv->pos40, sv->pos90);
+    v[1] = func_00108DD8(sv->pos40, sv->posA0);
+    v[2] = func_00108DD8(sv->pos40, sv->posB0);
+    func_002DCEC8(v, v);
+    v[0] = 1.0f - v[0];
+    v[1] = 1.0f - v[1];
+    v[2] = 1.0f - v[2];
+    func_002DCEC8(v, v);
+    v[0] *= Ch_IdGetShade0(chr) / 31.0f;
+    v[1] *= Ch_IdGetShade1(chr) / 31.0f;
+    v[2] *= Ch_IdGetShade2(chr) / 31.0f;
+    func_00110478(chr, func_00108E50(v), 3);
+}
 
 void func_00109030(Chr *chr, s32 a, s32 b)
 {
@@ -285,7 +356,76 @@ s8 Ch_GetDumpMotEv(void)
     return D_00303634;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_MotEvent);
+typedef struct {
+    s8 b00;
+    s8 b01;
+    s16 h02;
+    s16 h04;
+    s16 h06;
+} MotEv;
+
+typedef struct {
+    u8 pad000[0x198];
+    s32 w198;
+    u8 pad19C[0x56C];
+    s32 w708;
+    s32 w70C;
+    u8 pad710[0x40];
+    s32 w750;
+    u8 pad754[0xA8];
+    s16 h7FC;
+    s16 h7FE;
+    MotEv *p800;
+    void (*p804)(s32, s32);
+    s32 w808;
+} ChrMotEvView;
+
+s32 func_001E1020(s32 id, s32 a, s32 b);
+void func_00106E58(Chr *chr, s32 a);
+void tex_anim_no_set(s32 a, s32 b, s32 c);
+
+void Ch_MotEvent(Chr *chr)
+{
+    ChrMotEvView *mv = (ChrMotEvView *)chr;
+    MotEv *ev;
+    s32 cur;
+    s32 prev;
+    s32 i;
+
+    if (mv->p800 == 0) {
+        return;
+    }
+    cur = mv->w750 >> 8;
+    prev = mv->h7FE;
+    if (prev < cur) {
+        for (i = 0, ev = mv->p800; i < mv->h7FC; i++) {
+            s32 step;
+            if (prev < ev->h04 && cur >= ev->h02) {
+                switch (ev->b00) {
+                case 5:
+                    func_001E1020(mv->w198, ev->h06, 0);
+                    break;
+                case 1:
+                    func_00106E58(chr, ev->h06);
+                    break;
+                case 3:
+                    if (mv->w708 != 0) {
+                        tex_anim_no_set(mv->w70C, (u16)ev->h06 >> 8, (u16)ev->h06 & 0xFF);
+                    }
+                    break;
+                case 2:
+                    if (mv->p804 != 0) {
+                        mv->p804(mv->w808, ev->h06);
+                    }
+                    break;
+                }
+            }
+            step = ev->b01 * 4 + 8;
+            ev = (MotEv *)((u8 *)ev + step);
+        }
+    }
+    mv->h7FE = cur;
+}
 
 void func_001091C8(void)
 {
