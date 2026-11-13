@@ -108,7 +108,6 @@ void func_01B006B0(W3Task *t)
     float a, b, lc, lt, hc, ht, x;
     float k;
     int ki;
-    register u32 fl __asm__("$3"); /* DEBT(FAKE): original register assignment */
 
     a = (float)func_002EFD78() * 4.656612873077393e-10f;
     b = (float)func_002EFD78() * 4.656612873077393e-10f;
@@ -133,8 +132,8 @@ void func_01B006B0(W3Task *t)
     k = 0.06666667f;
     MIPS_MFC1(ki, k);
     VEC3_SCALE(d, d, ki);
-    fl = o->flagsBC | 0x2000;
-    o->flagsBC = fl;
+    ki = o->flagsBC | 0x2000;
+    o->flagsBC = ki;
     o->pos[0] = va[0];
     o->pos[1] = va[1];
     o->pos[2] = va[2];
