@@ -78,23 +78,28 @@ int func_00267FA0(void *o, int a);
 void func_01B00738(float *out, float len, int angle)
 {
     float m[16];
-    float z = 0.0f;
+    float z;
+    float one;
 
     func_0026BE48(m, -angle);
+    one = 1.0f;
+    z = 0.0f;
     out[0] = len;
-    out[3] = 1.0f;
     out[2] = z;
     out[1] = z;
+    out[3] = one;
     func_002DCE08(out, m, out);
 }
 
 void func_01B007A0(int cur, int start, int fin, int fout, u8 r, u8 g, u8 b, int prio)
 {
     int t = cur - start;
-    int total;
-    int alpha;
+    register int total __asm__("$8");
+    u8 alpha;
+    register int pr __asm__("$24") = prio;
+    register int rr __asm__("$11") = r;
     unsigned long long col;
-    unsigned long long *p;
+    register unsigned long long *p __asm__("$15");
 
     if (t > 0) {
         total = fin + fout;
@@ -107,10 +112,10 @@ void func_01B007A0(int cur, int start, int fin, int fout, u8 r, u8 g, u8 b, int 
                 t = total - t;
                 alpha = (t << 7) / fout;
             }
-            col = (r | ((unsigned long long)(u8)alpha << 24)) | (((unsigned long long)b << 16) | ((unsigned long long)g << 8));
+            col = (((unsigned long long)alpha << 24) | (((unsigned long long)b << 16) | ((unsigned long long)g << 8))) | (unsigned long long)rr;
             ((unsigned long long *)p)[2] = 0x4023400000008001ULL;
             ((unsigned long long *)p)[3] = 21998;
-            ((unsigned long long *)p)[4] = prio;
+            ((unsigned long long *)p)[4] = pr;
             ((unsigned long long *)p)[5] = 66;
             ((unsigned long long *)p)[6] = col;
             ((unsigned long long *)p)[7] = 1;
@@ -247,11 +252,11 @@ int func_01B00CE0(void)
     }
     if (D_01B00728 == 0) {
         if (func_001CDAF8(D_01B01280) > 0) {
-            goto inc;
+            D_01B00728 += 1;
+        } else {
+            __asm__ volatile("");
+            return 0;
         }
-        return 0;
-    inc:
-        D_01B00728++;
     }
     if (func_00116068() == 0) {
         D_006A3BC4 = 1;
@@ -280,7 +285,8 @@ int func_01B00CE0(void)
                 func_01B00A18(&D_01B01290, 0, 0.0f, 0.0f, 0.0f, 0.0f,
                     (float)(-e->a16 - 0x4000), 0.0f, 0.15f, 0.15f, 0.15f);
                 func_00107428(D_01D013F0[0].hnd, 38, 0, D_01B01290.position);
-                func_01B00738(v, 10.0f, D_01D013F0[0].a16);
+                { register int ang __asm__("$5") = D_01D013F0[0].a16;
+                func_01B00738(v, 10.0f, ang); }
                 D_01B01290.position[0] += v[0];
                 D_01B01290.position[1] -= 20.0f;
                 D_01B01290.position[2] += v[2];
@@ -346,11 +352,9 @@ int func_01B010B0(void)
     func_01B00B28(&D_01B01310);
     if (D_01D013F0[0].state == 178 && D_01D013F0[0].cnt == D_01D013F0[0].dur) {
         e = D_01D013F0;
-        i = 2;
-        do {
+        for (i = 2; i >= 0; i--, e++) {
             func_001CE2F0(e->chr, 0);
-            e++;
-        } while (--i >= 0);
+        }
         func_001CDDD8(D_01B01280);
     }
     D_01D013C0++;
