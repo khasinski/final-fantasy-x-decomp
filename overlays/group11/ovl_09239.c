@@ -251,8 +251,8 @@ void func_01B00D00(W3Task *t)
 
     o->pos[0] = v[0];
     o->pos[1] = v[1];
-    o->pos_w = 0;
     o->pos[2] = v[2];
+    *(float *)&o->pos_w = 0;
     o->scale[0] = 0.2f;
     o->scale[3] = 0;
     o->scale[1] = 0.2f;
