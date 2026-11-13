@@ -122,7 +122,42 @@ void TOBtlSetCallback(R4Task *o)
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_002105D0);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_210340/rodata", jtbl_00570B30);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00210898);
+extern char D_00570B90[];
+extern char D_00570B98[];
+extern char D_00570BA8[];
+extern char D_00570BB8[];
+extern char D_00570BC8[];
+extern char D_00570BD8[];
+extern char D_00570BE8[];
+extern char D_00570BF8[];
+
+int func_00210898(R4Task *o)
+{
+    func_0020DC20(2);
+    switch (MsCheckLeftWindow(o->h8)) {
+    case 0:
+        TOSeqStartScene(2, D_00570B90);
+        TOSeqStartScene(2, D_00570B98);
+        break;
+    case 1:
+        TOSeqStartScene(2, D_00570BA8);
+        TOSeqStartScene(2, D_00570BB8);
+        break;
+    case 2:
+        TOSeqStartScene(2, D_00570BC8);
+        TOSeqStartScene(2, D_00570BD8);
+        break;
+    case 3:
+        TOSeqStartScene(2, D_00570BE8);
+        TOSeqStartScene(2, D_00570BF8);
+        break;
+    default:
+        TOSeqStartScene(2, D_00570B90);
+        TOSeqStartScene(2, D_00570B98);
+        break;
+    }
+    return 1;
+}
 
 int func_002109C0(void *o)
 {

@@ -346,7 +346,49 @@ void func_002D3330(W10Pad *a, u8 b, u8 c) {
     a->res[1] = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D3348);
+void func_002D3348(s32 a0, s32 a1, W10Pad *a2, u8 *a3)
+{
+    u16 s0 = ~((a3[2] << 8) | a3[3]);
+    s32 type;
+    s32 len;
+    s32 i;
+    u16 old;
+
+    if ((s0 & 0xA000) == 0xA000) {
+        s0 &= 0x5FFF;
+    }
+    if ((s0 & 0x5000) == 0x5000) {
+        s0 &= 0xAFFF;
+    }
+    len = a3[1];
+    type = (u32)len >> 4;
+    len &= 0xF;
+    len <<= 1;
+    switch (type) {
+    case 6:
+        s0 = 0;
+        for (i = 3; i < len; i++) {
+            a3[i] = 0x80;
+        }
+        a3[1] = 0x42;
+        break;
+    case 2:
+        a3[1] = 0x22;
+        break;
+    }
+    if (func_00124468() != 0 && a0 == 0 && a1 == 0) {
+        old = s0;
+        s0 &= 0xFF9F;
+        if (old & 0x40) {
+            s0 |= 0x20;
+        }
+        if (old & 0x20) {
+            s0 |= 0x40;
+        }
+    }
+    *(u16 *)((u8 *)a2 + 0x98) = s0;
+    *(u16 *)((u8 *)a2 + 0x9A) = s0;
+}
 
 void _m2c_func_002D3468_func_002D2C98(void *, s32, u16) __asm__("func_002D2C98");
 void _m2c_func_002D3468_func_002D3348(s32, s32, void *, s32) __asm__("func_002D3348");

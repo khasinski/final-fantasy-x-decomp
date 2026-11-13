@@ -200,7 +200,23 @@ void NkzSetLuluLimitTbl(int kind)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_265F78", func_002664D8);
+typedef struct {
+    float v[5];
+} FloatTab5;
+
+extern FloatTab5 D_00573D10;
+
+int func_002664D8(int a0, int a1, int a2)
+{
+    FloatTab5 t1 = D_00573D10;
+    int x = a0 + 50;
+    FloatTab5 t2 = D_00573D10;
+
+    if (a2 == 4) {
+        return 100000;
+    }
+    return (int)((float)x * t1.v[a1] * t2.v[a2]);
+}
 
 int abmap_special_sphere_select_check(int a, int b, S6Ent *o, int ch)
 {

@@ -726,8 +726,61 @@ int func_001CFEC0(int id) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CE8E0", MsDeathEffectStart);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1CE8E0/rodata", jtbl_0056E9F0);
+int MsDeathEffectStart(int id, int kind) {
+    if (id != 0xFF) {
+        int eff = 0;
+        int type = 4;
+        BtlChr *c = MsGetChr(id);
+        int se;
+
+        if (c->f3C1 == 3) {
+            kind = 1;
+        }
+        se = 0;
+        switch (kind) {
+        case 0:
+        case 1:
+        case 6:
+            break;
+        case 2:
+            eff = 0x29;
+            se = 0x4C;
+            break;
+        case 3:
+            eff = 0x2A;
+            se = 0x1C;
+            break;
+        case 4:
+            eff = 0x2B;
+            se = 0x1B;
+            break;
+        case 5:
+            eff = 0x2C;
+            se = 0x49;
+            break;
+        case 8:
+            eff = 0x2C;
+            break;
+        case 7:
+            c->fAD7 = 0;
+            eff = 0x39;
+            se = 0x58;
+            type = 15;
+            break;
+        }
+        if (se != 0) {
+            MsRegSEplay(id, se);
+        }
+        if (eff != 0) {
+            u32 eff_id = MsGetEffID(c->fADE, type, id);
+            c->fB7 = 1;
+            c->fADE++;
+            op_et_eff(D_003172F0.f8C, 0, eff, eff_id);
+            return 1;
+        }
+    }
+    return 0;
+}
 
 void func_001D0098(int a) {
     MsRegSEfade(0, 0x1C, a);

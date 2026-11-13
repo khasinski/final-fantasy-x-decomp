@@ -86,7 +86,33 @@ u16 func_0011FD70(u16 c)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11FC58", func_0011FE00);
+void func_0011FE00(s32 a0, s32 a1)
+{
+    u8 *d = (u8 *)a1;
+    u8 *s = (u8 *)a0;
+
+    while (*s != 0) {
+        u8 b = *s;
+        u8 f = D_00307FF9[b];
+
+        if (!(f & 3)) {
+            if (!(f & 4) || !(D_00307FF9[s[1]] & 8)) {
+                *d = b;
+                s++;
+            } else {
+                u16 c = s[1] | (b << 8);
+                s += 2;
+                c = func_0011FD70(c) + 0x8080;
+                *d++ = c >> 8;
+                *d = c;
+            }
+        } else {
+            *d = 0x20;
+        }
+        d++;
+    }
+    *d = 0;
+}
 
 void func_0011FEC8(s32 a, s32 b)
 {

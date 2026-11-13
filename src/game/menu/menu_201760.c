@@ -148,4 +148,15 @@ INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_00201F50);
 
 /* Text window measuring helpers (TextWin). Module guess: meswin.c-like. */
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_002020A0);
+void func_002020A0(int i)
+{
+    if (D_006672D8[i].h0 != 0) {
+        if (D_006672D8[i].hA < D_006672D8[i].hC) {
+            D_006672D8[i].hA++;
+        }
+        D_006672D8[i].h8 = D_006672D8[i].h6 * func_00201C18(D_006672D8[i].hA, D_006672D8[i].hC);
+        TOMkpShapeXY(0xE2, D_006672D8[i].h2 - 5, D_006672D8[i].h4);
+        func_001FE298(0xE3, D_006672D8[i].h2 + 11, D_006672D8[i].h4, D_006672D8[i].h8 - 11, 0, 0x80808080, 0x80808080);
+        TOMkpShapeXY(0xE4, D_006672D8[i].h2 + D_006672D8[i].h8, D_006672D8[i].h4);
+    }
+}

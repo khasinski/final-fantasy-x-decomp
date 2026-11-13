@@ -41,7 +41,27 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016A268);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C040);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C060);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016AA88);
+extern s32 D_0030E094;
+void func_002DA928(void *, s16, s16, s16, s16, s16, s16, s16);
+void func_002DAC50(void *, void *);
+
+void func_0016AA88(s32 *a0, s32 *a1, s32 *a2)
+{
+    u8 sp[0x60];
+    int v = D_0030E094;
+
+    *a1 = a0[0];
+    *a2 = a0[1];
+    func_002DA928(sp, v, 1, 0, 0, 0, 0x10, 0x10);
+    v += 4;
+    func_002F8660(0);
+    func_002DAC50(sp, a0 + 4);
+    func_002DA610(0, 0);
+    func_002DA928(sp, v, a0[0] / 64, 0x13, 0, 0, a0[0], a0[1]);
+    func_002F8660(0);
+    func_002DAC50(sp, a0 + 0x104);
+    func_002DA610(0, 0);
+}
 
 typedef struct {
     u8 pad0[0x20];

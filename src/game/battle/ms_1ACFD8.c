@@ -2,6 +2,7 @@
 #define MsBattleFree _hdr_MsBattleFree
 #define MsBtlListEncount _hdr_MsBtlListEncount
 #define MsFldGetScene _hdr_MsFldGetScene
+#define MsSetCountryName _hdr_MsSetCountryName
 #define func_002D9868 _hdr_func_002D9868
 #define func_002D9880 _hdr_func_002D9880
 #define func_002D97C8 _hdr_func_002D97C8
@@ -15,6 +16,7 @@
 #undef MsBattleFree
 #undef MsBtlListEncount
 #undef MsFldGetScene
+#undef MsSetCountryName
 #undef func_002D9868
 #undef func_002D9880
 #undef func_002D97C8
@@ -38,8 +40,54 @@ void MsBattleMemInit(void) {
     MsEtEffectReadInit();
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsSetCountryName);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1ACFD8/rodata", jtbl_0056E000);
+int MsSetCountryName(char *s) {
+    int r = 0;
+    switch (FFXGetLang()) {
+    case 0:
+        r = 0;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFC8);
+        }
+        break;
+    case 1:
+        r = 0;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFD0);
+        }
+        break;
+    case 2:
+        r = 1;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFD8);
+        }
+        break;
+    case 3:
+        r = 1;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFE0);
+        }
+        break;
+    case 4:
+        r = 1;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFE8);
+        }
+        break;
+    case 5:
+        r = 1;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFF0);
+        }
+        break;
+    case 6:
+        r = 1;
+        if (s != 0) {
+            func_002F0008(s, D_0056DFF8);
+        }
+        break;
+    }
+    return r;
+}
 
 void MsDebugInfoRead(void) {
     int status;

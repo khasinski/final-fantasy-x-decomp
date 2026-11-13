@@ -33,7 +33,42 @@ void func_002AF1D0(AnimCtx *o, int b)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", opp_dbg_draw_spl);
+extern HwRegs2008250 D_2008250;
+extern char D_00575AA8[];
+void func_002B41B0(char *);
+AnimTgt *opus_no_get(int, AnimTgt *, s16);
+void op_spline_draw_path3(int, int, s16, AnimCtx *, int);
+
+void opp_dbg_draw_spl(AnimCtx *o, int b)
+{
+    AnimTgt *t = o->p220;
+    s16 idx = t->pA8[1];
+    AnimTgt *tgt;
+    s8 *spl;
+    void *loc;
+
+    if (idx == 0) {
+        tgt = t;
+    } else {
+        tgt = opus_no_get(b, t, idx);
+    }
+    spl = *(s8 **)((u8 *)tgt + 0xBC);
+    if (spl == 0) {
+        if (D_2008250.b2 != 0) {
+            func_002B41B0(D_00575AA8);
+        }
+        return;
+    }
+    loc = (void *)opus_local_get((void *)o, (void *)t);
+    if (spl[7] != 0) {
+        op_unit_m_scale(o, 0.0625f);
+        func_002DCE38(o, loc, o);
+        func_002DCE38(o, (u8 *)o + 0x2C0, o);
+    } else {
+        func_002DCE38(o, (u8 *)o + 0x2C0, loc);
+    }
+    op_spline_draw_path3(*(int *)(spl + 8), *(int *)(spl + 0xC), *(s16 *)spl, o, *(int *)(b + 0x28));
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002AF368);
 

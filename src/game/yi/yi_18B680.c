@@ -18,7 +18,37 @@ void func_0018B7A0(void *p, s32 a, s32 b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B810);
+typedef struct {
+    int a[8];
+} YiTbl8;
+
+extern YiTbl8 D_0056D190;
+void func_0018BC00(void *, void *, int);
+void func_0018C008(void *, void *, int);
+void func_0018C248(void *, void *, int);
+
+void func_0018B810(void)
+{
+    YiTbl8 tbl = D_0056D190;
+    u8 buf1[0x80];
+    u8 buf2[0x20];
+    int i;
+    int j;
+
+    func_0018BC00(buf1, &tbl, 8);
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 4; j++) {
+        }
+    }
+    func_0018C008(buf1, &tbl, 8);
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 4; j++) {
+        }
+    }
+    func_0018C248(buf2, buf1, 8);
+    for (i = 0; i < 8; i++) {
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B950);
 

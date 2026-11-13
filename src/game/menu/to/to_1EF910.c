@@ -95,7 +95,20 @@ void func_001EFB08(void)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", TOMakePktSampleBlueWindowXY2);
+void TOMakePktSampleBlueWindowXY2(int x0, int y0, int x1, int y1)
+{
+    GIF_CUR()->ul64[0] = 0x70A6400000008001UL;
+    GIF_CUR()->ul64[1] = 0x441441E;
+    GIF_NEXT();
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    locNameTmpSetLanguage(0x10, 0x10, 0x70, 0x58);
+    func_001FB678(x0, y0);
+    func_001FB678(x1, y0);
+    locNameTmpSetLanguage(0x50, 0x50, 0x50, 0x60);
+    func_001FB678(x0, y1);
+    func_001FB678(x1, y1);
+    func_001EFA30();
+}
 
 Quad32 *func_001EFCE0(GsAdPacket *p, int x0, int y0, int x1, int y1, int r, int g, int b, int a)
 {
@@ -212,7 +225,38 @@ void func_001F0458(int x0, int y0, int x1, int y1, u32 c0, u32 c1)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0580);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", TOMakePktMovieFont1612);
+void func_001F0870(TextItem *, R4CharInfo *);
+void func_001F0A20(TextItem *, R4CharInfo *);
+
+void TOMakePktMovieFont1612(TextItem *it, R4CharInfo *ci)
+{
+    TextItem tmp = *it;
+
+    tmp.y++;
+    switch (it->f12) {
+    case 1:
+        func_001F0A20(it, ci);
+        func_001F0A20(&tmp, ci);
+        func_001F0870(it, ci);
+        func_001F0870(&tmp, ci);
+        it->x += ci->h10 + 4;
+        break;
+    case 3:
+        func_001F1A48(it, ci);
+        func_001F1A48(&tmp, ci);
+        func_001F1850(it, ci);
+        func_001F1850(&tmp, ci);
+        it->x += ci->h10 + 4;
+        break;
+    default:
+        func_001F0A20(it, ci);
+        func_001F0A20(&tmp, ci);
+        func_001F0870(it, ci);
+        func_001F0870(&tmp, ci);
+        it->x += ci->h10 + 4;
+        break;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0870);
 

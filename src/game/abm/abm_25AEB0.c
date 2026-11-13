@@ -216,7 +216,31 @@ void func_00260600(void)
     func_002B2A28(&D_006A3510, 11, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_00260670);
+typedef struct {
+    u_long128 dmatag;
+    u64 giftag;
+    u64 regs;
+    u64 zbuf_data;
+    u64 zbuf_reg;
+    u64 test_data;
+    u64 test_reg;
+} AbmGsZbufPkt;
+
+extern AbmGsZbufPkt D_006A35C0;
+
+void func_00260670(void)
+{
+    AbmGsZbufPkt *p = &D_006A35C0;
+
+    p->dmatag = 0x70000003;
+    p->giftag = 0x2000000000008001UL;
+    p->regs = 0xEE;
+    p->zbuf_data = 0x131000108UL;
+    p->zbuf_reg = 0x4E;
+    p->test_data = 0;
+    p->test_reg = 0x47;
+    func_002B2A28(p, 4, 1, 0);
+}
 
 void func_002606E0(void)
 {
@@ -227,7 +251,20 @@ void func_002606E0(void)
     func_002B2A80(p, 11, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_00260758);
+void func_00260758(void)
+{
+    AbmGsZbufPkt *p = (AbmGsZbufPkt *)D_006A3BCC;
+
+    D_006A3BCC += sizeof(AbmGsZbufPkt);
+    p->dmatag = 0x70000003;
+    p->giftag = 0x2000000000008001UL;
+    p->regs = 0xEE;
+    p->zbuf_data = 0x131000108UL;
+    p->zbuf_reg = 0x4E;
+    p->test_data = 0x30000;
+    p->test_reg = 0x47;
+    func_002B2A80(p, 4, 1, 0);
+}
 
 void func_002607D8(int a, int b)
 {

@@ -516,7 +516,22 @@ s32 func_00209338(MenuSlot *s)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_208448", _TODrawWindowHelp);
+int _TODrawWindowHelp(UiWidget *w)
+{
+    UiFrame f;
+
+    f.box.x0 = w->cur[0];
+    f.box.y0 = w->cur[1];
+    f.box.x1 = w->cur[2];
+    f.box.y1 = w->cur[3];
+    f.col = *w->col;
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    ((int (*)(int, int, s16, s16, s16, int, int))TODrawMenuPlateXYWC2_Rfix)(0x10D, 0x10E, D_00324248, D_0032424A, D_0032424C, D_00324250, D_00324254);
+    ((int (*)(int, int, s16, s16, s16, int, int))TODrawMenuPlateXYWC2_Rfix)(0xCE, 0xCF, D_0032425C, D_0032425E, D_00324260, 0x40000000, 0x40000000);
+    TOMkpShapeXY(0x106, D_00324248 + 0x50, D_0032424A);
+    TOMakePktScissor(0, 8, 0x1FF, 0x1C);
+    return 0;
+}
 
 void *func_00209450(void)
 {

@@ -259,6 +259,8 @@ typedef struct RcefBlurCtx {
     s32 w234;
 } RcefBlurCtx;
 
+void func_001AAC18(float a, float b);
+
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A08A8);
 
 void func_001A0A10(void *p)
@@ -640,20 +642,6 @@ void func_001A19F0(void *b) {
 void func_001A1A00(void *b)
 {
 }
-
-typedef struct RcefObj3C0 {
-    s32 w00;
-    void *p04;
-    u8 pad08[8];
-    V2GsSub sub;
-    void *p80;
-    void *p84;
-    u8 pad88[8];
-    float m90[16];
-} RcefObj3C0;
-
-extern u32 D_006A3B70[];
-extern u32 D_006A3B30[];
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1A08);
 

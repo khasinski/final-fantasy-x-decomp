@@ -113,7 +113,37 @@ typedef union {
     float f[4];
 } QwPkt;
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EF98);
+void *func_0010EF98(QwPkt *pkt)
+{
+    pkt->q = 0;
+    pkt->w[3] = 0x51000007;
+    pkt++;
+    pkt->d[0] = 0x6000000000008001UL;
+    pkt->d[1] = 0x0EEEEEEE;
+    pkt++;
+    pkt->d[0] = 0x7000F;
+    pkt->d[1] = 0x48;
+    pkt++;
+    pkt->d[0] = 0x44;
+    pkt->d[1] = 0x43;
+    pkt++;
+    pkt->d[0] = 0;
+    pkt->d[1] = 0x49;
+    pkt++;
+    if (D_00303714) {
+        pkt->d[0] = 0x25;
+    } else {
+        pkt->d[0] = 0x5;
+    }
+    pkt->d[1] = 0x15;
+    pkt++;
+    pkt->d[0] = 0;
+    pkt->d[1] = 0x9;
+    pkt++;
+    pkt->d[0] = 0x1;
+    pkt->d[1] = 0x46;
+    return pkt + 1;
+}
 
 s32 _m2c_func_0010F060_func_0010EBD8(s32) __asm__("func_0010EBD8");
 void _m2c_func_0010F060_func_0010EF98(s32 *) __asm__("func_0010EF98");

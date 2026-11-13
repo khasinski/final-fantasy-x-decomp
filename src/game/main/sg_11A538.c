@@ -487,7 +487,23 @@ s32 Sg_MainCheckMenu(void)
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", Sg_MainCalcRate);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", func_0011B218);
+void func_0011B218(int dummy)
+{
+    Sg_IdDrawMain();
+    func_0011AD00(4);
+    if (ffx_debugmode) {
+        Sg_DbDraw();
+        if (Sg_CaptureGetGuiHide() == 0 && D_0058082B != 0) {
+            func_20318C8(dmaGif, Sg_PacketGetPtr());
+            func_001044D8();
+        }
+        func_202A528();
+        if (Sg_Capture() != 0) {
+            *(int *)&dummy;
+            Sg_SetTkAntiXYB(0, 1, 0x80);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", Sg_MainLoop);
 

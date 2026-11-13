@@ -656,7 +656,37 @@ void func_001255A8(void)
     save->control10.flags = (save->control10.flags | 0x2000000) & ~0x4000000;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tklib", func_00125638);
+typedef struct {
+    int a[3];
+} DiscInfo125638;
+
+extern DiscInfo125638 D_0056A118;
+extern s8 D_00576479;
+extern const char D_0056A128[];
+extern const char D_0056A138[];
+extern const char D_0056A148[];
+void func_00165DF0(int *src);
+void func_00164A80(int a);
+void sa_cd_callback_init(int a);
+
+void func_00125638(void)
+{
+    if (TkGetTGS() != 0) {
+        DiscInfo125638 info = D_0056A118;
+
+        if (D_00576479 == 0) {
+            func_002EF240(D_0056A128, info.a[0]);
+            func_002EF240(D_0056A138, info.a[1]);
+            func_002EF240(D_0056A148, info.a[2]);
+            func_00165DF0(info.a);
+        }
+    }
+    func_00164A80(0);
+    sa_cd_callback_init(0);
+    func_00124858(0x17, 0);
+    func_00124870(0x17, 0);
+    D_0030893C = 0;
+}
 
 void func_001256F0(void)
 {

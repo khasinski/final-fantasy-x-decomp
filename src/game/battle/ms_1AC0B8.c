@@ -7,7 +7,23 @@
 #include "ffx/v2.h"
 #include "vu0.h"
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001AC0B8);
+int func_001AC0B8(int id, int which) {
+    int r = 0;
+    int i;
+    Unk314840 *u;
+    Unk317120Rec *rec;
+
+    which &= 1;
+    u = &D_00314840[id & 0xFF];
+    rec = &u->rec[which];
+    for (i = 0; i < 3; i++) {
+        if (rec->e5B0[i].on != 0) {
+            r = -1;
+            break;
+        }
+    }
+    return r;
+}
 
 int func_001AC128(u32 i) {
     int r = 0;

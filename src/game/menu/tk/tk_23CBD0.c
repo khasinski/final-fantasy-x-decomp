@@ -79,7 +79,14 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CE38);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CF70);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D190);
+typedef struct SaveDataBody {
+    u8 d[0x64B8];
+} SaveDataBody;
+
+void func_0023D190(SaveDataBody *dst, u8 *src)
+{
+    *dst = *(SaveDataBody *)(src + 0x40);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D268);
 

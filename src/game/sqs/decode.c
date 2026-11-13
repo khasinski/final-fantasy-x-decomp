@@ -16,7 +16,51 @@ INCLUDE_ASM("build/ee_asm/game/sqs/decode", spline_get_near_point);
 
 INCLUDE_ASM("build/ee_asm/game/sqs/decode", spline_get_near_point_init);
 
-INCLUDE_ASM("build/ee_asm/game/sqs/decode", func_002545E0);
+typedef struct {
+    u8 pad0[0x503E0];
+    float m0[16];
+    float m1[16];
+    float m2[16];
+    float m3[16];
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float f50510;
+    u8 pad50514[0x14];
+    s32 w50528;
+    u8 pad5052C[0x50773 - 0x5052C];
+    s8 b50773;
+} Decode503E0;
+
+extern float D_0031430C;
+void func_001ACB48(void *a, void *b, void *c, void *d, float f);
+void MsSetCameraMatrix(int a, void *b, void *c, void *d, void *e, float f);
+void yiRenderEnable(int a);
+void func_00173450(void *a, void *b);
+
+void func_002545E0(Decode503E0 *a)
+{
+    int i;
+
+    D_0031430C = a->f50510;
+    func_001ACB48(a->m0, a->v0, a->v1, a->v2, 0.0f);
+    MsSetCameraMatrix(1, a->m1, a->m0, a->v1, a->v0, a->f50510);
+    switch (a->b50773) {
+    case 1:
+        if (a->w50528 >= 0x406) {
+            a->b50773 = 2;
+        }
+        break;
+    case 2:
+        yiRenderEnable(0x800);
+        func_00173450(a->m3, a->m2);
+        break;
+    }
+    for (i = 0; i < 16; i++) {
+        a->m2[i] = a->m0[i];
+        a->m3[i] = a->m1[i];
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/sqs/decode", func_00254730);
 

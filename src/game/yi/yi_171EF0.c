@@ -4,7 +4,9 @@
 #include "ffx/w2.h"
 #include "ffx/r1.h"
 #include "ffx/b0.h"
+#define yiTexReadCallback _hdr_yiTexReadCallback
 #include "ffx/v1.h"
+#undef yiTexReadCallback
 #include "ffx/s1.h"
 
 void yiInit(void)
@@ -294,7 +296,27 @@ int yiMapReadMaster(int a, int b, int c, int d, int e) { /* DEBT(TYPE): the succ
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiObjReadCallback);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiTexReadCallback);
+void yiTexReadCallback(LoadReq *req)
+{
+    struct Q3Ent *p = req->buf;
+    int h;
+
+    func_001723D8(p, 0);
+    h = func_001723D8(p, 1);
+    if (h != 0) {
+        if (func_0017B360(&D_00597F00, h) < 0) {
+            return;
+        }
+    }
+    h = func_001723D8(p, 2);
+    if (h != 0) {
+        pppSetFpTex(h);
+    }
+    func_0017DC70(p);
+    D_00597F00.w67F20 &= 0xFFFFFFBF;
+    D_00597F00.w67F20 &= 0xFFFFFF7F;
+    D_00597F00.w67F4C = req->n;
+}
 
 typedef struct ObjLoadReq {
     u8 pad0[0xC];
@@ -717,9 +739,50 @@ int func_00173D20(int a, int b, int c, int d, int e) {
     return yiPacketConvToOMD_DRAWACC(&D_00597F00, a, b, c, 0x100, d, e);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiSetRotTransDObj);
+typedef struct {
+    float v[4];
+} YiVec4;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiSetRotTransGroup);
+void func_002DD270(void *d, void *a, float r);
+void func_002DD318(void *d, void *a, float r);
+void func_002DD1C8(void *d, void *a, float r);
+
+void yiSetRotTransDObj(u32 i, YiVec4 *a, YiVec4 *b)
+{
+    Blk64 t;
+    YiVec4 *v50;
+    YiVec4 *v60;
+
+    if (i < D_00597F00.w687B8) {
+        v50 = (YiVec4 *)D_00597F00.ent[i].v50;
+        *v50 = *a;
+        v60 = (YiVec4 *)D_00597F00.ent[i].v60;
+        *v60 = *b;
+        func_002DD128(&t);
+        yiRotMatrixSeq(&t, v50->v, D_00597F00.ent[i].h86);
+        func_002DD080(&t, &t, v60->v);
+        *D_00597F00.ent[i].m10 = t;
+    }
+}
+
+void yiSetRotTransGroup(int id, YiVec4 *a, YiVec4 *b)
+{
+    Blk64 t;
+    u32 i;
+
+    func_002DD128(&t);
+    func_002DD270(&t, &t, a->v[0]);
+    func_002DD318(&t, &t, a->v[1]);
+    func_002DD1C8(&t, &t, a->v[2]);
+    func_002DD080(&t, &t, b->v);
+    for (i = 0; i < D_00597F00.w687B8; i++) {
+        if (D_00597F00.ent[i].h84 == id) {
+            *(YiVec4 *)D_00597F00.ent[i].v50 = *a;
+            *(YiVec4 *)D_00597F00.ent[i].v60 = *b;
+            *D_00597F00.ent[i].m10 = t;
+        }
+    }
+}
 
 void yiAddRotTransDObj(u32 i, float *a, float *b)
 {

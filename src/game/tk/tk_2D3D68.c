@@ -1,10 +1,12 @@
 /* tu_337 0x2d3d68-0x2d41a8: low; ~Tk (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: pad module (ports/slots) (see w10.h). */
+#define func_002D3FF0 _hdr_func_002D3FF0
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/r7.h"
 #include "ffx/u5.h"
+#undef func_002D3FF0
 
 s32 func_002D3D68(void) {
     return 12;
@@ -100,7 +102,39 @@ s32 func_002D3FB0(void) {
     return func_002D3F08(1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D3D68", func_002D3FF0);
+s32 func_002D3FF0(s32 a)
+{
+    s32 s1 = 1;
+    s32 s0;
+    s32 zero = 0;
+
+    if (a > zero) {
+        s1 = a;
+    }
+    s0 = D_0078B100;
+
+    while (s0 < s1) {
+        func_002F8420(func_002D2050());
+        s0 = D_0078B100;
+    }
+    s1 = s0;
+    do {
+        func_002F8420(func_002D2050());
+        s0 = D_0078B100;
+    } while (s1 == s0);
+    s0--;
+    D_0078B130 = D_0078B134;
+    func_002D41E0();
+    func_002D3F80();
+    D_0078B100 = 1;
+    func_002D3FB0();
+    D_0078B120 = s0;
+    func_002D3D88();
+    func_002D3DB8();
+    func_002D3DE8();
+    func_002D5CE8();
+    return s0;
+}
 
 s32 func_002D4118(void) {
     return D_0078B130;

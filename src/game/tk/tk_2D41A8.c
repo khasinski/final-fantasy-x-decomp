@@ -409,7 +409,33 @@ void func_002D5450(s32 a, void *b, s32 c, float f) {
     func_002D5190(a, b, c, 0, f);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5458);
+int func_002D5458(Vec4 *p0, Vec4 *p1, Vec4 *p2, Vec4 *p3)
+{
+    float x0 = p0->x;
+    float z0 = p0->z;
+    float x1 = p1->x;
+    float z1 = p1->z;
+    float x2 = p2->x;
+    float z2 = p2->z;
+    float x3 = p3->x;
+    float z3 = p3->z;
+    float s1 = x0 * z1 + x1 * z2 + x2 * z0 - x0 * z2 - x1 * z0 - x2 * z1;
+    float s2 = x0 * z1 + x1 * z3 + x3 * z0 - x0 * z3 - x1 * z0 - x3 * z1;
+    float s3;
+    float s4;
+
+    if (s1 * s2 <= 0.0f) {
+        s3 = x2 * z3 + x3 * z0 + x0 * z2 - x2 * z0 - x3 * z2 - x0 * z3;
+        s4 = x2 * z3 + x3 * z1 + x1 * z2 - x2 * z1 - x3 * z2 - x1 * z3;
+        if (s3 * s4 <= 0.0f) {
+            if (s2 > 0.0f) {
+                return 1;
+            }
+            return -1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5540);
 

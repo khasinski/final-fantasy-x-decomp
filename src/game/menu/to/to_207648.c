@@ -5,7 +5,40 @@
 #include "ffx/r4.h"
 #include "ffx/u3.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", func_00207648);
+extern char D_00570348[];
+extern char D_00570350[];
+
+void func_00207648(int val, void *out, int width)
+{
+    char fmt[16];
+    char buf[32];
+    u8 *dst = (u8 *)out;
+    int i;
+
+    if (width > 0) {
+        func_002F0008(fmt, D_00570348, width);
+        func_002F0008(buf, fmt, val);
+    } else {
+        func_002F0008(buf, D_00570350, val);
+    }
+    for (i = 0; (u32)i < func_002F0840(buf); i++) {
+        if (buf[i] >= '0' && buf[i] <= '9') {
+            *dst++ = buf[i];
+        } else if (buf[i] == ' ') {
+            if (func_0020B850() == 0) {
+                if (func_001BD360() == 0) {
+                    *dst = 0x5E;
+                } else {
+                    *dst = 0xFE;
+                }
+            } else {
+                *dst = 0xFE;
+            }
+            dst++;
+        }
+    }
+    *dst = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOIntToMes);
 

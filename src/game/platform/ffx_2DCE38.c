@@ -329,7 +329,20 @@ void func_002DD438(s32 arg0, float *arg1, void *arg2, s32 *arg3) {
     func_002DCF48(arg0, sp);
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD4E8);
+void func_002DD4E8(float *m, void *r0, void *r1, void *r2)
+{
+    u8 sp[0x10];
+
+    func_002DD068((u32)sp, (u32)r0, -1.0f);
+    func_002DCEC8(&m[0], sp);
+    func_002DD068((u32)sp, (u32)r1, -1.0f);
+    func_002DCEC8(&m[4], sp);
+    func_002DD068((u32)sp, (u32)r2, -1.0f);
+    func_002DCEC8(&m[8], sp);
+    m[12] = m[13] = m[14] = 0.0f;
+    m[15] = 1.0f;
+    func_002DCF00((u32)m, (u32)m);
+}
 
 void func_002DD5A8(Vec4 *m, void *r0, void *r1, void *r2, void *r3)
 {
@@ -339,7 +352,28 @@ void func_002DD5A8(Vec4 *m, void *r0, void *r1, void *r2, void *r3)
     func_002DD0B0(&m[3], r3);
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD610);
+void func_002DD610(void *a, float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8)
+{
+    Vec4 *m = a;
+    Vec4 sp[4];
+    float f20 = (-f6 * f7 + f5 * f8) / (-f7 + f8);
+    float f21 = f8 * f7 * (-f5 + f6) / (-f7 + f8);
+
+    func_002DD128(m);
+    m[0].x = f0;
+    m[1].y = f0;
+    m[2].z = 0.0f;
+    m[2].w = m[3].z = 1.0f;
+    m[3].w = 0.0f;
+    func_002DD128(sp);
+    sp[0].x = f1;
+    sp[1].y = f2;
+    sp[2].z = f21;
+    sp[3].x = f3;
+    sp[3].y = f4;
+    sp[3].z = f20;
+    func_002DCE38(m, sp, m);
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DCE38", func_002DD718);
 

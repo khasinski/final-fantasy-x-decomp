@@ -13,7 +13,50 @@
 #undef MsCameraSetScrDpt
 void MsCameraSetScrDpt(int h, float a);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_test_data_read);
+void opu_test_data_read(void)
+{
+    u8 *hw = (u8 *)&D_2008250;
+
+    if (D_007649A0 != 0) {
+        if (*(u16 *)(hw + 0x40) & 0x20) {
+            ((void (*)(int))func_002975B0)(*(int *)(hw + 0x98));
+            op_file_read(hw + 0xB00, *(int *)(hw + 0x98));
+            op_oef2_set2(*(void **)(hw + 0x98));
+            op_file_read(hw + 0xC00, *(int *)(hw + 0x9C));
+            op_oef2_set(*(void **)(hw + 0x98), *(void **)(hw + 0x9C));
+        }
+        if (*(u16 *)(hw + 0x40) & 0x1) {
+            op_file_read(hw + 0x100, *(int *)(hw + 0x80));
+            op_oef2_set2(*(void **)(hw + 0x80));
+            op_file_read(hw + 0x200, *(int *)(hw + 0x84));
+            op_oef2_set(*(void **)(hw + 0x80), *(void **)(hw + 0x84));
+        }
+        if (*(u16 *)(hw + 0x40) & 0x2) {
+            op_et_monster_free(*(void **)(hw + 0x88));
+            op_file_read(hw + 0x300, *(int *)(hw + 0x88));
+            op_oef2_set2(*(void **)(hw + 0x88));
+            if (*(int *)(hw + 0x8C) != 0) {
+                op_file_read(hw + 0x400, *(int *)(hw + 0x8C));
+                op_oef2_set(*(void **)(hw + 0x88), *(void **)(hw + 0x8C));
+            }
+        }
+        if (*(u16 *)(hw + 0x40) & 0x4) {
+            op_et_weapon_free(*(int *)(hw + 0x88));
+            op_file_read(hw + 0x500, *(int *)(hw + 0x90));
+            op_oef2_set2(*(void **)(hw + 0x90));
+            if (*(int *)(hw + 0x94) != 0) {
+                op_file_read(hw + 0x600, *(int *)(hw + 0x94));
+                op_oef2_set(*(void **)(hw + 0x90), *(void **)(hw + 0x94));
+            }
+        }
+        if (*(u16 *)(hw + 0x40) & 0x10) {
+            op_file_read(hw + 0x900, *(int *)(hw + 0xA8));
+            op_oef2_set2(*(void **)(hw + 0xA8));
+            op_file_read(hw + 0xA00, *(int *)(hw + 0xAC));
+            op_oef2_set(*(void **)(hw + 0xA8), *(void **)(hw + 0xAC));
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_debug_check);
 

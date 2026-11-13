@@ -382,7 +382,29 @@ void func_001631E0(u8 v) {
     D_0030DE24 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_001631F0);
+typedef struct {
+    u8 a[4];
+} Mode1631F0;
+
+extern Mode1631F0 D_00595F60;
+extern s32 D_0030DE28;
+int func_002E19C0(int a, int b, int c, void *d);
+
+int func_001631F0(int a0, int a1, int a2, void *a3)
+{
+    int s0;
+
+    D_0030DE24 = 0;
+    D_0030DE28 = 0;
+    D_00595F54 = a0;
+    D_00595F58 = a1;
+    D_00595F5C = a2;
+    D_00595F60 = *(Mode1631F0 *)a3;
+    func_0015B350();
+    s0 = a1 / 2048;
+    func_002F8660(0);
+    return func_002E19C0(a0, s0, a2, a3);
+}
 
 int func_001632B0(void) {
     if (D_0030DE24 != 0) {

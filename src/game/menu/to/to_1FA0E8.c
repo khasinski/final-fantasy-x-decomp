@@ -558,7 +558,22 @@ int func_001FC9B0(int n, int x, int y)
     return func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FCB88);
+void func_001FCB88(int b, int c, u32 rgba)
+{
+    char buf[0x10];
+    int i;
+
+    func_002F0008(buf, D_00570080, ((int (*)(void))func_002ED038)());
+    for (i = 0; i < 16 && buf[i] != 0; i++, b += 20) {
+        if (buf[i] >= '0' && buf[i] <= '9') {
+            func_001FE240(buf[i] + 0x1B0, b, c, rgba, rgba);
+        }
+        if (buf[i] == '.') {
+            func_001FE240(0x1DF, b, c, rgba, rgba);
+        }
+    }
+    func_001EFA30();
+}
 
 void func_001FCC88(int a, int b, int c, u32 rgba)
 {

@@ -101,8 +101,64 @@ void func_0013AC00(void) {
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", AtelGetBasicWork);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", AtelGetRealVarAdrs);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13A940/rodata", jtbl_0056A7F0);
+int AtelGetRealVarAdrs(Actor *a, int var) {
+    char *res = 0;
+    u32 uvar = var;
+    u32 kind = (uvar >> 25) & 7;
+    uvar &= 0xFFFFFFF;
+
+    switch (kind) {
+    case 0:
+        uvar &= 0xF0FFFFFF;
+        res = (char *)D_0058E3D8->w2C + uvar;
+        break;
+    case 1:
+        uvar &= 0xF0FFFFFF;
+        res = (char *)D_0058E3D8->w30 + uvar;
+        break;
+    case 6:
+        res = (char *)a->blob + a->blob->o20;
+        uvar &= 0xF0FFFFFF;
+        res += uvar;
+        break;
+    case 2:
+        res = (char *)a->blob + a->hdr->o28;
+        uvar &= 0xF0FFFFFF;
+        res += uvar;
+        break;
+    case 3:
+        if (D_0058E3D8->f54 == 0) {
+            res = (char *)a->blob + a->hdr->o2C;
+            uvar &= 0xF0FFFFFF;
+            res += uvar;
+        } else {
+            res = (char *)D_0058E3D8->f54(a, uvar & 0xF0FFFFFF);
+        }
+        break;
+    case 4:
+        res = (char *)a->blob + a->hdr->o30;
+        uvar &= 0xF0FFFFFF;
+        res += uvar;
+        break;
+    case 5:
+        uvar &= 0xF0FFFFFF;
+        res = (char *)a + (uvar + 0x48);
+        break;
+    default:
+        func_0013C9C8(a, a->slotIdx);
+        break;
+    }
+    if (D_0058E3D8->h1A == 0) {
+        char *base = (char *)func_00124828();
+        char *blob = (char *)a->blob;
+        if (!(res < blob + *(int *)(blob + 0x10) && res >= blob)) {
+            if (!(res >= base && res < base + 0x2000)) {
+                func_0013C9C8(a, a->slotIdx);
+            }
+        }
+    }
+    return (int)res;
+}
 
 int func_0013AF90(int id) {
     int n = D_0058E3D8->hC;

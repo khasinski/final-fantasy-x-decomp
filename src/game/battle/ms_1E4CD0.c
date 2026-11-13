@@ -251,8 +251,77 @@ int MsGetSummonEnergy(int id) {
     return MsGetChr(id)->f3A1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsCheckSummon);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E4CD0/rodata", jtbl_0056FA00);
+int MsCheckSummon(int id, BtlChr *c, int a, EvList *e) {
+    int ret = -1;
+
+    if (a == 0) {
+        int page = e->page;
+        int i;
+        u16 ev;
+        switch (id) {
+        case 14:
+            for (i = 0; i < 2; i++) {
+                ev = e->ev[page][i];
+                switch (ev) {
+                case 0x3123:
+                    c->fAB4 = 1;
+                    ret = 0;
+                    MsActionRequest(id, 0xFF, 9, 1, a, e);
+                    break;
+                case 0x3057:
+                    ret = 0;
+                    MsActionRequest(id, 0xFF, 0xA, 1, 2, 0);
+                    break;
+                }
+                if (ret == 0) {
+                    break;
+                }
+            }
+            break;
+        case 15:
+        case 16:
+        case 17:
+            for (i = 0; i < 2; i++) {
+                int act = 0;
+                ev = e->ev[page][i];
+                switch (ev) {
+                case 0x3124:
+                    act = 0xD;
+                    break;
+                case 0x3125:
+                    act = 0xE;
+                    break;
+                case 0x3126:
+                    act = 0xF;
+                    break;
+                case 0x3127:
+                    act = 0x10;
+                    break;
+                case 0x3128:
+                    act = 0x11;
+                    break;
+                case 0x3129:
+                    act = 0x12;
+                    break;
+                case 0x312A:
+                    act = 0x13;
+                    break;
+                case 0x312B:
+                    act = 0x14;
+                    break;
+                }
+                if (act != 0) {
+                    c->fAB4 = 1;
+                    ret = 0;
+                    MsActionRequest(id, 0xFF, act, 1, a, e);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return ret;
+}
 
 int MsDeathYoujinbou(int a) {
     int r = -1;

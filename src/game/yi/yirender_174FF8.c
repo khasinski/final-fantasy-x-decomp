@@ -224,8 +224,6 @@ INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001764A0);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001765D0);
 
-void func_001764A0(Sys597F00 *s, R2Qw *pkt, int n);
-
 void func_001766D0(Sys597F00 *s) {
     R2Qw pkt[16];
 

@@ -203,7 +203,31 @@ void func_002140E8(void) {
 void func_002140F0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", func_002140F8);
+extern s16 D_00324358;
+extern s16 D_0032435A;
+extern s16 D_0032435C;
+extern s16 D_0032435E;
+extern s16 D_00324360;
+extern s16 D_00324362;
+extern s16 D_00324364;
+extern s16 D_00324366;
+extern s16 D_00324368;
+extern s16 D_0032436A;
+extern s16 D_0032436C;
+
+void func_002140F8(int id, int x, int y)
+{
+    func_001FA7D0(x, y, D_0032435C, D_0032435E);
+    if (id >= 8) {
+        TOMkpShapeXY(0x1C0, x + D_00324366, y + D_00324368);
+    } else if (id == 6 && ((int (*)(void))func_0014AC00)() < 0x434) {
+        TOMkpShapeXY(0x1D4, x + D_00324366, y + D_00324368);
+    } else {
+        TOMkpShapeXY(id + 0x1B8, x + D_00324366, y + D_00324368);
+    }
+    TOMkpEasyMesFontLCenter(func_0021F940(id), x + D_00324362, y + D_00324364);
+    TOBtlDrawParamPlate(id, x + D_0032436A, y + D_0032436C);
+}
 
 int func_00214210(R4Task *o)
 {
@@ -246,7 +270,17 @@ int func_00214318(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", func_00214320);
+int func_00214320(R4Task *o)
+{
+    int i = 0;
+
+    TOMakePktBoxXYWHRGBA(0, D_0032435A + o->h42 * D_00324360, D_00324358 + D_0032435C + 16, D_0032435E, 0x80, 0x80, 0x80, 0x80);
+    TOMkpShapeXY(0x1AC, D_00324358 + 36, D_0032435A);
+    for (; i < D_00690640.wC; i++) {
+        func_002140F8(((s16 *)o->w20)[i], D_00324358, D_0032435A + i * D_00324360);
+    }
+    return 0;
+}
 
 int func_00214428(void)
 {

@@ -357,5 +357,63 @@ int func_001D1FA8(int x, int y, int z) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsGetMagicEffNum);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D00D8/rodata", jtbl_0056EAA0);
+typedef struct {
+    u8 pad0[0x10];
+    u16 h10[2];
+    u8 pad14[0x19 - 0x14];
+    u8 b19;
+    u8 pad1A[0x58 - 0x1A];
+    u8 b58;
+} MagicEffData;
+
+int MsGetMagicEffNum(int id, int cmd, MagicEffData *p) {
+    int idx;
+    int res;
+
+    if ((u32)(p->b19 - 8) < 10) {
+        if (((D_0031D1DC >> 11) & 1) || MsGetSaveCommandUse(id, cmd) == 0) {
+            idx = 0;
+        } else {
+            idx = 1;
+        }
+    } else {
+        idx = D_003193EE;
+    }
+    res = p->h10[idx];
+    if (p->b58 == 0x24 || p->b58 == 0x34 || p->b58 == 0x44 || p->b58 == 0x54) {
+        int sp0[2];
+        switch (FFXGetLang()) {
+        case 2:
+            sp0[0] = 0x2B3;
+            sp0[1] = 0x2B4;
+            break;
+        case 0:
+        case 3:
+            sp0[0] = 0x2B9;
+            sp0[1] = 0x2BA;
+            break;
+        case 4:
+            sp0[0] = 0x2B7;
+            sp0[1] = 0x2B8;
+            break;
+        case 5:
+            sp0[0] = 0x2B5;
+            sp0[1] = 0x2B6;
+            break;
+        default:
+            sp0[0] = p->h10[0];
+            sp0[1] = p->h10[1];
+            break;
+        }
+        res = sp0[idx];
+    } else {
+        int i;
+        Q4Ev *e = D_00662630;
+        for (i = 0; i < D_00662628; i++, e++) {
+            if (cmd == e->key) {
+                res = e->v[idx];
+            }
+        }
+    }
+    return res;
+}

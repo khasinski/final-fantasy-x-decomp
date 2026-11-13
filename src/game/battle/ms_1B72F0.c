@@ -194,8 +194,79 @@ float MsCalcChrDir(int id, BtlChr *c) {
     return polar[0];
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", func_001B78B0);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B72F0/rodata", jtbl_0056E380);
+typedef struct {
+    u8 pad0[0x1D1];
+    s8 f1D1;
+    u8 pad1D2[2];
+    float f1D4[4];
+    float f1E4[4];
+} BtlChrDirView;
+
+int func_001B78B0(int id, int kind, int arg2, float f, float *out) {
+    float sp0[4];
+    float sp10[4];
+    int ret = 1;
+    BtlChr *c;
+    Chr *chr;
+
+    id &= 0xFF;
+    c = MsGetChr(id);
+    MMI_SQ_ZERO(0, sp0);
+    chr = c->chr;
+    switch (kind) {
+    case 1:
+        func_001B6790(id, sp0);
+        break;
+    case 8:
+        MsGetChrBottomPos(id, sp0);
+        break;
+    case 9:
+        func_001B69D0(id, sp0);
+        break;
+    case 2:
+        func_001B6E48(id, sp0);
+        break;
+    case 3:
+        sp0[0] = MsGetChrHeight(id);
+        break;
+    case 4:
+        sp0[0] = MsGetChrWidth(id);
+        break;
+    case 5:
+        MsGetChrBtlPos(id, sp0);
+        break;
+    case 6:
+        sp0[0] = ((BtlChrDirView *)c)->f1D4[c->f1D1];
+        sp0[1] = ((BtlChrDirView *)c)->f1E4[c->f1D1];
+        break;
+    case 7:
+        sp0[0] = func_001B6AD0(id, f);
+        break;
+    case 10:
+        sp0[0] = MsGetChrCamHeight(id);
+        break;
+    case 11:
+        sp0[0] = MsGetChrCamWidth(id);
+        break;
+    case 12:
+        MsGetChrPredictPos(id, sp0);
+        break;
+    case 13:
+        if (chr != 0) {
+            func_001B6790(id, sp10);
+            Ch_OptposGet(chr, arg2, sp0);
+            func_001AC3E8(sp0, sp0, sp10);
+        }
+        break;
+    default:
+        ret = 0;
+        break;
+    }
+    if (out != 0) {
+        func_001AC3D0(out, out, sp0);
+    }
+    return ret;
+}
 
 int MsGetChrInfo(int kind, int mask, int arg2, float *out) {
     int count = 0;

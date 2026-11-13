@@ -1122,7 +1122,46 @@ INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DF10);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCamSetBtl);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB568);
+typedef struct {
+    u8 pad0[0xA0];
+    s32 wA0[4];
+    float fB0[4];
+    u8 padC0[0x5B0 - 0xC0];
+    struct CamRecShakeEnt {
+        s8 b0;
+        s8 b1;
+        s16 h2;
+        s16 h4;
+        s16 h6;
+        s32 w8;
+        u8 padC[0x24 - 0xC];
+    } e5B0[3];
+    u8 pad61C[0x620 - 0x61C];
+} CamRecShake;
+
+void func_001AB568(int id, int which, int mask, int a, float f, int b, int c, int d) {
+    int cur = func_001A6738(id);
+    if (cur == id) {
+        Unk314840 *u = &D_00314840[cur & 0xFF];
+        CamRecShake *r;
+        int i;
+        which &= 1;
+        r = (CamRecShake *)&u->rec[which];
+        for (i = 0; i < 3; i++) {
+            if ((mask >> i) & 1) {
+                struct CamRecShakeEnt *e = &r->e5B0[i];
+                e->b0 = a;
+                e->b1 = d;
+                e->w8 = 0;
+                e->h2 = c;
+                e->h4 = b;
+                e->h6 = b;
+                r->wA0[i] = 0;
+                r->fB0[i] = f;
+            }
+        }
+    }
+}
 
 typedef struct {
     u8 pad0[0x15C];

@@ -72,7 +72,35 @@ void func_00232DB8(void)
     func_002273A0(D_005721A8, D_00693ED8);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00232F48);
+void func_00232F48(void)
+{
+    u8 buf[4];
+    u8 *p;
+    u8 c;
+    int i;
+
+    if (D_00693E20 >= 0) {
+        p = (u8 *)MsGetSaveChrName(D_00693E20);
+    } else {
+        p = (u8 *)func_00124828() + 0xEC;
+    }
+    i = 0;
+    for (c = D_00693E48[0].on; c != 0; c = D_00693E48[i].on) {
+        if (D_00693E20 >= 0 && func_0020B850() == 0 && func_001BD360() == 0) {
+            *(s32 *)buf = 0;
+            func_0014D610((int)&D_00693E48[i], buf);
+            i++;
+            *p++ = buf[0];
+        } else {
+            *p++ = c;
+            if (c >= 6 && c <= 47) {
+                *p++ = D_00693E48[i].b1;
+            }
+            i++;
+        }
+    }
+    *p = 0;
+}
 
 void func_00233060(int a)
 {

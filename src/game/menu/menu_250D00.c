@@ -7,7 +7,38 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_250D00", TkMenuCtrlHelp);
+extern void (*D_0030E080)(int);
+extern void (*D_0030E074)(void);
+
+void TkMenuCtrlHelp(Task *o)
+{
+    s32 *state = &o->x1C;
+
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    switch (o->x1C) {
+    case 0:
+        *state = 1;
+    case 1:
+        if (TOMenuGetFirstReadEndFlag() != 0) {
+            if (D_0069BEF8 == 0) {
+                D_0030E080(1);
+                D_0069BEF0 = 0;
+            } else {
+                D_0030E080(D_0069BEF8);
+                D_0069BEF0 = D_0069BEF8;
+            }
+            *state = 2;
+        }
+        break;
+    case 2:
+        *state = 3;
+    case 3:
+        D_0030E074();
+        break;
+    }
+}
 
 void func_00250DF8(void) {
     func_00124F08();

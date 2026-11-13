@@ -176,7 +176,24 @@ void func_00111158(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_Exist);
+extern char D_00569658[], D_00569668[];
+
+s32 Cache_Exist(s32 a, s32 b)
+{
+    s32 i;
+    Handle *h;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC != 0 && h->w0 == b && h->b4 == a) {
+            if (h->b6 != 0) {
+                yiAssert(0, D_00569658, D_00569668, a, b, h->wC);
+            }
+            return h->wC;
+        }
+    }
+    return 0;
+}
 
 void func_00111250(s32 a, s32 b, s32 v)
 {

@@ -105,7 +105,32 @@ void func_00231E10(int level)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00231E68);
+void func_002269B0(int, int, int, int);
+
+void func_00231E68(int a, int x, int y, int i, int b)
+{
+    Task *t = (Task *)a;
+    s32 buf[4];
+    Unk1BFED8 *p;
+
+    if (b == 0) {
+        y -= t->x46 / 128;
+    }
+    if (i < 0 || i >= *(u16 *)&t->x30) {
+        return;
+    }
+    func_00226D88(x, y, 0);
+    func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+    p = MsGetSaveWeapon(D_00693D60[i], buf);
+    if (p->b2 == 0) {
+        return;
+    }
+    if ((p->b3 >> 1) & 1) {
+        return;
+    }
+    b = func_002317C0(D_00693D60[i], 0) == 0;
+    func_002269B0(D_00693D60[i], x, y, b);
+}
 
 /* DEBT(FAKE) */
 void func_00231F88(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -130,7 +155,35 @@ void func_00231F88(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     } while ((_cond = (var_16 < 0xA)) != 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232028);
+void func_00226800(int, int, int, int);
+
+void func_00232028(int i)
+{
+    s32 buf[4];
+    Unk1BFED8 *p = MsGetSaveWeapon(D_00693D60[i], buf);
+    int x;
+    int y;
+    int j;
+
+    if (p->b2 == 0) {
+        return;
+    }
+    x = D_00693D80[0];
+    y = D_00693D80[1];
+    for (j = 0; j < ((SlotRec *)p)->count; j++, y += 0x20) {
+        func_00226D88(x, y, 0x10);
+        func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+    }
+    x = D_00693D80[0];
+    y = D_00693D80[1];
+    for (j = 0; j < 4; j++, y += 0x20) {
+        u16 id = p->fE[j];
+
+        if (id != 0 && id != 0xFF) {
+            func_00226800(id, x, y, 0);
+        }
+    }
+}
 
 void func_00232158(Task *o, int a1, int a2) { func_002270F8(a1, a2 + ((o->x48 - o->x32) << 5), 0); }
 

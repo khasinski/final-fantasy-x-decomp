@@ -204,7 +204,51 @@ void func_002D60B0(int arg, int value)
     D_0078BB68 = index + 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D5B90", func_002D60F0);
+void func_002D60F0(s32 a, s32 b) {
+    W10Cmd *e;
+    s32 i;
+    s32 n;
+    s32 j;
+    W10Cmd *p;
+    W10Cmd *q;
+
+    e = D_0078BAE0;
+    for (i = 0; i < D_0078BB68; i++, e++) {
+        if (a == 0) {
+            if (e->id == b) {
+                e->val = 0;
+            }
+        }
+        if (a == -1) {
+            if (e->arg == b) {
+                e->val = 0;
+            }
+        }
+        if (e->val > 0) {
+            if (--e->val <= 0) {
+                if (e->id < 0) {
+                    SndSepStop(e->arg);
+                } else {
+                    SndMusicClear(e->id);
+                }
+            }
+        }
+    }
+    n = D_0078BB68;
+    e = D_0078BAE0;
+    for (i = 0; i < n; i++) {
+        if (e->val <= 0) {
+            p = e;
+            q = e + 1;
+            for (j = i + 1; j < n; j++, p++, q++) {
+                *p = *q;
+            }
+            D_0078BB68--;
+        } else {
+            e++;
+        }
+    }
+}
 
 void func_002D6260(s32 a) {
     func_002D60F0(0, a);

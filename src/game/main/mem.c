@@ -39,7 +39,50 @@ void func_0011BA60(void *p) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BAB8);
+typedef struct MemBlk {
+    struct MemBlk *end;
+    struct MemBlk *next;
+    u16 sum;
+    u32 name_idx : 11;
+    u32 sub_kind : 5;
+    u32 kind : 4;
+    u32 pc : 22;
+    u32 chk : 1;
+    u32 heap_id : 2;
+    u32 top : 3;
+} MemBlk;
+
+typedef struct MemHeap {
+    s8 b00;
+    s8 flag01;
+    u8 pad02[2];
+    s32 id;
+    u8 *p08;
+    MemBlk *first;
+    MemBlk *last;
+    MemBlk *free_min;
+} MemHeap;
+
+char *func_0011BAB8(AllocHdr *p)
+{
+    AllocHdr *b = p - 1;
+    u32 v;
+    u32 off;
+
+    if (ffx_debugmode == 0) {
+        return D_00569B58;
+    }
+    if (p == 0) {
+        return D_00569B58;
+    }
+    v = b->w8;
+    if ((v & 0x07FF0000) == 0) {
+        return D_00569B58;
+    }
+    off = (v >> 11) & 0xFFE0;
+    v = 0x05FB0000;
+    return (char *)(off | v);
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BB08);
 
@@ -57,7 +100,35 @@ void func_0011BD80(u8 v)
     D_00580915 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BD90);
+void func_0011BD90(int id, u32 start, u32 end)
+{
+    MemHeap *h = (MemHeap *)&D_005808C8[id];
+    MemBlk *first;
+    MemBlk *last;
+
+    start &= ~3;
+    end &= ~3;
+    h->p08 = (u8 *)(end - start);
+    first = (MemBlk *)start;
+    end -= 0x10;
+    h->first = first;
+    h->last = (MemBlk *)end;
+    h->id = id;
+    *(u_long128 *)first = 0;
+    first->end = (MemBlk *)end;
+    first->next = 0;
+    first->kind = 0;
+    first->heap_id = id;
+    last = h->last;
+    *(u_long128 *)last = 0;
+    last->next = first;
+    last->end = 0;
+    last->kind = 0xF;
+    last->heap_id = id;
+    h->flag01 = 1;
+    h->b00 = 0;
+    h->free_min = h->first;
+}
 
 /* DEBT(ORDER): heap flag clears retain the original scheduling order. */
 void func_0011BE48(void)
@@ -200,28 +271,6 @@ u16 func_0011C188(R0Blk *b)
     return sum;
 }
 
-typedef struct MemBlk {
-    struct MemBlk *end;
-    struct MemBlk *next;
-    u16 sum;
-    u16 hi16;
-    u32 kind : 4;
-    u32 pc : 22;
-    u32 chk : 1;
-    u32 heap_id : 2;
-    u32 top : 3;
-} MemBlk;
-
-typedef struct MemHeap {
-    s8 b00;
-    s8 flag01;
-    u8 pad02[6];
-    u8 *p08;
-    MemBlk *first;
-    MemBlk *last;
-    MemBlk *free_min;
-} MemHeap;
-
 void Sg_MemCheckHeap(struct R0Heap *h, void *b, s32 c)
 {
     MemHeap *heap = (MemHeap *)h;
@@ -310,7 +359,23 @@ void func_0011C7E8(u8 *p, int f)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011C838);
+void func_0011C838(R0Blk *arg0)
+{
+    MemBlk *b = (MemBlk *)arg0;
+    MemHeap *h = (MemHeap *)&D_005808C8[b->heap_id];
+
+    b->kind = 0;
+    b->pc = 0;
+    b->chk = 0;
+    b->top = 0;
+    b->sub_kind = 0;
+    b->name_idx = 0;
+    b->sum = 0;
+    if ((u32)b < (u32)h->free_min) {
+        h->free_min = b;
+    }
+    h->b00 = 1;
+}
 
 R0Blk *func_0011C8B8(R0Blk *b)
 {

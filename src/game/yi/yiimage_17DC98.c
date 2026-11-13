@@ -10,7 +10,38 @@
 #undef func_00180370
 #undef func_00180520
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", yiImage_GSSInit);
+void yiImage_GSSInit(int a, int mode)
+{
+    switch (mode) {
+    case 0:
+        D_0030ECB8 = D_0030ECC8 = 0;
+        D_0030ECD8 = 0x90000;
+        D_0030ECBC = D_0030ECCC = D_0030ECDC = 0;
+        D_0030ECEC = D_0030ECF0 = 0x90000;
+        D_0030ECF4 = 0x9C000;
+        break;
+    case 1:
+        D_0030ECB8 = D_0030ECC8 = 0x1C000;
+        D_0030ECD8 = 0xAC000;
+        D_0030ECBC = D_0030ECCC = D_0030ECDC = 0;
+        D_0030ECEC = D_0030ECF0 = 0xAC000;
+        D_0030ECF4 = 0xB8000;
+        break;
+    case 2:
+        D_0030ECB8 = D_0030ECC8 = 0;
+        D_0030ECD8 = 0x60000;
+        D_0030ECBC = D_0030ECCC = 0x84000;
+        D_0030ECDC = 0xB4000;
+        D_0030ECEC = D_0030ECF0 = 0x60000;
+        D_0030ECF4 = 0x68000;
+        break;
+    }
+    D_0030ECC0 = D_0030ECD0 = 0xBC000;
+    D_0030ECE0 = 0xE0000 - (a << 14);
+    D_0030ECC4 = D_0030ECD4 = 0xF0000;
+    D_0030ECE4 = 0x100000;
+    D_0030ECE8 = 0xFFFFFFFF;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", yiImage_printusemem);
 
@@ -534,7 +565,51 @@ void func_00180370(void)
 {
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_00180378);
+void *func_0017DBA0(int size);
+
+int func_00180378(Sys597F00 *s, YiImgRec *img)
+{
+    u8 *p;
+    u8 *dst;
+    u8 *buf;
+    int size;
+    u32 x;
+    u32 y;
+
+    size = img->h * img->w;
+    switch (img->psm) {
+    case 0:
+        return;
+    case 0x14:
+        buf = func_0017DBA0(size / 4);
+        dst = buf;
+        p = img->texData;
+        for (y = 0; y < img->h; y++) {
+            for (x = 0; x < img->w / 4; x++, dst++) {
+                u8 c0 = *p++ & 0xF;
+                u8 c1 = *p++ & 0xF;
+                *dst = c0 | (c1 << 4);
+            }
+        }
+        break;
+    case 0x13:
+        buf = func_0017DBA0(size / 2);
+        dst = buf;
+        p = img->texData;
+        for (y = 0; y < img->h; y++) {
+            for (x = 0; x < img->w / 2; x++, p += 2, dst++) {
+                *dst = *p;
+            }
+        }
+        break;
+    default:
+        return;
+    }
+    func_0017DC70((struct Q3Ent *)img->texData);
+    img->texData = buf;
+    img->w /= 2;
+    img->flags |= 0x100;
+}
 
 void func_00180520(void)
 {
