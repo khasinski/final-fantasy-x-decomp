@@ -19,7 +19,7 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 2. Links the object at its fixed `.text` virtual address (`0x01B00xxx`) against resident ELF symbols (`SCES_504.90`) and overlay-local `.data`/`.bss` addresses.
 3. Verifies 100% byte-for-byte `.text` identity against `build/overlay-audit/overlay-group11-fileXXXXX.bin` and confirms the reconstructed container matches the original SHA-256.
 
-## Matched Units (29 C Units; 30 Containers Fully Matched, 343 Partially)
+## Matched Units (32 C Units; 33 Containers Fully Matched, 343 Partially)
 
 | C Unit | Containers (`group 0x11`) | `.text` Range | `.text` Span | Discovered Insns | Functions | Subsystem |
 |---|---|---|---:|---:|---:|---|
@@ -38,6 +38,9 @@ For each unit, [`overlays/verify_overlays.py`](verify_overlays.py):
 | [`overlays/group11/ovl_09745.c`](group11/ovl_09745.c) | `file09745` | `0x01B00508..0x01B00B10` | 1,544 B | 1,524 B | 11 | `oef` / `ppp` |
 | [`overlays/group11/ovl_09242.c`](group11/ovl_09242.c) | `file09242` | `0x01B00508..0x01B00CA8` | 1,952 B | 1,936 B | 9 | `oef` / `ppp` |
 | [`overlays/group11/ovl_09572.c`](group11/ovl_09572.c) | `file09572` | `0x01B00580..0x01B00CB8` | 1,848 B | 1,364 B | 19 | `rcef` |
+| [`overlays/group11/ovl_09748.c`](group11/ovl_09748.c) | `file09748` (complete container) | `0x01B00738..0x01B01258` | 2,848 B | 2,816 B | 14 | oef effect |
+| [`overlays/group11/ovl_09344.c`](group11/ovl_09344.c) | `file09344` (complete container) | `0x01B00648..0x01B00F48` | 2,304 B | 2,260 B | 27 | rcef effect |
+| [`overlays/group11/ovl_09239.c`](group11/ovl_09239.c) | `file09239` (complete container) | `0x01B004D0..0x01B01050` | 2,944 B | 2,344 B | 23 | rcef seven-bolts effect |
 | [`overlays/group11/ovl_09527.c`](group11/ovl_09527.c) | `file09527` (complete container) | `0x01B005F8..0x01B011D0` | 3,032 B | 3,016 B | 9 | oef effect (part objects, double constants via DK macro) |
 | [`overlays/group11/ovl_09385.c`](group11/ovl_09385.c) | `file09385` (complete container) | `0x01B00698..0x01B01220` | 2,952 B | 2,936 B | 11 | ppp/oef2 effect |
 | [`overlays/group11/ovl_09573.c`](group11/ovl_09573.c) | `file09573` (complete container) | `0x01B006C0..0x01B01130` | 2,672 B | 2,624 B | 25 | rcef screen-effect/resource effect |
