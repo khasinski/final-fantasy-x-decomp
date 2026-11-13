@@ -620,6 +620,28 @@ def _pool_9088_syms(pool_addr: int) -> dict[str, int]:
 
 OVERLAY_UNITS = [
     {
+        "src": "overlays/group11/ovl_09554.c",
+        "containers": [9554],
+        "text_start": 0x01B005F8,
+        "text_end": 0x01B01410,
+        "discovered_code_bytes": 3548,
+        "functions": 27,
+        "syms": {
+            "D_01B005B8": 0x01B005B8,
+            "D_01B005C0": 0x01B005C0,
+            "D_01B01420": 0x01B01420,
+            "D_01B01430": 0x01B01430,
+            "D_01B01470": 0x01B01470,
+            "D_01B01480": 0x01B01480,
+            "D_01B01490": 0x01B01490,
+            "D_01B014A0": 0x01B014A0,
+            "D_01B014B0": 0x01B014B0,
+            "D_01B014C0": 0x01B014C0,
+            "D_01B014C4": 0x01B014C4,
+            "D_01B014D0": 0x01B014D0,
+        },
+    },
+    {
         "src": "overlays/group11/ovl_09235.c",
         "containers": [9235],
         "text_start": 0x01B00490,
