@@ -1,0 +1,29 @@
+[
+  {
+    "src": "ovl_09530_normalize.c",
+    "containers": [
+      9530
+    ],
+    "text_start": "0x01B015E0",
+    "text_end": "0x01B01740",
+    "discovered_code_bytes": 340,
+    "functions": 7,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09530_more200_ring.c",
+    "containers": [
+      9530
+    ],
+    "text_start": "0x01B01740",
+    "text_end": "0x01B01A04",
+    "functions": 3,
+    "discovered_code_bytes": 704,
+    "syms": {
+      "D_01B01AC8": "0x01B01AC8",
+      "D_01B01AD8": "0x01B01AD8",
+      "func_01B016A0": "0x01B016A0",
+      "func_01B016D0": "0x01B016D0"
+    }
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "src": "ovl_09229_particle_slot.c",
+    "containers": [
+      9229
+    ],
+    "text_start": "0x01B00B70",
+    "text_end": "0x01B00BA8",
+    "functions": 1,
+    "discovered_code_bytes": 56,
+    "syms": {
+      "D_01D01EE0": "0x01D01EE0"
+    }
+  }
+]

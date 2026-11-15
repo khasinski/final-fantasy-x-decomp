@@ -1,0 +1,15 @@
+[
+  {
+    "src": "ovl_09755_helpers.c",
+    "containers": [
+      9755
+    ],
+    "text_start": "0x01B00D88",
+    "text_end": "0x01B01504",
+    "functions": 20,
+    "discovered_code_bytes": 1172,
+    "syms": {
+      "D_01B01850": "0x01B01850"
+    }
+  }
+]

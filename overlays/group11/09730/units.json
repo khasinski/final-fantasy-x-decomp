@@ -1,0 +1,70 @@
+[
+  {
+    "src": "ovl_09730_next500_b_callbacks_49f0.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B049F0",
+    "text_end": "0x01B049F8",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09730_next500_b_callbacks_4ba8.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B04BA8",
+    "text_end": "0x01B04BB8",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09730_next500_b_callbacks_5610.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B05610",
+    "text_end": "0x01B05658",
+    "functions": 9,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09730_next500_b_math.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B04BB8",
+    "text_end": "0x01B04FD4",
+    "functions": 9,
+    "discovered_code_bytes": 1044,
+    "syms": {
+      "D_01B05BC0": "0x01B05BC0",
+      "D_01B05BD0": "0x01B05BD0"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  },
+  {
+    "src": "ovl_09730_next500_b_ring.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B05088",
+    "text_end": "0x01B05424",
+    "functions": 12,
+    "discovered_code_bytes": 632,
+    "syms": {},
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  }
+]

@@ -9,12 +9,12 @@ with compiled code that matches the original game.
 |---|---:|---:|
 | Main ELF | 1 | 46.39% |
 | Completed overlays | 47 | 100% |
-| Partially decompiled overlays | 528 | 38.37% |
-| Untouched overlays | 9 | 0% |
+| Partially decompiled overlays | 537 | 38.30% |
 
 **About 39.47% of known EE code**, measured by code size. Overlay sizes are estimates;
 shared code counts in each overlay. This excludes IOP and VU code.
 
+Every one of the 584 known overlays now has matching C code.
 Run `python3 -P tools/status.py` for current numbers.
 
 ## Getting started

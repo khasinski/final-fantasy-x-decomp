@@ -1,0 +1,105 @@
+[
+  {
+    "src": "ovl_09584_next300_b_helpers.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01F48",
+    "text_end": "0x01B0277C",
+    "functions": 21,
+    "discovered_code_bytes": 1444,
+    "syms": {
+      "D_01B02940": "0x01B02940",
+      "D_01B02950": "0x01B02950",
+      "D_01B02930": "0x01B02930"
+    }
+  },
+  {
+    "src": "ovl_09584_next300_b_particle1.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01558",
+    "text_end": "0x01B01630",
+    "functions": 2,
+    "discovered_code_bytes": 212,
+    "syms": {
+      "D_01B027F8": "0x01B027F8",
+      "D_006A3AB0": "0x006A3AB0",
+      "D_006A39B0": "0x006A39B0",
+      "func_01B023F0": "0x01B023F0",
+      "D_006A3970": "0x006A3970",
+      "D_006A3930": "0x006A3930",
+      "D_006A3A70": "0x006A3A70",
+      "D_006A3924": "0x006A3924",
+      "D_01B00D60": "0x01B00D60",
+      "D_01B00928": "0x01B00928"
+    }
+  },
+  {
+    "src": "ovl_09584_next300_b_particle2.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01850",
+    "text_end": "0x01B01928",
+    "functions": 2,
+    "discovered_code_bytes": 212,
+    "syms": {
+      "D_006A3AB0": "0x006A3AB0",
+      "D_006A39B0": "0x006A39B0",
+      "func_01B023F0": "0x01B023F0",
+      "D_006A3970": "0x006A3970",
+      "D_006A3930": "0x006A3930",
+      "D_006A3A70": "0x006A3A70",
+      "D_006A3924": "0x006A3924",
+      "D_01B00D60": "0x01B00D60",
+      "D_01B02828": "0x01B02828",
+      "D_01B00928": "0x01B00928"
+    }
+  },
+  {
+    "src": "ovl_09584_next300_b_particle3.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01A00",
+    "text_end": "0x01B01AD8",
+    "functions": 2,
+    "discovered_code_bytes": 212,
+    "syms": {
+      "D_006A3AB0": "0x006A3AB0",
+      "D_006A39B0": "0x006A39B0",
+      "func_01B023F0": "0x01B023F0",
+      "D_006A3970": "0x006A3970",
+      "D_006A3930": "0x006A3930",
+      "D_006A3A70": "0x006A3A70",
+      "D_006A3924": "0x006A3924",
+      "D_01B00D60": "0x01B00D60",
+      "D_01B02850": "0x01B02850",
+      "D_01B00928": "0x01B00928"
+    }
+  },
+  {
+    "src": "ovl_09584_next300_b_returns1.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01D20",
+    "text_end": "0x01B01D30",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09584_next300_b_returns2.c",
+    "containers": [
+      9584
+    ],
+    "text_start": "0x01B01F38",
+    "text_end": "0x01B01F48",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {}
+  }
+]

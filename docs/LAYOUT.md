@@ -4,7 +4,8 @@ The repository is organized into resident ELF translation units (`src/game/` and
 
 - **`src/game/`**: Game subsystems shared with the HD ports (character, event VM, battle, menu, rendering, particle, audio, and platform glue).
 - **`src/sdk/`**: Sony PS2 SDK libraries (`libgraph`, `libdma`, `libpad`, `libmc`, `libcdvd`, `libipu`, `libkernl`), `newlib` (`libc`, `libm`), and `libgcc`.
-- **`overlays/`**: Fixed-base (`0x01B00000`) EE battle-effect overlays from disc resource group `0x11` (see [overlays/README.md](../overlays/README.md)).
+- **`overlays/group11/<reference>/`**: Matching overlay C sources and their `units.json` manifests, grouped by reference container. Shared units list all their containers in the manifest.
+- **`overlays/wip/<reference>/`**: Unverified drafts, excluded from progress. See the [overlay guide](../overlays/README.md).
 
 ## Resident ELF Address Map
 

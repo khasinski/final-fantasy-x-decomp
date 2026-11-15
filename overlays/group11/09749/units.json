@@ -1,0 +1,13 @@
+[
+  {
+    "src": "ovl_09749_character_state.c",
+    "containers": [
+      9749
+    ],
+    "text_start": "0x01B007D8",
+    "text_end": "0x01B00818",
+    "functions": 1,
+    "discovered_code_bytes": 64,
+    "syms": {}
+  }
+]

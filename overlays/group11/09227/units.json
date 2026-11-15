@@ -1,0 +1,17 @@
+[
+  {
+    "src": "ovl_09227_position.c",
+    "containers": [
+      9227
+    ],
+    "text_start": "0x01B00938",
+    "text_end": "0x01B009A8",
+    "functions": 1,
+    "discovered_code_bytes": 112,
+    "syms": {
+      "D_01D01510": "0x01D01510",
+      "D_01D01520": "0x01D01520",
+      "D_01D01530": "0x01D01530"
+    }
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "src": "ovl_09734_next500_b_callbacks_0e08.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B00E08",
+    "text_end": "0x01B00E10",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09734_next500_b_callbacks_2248.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B02248",
+    "text_end": "0x01B02250",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09734_next500_b_callbacks_23c8.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B023C8",
+    "text_end": "0x01B023D8",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09734_next500_b_callbacks_2bb8.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B02BB8",
+    "text_end": "0x01B02BC8",
+    "functions": 2,
+    "discovered_code_bytes": 0,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09734_next500_b_callbacks_35c8.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B035C8",
+    "text_end": "0x01B035D8",
+    "functions": 2,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09734_next500_b_mathdebug.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B023D8",
+    "text_end": "0x01B02938",
+    "functions": 18,
+    "discovered_code_bytes": 1172,
+    "syms": {
+      "D_01B039E0": "0x01B039E0"
+    }
+  },
+  {
+    "src": "ovl_09734_next500_b_ring.c",
+    "containers": [
+      9734
+    ],
+    "text_start": "0x01B02938",
+    "text_end": "0x01B02BB4",
+    "functions": 3,
+    "discovered_code_bytes": 636,
+    "syms": {}
+  }
+]

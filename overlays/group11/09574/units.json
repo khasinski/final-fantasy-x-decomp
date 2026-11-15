@@ -1,0 +1,87 @@
+[
+  {
+    "containers": [
+      9574
+    ],
+    "discovered_code_bytes": 16,
+    "functions": 2,
+    "src": "ovl_09574_simple0.c",
+    "syms": {
+      "func_01B01EB8": "0x01B01EB8",
+      "func_01B01EC0": "0x01B01EC0"
+    },
+    "text_end": "0x01B01EC8",
+    "text_start": "0x01B01EB8"
+  },
+  {
+    "containers": [
+      9574
+    ],
+    "discovered_code_bytes": 16,
+    "functions": 2,
+    "src": "ovl_09574_simple1.c",
+    "syms": {
+      "func_01B02A78": "0x01B02A78",
+      "func_01B02A80": "0x01B02A80"
+    },
+    "text_end": "0x01B02A88",
+    "text_start": "0x01B02A78"
+  },
+  {
+    "src": "ovl_09574_next300_b_math.c",
+    "containers": [
+      9574
+    ],
+    "text_start": "0x01B01648",
+    "text_end": "0x01B01A64",
+    "functions": 9,
+    "discovered_code_bytes": 1044,
+    "syms": {
+      "D_01B02DC0": "0x01B02DC0",
+      "D_01B02DD0": "0x01B02DD0"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  },
+  {
+    "src": "ovl_09574_next300_b_returns1.c",
+    "containers": [
+      9574
+    ],
+    "text_start": "0x01B01470",
+    "text_end": "0x01B01478",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09574_next300_b_returns2.c",
+    "containers": [
+      9574
+    ],
+    "text_start": "0x01B01638",
+    "text_end": "0x01B01648",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09574_next300_b_ring.c",
+    "containers": [
+      9574
+    ],
+    "text_start": "0x01B01B18",
+    "text_end": "0x01B01EB4",
+    "functions": 12,
+    "discovered_code_bytes": 640,
+    "syms": {},
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "src": "ovl_09465_next300_api.c",
+    "containers": [
+      9465
+    ],
+    "text_start": "0x01B01990",
+    "text_end": "0x01B01AC0",
+    "functions": 9,
+    "discovered_code_bytes": 288,
+    "syms": {
+      "D_01B00540": "0x01B00540",
+      "D_01B00548": "0x01B00548",
+      "D_01B01C40": "0x01B01C40",
+      "func_01B00580": "0x01B00580"
+    }
+  },
+  {
+    "src": "ovl_09465_next300_parts.c",
+    "containers": [
+      9465
+    ],
+    "text_start": "0x01B01810",
+    "text_end": "0x01B0198C",
+    "functions": 2,
+    "discovered_code_bytes": 376,
+    "syms": {
+      "D_01B01AEC": "0x01B01AEC",
+      "D_01B01C00": "0x01B01C00",
+      "func_01B00A98": "0x01B00A98"
+    }
+  },
+  {
+    "src": "ovl_09465_next300_start.c",
+    "containers": [
+      9465
+    ],
+    "text_start": "0x01B00830",
+    "text_end": "0x01B00878",
+    "functions": 1,
+    "discovered_code_bytes": 72,
+    "syms": {
+      "func_01B00878": "0x01B00878"
+    }
+  },
+  {
+    "src": "ovl_09465_next300_tasks.c",
+    "containers": [
+      9465
+    ],
+    "text_start": "0x01B009A0",
+    "text_end": "0x01B00B94",
+    "functions": 6,
+    "discovered_code_bytes": 492,
+    "syms": {
+      "D_01B01AEC": "0x01B01AEC"
+    }
+  },
+  {
+    "src": "ovl_09465_next300_wait.c",
+    "containers": [
+      9465
+    ],
+    "text_start": "0x01B007E8",
+    "text_end": "0x01B0082C",
+    "functions": 1,
+    "discovered_code_bytes": 68,
+    "syms": {
+      "func_01B00830": "0x01B00830"
+    }
+  }
+]

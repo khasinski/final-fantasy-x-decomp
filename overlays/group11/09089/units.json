@@ -1,0 +1,28 @@
+[
+  {
+    "src": "ovl_09089_helpers.c",
+    "containers": [
+      9089
+    ],
+    "text_start": "0x01B01BF8",
+    "text_end": "0x01B0242C",
+    "functions": 21,
+    "discovered_code_bytes": 2076,
+    "syms": {
+      "D_01B02C50": "0x01B02C50",
+      "D_01B02C60": "0x01B02C60",
+      "D_01B02C70": "0x01B02C70"
+    }
+  },
+  {
+    "src": "ovl_09089_dma.c",
+    "containers": [
+      9089
+    ],
+    "text_start": "0x01B02430",
+    "text_end": "0x01B024D8",
+    "functions": 10,
+    "discovered_code_bytes": 168,
+    "syms": {}
+  }
+]

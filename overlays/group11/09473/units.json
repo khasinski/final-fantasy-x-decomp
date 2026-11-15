@@ -1,0 +1,40 @@
+[
+  {
+    "src": "ovl_09473_math.c",
+    "containers": [
+      9473
+    ],
+    "text_start": "0x01B00DE8",
+    "text_end": "0x01B01204",
+    "functions": 9,
+    "discovered_code_bytes": 1044,
+    "syms": {
+      "D_01B01670": "0x01B01670",
+      "D_01B01680": "0x01B01680"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  },
+  {
+    "src": "ovl_09473_ring.c",
+    "containers": [
+      9473
+    ],
+    "text_start": "0x01B012B8",
+    "text_end": "0x01B01654",
+    "functions": 12,
+    "discovered_code_bytes": 908,
+    "syms": {
+      "D_01B01670": "0x01B01670",
+      "D_01B01680": "0x01B01680"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  }
+]

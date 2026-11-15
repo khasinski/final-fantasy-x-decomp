@@ -1,0 +1,67 @@
+[
+  {
+    "src": "ovl_09580_next_b_helpers.c",
+    "containers": [
+      9580
+    ],
+    "text_start": "0x01B01130",
+    "text_end": "0x01B018EC",
+    "functions": 17,
+    "discovered_code_bytes": 1340,
+    "syms": {
+      "D_01B019B0": "0x01B019B0",
+      "D_01B019C0": "0x01B019C0",
+      "D_01B019A0": "0x01B019A0"
+    }
+  },
+  {
+    "src": "ovl_09580_next_b_particle.c",
+    "containers": [
+      9580
+    ],
+    "text_start": "0x01B00B28",
+    "text_end": "0x01B00C00",
+    "functions": 2,
+    "discovered_code_bytes": 212,
+    "syms": {
+      "D_006A3AB0": "0x006A3AB0",
+      "func_01B01570": "0x01B01570",
+      "D_01B01910": "0x01B01910",
+      "D_006A3A70": "0x006A3A70",
+      "D_01B008F4": "0x01B008F4",
+      "D_006A3930": "0x006A3930",
+      "D_01B005B8": "0x01B005B8",
+      "D_006A39B0": "0x006A39B0",
+      "D_006A3970": "0x006A3970",
+      "D_006A3924": "0x006A3924"
+    }
+  },
+  {
+    "src": "ovl_09580_next_b_scene_b.c",
+    "containers": [
+      9580
+    ],
+    "text_start": "0x01B00F98",
+    "text_end": "0x01B01130",
+    "functions": 5,
+    "discovered_code_bytes": 404,
+    "syms": {
+      "func_01B01820": "0x01B01820",
+      "func_01B01570": "0x01B01570",
+      "D_01B0059C": "0x01B0059C",
+      "D_01B00598": "0x01B00598",
+      "D_01B005A8": "0x01B005A8",
+      "D_01B005A0": "0x01B005A0",
+      "D_006A3A70": "0x006A3A70",
+      "D_006A3BCC": "0x006A3BCC",
+      "D_01B01978": "0x01B01978",
+      "D_01B008F4": "0x01B008F4",
+      "func_01B016C8": "0x01B016C8",
+      "D_01B005B8": "0x01B005B8",
+      "D_01B005AC": "0x01B005AC",
+      "D_006A3970": "0x006A3970",
+      "D_006A3924": "0x006A3924",
+      "D_01B008F8": "0x01B008F8"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "src": "ovl_09379.c",
+    "containers": [
+      9379,
+      9406
+    ],
+    "text_start": "0x01B00558",
+    "text_end": "0x01B008E0",
+    "discovered_code_bytes": 856,
+    "functions": 17,
+    "syms": {
+      "D_01B00518": "0x01B00518",
+      "D_01B00520": "0x01B00520",
+      "D_01B008F0": "0x01B008F0"
+    }
+  }
+]

@@ -126,7 +126,7 @@ if estimate_path.exists() and audit_path.exists():
     report["ee_overlays"] = {
         "containers": inventory["battle_containers"],
         "distinct_payloads": inventory["unique_battle_payload_sha256"],
-        "matched_units": progress.get("matched_unique_units"),
+        "matched_units": fmap.get("matched_units") if fmap else progress.get("matched_unique_units"),
         "containers_with_any_match": fmap["containers"] - fmap["containers_unmatched"] if fmap else progress.get("matched_containers", 0),
         "containers_fully_matched": fmap["containers_fully_matched"] if fmap else None,
         "containers_partially_matched": fmap["containers_partially_matched"] if fmap else None,

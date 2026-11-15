@@ -1,0 +1,83 @@
+[
+  {
+    "src": "ovl_09327_more500_runtime0.c",
+    "containers": [
+      9327
+    ],
+    "text_start": "0x01B009B8",
+    "text_end": "0x01B013F8",
+    "functions": 18,
+    "discovered_code_bytes": 2320,
+    "syms": {
+      "D_01B00000": "0x01B00000",
+      "D_01B0AA10": "0x01B0AA10",
+      "D_01B0A910": "0x01B0A910",
+      "D_01B0A710": "0x01B0A710",
+      "D_01B0CA10": "0x01B0CA10",
+      "D_01B0A6C8": "0x01B0A6C8",
+      "D_01B0A6F8": "0x01B0A6F8",
+      "D_01B0A810": "0x01B0A810",
+      "D_01B007E0": "0x01B007E0",
+      "D_01B00788": "0x01B00788",
+      "func_01B013F8": "0x01B013F8",
+      "func_01B014D0": "0x01B014D0"
+    }
+  },
+  {
+    "src": "ovl_09327_more500_runtime1.c",
+    "containers": [
+      9327
+    ],
+    "text_start": "0x01B014D0",
+    "text_end": "0x01B01568",
+    "functions": 1,
+    "discovered_code_bytes": 152,
+    "syms": {
+      "D_01B00000": "0x01B00000",
+      "D_01B0AA10": "0x01B0AA10",
+      "D_01B0A910": "0x01B0A910",
+      "D_01B0A710": "0x01B0A710",
+      "D_01B0CA10": "0x01B0CA10",
+      "D_01B0A6C8": "0x01B0A6C8",
+      "D_01B0A6F8": "0x01B0A6F8",
+      "D_01B0A810": "0x01B0A810",
+      "D_01B007E0": "0x01B007E0",
+      "D_01B00788": "0x01B00788",
+      "func_01B009B8": "0x01B009B8",
+      "func_01B00AE0": "0x01B00AE0",
+      "func_01B00B30": "0x01B00B30",
+      "func_01B00B38": "0x01B00B38",
+      "func_01B00BE8": "0x01B00BE8",
+      "func_01B00CE8": "0x01B00CE8",
+      "func_01B00CF0": "0x01B00CF0",
+      "func_01B00D58": "0x01B00D58",
+      "func_01B00EF0": "0x01B00EF0",
+      "func_01B00F90": "0x01B00F90",
+      "func_01B00FD0": "0x01B00FD0",
+      "func_01B01010": "0x01B01010",
+      "func_01B010D0": "0x01B010D0",
+      "func_01B01148": "0x01B01148",
+      "func_01B011F0": "0x01B011F0",
+      "func_01B01258": "0x01B01258",
+      "func_01B01370": "0x01B01370",
+      "func_01B01378": "0x01B01378",
+      "func_01B013F8": "0x01B013F8"
+    }
+  },
+  {
+    "src": "ovl_09327_more500_loader.c",
+    "containers": [
+      9327
+    ],
+    "text_start": "0x01B013F8",
+    "text_end": "0x01B014CC",
+    "functions": 1,
+    "discovered_code_bytes": 212,
+    "syms": {
+      "D_01C177B0": "0x01C177B0",
+      "D_01B0D5E0": "0x01B0D5E0",
+      "D_01BA8EF0": "0x01BA8EF0",
+      "func_01B009B8": "0x01B009B8"
+    }
+  }
+]
