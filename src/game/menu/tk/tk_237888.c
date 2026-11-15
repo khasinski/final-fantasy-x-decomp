@@ -183,7 +183,7 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002381F0);
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002382D0);
 
 /* DEBT(FAKE) */
-s32 func_002383F8(void) {
+s32 func_002383F8(void *weapon) {
     register s32 v0 __asm__("$2");
     s32 temp_16;
 
@@ -209,7 +209,32 @@ void func_00238440(Task *t)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002384D8);
+typedef struct { u8 pad0[0x30]; u16 count; u8 pad32[0x14]; s16 scroll; } WeaponList;
+typedef struct { u16 count; u16 ids[1]; } WeaponIds;
+extern s16 D_003261DC;
+void func_00226E90(FlagRec *rect);
+void func_00226A40(void *weapon, int x, int y, int disabled);
+
+void func_002384D8(int address,int x,int y,int index,int fixed,int ids)
+{
+    FlagRec rect;
+    void *weapon;
+    int value;
+    WeaponList *list=(WeaponList *)address;
+    if (!fixed) y-=list->scroll/128;
+    if (index>=0 && index<list->count) {
+        weapon=func_00237E00(((WeaponIds *)ids)->ids[index]);
+        value=func_002381F0(weapon);
+        rect=D_003261A0;
+        rect.rect[0]=x;
+        rect.rect[1]=y;
+        func_00226E90(&rect);
+        func_00226E10(x+D_003261E0[0]+96,y+D_003261E0[1],0xD4);
+        func_00226D00(x+D_003261DC-D_003261B8[0],y+D_003261B8[1],value,0x25);
+        func_00226A40(weapon,x,y,!func_002383F8(weapon));
+        graphicUiRemapY2();
+    }
+}
 
 void func_00238630(int a, int b, int c, int x, int y, int d)
 {
@@ -327,7 +352,30 @@ void func_00238968(Task *t)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00238A08);
+void func_00238A08(int address,int x,int y,int index,int fixed, int unused)
+{
+    FlagRec rect;
+    s32 count;
+    void *weapon;
+    SysEntry *entry=(SysEntry *)0x1D57300;
+    WeaponList *list=(WeaponList *)address;
+    if (!fixed) y-=list->scroll/128;
+    if (index>=0 && index<list->count) {
+        entry+=index;
+        rect=D_003261A0;
+        rect.rect[0]=x;
+        rect.rect[1]=y;
+        func_00226E90(&rect);
+        func_00226E10(x+D_003261E0[0]+96,y+D_003261E0[1],0xD4);
+        if(entry->h0) {
+            int value;
+            weapon=MsGetSaveWeapon(entry->h0,&count);
+            value=func_002382D0((int)weapon);
+            func_00226D00(x+D_003261DC-D_003261B8[0],y+D_003261B8[1],value,0x25);
+            func_00226A40(weapon,x,y,!entry->b3);
+        }
+    }
+}
 
 void func_00238B60(int a, int b, int c, int x, int y, int d)
 {

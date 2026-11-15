@@ -3271,7 +3271,7 @@ typedef struct MenuCmd {
     /* 0x94 */ s32 x94;
     /* 0x98 */ s32 x98;
     /* 0x9C */ s32 x9C;
-    /* 0xA0 */ u8 padA0[0xA4 - 0xA0];
+    /* 0xA0 */ s32 xA0; /* accumulated message reveal time */
     /* 0xA4 */ s32 xA4;
     /* 0xA8 */ u8 padA8[0xD0 - 0xA8];
     /* 0xD0 */ struct SlotZ *slot;

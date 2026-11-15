@@ -14,7 +14,7 @@ by any amount of other rodata.
 Any other .rdata block (string literal, float constant, non-table data) is left in plain `.rodata`;
 configure.py cannot place it, so this wrapper fails the build with a clear message instead.
 """
-import os, re, subprocess, sys, tempfile
+import os, re, subprocess, sys, tempfile, json, struct
 
 cc, src, out, *flags = sys.argv[1:]
 tmp = tempfile.mkdtemp()
@@ -44,10 +44,32 @@ while i < len(lines):
         continue
     res.append(l)
     i += 1
-if other:
+literal_layout = json.load(open("config/c_rodata.json")) if os.path.exists("config/c_rodata.json") else {}
+unit = os.path.normpath(src).removeprefix("src/").removesuffix(".c")
+literal = literal_layout.get(unit)
+if other and literal is None:
     sys.stderr.write(f"ccwrap: {src}: non-jump-table .rodata emitted by gcc (string literal / float constant?); "
                      "configure.py cannot place it. Use extern data from the existing rodata.\n")
     sys.exit(1)
 open(s, "w").write("\n".join(res))
 r = subprocess.run([cc, "-c", *[f for f in flags if not f.startswith("-I") and not f.startswith("-D")], s, "-o", out])
+if r.returncode == 0 and literal is not None:
+    # Refuse unplanned literals or padding changes before linking other units.
+    blob = open(out, "rb").read()
+    shoff = struct.unpack_from("<I", blob, 32)[0]
+    stride, count, names_index = struct.unpack_from("<HHH", blob, 46)
+    sections = [struct.unpack_from("<10I", blob, shoff + i * stride) for i in range(count)]
+    names = sections[names_index]
+    names = blob[names[4]:names[4] + names[5]]
+    contents = []
+    for section in sections:
+        name = names[section[0]:].split(b"\0", 1)[0]
+        if name == b".rodata":
+            contents.append(blob[section[4]:section[4] + section[5]])
+    original = open("baserom/SCES_504.90", "rb").read()
+    start = literal["address"] - 0xff000
+    expected = original[start:start + literal["size"]]
+    if contents != [expected]:
+        os.unlink(out)
+        sys.exit(f"ccwrap: {src}: literal block differs from its original {literal['piece']}")
 sys.exit(r.returncode)

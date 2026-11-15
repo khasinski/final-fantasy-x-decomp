@@ -12,7 +12,30 @@ s32 func_00208448(void)
     return D_003241C0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_208448", func_00208458);
+void func_00208458(u8 *src, u8 *dst)
+{
+    int index;
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        while (*src != 0) {
+            if (*src >= 0x30) {
+                index = (*src - 0x30) * 2;
+            } else {
+                index = (*src - 0x2B) * 0x1A0 + (src[1] - 0x30) * 2;
+            }
+            *dst++ = D_00323960[index];
+            *dst++ = D_00323960[index + 1];
+            src = TOSkipCode(src);
+        }
+    } else {
+        while (*src != 0) {
+            index = (*src - 0x30) * 2;
+            *dst++ = D_00323960[index];
+            *dst++ = D_00323960[index + 1];
+            src = TOSkipCode(src);
+        }
+    }
+    *dst = 0;
+}
 
 /* Menu/window slide animation callbacks (UiWidget). Module guess: meswin.c-like (string "meswin.c" exists in the ELF). */
 

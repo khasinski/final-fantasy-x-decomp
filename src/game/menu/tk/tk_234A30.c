@@ -367,7 +367,22 @@ void func_00235AA8(void) {
     func_00234A30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_234A30", func_00235B48);
+void func_00235B48(Task *task) {
+    int i = 0;
+
+    D_00693F60 = func_001BD360();
+    task->x1C = 0;
+    D_00693F68 = 0;
+    for (; i < D_00693F6C; i++) {
+        FlagRec *record = D_00693F70[i];
+        /* DEBT(TYPE): x10 holds a callback in this record family. */
+        void (*callback)(FlagRec *) = (void (*)(FlagRec *))record->x10;
+        callback(record);
+    }
+    func_00227480("scene4");
+    func_00227480("scene17");
+}
+
 
 void func_00235C08(void) {
     func_00227490(&D_00572370);

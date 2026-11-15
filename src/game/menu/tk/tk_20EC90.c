@@ -98,7 +98,40 @@ TblEntry *TkMenuIsTermScene(int a, int idx)
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", func_0020EEB8);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_20EC90/rodata", jtbl_00570A80);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", func_0020F750);
+float func_0020F750(u16 mode, int elapsed, int duration)
+{
+    float t = (float)elapsed / (float)duration;
+
+    if (duration) {
+        switch (mode & 0x7000) {
+        case 0x1000:
+            break;
+        case 0x2000:
+            t = 1.0f - t;
+            t = t * t;
+            t = 1.0f - t;
+            break;
+        case 0x3000:
+            t = t * t;
+            break;
+        case 0x4000:
+            t = 1.0f - t;
+            t *= 3.14159265358979323846f;
+            if (t > 3.14159265358979323846f) {
+                t = 3.14159265358979323846f;
+            }
+            if (t < 0.0f) {
+                t = 0.0f;
+            }
+            t = func_002E8648(t) + 1.0f;
+            t *= 0.5f;
+            break;
+        }
+    } else {
+        t = 1.0f;
+    }
+    return t;
+}
 
 void func_0020F850(u16 *code, R4Anim *an, int t, int dur)
 {

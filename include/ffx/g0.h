@@ -42,7 +42,7 @@ extern char D_0056AF98[];
 /* c_14C478 */
 struct Ent24;
 struct Rec14CE48;
-int func_0014D180(struct Ent24 *e, struct Rec14CE48 *r);
+int func_0014D180(struct Ent24 *e, struct Rec14CE48 *r, int duration);
 
 /* c_157938 */
 typedef struct G0S58FE60 {

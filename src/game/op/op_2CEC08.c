@@ -5,7 +5,7 @@
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #undef func_002CEDD8
-void func_002CEDD8(s32 arg0, s64 arg1, u16 arg2, u16 arg3);
+void func_002CEDD8(s32 arg0, s64 arg1, int arg2, int arg3);
 
 #define M2C_FIELD(expr, type_ptr, offset) (*(type_ptr)((u8 *)(expr) + (offset)))
 #define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
@@ -74,7 +74,30 @@ void func_002CED28(void *a0, void *a1, void *a2, void *a3) {
     _m2c_func_002CEFE8(a0, a1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEC08", func_002CEDD8);
+void func_002CEDD8(int address, s64 value, int first, int last) {
+    /* DEBT(CAST): the shared resource API passes addresses as integers. */
+    W10TextureTable *table = (W10TextureTable *)address;
+    int count = table->count;
+    s16 *start = &table->entries[0][0];
+    s16 *entry;
+
+    first &= 0xFFFF;
+    last &= 0xFFFF;
+    /* The original makes a count-only pass before updating packets. */
+    for (; count > 0; count--) {
+    }
+    count = table->count;
+    entry = start;
+    for (; count > 0; count--, entry += 4) {
+        W10TexturePacket *packet = (W10TexturePacket *)(address + *entry);
+        int id = packet->tag.words[0] & 0x3FFF;
+
+        if (id >= (u16)first && id <= last) {
+            packet->tag.value = value;
+        }
+    }
+}
+
 
 void func_002CEE60(s32 a, s32 b) {
     func_002CEDD8(a, b, 0, 0x4000);

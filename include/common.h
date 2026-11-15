@@ -8,6 +8,11 @@ typedef signed short s16;
 typedef unsigned int u32;
 typedef signed int s32;
 
+/* The period compiler bundle has no stddef.h. */
+#ifndef offsetof
+#define offsetof(type, member) ((u32)&((type *)0)->member)
+#endif
+
 #include "asm_include.h"
 
 /* 128-bit integer (one GPR, moved with lq/sq). Assigning (u_long128)0 gives `por rt,zero,zero; sq`. */

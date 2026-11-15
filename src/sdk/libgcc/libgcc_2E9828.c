@@ -37,7 +37,23 @@ void func_002EA328(int status)
     func_001000B8(status);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EA358);
+unsigned long func_002EA358(float input)
+{
+    unsigned long high;
+    double value = input;
+
+    if (value < 0) {
+        return 0;
+    }
+    high = (unsigned long)(unsigned int)(value * (1.0 / 4294967296.0)) << 32;
+    value -= (double)high;
+    if (value < 0) {
+        high -= (unsigned int)-value;
+    } else {
+        high += (unsigned int)value;
+    }
+    return high;
+}
 
 double func_002EA450(s64 u)
 {
@@ -55,7 +71,21 @@ double func_002EA450(s64 u)
     return func_002EBBB0(d, f);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EA4E8);
+float func_002EA4E8(long value)
+{
+    double high;
+
+    /* Preserve discarded low bits when the integer exceeds double precision. */
+    if ((unsigned long)value + 0x1fffffffffffffUL > 0x3ffffffffffffeUL) {
+        if ((int)value & 0x7ff) {
+            value |= 0x800;
+        }
+    }
+    high = (double)(int)(value >> 32);
+    high *= 65536.0;
+    high *= 65536.0;
+    return (float)(high + (double)(unsigned int)(value & 0xffffffffUL));
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EA5C8);
 

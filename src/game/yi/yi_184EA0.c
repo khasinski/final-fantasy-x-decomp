@@ -7,7 +7,7 @@ void Sg_MFIFOSync(void);
 int func_002DA610(int a, int b); /* DEBT(TYPE): asm reads (int a); C callers c_2203B8.c:36 pass 2 */
 u32 *func_002DB6D8(int a0);
 extern void func_002DBB00(S2DmaCtl *ch, int a, int b);
-void func_002DBF78(int a, int b, int c);
+int func_002DBF78(int a, int b, int c);
 void func_002F8660();
 void func_00184EA0(s32 arg0, s32 arg1) {
     s32 temp_2;

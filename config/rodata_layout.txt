@@ -14,7 +14,6 @@ piece piece_005695B8 0x5695b8
 jtbl jtbl_00569720 game/chr/ch_111B50 0x569720
 piece piece_00569748 0x569748
 jtbl jtbl_005697E0 game/chr/ch_113FF8 0x5697e0
-piece piece_005699AC 0x5699ac
 jtbl jtbl_005699D0 game/chr/ch_113FF8 0x5699d0
 piece piece_005699E8 0x5699e8
 jtbl jtbl_00569A00 game/main/sg_117D78 0x569a00
@@ -135,6 +134,8 @@ jtbl jtbl_0056DC70 game/rc/dt/rcdtRsd2 0x56dc70
 piece piece_0056DC88 0x56dc88
 jtbl jtbl_0056DD40 game/rc/dt/rcdtRsd2 0x56dd40
 piece piece_0056DD88 0x56dd88
+piece piece_0056DE08 0x56de08
+piece piece_0056DE10 0x56de10
 jtbl jtbl_0056DE80 game/battle/ms_1A56F8 0x56de80
 jtbl jtbl_0056DED0 game/battle/ms_1A56F8 0x56ded0
 piece piece_0056DEE8 0x56dee8
@@ -221,7 +222,7 @@ jtbl jtbl_00570220 game/menu/to/to_2021E8 0x570220
 jtbl jtbl_00570250 game/menu/to/to_2021E8 0x570250
 jtbl jtbl_00570280 game/menu/to/to_2021E8 0x570280
 piece piece_005702D0 0x5702d0
-jtbl jtbl_005702F0 game/menu/to/to_2021E8 0x5702f0
+jtbl jtbl_005702F0 game/menu/to/to_204080 0x5702f0
 piece piece_00570340 0x570340
 jtbl jtbl_00570840 game/menu/to/to_209460 0x570840
 jtbl jtbl_00570860 game/menu/to/to_209460 0x570860
@@ -229,8 +230,8 @@ jtbl jtbl_00570880 game/menu/to/to_209460 0x570880
 piece piece_005708A0 0x5708a0
 jtbl jtbl_005708C0 game/menu/to/to_209460 0x5708c0
 jtbl jtbl_00570940 game/menu/to/to_209460 0x570940
-jtbl jtbl_00570960 game/menu/to/to_209460 0x570960
-jtbl jtbl_00570980 game/menu/to/to_209460 0x570980
+jtbl jtbl_00570960 game/menu/to/to_20C188 0x570960
+jtbl jtbl_00570980 game/menu/to/to_20C188 0x570980
 piece piece_00570A38 0x570a38
 jtbl jtbl_00570A80 game/menu/tk/tk_20EC90 0x570a80
 jtbl jtbl_00570AA0 game/menu/tk/tk_20EC90 0x570aa0
@@ -409,8 +410,8 @@ jtbl jtbl_005766B0 sdk/libgraph/libgraph 0x5766b0
 piece piece_005767A0 0x5767a0
 jtbl jtbl_005768C0 sdk/libgraph/libgraph 0x5768c0
 piece piece_005769B0 0x5769b0
-jtbl jtbl_005769D0 game/platform/platform_2DC110 0x5769d0
-jtbl jtbl_005769F0 game/platform/ffx_2DC580 0x5769f0
+jtbl jtbl_005769D0 game/platform/platform_2DC1A0 0x5769d0
+jtbl jtbl_005769F0 game/platform/ffx_2DC650 0x5769f0
 piece piece_00576A08 0x576a08
 jtbl jtbl_005781E0 sdk/newlib/libc/libc_2F0840 0x5781e0
 piece piece_00578298 0x578298
@@ -423,6 +424,6 @@ jtbl jtbl_00578840 sdk/newlib/libc/libc_2F3A70 0x578840
 piece piece_00578930 0x578930
 jtbl jtbl_00578970 sdk/newlib/libc/libc_2F3A70 0x578970
 piece piece_00578988 0x578988
-jtbl jtbl_00578BC0 sdk/libkernl/tty 0x578bc0
+jtbl jtbl_00578BC0 sdk/libkernl/tty_2F9318 0x578bc0
 jtbl jtbl_00578CF0 sdk/libkernl/libkernl_2FBBE8 0x578cf0
 piece piece_00578D58 0x578d58

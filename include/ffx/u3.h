@@ -119,7 +119,8 @@ extern U3Popup D_00692560;
 extern s16 D_006925B0;
 extern s16 D_006925B2;
 extern s16 D_006925B4;
-void TOBtlInitInfoWinMes(int a);
+/* Assembly entry ignores arguments; existing callers use both call forms. */
+void TOBtlInitInfoWinMes();
 
 extern R4Ptrs D_0068EEE8[8];
 extern R4Ptrs D_0068EFC8[8];

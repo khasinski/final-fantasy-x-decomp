@@ -156,7 +156,7 @@ extern s32 D_00566388;          /* last command */
 extern s32 D_0056638C;          /* client semaphore */
 s32 func_002F8430(s32 sema);    /* PollSema */
 void func_002DF550(McReadEnd *p);
-void func_002DE358(int a, int b, int c);
+int func_002DE358(int a, int b, int c);
 typedef struct U5Blk12 {        /* 12 bytes, byte aligned */
     u8 b[12];
 } U5Blk12;

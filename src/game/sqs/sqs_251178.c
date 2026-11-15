@@ -139,7 +139,14 @@ int func_002517A8(int a, int wait)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00251828);
+void func_00251828(void)
+{
+    D_00327010[1] = *D_00327024;
+    if (D_0069C8F4 != 0) {
+        D_0069C8F4(D_0069C8F8);
+    }
+    D_0069BF74 &= ~1;
+}
 
 int SqsDataSendingCompleted(int a)
 {
@@ -726,7 +733,79 @@ void func_00252CD8(int a, int b)
     func_00251360(0x3D, a, b & 0x7F, 0, 0, 0, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00252D00);
+typedef struct {
+    s32 c0;
+    s32 c1;
+} SqsAdpcmCoeff;
+
+extern SqsAdpcmCoeff D_00327030[];
+extern s32 D_006A3180[];
+extern s32 D_006A3188[];
+
+void func_00252D00(u8 *src, u8 *dst)
+{
+    u8 *end_all = dst + 0x6400;
+
+    do {
+        u8 *end1 = dst + 0x200;
+        u8 *end2;
+
+        do {
+            u8 b = *src++;
+            s32 shift = b & 0xF;
+            SqsAdpcmCoeff *c = &D_00327030[(s32)b >> 4];
+            s32 i = 8;
+
+            do {
+                s32 s0 = D_006A3180[0];
+                s32 s1 = D_006A3180[1];
+                s32 sample;
+
+                D_006A3180[1] = s0;
+                sample = (((s32)(*src << 28) >> 16) >> shift) + ((s0 * c->c0 + s1 * c->c1) >> 6);
+                D_006A3180[0] = sample;
+                *(s16 *)dst = sample;
+                dst += 2;
+
+                s1 = D_006A3180[1];
+                D_006A3180[1] = sample;
+                sample = (((s32)((*src++ & 0xF0) << 24) >> 16) >> shift) + ((sample * c->c0 + s1 * c->c1) >> 6);
+                *(s16 *)dst = sample;
+                dst += 2;
+                D_006A3180[0] = sample;
+                i--;
+            } while (i != 0);
+        } while (dst < end1);
+
+        end2 = dst + 0x200;
+        do {
+            u8 b = *src++;
+            s32 shift = b & 0xF;
+            SqsAdpcmCoeff *c = &D_00327030[(s32)b >> 4];
+            s32 i = 8;
+
+            do {
+                s32 s0 = D_006A3188[0];
+                s32 s1 = D_006A3188[1];
+                s32 sample;
+
+                D_006A3188[1] = s0;
+                sample = (((s32)(*src << 28) >> 16) >> shift) + ((s0 * c->c0 + s1 * c->c1) >> 6);
+                D_006A3188[0] = sample;
+                *(s16 *)dst = sample;
+                dst += 2;
+
+                s1 = D_006A3188[1];
+                D_006A3188[1] = sample;
+                sample = (((s32)((*src++ & 0xF0) << 24) >> 16) >> shift) + ((sample * c->c0 + s1 * c->c1) >> 6);
+                *(s16 *)dst = sample;
+                dst += 2;
+                D_006A3188[0] = sample;
+                i--;
+            } while (i != 0);
+        } while (dst < end2);
+    } while (dst < end_all);
+}
 
 void func_00252EF0(int a, int b) {
     D_00327018[0] = a;

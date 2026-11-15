@@ -44,7 +44,24 @@ void func_001BCC50(void) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsDebugFullCommand);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BCE30);
+void func_001BCE30(void)
+{
+    int i;
+    int j;
+
+    for (i = 0; i < 0x70; i++) {
+        for (j = 0; j < 0x70; j++) {
+            if (D_003194D0.h3ECC[j] == 0x2000 + i) {
+                D_003194D0.b40CC[j] = 0x63;
+                break;
+            }
+        }
+        if (i >= 0) {
+            D_003194D0.h3ECC[i] = 0x2000 + i;
+            D_003194D0.b40CC[i] = 0x63;
+        }
+    }
+}
 
 void func_001BCED0(void) {
     int i;
@@ -421,7 +438,15 @@ s32 func_001BE5C0(int id) {
     return D_003194D0.slot[(u8)id].f18;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsGetNextAP);
+int MsGetNextAP(int a0) {
+    u8 *a3 = MsGetExcelData(a0, D_00317358, 0);
+    int lvl = D_003194D0.slot[a0].f3B + D_003194D0.slot[a0].b3C;
+    if (lvl < 0x65) {
+        int lvl2 = lvl * lvl;
+        return ((lvl * a3[0x11] * lvl2) / 100) + ((lvl2 * a3[0x12]) / 10) + ((lvl + 1) * a3[0x13]);
+    }
+    return *(s32 *)(a3 + 0x14);
+}
 
 u32 func_001BE690(int a, int b) {
     u8 i = a;

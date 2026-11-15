@@ -103,6 +103,19 @@ s32 func_002D2050(void) {
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D2060);
 
+void func_002D20D0(void (*handler)(void))
+{
+    if (D_0078ACAC != -1) {
+        func_002F8E08(2);
+        func_002F80E0(2,D_0078ACAC);
+        D_0078ACAC = -1;
+    }
+    if (handler && D_0078ACAC == -1) {
+        D_0078ACAC = func_002F80C0(2,handler,-1);
+        func_002F8E70(2);
+    }
+}
+
 void func_002D2168(void) {
     func_002D20D0(func_002D3E78);
 }

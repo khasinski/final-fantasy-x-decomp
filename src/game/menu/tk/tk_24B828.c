@@ -906,7 +906,42 @@ int func_0024F3E8(int a, int idx)
     return e->b3;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024F400);
+extern u16 D_0036F0F0[];
+u8 *MsSaveItemNumBuffer(int *n);
+
+void func_0024F400(void)
+{
+    u16 counts[256];
+    int size;
+    u16 *types;
+    u8 *numbers;
+    int i = 0;
+    SysEntry *item = SYS_TBL;
+    u16 *order;
+    int type;
+    types = (u16 *)MsSaveItemTypeBuffer(&size);
+    numbers = MsSaveItemNumBuffer(&size);
+    for (; i < 256; i++) {
+        types[i] = 0xFF;
+        numbers[i] = 0;
+        counts[i] = 0;
+    }
+    for (i = 0; i < func_0024CB28(); i++, item++) {
+        int quantity;
+        int index = item->h0;
+        quantity = item->b2;
+        index &= 0xFFF;
+        if (quantity != 0) counts[index] = item->b2;
+    }
+    order = D_0036F0F0;
+    while ((type = *order++) != 0xFFFF) {
+        if (counts[type & 0xFFF] != 0) {
+            *types++ = type;
+            *numbers++ = counts[type & 0xFFF];
+        }
+    }
+    TkMenuItemRefresh(4);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", TkMenuCtrlItem);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_00573510);

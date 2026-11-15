@@ -104,4 +104,15 @@ typedef struct W11SoundDevice { u8 pad0[8]; u8 b08, b09; u16 h0A; char buf0C[0x1
 extern W11SoundDevice D_00565F50;
 int func_2064278(W11SoundDevice *state, int a, int b, int c, int d); /* DEBT(TYPE): external entry's call signature inferred from argument registers. */
 
+/* EE DMA channel control: STR is bit 8. */
+typedef union DmaControl {
+    u32 word;
+    struct {
+        unsigned int low : 8;
+        unsigned int start : 1;
+        unsigned int high : 23;
+    } bits;
+} DmaControl;
+extern char D_005769B0[];
+
 #endif

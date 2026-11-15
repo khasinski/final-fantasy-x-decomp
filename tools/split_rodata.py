@@ -14,7 +14,7 @@ is no longer part of that blob.  This script (run after `splat split`, see Makef
 configure.py turns the layout into the .rodata part of the link script.  Idempotent: it does nothing
 when the blob is already gone.
 """
-import glob, os, re, sys
+import glob, os, re, sys, json
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))   # append: tools/dis.py must not shadow `dis`
 import ffxsyms  # noqa: E402  (rodata items may carry applied real data names, config/names_applied.tsv)
@@ -100,8 +100,14 @@ def flush():
         run = []
 
 
+# Compiler-owned literals must be independent pieces, including after a fresh split.
+literal_layout = json.load(open("config/c_rodata.json")) if os.path.exists("config/c_rodata.json") else {}
+literal_boundaries = {address for item in literal_layout.values()
+                      for address in (item["address"], item["address"] + item["size"])}
 func_tables = {}
 for name, text in items:
+    if addr_of(name) in literal_boundaries:
+        flush()
     if not name.startswith("jtbl_"):
         if not run:
             run_start = f"{addr_of(name):08X}"

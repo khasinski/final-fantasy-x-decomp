@@ -475,7 +475,93 @@ u8 *MsGetTargetListWakka(int a, int *out1, int n, int *out2) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", func_001E47B8);
+s32 func_001E47B8(u8 *symbols, s32 *out_value)
+{
+    s32 count2;
+    s32 count8;
+    s32 count5;
+    s32 count1;
+    s32 count7;
+    s32 count0;
+    s32 count6;
+    s32 count3;
+    s32 count9;
+    s32 result;
+
+    *out_value = 0;
+    result = 0;
+    if (func_001E49F8(symbols, 0xFF) == 0) {
+        *out_value = 1;
+        if (func_001E49F8(symbols, 0xA) >= 3) {
+            return 0xF;
+        }
+        count0 = func_001E49F8(symbols, 0);
+        count1 = func_001E49F8(symbols, 1);
+        count2 = func_001E49F8(symbols, 2);
+        count3 = func_001E49F8(symbols, 3);
+        if (count0 >= 3) {
+            return 2;
+        }
+        if (count1 >= 3) {
+            return 4;
+        }
+        if (count2 >= 3) {
+            return 6;
+        }
+        if (count3 >= 3) {
+            return 8;
+        }
+        if (count0 >= 2) {
+            return 1;
+        }
+        if (count1 >= 2) {
+            return 3;
+        }
+        if (count2 >= 2) {
+            return 5;
+        }
+        if (count3 >= 2) {
+            return 7;
+        }
+        count7 = func_001E49F8(symbols, 7);
+        count8 = func_001E49F8(symbols, 8);
+        count9 = func_001E49F8(symbols, 9);
+        if (count7 >= 3) {
+            return 0xA;
+        }
+        if (count8 >= 3) {
+            return 0xC;
+        }
+        if (count9 >= 3) {
+            return 0xE;
+        }
+        if (count7 >= 2) {
+            return 9;
+        }
+        if (count8 >= 2) {
+            return 0xB;
+        }
+        if (count9 >= 2) {
+            return 0xD;
+        }
+        count5 = func_001E49F8(symbols, 5);
+        count6 = func_001E49F8(symbols, 6);
+        if (count6 >= 3) {
+            *out_value = 12;
+            return 17;
+        }
+        if (count5 >= 3) {
+            *out_value = 6;
+            return 17;
+        }
+        if (count5 > 0 || count6 > 0) {
+            *out_value = count5 + count6 * 2;
+            return 17;
+        }
+        return 16;
+    }
+    return result;
+}
 
 int func_001E49F8(u8 *p, int v)
 {

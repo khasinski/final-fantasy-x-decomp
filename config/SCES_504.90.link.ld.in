@@ -8,15 +8,15 @@ D_0069247A = 0x0069247a;
 /* data inside .text that splat folds into padding: absolute aliases */
 func_0017A540 = 0x17A540;
 /* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */
-dpadd = 0x2EBBB0;
-dpsub = 0x2EBC08;
-dpcmp = 0x2EC198;
-litodp = 0x2EC1E8;
+dpadd = func_002EBBB0;
+dpsub = func_002EBC08;
+dpcmp = func_002EC198;
+litodp = func_002EC1E8;
 dptoli = 0x2EC2A0;
-dptoul = 0x2EC338;
-dptofp = 0x2EC440;
+dptoul = func_002EC338;
+dptofp = func_002EC440;
 fptoui = 0x2ECF38;
-fptodp = 0x2ED038;
+fptodp = func_002ED038;
 sqrtf = 0x2E9708;
 SECTIONS
 {
@@ -38,3 +38,10 @@ SECTIONS
     .bss (NOLOAD) : { build/asm/data/47DB0C.bss.s.o(.bss) }
     /DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.gnu.attributes) *(.comment) *(.pdr) *(.mdebug*) }
 }
+
+/* Existing data points inside the full 122-entry character jump table. */
+D_005699AC = 0x005699AC;
+
+/* EE compiler helpers used by unsigned double-to-integer conversion. */
+dpmul = func_002EBC70;
+__floatdidf = func_002EA450;

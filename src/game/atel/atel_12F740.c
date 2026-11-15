@@ -1484,7 +1484,21 @@ int func_00133948(Actor *a, void *op, ScriptCtx *ctx) {
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_001339B8);
+void func_001339B8(Actor *actor, void *op, ScriptCtx *ctx)
+{
+    for (;;) {
+        int value = AtelPopStackInteger(actor,ctx);
+        AtelPushStackInteger(actor,ctx,2);
+        AtelPushStackInteger(actor,ctx,value);
+    }
+}
+int func_00133A10(Actor *actor, void *op, ScriptCtx *ctx)
+{
+    int value = AtelPopStackInteger(actor,ctx);
+    s32 *handle = func_00124498();
+    func_0014D3F0(1, value, (int)handle); /* DEBT(TYPE): callee declares the work pointer as int. */
+    return 1;
+}
 
 int func_00133A50(int x) {
     return MsMenuGetText(3, x, MsGetSaveConfigHiragana());

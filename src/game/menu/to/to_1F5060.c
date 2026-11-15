@@ -434,7 +434,34 @@ void *func_001F80D0(void *list, int id, int x, int y, int d)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F8138);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F8258);
+extern R4CharInfo D_00323930;
+extern TextItem D_00323918;
+void *func_001F8258(void *list, int number, int x, int y, int style)
+{
+    char buf[32];
+    u8 *s;
+    TextItem *it;
+    R4CharInfo *glyph = &D_00323930;
+    func_002EF0D0(glyph, 0, 32);
+    func_002EF0D0(&D_00323918, 0, 20);
+    InvokedFromSelectCursor = list;
+    func_002F0008(buf, D_0056FF90, number);
+    x -= func_002F0840(buf) * 11;
+    it = &D_00323918;
+    it->x = x;
+    it->y = y;
+    it->col[0] = 0x80;
+    it->col[1] = 0x80;
+    it->col[2] = 0x80;
+    it->col[3] = 0x80;
+    it->f12 = 0;
+    it->f13 = style;
+    for (s = (u8 *)buf; *s; s = TOSkipCode(s)) {
+        func_0020E468(s, glyph);
+        func_001F1F60(it, glyph);
+    }
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F8390(void *list, int v, int x, int y, int d)
 {

@@ -17,15 +17,81 @@ INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9A48);
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9AB0);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9D20);
+void func_002D9D20(void *data) {
+    /* DEBT(CAST): buffer and MMIO registers use 64-bit GS words. */
+    unsigned long *regs = data;
+    if (*(s16 *)(func_002D9A38() + 6) == 1) {
+        *(volatile unsigned long *)0x12000000 = regs[0];
+        *(volatile unsigned long *)0x12000070 = regs[2];
+        *(volatile unsigned long *)0x12000080 = regs[3];
+        *(volatile unsigned long *)0x120000C0 = regs[4];
+    } else {
+        *(volatile unsigned long *)0x12000000 = regs[0];
+        *(volatile unsigned long *)0x12000020 = regs[1];
+        *(volatile unsigned long *)0x12000090 = regs[2];
+        *(volatile unsigned long *)0x120000A0 = regs[3];
+        *(volatile unsigned long *)0x120000E0 = regs[4];
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9DE0);
+s16 func_002D9DE0(s16 format, s16 width, s16 height) {
+    u8 *state = func_002D9A38();
+    int columns = (width + 63) / 64;
+    int rows;
+    if (format & 2) rows = (height + 63) / 64;
+    else rows = (height + 31) / 32;
+    /* DEBT(CAST): read the packed GS mode fields as one 64-bit word. */
+    if ((*(unsigned long *)state & 0x0000ffff0000ffffUL) == 1) return columns * rows;
+    return columns * rows * 2;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9EA8);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA090);
+int func_002DA090(unsigned long *p, s16 test, s16 x, s16 y, s16 width, s16 height, u8 r, u8 g, u8 b, u8 a, u32 z) {
+    unsigned long color = r | ((unsigned long)g << 8) | ((unsigned long)b << 16) | ((unsigned long)a << 24) | 0x3f80000000000000UL;
+    unsigned long start = (x * 16) | ((unsigned long)(y * 16) << 16) | ((unsigned long)z << 32);
+    unsigned long end = ((x + width) * 16) | ((unsigned long)((y + height) * 16) << 16) | ((unsigned long)z << 32);
+    p[1]=0x47;
+    p[0]=0x30000;
+    p[2]=6;
+    p[3]=0;
+    p[5]=1;
+    p[4]=color;
+    p[6]=start;
+    p[7]=5;
+    p[9]=5;
+    p[8]=end;
+    p[11]=0x47;
+    if (test) {
+        p[10] = ((unsigned long)(test & 3) << 17) | 0x10000;
+    } else {
+        p[10] = 0x30000;
+    }
+    /* Publish the completed packet before the DMA consumer reads it. */
+    SYNC();
+    return 6;
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA198);
+extern char D_005764B8[];
+
+int func_002DA198(void *packet) {
+    /* DEBT(CAST): EE hardware registers and packet addresses. */
+    unsigned int timeout = 0;
+    while (*(volatile unsigned int *)0x1000A000 & 0x100) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_005764B8);
+            return -1;
+        }
+    }
+    *(volatile unsigned int *)0x1000A020 = (int)(*(unsigned long *)packet & 0x7fff) + 1;
+    if (((unsigned int)packet & 0x70000000) == 0x70000000) {
+        *(volatile unsigned int *)0x1000A010 = ((unsigned int)packet & 0xfffffff) | 0x80000000;
+    } else {
+        *(volatile unsigned int *)0x1000A010 = (unsigned int)packet & 0xfffffff;
+    }
+    *(volatile unsigned int *)0x1000A000 = 0x101;
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA280);
 

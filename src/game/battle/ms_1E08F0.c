@@ -538,7 +538,67 @@ W5OffTbl *MsSetMotBinAddress(BtlChr *c, int idx)
 void func_001E1C68(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", func_001E1C70);
+int func_001E1C70(int id, BtlChr *c, int b, int b0)
+{
+    u8 *base = (u8 *)c->f1B8;
+    s32 res = 0;
+
+    if (base != 0) {
+        s32 lo = 0;
+        s32 hi = *(u16 *)base - 1;
+        u8 *tbl = base + 2;
+        u8 *found = 0;
+
+        while (lo <= hi) {
+            s32 mid = (lo + hi) / 2;
+            u8 *e = tbl + (mid << 2);
+            u16 key = *(u16 *)e;
+            if (key == b) {
+                found = e;
+                break;
+            }
+            if (b < key) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        if (found != 0) {
+            u8 *sub = base + *(u16 *)(found + 2);
+            u16 cnt = *(u16 *)sub;
+            u8 *ptrs = sub + 2;
+            s32 i;
+
+            for (i = 0; i < cnt; i++, ptrs += 2) {
+                u8 *rec = sub + *(u16 *)ptrs;
+                u8 n1 = rec[1];
+                u8 n2 = rec[2];
+                u16 *arr = (u16 *)(rec + 4);
+                s32 j;
+
+                for (j = 0; j < n1; j++) {
+                    u16 v = *arr++;
+                    if (v == 0xFFFF || v == b0) {
+                        res = rec[0];
+                        break;
+                    }
+                }
+                for (j = 0; j < n2; j++) {
+                    u16 v = *arr++;
+                    if (v == 0xFFFF || v == b0) {
+                        res = 0;
+                        break;
+                    }
+                }
+                if (res != 0) {
+                    break;
+                }
+            }
+        }
+    }
+    return res;
+}
 
 int msVoiceCheckStanby(int a)
 {

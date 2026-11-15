@@ -83,11 +83,86 @@ void TOClearBtlWindow(void)
     D_003249A0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOSetBtlActiveChr);
+extern s16 D_00692040[];
+void TOBtlInitAnm(void);
+void TOBtlInitCtbWindow(void);
+void TOBtlInitChrNum(void);
+void TOBtlInitStatusWin(void);
+void func_002180A0(void);
+void func_00218928(void);
+void TOBtlInitLimitTimer(void);
+void TOBtlSetNextAction(int,int);
+
+void TOSetBtlActiveChr(int id)
+{
+    if (MsBattleGetStatus() == 1 && D_00692038 == 0) {
+        func_002EF0D0(D_00690678,0,0x20);
+        D_00690698=0;
+        D_003249A4=0;
+        D_00325670=0;
+        func_002EF0D0(D_003249C0,0,0x660);
+        D_00325020=-1;
+        func_002EF0D0(D_00692040,0,8);
+        func_002EF0D0(D_003252A8,0,0x48);
+        TOBtlInitAnm();
+        TOBtlInitCtbWindow();
+        TOBtlInitChrNum();
+        TOBtlInitStatusWin();
+        func_002180A0();
+        func_00216FA0(0);
+        func_00216FA0(1);
+        func_00218928();
+        TOBtlInitInfoWinMes();
+        TOBtlInitLimitTimer();
+        D_00692038 |= 1 << id;
+        D_003252A4 = id;
+        TOBtlSetNextAction(id,0xFE);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetNextAction);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetPrevAction);
+extern R4Init D_00325170;
+extern s16 D_00692040[];
+
+int TOBtlSetPrevAction(void)
+{
+    R4Rec *r;
+    s8 prev;
+    u16 hC;
+
+    if (D_00325020 <= 0) {
+        return 0;
+    }
+    r = &D_003249C0[D_00325020];
+    hC = *(u16 *)((u8 *)r + 0xC);
+    r->state = 5;
+    *(s16 *)((u8 *)r + 8) = D_003252A4;
+    *(s16 *)((u8 *)r + 0x16) = 0xFF;
+    if (hC == 0x311E) {
+        D_003249A4 = 0;
+    }
+    if (hC == 0x3029) {
+        D_003249A4 = 0;
+    }
+    if (r->b2 == 1) {
+        r->h96 = D_003249C0[D_00325020 - 1].h96;
+    }
+    prev = D_00325020 - 1;
+    D_00325020 = prev;
+    r = &D_003249C0[prev];
+    r->state = 2;
+    if (*(s8 *)((u8 *)r + 0xB) >= *(s8 *)((u8 *)r + 0xA)) {
+        if (*(s8 *)((u8 *)r + 0xB) > 0) {
+            (*(s8 *)((u8 *)r + 0xB))--;
+        }
+    }
+    if (D_003249C0[D_00325020].b2 == 1) {
+        toTarget = D_00325170;
+        D_00692040[3] = 0;
+    }
+    return 1;
+}
 
 void func_00215360() /* DEBT(TYPE): old-style definition; TOBtlFinishCommand passes an argument */
 {
@@ -133,7 +208,40 @@ void func_002156C0(s8 v)
     D_003249AA = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOCheckBtlCommandUse);
+extern u16 D_00692046;
+int MsGetCommandUse(int, int);
+int MsCheckUseCommand(int, OfsTbl *, int);
+int TOCheckBtlCommandUse(int owner, int item)
+{
+    int output[2];
+    OfsTbl *cmd;
+    int kind;
+    if (item == 0xFE) {
+        return 0;
+    }
+    if (item == 0xFF) {
+        return -2;
+    }
+    cmd = MsGetComData(item, &output[0]);
+    if (MsGetCommandUse(owner, item) == 1) {
+        return -1;
+    }
+    if (MsCheckUseCommand(owner, cmd, D_00692046) == -1) {
+        return -2;
+    }
+    kind = cmd->b16 & 0xF8;
+    if (kind == 8 || kind == 16) {
+        TOGetSaveWindow(owner, cmd->b17, &output[1]);
+        if (output[1] == 0) {
+            return kind != 8 ? -3 : -4;
+        }
+        return cmd->b17;
+    }
+    if (cmd->h1A & 1) {
+        return 0xFE;
+    }
+    return D_003249A4 == 0x100 ? 0xFE : 0xFF;
+}
 
 s32 TOCheckBtlCommandTarget(s32 a, s32 b) {
     s32 temp_3;

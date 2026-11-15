@@ -621,7 +621,31 @@ void func_002238D8(void) {
     _m2c_func_002238D8_TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_002239A8);
+extern s16 D_0069330C;
+void func_001F3910(int font, u8 *text, int x, int y);
+
+void func_002239A8(void)
+{
+    s16 size[2];
+    int textx, y, x;
+    if(D_0069330C && D_003257A8) {
+        TOMenuOpenPktBuffTmp();
+        size[0]=0;
+        size[1]=0;
+        _TOGetMessageWH(7,(u8 *)D_003257A8,&size[0],&size[1],0,0);
+        size[0]+=36;
+        size[1]+=10;
+        textx=(512-size[0])/2;
+        y=(416-size[1])/2;
+        size[0]=size[0]*D_0069330C/4096;
+        x=(512-size[0])/2;
+        func_001FA548(x,y,size[0],size[1]);
+        TODrawScissorXYWH(x,y,size[0],size[1]);
+        func_001F3910(7,(u8 *)D_003257A8,textx+18,y+5);
+        TODrawScissorXYWH(0,0,511,415);
+        TOMenuDrawKickTmp();
+    }
+}
 
 void func_00223B00(void)
 {
@@ -650,7 +674,7 @@ int func_00223DC0(int v) {
     return 0;
 }
 
-int func_00223E28(void) { return func_00242C58(); }
+int func_00223E28(int id) { return func_00242C58(); }
 
 int func_00223E48(int a0, int a1) {
     return ((140 - a1 * 20) >> 1) + (a0 * 20 + 46);
@@ -660,7 +684,38 @@ int func_00223E70(int a0, int a1) {
     return ((308 - a1 * 44) >> 1) + (a0 * 44 + 76);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223E98);
+extern u8 D_006930B1;
+void func_00223E98(void)
+{
+    int total = 0;
+    int i;
+    int row;
+    Rec0E *entry;
+    D_006930B1 = 0;
+    for (i = 0; i < 8; i++) {
+        if ((s8)btlgetdata.pad0[i] != 0) {
+            if (btlgetdata.next[i] != 0) {
+                D_006930B1 = 1;
+            }
+            total++;
+        }
+    }
+    row = 0;
+    for (i = 0; i < 8; i++) {
+        if ((s8)btlgetdata.pad0[i] != 0) {
+            entry = &D_006930B8[row];
+            entry->h2 = row * 6;
+            entry->h4 = 0;
+            entry->h6 = i;
+            entry->pad8[0] = func_00223E28(i);
+            entry->pad8[1] = func_00223DC0(i);
+            entry->h0 = func_00223E70(row, total);
+            entry->b0A = 0;
+            row++;
+        }
+    }
+    D_006930B0 = total;
+}
 
 void func_00223FB8(int a)
 {

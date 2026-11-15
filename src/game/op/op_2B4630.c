@@ -53,7 +53,20 @@ int op_oef2_obj_a_get(int a, int b, int c)
     return (int)t + t[c] + c * 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", op_oef2_a_set);
+int op_oef2_a_set(u8 *arg0, int arg1, int arg2, int arg3)
+{
+    int n;
+
+    if (arg1 == 3 || arg1 == 2 || arg1 == 6) {
+        return 0;
+    }
+    n = *(s16 *)(arg0 + arg1 * 2 + 0x40);
+    if (n == 0 || arg2 >= ((n + 3) & 0xFC)) {
+        return 0;
+    }
+    *(s32 *)(*(s32 *)(arg0 + arg1 * 4) + (s32)arg0 + arg2 * 4) = arg3;
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", func_002B4BA8);
 

@@ -144,7 +144,20 @@ void func_00201F20(int i)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_00201F50);
+CmdRec *func_00201F50(int i, CmdRec *list)
+{
+    if (D_006672D8[i].h0 == 0) return list;
+    {
+        if (D_006672D8[i].hA < D_006672D8[i].hC) {
+            D_006672D8[i].hA++;
+        }
+        D_006672D8[i].h8 = D_006672D8[i].h6 * func_00201C18(D_006672D8[i].hA, D_006672D8[i].hC);
+        list = func_001FE170(list, 0xE2, D_006672D8[i].h2 - 5, D_006672D8[i].h4);
+        list = func_001FE1C8(list, 0xE3, D_006672D8[i].h2 + 11, D_006672D8[i].h4, D_006672D8[i].h8 - 11, 0, 0x80808080, 0x80808080);
+        list = func_001FE170(list, 0xE4, D_006672D8[i].h2 + D_006672D8[i].h8, D_006672D8[i].h4);
+    }
+    return list;
+}
 
 /* Text window measuring helpers (TextWin). Module guess: meswin.c-like. */
 

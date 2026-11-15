@@ -1,11 +1,13 @@
 /* tu_106 0x160780-0x161aa0: high; tex_anim (config/tu_map.tsv) */
 #define Sg_GetDBuffDC _hdr_Sg_GetDBuffDC
+#define func_00161968 _hdr_func_00161968
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
 #include "ffx/v1.h"
 #include "ffx/g1.h"
 #undef Sg_GetDBuffDC
+#undef func_00161968
 
 void func_00161A20(int a0, int a1, int a2, int a3);
 void Sg_GetDBuffDC(s32 *p);
@@ -67,7 +69,24 @@ s32 chr_texanim_draw(s32 arg0, s32 arg1)
     return arg1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", func_001608D0);
+/* Keep -fno-strict-aliasing for the original ordering of pointer/word stores. */
+void func_001608D0(void) {
+    int i, j;
+
+    for (i = 0; i < 64; i++) {
+        D_0078D898[i].p00 = 0;
+        D_0078D898[i].w04 = 0;
+        D_0078D898[i].w08 = 0;
+        D_0078D898[i].b0D = 0;
+        D_0078D898[i].b0E = 1;
+        for (j = 31; j >= 0; j--) {
+            D_0078D898[i].pad_0F[j] = 0;
+        }
+    }
+    D_00591F48 = 0;
+    D_00591F49 = -1;
+}
+
 
 void func_00160978(void)
 {
@@ -262,7 +281,43 @@ int chr_texanim_draw_sub_new(int index, int value)
     return value;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", func_00161968);
+void func_00161968(int a0, int a1, int a2)
+{
+    TexAnimWorkNew *w;
+
+    if (D_0078D898[a0].p00 == 0) {
+        return;
+    }
+    w = (TexAnimWorkNew *)D_0078D898[a0].w04;
+    if (a1 == 1) {
+        s32 i;
+        for (i = 0; i < 64; i++) {
+            if (w->bD08[i] == 1) {
+                TaSubEnt *ent = &w->ent[i];
+                ent->h1A = 0;
+                ent->w04 = a2;
+                ent->h14 = 0;
+                ent->h16 = 0;
+                ent->w24 = 0;
+                ent->w28 = 0;
+                ent->w2C = 0;
+                ent->w30 = 0;
+                ent->h18 = 0;
+            }
+        }
+    } else {
+        TaSubEnt *ent = &w->ent[a1];
+        ent->w04 = a2;
+        ent->h1A = 0;
+        ent->h14 = 0;
+        ent->h16 = 0;
+        ent->w24 = 0;
+        ent->w28 = 0;
+        ent->w2C = 0;
+        ent->w30 = 0;
+        ent->h18 = 0;
+    }
+}
 
 void func_00161A20(int a0, int a1, int a2, int a3) {
     if (a1 == 4) {

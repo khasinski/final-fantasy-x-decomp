@@ -41,10 +41,13 @@ When compiling a C unit, `tools/ccwrap.py` renames the `k`-th compiler-emitted j
 | `syscall` | `syscall` (EE kernel stubs) |
 | `cop0` | `mfc0`, `mtc0`, `ei`, `di`, `eret`, `cache`, `tlb*` |
 | `cop2` | `lqc2`, `sqc2`, `qmfc2`, `qmtc2`, `cfc2`, `ctc2`, `v*` (VU0 macro mode) |
-| `mmi` | R5900 multimedia instructions (`p*`, `mult1`/`div1`/`mflo1`, `qfsrv`, `mfsa`/`mtsa`) |
+| `mmi` | R5900 multimedia instructions (`p*`, `div1`/`mflo1`, `qfsrv`, `mfsa`/`mtsa`) |
 | `sq-zero` | `sq $zero, ...` (`movti_internal` in `ee-gcc 2.9` requires a general-purpose register `d` for TI-mode stores and emits `por` + `sq` for zero stores) |
 | `nop-loop` | Explicit `nop` delay loops |
 | `sdk` | Handwritten Sony library routines |
+
+`mult1` can also be emitted by `ee-gcc` for ordinary integer multiplication, as in
+`AtelGetActorBufferSize`. Its presence alone does not establish that a function is handwritten.
 
 Note that ordinary `lq`/`sq` instructions are **not** handwritten markers: `ee-gcc 2.9` emits them for 128-bit `u_long128` (`__attribute__((mode(TI)))`) copies and struct moves.
 

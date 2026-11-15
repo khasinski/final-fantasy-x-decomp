@@ -32,7 +32,8 @@ extern s8 D_0030DE81;
 
 extern int D_0030DE90;
 
-extern int D_0030E068;
+extern void (*D_0030E068)(void);
+void func_0016BC80(void (*callback)(void));
 
 extern int D_0030E060;
 

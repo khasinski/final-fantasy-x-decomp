@@ -68,4 +68,19 @@ long long func_00300350(double a)
     return func_003003B0(a);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/iopreset", func_003003B0);
+unsigned long func_003003B0(double value)
+{
+    unsigned long high;
+
+    if (value < 0) {
+        return 0;
+    }
+    high = (unsigned long)(unsigned int)(value * (1.0 / 4294967296.0)) << 32;
+    value -= (double)high;
+    if (value < 0) {
+        high -= (unsigned int)-value;
+    } else {
+        high += (unsigned int)value;
+    }
+    return high;
+}

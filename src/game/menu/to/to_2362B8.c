@@ -72,7 +72,35 @@ int func_00236640(int text, int a, int b, int c)
     return (int)t; /* DEBT(TYPE): declared int in funcs.h */
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2362B8", func_00236720);
+int func_00236720(int text, int a, int b, int c)
+{
+    Task *t = func_00243400();
+
+    D_00326038 = t;
+    t->cb = 0;
+    t->x1C = 0;
+    t->x0C = (s32)func_00236090; /* DEBT(CAST): Task callbacks are typed s32 */
+    t->x10 = (s32)func_002362B8;
+    t->x14 = (s32)func_00236558;
+    t->x30 = 2;
+    t->x48 = 1;
+    t->b42 = 1;
+    t->x3A = 2;
+    t->b37 = 1;
+    if (a != 0) {
+        t->b3E = 2;
+    } else {
+        t->b3E = 3;
+    }
+    t->x24 = text;
+    t->ext[0] = a;
+    t->ext[1] = b;
+    t->ext[2] = c;
+    t->ext[14] = 1;
+    t->ext[15] = 2;
+    TkMenuMainRegistWindow(t);
+    return (int)t; /* DEBT(TYPE): declared int in funcs.h */
+}
 
 int func_00236808(int text, int a, int b, int c)
 {

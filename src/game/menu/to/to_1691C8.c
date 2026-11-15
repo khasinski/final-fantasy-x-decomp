@@ -209,7 +209,7 @@ void func_0016BC30(int a) {
     }
 }
 
-void func_0016BC80(int v) {
+void func_0016BC80(void (*v)(void)) {
     D_0030E068 = v;
 }
 
@@ -217,7 +217,18 @@ int func_0016BC90(void) {
     return D_0030E068 != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BCA0);
+void func_0016BCA0(void)
+{
+    for (;;) {
+        if (D_0030E068 != 0) {
+            D_0030E068();
+            D_0030E068 = 0;
+        }
+        func_0017135C(1);
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BCE0);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C160);
 
 int func_0016C318(void) {

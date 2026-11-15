@@ -17,13 +17,369 @@
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E4250);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E4770);
+double func_002EBC70(double arg_a, double arg_b);
+int func_002EC198(double arg_a, double arg_b);
+float func_002E57C0(float x);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E4A78);
+#define INSERT_WORDS(d, ix0, ix1) \
+    do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E4EA8);
+double func_002E4770(double x)
+{
+    double z;
+    s32 sign = (int)0x80000000;
+    u32 r, t1, s1, ix1, q1;
+    s32 ix0, s0, q, m, t, i;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E5190);
+    EXTRACT_WORDS(ix0, ix1, x);
+    if ((ix0 & 0x7ff00000) == 0x7ff00000) {
+        return func_002EBBB0(func_002EBC70(x, x), x);
+    }
+    if (ix0 <= 0) {
+        if (((ix0 & (~sign)) | ix1) == 0) {
+            return x;
+        } else if (ix0 < 0) {
+            double tmp = func_002EBC08(x, x);
+            return func_002EBF18(tmp, tmp);
+        }
+    }
+    m = (ix0 >> 20);
+    if (m == 0) {
+        while (ix0 == 0) {
+            m -= 21;
+            ix0 |= (ix1 >> 11);
+            ix1 <<= 21;
+        }
+        for (i = 0; (ix0 & 0x00100000) == 0; i++) {
+            ix0 <<= 1;
+        }
+        m -= i - 1;
+        ix0 |= (ix1 >> (32 - i));
+        ix1 <<= i;
+    }
+    m -= 1023;
+    ix0 = (ix0 & 0x000fffff) | 0x00100000;
+    if (m & 1) {
+        ix0 += ix0 + ((ix1 & sign) >> 31);
+        ix1 += ix1;
+    }
+    m >>= 1;
+    ix0 += ix0 + ((ix1 & sign) >> 31);
+    ix1 += ix1;
+    q = q1 = s0 = s1 = 0;
+    r = 0x00200000;
+    while (r != 0) {
+        t = s0 + r;
+        if (t <= ix0) {
+            s0 = t + r;
+            ix0 -= t;
+            q += r;
+        }
+        ix0 += ix0 + ((ix1 & sign) >> 31);
+        ix1 += ix1;
+        r >>= 1;
+    }
+    r = sign;
+    while (r != 0) {
+        t1 = s1 + r;
+        t = s0;
+        if ((t < ix0) || ((t == ix0) && (t1 <= ix1))) {
+            s1 = t1 + r;
+            if (((t1 & sign) == sign) && (s1 & sign) == 0) {
+                s0 += 1;
+            }
+            ix0 -= t;
+            if (ix1 < t1) {
+                ix0 -= 1;
+            }
+            ix1 -= t1;
+            q1 += r;
+        }
+        ix0 += ix0 + ((ix1 & sign) >> 31);
+        ix1 += ix1;
+        r >>= 1;
+    }
+    if ((ix0 | ix1) != 0) {
+        z = 1.0 - 1.0e-300;
+        if (func_002EC198(z, 1.0) >= 0) {
+            z = 1.0 + 1.0e-300;
+            if (q1 == (u32)0xffffffff) {
+                q1 = 0;
+                q += 1;
+            } else if (func_002EC198(z, 1.0) > 0) {
+                if (q1 == (u32)0xfffffffe) {
+                    q += 1;
+                }
+                q1 += 2;
+            } else {
+                q1 += (q1 & 1);
+            }
+        }
+    }
+    ix0 = (q >> 1) + 0x3fe00000;
+    ix1 = q1 >> 1;
+    if ((q & 1) == 1) {
+        ix1 |= sign;
+    }
+    ix0 += (m << 20);
+    INSERT_WORDS(z, ix0, ix1);
+    return z;
+}
+
+#define one 1.0000000000e+00f
+#define pi 3.1415925026e+00f
+#define pio2_hi 1.5707962513e+00f
+#define pio2_lo 7.5497894159e-08f
+#define pS0 1.6666667163e-01f
+#define pS1 -3.2556581497e-01f
+#define pS2 2.0121252537e-01f
+#define pS3 -4.0055535734e-02f
+#define pS4 7.9153501429e-04f
+#define pS5 3.4793309169e-05f
+#define qS1 -2.4033949375e+00f
+#define qS2 2.0209457874e+00f
+#define qS3 -6.8828397989e-01f
+#define qS4 7.7038154006e-02f
+float func_002E4A78(float x)
+{
+    float z, p, q, r, w, s, c, df;
+    s32 hx, ix;
+
+    GET_FLOAT_WORD(hx, x);
+    ix = hx & 0x7fffffff;
+    if (ix == 0x3f800000) {
+        if (hx > 0) {
+            return 0.0f;
+        } else {
+            return pi + 2.0f * pio2_lo;
+        }
+    } else if (ix > 0x3f800000) {
+        return (x - x) / (x - x);
+    }
+    if (ix < 0x3f000000) {
+        if (ix <= 0x23000000) {
+            return pio2_hi + pio2_lo;
+        }
+        z = x * x;
+        p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
+        q = one + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+        r = p / q;
+        return pio2_hi - (x - (pio2_lo - x * r));
+    } else if (hx < 0) {
+        z = (one + x) * 0.5f;
+        p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
+        q = one + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+        s = func_002E57C0(z);
+        r = p / q;
+        w = r * s - pio2_lo;
+        return pi - 2.0f * (s + w);
+    } else {
+        s32 idf;
+
+        z = (one - x) * 0.5f;
+        s = func_002E57C0(z);
+        df = s;
+        GET_FLOAT_WORD(idf, df);
+        SET_FLOAT_WORD(df, idf & 0xfffff000);
+        c = (z - df * df) / (s + df);
+        p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
+        q = one + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+        r = p / q;
+        w = r * s + c;
+        return 2.0f * (df + w);
+    }
+}
+#undef one
+#undef pi
+#undef pio2_hi
+#undef pio2_lo
+#undef pS0
+#undef pS1
+#undef pS2
+#undef pS3
+#undef pS4
+#undef pS5
+#undef qS1
+#undef qS2
+#undef qS3
+#undef qS4
+
+extern const float D_005774C8;
+float func_002E8370(float x);
+float func_002E8730(float x);
+
+#define tiny 1.0e-30f
+#define pi_o_4 7.8539818525e-01f
+#define pi_o_2 1.5707963705e+00f
+#define pi 3.1415925026e+00f
+#define pi_lo 1.5099578832e-07f
+float func_002E4EA8(float y, float x)
+{
+    float z;
+    s32 k, m, hx, hy, ix, iy;
+
+    GET_FLOAT_WORD(hx, x);
+    ix = hx & 0x7fffffff;
+    GET_FLOAT_WORD(hy, y);
+    iy = hy & 0x7fffffff;
+    if ((ix > 0x7f800000) || (iy > 0x7f800000)) {
+        return x + y;
+    }
+    if (hx == 0x3f800000) {
+        return func_002E8370(y);
+    }
+    m = ((hy >> 31) & 1) | ((hx >> 30) & 2);
+    if (iy == 0) {
+        switch (m) {
+        case 0:
+        case 1:
+            return y;
+        case 2:
+            return pi + tiny;
+        case 3:
+            return -pi - tiny;
+        }
+    }
+    if (ix == 0) {
+        return (hy < 0) ? -pi_o_2 - tiny : pi_o_2 + tiny;
+    }
+    if (ix == 0x7f800000) {
+        if (iy == 0x7f800000) {
+            switch (m) {
+            case 0:
+                return pi_o_4 + tiny;
+            case 1:
+                return -pi_o_4 - tiny;
+            case 2:
+                return 3.0f * pi_o_4 + tiny;
+            case 3:
+                return -3.0f * pi_o_4 - tiny;
+            }
+        } else {
+            switch (m) {
+            case 0:
+                return zero;
+            case 1:
+                return D_005774C8;
+            case 2:
+                return pi + tiny;
+            case 3:
+                return -pi - tiny;
+            }
+        }
+    }
+    if (iy == 0x7f800000) {
+        return (hy < 0) ? -pi_o_2 - tiny : pi_o_2 + tiny;
+    }
+    k = (iy - ix) >> 23;
+    if (k > 60) {
+        z = pi_o_2 + 0.5f * pi_lo;
+    } else if (hx < 0 && k < -60) {
+        z = 0.0f;
+    } else {
+        z = func_002E8370(func_002E8730(y / x));
+    }
+    switch (m) {
+    case 0:
+        return z;
+    case 1: {
+        u32 zh;
+
+        GET_FLOAT_WORD(zh, z);
+        SET_FLOAT_WORD(z, zh ^ 0x80000000);
+    }
+        return z;
+    case 2:
+        return pi - (z - pi_lo);
+    default:
+        return (z - pi_lo) - pi;
+    }
+}
+#undef tiny
+#undef pi_o_4
+#undef pi_o_2
+#undef pi
+#undef pi_lo
+
+extern const float D_005774D8[];
+
+float func_002E5190(float x, float y)
+{
+    s32 n, hx, hy, hz, ix, iy, sx, i;
+
+    GET_FLOAT_WORD(hx, x);
+    GET_FLOAT_WORD(hy, y);
+    sx = hx & 0x80000000;
+    hx ^= sx;
+    hy &= 0x7fffffff;
+    if (hy == 0 || (hx >= 0x7f800000) || (hy > 0x7f800000)) {
+        return (x * y) / (x * y);
+    }
+    if (hx < hy) {
+        return x;
+    }
+    if (hx == hy) {
+        return D_005774D8[(u32)sx >> 31];
+    }
+    if (hx < 0x00800000) {
+        for (ix = -126, i = (hx << 8); i > 0; i <<= 1) {
+            ix -= 1;
+        }
+    } else {
+        ix = (hx >> 23) - 127;
+    }
+    if (hy < 0x00800000) {
+        for (iy = -126, i = (hy << 8); i >= 0; i <<= 1) {
+            iy -= 1;
+        }
+    } else {
+        iy = (hy >> 23) - 127;
+    }
+    if (ix >= -126) {
+        hx = 0x00800000 | (0x007fffff & hx);
+    } else {
+        n = -126 - ix;
+        hx = hx << n;
+    }
+    if (iy >= -126) {
+        hy = 0x00800000 | (0x007fffff & hy);
+    } else {
+        n = -126 - iy;
+        hy = hy << n;
+    }
+    n = ix - iy;
+    while (n--) {
+        hz = hx - hy;
+        if (hz < 0) {
+            hx = hx + hx;
+        } else {
+            if (hz == 0) {
+                return D_005774D8[(u32)sx >> 31];
+            }
+            hx = hz + hz;
+        }
+    }
+    hz = hx - hy;
+    if (hz >= 0) {
+        hx = hz;
+    }
+    if (hx == 0) {
+        return D_005774D8[(u32)sx >> 31];
+    }
+    while (hx < 0x00800000) {
+        hx = hx + hx;
+        iy -= 1;
+    }
+    if (iy >= -126) {
+        hx = ((hx - 0x00800000) | ((iy + 127) << 23));
+        SET_FLOAT_WORD(x, hx | sx);
+    } else {
+        n = -126 - iy;
+        hx >>= n;
+        SET_FLOAT_WORD(x, hx | sx);
+    }
+    return x;
+}
 int func_002E53E0(float x, float *y)
 {
     float z, w, t, r, fn;
@@ -344,9 +700,45 @@ float func_002E7438(float x, float y, int iy)
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E76D0);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E7AE0);
+double func_002E7AE0(double x, double y)
+{
+    u32 hx, hy;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E7B28);
+    GET_HIGH_WORD(hx, x);
+    GET_HIGH_WORD(hy, y);
+    SET_HIGH_WORD(x, (hx & 0x7fffffff) | (hy & 0x80000000));
+    return x;
+}
+
+int func_002E4250(double x, double *y);
+double func_002E58F8(double x, double y);
+double func_002E66B0(double x, double y, int iy);
+
+double func_002E7B28(double x)
+{
+    double y[2], z = 0.0;
+    s32 n, ix;
+
+    GET_HIGH_WORD(ix, x);
+    ix &= 0x7fffffff;
+    if (ix <= 0x3fe921fb) {
+        return func_002E58F8(x, z);
+    } else if (ix >= 0x7ff00000) {
+        return func_002EBC08(x, x);
+    } else {
+        n = func_002E4250(x, y);
+        switch (n & 3) {
+        case 0:
+            return func_002E58F8(y[0], y[1]);
+        case 1:
+            return func_002EBC08(0.0, func_002E66B0(y[0], y[1], 1));
+        case 2:
+            return func_002EBC08(0.0, func_002E58F8(y[0], y[1]));
+        default:
+            return func_002E66B0(y[0], y[1], 1);
+        }
+    }
+}
 
 double func_002E7C30(double x)
 {

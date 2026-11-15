@@ -67,7 +67,29 @@ void func_002D3E40(void) {
     func_002D3868();
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D3D68", func_002D3E78);
+void func_002D3E78(void)
+{
+    int i;
+    int flag;
+
+    SYNC();
+    flag = D_0078B0F0;
+    func_002D3E08();
+    if (flag != 0) {
+        if (func_002D1F18(0) >= 0) {
+            func_002D1FB8(0);
+        }
+        if (D_0078B0E0 == 0) {
+            for (i = 1; i < 3; i++) {
+                if (func_002D1F18(i) >= 0) {
+                    func_002D1FB8(i);
+                }
+            }
+        }
+    }
+    SYNC();
+    EI();
+}
 
 int func_002D3F08(int value)
 {

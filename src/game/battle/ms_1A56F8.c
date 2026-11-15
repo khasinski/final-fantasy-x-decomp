@@ -866,7 +866,22 @@ float MsCameraGetScrDpt(void) {
     return ms_camera_now->fCA4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AA048);
+R2AreaObj *func_001AA048(int side)
+{
+    int screen = ms_screen_now->bC1;
+    u8 *data = (u8 *)&D_00314840[screen];
+    int area;
+
+    side &= 1;
+    area = func_001A65E0(screen);
+    /* DEBT(CAST): byte-addressed lookup preserves the original address calculation. */
+    side *= sizeof(Unk317120Rec);
+    side += offsetof(Unk314840, rec);
+    data += side;
+    area *= sizeof(R2Area);
+    area += (u32)data;
+    return ((R2Area *)(area + offsetof(Unk317120Rec, area)))->obj;
+}
 
 extern s32 D_003142E0;
 extern float D_0065FDC0;

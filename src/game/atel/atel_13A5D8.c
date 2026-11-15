@@ -4,7 +4,25 @@
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A5D8", AtelGetActorBufferSize);
+int AtelGetActorBufferSize(Actor *actor)
+{
+    int actors = AtelGetActorNumber(actor);
+    int lines = AtelGetLineNumber(actor);
+    int event_lines = AtelGetELineNumber(actor);
+    int backgrounds = AtelGetBgNumber(actor);
+    int namespaces = AtelGetNamespaceNumber(actor);
+    namespaces -= actors;
+    actors -= event_lines + lines + backgrounds;
+    actors *= 0xB58;
+    lines *= 0x5B8;
+    event_lines *= 0x2E8;
+    backgrounds *= 0x558;
+    namespaces *= 0x30;
+    actors += lines;
+    actors += event_lines;
+    actors += backgrounds;
+    return actors + namespaces;
+}
 
 ActorState *AtelGetPosWorkAdrs(Actor *a) {
     switch (a->hdr->type) {

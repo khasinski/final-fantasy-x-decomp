@@ -1,0 +1,30 @@
+{
+  "game/menu/tk/tk_234A30": {
+    "piece": "piece_00572370",
+    "address": 5710704,
+    "size": 16,
+    "symbols": {
+      "D_00572370": 0,
+      "D_00572378": 8
+    }
+  },
+  "game/battle/ms_1D27C0": {
+    "piece": "piece_0056EAF8",
+    "address": 5696248,
+    "size": 32,
+    "symbols": {
+      "D_0056EAF8": 0,
+      "D_0056EB00": 8,
+      "D_0056EB08": 16,
+      "D_0056EB10": 24
+    }
+  },
+  "game/rc/rcef_1A21E0": {
+    "piece": "piece_0056DE08",
+    "address": 5692936,
+    "size": 8,
+    "symbols": {
+      "D_0056DE08": 0
+    }
+  }
+}

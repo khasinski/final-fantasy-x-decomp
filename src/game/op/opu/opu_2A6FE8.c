@@ -11,13 +11,68 @@
 #include "ffx/r7.h"
 #undef func_002A74A8
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", op_mdc_size_get_main);
+int Ch_ModelGetHide(Chr *chr, int i);
+int Ch_ModelCalcSizeEffectPacket(Chr *chr, int i);
+ResEntry *opus_mimic_check(Chr *key);
+int opus_mdc_size_get_mimic(int mode, int flag);
+
+int op_mdc_size_get_main(int a, int mode, int flag, int check_mimic)
+{
+    Chr *chr = (Chr *)a;
+    int total;
+    int nb;
+    int i;
+    int ret;
+
+    if (check_mimic == 0 || opus_mimic_check(chr) == 0) {
+        total = 0;
+        nb = Ch_GetNbModel(chr);
+        if (nb == 0) {
+            return 0;
+        }
+        for (i = 0; i < nb; i++) {
+            u32 sz;
+            u32 extra;
+
+            if (Ch_ModelGetHide(chr, i) == 0 || flag == 0) {
+                sz = (Ch_ModelCalcSizeEffectPacket(chr, i) + 0xF) & 0xFFFFFF0;
+                extra = 0;
+                if (mode == 2) {
+                    extra = (sz / 0x1C * 3) << 2;
+                    extra = (extra + 0xF) & 0xFFFFFF0;
+                }
+                total = total + sz + extra;
+            }
+        }
+        ret = total + 0x10;
+        return ret + nb * 16;
+    } else {
+        return opus_mdc_size_get_mimic(mode, flag);
+    }
+}
 
 int func_002A7120(int a, int b, int c)
 {
     return op_mdc_size_get_main(a, b, c, 1);
 }
 
+typedef struct MdcModelEntry {
+    u8 *pkt;
+    void *mat;
+    u16 flags;
+    u16 model_idx;
+    u32 padC;
+} MdcModelEntry;
+
+typedef struct MdcHdr {
+    Chr *chr;
+    u16 count;
+    u8 mode;
+    u8 pad7[9];
+    MdcModelEntry entries[1];
+} MdcHdr;
+
+void func_002A7140(s32 a, s32 b, s32 mode, s32 flag, s32 check_mimic, s32 work);
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A7140);
 
 void func_002A72F8(s32 a, s32 b, s32 c, s32 d) {
@@ -33,7 +88,41 @@ s32 func_002A7318(char *a, s32 i) {
     return *(s32 *)(a + 0x10); /* DEBT(CAST): 16-byte entry type unknown, word at +0x10 (i.e. member 0 of the next entry) */
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_free);
+void op_free(int addr, void *p);
+void op_oef2_a_set(int res, int type, int idx, int val);
+
+void opus_mdc_free(int res, Chr *chr, int addr)
+{
+    int idx;
+    ResEntry *e;
+    u8 slot;
+
+    if (chr == 0) {
+        return;
+    }
+    idx = opus_get_chr_status_index(chr, 0, 0);
+    if (idx < 0) {
+        return;
+    }
+    e = &owu_chr_status[idx];
+    if (addr <= 0x1AFFFFF) {
+        slot = e->pad14[0];
+        e->pad14[0] = 0xFF;
+    } else {
+        slot = e->pad14[1];
+        e->pad14[1] = 0xFF;
+    }
+    Ch_TextureSetImageBase(chr, -1, -1);
+    Ch_TextureSetClutBase(chr, -1, -1);
+    if (slot != 0xFF) {
+        void *p = op_oef2_a_get(res, 4, slot);
+
+        if (p != 0) {
+            op_free(addr, p);
+            op_oef2_a_set(res, 4, slot, 0);
+        }
+    }
+}
 
 void func_002A7420(int id, int val)
 {
@@ -129,7 +218,49 @@ void op_mdc_mem_transfer_cue_free(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A7620);
+extern char D_005756C0[];
+extern char D_005756F0[];
+extern char D_00575728[];
+extern char D_00575760[];
+int Ch_SetSequence(Chr *chr, int seq);
+int Ch_GetSeqFrame(Chr *chr);
+
+int func_002A7620(int id, int seq, int flag)
+{
+    int ret;
+    Chr *chr = owu_chr_hd[id];
+
+    if (MsBattleChrStart() != 0) {
+        if (flag != 0) {
+            return;
+        }
+        if (id < 0x20) {
+            func_00120108(D_005756C0, id, seq);
+            ret = ((int (*)(int, int))func_001CE050)(id, seq);
+            goto out;
+        } else if (chr != 0) {
+            func_00120108(D_005756F0, chr, seq);
+            Ch_ResetMotion(chr);
+            Ch_SetSysMotion((int)chr, 1, seq);
+            ret = Ch_GetSeqFrame(chr);
+            goto out;
+        }
+    } else {
+        if (flag == 0) {
+            return;
+        }
+        if (chr != 0) {
+            func_00120108(D_00575728, chr, seq);
+            Ch_ResetMotion(chr);
+            Ch_SetSequence(chr, seq);
+            ret = Ch_GetSeqFrame(chr);
+            goto out;
+        }
+    }
+    func_00120108(D_00575760);
+out:
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_break_make_VitaSafe);
 
@@ -361,6 +492,57 @@ ResEntry *opus_mimic_check(Chr *key)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_size_get_mimic);
+typedef struct MimicEntry {
+    u8 pad0[4];
+    u16 h4;
+    u8 pad6[0x1A];
+    u8 mat20[0x40];
+} MimicEntry;
+
+typedef struct MimicWork {
+    Chr **pp0;
+    Chr **pp4;
+    u8 pad8[6];
+    u16 hE;
+    u8 pad10[0x110];
+    MimicEntry entries[1];
+} MimicWork;
+
+typedef struct MimicOsu {
+    u8 pad0[0xBC];
+    MimicWork *w;
+} MimicOsu;
+
+MimicOsu *opus_get_osu_by_draw(int a, int b, int c, int d);
+
+int opus_mdc_size_get_mimic(int mode, int flag)
+{
+    MimicOsu *osu = opus_get_osu_by_draw(0, 0, 0x12, 1);
+    MimicWork *w;
+    int i;
+    int total;
+    Chr *chr;
+    MimicEntry *e;
+
+    if (osu == 0) {
+        return 0;
+    }
+    w = osu->w;
+    chr = *w->pp4;
+    e = &w->entries[0];
+    total = 0;
+    for (i = 0; i < w->hE; i++, e++) {
+        u32 sz = (Ch_ModelCalcSizeEffectPacket(chr, e->h4) + 0xF) & 0xFFFFFF0;
+        u32 extra = 0;
+
+        if (mode == 2) {
+            extra = sz / 0x1C * 3;
+            extra <<= 2;
+            extra = (extra + 0xF) & 0xFFFFFF0;
+        }
+        total = total + sz + extra;
+    }
+    return total;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_make_mimic);

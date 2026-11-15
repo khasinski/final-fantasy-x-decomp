@@ -230,7 +230,16 @@ s8 Sg_GetPause(void)
     return D_00580833;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", func_0011ABC8);
+typedef struct SgTimer56 {
+    u8 b[0x38];
+} SgTimer56;
+
+/* DEBT(CAST): D_00580838/D_00580870 declared s32 in headers; 0x38-byte timer struct */
+void func_0011ABC8(void)
+{
+    D_00580838 += *(volatile u32 *)0x10000800; /* EE timer 1 counter */
+    *(SgTimer56 *)&D_00580870 = *(SgTimer56 *)&D_00580838;
+}
 
 s32 func_0011AC68(void)
 {
@@ -485,7 +494,18 @@ s32 Sg_MainCheckMenu(void)
     return result;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", Sg_MainCalcRate);
+void Sg_MainCalcRate(void)
+{
+    u32 diff = (D_00307F30 - D_005808B0) << 7;
+
+    D_00307F38 = diff;
+    D_00307F3C = (float)diff * (1.0f / 256.0f);
+    D_005808B0 = D_00307F30;
+    if (Sg_GetCurExecFrames() != 1) {
+        D_00307F38 = 0x100;
+        D_00307F3C = 1.0f;
+    }
+}
 
 void func_0011B218(int dummy)
 {

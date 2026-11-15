@@ -41,4 +41,27 @@ void *func_002B7388(W10PackedResource *resource, int index);
 
 int op_file_read(const char *path, void *buffer);
 
+/* Interrupt handler registration. */
+extern int D_0078ACAC;
+void func_002F8E08(int irq);
+void func_002F80E0(int irq, int handler_id);
+void func_002F8E70(int irq);
+int func_002F80C0(int irq, void (*handler)(void), int priority);
+
+/* DEBT(NAME): relative texture-packet table used by func_002CEDD8. */
+typedef struct W10TextureTable {
+    u8 pad[6];
+    s16 count;
+    u8 pad8[8];
+    s16 entries[1][4]; /* first halfword of each entry is a relative offset */
+} W10TextureTable;
+typedef union W10TextureTag {
+    s64 value;
+    u32 words[2];
+} W10TextureTag;
+typedef struct W10TexturePacket {
+    u8 pad[16];
+    W10TextureTag tag;
+} W10TexturePacket;
+
 #endif

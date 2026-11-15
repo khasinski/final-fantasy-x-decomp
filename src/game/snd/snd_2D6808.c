@@ -5,6 +5,8 @@
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 
+s32 *func_002D6818(s32 a, s32 b, s32 c);
+
 void func_002D6808(s32 v) {
     D_0078BA48 = v;
 }
@@ -12,8 +14,34 @@ void func_002D6808(s32 v) {
 INCLUDE_ASM("build/ee_asm/game/snd/snd_2D6808", func_002D6818);
 INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_00576060);
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D6808", func_002D6A28);
-INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_005760A0);
+void func_002D6A28(s32 unused)
+{
+    int i, j, k;
+    int limit;
+
+    D_0078BA48 = 0;
+    for (i = 0; i < 16; i++) {
+        switch (i) {
+        case 2: case 3: case 4: case 6: case 7:
+        case 10: case 11: case 12: case 14: case 15:
+            limit = 0;
+            break;
+        case 0: case 1: case 5: case 8: case 9: case 13:
+        default:
+            limit = 3;
+            break;
+        }
+        for (j = 0; j < 16; j++) {
+            for (k = 0; k <= limit; k++) {
+                s32 *p = func_002D6818(i, j, k);
+
+                if (*p) {
+                    *p = 0;
+                }
+            }
+        }
+    }
+}
 
 void SndRemoveFootSepWork(void) {
     func_002D6A28(1);

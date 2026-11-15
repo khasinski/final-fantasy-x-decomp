@@ -15,7 +15,28 @@ INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_00171568);
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_001715C0);
 
-INCLUDE_ASM("build/ee_asm/game/sa/sa_task", func_001715D8);
+void func_001715D8(u8 *buf, u32 size)
+{
+    u32 n = size >> 2;
+    u8 *dst = buf;
+    u32 mask = 0xFFFFFF;
+
+    do {
+        u64 w0 = *(u64 *)buf;
+        u64 w1 = *(u64 *)(buf + 8);
+        u32 a = (u32)w0;
+        u32 b = (u32)(w0 >> 32);
+        u32 c = (u32)w1;
+        u32 d = (u32)(w1 >> 32);
+
+        ((u32 *)dst)[0] = (a & mask) | (b << 24);
+        ((u32 *)dst)[1] = ((b >> 8) & 0xFFFF) | (c << 16);
+        ((u32 *)dst)[2] = ((c & mask) >> 16) | (d << 8);
+        buf += 16;
+        dst += 12;
+        n--;
+    } while (n != 0);
+}
 
 /* DEBT(CAST) */
 void func_00171648(s32 on) {

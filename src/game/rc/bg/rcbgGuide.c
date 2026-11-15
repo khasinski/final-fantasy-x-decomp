@@ -359,11 +359,93 @@ void func_00195FF8(GuideMap *g) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001960D0);
+int func_001960D0(float *a0, float *a1, float *b0, float *b1, float *out)
+{
+    float dy2 = b1[1] - b0[1];
+    float dx2 = b1[0] - b0[0];
+    float dx1 = a1[0] - a0[0];
+    float dy1 = a1[1] - a0[1];
+    float t1 = dy2 * dx1;
+    float t2 = dx2 * dy1;
+    float det = t1 - t2;
+
+    if (det > 1e-5f || det < -1e-5f) {
+        float s = (dx1 * (b0[1] - a0[1]) - dy1 * (b0[0] - a0[0])) / det;
+        if (0.0f <= s && s <= 1.0f) {
+            float t = (dx2 * (a0[1] - b0[1]) - dy2 * (a0[0] - b0[0])) / (t2 - t1);
+            if (0.0f <= t && t <= 1.0f) {
+                float omt = 1.0f - t;
+                out[0] = a0[0] * omt + a1[0] * t;
+                out[1] = a0[1] * omt + a1[1] * t;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001961F8);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00196498);
+extern s32 D_00313734;
+extern s32 D_00313738;
+extern s32 D_0031373C;
+extern s32 D_00313740;
+extern s32 D_00313744;
+extern s32 D_00313748;
+
+void func_00196498(int a0)
+{
+    if (a0 != 0) {
+        switch (D_00313734) {
+        case 0:
+            D_0031373C++;
+            if (D_0031373C >= D_00313738) {
+                D_0031373C = 0;
+                D_00313734 = 1;
+            }
+            break;
+        case 1:
+            if (D_00313744 < D_00313740) {
+                D_00313744++;
+                if (D_00313744 < D_00313740) {
+                    break;
+                }
+            }
+            D_00313734 = 2;
+            break;
+        case 2:
+            break;
+        case 3:
+            D_00313734 = 1;
+            break;
+        }
+    } else {
+        switch (D_00313734) {
+        case 0:
+            break;
+        case 1:
+            D_00313734 = 3;
+            break;
+        case 2:
+            D_0031373C++;
+            if (D_0031373C > D_00313738) {
+                D_0031373C = 0;
+                D_00313734 = 3;
+            }
+            break;
+        case 3:
+            if (D_00313744 > 0) {
+                D_00313744--;
+                if (D_00313744 > 0) {
+                    break;
+                }
+            }
+            D_00313734 = 0;
+            break;
+        }
+    }
+    D_00313748 = (D_00313744 << 7) / D_00313740;
+}
 
 extern s32 _m2c_rcbgGuideUpdateEx_D_00313734 __asm__("D_00313734");
 extern s32 _m2c_rcbgGuideUpdateEx_D_0031373C __asm__("D_0031373C");

@@ -194,7 +194,28 @@ void func_0022D588(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022D5E0);
+extern s16 D_00325878[2];
+void func_00226D88(int x, int y, int k);
+
+void func_0022D5E0(int a, int x, int y, int i, int b)
+{
+    Task *t = (Task *)a;
+
+    if (b == 0) {
+        y -= t->x46 / 128;
+    }
+    if (i >= 0 && i < (u16)t->x30) {
+        SysEntry *e;
+
+        func_00226D88(x, y, 0x10);
+        ((int (*)(int, int, int))func_00226E10)(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+        e = SYS_TBL;
+        e += i;
+        if (e->b2 != 0) {
+            func_00226770(e->h0, x, y, e->b2 != 4);
+        }
+    }
+}
 
 void func_0022D6C8(int a, int b, int c, int x, int y)
 {
@@ -433,7 +454,39 @@ int func_0022E7A8(void) { return 1; }
 
 int func_0022E7B0(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E7B8);
+Task *func_0022E7B8(void)
+{
+    int two;
+    int one;
+    int k = func_00242940();
+    Task *t = func_00243400();
+
+    two = 2;
+    t->x48 = 0;
+    one = 1;
+    t->x32 = 0;
+    t->x34 = 0;
+    t->cb = func_0022E7A0;
+    t->x0C = (s32)func_0022DF10;
+    t->x10 = (s32)func_0022E538;
+    t->x14 = (s32)func_0022E7A8;
+    t->b3E = two;
+    t->x1C = (s32)func_0022E7B0;
+    t->b42 = one;
+    t->x30 = 10;
+    t->b36 = 3;
+    t->x3A = 9;
+    t->b37 = 0;
+    t->b45 = 0;
+    t->x54 = 0xAA;
+    TkMenuMainRegistWindow(t);
+    D_00693B84 = t;
+    TkMn2InitStatusBG();
+    func_0022E468(k);
+    func_00227490(D_00571B68);
+    func_00227480(D_00571BB0);
+    return t;
+}
 
 void func_0022E8A8(void)
 {
@@ -582,10 +635,27 @@ void func_0022F3A8(Task *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F5E8);
-
-void func_0022F5E8(int x, int y, int id);
+void func_00226FE0(DrawArgs *a);
 u8 func_00242798(int i);
+
+void func_0022F5E8(int x, int y, int id)
+{
+    FlagRec box;
+    PartySlot *p = MsGetSavePlayerPtr(id);
+    int dx, dy;
+
+    box = D_00693B90;
+    box.rect[0] = D_00693BA8[0] + x;
+    box.rect[1] = D_00693BA8[1] + y;
+    func_00226FE0((DrawArgs *)&box);
+    dx = D_00693BB0[0] + box.rect[0];
+    dy = D_00693BB0[1] + box.rect[1];
+    func_00226350(dx, dy, func_002494E8(0x18), 0x53);
+    dx = D_00693BB8[0] + box.rect[0];
+    dy = D_00693BB8[1] + box.rect[1];
+    TkMn2SetMacroParam(4, 1, ((u8 *)p)[0x3D]);
+    func_00226400(dx, dy, func_002494E8(0x19), 0);
+}
 
 void func_0022F720(int x, int y, int id)
 {
@@ -607,7 +677,25 @@ void func_0022F720(int x, int y, int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022F810);
+void func_0022F810(int v, int a, int b)
+{
+    int i = 0;
+    int max = TkMenuGetSummonListMax();
+    int x = D_00693BC0[0] + v;
+    int y = D_00693BC0[1];
+
+    for (; i < max; i++) {
+        func_0022F720(x, y, func_00242798(i));
+        if (i == func_00242970()) {
+            if (b >= 0) {
+                func_002270F8(x + D_00693BC8[0], y + D_00693BC8[1], 0);
+            } else if (b == -1) {
+                func_002270F8(x + D_00693BC8[0], y + D_00693BC8[1], 1);
+            }
+        }
+        y += D_00693BC4;
+    }
+}
 
 void func_0022F918(Task *t)
 {

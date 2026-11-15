@@ -231,7 +231,22 @@ void func_00158768(void)
     D_0030D3E8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158868);
+int func_00158868(void)
+{
+    if (D_0030D410 == 1) {
+        if (D_0058FE50 != 0 && D_0030D3EC != 0) {
+            return *(int *)((u8 *)D_0058FE54 + 0x505C0);
+        }
+        return 0;
+    }
+    if (D_0030D410 == 2) {
+        if (D_0058FE58 != 0 && D_0058FE5C != 0) {
+            return *(int *)((u8 *)D_0058FE60 + 0xF7140);
+        }
+        return 0;
+    }
+    return 0;
+}
 
 int func_001588F8(void)
 {

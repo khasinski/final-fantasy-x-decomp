@@ -26,7 +26,18 @@ INCLUDE_ASM("build/ee_asm/sdk/libipu/libipu_2E2220", func_002E22F0);
 
 INCLUDE_ASM("build/ee_asm/sdk/libipu/libipu_2E2220", func_002E23D8);
 
-INCLUDE_ASM("build/ee_asm/sdk/libipu/libipu_2E2220", func_002E2528);
+u32 func_002E2528(int mode)
+{
+    if (mode == 0) {
+        while (*(volatile s32 *)0x10002010 < 0) {
+        }
+        return 0;
+    }
+    if (mode == 1) {
+        return *(volatile u32 *)0x10002010 >> 31;
+    }
+    return 0;
+}
 
 void func_002E2590(u32 chcr)
 {

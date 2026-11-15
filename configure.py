@@ -5,7 +5,7 @@ Pipeline: splat -> asm/*.s (+ src/*.c as functions get matched) -> objects -> ld
 Compiler: ee-gcc 2.9-991111-01, -O2 -G0 (confirmed by matching real functions).
 Run the generated build inside the Docker image: `make build`.
 """
-import glob, os, re
+import glob, os, re, json
 import ninja_syntax
 
 CC = "tools/cc/ee-gcc2.9-991111-01/bin/ee-gcc"
@@ -23,6 +23,11 @@ if _srcs != set(chunks):
 text_objs = "\n".join(f"        build/{p}.o(.text)" for p in ["asm/text.s"] + [f"src/{c}.c" for c in chunks])
 
 
+# Explicit ownership of compiler-emitted literal blocks, verified by ccwrap.
+C_RODATA = json.load(open("config/c_rodata.json")) if os.path.exists("config/c_rodata.json") else {}
+C_PIECES = {v["piece"]: (unit, v) for unit, v in C_RODATA.items()}
+
+
 def rodata_objs():
     """.rodata in original order: blob pieces, and each jump table either from its INCLUDE_RODATA
     section (function still asm) or from the chunk's own .rodata (function is C: gcc emitted it)."""
@@ -31,10 +36,16 @@ def rodata_objs():
     for l in open("config/rodata_layout.txt"):
         f = l.split()
         if f[0] == "piece":
-            out.append(f"        . = {f[2]} - 0x568f00;\n        build/asm/data/rodata/{f[1]}.s.o(.rodata)")
+            if f[1] in C_PIECES:
+                unit, literal = C_PIECES[f[1]]
+                assert int(f[2], 16) == literal["address"]
+                out.append(f"        . = {f[2]} - 0x568f00;\n        build/src/{unit}.c.o(.rodata)")
+            else:
+                out.append(f"        . = {f[2]} - 0x568f00;\n        build/asm/data/rodata/{f[1]}.s.o(.rodata)")
             continue
         _, tbl, chunk, addr = f
-        if f'INCLUDE_RODATA("build/ee_asm/{chunk}/rodata", {tbl})' in src[chunk]:
+        # Split units may still include assembly from their original directory.
+        if re.search(r'\bINCLUDE_RODATA\("[^"\n]+",\s*' + re.escape(tbl) + r'\)', src[chunk]):
             out.append(f"        . = {addr} - 0x568f00;\n        build/src/{chunk}.c.o(.rodata.{tbl})")
         else:   # C function: tools/ccwrap.py names the k-th gcc table of the chunk .rodata.cjt<k> (source order)
             k = nown.get(chunk, 0); nown[chunk] = k + 1
@@ -44,7 +55,9 @@ def rodata_objs():
 
 open("config/SCES_504.90.link.ld", "w").write(
     open("config/SCES_504.90.link.ld.in").read().replace("@TEXT_OBJS@", text_objs)
-    .replace("@RODATA_OBJS@", rodata_objs()))
+    .replace("@RODATA_OBJS@", rodata_objs()) + "\n" + "\n".join(
+        f"{symbol} = {literal['address'] + offset:#x};"
+        for literal in C_RODATA.values() for symbol, offset in literal["symbols"].items()))
 
 # per-file compiler flag overrides: "<unit> <flags...>" (a few objects were built with other options)
 EXTRA = {}
@@ -69,6 +82,8 @@ n.rule("check", command="python3 tools/check.py $in", description="sha1 check")
 
 objs = []
 for s in sorted(glob.glob("asm/**/*.s", recursive=True)):
+    if s in {f"asm/data/rodata/{piece}.s" for piece in C_PIECES}:
+        continue  # this exact block now comes from the compiler
     if s.startswith("asm/nonmatchings/"):
         continue  # pulled into src/*.c through INCLUDE_ASM
     o = f"build/{s}.o"; n.build(o, "as", s); objs.append(o)
@@ -82,7 +97,7 @@ for c in sorted(glob.glob("src/**/*.c", recursive=True)):
         deps += glob.glob(f"{folder}/**/*.s", recursive=True)
     if "-Btools/cc/ee-as-delay/" in EXTRA.get(stem, ""):
         deps.append("tools/cc/ee-as-delay/as")
-    n.build(o, "cc", c, implicit=deps + ["config/cflags.txt", "tools/ccwrap.py"], variables={"extra": EXTRA.get(stem, "")}); objs.append(o)
+    n.build(o, "cc", c, implicit=deps + ["config/cflags.txt", "tools/ccwrap.py"] + (["config/c_rodata.json"] if C_RODATA else []), variables={"extra": EXTRA.get(stem, "")}); objs.append(o)
 for b in sorted(glob.glob("assets/*.bin")):
     # wrap raw blobs in a tiny .s so they get the same r5900/eabi flags as everything else
     wrap = f"build/{b}.s"

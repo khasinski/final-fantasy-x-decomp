@@ -73,7 +73,28 @@ void func_00218500(u16 id)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlSetTargetHelpMes);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlSetChangeHelpMes);
+void TOBtlSetChangeHelpMes(unsigned int id)
+{
+    int base;
+    char *text;
+
+    if (id < 18 || id == 0x30FF) {
+        func_002EF0D0(D_00692480, 0, 0x80);
+        if (id < 8) {
+            text = (char *)MsGetMenuChrInfo(id, 0);
+        }
+        if (id - 8 < 10) {
+            text = (char *)MsGetMenuChrInfo(id, 0);
+        }
+        if (id == 0x30FF) {
+            OfsTbl *command = MsGetComData(0x30FF, &base);
+
+            text = (char *)base + command->b[0].x;
+        }
+        func_002F072C((char *)D_00692480, text);
+        _TOGetMessageWH(0, D_00692480, &D_00692478[0], &D_0069247A, 0, 0);
+    }
+}
 
 void func_002188A0(char *s)
 {

@@ -26,3 +26,30 @@ game/movie/movie_15BBF8 -Btools/cc/ee-as-delay/
 game/movie/movie_str -Btools/cc/ee-as-delay/
 game/menu/tk/tk_228B08 -Btools/cc/ee-as-delay/
 game/menu/tk/tk_242040 -Btools/cc/ee-as-delay/
+game/main/sg_11A538 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/op/opus_294CD8 -Btools/cc/ee-as-delay/
+game/yi/yi_171EF0 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/chr/tex_anim_old -Btools/cc/ee-as-delay/
+game/menu/to/to_218A78 -Btools/cc/ee-as-delay/
+game/chr/chr_10EA50 -Btools/cc/ee-as-delay/ -Wa,-mips4
+
+# This assembly-origin unit uses 4-byte function alignment.
+game/main/sg_123844 -malign-functions=2
+
+# Preserve the existing assembler for surrounding VU/VIF functions.
+game/platform/ffx_2DC650 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/platform/ffx_2DC7D8 -Btools/cc/ee-as-delay/ -Wa,-mips4
+
+game/platform/platform_2DC1A0 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/platform/platform_2DC2B0 -Btools/cc/ee-as-delay/ -Wa,-mips4
+
+game/battle/battle_1EED50 -Btools/cc/ee-as-delay/ -Wa,-mips4
+
+# Assembly task helpers start at an address aligned to four bytes.
+game/sa/sa_170BC4 -malign-functions=2
+
+game/chr/tex_anim -fno-strict-aliasing
+
+game/menu/to/to_203FC0 -Btools/cc/ee-as-delay/
+
+game/menu/to/to_20C040 -fno-strict-aliasing

@@ -187,7 +187,31 @@ extern double D_0056DE08;
 float func_0018F0E8(float *a, float *b);
 void func_001A32F8(float *out, float a);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2880);
+void func_001A2880(float angle)
+{
+    float direction[4];
+    int i = 0;
+    RcefSlot30 *slot;
+    func_001A32F8(direction, angle);
+    slot = D_00313F30_work.slots;
+    for (; i < D_00313F30_work.count; i++, slot++) {
+        if (!(slot->flags & 1)) {
+            double delta = func_002E93A0(func_0018F0E8(direction, slot->v20));
+            if (delta < 0.0) {
+                delta = 0.0 - delta;
+            }
+            if (delta < 0.0872664600610733) {
+                slot->flags |= 1;
+                slot->timer = D_00313F30_work.init_timer;
+            }
+        }
+        if ((slot->flags & 1) && !(slot->flags & 2)) {
+            if (slot->timer == 0 || --slot->timer == 0) {
+                slot->flags |= 2;
+            }
+        }
+    }
+}
 
 s32 func_001A29A0(s32 arg0) {
     s32 _bit_v;

@@ -398,7 +398,29 @@ void func_00225C70(int a, int x, int y, int v)
     p->wC = 0x50000000 | (n - 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_224930", func_00225CF8);
+GsAdPacket *func_00225CF8(GsAdPacket *q, int x, int y, int a, int rgb)
+{
+    u32 col = rgb | (rgb << 8) | (rgb << 16) | (a << 24);
+    int y0 = y + 0x7300;
+    int x0 = x + 0x7000;
+
+    q[0].data = 0x1000000000000001UL;
+    q[0].reg = 0xE;
+    q[1].data = 1;
+    q[1].reg = 0x14;
+    q[2].data = 0x2400000000008001UL;
+    q[2].reg = 0x16;
+    q[3].data = 0x1E4901A00UL;
+    q[3].reg = col;
+    q[4].data = 0x6400000000008001UL;
+    q[4].reg = 0xF53530UL;
+    q[5].data = 0x156;
+    q[5].reg = 0;
+    q[6].data = x0 | ((u64)y0 << 16);
+    q[6].reg = 0x02002000UL;
+    q[7].data = (x0 + 0x2000) | ((u64)(y0 + 0x200) << 16);
+    return q + 8;
+}
 
 void func_00225DE0(int a, int b, int c, int d)
 {

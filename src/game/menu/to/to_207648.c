@@ -42,7 +42,24 @@ void func_00207648(int val, void *out, int width)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOIntToMes);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", func_00207988);
+void func_00207988(int id, int count, int x, int y, int width)
+{
+    int i;
+    D_00668740[id]->w1C = 2;
+    D_00669AE0[id]->b1 = 0;
+    D_00669AE0[id]->b4 = 0;
+    D_00669AE0[id]->b5 = count;
+    D_00669AE0[id]->b2 = D_00669AE0[id]->b2 > count - 1 ? count - 1 : D_00669AE0[id]->b2 < 0 ? 0 : D_00669AE0[id]->b2;
+    D_00669AE0[id]->b3 = D_00669AE0[id]->b3 > count - 1 ? count - 1 : D_00669AE0[id]->b3 < 0 ? 0 : D_00669AE0[id]->b3;
+    width /= count;
+    for (i = 0; i < count; i++) {
+        D_00669AE0[id]->ent[i].h0 = 1;
+        D_00669AE0[id]->ent[i].h2 = width;
+        D_00669AE0[id]->ent[i].h4 = x;
+        D_00669AE0[id]->ent[i].h6 = y;
+        x += width;
+    }
+}
 
 int func_00207A80(int i)
 {
@@ -56,7 +73,33 @@ void func_00207AA0(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOFuncPadMessageSelect);
+s32 TOFuncPadMessageSelect(int id)
+{
+    int previous = D_00669AE0[id]->b2;
+    if (D_003238D0.h14 & 0x40) {
+        if (D_00669AE0[id]->b2 != D_00669AE0[id]->b3) {
+            D_00669AE0[id]->b2 = D_00669AE0[id]->b3;
+            func_002D70D8(4);
+        }
+        return;
+    }
+    if (D_003238D0.h14 & 0x20) {
+        D_00669AE0[id]->x18[D_00669AE0[id]->b7++] = D_00669AE0[id]->b2;
+        if (D_00669AE0[id]->b7 == D_00669AE0[id]->b6)
+            D_00669AE0[id]->b1 = 2;
+        func_002D70D8(1);
+        return;
+    }
+    {
+        if (D_003238D0.h16 & 0x6000) D_00669AE0[id]->b2++;
+        if (D_003238D0.h16 & 0x9000) D_00669AE0[id]->b2--;
+        if (D_00669AE0[id]->b2 >= D_00669AE0[id]->b5)
+            D_00669AE0[id]->b2 = D_00669AE0[id]->b4;
+        if (D_00669AE0[id]->b2 < D_00669AE0[id]->b4)
+            D_00669AE0[id]->b2 = D_00669AE0[id]->b5 - 1;
+        if (D_00669AE0[id]->b2 != previous) func_002D70D8(1);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOFuncPadMessageInputValue);
 

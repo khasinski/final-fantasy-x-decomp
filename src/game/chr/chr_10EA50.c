@@ -85,7 +85,10 @@ void func_0010EB60(s32 v)
     D_0057EB7C = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EB70);
+void func_0010EB70(float v)
+{
+    D_0057EB8C = (s32)(v * 128.0f);
+}
 
 void func_0010EB90(float a, float b, float c)
 {
@@ -185,9 +188,126 @@ void *func_0010F0D8(QwPkt *pkt, s32 idx)
     return pkt + 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F1A0);
+extern s32 D_0057EB70;
+extern s32 D_0057EB78;
+extern u64 D_0057EB90[2];
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F308);
+void *func_0010F1A0(QwPkt *pkt, s32 idx)
+{
+    u8 *p;
+
+    if (D_003036A8 == 0) {
+        return pkt;
+    }
+    p = (u8 *)D_003036A8 + (idx << 5);
+    D_0057EB78 = (s32)p;
+    if (D_0057EB70 == 2) {
+        pkt->q = 0x10000007;
+    } else {
+        pkt->q = 0x10000009;
+    }
+    pkt++;
+    pkt->q = 0;
+    pkt->w[3] = 0x51000004;
+    pkt->w[2] = 0x10000000;
+    pkt++;
+    pkt->d[0] = 0x3000000000008001UL;
+    pkt->d[1] = 0xEEE;
+    pkt++;
+    pkt->d[1] = 0x3F;
+    pkt++;
+    pkt->d[1] = 0x7;
+    pkt->d[0] = *(u64 *)(p + 0x18);
+    pkt++;
+    pkt->w[0] = *(s8 *)(p + 0x11);
+    pkt->d[1] = 0x43;
+    pkt->w[1] = *(s8 *)(p + 0x12);
+    pkt++;
+    if (D_0057EB70 == 2) {
+        pkt->q = 0;
+        pkt->w[3] = 0x6C010027;
+        pkt++;
+        pkt->d[1] = 0x17;
+        pkt->d[0] = *(u64 *)(p + 0x18);
+    } else {
+        pkt->q = 0;
+        pkt->w[3] = 0x6C0100DF;
+        pkt++;
+        pkt->d[1] = 0x17;
+        pkt->d[0] = *(u64 *)(p + 0x18);
+        pkt++;
+        pkt->q = 0;
+        pkt->w[3] = 0x6C0102CB;
+        pkt++;
+        pkt->d[1] = 0x17;
+        pkt->d[0] = *(u64 *)(p + 0x18);
+    }
+    return pkt + 1;
+}
+
+s32 func_0010F308(QwPkt *pkt, s32 mode)
+{
+    s32 ret = 0;
+
+    if (mode == 0) {
+        if (D_0057EB70 != 0) {
+            D_0057EB70 = 0;
+            mode = 1;
+        } else {
+            D_0057EB70 = mode;
+        }
+    } else {
+        D_0057EB70 = mode;
+    }
+
+    if (mode == 1) {
+        pkt->d[0] = 0;
+        pkt->w[2] = 0;
+        pkt->w[3] = 0x6C010027;
+        pkt++;
+        pkt->d[0] = D_0057EB90[0];
+        pkt->d[1] = D_0057EB90[1];
+        pkt++;
+        if (D_0057EB78 != 0) {
+            u8 *p = (u8 *)D_0057EB78;
+            pkt->q = 0;
+            pkt->w[3] = 0x6C0100DF;
+            pkt++;
+            pkt->d[1] = 0x17;
+            pkt->d[0] = *(u64 *)(p + 0x18);
+            pkt++;
+            pkt->q = 0;
+            pkt->w[3] = 0x6C0102CB;
+            pkt++;
+            pkt->d[1] = 0x17;
+            pkt->d[0] = *(u64 *)(p + 0x18);
+        } else {
+            pkt->q = 0;
+            pkt->w[3] = 0x6C0100DF;
+            pkt++;
+            pkt->d[1] = 1;
+            pkt->d[0] = 0;
+            pkt++;
+            pkt->q = 0;
+            pkt->w[3] = 0x6C0102CB;
+            pkt++;
+            pkt->d[1] = 1;
+            pkt->d[0] = 0;
+        }
+        ret = 6;
+    } else if (mode == 2) {
+        u8 *p = (u8 *)D_0057EB78;
+        if (p != 0) {
+            pkt->q = 0;
+            pkt->w[3] = 0x6C010027;
+            pkt++;
+            pkt->d[1] = 0x17;
+            pkt->d[0] = *(u64 *)(p + 0x18);
+            ret = 2;
+        }
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F468);
 

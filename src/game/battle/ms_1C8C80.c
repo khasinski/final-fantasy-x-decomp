@@ -382,7 +382,33 @@ int MsSetDeathSentence(int id, BtlChr *c, GsEnt48 *e, int arg) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsSetChrMimic);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CC648);
+int func_001CC648(int mask, OfsTbl *command)
+{
+    int result;
+    int valid = 0;
+    int selected = 0;
+    int i = 0;
+    int allow_dead = (command->h1A >> 6) & 1;
+
+    result = 1;
+    for (; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            BtlChr *c;
+
+            selected++;
+            c = MsGetChr(i);
+            if (c->fA88 && c->fA99) {
+                if (!MsGetChrStatDeath(i) || allow_dead) {
+                    valid++;
+                }
+            }
+        }
+    }
+    if (selected > 0 && valid >= selected) {
+        result = 0;
+    }
+    return result;
+}
 
 int func_001CC728(int a, int mask) {
     int r = 1;
@@ -560,4 +586,7 @@ void MsStructFill(u16 *p, int n, int v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsBattleError);
+void MsBattleError(char *name) {
+    while (1) {
+    }
+}

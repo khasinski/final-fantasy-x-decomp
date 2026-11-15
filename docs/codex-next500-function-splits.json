@@ -1,0 +1,47 @@
+{
+  "reason": "The linear-sweep map groups four independent 12-byte tail-call entrypoints into one 60-byte span at 0x01B02590. Each function prepares arguments, jumps to 0x01B013E8 and executes its own delay slot; intervening words are alignment nops. They are compiled as four C definitions and compared byte-for-byte.",
+  "container": 9088,
+  "original_container_sha256": "b496455e8fc19376ec12011460794f6ce24ea0cd1f3a05f19247ba7bd0a6da9b",
+  "mapped_range": [
+    "0x01B02590",
+    "0x01B025CC"
+  ],
+  "functions": [
+    {
+      "address": "0x01B02590",
+      "instruction_bytes": 12,
+      "original_words": [
+        "0x2404FFFB",
+        "0x086C04FA",
+        "0x0000282D"
+      ]
+    },
+    {
+      "address": "0x01B025A0",
+      "instruction_bytes": 12,
+      "original_words": [
+        "0x2404FFFB",
+        "0x086C04FA",
+        "0x24050002"
+      ]
+    },
+    {
+      "address": "0x01B025B0",
+      "instruction_bytes": 12,
+      "original_words": [
+        "0x8C840120",
+        "0x086C04FA",
+        "0x0000282D"
+      ]
+    },
+    {
+      "address": "0x01B025C0",
+      "instruction_bytes": 12,
+      "original_words": [
+        "0x8C840120",
+        "0x086C04FA",
+        "0x24050008"
+      ]
+    }
+  ]
+}

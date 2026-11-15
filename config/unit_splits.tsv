@@ -7,3 +7,20 @@
 0x2F5CB8	flag split: 0x2F5CB8-0x2F6D58 (newlib Bigint helpers) needs -fno-strict-aliasing, func_002F3A70 and func_002F48D0 do not
 0x2D98A8	library split: 0x2D9730-0x2D98A8 is FFX platform glue (FFXIsPC, FFXGetLang, FFXSetVideoMode: Switch-port names), 0x2D98A8 is sceGsResetGraph (libgraph); tu_map's low boundary 0x2D9730 put both in one TU
 0x2E2830	library split: 0x2E2220-0x2E2830 is libipu (IPU registers, IPU DMA channels), 0x2E2830 starts the fdlibm double math (calls fp-bit, 0x7FF00000 masks)
+0x2dc638	flag split: native assembler for VU control helpers; surrounding functions retain delay-slot assembler
+0x2dc650	flag split: native assembler for VU control helpers; surrounding functions retain delay-slot assembler
+0x2dc700	flag split: native assembler for VU control helpers; surrounding functions retain delay-slot assembler
+0x2dc7d8	flag split: native assembler for VU control helpers; surrounding functions retain delay-slot assembler
+0x2dc188	flag split: native assembler for VU0 control writes; surrounding functions retain delay-slot assembler
+0x2dc1a0	flag split: native assembler for VU0 control writes; surrounding functions retain delay-slot assembler
+0x2dc250	flag split: native assembler for VU0 control writes; surrounding functions retain delay-slot assembler
+0x2dc2b0	flag split: native assembler for VU0 control writes; surrounding functions retain delay-slot assembler
+0x2f9168	queue worker and initialization; typed kernel calls separate from legacy syscall wrappers
+0x2f9318	end of queue worker and initialization
+0x1eed50	float conversion needs delay-slot assembler
+0x1eed60	end of float conversion; surrounding C keeps native assembler
+0x203fc0	message timing needs delay-slot assembler
+0x204080	end of message timing; surrounding C keeps native assembler
+0x2f9090	kernel patch initialization; typed calls separate from legacy syscall wrappers
+0x20c040	flag split: message language swap requires -fno-strict-aliasing
+0x20c188	end of language swap; surrounding code keeps default alias analysis

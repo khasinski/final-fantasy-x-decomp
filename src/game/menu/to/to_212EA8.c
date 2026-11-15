@@ -105,7 +105,60 @@ int func_002130F8(MenuList *o)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlInitCtbWindow);
+typedef struct CtbWindowEntry {
+    u8 active, id;
+    u8 pad2[2];
+    u32 value4, value8;
+    u8 orderC, orderD, flags, padF;
+    s16 x, y;
+    s32 state;
+} CtbWindowEntry;
+typedef struct CtbListEntry {
+    u8 id, pad;
+    u16 value;
+} CtbListEntry;
+
+extern s16 D_0032498C, D_0032498E, D_00324988, D_0032498A;
+extern u8 D_00324990;
+extern s32 D_006902BC;
+extern CtbWindowEntry D_00690340[32];
+extern CtbWindowEntry *D_006902C0[32];
+CtbListEntry *MsGetCTBlist(int *);
+
+void TOBtlInitCtbWindow(void)
+{
+    int count;
+    int i;
+    CtbWindowEntry *dst;
+    CtbListEntry *src;
+    D_00324990 = 0;
+    D_0032498C = 0;
+    D_0032498E = 0;
+    D_00324988 = 0;
+    D_0032498A = 0;
+    D_006902BC = 0;
+    func_002EF0D0(D_00690340, 0, 0x300);
+    func_002EF0D0(D_006902C0, 0, 0x80);
+    src = MsGetCTBlist(&count);
+    dst = D_00690340;
+    for (i = 0; i < 16; i++) {
+        dst->active = 1;
+        dst->id = src->id;
+        dst->value4 = src->value;
+        dst->value8 = src->value;
+        dst->orderC = i;
+        dst->orderD = i;
+        dst->flags = 0;
+        dst->x = 0;
+        dst->y = i * 22;
+        dst->state = 0;
+        src++;
+        dst++;
+    }
+    for (i = 15; i >= 0; i--) {
+        D_006902C0[i] = &D_00690340[i];
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlCtrlCtbWindow);
 

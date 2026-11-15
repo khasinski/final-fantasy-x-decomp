@@ -1,5 +1,6 @@
 /* tu_120 0x170bc4-0x171530: high; unk_170BC4 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r1.h"
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_170BC4", func_00170BC4);
@@ -16,7 +17,10 @@ INCLUDE_ASM("build/ee_asm/game/sa/sa_170BC4", func_00170EE8);
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_170BC4", func_00170FBC);
 
-INCLUDE_ASM("build/ee_asm/game/sa/sa_170BC4", func_00170FF8);
+void func_00170FF8(void *task)
+{
+    MMI_SQ_ZERO(0xB0, task);
+}
 
 INCLUDE_ASM("build/ee_asm/game/sa/sa_170BC4", func_00171004);
 

@@ -66,7 +66,7 @@ long func_002F4708(W11Reent *ptr, int fd, int buf, int n); /* _write_r */
 /* libgcc soft-double helpers (__muldf3, __subdf3 = func_002EBC08, __cmpdf2 = func_002EC198, ...)
    are called by address: the link has no libgcc symbol names, so a double operation that the
    original compiled to a libcall is written as that call */
-long long func_003003B0(double a); /* __fixunsdfdi */
+unsigned long func_003003B0(double a); /* __fixunsdfdi */
 double func_002EBC70(double a, double b); /* __muldf3 (also in u4.h) */
 
 void func_002ED500(W11Reent *ptr); /* __sinit */

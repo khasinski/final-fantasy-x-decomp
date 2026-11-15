@@ -146,4 +146,30 @@ void func_0022BBC8(void);
 /* DEBT(TYPE): this caller retains the legacy implicit-int declaration view. */
 #define CALL_func_0022BBC8_INT ((int (*)(void))func_0022BBC8)
 
+
+/* Active-character cursor vertices and colors. */
+extern float D_00692950[4];
+extern float D_00692960[4];
+extern float D_00692970[4];
+extern float D_00692980[4];
+extern float D_00692990[4];
+extern float D_006929A0[4];
+extern const char D_00571178[];
+extern const char D_00571180[];
+extern const char D_00571188[];
+extern const char D_00571190[];
+extern int D_00692BF0;
+extern int D_00692BF4;
+extern int D_00692BF8;
+extern int D_00692BFC;
+
+/* Active-character cursor transforms and projected vertices. */
+extern float D_006929B0[4];
+extern float D_006929D0[4][4], D_00692A10[4][4], D_00692A50[4][4];
+extern float D_00692AD0[4][4], D_00692B10[4][4], D_00692B50[4][4];
+extern int D_00692B90[4], D_00692BA0[4], D_00692BB0[4];
+extern void MsGetChrHeadPos(int character, float *position);
+extern float func_001AC458(void *screen, void *matrix, void *vertex, int mode);
+extern void func_001FAC60(int x0, int y0, int x1, int y1, int x2, int y2, u32 color0, u32 color1);
+
 #endif

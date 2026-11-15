@@ -1,8 +1,10 @@
 /* tu_358 0x2e7e60-0x2e9828: low; libm/acos (config/tu_map.tsv) */
 #include "common.h"
+#define func_002E94A0 func_002E94A0_orig
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
+#undef func_002E94A0
 
 int func_002E7E60(double x)
 {
@@ -23,9 +25,93 @@ int func_002E7E98(V128 *value)
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E7EC0);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E80C0);
+extern const double D_00577BC0;
+extern const double D_00577BC8;
+double func_002E7AE0(double x, double y);
+double func_002EBC70(double arg_a, double arg_b);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8278);
+double func_002E80C0(double x, int n)
+{
+    int k, hx, lx;
+    double t;
+
+    EXTRACT_WORDS(hx, lx, x);
+    k = (hx & 0x7ff00000) >> 20;
+    if (k == 0) {
+        if ((lx | (hx & 0x7fffffff)) == 0) {
+            return x;
+        }
+        x = func_002EBC70(x, 1.80143985094819840000e+16);
+        GET_HIGH_WORD(hx, x);
+        k = ((hx & 0x7ff00000) >> 20) - 54;
+        if (n < -50000) {
+            return func_002EBC70(x, D_00577BC0);
+        }
+    }
+    if (k == 0x7ff) {
+        return func_002EBBB0(x, x);
+    }
+    k = k + n;
+    if (k > 0x7fe) {
+        t = D_00577BC8;
+        return func_002EBC70(func_002E7AE0(t, x), t);
+    }
+    if (k > 0) {
+        SET_HIGH_WORD(x, (hx & 0x800fffff) | (k << 20));
+        return x;
+    }
+    if (k <= -54) {
+        if (n > 50000) {
+            t = D_00577BC8;
+            return func_002EBC70(func_002E7AE0(t, x), t);
+        } else {
+            t = D_00577BC0;
+            return func_002EBC70(func_002E7AE0(t, x), t);
+        }
+    }
+    k += 54;
+    SET_HIGH_WORD(x, (hx & 0x800fffff) | (k << 20));
+    return func_002EBC70(x, 5.55111512312578270212e-17);
+}
+
+int func_002E4250(double x, double *y);
+double func_002E58F8(double x, double y);
+double func_002E66B0(double x, double y, int iy);
+float func_002E7438(float x, float y, int iy);
+double func_002E2830(double x);
+double func_002E2E00(double y, double x);
+double func_002E3138(double x, double y);
+double func_002E4770(double x);
+float func_002E4A78(float x);
+float func_002E4EA8(float y, float x);
+float func_002E5190(float x, float y);
+float func_002E57C0(float x);
+
+double func_002E8278(double x)
+{
+    double y[2], z = 0.0;
+    int n, ix;
+
+    GET_HIGH_WORD(ix, x);
+    ix &= 0x7fffffff;
+    if (ix <= 0x3fe921fb) {
+        return func_002E66B0(x, z, 0);
+    } else if (ix >= 0x7ff00000) {
+        return func_002EBC08(x, x);
+    } else {
+        n = func_002E4250(x, y);
+        switch (n & 3) {
+        case 0:
+            return func_002E66B0(y[0], y[1], 1);
+        case 1:
+            return func_002E58F8(y[0], y[1]);
+        case 2:
+            return func_002EBC08(z, func_002E66B0(y[0], y[1], 1));
+        default:
+            return func_002EBC08(z, func_002E58F8(y[0], y[1]));
+        }
+    }
+}
 
 #define one 1.0f
 #define huge 1.0e30f
@@ -264,22 +350,297 @@ float func_002E89C0(float x)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8AB0);
+typedef struct {
+    int type;
+    char *name;
+    double arg1;
+    double arg2;
+    double retval;
+    int err;
+} LibmException;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8B38);
+extern const int D_00577B88;
+extern char D_00577C40[];
+extern char D_00577C48[];
+extern char D_00577C50[];
+extern double D_00577C58;
+extern char D_00577C80[];
+extern double D_00577C88;
+extern char D_00577C90[];
+extern char D_00577C98[];
+extern char D_00577CA0[];
+extern double D_00577CA8;
+extern char D_00577CB0[];
+extern double D_00577CB8;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8C28);
+float func_002E8AB0(float x)
+{
+    float y[2];
+    float z = 0.0f;
+    int n, ix;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8D40);
+    GET_FLOAT_WORD(ix, x);
+    ix &= 0x7fffffff;
+    if (ix <= 0x3f490fda) {
+        return func_002E7438(x, z, 1);
+    } else if (ix > 0x7f7fffff) {
+        return x - x;
+    } else {
+        n = func_002E53E0(x, y);
+        return func_002E7438(y[0], y[1], 1 - ((n & 1) << 1));
+    }
+}
+
+double func_002E8B38(double x)
+{
+    double z;
+    LibmException exc;
+
+    z = func_002E2830(x);
+    if (D_00577B88 == -1 || func_002E7E60(x)) {
+        return z;
+    }
+    if (func_002EC198(func_002E7C30(x), 1.0) > 0) {
+        exc.type = 1;
+        exc.name = D_00577C40;
+        exc.err = 0;
+        exc.arg1 = exc.arg2 = x;
+        exc.retval = 0.0;
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return exc.retval;
+    } else {
+        return z;
+    }
+}
+
+double func_002E8C28(double y, double x)
+{
+    double z;
+    LibmException exc;
+
+    z = func_002E2E00(y, x);
+    if (D_00577B88 == -1 || func_002E7E60(x) || func_002E7E60(y)) {
+        return z;
+    }
+    if (func_002EC198(x, 0.0) == 0 && func_002EC198(y, 0.0) == 0) {
+        exc.arg1 = y;
+        exc.arg2 = x;
+        exc.type = 1;
+        exc.name = D_00577C48;
+        exc.retval = 0.0;
+        exc.err = 0;
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return exc.retval;
+    } else {
+        return z;
+    }
+}
+
+double func_002E8D40(double x, double y)
+{
+    double z;
+    LibmException exc;
+
+    z = func_002E3138(x, y);
+    if (D_00577B88 == -1 || func_002E7E60(y) || func_002E7E60(x)) {
+        return z;
+    }
+    if (func_002EC198(y, 0.0) == 0) {
+        exc.type = 1;
+        exc.name = D_00577C50;
+        exc.arg1 = x;
+        exc.arg2 = y;
+        exc.err = 0;
+        if (D_00577B88 == 0) {
+            exc.retval = x;
+        } else {
+            exc.retval = D_00577C58;
+        }
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return exc.retval;
+    } else {
+        return z;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8E60);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E9290);
+double func_002E9290(double x)
+{
+    double z;
+    LibmException exc;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E93A0);
+    z = func_002E4770(x);
+    if (D_00577B88 == -1 || func_002E7E60(x)) {
+        return z;
+    }
+    if (func_002EC198(x, 0.0) < 0) {
+        exc.type = 1;
+        exc.name = D_00577C80;
+        exc.err = 0;
+        exc.arg1 = exc.arg2 = x;
+        if (D_00577B88 == 0) {
+            exc.retval = 0.0;
+        } else {
+            exc.retval = D_00577C88;
+        }
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return exc.retval;
+    } else {
+        return z;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E94A0);
+float func_002E93A0(float x)
+{
+    float z;
+    LibmException exc;
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E95C8);
+    z = func_002E4A78(x);
+    if (D_00577B88 == -1 || func_002E8838(x)) {
+        return z;
+    }
+    if (func_002E8730(x) > 1.0f) {
+        exc.type = 1;
+        exc.name = D_00577C90;
+        exc.err = 0;
+        exc.arg1 = exc.arg2 = func_002ED038(x);
+        exc.retval = 0.0;
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return func_002EC440(exc.retval);
+    } else {
+        return z;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E9708);
+float func_002E94A0(float y, float x)
+{
+    float z;
+    LibmException exc;
+
+    z = func_002E4EA8(y, x);
+    if (D_00577B88 == -1 || func_002E8838(x) || func_002E8838(y)) {
+        return z;
+    }
+    if (x == 0.0f && y == 0.0f) {
+        exc.arg1 = func_002ED038(y);
+        exc.arg2 = func_002ED038(x);
+        exc.type = 1;
+        exc.name = D_00577C98;
+        exc.retval = 0.0;
+        exc.err = 0;
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return func_002EC440(exc.retval);
+    } else {
+        return z;
+    }
+}
+
+float func_002E95C8(float x, float y)
+{
+    float z;
+    LibmException exc;
+
+    z = func_002E5190(x, y);
+    if (D_00577B88 == -1 || func_002E8838(y) || func_002E8838(x)) {
+        return z;
+    }
+    if (y == 0.0f) {
+        exc.type = 1;
+        exc.name = D_00577CA0;
+        exc.err = 0;
+        exc.arg1 = func_002ED038(x);
+        exc.arg2 = func_002ED038(y);
+        if (D_00577B88 == 0) {
+            exc.retval = func_002ED038(x);
+        } else {
+            exc.retval = D_00577CA8;
+        }
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return func_002EC440(exc.retval);
+    } else {
+        return z;
+    }
+}
+
+float func_002E9708(float x)
+{
+    float z;
+    LibmException exc;
+
+    z = func_002E57C0(x);
+    if (D_00577B88 == -1 || func_002E8838(x)) {
+        return z;
+    }
+    if (x < 0.0f) {
+        exc.type = 1;
+        exc.name = D_00577CB0;
+        exc.err = 0;
+        exc.arg1 = exc.arg2 = func_002ED038(x);
+        if (D_00577B88 == 0) {
+            exc.retval = 0.0;
+        } else {
+            exc.retval = D_00577CB8;
+        }
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 33;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 33;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return func_002EC440(exc.retval);
+    } else {
+        return z;
+    }
+}

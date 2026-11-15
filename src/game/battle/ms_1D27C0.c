@@ -58,7 +58,23 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", func_001D2958);
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetDirMode);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D27C0/rodata", jtbl_0056EAC0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", func_001D3350);
+float func_001D3350(BtlChr *chr, float angle)
+{
+    float current, delta;
+    angle = MsNearRag(chr->f150[0], angle);
+    current = chr->f150[0];
+    delta = angle - current;
+    if (delta >= 0.0) {
+        if (chr->f150[1] < -2.094395160675049 && delta > 2.094395160675049) {
+            angle = current + delta - 6.2831854820251465f;
+        }
+    } else {
+        if (chr->f150[1] > 2.094395160675049 && delta < -2.094395160675049) {
+            angle = current + delta + 6.2831854820251465f;
+        }
+    }
+    return angle;
+}
 
 void MsResetDirMove(BtlChr *c)
 {

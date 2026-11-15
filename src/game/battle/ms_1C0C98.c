@@ -785,7 +785,24 @@ u32 func_001C54F8(int unused, Q4Act *a, int b, u32 flags, int *out) {
     return flags;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C5538);
+void func_001C5538(int unused, BtlChr *chr, const u8 *effect) {
+    int i = 0;
+    /* DEBT(TYPE): six adjacent stat levels span pad31E, f322 and f323. */
+    u8 *stat = (u8 *)chr + offsetof(BtlChr, pad31E);
+    /* DEBT(TYPE): action fields at 0x56 (stat mask) and 0x59 (increment). */
+    int mask = *(const u16 *)(effect + 0x56);
+
+    do {
+        int amount = effect[0x59];
+        if ((mask & (1 << i++)) != 0U) {
+            if (!amount) {
+                amount = 1;
+            }
+            *stat = MsCheckRange(*stat + amount, 0, 5);
+        }
+        stat++;
+    } while (i < 6);
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C55D0);
 

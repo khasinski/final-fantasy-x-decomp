@@ -698,7 +698,46 @@ s32 func_0014A190(void)
     return prev;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_148F40", AtelPopMember);
+s32 AtelPopMember(void)
+{
+    int member[3];
+    int i;
+    int sentinel;
+    Rec124828 *r = func_00124828();
+    int prev = r->x20;
+    u8 *src;
+    int *dst;
+    u8 *walk;
+
+    if (prev) {
+        i = 0;
+        src = r->pad21;
+        for (; i < 7; i++) {
+            if ((*(s32 *)(r->pad21 + 3) >> i) & 1) {
+                MsSetSavePlyJoin(i, 1);
+            } else {
+                MsSetSavePlyJoin(i, 0);
+            }
+        }
+        sentinel = 0xFF;
+        dst = member;
+        walk = src;
+        for (i = 2; i >= 0; i--) {
+            int value = *walk;
+
+            if (value == sentinel) {
+                *dst = sentinel;
+            } else {
+                *dst = value;
+            }
+            dst++;
+            walk++;
+        }
+        MsSetSavePartyMember(member[0], member[1], member[2]);
+    }
+    r->x20 = 0;
+    return prev;
+}
 
 u8 func_0014A330(void)
 {

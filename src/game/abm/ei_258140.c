@@ -396,10 +396,11 @@ EiPt50 *func_00259708(int i, int idx, float f, int a2, int a3, int a4)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002598C8);
-
-void func_002598C8(EiPt50 *p);
 extern float eff_sin_t[];
+extern s32 D_0032792C;
+extern s32 D_00327930;
+extern s32 D_00327934;
+extern s32 D_00327938;
 extern s32 D_0032793C;
 extern s32 D_00327940;
 extern s32 D_00327944;
@@ -408,7 +409,29 @@ extern u16 D_0032794C;
 extern u16 D_00327950;
 extern u16 D_00327954;
 extern u16 D_00327958;
-extern u16 D_0032792C;
+
+void func_002598C8(EiPt50 *p)
+{
+    s16 x = p->h30;
+    s16 y = p->h32;
+
+    D_0032792C = x;
+    D_00327930 = y;
+    D_00327934 = x + 14;
+    D_00327938 = y + 2;
+    p->h30 = x;
+    *(u16 *)((u8 *)p + 0x36) = (u16)D_00327938;
+    D_0032793C = 0;
+    D_00327940 = 0;
+    D_00327944 = ((y + 4) / 2) << 4;
+    D_00327948 = (y + 4) << 4;
+    *(s32 *)&D_0032794C = 11;
+    *(s32 *)&D_00327950 = 10;
+    *(s32 *)&D_00327954 = -18;
+    *(s32 *)&D_00327958 = 0;
+    *(u16 *)((u8 *)p + 0x38) = 14;
+    *(u16 *)((u8 *)p + 0x34) = (y + 2) >> 1;
+}
 
 EiPt50 *func_002599C0(int i)
 {

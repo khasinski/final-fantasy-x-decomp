@@ -1,0 +1,326 @@
+{
+  "count": 88,
+  "baseline": "docs/codex-next300-functions.json",
+  "verification_log": "/tmp/300b_verified.log",
+  "units": [
+    {
+      "registration": "overlays/units/next300_b_09532_debug.py",
+      "source": "overlays/group11/ovl_09532_next300_b_debug.c",
+      "container": 9532,
+      "text_start": "0x1b012c0",
+      "text_end": "0x1b01420",
+      "functions": [
+        "func_01B012C0",
+        "func_01B01380",
+        "func_01B013B0",
+        "func_01B013D8",
+        "func_01B01408",
+        "func_01B01410",
+        "func_01B01418"
+      ],
+      "count": 7,
+      "sha256": "fcbf20e78d930165a2c251a3ebf03a5c6e59bbf60b7714a7d933f1c401c866f6"
+    },
+    {
+      "registration": "overlays/units/next300_b_09532_returns1.py",
+      "source": "overlays/group11/ovl_09532_next300_b_returns1.c",
+      "container": 9532,
+      "text_start": "0x1b010f0",
+      "text_end": "0x1b01100",
+      "functions": [
+        "func_01B010F0",
+        "func_01B010F8"
+      ],
+      "count": 2,
+      "sha256": "042d6aaa9f786a9432b28221e1b2cf60a24705edbfc5dd8125256bfa22633b6b"
+    },
+    {
+      "registration": "overlays/units/next300_b_09532_returns2.py",
+      "source": "overlays/group11/ovl_09532_next300_b_returns2.c",
+      "container": 9532,
+      "text_start": "0x1b012b0",
+      "text_end": "0x1b012c0",
+      "functions": [
+        "func_01B012B0",
+        "func_01B012B8"
+      ],
+      "count": 2,
+      "sha256": "a27ec765e94b14fdd9397348ef8acd9f432190ca634b380c43aee2be9484d873"
+    },
+    {
+      "registration": "overlays/units/next300_b_09532_ring.py",
+      "source": "overlays/group11/ovl_09532_next300_b_ring.c",
+      "container": 9532,
+      "text_start": "0x1b01ca0",
+      "text_end": "0x1b01f64",
+      "functions": [
+        "func_01B01CA0",
+        "func_01B01D50",
+        "func_01B01EA8"
+      ],
+      "count": 3,
+      "sha256": "6b1d48b64ad3f6306eb9a6532958ff6741ac641ebf48f37810baa4706e28ddd5"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_debug.py",
+      "source": "overlays/group11/ovl_09533_next300_b_debug.c",
+      "container": 9533,
+      "text_start": "0x1b02b00",
+      "text_end": "0x1b02c60",
+      "functions": [
+        "func_01B02B00",
+        "func_01B02BC0",
+        "func_01B02BF0",
+        "func_01B02C18",
+        "func_01B02C48",
+        "func_01B02C50",
+        "func_01B02C58"
+      ],
+      "count": 7,
+      "sha256": "a8ee24d0bf35b810dd625cb7cb65473cf31a4db975e4aa16bf24f09391a516a2"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_particle1.py",
+      "source": "overlays/group11/ovl_09533_next300_b_particle1.c",
+      "container": 9533,
+      "text_start": "0x1b01fa8",
+      "text_end": "0x1b02080",
+      "functions": [
+        "func_01B01FA8",
+        "func_01B02030"
+      ],
+      "count": 2,
+      "sha256": "31ac8a14ef0b74b4afd53dd2f7e831829025d5a955732a541722b552d88a3ec8"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_particle2.py",
+      "source": "overlays/group11/ovl_09533_next300_b_particle2.c",
+      "container": 9533,
+      "text_start": "0x1b02178",
+      "text_end": "0x1b02250",
+      "functions": [
+        "func_01B02178",
+        "func_01B02200"
+      ],
+      "count": 2,
+      "sha256": "8c5c3f901d6f5a8ba5fd2c36ae79991d9628f6cf1376e4d74fcf218b270a146d"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_particle3.py",
+      "source": "overlays/group11/ovl_09533_next300_b_particle3.c",
+      "container": 9533,
+      "text_start": "0x1b023f0",
+      "text_end": "0x1b024c8",
+      "functions": [
+        "func_01B023F0",
+        "func_01B02478"
+      ],
+      "count": 2,
+      "sha256": "77becf0bfa6cc6c26632c99221c35060272a0ee140c8f1bffec07f281cd31d8c"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_returns1.py",
+      "source": "overlays/group11/ovl_09533_next300_b_returns1.c",
+      "container": 9533,
+      "text_start": "0x1b02770",
+      "text_end": "0x1b02778",
+      "functions": [
+        "func_01B02770"
+      ],
+      "count": 1,
+      "sha256": "9e380c08b577308c8195bb122c633779461a900b80b4b07c32a92758cc9a9172"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_returns2.py",
+      "source": "overlays/group11/ovl_09533_next300_b_returns2.c",
+      "container": 9533,
+      "text_start": "0x1b02af0",
+      "text_end": "0x1b02b00",
+      "functions": [
+        "func_01B02AF0",
+        "func_01B02AF8"
+      ],
+      "count": 2,
+      "sha256": "9cc497f878e8298540bb2b9a13473e9208600ce7d1cca3486a0fe6ac809d547b"
+    },
+    {
+      "registration": "overlays/units/next300_b_09533_ring.py",
+      "source": "overlays/group11/ovl_09533_next300_b_ring.c",
+      "container": 9533,
+      "text_start": "0x1b034e0",
+      "text_end": "0x1b037a4",
+      "functions": [
+        "func_01B034E0",
+        "func_01B03590",
+        "func_01B036E8"
+      ],
+      "count": 3,
+      "sha256": "d4d5ca44401b7f8854fc9bae6fb28d7ef67e2d67e8008aa5ead77cb8fb0f1424"
+    },
+    {
+      "registration": "overlays/units/next300_b_09574_math.py",
+      "source": "overlays/group11/ovl_09574_next300_b_math.c",
+      "container": 9574,
+      "text_start": "0x1b01648",
+      "text_end": "0x1b01a64",
+      "functions": [
+        "func_01B01648",
+        "func_01B01688",
+        "func_01B016B0",
+        "func_01B016C8",
+        "func_01B016E0",
+        "func_01B017C0",
+        "func_01B01800",
+        "func_01B01850",
+        "func_01B01948"
+      ],
+      "count": 9,
+      "sha256": "d6c55fcc9cf60e12000630c9cf90935cb1cbdca82cd487dcf2b8290398ba1cdb"
+    },
+    {
+      "registration": "overlays/units/next300_b_09574_returns1.py",
+      "source": "overlays/group11/ovl_09574_next300_b_returns1.c",
+      "container": 9574,
+      "text_start": "0x1b01470",
+      "text_end": "0x1b01478",
+      "functions": [
+        "func_01B01470"
+      ],
+      "count": 1,
+      "sha256": "12a26fa52695679d3e8181861189e2c722a9fc9ff9677601dea4c569adb027f1"
+    },
+    {
+      "registration": "overlays/units/next300_b_09574_returns2.py",
+      "source": "overlays/group11/ovl_09574_next300_b_returns2.c",
+      "container": 9574,
+      "text_start": "0x1b01638",
+      "text_end": "0x1b01648",
+      "functions": [
+        "func_01B01638",
+        "func_01B01640"
+      ],
+      "count": 2,
+      "sha256": "b014d33ea55bebad3507603b0b6acd2d85f731bb6b95684c91d3939770df0f3c"
+    },
+    {
+      "registration": "overlays/units/next300_b_09574_ring.py",
+      "source": "overlays/group11/ovl_09574_next300_b_ring.c",
+      "container": 9574,
+      "text_start": "0x1b01b18",
+      "text_end": "0x1b01eb4",
+      "functions": [
+        "func_01B01B18",
+        "func_01B01B68",
+        "func_01B01BB0",
+        "func_01B01C00",
+        "func_01B01C08",
+        "func_01B01C10",
+        "func_01B01C18",
+        "func_01B01C20",
+        "func_01B01C28",
+        "func_01B01C30",
+        "func_01B01CB0",
+        "func_01B01E10"
+      ],
+      "count": 12,
+      "sha256": "11815b5730f62a771a7aa7cc9ea4b3a4ec3463e3877eee6d021e0b407f13366c"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_helpers.py",
+      "source": "overlays/group11/ovl_09584_next300_b_helpers.c",
+      "container": 9584,
+      "text_start": "0x1b01f48",
+      "text_end": "0x1b0277c",
+      "functions": [
+        "func_01B01F48",
+        "func_01B01F88",
+        "func_01B01FB0",
+        "func_01B01FB8",
+        "func_01B02088",
+        "func_01B020C8",
+        "func_01B02118",
+        "func_01B02210",
+        "func_01B02330",
+        "func_01B023F0",
+        "func_01B02420",
+        "func_01B02448",
+        "func_01B02478",
+        "func_01B02480",
+        "func_01B02488",
+        "func_01B02490",
+        "func_01B02498",
+        "func_01B024A0",
+        "func_01B024A8",
+        "func_01B02558",
+        "func_01B026B0"
+      ],
+      "count": 21,
+      "sha256": "271e54c728c51e0d0f8fff9834684e94ef6edf7a9c4a8bcd575e84dfcf9ed574"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_particle1.py",
+      "source": "overlays/group11/ovl_09584_next300_b_particle1.c",
+      "container": 9584,
+      "text_start": "0x1b01558",
+      "text_end": "0x1b01630",
+      "functions": [
+        "func_01B01558",
+        "func_01B015E0"
+      ],
+      "count": 2,
+      "sha256": "88d5a73dda509dd5b986ef6c09e0c6a77d8723ecaad4156e01aabf604e51c1e8"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_particle2.py",
+      "source": "overlays/group11/ovl_09584_next300_b_particle2.c",
+      "container": 9584,
+      "text_start": "0x1b01850",
+      "text_end": "0x1b01928",
+      "functions": [
+        "func_01B01850",
+        "func_01B018D8"
+      ],
+      "count": 2,
+      "sha256": "0439d62699a1b36d17e7f8d71537bc29b78a5cf37b17f7e337ad61847961005a"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_particle3.py",
+      "source": "overlays/group11/ovl_09584_next300_b_particle3.c",
+      "container": 9584,
+      "text_start": "0x1b01a00",
+      "text_end": "0x1b01ad8",
+      "functions": [
+        "func_01B01A00",
+        "func_01B01A88"
+      ],
+      "count": 2,
+      "sha256": "5fe6451750db6649d00d021e539f1257d24f83c351dd87a1b7318b295fb85943"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_returns1.py",
+      "source": "overlays/group11/ovl_09584_next300_b_returns1.c",
+      "container": 9584,
+      "text_start": "0x1b01d20",
+      "text_end": "0x1b01d30",
+      "functions": [
+        "func_01B01D20",
+        "func_01B01D28"
+      ],
+      "count": 2,
+      "sha256": "103b5584661c770d8f96d0b5929f9bb785f721615f9d23f56927b28a79a8b81d"
+    },
+    {
+      "registration": "overlays/units/next300_b_09584_returns2.py",
+      "source": "overlays/group11/ovl_09584_next300_b_returns2.c",
+      "container": 9584,
+      "text_start": "0x1b01f38",
+      "text_end": "0x1b01f48",
+      "functions": [
+        "func_01B01F38",
+        "func_01B01F40"
+      ],
+      "count": 2,
+      "sha256": "29a4b360beec16c1aca1bd484e9845037d6f6580c9cc104aa6a79cefd3afa0e1"
+    }
+  ]
+}

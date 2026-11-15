@@ -3392,7 +3392,8 @@ func_0016BB88 = 0x0016bb88; // type:func size:0xa8
 func_0016BC30 = 0x0016bc30; // type:func size:0x50
 func_0016BC80 = 0x0016bc80; // type:func size:0xc
 func_0016BC90 = 0x0016bc90; // type:func size:0x10
-func_0016BCA0 = 0x0016bca0; // type:func size:0x678
+func_0016BCA0 = 0x0016bca0; // type:func size:0x3c
+func_0016BCE0 = 0x0016bce0; // type:func size:0x638
 func_0016C318 = 0x0016c318; // type:func size:0xc
 func_0016C328 = 0x0016c328; // type:func size:0x35c
 func_0016C688 = 0x0016c688; // type:func size:0x298
@@ -10524,7 +10525,8 @@ func_002D1FF0 = 0x002d1ff0; // type:func size:0xc
 func_002D2000 = 0x002d2000; // type:func size:0xc
 func_002D2010 = 0x002d2010; // type:func size:0x40
 func_002D2050 = 0x002d2050; // type:func size:0xc
-func_002D2060 = 0x002d2060; // type:func size:0x108
+func_002D2060 = 0x002d2060; // type:func size:0x70
+func_002D20D0 = 0x002d20d0; // type:func size:0x98
 func_002D2168 = 0x002d2168; // type:func size:0xc
 func_002D2178 = 0x002d2178; // type:func size:0x8
 func_002D2180 = 0x002d2180; // type:func size:0x28
@@ -11645,3 +11647,6 @@ InvokedFromSelectCursor = 0x006632c0;
 TkMenuHelpMessage = 0x0069bb8c;
 lpamng = 0x006a3604;
 ppvMng = 0x006a3920;
+
+// All 122 entries are addressed by func_00114A20.
+jtbl_005697E0 = 0x005697E0; // type:jtbl size:0x1e8

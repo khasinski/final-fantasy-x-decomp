@@ -75,7 +75,33 @@ void *func_0023CE08(int n)
     return (char *)0x1D5E400 + i * 64; /* DEBT(CAST): record type unknown */
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CE38);
+extern char D_00572CC8[], D_00572CD0[], D_00326F38[];
+extern unsigned char D_00326F20[];
+void func_0023CE38(char *dst, int number, int digits, int pad)
+{
+    char buf[16];
+    char code[3];
+    char *s;
+    int started;
+    if (digits == 3) func_002F0008(buf, D_00572CC8, number);
+    if (digits == 2) func_002F0008(buf, D_00572CD0, number);
+    s = buf;
+    *dst = 0;
+    started = 0;
+    while (digits > 0) {
+        if (digits != 1 && *s == '0' && pad != 0 && started == 0) {
+            func_002F032C(dst, D_00326F38);
+        } else {
+            code[0] = D_00326F20[0];
+            code[1] = D_00326F20[1] + (unsigned char)*s - '0';
+            code[2] = 0;
+            func_002F032C(dst, code);
+            started = 1;
+        }
+        digits--;
+        s++;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CF70);
 
@@ -280,7 +306,31 @@ void func_0023E660(Task *o, int a1, int a2) { func_00246210(a1, a2 + (o->x48 - o
 
 void func_0023E688(Task *o, int a1, int a2) { func_00246220(a1, a2 + (o->x48 - o->x32) * 15, 0x80); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E6B0);
+void func_001FFDA0(void);
+void func_001FFE00(int id, int x, int y);
+
+void func_0023E6B0(Task *o, int x, int y)
+{
+    u8 state = D_0069A690[o->x48];
+    u8 *rec = func_0023CE08(o->x48);
+    int i;
+
+    if (state == 1) {
+        func_001FFDA0();
+        TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+        for (i = 5; i < 12; i++) {
+            if (rec[i] != 0xFF) {
+                int id = rec[i];
+
+                if (id == 6 && rec[0x1E] != 0) {
+                    id = 7;
+                }
+                func_001FFE00(id, x, y);
+                x += 0x3B;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E798);
 
@@ -332,9 +382,76 @@ void func_0023EA48(void) {
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EA68);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D50);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EB20);
+extern s32 D_0069A664;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EC50);
+void func_0023EB20(void)
+{
+    int res;
+    int port;
+
+    if (D_0069A686 != 0) {
+        port = 1;
+    } else {
+        port = 0;
+    }
+    switch (D_0069A687) {
+    case 0:
+        if (func_002D8AC8(1, 0, 0) == 0) {
+            break;
+        }
+        D_0069A687 = 1;
+    case 1:
+        if (func_002D9050(port, &D_0069A664, 0, 0) != 0) {
+            break;
+        }
+        D_0069A687 = 2;
+    case 2:
+        if (func_002D8AC8(1, 0, &res) == 1) {
+            if (res == 0 && D_0069A664 == 2) {
+                D_0069A660[port] = 1;
+            } else {
+                D_0069A660[port] = 0;
+            }
+            D_0069A687 = 0;
+            D_0069A686 = D_0069A686 == 0;
+        }
+        break;
+    }
+}
+
+int func_0023EC50(void)
+{
+    int res;
+    int port;
+    int ret;
+
+    if (D_0069A686 != 0) {
+        port = 1;
+    } else {
+        port = 0;
+    }
+    ret = 1;
+    if (D_0069A687 == 2) {
+        int r;
+
+        ret = 0;
+        r = func_002D8AC8(1, 0, &res);
+        if (r == 1) {
+            if (res == 0 && D_0069A664 == 2) {
+                D_0069A660[port] = 1;
+            } else {
+                D_0069A660[port] = 0;
+            }
+            ret = 1;
+            D_0069A687 = 0;
+            D_0069A686 = D_0069A686 == 0;
+        }
+        if (r < 0) {
+            ret = 1;
+        }
+    }
+    return ret;
+}
 
 void func_0023ED40(void) {
     D_0069A686 = 0;

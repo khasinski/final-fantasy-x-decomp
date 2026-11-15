@@ -27,7 +27,7 @@ u32 *func_002F62F0(W11Reent *r);
 int func_002F87F0(int a);
 void func_003002E0(void);
 void func_002F9090(void);
-void func_002F9240(void);
+int func_002F9240(void);
 W11File *func_002ED590(W11Reent *r, const char *file, const char *mode); /* _fopen_r */
 void func_002E9B10(void);
 void func_001000B8(int a);

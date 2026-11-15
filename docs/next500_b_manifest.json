@@ -1,0 +1,512 @@
+{
+  "count": 153,
+  "baseline": "docs/codex-next500-functions.json",
+  "verification_log": "/tmp/500b_verified.log",
+  "units": [
+    {
+      "registration": "overlays/units/next500_b_09685_callbacks_2258.py",
+      "source": "overlays/group11/ovl_09685_next500_b_callbacks_2258.c",
+      "container": 9685,
+      "text_start": "0x1b02258",
+      "text_end": "0x1b02260",
+      "functions": [
+        "func_01B02258"
+      ],
+      "count": 1,
+      "sha256": "89d9f2d0cae36e5afeaa6b71c1421364aa410571d84a861724a0b64b8dac3c98"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_callbacks_2458.py",
+      "source": "overlays/group11/ovl_09685_next500_b_callbacks_2458.c",
+      "container": 9685,
+      "text_start": "0x1b02458",
+      "text_end": "0x1b02468",
+      "functions": [
+        "func_01B02458",
+        "func_01B02460"
+      ],
+      "count": 2,
+      "sha256": "cb84e5adfe442591a9f3213181d0f52b5093650ddc0da7133ca4fc649b561294"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_callbacks_3520.py",
+      "source": "overlays/group11/ovl_09685_next500_b_callbacks_3520.c",
+      "container": 9685,
+      "text_start": "0x1b03520",
+      "text_end": "0x1b03530",
+      "functions": [
+        "func_01B03520",
+        "func_01B03528"
+      ],
+      "count": 2,
+      "sha256": "23c9cf6a789c7b754f54d937863a6242cbc7d6980c70f21de1bc91d4922c93cf"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_callbacks_4080.py",
+      "source": "overlays/group11/ovl_09685_next500_b_callbacks_4080.c",
+      "container": 9685,
+      "text_start": "0x1b04080",
+      "text_end": "0x1b04090",
+      "functions": [
+        "func_01B04080",
+        "func_01B04088"
+      ],
+      "count": 2,
+      "sha256": "ca89a19147ce790ce74d11c0afc25047a4dfc5bf04d8bae8385cd2b89c7ab581"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_mathdebug.py",
+      "source": "overlays/group11/ovl_09685_next500_b_mathdebug.c",
+      "container": 9685,
+      "text_start": "0x1b02468",
+      "text_end": "0x1b029c8",
+      "functions": [
+        "func_01B02468",
+        "func_01B024A8",
+        "func_01B024D0",
+        "func_01B024D8",
+        "func_01B025A8",
+        "func_01B025E8",
+        "func_01B02638",
+        "func_01B02730",
+        "func_01B02850",
+        "func_01B02910",
+        "func_01B02940",
+        "func_01B02968",
+        "func_01B02998",
+        "func_01B029A0",
+        "func_01B029A8",
+        "func_01B029B0",
+        "func_01B029B8",
+        "func_01B029C0"
+      ],
+      "count": 18,
+      "sha256": "35dce6a16bbe6fe744533c54e5e05e395f18a7275f4173de434b348af4c428f5"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_pool0.py",
+      "source": "overlays/group11/ovl_09685_next500_b_pool0.c",
+      "container": 9685,
+      "text_start": "0x1b029c8",
+      "text_end": "0x1b02a50",
+      "functions": [
+        "func_01B029C8"
+      ],
+      "count": 1,
+      "sha256": "ceee529f6795947cf51a1c3795c27f1359016b0f4ff240be96af69418fe4d4b6"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_pool1.py",
+      "source": "overlays/group11/ovl_09685_next500_b_pool1.c",
+      "container": 9685,
+      "text_start": "0x1b02c40",
+      "text_end": "0x1b02cd0",
+      "functions": [
+        "func_01B02C40",
+        "func_01B02CA0"
+      ],
+      "count": 2,
+      "sha256": "e184a397318c1a7b1866da980ff93a48e07e53b160d00ff52e47939022f28a0d"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_pool2.py",
+      "source": "overlays/group11/ovl_09685_next500_b_pool2.c",
+      "container": 9685,
+      "text_start": "0x1b02eb0",
+      "text_end": "0x1b03244",
+      "functions": [
+        "func_01B02EB0",
+        "func_01B02EB8",
+        "func_01B02F30",
+        "func_01B03068",
+        "func_01B030C8",
+        "func_01B031A0",
+        "func_01B03208"
+      ],
+      "count": 7,
+      "sha256": "15086a85cfda13442da6db8f579cc30d68c2e45d3d27438534359170eefc6039"
+    },
+    {
+      "registration": "overlays/units/next500_b_09685_ring.py",
+      "source": "overlays/group11/ovl_09685_next500_b_ring.c",
+      "container": 9685,
+      "text_start": "0x1b03248",
+      "text_end": "0x1b0351c",
+      "functions": [
+        "func_01B03248",
+        "func_01B032F8",
+        "func_01B03450"
+      ],
+      "count": 3,
+      "sha256": "dbdb9e8187ae0f4bdd8b88c1e4db5336fe98b9f7427dd04871719e94af4bef64"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_2188.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_2188.c",
+      "container": 9713,
+      "text_start": "0x1b02188",
+      "text_end": "0x1b02190",
+      "functions": [
+        "func_01B02188"
+      ],
+      "count": 1,
+      "sha256": "c1d35cec7c7793b692292bd337e989e911c6898061358c84520e632bcbfc466e"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_2320.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_2320.c",
+      "container": 9713,
+      "text_start": "0x1b02320",
+      "text_end": "0x1b02330",
+      "functions": [
+        "func_01B02320",
+        "func_01B02328"
+      ],
+      "count": 2,
+      "sha256": "4548d1194a492ed321b124d1d16c83e6ad7c7ec4ace850698faac2a5837273d7"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_33e8.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_33e8.c",
+      "container": 9713,
+      "text_start": "0x1b033e8",
+      "text_end": "0x1b03430",
+      "functions": [
+        "func_01B033E8",
+        "func_01B033F0",
+        "func_01B033F8",
+        "func_01B03400",
+        "func_01B03408",
+        "func_01B03410",
+        "func_01B03418",
+        "func_01B03420",
+        "func_01B03428"
+      ],
+      "count": 9,
+      "sha256": "bb6e4482bd37362cd139cbde6b4af4d9540e4eb2c0d28928f5e668bf32534953"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_35b8.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_35b8.c",
+      "container": 9713,
+      "text_start": "0x1b035b8",
+      "text_end": "0x1b035c0",
+      "functions": [
+        "func_01B035B8"
+      ],
+      "count": 1,
+      "sha256": "e99dab3f083ffbe6b940a59a93472118647652123820f6cc3af251f5bc89ad60"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_3ae8.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_3ae8.c",
+      "container": 9713,
+      "text_start": "0x1b03ae8",
+      "text_end": "0x1b03b20",
+      "functions": [
+        "func_01B03AE8",
+        "func_01B03AF0",
+        "func_01B03AF8",
+        "func_01B03B00",
+        "func_01B03B08",
+        "func_01B03B10",
+        "func_01B03B18"
+      ],
+      "count": 7,
+      "sha256": "575c911052c24d9336533fd06dc54b40c612e11c04dd52706cad358c656b4d35"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_callbacks_4670.py",
+      "source": "overlays/group11/ovl_09713_next500_b_callbacks_4670.c",
+      "container": 9713,
+      "text_start": "0x1b04670",
+      "text_end": "0x1b04680",
+      "functions": [
+        "func_01B04670",
+        "func_01B04678"
+      ],
+      "count": 2,
+      "sha256": "0d48ae4b06fbca3b860e05ee1b2c60c6232eeca5affd142f07c6de348dd79093"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_mathdebug.py",
+      "source": "overlays/group11/ovl_09713_next500_b_mathdebug.c",
+      "container": 9713,
+      "text_start": "0x1b02330",
+      "text_end": "0x1b02890",
+      "functions": [
+        "func_01B02330",
+        "func_01B02370",
+        "func_01B02398",
+        "func_01B023A0",
+        "func_01B02470",
+        "func_01B024B0",
+        "func_01B02500",
+        "func_01B025F8",
+        "func_01B02718",
+        "func_01B027D8",
+        "func_01B02808",
+        "func_01B02830",
+        "func_01B02860",
+        "func_01B02868",
+        "func_01B02870",
+        "func_01B02878",
+        "func_01B02880",
+        "func_01B02888"
+      ],
+      "count": 18,
+      "sha256": "ebf194bbfa0eb0cc859a09754259b972af1840acc8b44a8e957982c4c183bf75"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_pool0.py",
+      "source": "overlays/group11/ovl_09713_next500_b_pool0.c",
+      "container": 9713,
+      "text_start": "0x1b02890",
+      "text_end": "0x1b02918",
+      "functions": [
+        "func_01B02890"
+      ],
+      "count": 1,
+      "sha256": "f300052378c3901cddc821871445676caf7306a9f778f18fb8894773346f6d42"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_pool1.py",
+      "source": "overlays/group11/ovl_09713_next500_b_pool1.c",
+      "container": 9713,
+      "text_start": "0x1b02b08",
+      "text_end": "0x1b02b98",
+      "functions": [
+        "func_01B02B08",
+        "func_01B02B68"
+      ],
+      "count": 2,
+      "sha256": "d1fa7b6ac17cd664b86fa584cfafdb23cb46ba6332de4f0e2e438c3bbb0e7a3e"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_pool2.py",
+      "source": "overlays/group11/ovl_09713_next500_b_pool2.c",
+      "container": 9713,
+      "text_start": "0x1b02d78",
+      "text_end": "0x1b0310c",
+      "functions": [
+        "func_01B02D78",
+        "func_01B02D80",
+        "func_01B02DF8",
+        "func_01B02F30",
+        "func_01B02F90",
+        "func_01B03068",
+        "func_01B030D0"
+      ],
+      "count": 7,
+      "sha256": "b80fa0d48277d87f78139d999c2d70044fada886182bc4fee3b17121e93a596b"
+    },
+    {
+      "registration": "overlays/units/next500_b_09713_ring.py",
+      "source": "overlays/group11/ovl_09713_next500_b_ring.c",
+      "container": 9713,
+      "text_start": "0x1b03110",
+      "text_end": "0x1b033e4",
+      "functions": [
+        "func_01B03110",
+        "func_01B031C0",
+        "func_01B03318"
+      ],
+      "count": 3,
+      "sha256": "c8fd84e881225be63f6754503269c9afc66e6024acd2081e6ca056f18e0309e5"
+    },
+    {
+      "registration": "overlays/units/next500_b_09730_callbacks_49f0.py",
+      "source": "overlays/group11/ovl_09730_next500_b_callbacks_49f0.c",
+      "container": 9730,
+      "text_start": "0x1b049f0",
+      "text_end": "0x1b049f8",
+      "functions": [
+        "func_01B049F0"
+      ],
+      "count": 1,
+      "sha256": "5fc59571f3bffc4b9070bd8d7aef9d0b688da6a05bcbeceb1ea4e67cc29cbf61"
+    },
+    {
+      "registration": "overlays/units/next500_b_09730_callbacks_4ba8.py",
+      "source": "overlays/group11/ovl_09730_next500_b_callbacks_4ba8.c",
+      "container": 9730,
+      "text_start": "0x1b04ba8",
+      "text_end": "0x1b04bb8",
+      "functions": [
+        "func_01B04BA8",
+        "func_01B04BB0"
+      ],
+      "count": 2,
+      "sha256": "83aba8e1ab382f8fb64e56d26b738c3c7c9ae60ddc3ae09276d209530a4f4a31"
+    },
+    {
+      "registration": "overlays/units/next500_b_09730_callbacks_5610.py",
+      "source": "overlays/group11/ovl_09730_next500_b_callbacks_5610.c",
+      "container": 9730,
+      "text_start": "0x1b05610",
+      "text_end": "0x1b05658",
+      "functions": [
+        "func_01B05610",
+        "func_01B05618",
+        "func_01B05620",
+        "func_01B05628",
+        "func_01B05630",
+        "func_01B05638",
+        "func_01B05640",
+        "func_01B05648",
+        "func_01B05650"
+      ],
+      "count": 9,
+      "sha256": "5168d17aafc4926f63c6b05f1bafd19c9f41883fb062faa7ec48d8935ec62b7f"
+    },
+    {
+      "registration": "overlays/units/next500_b_09730_math.py",
+      "source": "overlays/group11/ovl_09730_next500_b_math.c",
+      "container": 9730,
+      "text_start": "0x1b04bb8",
+      "text_end": "0x1b04fd4",
+      "functions": [
+        "func_01B04BB8",
+        "func_01B04BF8",
+        "func_01B04C20",
+        "func_01B04C38",
+        "func_01B04C50",
+        "func_01B04D30",
+        "func_01B04D70",
+        "func_01B04DC0",
+        "func_01B04EB8"
+      ],
+      "count": 9,
+      "sha256": "98b9e31a2c9107ff9d929ff030e4d78a64408b680d4411916508c90dade86250"
+    },
+    {
+      "registration": "overlays/units/next500_b_09730_ring.py",
+      "source": "overlays/group11/ovl_09730_next500_b_ring.c",
+      "container": 9730,
+      "text_start": "0x1b05088",
+      "text_end": "0x1b05424",
+      "functions": [
+        "func_01B05088",
+        "func_01B050D8",
+        "func_01B05120",
+        "func_01B05170",
+        "func_01B05178",
+        "func_01B05180",
+        "func_01B05188",
+        "func_01B05190",
+        "func_01B05198",
+        "func_01B051A0",
+        "func_01B05220",
+        "func_01B05380"
+      ],
+      "count": 12,
+      "sha256": "606a86b39b4c3395c081a425e287bbd72b00de25a04cffec70f28bbd25332f5b"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_callbacks_0e08.py",
+      "source": "overlays/group11/ovl_09734_next500_b_callbacks_0e08.c",
+      "container": 9734,
+      "text_start": "0x1b00e08",
+      "text_end": "0x1b00e10",
+      "functions": [
+        "func_01B00E08"
+      ],
+      "count": 1,
+      "sha256": "2800b00c1e173184ff69728fc03e1416f84aa1a1c3723279e8d8af072f9bafa8"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_callbacks_2248.py",
+      "source": "overlays/group11/ovl_09734_next500_b_callbacks_2248.c",
+      "container": 9734,
+      "text_start": "0x1b02248",
+      "text_end": "0x1b02250",
+      "functions": [
+        "func_01B02248"
+      ],
+      "count": 1,
+      "sha256": "0b291f01850fabb1ff5a8f3dcd30047f336f3c09815a05ff27243a218a4dc332"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_callbacks_23c8.py",
+      "source": "overlays/group11/ovl_09734_next500_b_callbacks_23c8.c",
+      "container": 9734,
+      "text_start": "0x1b023c8",
+      "text_end": "0x1b023d8",
+      "functions": [
+        "func_01B023C8",
+        "func_01B023D0"
+      ],
+      "count": 2,
+      "sha256": "8d01b1715101a962f9a9c98b96dc15d6e1c5417516b3c0ff597bb37be29efaff"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_callbacks_2bb8.py",
+      "source": "overlays/group11/ovl_09734_next500_b_callbacks_2bb8.c",
+      "container": 9734,
+      "text_start": "0x1b02bb8",
+      "text_end": "0x1b02bc8",
+      "functions": [
+        "func_01B02BB8",
+        "func_01B02BC0"
+      ],
+      "count": 2,
+      "sha256": "9f7b7369acac4c2e842f4a221eea071e9f3b61140fe321ba4699768afa07fac4"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_callbacks_35c8.py",
+      "source": "overlays/group11/ovl_09734_next500_b_callbacks_35c8.c",
+      "container": 9734,
+      "text_start": "0x1b035c8",
+      "text_end": "0x1b035d8",
+      "functions": [
+        "func_01B035C8",
+        "func_01B035D0"
+      ],
+      "count": 2,
+      "sha256": "d174ec1c18004ae2917c77b21ce62e2eb0571754cd1ead893571edcca1597b07"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_mathdebug.py",
+      "source": "overlays/group11/ovl_09734_next500_b_mathdebug.c",
+      "container": 9734,
+      "text_start": "0x1b023d8",
+      "text_end": "0x1b02938",
+      "functions": [
+        "func_01B023D8",
+        "func_01B02418",
+        "func_01B02440",
+        "func_01B02448",
+        "func_01B02518",
+        "func_01B02558",
+        "func_01B025A8",
+        "func_01B026A0",
+        "func_01B027C0",
+        "func_01B02880",
+        "func_01B028B0",
+        "func_01B028D8",
+        "func_01B02908",
+        "func_01B02910",
+        "func_01B02918",
+        "func_01B02920",
+        "func_01B02928",
+        "func_01B02930"
+      ],
+      "count": 18,
+      "sha256": "2dfd9cc5197e9b91deb13429614b33a95aa018234b64d2e250513559bd728a99"
+    },
+    {
+      "registration": "overlays/units/next500_b_09734_ring.py",
+      "source": "overlays/group11/ovl_09734_next500_b_ring.c",
+      "container": 9734,
+      "text_start": "0x1b02938",
+      "text_end": "0x1b02bb4",
+      "functions": [
+        "func_01B02938",
+        "func_01B029B8",
+        "func_01B02B10"
+      ],
+      "count": 3,
+      "sha256": "600158d2aef4d8955229668ba02256cd9732a78487509a94a9399e3a095c185b"
+    }
+  ]
+}

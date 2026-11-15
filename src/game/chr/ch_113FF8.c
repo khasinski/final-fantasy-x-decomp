@@ -280,8 +280,17 @@ void func_001149F8(u32 a0, u32 a1, u32 a2)
         :  : "r"(a0), "r"(a1), "r"(a2));
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", func_00114A20);
-INCLUDE_RODATA("build/ee_asm/game/chr/ch_113FF8/rodata", jtbl_005697E0);
+void func_00114A20(Chr *c) {
+ c->h81C = 1;
+ c->u828.s.f828 = 0;
+ switch(c->h00) {
+ case 7: case 107: c->h81E=20; break;
+ case 2: case 3: case 45: case 102: case 103: c->h81E=10; c->u828.s.f828=2.0f; break;
+ case 6: case 106: c->h81E=15; break;
+ case 1: case 4: case 44: case 101: case 104: case 122: c->h81E=10; break;
+ default:c->h81E=1;break;
+ }
+}
 
 void Ch_ClothSetAtariJimenCheck(Chr *chr)
 {

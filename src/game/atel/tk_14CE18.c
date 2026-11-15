@@ -179,7 +179,29 @@ void func_0014D130(Ent24 *e)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/tk_14CE18", func_0014D180);
+int func_0014D180(Ent24 *e, Rec14CE48 *r, int duration)
+{
+    if (duration >= 0) {
+        r->x4++;
+        if (r->x4 >= duration) {
+            switch (e->x22) {
+            case 1:
+                if (r->x0) {
+                    func_0014D048(r, r->x0);
+                }
+                break;
+            case 2:
+                r->x6 = -2;
+                r->x8 = r->x9;
+                break;
+            }
+        }
+        if (r->x8 != r->x9 && r->x6 > 0) {
+            return (r->x9 * r->x4 + r->x8 * (r->x6 - r->x4)) / r->x6;
+        }
+    }
+    return r->x8;
+}
 
 int func_0014D260(Ent24 *e, int idx)
 {
@@ -199,7 +221,7 @@ int func_0014D260(Ent24 *e, int idx)
                 break;
             }
         case 2:
-            v = func_0014D180(e, r);
+            v = func_0014D180(e, r, x6);
             break;
         }
         r->xA = v;

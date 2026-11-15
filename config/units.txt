@@ -215,7 +215,9 @@ game/battle/ms_1E2360	0x1e2360	0x1e4c30	tu	tu_211	medium; ~Ms
 game/battle/battle_1E4C30	0x1e4c30	0x1e4cd0	tu	tu_212	medium; unk_1E4C30
 game/battle/ms_1E4CD0	0x1e4cd0	0x1e7af0	tu	tu_213	low; ~Ms
 game/battle/ms_1E7AF0	0x1e7af0	0x1ea000	tu	tu_214	low; ~Ms
-game/battle/battle_1EA000	0x1ea000	0x1ef4e8	tu	tu_215	low; unk_1EA000
+game/battle/battle_1EA000	0x1ea000	0x1eed50	tu	tu_215	battle script callbacks; assembler split
+game/battle/battle_1EED50	0x1eed50	0x1eed60	tu	tu_215	battle script callbacks; assembler split
+game/battle/battle_1EED60	0x1eed60	0x1ef4e8	tu	tu_215	battle script callbacks; assembler split
 game/battle/battle_1EF4E8	0x1ef4e8	0x1ef910	tu	tu_216	low; unk_1EF4E8
 game/menu/to/to_1EF910	0x1ef910	0x1f1eb8	tu	tu_217	low; ~TODrawKick
 game/menu/to/to_1F1EB8	0x1f1eb8	0x1f3280	tu	tu_218	low; ~To
@@ -227,11 +229,15 @@ game/menu/to/to_1FA0E8	0x1fa0e8	0x2004d0	tu	tu_223	low; ~locNameTmpSetLanguage
 game/menu/menu_2004D0	0x2004d0	0x200c58	tu	tu_224	low; unk_2004D0
 game/menu/menu_200C58	0x200c58	0x201760	tu	tu_225	low; unk_200C58
 game/menu/menu_201760	0x201760	0x2021e8	tu	tu_226	medium; unk_201760
-game/menu/to/to_2021E8	0x2021e8	0x207648	tu	tu_227	medium; ~TOGetFFXToAlbhedTblAdrs
+game/menu/to/to_2021E8	0x2021e8	0x203fc0	tu	tu_227	message helpers
+game/menu/to/to_203FC0	0x203fc0	0x204080	tu	tu_227	message timing; assembler split
+game/menu/to/to_204080	0x204080	0x207648	tu	tu_227	message helpers
 game/menu/to/to_207648	0x207648	0x207f50	tu	tu_228	medium; ~TOValueToMesFontL
 game/menu/to/to_207F50	0x207f50	0x208448	tu	tu_229	low; ~TOGetButtonIconWidth
 game/menu/to/to_208448	0x208448	0x209460	tu	tu_230	low; ~TOInitWindowCallBack
-game/menu/to/to_209460	0x209460	0x20cc98	tu	tu_231	low; ~TOSetExeWindowArea
+game/menu/to/to_209460	0x209460	0x20c040	tu	tu_231	message windows
+game/menu/to/to_20C040	0x20c040	0x20c188	tu	tu_231	language swap; aliasing flag split
+game/menu/to/to_20C188	0x20c188	0x20cc98	tu	tu_231	message and texture helpers
 game/menu/to/meswin	0x20cc98	0x20d058	tu	tu_232	low; meswin
 game/menu/to/to_20D058	0x20d058	0x20dfc8	tu	tu_233	low; ~TOSetEnvMovieMessage
 game/menu/to/to_20DFC8	0x20dfc8	0x20e248	tu	tu_234	low; ~TOSeqGetRect
@@ -353,8 +359,16 @@ game/tk/tk_2D9188	0x2d9188	0x2d9730	tu	tu_346	low; ~FFXGetHddEnable
 game/platform/ffx_2D9730	0x2d9730	0x2d98a8	tu	tu_347	low; libgraph; split at 0x2d98a8: library split: 0x2D9730-0x2D98A8 is FFX platform glue (FFXIsPC, FFXGetLang, FFXSetVideoMode: Switch-port names), 0x2D98A8 is sceGsResetGraph (libgraph); tu_map's low boundary 0x2D9730 put both in one TU
 sdk/libgraph/libgraph	0x2d98a8	0x2dba00	tu	tu_347	low; libgraph; split at 0x2d98a8: library split: 0x2D9730-0x2D98A8 is FFX platform glue (FFXIsPC, FFXGetLang, FFXSetVideoMode: Switch-port names), 0x2D98A8 is sceGsResetGraph (libgraph); tu_map's low boundary 0x2D9730 put both in one TU
 sdk/libdma/libdma	0x2dba00	0x2dc110	tu	tu_348	medium; libdma
-game/platform/platform_2DC110	0x2dc110	0x2dc580	tu	tu_349	medium; unk_2DC110
-game/platform/ffx_2DC580	0x2dc580	0x2dce38	tu	tu_350	medium; ~FFXVu0ApplyMatrix
+game/platform/platform_2DC110	0x2dc110	0x2dc188	tu	tu_349	flag split; VU0 control helpers
+game/platform/platform_2DC188	0x2dc188	0x2dc1a0	tu	tu_349	flag split; VU0 control helpers
+game/platform/platform_2DC1A0	0x2dc1a0	0x2dc250	tu	tu_349	flag split; VU0 control helpers
+game/platform/platform_2DC250	0x2dc250	0x2dc2b0	tu	tu_349	flag split; VU0 control helpers
+game/platform/platform_2DC2B0	0x2dc2b0	0x2dc580	tu	tu_349	flag split; VU0 control helpers
+game/platform/ffx_2DC580	0x2dc580	0x2dc638	tu	tu_350	flag split; FFX VU control helpers
+game/platform/ffx_2DC638	0x2dc638	0x2dc650	tu	tu_350	flag split; FFX VU control helpers
+game/platform/ffx_2DC650	0x2dc650	0x2dc700	tu	tu_350	flag split; FFX VU control helpers
+game/platform/ffx_2DC700	0x2dc700	0x2dc7d8	tu	tu_350	flag split; FFX VU control helpers
+game/platform/ffx_2DC7D8	0x2dc7d8	0x2dce38	tu	tu_350	flag split; FFX VU control helpers
 game/platform/ffx_2DCE38	0x2dce38	0x2ddb48	tu	tu_351	low; ~FFXVu0InnerProduct
 sdk/libpad/libpad	0x2ddb48	0x2deef0	tu	tu_352	low; libpad
 sdk/libmc/libmc	0x2deef0	0x2e06d0	tu	tu_353	medium; libmc
@@ -375,7 +389,10 @@ sdk/newlib/libc/libc_2F0840	0x2f0840	0x2f2150	tu	tu_366	medium; unk_2F0840
 sdk/newlib/libc/vfprintf	0x2f2150	0x2f3a70	tu	tu_367	medium; newlib/vfprintf
 sdk/newlib/libc/libc_2F3A70	0x2f3a70	0x2f5cb8	tu	tu_368	low; newlib/strtod; split at 0x2f5cb8: flag split: 0x2F5CB8-0x2F6D58 (newlib Bigint helpers) needs -fno-strict-aliasing, func_002F3A70 and func_002F48D0 do not
 sdk/newlib/libc/libc_2F3A70_2F5CB8	0x2f5cb8	0x2f8000	tu	tu_368	low; newlib/strtod; split at 0x2f5cb8: flag split: 0x2F5CB8-0x2F6D58 (newlib Bigint helpers) needs -fno-strict-aliasing, func_002F3A70 and func_002F48D0 do not
-sdk/libkernl/tty	0x2f8000	0x2fac84	tu	tu_369	low; libkernl/tty
+sdk/libkernl/tty	0x2f8000	0x2f9090	tu	tu_369	libkernl/tty; queue worker split
+sdk/libkernl/tty_2F9090	0x2f9090	0x2f9168	tu	tu_369	kernel patch initialization; typed syscall interfaces
+sdk/libkernl/tty_2F9168	0x2f9168	0x2f9318	tu	tu_369	libkernl/tty; queue worker split
+sdk/libkernl/tty_2F9318	0x2f9318	0x2fac84	tu	tu_369	libkernl/tty; queue worker split
 sdk/libkernl/libkernl_2FAC84	0x2fac84	0x2fac88	asm	tu_370	high; unk_2FAC84
 sdk/libkernl/libkernl_2FAC88	0x2fac88	0x2fbbe8	tu	tu_371	medium; unk_2FAC88
 sdk/libkernl/libkernl_2FBBE8	0x2fbbe8	0x2ff270	tu	tu_372	medium; ~sce

@@ -263,7 +263,24 @@ done:
     list[i] = id;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_draw_off);
+void opus_draw_off(IdList *o, s16 id) {
+    s16 *p = o->list;
+    int value;
+    while ((value = *p) >= 0) {
+        if (value == id) {
+            /* DEBT(GOTO): preserve the original search/removal block layout. */
+            goto found;
+        }
+        p++;
+    }
+    return;
+found:
+    while ((value = p[1]) >= 0) {
+        *p = value;
+        p++;
+    }
+    *p = -1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_no_get);
 

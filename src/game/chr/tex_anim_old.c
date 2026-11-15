@@ -113,7 +113,46 @@ void func_00162488(int a, int idx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim_old", func_00162500);
+void func_00162500(int a0, int a1, int a2)
+{
+    Rec78D898 *r = &D_0078D898[a0];
+
+    if (r->p00 != 0) {
+        TexAnimWorkOld *w = (TexAnimWorkOld *)r->w04;
+        G1Sub160BA8Ent *ent;
+
+        if (a1 == 1) {
+            s8 *p = &w->b5A8[1];
+            int n;
+
+            for (n = 0; n < 8; n++) {
+                if (*p == 1) {
+                    ent = &w->ent[1];
+                    ent->w04 = a2;
+                    ent->h14 = 0;
+                    ent->h16 = 0;
+                    ent->w24 = 0;
+                    ent->w28 = 0;
+                    ent->w2C = 0;
+                    ent->w30 = 0;
+                    ent->h18 = 0;
+                    ent->h1A = 0;
+                }
+            }
+        } else {
+            ent = &w->ent[a1];
+            ent->w04 = a2;
+            ent->h14 = 0;
+            ent->h16 = 0;
+            ent->w24 = 0;
+            ent->w28 = 0;
+            ent->w2C = 0;
+            ent->w30 = 0;
+            ent->h18 = 0;
+            ent->h1A = 0;
+        }
+    }
+}
 
 /* DEBT(NAME): 0x34-byte sub entries at (Rec78D898.w04 + 0x408); this is tex_anim_no_set_new (ffx-rust) */
 typedef struct TaSub34 {

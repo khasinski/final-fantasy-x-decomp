@@ -2397,7 +2397,7 @@ int func_002DA610(int a, int b); /* DEBT(TYPE): asm reads (int a); C callers c_2
 
 /* ---- functions of the w7 chunks, 0x223DC0-0x24DA50 ---- */
 int func_00223DC0(int v);
-int func_00223E28(void);
+int func_00223E28(int id);
 int func_00223E48(int a0, int a1);
 int func_00223E70(int a0, int a1);
 void func_002243C0(int a0, int a1, int a2);
@@ -3118,7 +3118,7 @@ void func_00293DC8(int a);
 void op_et_tex_load_triger(int a);
 void func_002B2A80(); /* DEBT(TYPE): asm reads (void *a, int b, int c); C callers c_2567F0.c:72,c_2567F0.c:81 pass 0 */
 void *func_002B3888(int a);
-void func_002DBF78(int a, int b, int c);
+int func_002DBF78(int address, int mode, int timeout);
 void func_002DCE38(void *a, void *b, void *c);
 
 /* ---- functions of the w9 chunks, 0x2781C8-0x2A1680 ---- */
@@ -3891,7 +3891,7 @@ int func_00252AB8(int a, int b, int c, u8 d, int e);
 int func_00252FA8(void);
 void func_002D62F8(int id);
 int func_002D7F88(void *p);
-int func_002D9D20(void *p);
+void func_002D9D20(void *p);
 int func_002DA198(void *p);
 int func_002DF3C0(int a);
 int func_002DF478(int a, int b, int c);

@@ -580,7 +580,6 @@ func_002D10D8 cop2,mmi,sdk
 func_002D14D8 cop2,mmi,sdk
 func_002D17F0 cop2,mmi,sdk
 func_002D1AB8 cop2,mmi,sdk
-func_002D3E78 cop0,sdk
 func_002D4E50 cop2
 func_002D5190 cop2
 func_002D5A40 cop2

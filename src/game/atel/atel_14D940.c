@@ -629,7 +629,44 @@ char *func_0014F1C0(int id)
     return s;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14D940", func_0014F228);
+int func_0014F228(int mode,int group,int minimum, int unused)
+{
+    int result=0;
+    int total=func_00265F28();
+    int i;
+    Rec36E230 *table = D_0036E230;
+    switch(mode) {
+    case 2:
+        for(i=0;i<total;i++)
+            if(MsGetMonsterCapture(i)>=minimum) result++;
+        break;
+    case 1: {
+        i = 0;
+        if (total > 0) {
+        unsigned short *entry = &table[0].h04;
+        for(;i<total;i++) {
+            int value = *entry;
+            entry += 4;
+            if(value==group && MsGetMonsterCapture(i)>=minimum) result++;
+        }
+        }
+        break;
+    }
+    case 0: {
+        i = 0;
+        if (total > 0) {
+        unsigned short *entry = &table[0].h02;
+        for(;i<total;i++) {
+            int value = *entry;
+            entry += 4;
+            if(value==group && MsGetMonsterCapture(i)>=minimum) result++;
+        }
+        }
+        break;
+    }
+    }
+    return result;
+}
 
 int func_0014F380(int a, int b)
 {

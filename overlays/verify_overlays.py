@@ -13,6 +13,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE = 0x01B00000
@@ -1541,8 +1542,10 @@ def main(argv=None) -> int:
         return 1
 
     cc = "tools/cc/ee-gcc2.9-991111-01/bin/ee-gcc"
-    out_dir = ROOT / "build" / "overlays" / f"run{os.getpid()}"  # per-process dir: concurrent runs must not share objects
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_root = ROOT / "build" / "overlays"
+    out_root.mkdir(parents=True, exist_ok=True)
+    # Docker processes can all have PID 1 while sharing the same mounted build tree.
+    out_dir = Path(tempfile.mkdtemp(prefix="run-", dir=out_root))
     import atexit; atexit.register(shutil.rmtree, out_dir, True)
     funcs_txt = load_funcs_txt()
 
@@ -1561,7 +1564,7 @@ def main(argv=None) -> int:
         text_bin = out_dir / f"{stem}.text.bin"
 
         subprocess.run(
-            [cc, "-c", *unit.get("cflags", ["-O2"]), "-G0", "-g0", "-Iinclude", "-Ioverlays", str(src), "-o", str(obj)],
+            [unit.get("cc", cc), "-c", *unit.get("cflags", ["-O2"]), "-G0", "-g0", "-Iinclude", "-Ioverlays", str(src), "-o", str(obj)],
             check=True,
         )
         subprocess.run(["mipsel-linux-gnu-objcopy", str(obj), str(obj)], check=True)

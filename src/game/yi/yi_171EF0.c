@@ -176,7 +176,20 @@ int func_001723D8(struct Q3Ent *p, int n)
     return (int)(d + ofs);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00172450);
+int func_00172450(SecHdr *hdr, int n, int total)
+{
+    int i;
+
+    if (hdr->ofs[n] == 0) {
+        return 0;
+    }
+    for (i = n + 1; i < 0x1C; i++) {
+        if (hdr->ofs[i] != 0) {
+            return hdr->ofs[i] - hdr->ofs[n];
+        }
+    }
+    return total - hdr->ofs[n];
+}
 
 int func_001724C8(u32 group, int idx) {
     u32 size;
@@ -649,7 +662,13 @@ void func_00173740(int *c)
     D_00597F00.f68240[3] = c[3] - 0x80;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_001737A8);
+void func_001737A8(int *c)
+{
+    c[0] = (s32)(D_00597F00.f68240[0] + 128.0f);
+    c[1] = (s32)(D_00597F00.f68240[1] + 128.0f);
+    c[2] = (s32)(D_00597F00.f68240[2] + 128.0f);
+    c[3] = (s32)(D_00597F00.f68240[3] + 128.0f);
+}
 
 void func_00173808(void *a) {
     func_002DD0B0(D_00600140, a);
@@ -712,7 +731,13 @@ int func_00173AF0(u32 i) {
     return D_00597F00.ent[i].h84;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00173B30);
+int func_00173B30(u32 i)
+{
+    if (i >= D_00597F00.w687B8) {
+        return -1;
+    }
+    return 0;
+}
 
 int yiDObjToOMD(int a, int b) {
     return yiPacketConvToOMD(&D_00597F00, a, b);
