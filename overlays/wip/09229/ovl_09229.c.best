@@ -1,0 +1,104 @@
+/* EE Battle-Effect Overlay: group 0x11, file 09229
+ * Load base: 0x01B00000, .text: 0x01B00468..0x01B01858 (15 functions)
+ */
+#include "oef_overlay.h"
+
+typedef struct Blk176 {
+    unsigned long long q[22];
+} Blk176;
+
+extern int D_01B01A34;
+extern int D_01B01A38;
+extern Blk176 D_01B01880;
+extern u8 D_01B01930[];
+extern Blk176 D_006F2CE0;
+
+void func_002B4980(void *res);
+void func_002B2A80(void *p, int a, int b, int c);
+void *func_002B49A0(void *res, int a, int b);
+void func_002944B0(void *res, int a, int b, int c);
+void *func_0011A538(s32 *p);
+
+void func_01B00468(void *res)
+{
+    int *p0 = &D_01B01A34;
+    int *p1 = &D_01B01A38;
+
+    func_002B4980(res);
+    func_002D02E8(res, 0, 1000, 0x100);
+    func_002944B0(res, 0, 1000, 0x100);
+    *p0 = (int)func_002B49A0(res, 6, 0);
+    *p1 = (int)func_002B49A0(res, 6, 1);
+}
+
+void func_01B004F8(void)
+{
+    D_01B01880 = D_006F2CE0;
+    func_002B2A80(&D_01B01880, 0xb, 1, 0);
+}
+
+void func_01B00568(int alpha)
+{
+    s32 idx;
+    u8 *base;
+    unsigned long long *rec;
+    unsigned long long *q;
+    int *w;
+    float *f;
+
+    base = func_0011A538(&idx);
+    q = (unsigned long long *)D_01B01930;
+    w = (int *)D_01B01930;
+    f = (float *)D_01B01930;
+    q[2] = 0xE02A400000008001ULL;
+    q[3] = 0x005252525216EEEEULL;
+    q[4] = 0x0000008000000080ULL;
+    q[5] = 0x3B;
+    q[6] = 0x44;
+    q[7] = 0x42;
+    rec = (unsigned long long *)(((idx & 1) == 0) ? base + 0x1D0 : base + 0x60);
+    q[8] = rec[4];
+    q[9] = 0x18;
+    q[10] = 0x067C007FC00AULL;
+    q[11] = 8;
+    f[35] = 0.0f;
+    w[46] = 0xFFFFFF;
+    w[60] = 0x8FF0;
+    q[13] = 0;
+    w[37] = 0x7300;
+    w[52] = 0x7000;
+    w[39] = 0;
+    f[40] = 1.0f;
+    f[58] = 1.0f;
+    f[34] = 1.0f;
+    w[36] = 0x7000;
+    w[31] = alpha;
+    f[32] = 0.0f;
+    w[62] = 0xFFFFFF;
+    w[59] = 0;
+    f[49] = 0.8125f;
+    w[53] = 0x8CF0;
+    w[55] = 0;
+    w[63] = 0;
+    f[50] = 1.0f;
+    w[48] = 0;
+    w[44] = 0x8FF0;
+    w[61] = 0x8CF0;
+    w[29] = 0x80;
+    f[41] = 0.0f;
+    f[42] = 1.0f;
+    w[38] = 0xFFFFFF;
+    w[51] = 0;
+    f[43] = 0.0f;
+    w[54] = 0xFFFFFF;
+    f[56] = 1.0f;
+    w[47] = 0;
+    q[12] = 0x24020000ULL | (long long)((int)(rec[0] & 0x1FF) << 5) | 0x240000000ULL;
+    w[28] = 0x80;
+    f[33] = 0.0f;
+    f[57] = 0.8125f;
+    w[45] = 0x7300;
+    w[30] = 0x80;
+    func_002B2A80(D_01B01930, 0x10, 1, 0);
+    func_01B004F8();
+}
