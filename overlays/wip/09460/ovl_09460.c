@@ -309,9 +309,8 @@ void func_01B00EA8(W3Task *t)
     *(float *)&t->frame[t->sp].arg2 = y;
     VEC3_COPY(p, o->pos);
     dy = y - old;
-    __asm__ volatile("" : : "f"(y), "f"(old));
     g = p[2];
-    __asm__ volatile("" : : "f"(g));
+    __asm__ volatile("" : : "f"(y), "f"(old));
     h = p[1];
     r = p[0];
     h = h + dy;

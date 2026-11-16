@@ -21,6 +21,7 @@ extern s32 D_00313E48;
 #define VEC3_ADD(d, a, b) \
     __asm__ volatile("lqc2 $vf31, 0(%1)\n\tlqc2 $vf30, 0(%2)\n\tvadd.xyz $vf31, $vf31, $vf30\n\tsqc2 $vf31, 0(%0)" \
                      : : "r"(d), "r"(a), "r"(b) : "memory")
+#define ZF(x) (*(float *)&(x) = 0)
 #define VEC3_COPY(d, s) \
     __asm__ volatile("lqc2 $vf31, 0(%1)\n\tsqc2 $vf31, 0(%0)" : : "r"(d), "r"(s) : "memory")
 
@@ -166,13 +167,14 @@ void func_01B00B20(W3Task *t)
     int n;
     float fs;
     float *v = D_01B01780;
-    int c = D_00313CB0.caster;
+    int c;
 
+    c = D_00313CB0.caster;
     D_01B01780[0] = 2.5f;
     v[1] = 2.5f;
     tgt = D_00313CB0.targets[0];
-    *(int *)&v[2] = 0;
-    *(int *)&v[3] = 0;
+    v[2] = 0;
+    v[3] = 0;
     func_001A2F50(c, 41, v, D_01B01760);
     fs = 0.03f;
     if (D_01B01748 == 0) {
@@ -203,8 +205,8 @@ void func_01B00B20(W3Task *t)
     o->pos[1] = D_01B01760[1];
     o->pos[2] = D_01B01760[2];
     o->scale[2] = o->scale[1] = o->scale[0] = fs;
+    ZF(o->pos_w);
     o->scale[3] = 0;
-    o->pos_w = 0;
 }
 
 void func_01B00D18(W3Task *t)
@@ -219,13 +221,13 @@ void func_01B00D18(W3Task *t)
     float c1;
     float c2;
 
-    cp = c;
     VEC3_COPY(a, D_01B01790);
     rcVec3fNormalize((Vec4 *)a);
     b[1] = -1.0f;
     b[0] = 0;
     b[2] = 0;
     b[3] = 0;
+    cp = c;
     func_0018EFD0(cp, a, b);
     {
         int ki;
@@ -237,18 +239,18 @@ void func_01B00D18(W3Task *t)
     c1 = c[1];
     c2 = c[2];
     m = (float)(D_01B01750 / 2 + 1);
-    D_01B01790[2] += -c2 * m;
     D_01B01790[0] += -c0 * m;
     D_01B01790[1] += -c1 * m;
+    D_01B01790[2] += -c2 * m;
     o->pos[0] = D_01B01760[0];
     o->pos[1] = D_01B01760[1];
     o->pos[2] = D_01B01760[2];
-    o->pos_w = 0;
+    ZF(o->pos_w);
     o->vel[0] = D_01B01790[0];
     o->vel[1] = D_01B01790[1];
     o->vel[2] = D_01B01790[2];
     o->vel[3] = 0;
-    o->acc_w = 0;
+    ZF(o->acc_w);
     o->scale[3] = 0;
     o->acc[0] = c0;
     o->acc[1] = c1;
@@ -257,8 +259,8 @@ void func_01B00D18(W3Task *t)
     func_0019FF90(&D_00313CB0, func_01B00FC0);
     D_01B01744->pos[0] = D_01B01760[0];
     D_01B01744->pos[1] = -0.1f;
-    D_01B01744->pos_w = 0;
     D_01B01744->pos[2] = D_01B01760[2];
+    ZF(D_01B01744->pos_w);
     func_001A1D08(t, func_01B00EF8);
     func_001A1DF0(t, D_01B01750);
 }
@@ -284,8 +286,8 @@ void func_01B00F38(W3Task *t)
         D_01B01744->pos[0] = p[0];
         t->frame[t->sp].count = c;
         D_01B01744->pos[1] = p[1];
-        D_01B01744->pos_w = 0;
         D_01B01744->pos[2] = p[2];
+        ZF(D_01B01744->pos_w);
     }
 }
 
@@ -294,7 +296,7 @@ void func_01B00FC0(W3Task *t)
     if (--D_01B0174C >= 0) {
         int i;
 
-        for (i = 5; i >= 0; i--) {
+        for (i = 0; i < 6; i++) {
             func_0019FF90(&D_00313CB0, func_01B01228);
         }
     } else {
@@ -372,9 +374,9 @@ void func_01B01228(W3Task *t)
         int ki;
 
         MIPS_MFC1(ki, -0.2f);
-        VEC3_SCALE(q, q, ki);
+        __asm__ volatile(".set push\n\t.set noreorder\n\tlqc2 $vf31, 0(%0)\n\tqmtc2.ni %1, $vf30\n\tvmulx.xyz $vf31, $vf31, $vf30x\n\tsqc2 $vf31, 0(%0)\n\t.set pop"
+                         : : "r"(q), "r"(ki) : "memory");
     }
-    __asm__ volatile("" ::: "memory");
     q[0] += (float)func_002EFD78() * k * c12 - c06;
     q[1] += (float)func_002EFD78() * k * c12 - c06;
     q[2] += (float)func_002EFD78() * k * c12 - c06;
@@ -387,11 +389,11 @@ void func_01B01228(W3Task *t)
     o->vel[0] = q[0];
     o->vel[1] = q[1];
     o->vel[2] = q[2];
+    o->unk170[0] = 1.0f;
+    o->unk170[1] = 0.2f;
     o->unk170[2] = 0.2f;
     o->unk170[3] = 1.0f;
     o->unk18C = -0.09f;
-    o->unk170[0] = 1.0f;
-    o->unk170[1] = 0.2f;
     func_001A0000_k(&D_00313CB0, o, 1);
     func_001A1D08(t, func_01B00A60);
     func_001A1D50(t, func_001A2110);
@@ -444,15 +446,10 @@ void func_01B01578(W3Task *t)
     } else {
         VEC3_COPY(p, D_01B01740->pos);
         t->frame[t->sp].count = c;
-        {
-            float x = p[0];
-            float z = p[2];
-
-            o->pos[0] = x;
-            o->pos[2] = z;
-            o->pos[1] = -0.1f;
-        }
-        o->pos_w = 0;
+        o->pos[0] = p[0];
+        o->pos[1] = -0.1f;
+        o->pos[2] = p[2];
+        ZF(o->pos_w);
     }
 }
 

@@ -225,6 +225,7 @@ int func_01B00740(int eff_id)
     int i;
     TgtEnt *e;
     float s;
+    float ty;
 
     D_01B01A30 = eff_id;
     __asm__ volatile("" ::: "memory");
@@ -255,8 +256,9 @@ int func_01B00740(int eff_id)
     func_002DD068(&D_01D01DD0.f[8], &D_01D01DD0.f[8], 100.0f);
     func_0026BE48(m, 0);
     func_002DCE38(&D_01D01E10, &D_01D01DD0, m);
+    ty = D_01D01E10.f[13];
     D_01D01E10.q[3] = D_01D01DC0.q;
-    D_01D01E10.f[13] = D_01D01E10.f[13] - 25.0f;
+    D_01D01E10.f[13] = ty - 25.0f;
     func_0026BE48(m, 0);
     func_002DCE38(&D_01D01E50, &D_01D01DD0, m);
     v[0] = 50.0f;
