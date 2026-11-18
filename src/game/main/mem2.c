@@ -37,12 +37,7 @@ char *func_0011D640(const char *s)
     return func_002F072C(func_0011D5C0(func_002F0840(s) + 1), s);
 }
 
-void func_0011D678(s32 a)
-{
-    D_0058091C = (s32)__builtin_return_address(0);
-    func_0011BFE0(D_0058091C);
-    Sg_MemGet(0, 0, 0xE, a, 0);
-}
+INCLUDE_ASM("build/ee_asm/game/main/mem2", func_0011D678);
 
 void func_0011D6C8(s32 a)
 {

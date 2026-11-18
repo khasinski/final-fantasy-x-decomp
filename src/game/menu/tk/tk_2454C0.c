@@ -1093,33 +1093,7 @@ void func_00247750(void *a, int b, int c, int d, int e)
     tag->wC = 0x50000000 | (n - 1);
 }
 
-void func_002477E0(u64 a, u32 b)
-{
-    u8 *p = D_0069BCDC;
-    CmdRec *tag = (CmdRec *)p;
-    u64 *q1 = (u64 *)(p + 0x10);
-    u64 *q2 = (u64 *)(p + 0x30);
-    u32 n;
-
-    q1[0] = 0x1000000000000001ULL;
-    q1[1] = 0xE;
-    q1[2] = 1;
-    q1[3] = 0x14;
-
-    q2[0] = 0x2400000000008001ULL;
-    q2[1] = 0x16;
-    q2[2] = a;
-    q2[3] = b;
-
-    D_0069BCDC = p + 0x50;
-    n = ((u32)(D_0069BCDC - p) + 15) >> 4;
-    tag->b3 = 0x10;
-    tag->b2 = 0;
-    tag->w4 = 0;
-    tag->w0 = n - 1;
-    tag->wC = 0x50000000 | (n - 1);
-    tag->w8 = 0;
-}
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_002477E0);
 
 void func_00247880(int a, int b, int c)
 {
@@ -1355,73 +1329,11 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248910);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248B30);
 
-GsAdPacket *func_00248D50(GsAdPacket *q, int n, u8 *src, int x, int y)
-{
-    if (n > 0) {
-        u8 *p = src + 4;
-        int y0 = y + 0x730;
-        int x0 = x + 0x700;
-        int u1 = ((src[4] + *(u16 *)(p + 8) - 1) << 4) + 8;
-        int v1 = (p[1] << 4) + 8;
-        int h0 = *(u16 *)(p + 6);
-        int h1 = *(u16 *)(p + 10);
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248D50);
 
-        q[0].data = 0x6400000000008001UL;
-        q[0].reg = 0xF53530UL;
-        q[1].data = 0x156;
-        q[1].reg = u1 | ((u64)v1 << 16);
-        q[2].data = (x0 << 4) | ((u64)(y0 << 4) << 16);
-        q[2].reg = u1 | ((u64)(v1 + (h0 << 4)) << 16);
-        q[3].data = ((x0 + n) << 4) | ((u64)((y0 + h1) << 4) << 16);
-        q += 4;
-    }
-    return q;
-}
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248E18);
 
-GsAdPacket *func_00248E18(GsAdPacket *q, int n, u8 *src, int x, int y)
-{
-    if (n > 0) {
-        u8 *p = src + 4;
-        int y0 = y + 0x730;
-        int x0 = x + 0x700;
-        int u1 = (src[4] << 4) + 8;
-        int v1 = ((p[1] + *(u16 *)(p + 6) - 1) << 4) + 8;
-        int w1 = *(u16 *)(p + 4);
-        int h0 = *(u16 *)(p + 8);
-
-        q[0].data = 0x6400000000008001UL;
-        q[0].reg = 0xF53530UL;
-        q[1].data = 0x156;
-        q[1].reg = u1 | ((u64)v1 << 16);
-        q[2].data = (x0 << 4) | ((u64)(y0 << 4) << 16);
-        q[2].reg = (u1 + (w1 << 4)) | ((u64)v1 << 16);
-        q[3].data = ((x0 + h0) << 4) | ((u64)((y0 + n) << 4) << 16);
-        q += 4;
-    }
-    return q;
-}
-
-GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y)
-{
-    if (n > 0) {
-        u8 *p = src + 4;
-        int y0 = y + 0x730;
-        int x0 = x + 0x700;
-        int u1 = (src[4] << 4) + 8;
-        int v1 = ((p[1] + *(u16 *)(p + 6) - 1) << 4) + 8;
-        int w1 = *(u16 *)(p + 4);
-
-        q[0].data = 0x6400000000008001UL;
-        q[0].reg = 0xF53530UL;
-        q[1].data = 0x156;
-        q[1].reg = u1 | ((u64)v1 << 16);
-        q[2].data = (x0 << 4) | ((u64)(y0 << 4) << 16);
-        q[2].reg = (u1 + (w1 << 4)) | ((u64)v1 << 16);
-        q[3].data = ((x0 + n1) << 4) | ((u64)((y0 + n) << 4) << 16);
-        q += 4;
-    }
-    return q;
-}
+INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248ED8);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248F98);
 

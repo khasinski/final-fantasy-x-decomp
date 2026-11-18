@@ -101,41 +101,7 @@ INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E300);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", func_001B38E8);
 
-void func_001B39A8(u8 *a, u8 *b, int idx)
-{
-    int i;
-    int j;
-    u8 *pa;
-    int n;
-
-    if (idx < 0 || idx >= (s8)a[1]) {
-        return;
-    }
-    pa = a + (idx << 5);
-    n = (s8)b[1];
-    if (n <= 0) {
-        return;
-    }
-    for (i = 0; i < n; i++) {
-        int m = (s8)pa[4];
-        int mb = (s8)b[4];
-        float *src = (float *)(a + *(s32 *)(pa + 0x10));
-        if (mb < m) {
-            m = mb;
-        }
-        if (m > 0) {
-            float *dst = (float *)(b + *(s32 *)(b + 0x10));
-            for (j = 0; j < m; j++) {
-                dst[0] = src[0] + *(float *)(b + 0x30);
-                dst[1] = src[1] + *(float *)(b + 0x34);
-                dst[2] = src[2] + *(float *)(b + 0x38);
-                src += 4;
-                dst += 4;
-            }
-        }
-        b += 0x60;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", func_001B39A8);
 
 void func_001B3A80(void) {
     s8 *p;

@@ -65,54 +65,7 @@ void op_md_copy(u_long128 *src, u_long128 *dst)
 
 extern s32 D_004F4140[];
 
-void op_md_tex0_change_limit(s32 a0, u64 tex0, s32 c, s32 d)
-{
-    u16 a2 = c;
-    u16 a3 = d;
-    u32 u0 = tex0 & 0x3FFF;
-    u32 v0 = (tex0 >> 37) & 0x3FFF;
-    u8 *p = (u8 *)(a0 + 0x20);
-    u8 *start = p;
-    s32 min_u = 0x3FFF;
-    s32 min_v = 0x3FFF;
-
-    while ((s8)p[1] != -1) {
-        u8 flags = p[1];
-        if (flags & 2) {
-            s16 du = (*(u16 *)(p + 8) & 0x3FFF) - u0;
-            s16 dv = ((*(u32 *)(p + 12) >> 5) & 0x3FFF) - v0;
-            if (du < min_u) {
-                min_u = du;
-            }
-            if (dv < min_v) {
-                min_v = dv;
-            }
-        }
-        p += D_004F4140[flags & 7] * *(s16 *)(p + 2) + 0x10;
-    }
-
-    p = start;
-    while ((s8)p[1] != -1) {
-        u8 flags = p[1];
-        if (flags & 2) {
-            u32 u = *(u16 *)(p + 8) & 0x3FFF;
-            if ((s32)u >= a2 && (s32)u <= a3) {
-                s16 nu = u - min_u;
-                s16 nv;
-                if (nu < 0) {
-                    nu = 0;
-                }
-                *(u32 *)(p + 8) = (*(u32 *)(p + 8) & 0xFFFFC000) | nu;
-                nv = ((*(u32 *)(p + 12) >> 5) & 0x3FFF) - min_v;
-                if (nv < 0) {
-                    nv = 0;
-                }
-                *(u32 *)(p + 12) = (*(u32 *)(p + 12) & 0xFFF8001F) | (nv << 5);
-            }
-        }
-        p += D_004F4140[flags & 7] * *(s16 *)(p + 2) + 0x10;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_tex0_change_limit);
 
 void op_md_tex0_change(s32 a, u64 b) {
     op_md_tex0_change_limit(a, b, 0, 0x4000);
@@ -150,17 +103,7 @@ void func_002B6E40(s32 a0, u16 a1, u16 a2, u16 a3, u16 a4) {
     op_md_tex0_change_limit(a0, res, a3, a4);
 }
 
-void op_md_tex0_reset(void *md, u64 tex0)
-{
-    u8 *p = (u8 *)md + 0x20;
-    u32 *tbl = D_004F4140;
-
-    while (*(s8 *)(p + 1) != -1) {
-        *(u32 *)(p + 8) = tex0;
-        *(u32 *)(p + 12) = tex0 >> 32;
-        p = p + tbl[*(u8 *)(p + 1) & 7] * *(s16 *)(p + 2) + 0x10;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_tex0_reset);
 
 /* DEBT(CAST) */
 void func_002B6EC8(void *arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -510,23 +453,7 @@ int func_002B7CE8(OpMdcHdr *mdc, OpMdDrawReq *req, void *m2, void *m3, void *m4,
     return req->w34;
 }
 
-int func_002B7E18(OpMdcHdr *mdc)
-{
-    int count = mdc->count;
-    int sum = 0;
-    OpMdcEntry *e = mdc->entries;
-    int i;
-
-    for (i = 0; i < count; i++, e++) {
-        u8 *p = (u8 *)e->md + 0x20;
-        while ((s8)p[1] == 0x10) {
-            s16 n = *(s16 *)(p + 2);
-            sum += n;
-            p += n * 0x1C + 0x20;
-        }
-    }
-    return sum;
-}
+INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7E18);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7EA0);
 

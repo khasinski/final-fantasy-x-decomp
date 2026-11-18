@@ -44,24 +44,7 @@ void func_001BCC50(void) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsDebugFullCommand);
 
-void func_001BCE30(void)
-{
-    int i;
-    int j;
-
-    for (i = 0; i < 0x70; i++) {
-        for (j = 0; j < 0x70; j++) {
-            if (D_003194D0.h3ECC[j] == 0x2000 + i) {
-                D_003194D0.b40CC[j] = 0x63;
-                break;
-            }
-        }
-        if (i >= 0) {
-            D_003194D0.h3ECC[i] = 0x2000 + i;
-            D_003194D0.b40CC[i] = 0x63;
-        }
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BCE30);
 
 void func_001BCED0(void) {
     int i;

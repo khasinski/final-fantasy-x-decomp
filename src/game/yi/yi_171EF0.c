@@ -176,20 +176,7 @@ int func_001723D8(struct Q3Ent *p, int n)
     return (int)(d + ofs);
 }
 
-int func_00172450(SecHdr *hdr, int n, int total)
-{
-    int i;
-
-    if (hdr->ofs[n] == 0) {
-        return 0;
-    }
-    for (i = n + 1; i < 0x1C; i++) {
-        if (hdr->ofs[i] != 0) {
-            return hdr->ofs[i] - hdr->ofs[n];
-        }
-    }
-    return total - hdr->ofs[n];
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00172450);
 
 int func_001724C8(u32 group, int idx) {
     u32 size;
@@ -582,35 +569,7 @@ void func_00173450(float *m, float *n)
     }
 }
 
-void yiGetBackColor(int *v)
-{
-    Sys597F00 *s = &D_00597F00;
-    float col[4];
-    int i;
-    int fl = s->w67F20; /* DEBT(FAKE): prevents fold_truthop from merging the two bit checks */
-
-    if ((fl & 1) && (s->w67F20 & 4)) {
-        col[0] = s->b683A8;
-        col[1] = s->b683A9;
-        col[2] = s->b683AA;
-        col[3] = s->b683AB;
-        for (i = 0; i < 4; i++) {
-            col[i] = col[i] * s->f68230[i] + s->f68240[i];
-            if (col[i] < 0.0f) {
-                col[i] = 0.0f;
-            }
-            if (col[i] > 255.0f) {
-                col[i] = 255.0f;
-            }
-            v[i] = col[i];
-        }
-    } else {
-        v[0] = s->b683A8;
-        v[1] = s->b683A9;
-        v[2] = s->b683AA;
-        v[3] = s->b683AB;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiGetBackColor);
 
 void func_00173650(void *src) {
     Q3Px *p = src;
@@ -731,13 +690,7 @@ int func_00173AF0(u32 i) {
     return D_00597F00.ent[i].h84;
 }
 
-int func_00173B30(u32 i)
-{
-    if (i >= D_00597F00.w687B8) {
-        return -1;
-    }
-    return 0;
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00173B30);
 
 int yiDObjToOMD(int a, int b) {
     return yiPacketConvToOMD(&D_00597F00, a, b);

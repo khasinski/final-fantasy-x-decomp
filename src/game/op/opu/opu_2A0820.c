@@ -118,28 +118,7 @@ u16 *opu_unit_ex(ScriptThread *th, u16 *pc)
     return pc;
 }
 
-u16 *opu_task(ScriptThread *th, u16 *pc)
-{
-    u32 hi = ((s16)th->flags & 0x8000) << 16;
-    u32 idx = (th->flags >> 12) & 3;
-    ScriptSub *sub = th->sub;
-
-    if (idx == 0) {
-        u8 i = 1;
-        do {
-            if (sub->reg[i] == 0) {
-                idx = i;
-                goto found;
-            }
-            i++;
-        } while (i < 4);
-        return pc + 2;
-    }
-found:
-    sub->reg[idx] = ((u32)pc + (s16)pc[1]) | hi;
-    *((u8 *)sub + idx + 0x10) = 0;
-    return pc + 2;
-}
+INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_task);
 
 u16 *func_002A0C58(ScriptThread *th, u16 *pc) {
     u16 idx = th->flags >> 12;

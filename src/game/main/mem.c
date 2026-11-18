@@ -86,14 +86,7 @@ char *func_0011BAB8(AllocHdr *p)
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BB08);
 
-void Sg_MemSetCurrentAddr(int a)
-{
-    if (a != 0) {
-        u32 *hdr = (u32 *)((u8 *)a - 0x10);
-        func_0011BFE0((s32)__builtin_return_address(0));
-        hdr[3] = (hdr[3] & 0xFC00000F) | ((D_00580910 & 0x3FFFFF) << 4);
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/main/mem", Sg_MemSetCurrentAddr);
 
 /* DEBT(TYPE): global type guessed from the access width only */
 void func_0011BD70(u8 v)

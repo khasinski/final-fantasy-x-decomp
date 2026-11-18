@@ -363,15 +363,7 @@ int func_001630B0(int i)
     return ret;
 }
 
-int func_00163110(int i)
-{
-    u32 v = *(u32 *)((G1_VT78E498->w20 + i) * 4 + D_0078E498.f28);
-
-    if (v & 0x800000) {
-        return 0;
-    }
-    return (v & 0x400000) != 0;
-}
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163110);
 
 
 int func_00163158(u8 *p) {

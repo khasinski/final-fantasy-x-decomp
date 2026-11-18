@@ -415,31 +415,7 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BC40);
 
 extern u8 D_0030E9E8[];
 
-int func_0017BD90(u8 *src, u8 *dst)
-{
-    unsigned int i, j, k;
-    int idx;
-    int n = 0;
-    u8 *d = dst;
-    u8 *s = src;
-
-    for (i = 0; i < 4; i++) {
-        idx = (i & 1) << 7;
-        for (j = 0; j < 16; j++) {
-            for (k = 0; k < 4; k++) {
-                u8 a = D_0030E9E8[idx];
-                u8 b = D_0030E9E8[idx + 1];
-                s32 lo = (s[a >> 1] & (0xF << ((a & 1) << 2))) >> ((a & 1) << 2);
-                s32 hi = ((s[b >> 1] & (0xF << ((b & 1) << 2))) >> ((b & 1) << 2)) & 0xFF;
-                d[n] = lo | (hi << 4);
-                idx += 2;
-                n++;
-            }
-        }
-        s += 0x40;
-    }
-    return 0;
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BD90);
 
 extern u8 D_0030EAE8[];
 

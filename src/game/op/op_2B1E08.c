@@ -466,25 +466,7 @@ s32 func_002B2E50(void (*fn)(s32, s32), s32 arg0, s32 arg1, u16 count) {
     return func_002B2D58(fn, arg0, arg1, count, 0x60);
 }
 
-void func_002B2E70(u32 id, s32 bank)
-{
-    s8 *list;
-    s32 i;
-
-    if (id < 0x80) {
-        D_006F2FE0[bank + id].fn = 0;
-        list = &D_006F2F60[bank];
-        for (i = 0; i < 0x20; i++) {
-            if (list[i] == (s32)id) {
-                for (; i < 0x20; i++) {
-                    list[i] = list[i + 1];
-                }
-                list[i - 1] = -1;
-                break;
-            }
-        }
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2E70);
 
 void func_002B2F10(u32 id) {
     func_002B2E70(id, 0);

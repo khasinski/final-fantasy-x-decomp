@@ -129,21 +129,7 @@ void func_00175358(V1Record1753 *record)
         record->color[0] = record->color[1] = record->color[2] = record->color[3] = 0x80;
 }
 
-void yiRender_setfogparam(Sys597F00 *s)
-{
-    u8 *p = (u8 *)s + 0x68000;
-    float f = *(float *)(p + 0x210) * 0.03125f * 32.0f;
-    float near_f = f * *(float *)(p + 0x378);
-    float far_f = f * *(float *)(p + 0x37C);
-
-    *(s32 *)(p + 0x38C) = 0;
-    *(float *)(p + 0x384) = 255.0f - *(float *)(p + 0x374);
-    *(float *)(p + 0x388) = -near_f;
-    *(float *)(p + 0x380) = -(255.0f / (far_f - near_f));
-    if (*(u32 *)((u8 *)s + 0x67F20) & 8) {
-        *(float *)(p + 0x384) = 255.0f;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setfogparam);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175468);
 
@@ -236,50 +222,7 @@ INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176368);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001764A0);
 
-void func_001765D0(Sys597F00 *s)
-{
-    u32 *p = (u32 *)((u8 *)s + 0x27630);
-
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    p[3] = 0x51000005;
-    p += 4;
-    p[0] = 4;
-    p[1] = 0x10030000;
-    p[2] = 0xE;
-    p[3] = 0;
-    p += 4;
-    p[0] = 0;
-    p[1] = 0x23C00;
-    p[2] = 0x50;
-    p[3] = 0;
-    p += 4;
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0x51;
-    p[3] = 0;
-    p += 4;
-    p[0] = 0x80;
-    p[1] = 0x200;
-    p[2] = 0x52;
-    p[3] = 0;
-    p += 4;
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0x53;
-    p[3] = 0;
-    p += 4;
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    p[3] = 0x51004001;
-    p += 4;
-    p[0] = 0xC000;
-    p[1] = 0x08000000;
-    p[2] = 0;
-    p[3] = 0;
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001765D0);
 
 void func_001766D0(Sys597F00 *s) {
     R2Qw pkt[16];

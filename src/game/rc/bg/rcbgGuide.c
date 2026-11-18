@@ -359,30 +359,7 @@ void func_00195FF8(GuideMap *g) {
     }
 }
 
-int func_001960D0(float *a0, float *a1, float *b0, float *b1, float *out)
-{
-    float dy2 = b1[1] - b0[1];
-    float dx2 = b1[0] - b0[0];
-    float dx1 = a1[0] - a0[0];
-    float dy1 = a1[1] - a0[1];
-    float t1 = dy2 * dx1;
-    float t2 = dx2 * dy1;
-    float det = t1 - t2;
-
-    if (det > 1e-5f || det < -1e-5f) {
-        float s = (dx1 * (b0[1] - a0[1]) - dy1 * (b0[0] - a0[0])) / det;
-        if (0.0f <= s && s <= 1.0f) {
-            float t = (dx2 * (a0[1] - b0[1]) - dy2 * (a0[0] - b0[0])) / (t2 - t1);
-            if (0.0f <= t && t <= 1.0f) {
-                float omt = 1.0f - t;
-                out[0] = a0[0] * omt + a1[0] * t;
-                out[1] = a0[1] * omt + a1[1] * t;
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
+INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001960D0);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_001961F8);
 

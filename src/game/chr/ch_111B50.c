@@ -155,49 +155,7 @@ typedef struct ChrFrameView {
     s32 w7EC;
 } ChrFrameView;
 
-int Ch_IncrementFrame(Chr *chr)
-{
-    ChrFrameView *fv = (ChrFrameView *)chr;
-    s32 cur = fv->w74C;
-    s32 next;
-    s32 end;
-    s32 masked;
-
-    if (cur < 0) {
-        fv->w74C = 0;
-        cur = 0;
-    }
-    next = (cur + fv->h762 + 0x1FF) >> 8;
-    end = (fv->w728 + 1) >> 8;
-    if (next > end && fv->h730 == 1) {
-        fv->h734 = 0;
-        fv->w74C = fv->w728 & ~0xFF;
-        return 1;
-    }
-    if (cur > fv->w728) {
-        masked = fv->w728 & ~0xFF;
-        do {
-            if (fv->h730 != 0) {
-                fv->h730--;
-                if (fv->h730 == 0) {
-                    fv->w74C = masked;
-                    fv->h760 = 0;
-                    fv->h734 = 0;
-                    return 1;
-                }
-                fv->w74C = cur - fv->w72C;
-            } else {
-                if (fv->w72C == 0) {
-                    fv->w74C = fv->w724;
-                    return 1;
-                }
-                fv->w74C = cur - fv->w72C;
-            }
-            cur = fv->w74C;
-        } while (cur > fv->w728);
-    }
-    return 0;
-}
+INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_IncrementFrame);
 
 void Ch_MotionApply(Chr *chr)
 {

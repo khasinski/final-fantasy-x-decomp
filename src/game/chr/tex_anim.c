@@ -281,43 +281,7 @@ int chr_texanim_draw_sub_new(int index, int value)
     return value;
 }
 
-void func_00161968(int a0, int a1, int a2)
-{
-    TexAnimWorkNew *w;
-
-    if (D_0078D898[a0].p00 == 0) {
-        return;
-    }
-    w = (TexAnimWorkNew *)D_0078D898[a0].w04;
-    if (a1 == 1) {
-        s32 i;
-        for (i = 0; i < 64; i++) {
-            if (w->bD08[i] == 1) {
-                TaSubEnt *ent = &w->ent[i];
-                ent->h1A = 0;
-                ent->w04 = a2;
-                ent->h14 = 0;
-                ent->h16 = 0;
-                ent->w24 = 0;
-                ent->w28 = 0;
-                ent->w2C = 0;
-                ent->w30 = 0;
-                ent->h18 = 0;
-            }
-        }
-    } else {
-        TaSubEnt *ent = &w->ent[a1];
-        ent->w04 = a2;
-        ent->h1A = 0;
-        ent->h14 = 0;
-        ent->h16 = 0;
-        ent->w24 = 0;
-        ent->w28 = 0;
-        ent->w2C = 0;
-        ent->w30 = 0;
-        ent->h18 = 0;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", func_00161968);
 
 void func_00161A20(int a0, int a1, int a2, int a3) {
     if (a1 == 4) {

@@ -138,28 +138,7 @@ s32 func_0010B558(Chr *chr)
     return 0;
 }
 
-void func_0010B6D0(u8 *arg0)
-{
-    s32 p = *(s32 *)(arg0 + 0x6EC);
-
-    D_003036A8 = p;
-    if (p != 0 && *(s32 *)(arg0 + 0x700) > 0) {
-        int i = 0;
-        u8 *rec = (u8 *)p;
-        do {
-            u64 v = *(u64 *)(rec + 0x18);
-            u16 idx1 = *(u16 *)(rec + 2);
-            u16 idx0 = *(u16 *)(rec + 0);
-
-            v = (v & ~0x3FFFULL) | (*(u16 *)(*(u8 **)(arg0 + 0x6F8) + idx1 * 0x70 + 0x6A) & 0x3FFF);
-            *(u64 *)(rec + 0x18) = v;
-            v = (v & 0xFFF8001FFFFFFFFFULL) | ((u64)(*(u16 *)(*(u8 **)(arg0 + 0x6F0) + idx0 * 0x70 + 0x6A) & 0x3FFF) << 37);
-            *(u64 *)(rec + 0x18) = v;
-            i++;
-            rec += 0x20;
-        } while (i < *(s32 *)(arg0 + 0x700));
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B6D0);
 
 void Ch_DrawEnEffect(Chr *chr, s32 v)
 {

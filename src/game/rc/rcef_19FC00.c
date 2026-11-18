@@ -646,23 +646,7 @@ void func_001A1A00(void *b)
 extern u8 D_006A3B70[];
 extern u8 D_006A3B30[];
 
-void func_001A1A08(void *arg0, s32 *arg1, void *arg2, void *arg3)
-{
-    u8 *p = (u8 *)arg0;
-    u8 *sub = p + 0x10;
-
-    *(s32 *)(p + 0x0) = 1;
-    *(s32 *)(p + 0x4) = (s32)arg1;
-    *(s32 *)(p + 0x10) = 0x1C;
-    *(s32 *)(p + 0x80) = (s32)arg2;
-    *(s32 *)(p + 0x84) = (s32)arg3;
-    *(s32 *)(sub + 0x4) = D_00303550;
-    *(u8 *)(sub + 0x8) = 0x44;
-    *(void **)(sub + 0x20) = p + 0x90;
-    *(void **)(sub + 0x24) = D_006A3B70;
-    *(void **)(sub + 0x28) = D_006A3B30;
-    *(void **)(sub + 0x2C) = arg2;
-}
+INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1A08);
 
 s32 _m2c_func_001A1A68_func_001A1AB0() __asm__("func_001A1AB0");
 s32 _m2c_func_001A1A68_func_001A1BE8(s32 *) __asm__("func_001A1BE8");

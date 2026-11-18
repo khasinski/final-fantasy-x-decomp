@@ -17,14 +17,7 @@ typedef struct Vu0RegisterState {
     u16 vi[16];
 } Vu0RegisterState;
 
-void func_002DC110(u32 *p)
-{
-    if (*(volatile u32 *)0x1000F520 == 0) {
-        *(volatile u32 *)0x1000F590 = 0x1000;
-    }
-    *p &= ~0x100;
-    *(volatile u32 *)0x1000F590 = 0;
-}
+INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC110);
 
 u32 func_002DC158(u32 *p, u32 v)
 {

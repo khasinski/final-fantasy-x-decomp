@@ -187,13 +187,7 @@ extern char D_00792240[];
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9B08);
 
-int func_002F9BC8(int c)
-{
-    while (*(volatile u32 *)0x1000F130 & 0x8000) {
-    }
-    *(volatile u8 *)0x1000F180 = c;
-    return c;
-}
+INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty_2F9318", func_002F9BC8);
 
 void func_002F9C00(int c)
 {

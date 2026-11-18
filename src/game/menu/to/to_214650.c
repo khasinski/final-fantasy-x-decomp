@@ -125,44 +125,7 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetNextAction);
 extern R4Init D_00325170;
 extern s16 D_00692040[];
 
-int TOBtlSetPrevAction(void)
-{
-    R4Rec *r;
-    s8 prev;
-    u16 hC;
-
-    if (D_00325020 <= 0) {
-        return 0;
-    }
-    r = &D_003249C0[D_00325020];
-    hC = *(u16 *)((u8 *)r + 0xC);
-    r->state = 5;
-    *(s16 *)((u8 *)r + 8) = D_003252A4;
-    *(s16 *)((u8 *)r + 0x16) = 0xFF;
-    if (hC == 0x311E) {
-        D_003249A4 = 0;
-    }
-    if (hC == 0x3029) {
-        D_003249A4 = 0;
-    }
-    if (r->b2 == 1) {
-        r->h96 = D_003249C0[D_00325020 - 1].h96;
-    }
-    prev = D_00325020 - 1;
-    D_00325020 = prev;
-    r = &D_003249C0[prev];
-    r->state = 2;
-    if (*(s8 *)((u8 *)r + 0xB) >= *(s8 *)((u8 *)r + 0xA)) {
-        if (*(s8 *)((u8 *)r + 0xB) > 0) {
-            (*(s8 *)((u8 *)r + 0xB))--;
-        }
-    }
-    if (D_003249C0[D_00325020].b2 == 1) {
-        toTarget = D_00325170;
-        D_00692040[3] = 0;
-    }
-    return 1;
-}
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetPrevAction);
 
 void func_00215360() /* DEBT(TYPE): old-style definition; TOBtlFinishCommand passes an argument */
 {

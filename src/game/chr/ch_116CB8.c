@@ -154,43 +154,7 @@ typedef struct {
     GsTex0Bits tex0;
 } TexInfo7B0;
 
-void func_00117140(void *arg0, void *arg1)
-{
-    u8 *src = (u8 *)arg0;
-    TexInfo7B0 *t = (TexInfo7B0 *)arg1;
-    int tw = 0;
-    int th = 0;
-    u16 w = 1;
-    u16 h = 1;
-
-    *(u16 *)((u8 *)t + 0x0) = src[1];
-    *(u16 *)((u8 *)t + 0x2) = src[0];
-    *(u16 *)((u8 *)t + 0xC) = *(u16 *)(src + 4);
-    *(u16 *)((u8 *)t + 0xE) = *(u16 *)(src + 6);
-    *((u8 *)t + 0x11) = src[8];
-    *(u16 *)((u8 *)t + 0x8) = w;
-    *(u16 *)((u8 *)t + 0xA) = h;
-    *((u8 *)t + 0x12) = *(u16 *)(src + 8) >> 8;
-    while (*(u16 *)((u8 *)t + 0xA) < *(u16 *)(src + 6)) {
-        *(u16 *)((u8 *)t + 0xA) <<= 1;
-        th++;
-    }
-    while (w < *(u16 *)(src + 4)) {
-        w <<= 1;
-        *(u16 *)((u8 *)t + 0x8) = w;
-        tw++;
-    }
-    t->tex0.TBW = *(u16 *)((u8 *)t + 0xC) >> 6;
-    t->tex0.TW = tw;
-    t->tex0.TH = th;
-    t->tex0.PSM = *(u16 *)(src + 2);
-    t->tex0.TCC = 1;
-    t->tex0.TFX = 0;
-    t->tex0.CPSM = 0;
-    t->tex0.CSM = 0;
-    t->tex0.CSA = 0;
-    t->tex0.CLD = 1;
-}
+INCLUDE_ASM("build/ee_asm/game/chr/ch_116CB8", func_00117140);
 
 s32 func_00117330(void)
 {

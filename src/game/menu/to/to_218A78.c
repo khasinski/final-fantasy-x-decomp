@@ -274,26 +274,7 @@ void func_0021A7C0(float f)
     D_00692658.on = 1;
 }
 
-void TOBtlCtrlLimitTimer(void)
-{
-    int r;
-
-    if (D_00692658.on == 2) {
-        D_00692658.fC += 1.0f;
-        if (TOGetFFXVideoMode() == 0) {
-            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 30.0f;
-        } else {
-            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 25.0f;
-        }
-        if (D_00692658.f14 <= 0.0) {
-            D_00692658.f14 = 0.0f;
-            D_00692658.f18 = 0.0f;
-        } else {
-            r = func_001ACEA0() % 10;
-            D_00692658.f18 = (float)((int)(D_00692658.f14 * 10.0f) * 10 + r) / 100.0f;
-        }
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlLimitTimer);
 
 int func_0021A8F0(void)
 {
@@ -368,85 +349,8 @@ void TOBtlInitAuronLimitWindow(void)
     D_00692678.h6 = 4;
 }
 
-void TOBtlCtrlAuronLimitWindow(void)
-{
-    u16 key;
-    s8 flag;
-    float x;
-
-    switch (D_00692678.state) {
-    case 0:
-        break;
-    case 1:
-        D_0069066C = 0;
-        TOSeqStartSceneDrawContinue(2, D_00570F90);
-        D_00692678.state++;
-        break;
-    case 2:
-        if (TOSeqCheckTermScene(2, D_00570F90) == 1) {
-            TOSeqStartScene(2, D_00570F98);
-            D_00692678.state++;
-        }
-        break;
-    case 3:
-        TOBtlStandbyLimitTimer();
-        D_00692678.state++;
-        break;
-    case 4:
-        TOBtlStartLimitTimer();
-        if (func_0021AA78() <= 0.0f) {
-            D_00692678.state = 7;
-            break;
-        }
-        key = D_003238E4;
-        if (key != 0) {
-            if (key == D_00692678.w10[D_00692678.h8]) {
-                D_00692678.h8++;
-            } else {
-                func_002D70D8(0x69);
-                D_00692678.h8 = 0;
-            }
-            if (D_00692678.h8 >= D_00692678.wC) {
-                D_00692678.state = 5;
-            }
-        }
-        break;
-    case 5:
-        TOBtlStopLimitTimer();
-        D_0069066C = 1;
-        TOSeqStartScene(2, D_00570FA0);
-        func_002D70D8(0x68);
-        D_00692678.state = 6;
-        break;
-    case 6:
-        if (TOSeqCheckTermScene(2, D_00570FA0) == 1) {
-            TOSeqStopScene(2, D_00570F90);
-            TOSeqStopScene(2, D_00570F98);
-            D_00692678.state = 9;
-        }
-        break;
-    case 7:
-        TOBtlStopLimitTimer();
-        D_0069066C = 0;
-        D_00692678.state = 8;
-        break;
-    case 8:
-        TOSeqStopScene(2, D_00570F90);
-        TOSeqStopScene(2, D_00570F98);
-        D_00692678.state = 9;
-        break;
-    case 9:
-        D_00692678.state++;
-        break;
-    case 10:
-        flag = D_0069066C;
-        x = func_0021AA78();
-        func_001E35D8(2, flag, x, func_0021AA88());
-        TOBtlInitLimitTimer();
-        D_00692678.state = 0;
-        break;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlAuronLimitWindow);
+INCLUDE_RODATA("build/ee_asm/game/menu/to/to_218A78/rodata", jtbl_00570FB0);
 
 void func_0021AD80(void)
 {
@@ -606,113 +510,8 @@ void TOBtlInitLuluLimitWindow(void)
     TOSeqGetPoint(2, D_005710A8, &D_006926A8.h10, &D_006926A8.h12);
 }
 
-void TOBtlCtrlLuluLimitWindow(void)
-{
-    DirSeq8 cw = D_005710B0;
-    DirSeq8 ccw = D_005710B8;
-    int dir = 0xFF;
-    int i;
-    u8 x;
-    u8 y;
-    s8 first;
-    int goal;
-    s8 n;
-    u8 level;
-    float f;
-
-    switch (D_006926A8.state) {
-    case 0:
-        break;
-    case 1:
-        TOSeqStartSceneDrawContinue(2, D_005710C0);
-        D_006926A8.state++;
-        break;
-    case 2:
-        if (TOSeqCheckTermScene(2, D_005710C0) == 1) {
-            TOSeqStartScene(2, D_005710C8);
-            D_006926A8.state++;
-        }
-        break;
-    case 3:
-        TOBtlStartLimitTimer();
-        D_006926A8.state++;
-        break;
-    case 4:
-        if (func_0021AA78() <= 0.0f) {
-            D_006926A8.state = 6;
-            break;
-        }
-        for (i = 0; i < 2; i++) {
-            if (i == 0) {
-                x = TkGetControlerAnalogHist(0, 0, 0, -1);
-                y = TkGetControlerAnalogHist(0, 0, 1, -1);
-            } else {
-                x = TkGetControlerAnalogHist(0, 0, 0, 0);
-                y = TkGetControlerAnalogHist(0, 0, 1, 0);
-            }
-            if (x >= 0xA0 && y < 0x60) {
-                dir = 4;
-            } else if (x >= 0xA0 && y >= 0xA0) {
-                dir = 5;
-            } else if (x < 0x60 && y >= 0xA0) {
-                dir = 6;
-            } else if (x < 0x60 && y < 0x60) {
-                dir = 7;
-            }
-            if (dir != 0xFF) {
-                n = D_006926A8.count;
-                if (n == 0) {
-                    D_006926A8.seq[0] = dir;
-                    D_006926A8.count++;
-                } else if (D_006926A8.seq[n - 1] != dir) {
-                    D_006926A8.seq[D_006926A8.count++] = dir;
-                }
-            }
-        }
-        if (D_006926A8.count >= 5) {
-            first = D_006926A8.seq[0];
-            if (func_002EEE88(D_006926A8.seq, &cw.d[first - 4], 5) == 0
-                || func_002EEE88(D_006926A8.seq, &ccw.d[7 - first], 5) == 0) {
-                TOSeqStartScene(2, D_005710D0);
-                if (D_006926A8.b17 >= 0x10) {
-                    D_006926A8.b17 = 0x10;
-                } else if (++D_006926A8.b16 >= D_006926D8[D_006926A8.b17]) {
-                    D_006926A8.b17++;
-                }
-            }
-            func_002EEFCC(D_006926A8.seq, &D_006926A8.seq[4], 12);
-            D_006926A8.count = 0;
-        }
-        goal = D_006926A8.h6 / 16 * D_006926A8.b17;
-        if (D_006926A8.h14 < goal) {
-            D_006926A8.h14 += 3;
-        } else {
-            D_006926A8.h14 = goal;
-        }
-        break;
-    case 5:
-        break;
-    case 6:
-        TOBtlStopLimitTimer();
-        TOBtlInitLimitTimer();
-        level = D_006926A8.b17;
-        f = func_0021AA78();
-        func_001E35D8(5, level, f, func_0021AA88());
-        D_006926A8.state = 7;
-        break;
-    case 7:
-        D_006926A8.state++;
-        break;
-    case 8:
-        TOSeqStopScene(2, D_005710C0);
-        TOSeqStopScene(2, D_005710C8);
-        D_006926A8.state++;
-        break;
-    case 9:
-        D_006926A8.state = 0;
-        break;
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlLuluLimitWindow);
+INCLUDE_RODATA("build/ee_asm/game/menu/to/to_218A78/rodata", jtbl_005710E0);
 
 void func_0021B9C8(void)
 {

@@ -1212,13 +1212,7 @@ void func_002F8850(void)
     D_00568630 = 0;
 }
 
-void func_002F8860(void)
-{
-    *(volatile u32 *)0x1000F000 = 4;
-    while ((*(volatile u32 *)0x1000F000 & 4) == 0) {
-    }
-    *(volatile u32 *)0x1000F000 = 4;
-}
+INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F8860);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F88A0);
 

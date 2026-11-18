@@ -612,35 +612,4 @@ float func_002E95C8(float x, float y)
     }
 }
 
-float func_002E9708(float x)
-{
-    float z;
-    LibmException exc;
-
-    z = func_002E57C0(x);
-    if (D_00577B88 == -1 || func_002E8838(x)) {
-        return z;
-    }
-    if (x < 0.0f) {
-        exc.type = 1;
-        exc.name = D_00577CB0;
-        exc.err = 0;
-        exc.arg1 = exc.arg2 = func_002ED038(x);
-        if (D_00577B88 == 0) {
-            exc.retval = 0.0;
-        } else {
-            exc.retval = D_00577CB8;
-        }
-        if (D_00577B88 == 2) {
-            func_002ED118()->_errno = 33;
-        } else if (!func_002E7E98((V128 *)&exc)) {
-            func_002ED118()->_errno = 33;
-        }
-        if (exc.err != 0) {
-            func_002ED118()->_errno = exc.err;
-        }
-        return func_002EC440(exc.retval);
-    } else {
-        return z;
-    }
-}
+INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E9708);

@@ -39,22 +39,7 @@ typedef struct YiSys180618 {
     YiImgRec180618 *imgs9E7D4;
 } YiSys180618;
 
-void func_00180618(u8 *arg0)
-{
-    u32 i;
-
-    for (i = 0; i < *(u32 *)(arg0 + 0x683B4); i++) {
-        u8 *sub = *(u8 **)(arg0 + 0x683B8 + i * 4);
-        u32 j;
-
-        for (j = 0; j < *(u32 *)(sub + 0x24); j++) {
-            u32 idx = *(u32 *)(*(u8 **)(sub + 0x20) + j * 0x120 + 4);
-            if (idx != 0) {
-                (*(u32 *)(*(u8 **)(arg0 + 0x9E7D4) + idx * 0x178 - 0x178 + 0x110))++;
-            }
-        }
-    }
-}
+INCLUDE_ASM("build/ee_asm/game/yi/yi_180618", func_00180618);
 
 int func_001806E0(YiSys180618 *s)
 {

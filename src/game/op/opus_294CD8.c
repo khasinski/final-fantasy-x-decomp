@@ -428,54 +428,13 @@ int func_00296538(Counter16 *c) {
     return n;
 }
 
-float opus_cscale_get(int id, int live)
-{
-    Chr *chr = owu_chr_hd[id];
-    float a;
-    float b;
-    float m;
-    u8 unused[0x10]; /* DEBT(PADDING): the original frame has an unused 16-byte local */
+INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_cscale_get);
 
-    if (live) {
-        a = MsGetChrHeight(id);
-        b = MsGetChrWidth(id);
-    } else {
-        a = T6_INTCALL(Ch_GetFixHeight, chr);
-        b = T6_INTCALL(func_00110910, chr);
-    }
-    m = a < b ? b : a;
-    return m / 18.0f;
-}
+INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_002965F8);
 
-float func_002965F8(int id, int live)
-{
-    u8 unused[0x10]; /* DEBT(PADDING): the original frame has an unused 16-byte local */
+INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00296640);
 
-    if (live) {
-        return MsGetChrHeight(id);
-    }
-    return T6_INTCALL(Ch_GetFixHeight, owu_chr_hd[id]);
-}
-
-float func_00296640(int id, int live)
-{
-    if (live) {
-        return MsGetChrWidth(id);
-    }
-    return T6_INTCALL(func_00110910, owu_chr_hd[id]);
-}
-
-float opus_cwidth_scale_get(int id, int live)
-{
-    float r;
-
-    if (live) {
-        r = MsGetChrWidth(id);
-    } else {
-        r = T6_INTCALL(func_00110910, owu_chr_hd[id]);
-    }
-    return r / 6.0f;
-}
+INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_cwidth_scale_get);
 
 int func_002966E8(int a, int b) {
     if (b != 0 && (MsGetChrFly(a) || func_001ADA00())) {
