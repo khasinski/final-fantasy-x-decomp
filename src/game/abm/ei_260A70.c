@@ -672,7 +672,36 @@ int func_002638B0(WorkEnt *p)
     return p->f22 & 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002638C0);
+void func_002632D8(int);
+void func_002626D0(int, int);
+void func_00264210(void);
+void func_00262DC8(int);
+
+void func_002638C0(void)
+{
+    GlobalWork *w;
+    u16 f;
+
+    func_002632D8((int)func_002638B0);
+    w = lpamng;
+    if (w->f1157D != 0 || w->next_a != 0) {
+        return;
+    }
+    *(s32 *)((u8 *)w + 0x115CC) = (w->ents[*(u16 *)((u8 *)w + 0x11304)].f24 + 3) >> 2;
+    f = w->f11622;
+    if (f & 0x20) {
+        func_002581D8(0xF8);
+        func_00263888();
+        func_002626D0(lpamng->f1156C, *(u16 *)((u8 *)lpamng + 0x11304));
+    } else if (f & 0x40) {
+        func_002581D8(0xF0);
+        SndSepPlaySimple(0x80000004);
+        lpamng->f11573 = 0;
+        *(s32 *)((u8 *)lpamng + 0x115CC) = 0;
+        func_00264210();
+        func_00262DC8(7);
+    }
+}
 
 void func_002587A0(int ch, int idx, int item);
 

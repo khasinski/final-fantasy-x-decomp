@@ -659,7 +659,54 @@ void func_00223B00(void)
     TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", TkBtlEndDraw);
+extern s16 D_00693300;
+
+void TkBtlEndDraw(void)
+{
+    func_00124F08();
+    TkMenuDrawScissorClear();
+    switch (D_006930A4) {
+    case 0:
+        D_006930A4 = 1;
+    case 1: {
+        int i;
+        for (i = 0; i < D_006930B0; i++) {
+            func_002229B0(i);
+        }
+        if (D_006930B0 != 0) {
+            func_00222D30();
+        }
+        func_00223078();
+        func_002237B0();
+        break;
+    }
+    }
+    if (D_006932F8 != 0) {
+        SndSepStop(0x80000017);
+        SndSepPlaySimple(0x80000017);
+    }
+    D_006932F8 = 0;
+    func_002238D8();
+    func_002239A8();
+    func_00223B00();
+    if (D_00693300 != 0x1000) {
+        u32 col = (0x1000 - D_00693300) / 32;
+        col <<= 24;
+        if (func_00147E50() != 0) {
+            col |= 0xFFFFFF;
+        }
+        TkMenuDrawRect(0, 0, 0x200, 0x1A0, col, col);
+    }
+    TkMenuDrawScissorClear();
+    func_002492F0();
+    func_002492F0();
+    if (D_006930B2 != 0) {
+        func_00220728(0x10000);
+        func_002227A0();
+        MsBtlGetInit();
+        TkMenuMainRemoveMenu(0x11);
+    }
+}
 
 int func_00223DC0(int v) {
     int a[3];

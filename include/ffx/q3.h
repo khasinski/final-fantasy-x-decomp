@@ -98,7 +98,11 @@ typedef struct Sys597F00 { /* DEBT(NAME): named after D_00597F00; large object, 
     s32 w67F44;
     s32 w67F48;
     s32 w67F4C;
-    u8 pad_67F50[0xB0];
+    u8 pad_67F50[0x40];
+    struct {
+        float m[4][4];
+    } __attribute__((aligned(8))) m67F90;
+    u8 pad_67FD0[0x30];
     float f68000[3];
     u8 pad_6800C[0x204];
     float f68210[4]; /* scale vector: yiGetBattleCenter multiplies by all four, c_172DA0 sets three */

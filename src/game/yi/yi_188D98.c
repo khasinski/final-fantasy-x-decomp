@@ -76,7 +76,29 @@ s32 func_00188F10(s32 arg0) {
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00188F48);
+typedef struct YiVec4 { /* DEBT(TYPE): 8-byte aligned float vector (copied with ld/sd) */
+    float x, y, z, w;
+} __attribute__((aligned(8))) YiVec4;
+
+typedef struct YiMat4 { /* DEBT(TYPE): 8-byte aligned 4x4 matrix (copied with ld/sd) */
+    float m[4][4];
+} __attribute__((aligned(8))) YiMat4;
+
+extern const YiVec4 D_0056D140;
+void func_002DCF48(void *dst, void *src);
+
+float func_00188F48(Sys597F00 *s) {
+    YiMat4 m;
+    YiVec4 v;
+    YiVec4 out;
+
+    v = D_0056D140;
+    v.y = -s->fC0DE4;
+    *(YiMat4 *)&m = *(YiMat4 *)&s->m67F90;
+    func_002DCF48(&m, &m);
+    func_002DCE08(&out, &m, &v);
+    return (out.y / ((208.0f / s->f68390) * 64.0f)) * 208.0f - 208.0f;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00189040);
 

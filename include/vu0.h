@@ -50,4 +50,14 @@
 #define COP0_MFC0_TAGLO(v) __asm__ volatile("mfc0 %0, $28" : "=r"(v))
 #define CACHE_OP(op, off, p) __asm__ volatile("cache " #op ", " #off "(%0)" : : "r"(p) : "memory")
 
+/* Capture the caller address before a C dispatcher makes any calls. */
+#define MIPS_STORE_RA(p) __asm__ volatile("sw $31, 0(%0)" : : "r"(p) : "memory")
+/* DEBT(ORDER): retain both addresses of the SDK quad-copy instruction pair.
+ * Each macro emits one instruction; t0 carries the quad between them. */
+#define MMI_COPY_LQ_T0(dst, src) __asm__ volatile("lq $8, 0(%1)" : : "r"(dst), "r"(src) : "$8", "memory")
+#define MMI_COPY_SQ_T0(dst) __asm__ volatile("sq $8, 0(%0)" : : "r"(dst) : "memory")
+
+/* DEBT(ORDER): prepare the other addresses of an inline VU operation together. */
+#define VU0_LQC2_INPUTS(vf, p, p1, p2) __asm__ volatile("lqc2 $vf" #vf ", 0(%0)" : : "r"(p), "r"(p1), "r"(p2) : "memory")
+
 #endif /* VU0_H */

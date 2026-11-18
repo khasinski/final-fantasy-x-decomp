@@ -413,7 +413,32 @@ int func_0023B238(int id)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B298);
+extern s16 D_003261DC;
+void func_00226E90(FlagRec *r);
+void func_00226890(int id, int x, int y, int f);
+
+void func_0023B298(Task *t, int x, int y, int i, int b, u16 *tbl)
+{
+    u16 id;
+    int price;
+    FlagRec rec;
+
+    if (b == 0) {
+        y -= t->x46 / 0x80;
+    }
+    if (i < 0 || i >= (u16)t->x30) {
+        return;
+    }
+    id = *(u16 *)((u8 *)tbl + (i << 1) + 2);
+    price = func_0023A960(id);
+    rec = D_003261A0;
+    rec.rect[0] = x;
+    rec.rect[1] = y;
+    func_00226E90(&rec);
+    func_00226E10(x + D_003261E0[0] + 0x60, y + D_003261E0[1], 0xD4);
+    func_00226D00(x + D_003261DC - D_003261B8[0], y + D_003261B8[1], price, 0x25);
+    func_00226890(id, x, y, func_0023B238(id) == 0);
+}
 
 void func_0023B3E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5)
 {

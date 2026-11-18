@@ -1,7 +1,7 @@
 {
   "objective": "100 new correctly decompiled functions in main ELF",
   "baseline": "build/main100-nov15/baseline.json",
-  "verified_new_functions": 74,
+  "verified_new_functions": 97,
   "target": 100,
   "functions": [
     {
@@ -705,6 +705,190 @@
       "size": 344,
       "source": "src/game/menu/tk/tk_237888.c",
       "result": "Exact original 344 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C draws a weapon sale row from the inventory table, with scroll offset, price, and enabled state."
+    },
+    {
+      "name": "func_002638C0",
+      "address": "0x002638c0",
+      "size": 244,
+      "source": "src/game/abm/ei_260A70.c",
+      "sha256": "ac24f6bf033d19f7be9012169fbf1e1a9cff3460bb0b8b746c42916de9048520",
+      "result": "Exact original 244 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001ACD48",
+      "address": "0x001acd48",
+      "size": 112,
+      "source": "src/game/battle/ms_1AC0B8.c",
+      "sha256": "e599d74d92e8d37163cc4d7b3191cc36e6793e445aeb328045a6fd47123094dd",
+      "result": "Exact original 112 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "TkBtlEndDraw",
+      "address": "0x00223be8",
+      "size": 468,
+      "source": "src/game/menu/tk/tk_220F30.c",
+      "sha256": "49896d9f8a8d43e093b6dae4ccf364482226866e06c60d3364e6b2d90c11c6f6",
+      "result": "Exact original 468 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0023B298",
+      "address": "0x0023b298",
+      "size": 324,
+      "source": "src/game/menu/tk/tk_23A450.c",
+      "sha256": "fa287b8e16df330f711eb5519ae9bde755af3b5c04246898de9560fbb89f34ae",
+      "result": "Exact original 324 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0024C238",
+      "address": "0x0024c238",
+      "size": 352,
+      "source": "src/game/menu/tk/tk_24B828.c",
+      "sha256": "a2d93d13fbcfc8bc877a95071f6c26ece6f8514714ffa4c38e2ede466958d399",
+      "result": "Exact original 352 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F0870",
+      "address": "0x001f0870",
+      "size": 432,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "35f55f37aafcdff589ec72d89e01535d9b63cf2ed50a7ab457b3189fd0ead6a7",
+      "result": "Exact original 432 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F1028",
+      "address": "0x001f1028",
+      "size": 440,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "6cd887fbe0d261321a29cae8e7efed087624046749df3def421812969a360fad",
+      "result": "Exact original 440 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F11E0",
+      "address": "0x001f11e0",
+      "size": 548,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "ad4dec4f516c35dfaf1c4f121fd5afc04f61580338fb401a3064cd1b9e4f2a4d",
+      "result": "Exact original 548 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F1408",
+      "address": "0x001f1408",
+      "size": 548,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "fb17d621e2c9f3831d10d6692e402411d697b8de2544ac123855057323b26562",
+      "result": "Exact original 548 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F1630",
+      "address": "0x001f1630",
+      "size": 540,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "def277f4eaa8a89cffd9132cc5b7dfedc67639ac1d61afe41fad64451d3c4d1e",
+      "result": "Exact original 540 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F1850",
+      "address": "0x001f1850",
+      "size": 504,
+      "source": "src/game/menu/to/to_1EF910.c",
+      "sha256": "838226dc0017f722e39352953e8b4c631ef34181ca7d321b6f58c73312cdd08f",
+      "result": "Exact original 504 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F26B0",
+      "address": "0x001f26b0",
+      "size": 396,
+      "source": "src/game/menu/to/to_1F1EB8.c",
+      "sha256": "941400266b1822b4e709e595f56d6a4ec8d1c41e20b31f0e7ac69230cc308cc5",
+      "result": "Exact original 396 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001F7798",
+      "address": "0x001f7798",
+      "size": 252,
+      "source": "src/game/menu/to/to_1F5060.c",
+      "sha256": "cef8fe819e9a42e04db675a48e45b90a399e3aa1a6d9d0969db3090d3c2b3851",
+      "result": "Exact original 252 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0020B308",
+      "address": "0x0020b308",
+      "size": 252,
+      "source": "src/game/menu/to/to_209460.c",
+      "sha256": "ceead06c99b6a428a3c1d2616b0f541cd8e037456b767ea0f46ca2e583faac6c",
+      "result": "Exact original 252 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0020B520",
+      "address": "0x0020b520",
+      "size": 392,
+      "source": "src/game/menu/to/to_209460.c",
+      "sha256": "bc63ee38ce4ff377dc04889fe1e45afcb6b46df90c96a19adad77df870e9984b",
+      "result": "Exact original 392 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0020CA38",
+      "address": "0x0020ca38",
+      "size": 432,
+      "source": "src/game/menu/to/to_20C188.c",
+      "sha256": "b492e94ddab2674e49d6d287442a04b7012a49bf955b3e1086381f8e07dc6ed3",
+      "result": "Exact original 432 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "TOBtlMakeTargetGroupBit",
+      "address": "0x0021d8f0",
+      "size": 460,
+      "source": "src/game/menu/to/to_21D048.c",
+      "sha256": "768197cabaf0831b2e51d8eeb31336234c7ae86ac5e6e44e939132dc3ecfb3b4",
+      "result": "Exact original 460 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "TOBtlDrawDamageValue2",
+      "address": "0x0021f4a8",
+      "size": 284,
+      "source": "src/game/menu/to/to_21D048.c",
+      "sha256": "2d2f2cec31a17aeb64276d112c652f609af7302fae25e85f42b52e523eec1f99",
+      "result": "Exact original 284 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "op1_md_draw",
+      "address": "0x002b7b20",
+      "size": 196,
+      "source": "src/game/op/op_2B6B50.c",
+      "sha256": "ab079ee44a8858229216d7894269f1a50aee5f9f67980add2544a9dfdba9b413",
+      "result": "Exact original 196 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_001A2400",
+      "address": "0x001a2400",
+      "size": 196,
+      "source": "src/game/rc/rcef_1A21E0.c",
+      "sha256": "0bbd366de71f9caf65299da9488aff542efe80f3170a6ee5fad4a973d2b02fa9",
+      "result": "Exact original 196 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_002D2060",
+      "address": "0x002d2060",
+      "size": 112,
+      "source": "src/game/tk/tk_2D1D68.c",
+      "sha256": "a71f0b0df3197470df7cb9cda66bebb1764d15137118fcae2e032c6d57e461d8",
+      "result": "Exact original 112 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_00188F48",
+      "address": "0x00188f48",
+      "size": 248,
+      "source": "src/game/yi/yi_188D98.c",
+      "sha256": "a0976c9739a49efbf2acb8711132ca83f6d19c74679f1abe5dd6df74f93ce836",
+      "result": "Exact original 248 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_002DA578",
+      "address": "0x002da578",
+      "size": 148,
+      "source": "src/sdk/libgraph/libgraph.c",
+      "sha256": "3ed5d24bd34ca123fb90b32a196dd39774b7125603a2279458ca806ed66f9d71",
+      "result": "Exact original 148 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
     }
   ],
   "verification_log": "build/main100-nov15/int64-float-rom-audit.log",
@@ -723,7 +907,7 @@
     "asm/nonmatchings/game/hddcopy/hdd_inst_start_sub.s"
   ],
   "workspace": "/tmp/ffx-main100-nov15",
-  "remaining": 26,
+  "remaining": 3,
   "verification_logs": [
     "build/main100-nov15/sg-three-verified.log",
     "build/main100-nov15/platform-five.log",

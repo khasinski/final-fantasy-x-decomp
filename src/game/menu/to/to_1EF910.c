@@ -3,6 +3,7 @@
 #include "ffx/q5.h"
 #include "ffx/w5.h"
 #include "ffx/r4.h"
+#include "ffx/w6.h"
 #include "ffx/u3.h"
 #include "ffx/v4.h"
 
@@ -258,7 +259,28 @@ void TOMakePktMovieFont1612(TextItem *it, R4CharInfo *ci)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0870);
+void func_001F0870(TextItem *it, R4CharInfo *ci)
+{
+    int col = 0x2EB8;
+    int row;
+
+    GIF_AD(0x90AB400000008001UL, 0x00043431EEEEUL);
+    row = it->f13 & 0xF;
+    if (row >= 8) {
+        col = 0x2EBC;
+        row -= 8;
+    }
+    func_001FB358(1, 7, 0, 0, 0, 0, 0, 0);
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    func_001FB3C0(ci->h0, 2, 0x13, 7, 0xA, 1, 0, col, 0, 0, 0, 1);
+    func_001FB3C0(ci->h0, 2, ci->h2, 7, 0xA, 1, 0, col, 0, 0, row * 2 + ci->h4, 0);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], 0x60);
+    func_001FB550(ci->h6, ci->h8);
+    func_001FB6B0(it->x, it->y + ci->hE, 1);
+    func_001FB550(ci->hA, ci->hC);
+    func_001FB678(it->x + ci->h10, it->y + ci->hE + ci->h12);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0A20);
 
@@ -330,15 +352,110 @@ void func_001F0EC0(TextItem *it, R4CharInfo *ci)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1028);
+void func_001F1028(TextItem *it, R4CharInfo *ci)
+{
+    GIF_AD(0x70AB400000008001UL, 0x043431EEUL);
+    GIF_AD(0x4005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EBC, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    GIF_CUR()->ui32[0] = (ci->h6 << 4) + 8;
+    GIF_CUR()->ui32[1] = (ci->h8 << 4) + 8;
+    GIF_NEXT();
+    func_001FB6B0(it->x + 2, it->y + ci->hE + 2, 1);
+    GIF_CUR()->ui32[0] = (ci->hA << 4) + 8;
+    GIF_CUR()->ui32[1] = (ci->hC << 4) + 8;
+    GIF_NEXT();
+    func_001FB678(it->x + ci->h10 + 2, it->y + ci->hE + ci->h12 + 2);
+    func_001EFA30();
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F11E0);
+void func_001F11E0(TextItem *it, R4CharInfo *ci)
+{
+    GIF_AD(0xA0AF400000008001UL, 0x43431EEEEEUL);
+    GIF_AD(0x4005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EBC, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    func_001FB358(1, 7, 0, 0, 0, 0, 0, 1);
+    func_001FB468(0, 0, 1, 0, 0, 0, 0);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    GIF_CUR()->ui32[0] = (ci->h6 << 4) + 8;
+    GIF_CUR()->ui32[1] = (ci->h8 << 4) + 8;
+    GIF_NEXT();
+    func_001FB6B0(it->x + 2, it->y + ci->hE + 2, 1);
+    GIF_CUR()->ui32[0] = (ci->hA << 4) + 8;
+    GIF_CUR()->ui32[1] = (ci->hC << 4) + 8;
+    GIF_NEXT();
+    func_001FB678(it->x + ci->h10 + 2, it->y + ci->hE + ci->h12 + 2);
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1408);
+typedef struct {
+    s8 xy[10][2];
+} To56FE90;
+extern To56FE90 D_0056FE90;
+void func_001FB550(int a, int b);
+void func_001FB678(int a, int b);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1630);
+void func_001F1408(TextItem *it, R4CharInfo *ci)
+{
+    To56FE90 tbl = D_0056FE90;
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1850);
+    GIF_AD(0x30AF400000008001UL, 0x01EEUL);
+    GIF_AD(0x2005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EB8, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    GIF_AD(0x40AF40000000800AUL, 0x4343UL);
+    for (i = 0; i < 10; i++) {
+        func_001FB550(ci->h6, ci->h8);
+        func_001FB678(it->x + tbl.xy[i][0], it->y + ci->hE + tbl.xy[i][1]);
+        func_001FB550(ci->hA, ci->hC);
+        func_001FB678(it->x + ci->h10 + tbl.xy[i][0], it->y + ci->hE + ci->h12 + tbl.xy[i][1]);
+    }
+    func_001EFA30();
+}
+
+void func_001F1630(TextItem *it, R4CharInfo *ci)
+{
+    To56FE90 tbl = D_0056FE90;
+    int i;
+
+    GIF_AD(0x30AF400000008001UL, 0x01EEUL);
+    GIF_AD(0x2005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EB8, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    GIF_AD(0x40AF40000000800AUL, 0x4343UL);
+    for (i = 0; i < 10; i++) {
+        func_001FB550(ci->h6, ci->h8);
+        func_001FB678(it->x + tbl.xy[i][0], it->y + ci->hE + tbl.xy[i][1]);
+        func_001FB550(ci->hA, ci->hC);
+        func_001FB678(it->x + ci->h10 + tbl.xy[i][0], it->y + ci->hE + ci->h12 + tbl.xy[i][1]);
+    }
+}
+
+void func_001F1850(TextItem *it, R4CharInfo *ci)
+{
+    int col = 0x2EB8;
+    int row;
+
+    GIF_AD(0xB0AA400000008001UL, 0x0434343431EEUL);
+    row = it->f13 & 0xF;
+    if (row >= 8) {
+        col = 0x2EBC;
+        row -= 8;
+    }
+    func_001FB3C0(ci->h0, 2, 0x13, 7, 0xA, 1, 0, col, 0, 0, 0, 1);
+    func_001FB3C0(ci->h0, 2, ci->h2, 7, 0xA, 1, 0, col, 0, 0, row * 2 + ci->h4, 0);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    func_001FB588(ci->h6, 8, ci->h8, 8);
+    func_001FB6B0(it->x + 5, it->y + ci->hE, 1);
+    func_001FB588(ci->hA, -4, ci->h8, 8);
+    func_001FB6B0(it->x + ci->h10 + 5, it->y + ci->hE, 1);
+    func_001FB588(ci->h6, 8, ci->hC, 8);
+    func_001FB6B0(it->x, it->y + ci->hE + ci->h12, 1);
+    func_001FB588(ci->hA, -4, ci->hC, 8);
+    func_001FB6B0(it->x + ci->h10, it->y + ci->hE + ci->h12, 1);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1A48);
 

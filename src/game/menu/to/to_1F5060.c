@@ -384,7 +384,32 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F6F88);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7378);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7798);
+extern R4CharInfo D_00323930;
+extern TextItem D_00323918;
+
+void *func_001F7798(void *list, int a, int b, int c)
+{
+    R4CharInfo *glyph = &D_00323930;
+    TextItem *it;
+
+    func_002EF0D0(glyph, 0, 0x20);
+    func_002EF0D0(&D_00323918, 0, 0x14);
+    InvokedFromSelectCursor = list;
+    it = &D_00323918;
+    it->x = b;
+    it->y = c;
+    it->col[0] = 0x80;
+    it->col[1] = 0x80;
+    it->col[2] = 0x80;
+    it->col[3] = 0x80;
+    it->f13 = 0;
+    it->f12 = 0;
+    func_00204CA8(a, glyph);
+    func_001F11E0(it, glyph);
+    func_001F0EC0(it, glyph);
+    it->x += glyph->h10 + 2;
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F7898(void *list, int a, int b, int c)
 {
@@ -434,8 +459,6 @@ void *func_001F80D0(void *list, int id, int x, int y, int d)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F8138);
 
-extern R4CharInfo D_00323930;
-extern TextItem D_00323918;
 void *func_001F8258(void *list, int number, int x, int y, int style)
 {
     char buf[32];

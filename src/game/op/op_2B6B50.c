@@ -412,7 +412,35 @@ int op_md_one8(int a, void *req);
 void func_002C9B78(void *md, void *req);
 void func_002CA930(void *md, void *req, void *a2, float f);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op1_md_draw);
+int op1_md_draw(int a, OpMdDrawReq *req)
+{
+    u32 flags;
+
+    MIPS_STORE_RA(&D_004F4380);
+    flags = (u32)req->w0;
+    if (flags & 0x2000) {
+        return func_002C19A0(a, req);
+    } else if (flags & 4) {
+        if (flags & 0x300) {
+            return func_002C0068(a, req);
+        } else {
+            return func_002BCB60(a, req);
+        }
+    } else if (flags & 0x80) {
+        if (flags & 0x300) {
+            return func_002BAF68(a, req);
+        } else {
+            return func_002B7FB0(a, req);
+        }
+    } else {
+        if (flags & 0x300) {
+            return op_md_one8_fog(a, req);
+        } else {
+            return op_md_one8(a, req);
+        }
+    }
+}
+
 
 int op1_mdc_draw(OpMdcHdr *mdc, OpMdDrawReq *req, void *m2, void *m3, void *m4)
 {

@@ -136,7 +136,27 @@ void TOTransTexture(void)
     TOTransImageHL((u32) D_0066B598, 0x2EA0, 0, 0, 0, 0x40, 0x40);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", func_0020CA38);
+void func_0020CA38(void)
+{
+    int type = TOGetInternationalBaseDicType();
+
+    if (func_0020B850() == 0) {
+        TOTransImageHL((u32)D_0066B530[0].w0, 0x3C00, 0x14, 0, 0, D_0066B530[0].hC, D_0066B530[0].hE);
+        TOTransImageHL((u32)D_0066B530[4].w0, 0x3D40, 0x14, 0, 0, D_0066B530[4].hC, D_0066B530[4].hE);
+    } else {
+        TOTransImageHL((u32)D_0066B530[type].w0, 0x3C00, 0x14, 0, 0, D_0066B530[type].hC, D_0066B530[type].hE);
+    }
+    if (func_0016C318() != 0) {
+        TOTransImageHL((u32)D_0066B530[3].w0, 0x3D00, 0x14, 0, 0, D_0066B530[3].hC, D_0066B530[3].hE);
+    }
+    TOTransImageHL(D_0066B584, 0x3D80, 0x14, 0, 0, 0x80, 0x100);
+    TOTransImageHL((u32)D_0066B588, 0x3DC0, 0x14, 0, 0, 0x100, 0x80);
+    TOTransImageHL(D_0066B58C, 0x3F00, 0x14, 0, 0, 0x200, 0x80);
+    if (func_0020BED0() == 0) {
+        TOTransImageHL((u32)D_0066B590, 0x3E00, 0x13, 0, 0, 0x100, 0x100);
+        TOTransImageHL((u32)D_0066B598, 0x2EA0, 0, 0, 0, 0x40, 0x40);
+    }
+}
 
 void func_0020CBE8(void)
 {

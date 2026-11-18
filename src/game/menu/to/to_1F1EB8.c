@@ -125,7 +125,25 @@ void func_001F2630(R4Quad *q, u32 i, u8 r, u8 g, u8 b, u8 a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F1EB8", func_001F26B0);
+void func_001F26B0(R4Quad *q)
+{
+    int i;
+
+    GIF_AD(0x1000000000000003UL, 0xE);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0x3000FUL, 0x47);
+    GIF_AD(0, 8);
+    GIF_AD(0x2026400000008004UL, 0x41);
+    for (i = 0; i < 4; i++) {
+        locNameTmpSetLanguage(q->r[i], q->g[i], q->b[i], q->a[i]);
+        GIF_CUR()->ui32[0] = (q->x[i] + 0x700) << 4;
+        GIF_CUR()->ui32[1] = (q->y[i] + 0x730) << 4;
+        GIF_CUR()->ui32[2] = 0x4000;
+        GIF_CUR()->ui32[3] = 0;
+        GIF_NEXT();
+    }
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F1EB8", func_001F2840);
 

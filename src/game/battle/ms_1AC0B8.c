@@ -358,7 +358,27 @@ void func_001ACCB0(u32 a0, u32 a1)
         : "+r"(a1) : "r"(a0) : "$2", "$3", "$6", "$7", "$8");
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AC0B8", func_001ACD48);
+int func_001ACD48(float x, float z, float x2, float z2)
+{
+    struct { float a[4], b[4], c[4]; } v;
+
+    v.a[0] = x;
+    v.a[2] = z;
+    v.b[0] = x2;
+    v.b[2] = z2;
+    v.a[1] = 0;
+    v.b[1] = 0;
+    VU0_LQC2_INPUTS(4, v.a, v.c, v.b);
+    VU0_LQC2(5, 0, v.b);
+    VU0_OP("vopmula.xyz ACC, $vf4, $vf5");
+    VU0_OP("vopmsub.xyz $vf6, $vf5, $vf4");
+    VU0_SQC2(6, 0, v.c);
+    if (v.c[1] < 0.0) {
+        return -1;
+    }
+    return 0;
+}
+
 
 int func_001ACDB8(void) {
     u8 b[8];

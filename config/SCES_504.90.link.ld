@@ -8,15 +8,15 @@ D_0069247A = 0x0069247a;
 /* data inside .text that splat folds into padding: absolute aliases */
 func_0017A540 = 0x17A540;
 /* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */
-dpadd = 0x2EBBB0;
-dpsub = 0x2EBC08;
-dpcmp = 0x2EC198;
-litodp = 0x2EC1E8;
+dpadd = func_002EBBB0;
+dpsub = func_002EBC08;
+dpcmp = func_002EC198;
+litodp = func_002EC1E8;
 dptoli = 0x2EC2A0;
-dptoul = 0x2EC338;
-dptofp = 0x2EC440;
+dptoul = func_002EC338;
+dptofp = func_002EC440;
 fptoui = 0x2ECF38;
-fptodp = 0x2ED038;
+fptodp = func_002ED038;
 sqrtf = 0x2E9708;
 SECTIONS
 {
@@ -239,6 +239,8 @@ SECTIONS
         build/src/game/battle/ms_1E4CD0.c.o(.text)
         build/src/game/battle/ms_1E7AF0.c.o(.text)
         build/src/game/battle/battle_1EA000.c.o(.text)
+        build/src/game/battle/battle_1EED50.c.o(.text)
+        build/src/game/battle/battle_1EED60.c.o(.text)
         build/src/game/battle/battle_1EF4E8.c.o(.text)
         build/src/game/menu/to/to_1EF910.c.o(.text)
         build/src/game/menu/to/to_1F1EB8.c.o(.text)
@@ -251,10 +253,14 @@ SECTIONS
         build/src/game/menu/menu_200C58.c.o(.text)
         build/src/game/menu/menu_201760.c.o(.text)
         build/src/game/menu/to/to_2021E8.c.o(.text)
+        build/src/game/menu/to/to_203FC0.c.o(.text)
+        build/src/game/menu/to/to_204080.c.o(.text)
         build/src/game/menu/to/to_207648.c.o(.text)
         build/src/game/menu/to/to_207F50.c.o(.text)
         build/src/game/menu/to/to_208448.c.o(.text)
         build/src/game/menu/to/to_209460.c.o(.text)
+        build/src/game/menu/to/to_20C040.c.o(.text)
+        build/src/game/menu/to/to_20C188.c.o(.text)
         build/src/game/menu/to/meswin.c.o(.text)
         build/src/game/menu/to/to_20D058.c.o(.text)
         build/src/game/menu/to/to_20DFC8.c.o(.text)
@@ -377,7 +383,15 @@ SECTIONS
         build/src/sdk/libgraph/libgraph.c.o(.text)
         build/src/sdk/libdma/libdma.c.o(.text)
         build/src/game/platform/platform_2DC110.c.o(.text)
+        build/src/game/platform/platform_2DC188.c.o(.text)
+        build/src/game/platform/platform_2DC1A0.c.o(.text)
+        build/src/game/platform/platform_2DC250.c.o(.text)
+        build/src/game/platform/platform_2DC2B0.c.o(.text)
         build/src/game/platform/ffx_2DC580.c.o(.text)
+        build/src/game/platform/ffx_2DC638.c.o(.text)
+        build/src/game/platform/ffx_2DC650.c.o(.text)
+        build/src/game/platform/ffx_2DC700.c.o(.text)
+        build/src/game/platform/ffx_2DC7D8.c.o(.text)
         build/src/game/platform/ffx_2DCE38.c.o(.text)
         build/src/sdk/libpad/libpad.c.o(.text)
         build/src/sdk/libmc/libmc.c.o(.text)
@@ -399,6 +413,9 @@ SECTIONS
         build/src/sdk/newlib/libc/libc_2F3A70.c.o(.text)
         build/src/sdk/newlib/libc/libc_2F3A70_2F5CB8.c.o(.text)
         build/src/sdk/libkernl/tty.c.o(.text)
+        build/src/sdk/libkernl/tty_2F9090.c.o(.text)
+        build/src/sdk/libkernl/tty_2F9168.c.o(.text)
+        build/src/sdk/libkernl/tty_2F9318.c.o(.text)
         build/src/sdk/libkernl/libkernl_2FAC84.c.o(.text)
         build/src/sdk/libkernl/libkernl_2FAC88.c.o(.text)
         build/src/sdk/libkernl/libkernl_2FBBE8.c.o(.text)
@@ -440,9 +457,7 @@ SECTIONS
         . = 0x569748 - 0x568f00;
         build/asm/data/rodata/piece_00569748.s.o(.rodata)
         . = 0x5697e0 - 0x568f00;
-        build/src/game/chr/ch_113FF8.c.o(.rodata.jtbl_005697E0)
-        . = 0x5699ac - 0x568f00;
-        build/asm/data/rodata/piece_005699AC.s.o(.rodata)
+        build/src/game/chr/ch_113FF8.c.o(.rodata.cjt0)
         . = 0x5699d0 - 0x568f00;
         build/src/game/chr/ch_113FF8.c.o(.rodata.jtbl_005699D0)
         . = 0x5699e8 - 0x568f00;
@@ -683,6 +698,10 @@ SECTIONS
         build/src/game/rc/dt/rcdtRsd2.c.o(.rodata.cjt1)
         . = 0x56dd88 - 0x568f00;
         build/asm/data/rodata/piece_0056DD88.s.o(.rodata)
+        . = 0x56de08 - 0x568f00;
+        build/src/game/rc/rcef_1A21E0.c.o(.rodata)
+        . = 0x56de10 - 0x568f00;
+        build/asm/data/rodata/piece_0056DE10.s.o(.rodata)
         . = 0x56de80 - 0x568f00;
         build/src/game/battle/ms_1A56F8.c.o(.rodata.jtbl_0056DE80)
         . = 0x56ded0 - 0x568f00;
@@ -780,7 +799,7 @@ SECTIONS
         . = 0x56eac0 - 0x568f00;
         build/src/game/battle/ms_1D27C0.c.o(.rodata.jtbl_0056EAC0)
         . = 0x56eaf8 - 0x568f00;
-        build/asm/data/rodata/piece_0056EAF8.s.o(.rodata)
+        build/src/game/battle/ms_1D27C0.c.o(.rodata)
         . = 0x56eb20 - 0x568f00;
         build/src/game/battle/ms_1D27C0.c.o(.rodata.jtbl_0056EB20)
         . = 0x56eb70 - 0x568f00;
@@ -856,7 +875,7 @@ SECTIONS
         . = 0x5702d0 - 0x568f00;
         build/asm/data/rodata/piece_005702D0.s.o(.rodata)
         . = 0x5702f0 - 0x568f00;
-        build/src/game/menu/to/to_2021E8.c.o(.rodata.jtbl_005702F0)
+        build/src/game/menu/to/to_204080.c.o(.rodata.jtbl_005702F0)
         . = 0x570340 - 0x568f00;
         build/asm/data/rodata/piece_00570340.s.o(.rodata)
         . = 0x570840 - 0x568f00;
@@ -872,9 +891,9 @@ SECTIONS
         . = 0x570940 - 0x568f00;
         build/src/game/menu/to/to_209460.c.o(.rodata.cjt3)
         . = 0x570960 - 0x568f00;
-        build/src/game/menu/to/to_209460.c.o(.rodata.jtbl_00570960)
+        build/src/game/menu/to/to_20C188.c.o(.rodata.jtbl_00570960)
         . = 0x570980 - 0x568f00;
-        build/src/game/menu/to/to_209460.c.o(.rodata.cjt4)
+        build/src/game/menu/to/to_20C188.c.o(.rodata.cjt0)
         . = 0x570a38 - 0x568f00;
         build/asm/data/rodata/piece_00570A38.s.o(.rodata)
         . = 0x570a80 - 0x568f00;
@@ -1006,7 +1025,7 @@ SECTIONS
         . = 0x572340 - 0x568f00;
         build/src/game/menu/tk/tk_234A30.c.o(.rodata.jtbl_00572340)
         . = 0x572370 - 0x568f00;
-        build/asm/data/rodata/piece_00572370.s.o(.rodata)
+        build/src/game/menu/tk/tk_234A30.c.o(.rodata)
         . = 0x572380 - 0x568f00;
         build/src/game/menu/menu_235C38.c.o(.rodata.cjt0)
         . = 0x5723a0 - 0x568f00;
@@ -1214,7 +1233,7 @@ SECTIONS
         . = 0x576060 - 0x568f00;
         build/src/game/snd/snd_2D6808.c.o(.rodata.jtbl_00576060)
         . = 0x5760a0 - 0x568f00;
-        build/src/game/snd/snd_2D6808.c.o(.rodata.jtbl_005760A0)
+        build/src/game/snd/snd_2D6808.c.o(.rodata.cjt0)
         . = 0x5760e0 - 0x568f00;
         build/src/game/snd/snd_2D6808.c.o(.rodata.jtbl_005760E0)
         . = 0x576100 - 0x568f00;
@@ -1232,9 +1251,9 @@ SECTIONS
         . = 0x5769b0 - 0x568f00;
         build/asm/data/rodata/piece_005769B0.s.o(.rodata)
         . = 0x5769d0 - 0x568f00;
-        build/src/game/platform/platform_2DC110.c.o(.rodata.cjt0)
+        build/src/game/platform/platform_2DC1A0.c.o(.rodata.cjt0)
         . = 0x5769f0 - 0x568f00;
-        build/src/game/platform/ffx_2DC580.c.o(.rodata.cjt0)
+        build/src/game/platform/ffx_2DC650.c.o(.rodata.cjt0)
         . = 0x576a08 - 0x568f00;
         build/asm/data/rodata/piece_00576A08.s.o(.rodata)
         . = 0x5781e0 - 0x568f00;
@@ -1260,7 +1279,7 @@ SECTIONS
         . = 0x578988 - 0x568f00;
         build/asm/data/rodata/piece_00578988.s.o(.rodata)
         . = 0x578bc0 - 0x568f00;
-        build/src/sdk/libkernl/tty.c.o(.rodata.jtbl_00578BC0)
+        build/src/sdk/libkernl/tty_2F9318.c.o(.rodata.jtbl_00578BC0)
         . = 0x578cf0 - 0x568f00;
         build/src/sdk/libkernl/libkernl_2FBBE8.c.o(.rodata.cjt0)
         . = 0x578d58 - 0x568f00;
@@ -1274,3 +1293,18 @@ SECTIONS
     .bss (NOLOAD) : { build/asm/data/47DB0C.bss.s.o(.bss) }
     /DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.gnu.attributes) *(.comment) *(.pdr) *(.mdebug*) }
 }
+
+/* Existing data points inside the full 122-entry character jump table. */
+D_005699AC = 0x005699AC;
+
+/* EE compiler helpers used by unsigned double-to-integer conversion. */
+dpmul = func_002EBC70;
+__floatdidf = func_002EA450;
+
+D_00572370 = 0x572370;
+D_00572378 = 0x572378;
+D_0056EAF8 = 0x56eaf8;
+D_0056EB00 = 0x56eb00;
+D_0056EB08 = 0x56eb08;
+D_0056EB10 = 0x56eb10;
+D_0056DE08 = 0x56de08;

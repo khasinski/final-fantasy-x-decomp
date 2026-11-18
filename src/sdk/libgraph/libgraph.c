@@ -111,7 +111,26 @@ int func_002DA518(u8 *base, int side)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA578);
+void func_002F8860(void);
+long func_002F88A0(void);
+
+int func_002DA578(void)
+{
+    u8 *state = func_002D9A38();
+
+    if (*(int *)(state + 8) == 0) {
+        func_002F8860();
+        if (*(s16 *)state == 1) {
+            return (int)((*(volatile unsigned long *)0x12001000 >> 13) & 1);
+        }
+    } else {
+        long bit = (func_002F88A0() >> 13) & 1;
+        if (*(s16 *)state == 1) {
+            return (int)bit;
+        }
+    }
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA610);
 

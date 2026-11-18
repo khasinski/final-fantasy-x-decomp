@@ -101,7 +101,15 @@ s32 func_002D2050(void) {
     return D_0078AC80;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D2060);
+void func_002D2060(ThreadParam *p) {
+    for (;;) {
+        volatile s32 tid = func_002F82D0(); /* DEBT(FAKE): volatile keeps unused stack slot for tid */
+        func_002F8420(D_00788BC0[p->option]);
+        if (D_0078ACB0[p->option] != 0) {
+            D_0078ACB0[p->option]();
+        }
+    }
+}
 
 void func_002D20D0(void (*handler)(void))
 {

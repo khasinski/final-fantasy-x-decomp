@@ -110,7 +110,31 @@ typedef struct RcefObj100 {
     float mC0[16];
 } RcefObj100;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A2400);
+void func_001A2400(void *arg0)
+{
+    RcefObj100 *obj = (RcefObj100 *)arg0; /* DEBT(CAST) */
+    RcefSub10 *sub = &obj->sub;
+
+    obj->w00 = 0;
+    obj->chr = 0;
+    obj->buf = 0;
+    func_002EF0D0(sub, 0, sizeof(RcefSub10));
+    sub->w00 = 0x1C;
+    sub->w04 = D_00303550;
+    sub->b08 = 0x44;
+    sub->b1B = 0x80;
+    sub->b1A = 0x80;
+    sub->b19 = 0x80;
+    sub->b18 = 0x80;
+    sub->p20 = obj->m80;
+    sub->p24 = func_00106460();
+    sub->p28 = func_00106470();
+    sub->p2C = obj->mC0;
+    sub->b4D = 0x80;
+    sub->b4C = 0x80;
+    func_002DD128(obj->m80);
+    func_002DD128(obj->mC0);
+}
 
 /* DEBT(CAST) */
 void func_001A24C8(void *obj) {

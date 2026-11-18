@@ -109,7 +109,34 @@ void func_0024C1F8(Task *t, int x, int y) {
     func_002270F8(x + D_003260B8.x, y + D_003260B8.y + ((t->x48 - t->x32) << 5), 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C238);
+void func_00226A40(void *r, int x, int y, int d);
+
+void func_0024C238(Task *t, int x, int y, int i, int b)
+{
+    u8 *e = (u8 *)0x01D57300;
+    FlagRec rec;
+    s32 buf;
+
+    if (b == 0) {
+        y -= t->x46 / 0x80;
+    }
+    if (i < 0 || i >= (u16)t->x30) {
+        return;
+    }
+    rec = D_003261A0;
+    e += i * 4;
+    rec.rect[0] = x;
+    rec.rect[1] = y;
+    func_00226D88(x, y, 0);
+    func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+    if (t->b45 > 0 && i == t->x2C) {
+        func_002270F8(x + 2, y - 1, 1);
+    }
+    if (e[2] != 0) {
+        func_00226A40(MsGetSaveWeapon(*(u16 *)e, &buf), x, y, 0);
+        graphicUiRemapY2();
+    }
+}
 
 /* DEBT(FAKE) */
 void func_0024C398(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {

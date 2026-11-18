@@ -236,7 +236,48 @@ int func_0021D820(void)
     return D_00692008 + D_00692020;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlMakeTargetGroupBit);
+void TOBtlMakeTargetGroupBit(void)
+{
+    s32 buf;
+    u8 *com = (u8 *)MsGetComData(toTarget.h2, &buf);
+    s32 *grp_arr = (s32 *)toTarget.pad14;
+    int grp;
+    int i;
+
+    func_002EF0D0(grp_arr, 0, 0x70);
+    grp = (*(u16 *)(com + 0x1A) >> 2) & 3;
+    toTarget.w10 = grp;
+    switch (grp) {
+    case 0:
+        for (i = 0; i < 0x1C; i++) {
+            if ((toTarget.wC >> i) & 1) {
+                grp_arr[i] = 1 << i;
+            }
+        }
+        break;
+    case 2:
+        *(s32 *)((u8 *)&toTarget + 0x14) = toTarget.w4;
+        *(s32 *)((u8 *)&toTarget + 0x64) = toTarget.w8;
+        break;
+    case 1:
+        for (i = 0; i < 0x14; i++) {
+            if ((toTarget.w4 >> i) & 1) {
+                grp_arr[MsGetChrGroup(i)] |= 1 << i;
+            }
+        }
+        for (i = 0x14; i < 0x1C; i++) {
+            if ((toTarget.w8 >> i) & 1) {
+                int g = MsGetChrGroup(i) + 0x14;
+
+                ((s32 *)toTarget.pad14)[g] |= 1 << i;
+            }
+        }
+        break;
+    case 3:
+        grp_arr[(u16)toTarget.h0] = 1 << (u16)toTarget.h0;
+        break;
+    }
+}
 
 void TOBtlMakeTargetChrStatusBit(void)
 {
@@ -310,7 +351,31 @@ void func_0021F448(int a, s16 b, s16 c)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlDrawDamageValue2);
+void TOBtlDrawDamageValue2(void)
+{
+    int sp;
+    int i;
+
+    func_002EF0D0(&sp, 0, 4);
+    func_001F56E8();
+    for (i = 0; i < D_00692450; i++) {
+        R4Ent16 *base = D_00692050;
+        R4Ent16 *e = &base[i];
+
+        if ((u32)e->w8 < 10) {
+            func_001F3140(e->w8, e->x, e->y, e->bC, e->bD, e->bE, e->bF);
+        } else if (e->w8 == 0x3D) {
+            func_001F30E8(0, e->x, e->y, e->bF);
+        } else if (e->w8 == 0x3C) {
+            func_001F30E8(1, e->x, e->y, e->bF);
+        } else if (e->w8 == 0x3B) {
+            func_001F30E8(2, e->x, e->y, e->bF);
+        } else if (e->w8 == 0x3A) {
+            func_001F30E8(3, e->x, e->y, e->bF);
+        }
+    }
+    D_00692450 = 0;
+}
 
 void TOBtlDrawChangeSeqAnm0(int p, int x, int y)
 {

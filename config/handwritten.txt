@@ -165,7 +165,6 @@ func_001ACB10 cop2
 func_001ACB28 cop2
 func_001ACB48 cop2
 func_001ACCB0 cop2
-func_001ACD48 cop2
 func_001AF2E8 mmi
 MsBtlGetPos mmi
 MsGetNextAP mmi

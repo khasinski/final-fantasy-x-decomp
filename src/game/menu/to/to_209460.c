@@ -483,7 +483,19 @@ int func_0020B238(int font, u8 *text)
     return (y << 16) | x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", func_0020B308);
+void func_0020B308(int id, int x, int y, int w, int h)
+{
+    func_002096F0(id, x, y, w, h);
+    if (TOGetMessageWindowMode() == 1) {
+        func_00205A10(id, x, y, w, h);
+    } else {
+        int k = R4PT(id)->p10->w04;
+        int dx = (s16)D_00323848[k].x;
+        int dy = (s16)D_00323848[k].y;
+
+        func_00205A10(id, x + dx, y + dy, w - (dx + (s16)D_00323848[k].w), h - (dy + (s16)D_00323848[k].h));
+    }
+}
 
 void TOSetSelectMessageWindow(int i, int a, int b, int c)
 {
@@ -527,7 +539,43 @@ void TOSetMessageWindowPriority(int i, int v)
     D_0068F0A8[i]->w04 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", func_0020B520);
+void func_0020B520(s16 *out)
+{
+    struct {
+        s16 id;
+        s16 pri;
+    } arr[8], tmp;
+    int i, j;
+
+    for (i = 0; i < 8; i++) {
+        arr[i].id = 0x7FFF;
+        arr[i].pri = 0x7FFF;
+    }
+    for (i = 0; i < 8; i++) {
+        R4Ptrs *p = D_0068F0A8[i];
+
+        if (p->w00 == 1) {
+            arr[i].id = i;
+            arr[i].pri = p->w04;
+        }
+    }
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 8; j++) {
+            if (arr[j].pri < arr[i].pri) {
+                tmp.id = arr[i].id;
+                tmp.pri = arr[i].pri;
+                arr[i].id = arr[j].id;
+                arr[i].pri = arr[j].pri;
+                arr[j].id = tmp.id;
+                arr[j].pri = tmp.pri;
+            }
+        }
+    }
+    func_002EF0D0(out, -1, 0x10);
+    for (i = 0; i < 8 && arr[i].id != 0x7FFF; i++) {
+        *out++ = arr[i].id;
+    }
+}
 
 int func_0020B6A8(int i)
 {
