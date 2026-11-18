@@ -77,7 +77,34 @@ void func_0020E388(u8 *s, s16 x, s16 y, int a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_20E248", func_0020E468);
+extern u8 D_00324380[][4];
+
+int func_0020E468(u8 *s, R4CharInfo *out)
+{
+    int c;
+    int w;
+    int u;
+    int v;
+
+    if (s[0] < 0x30) {
+        c = s[1] + 0xA0;
+    } else {
+        c = s[0] - 0x30;
+    }
+    out->h2 = 0x14;
+    w = D_00324380[c][3];
+    out->h12 = 8;
+    out->h10 = w;
+    u = D_00324380[c][0];
+    out->h6 = u;
+    v = D_00324380[c][1];
+    out->hA = u + w;
+    out->h8 = v;
+    out->hC = v + 8;
+    out->h16 = D_00324380[c][2];
+    out->h4 = (u64)(D_00324380[c][2] & 8) >> 3;
+    return (int)s;
+}
 
 void func_0020E508(s8 *s, u8 *d)
 {

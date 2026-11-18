@@ -1,7 +1,7 @@
 {
   "objective": "100 new correctly decompiled functions in main ELF",
   "baseline": "build/main100-nov15/baseline.json",
-  "verified_new_functions": 97,
+  "verified_new_functions": 102,
   "target": 100,
   "functions": [
     {
@@ -889,6 +889,41 @@
       "source": "src/sdk/libgraph/libgraph.c",
       "sha256": "3ed5d24bd34ca123fb90b32a196dd39774b7125603a2279458ca806ed66f9d71",
       "result": "Exact original 148 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+    },
+    {
+      "name": "func_0020E468",
+      "address": "0x0020e468",
+      "size": 160,
+      "source": "src/game/menu/menu_20E248.c",
+      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+    },
+    {
+      "name": "func_0023AA00",
+      "address": "0x0023aa00",
+      "size": 144,
+      "source": "src/game/menu/tk/tk_23A450.c",
+      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+    },
+    {
+      "name": "opu_et_init",
+      "address": "0x00297140",
+      "size": 176,
+      "source": "src/game/op/op_2967E8.c",
+      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+    },
+    {
+      "name": "func_002D0180",
+      "address": "0x002d0180",
+      "size": 184,
+      "source": "src/game/op/op_2CEFF0.c",
+      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+    },
+    {
+      "name": "func_002D0238",
+      "address": "0x002d0238",
+      "size": 176,
+      "source": "src/game/op/op_2CEFF0.c",
+      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
     }
   ],
   "verification_log": "build/main100-nov15/int64-float-rom-audit.log",
@@ -907,7 +942,7 @@
     "asm/nonmatchings/game/hddcopy/hdd_inst_start_sub.s"
   ],
   "workspace": "/tmp/ffx-main100-nov15",
-  "remaining": 3,
+  "remaining": 0,
   "verification_logs": [
     "build/main100-nov15/sg-three-verified.log",
     "build/main100-nov15/platform-five.log",
@@ -1136,5 +1171,6 @@
       "calls": 8,
       "verification": "build/main100-nov15/int64-float-call-audit.json"
     }
-  ]
+  ],
+  "current_include_asm": 1652
 }

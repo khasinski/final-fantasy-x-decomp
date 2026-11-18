@@ -47,7 +47,25 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_init);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_et_unit);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_et_init);
+/* DEBT(FAKE): second extern alias prevents CSE from merging the two D_00373560 arguments */
+extern char _D_00373560[] __asm__("D_00373560");
+
+void opu_et_init(void)
+{
+    R6Obj *o;
+
+    D_00373550 = 1;
+    o = (R6Obj *)D_00764A30;
+    func_0029A1A8();
+    o = opu_init(0, D_00373560, _D_00373560, o, 0x200, 0, -1);
+    o->pA8 = op_heap_init(D_00704130, 0x60000);
+    o->w58 = 0;
+    o->w2C = o->w28 = D_00303550;
+    D_00373550 = 0;
+    func_00295EB8(o, 0);
+    o->h38 = 0;
+    *(int *)o->p20 = 0;
+}
 
 int func_002971F0(int a, int b, int c, int d) /* DEBT(TYPE): b..d only forwarded */
 {

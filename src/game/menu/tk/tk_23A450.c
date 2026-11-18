@@ -98,7 +98,24 @@ int func_0023A9C0(int a0)
     return func_00266DE8(D_00694110, *p);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023AA00);
+/* DEBT(TYPE): D_00694114 is written as 32-bit int here, read as u16 in func_0023B708 */
+extern int _D_00694114 __asm__("D_00694114");
+
+void func_0023AA00(void)
+{
+    u16 *p = func_00228220(D_00694110, D_0069411C);
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 16; i++) {
+        if (p[i + 1] != 0xFF && p[i + 1] != 0) {
+            n++;
+        } else {
+            break;
+        }
+    }
+    _D_00694114 = n;
+}
 
 void func_0023AA90(Task *o)
 {
