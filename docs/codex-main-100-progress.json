@@ -1,7 +1,7 @@
 {
   "objective": "100 new correctly decompiled functions in main ELF",
-  "baseline": "build/main100-nov15/baseline.json",
-  "verified_new_functions": 102,
+  "baseline": "a553c3d3380a8baea9be4db6f972185d39f448e5",
+  "verified_new_functions": 106,
   "target": 100,
   "functions": [
     {
@@ -9,179 +9,198 @@
       "address": "0x00123cd0",
       "size": 8,
       "source": "src/game/main/sg_123844.c",
-      "result": "Exact original function bytes; entire rebuilt ROM unchanged from pre-change isolated baseline."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00123C60",
       "address": "0x00123c60",
       "size": 12,
       "source": "src/game/main/sg_123844.c",
-      "result": "Exact original bytes after link; complete ROM unchanged from baseline.",
-      "implementation": "C using a single hardware intrinsic, permitted by ASM_POLICY tier 1."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C using a single hardware intrinsic, permitted by ASM_POLICY tier 1.",
+      "verified": true
     },
     {
       "name": "func_00123C6C",
       "address": "0x00123c6c",
       "size": 12,
       "source": "src/game/main/sg_123844.c",
-      "result": "Exact original bytes after link; complete ROM unchanged from baseline.",
-      "implementation": "C using a single hardware intrinsic, permitted by ASM_POLICY tier 1."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C using a single hardware intrinsic, permitted by ASM_POLICY tier 1.",
+      "verified": true
     },
     {
       "name": "func_002DC638",
       "address": "0x002dc638",
       "size": 20,
       "source": "src/game/platform/ffx_2DC638.c",
-      "result": "Exact original bytes after link; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1).",
+      "verified": true
     },
     {
       "name": "func_002DC700",
       "address": "0x002dc700",
       "size": 48,
       "source": "src/game/platform/ffx_2DC700.c",
-      "result": "Exact original bytes after link; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1).",
+      "verified": true
     },
     {
       "name": "func_002DC730",
       "address": "0x002dc730",
       "size": 48,
       "source": "src/game/platform/ffx_2DC700.c",
-      "result": "Exact original bytes after link; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1).",
+      "verified": true
     },
     {
       "name": "func_002DC780",
       "address": "0x002dc780",
       "size": 72,
       "source": "src/game/platform/ffx_2DC700.c",
-      "result": "Exact original bytes after link; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1).",
+      "verified": true
     },
     {
       "name": "func_002DC7C8",
       "address": "0x002dc7c8",
       "size": 16,
       "source": "src/game/platform/ffx_2DC700.c",
-      "result": "Exact original bytes after link; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing single-instruction VU control intrinsics (ASM_POLICY tier 1).",
+      "verified": true
     },
     {
       "name": "func_002DC188",
       "address": "0x002dc188",
       "size": 20,
       "source": "src/game/platform/platform_2DC188.c",
-      "result": "Exact linked original bytes; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing tier-1 VU control intrinsics."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing tier-1 VU control intrinsics.",
+      "verified": true
     },
     {
       "name": "func_002DC250",
       "address": "0x002dc250",
       "size": 48,
       "source": "src/game/platform/platform_2DC250.c",
-      "result": "Exact linked original bytes; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing tier-1 VU control intrinsics."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing tier-1 VU control intrinsics.",
+      "verified": true
     },
     {
       "name": "func_002DC280",
       "address": "0x002dc280",
       "size": 48,
       "source": "src/game/platform/platform_2DC250.c",
-      "result": "Exact linked original bytes; whole ROM unchanged from baseline.",
-      "implementation": "C bit operations and existing tier-1 VU control intrinsics."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "implementation": "C bit operations and existing tier-1 VU control intrinsics.",
+      "verified": true
     },
     {
       "name": "func_001E47B8",
       "address": "0x001e47b8",
       "size": 572,
       "source": "src/game/battle/ms_1E2360.c",
-      "result": "Standalone linked at original address with helper at 0x1E49F8: all 572 bytes match. Complete resident rebuild unchanged from baseline.",
-      "original_function_sha256": "061c178f2cabef45c028199b1aa2f36560a61d1b4c771c47e163ea7774998fbf"
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "original_function_sha256": "061c178f2cabef45c028199b1aa2f36560a61d1b4c771c47e163ea7774998fbf",
+      "verified": true
     },
     {
       "name": "TOBtlInitActiveChrCursor",
       "address": "0x0021f9a8",
       "size": 344,
       "source": "src/game/menu/to/to_21F9A8.c",
-      "result": "All 344 bytes match after standalone linking with original data/function addresses. Full resident image unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "71448c3039b0e3a9f7342a97b189a227d7b783275dd1d152b73c29bfb593f2c6",
       "verification_logs": [
         "build/main100-nov15/cursor-original-proof.log",
         "build/main100-nov15/cursor-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "TOBtlDrawActiveChrCursor",
       "address": "0x0021fb58",
       "size": 636,
       "source": "src/game/menu/to/to_21F9A8.c",
-      "result": "All 636 bytes match after standalone linking with original data/function addresses. Final full resident image unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "a847fc775e6c6c7a20d7a6d9acf3c8795196c9b9ce1e0a1766d60b091fbbb8bd",
       "verification_logs": [
         "build/main100-nov15/draw-original-proof.log",
         "build/main100-nov15/draw-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_001339B8",
       "address": "0x001339b8",
       "size": 152,
       "source": "src/game/atel/atel_12F740.c",
-      "result": "All 152 original bytes match after linking at original addresses. Catalog range contains two real functions (func_001339B8 and func_00133A10); counted as one baseline entry. Full resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "d6b3eddc91ac035e2d1700626cf12db0d9cd552030639d7f58b0471009f89cc5",
       "verification_logs": [
         "build/main100-nov15/atel-pair-original-proof.log",
         "build/main100-nov15/atel-pair-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002F9168",
       "address": "0x002f9168",
       "size": 428,
       "source": "src/sdk/libkernl/tty_2F9168.c",
-      "result": "All 428 original bytes match after linking at original addresses. Catalog range contains queue worker func_002F9168 and initialization func_002F9240; counted as one baseline entry. Full resident image unchanged from baseline after TU split.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "482ec999c9c7dc081c2018d7ace385e8ecbe2f9b4a27987cad7e0b354814be09",
       "verification_logs": [
         "build/main100-nov15/tty-original-proof.log",
         "build/main100-nov15/tty-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_0016BCA0",
       "address": "0x0016bca0",
       "size": 60,
       "source": "src/game/menu/to/to_1691C8.c",
-      "result": "All 60 original function bytes match. Corrected catalog: former 1656-byte entry held this 60-byte worker, 4-byte alignment gap, and 1592-byte func_0016BCE0 which remains assembly. Full resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "2b74711c1b4f4f943172cbfb8c7d21be87a08877478e33d91923c307149a4568",
       "verification_logs": [
         "build/main100-nov15/menu-worker-proof.log",
         "build/main100-nov15/menu-worker-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002D20D0",
       "address": "0x002d20d0",
       "size": 152,
       "source": "src/game/tk/tk_2D1D68.c",
-      "result": "All 152 original bytes match. Separated from the baseline func_002D2060 catalog range; preceding 112-byte worker remains assembly. Full ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "b617489662b8cadac2d872773e4fa8ca25ca283a900c76bead31fc9a0e2ee733",
       "verification_logs": [
         "build/main100-nov15/interrupt-proof.log",
         "build/main100-nov15/interrupt-float-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_001EED50",
       "address": "0x001eed50",
       "size": 16,
       "source": "src/game/battle/battle_1EED50.c",
-      "result": "All 16 original bytes match using the existing delay-slot assembler. Isolated TU keeps neighboring compilation flags unchanged. Full resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "4c277aa70a61b4b6ac1708b58778fbc0cfedec393205c69c99c07ada4751c682",
       "verification_logs": [
         "build/main100-nov15/float-original-proof.log",
         "build/main100-nov15/float-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "AtelGetActorBufferSize",
@@ -189,12 +208,13 @@
       "size": 188,
       "source": "src/game/atel/atel_13A5D8.c",
       "implementation": "Pure C: separate size multiplications and sequential sum; compiler emits matching mult/mult1 instructions.",
-      "result": "Exact original bytes including linked addresses; full resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "70154e54b5e724023fec6d30ec15a5ae0317f7564f81df4e4424bf121e3d5b35",
       "verification_logs": [
         "build/main100-nov15/actor-clear-original-proof.log",
         "build/main100-nov15/actor-clear-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_00170FF8",
@@ -202,297 +222,321 @@
       "size": 12,
       "source": "src/game/sa/sa_170BC4.c",
       "implementation": "Existing single-instruction MMI_SQ_ZERO hardware primitive, permitted by ASM_POLICY tier 1.",
-      "result": "Exact original bytes including linked addresses; full resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "original_function_sha256": "c27a6f7e328841ecbd3773bbbeb60ab8825fa5caae08db3f8a18ba8eef187195",
       "verification_logs": [
         "build/main100-nov15/actor-clear-original-proof.log",
         "build/main100-nov15/actor-clear-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_001AA048",
       "address": "0x001aa048",
       "size": 108,
       "source": "src/game/battle/ms_1A56F8.c",
-      "result": "All 108 original bytes match after linking original function/data addresses. Complete resident ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C lookup using existing camera structures, sizeof and offsetof; byte-address calculation marked DEBT(CAST).",
       "original_function_sha256": "c69bedc7b2887752f34df1cb4a4da4f1d8ab180173e1b5dbb15097cfd7e194dc",
       "verification_logs": [
         "build/main100-nov15/camera-original-proof.log",
         "build/main100-nov15/camera-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_001C5538",
       "address": "0x001c5538",
       "size": 152,
       "source": "src/game/battle/ms_1C0C98.c",
-      "result": "Exact 152 original function bytes after linking; entire rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C loop applying masked stat increments, clamped to 0..5.",
       "verification": [
         "build/main100-nov15/statboost-original-proof.log",
         "build/main100-nov15/statboost-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_001608D0",
       "address": "0x001608d0",
       "size": 164,
       "source": "src/game/chr/tex_anim.c",
-      "result": "Exact 164 original bytes after linking; full rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C initialization of 64 texture-animation records. Native pointer stores with -fno-strict-aliasing for this TU; no casts or assembly.",
       "verification": [
         "build/main100-nov15/texinit-original-proof.log",
         "build/main100-nov15/texinit-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002CEDD8",
       "address": "0x002cedd8",
       "size": 132,
       "source": "src/game/op/op_2CEC08.c",
-      "result": "Exact 132 original bytes after standalone linking; full rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C traversal of relative packet offsets, replacing 64-bit texture tags within an ID range. Typed table, packet and union views.",
       "verification": [
         "build/main100-nov15/texture-original-proof.log",
         "build/main100-nov15/texture-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_00235B48",
       "address": "0x00235b48",
       "size": 188,
       "source": "src/game/menu/tk/tk_234A30.c",
-      "result": "Exact 188 original function bytes including all calls, data and string addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C reset and callback loop with original scene-name literals. Compiler-owned literal block has explicit original placement and byte validation.",
       "verification": [
         "build/main100-nov15/menu-literal-original-proof.log",
         "build/main100-nov15/menu-literal-full-verify.log",
         "build/main100-nov15/literal-tests.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBF78",
       "address": "0x002dbf78",
       "size": 196,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 196 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA status polling with timeout, diagnostic print and STR bit clearing. Corrected return type to int in shared declarations.",
       "verification": [
         "build/main100-nov15/dma-original-proof.log",
         "build/main100-nov15/dma-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBCD0",
       "address": "0x002dbcd0",
       "size": 196,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 196 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA timeout polling and channel start, with typed direction, mode and STR bit fields.",
       "verification": [
         "build/main100-nov15/dma-start-original-proof.log",
         "build/main100-nov15/dma-start-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBA28",
       "address": "0x002dba28",
       "size": 216,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 216 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBB00",
       "address": "0x002dbb00",
       "size": 228,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 228 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBBE8",
       "address": "0x002dbbe8",
       "size": 228,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 228 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBD98",
       "address": "0x002dbd98",
       "size": 236,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 236 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DBE88",
       "address": "0x002dbe88",
       "size": 240,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 240 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DC040",
       "address": "0x002dc040",
       "size": 208,
       "source": "src/sdk/libdma/libdma.c",
-      "result": "Exact 208 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C DMA channel transfer setup or progress polling, preserving volatile register accesses, timeout handling and control bit fields.",
       "verification": [
         "build/main100-nov15/dma-six-original-proof.log",
         "build/main100-nov15/dma-six-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002D9D20",
       "address": "0x002d9d20",
       "size": 188,
       "source": "src/sdk/libgraph/libgraph.c",
-      "result": "Exact 188 original bytes including call relocation; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C writes to volatile 64-bit GS display registers, selecting the register bank from GS state. Corrected unused return declaration to void.",
       "verification": [
         "build/main100-nov15/gs-pair-original-proof.log",
         "build/main100-nov15/gs-pair-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002D9DE0",
       "address": "0x002d9de0",
       "size": 200,
       "source": "src/sdk/libgraph/libgraph.c",
-      "result": "Exact 200 original bytes including call relocation; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C calculation of graphics storage size with signed short dimensions, rounded block division and packed GS mode check.",
       "verification": [
         "build/main100-nov15/gs-pair-original-proof.log",
         "build/main100-nov15/gs-pair-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DA198",
       "address": "0x002da198",
       "size": 232,
       "source": "src/sdk/libgraph/libgraph.c",
-      "result": "Exact 232 original bytes including call and data addresses; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C GIF DMA transfer with busy timeout, packet length calculation, scratchpad address mapping and volatile register writes.",
       "verification": [
         "build/main100-nov15/gs-send-original-proof.log",
         "build/main100-nov15/gs-send-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002DA090",
       "address": "0x002da090",
       "size": 260,
       "source": "src/sdk/libgraph/libgraph.c",
-      "result": "Exact 260 original bytes; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C graphics packet builder with packed color and coordinates, test state and one hardware SYNC intrinsic permitted by ASM_POLICY. Signed coordinate scaling uses multiplication.",
       "verification": [
         "build/main100-nov15/gs-clear-original-proof.log",
         "build/main100-nov15/gs-clear-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "opus_draw_off",
       "address": "0x00296070",
       "size": 96,
       "source": "src/game/op/opus_294CD8.c",
-      "result": "Exact96 original bytes after link; complete rebuilt ROM unchanged from baseline.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C search and removal from the signed ID list, shifting subsequent entries and restoring the negative terminator. Uses the existing assembler configuration for this unit.",
       "verification": [
         "build/main100-nov15/draw-off-original-proof.log",
         "build/main100-nov15/draw-off-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_00114A20",
       "address": "0x00114a20",
       "size": 132,
       "source": "src/game/chr/ch_113FF8.c",
-      "result": "Exact132 original code bytes and all488 original jump-table bytes when linked at original addresses. Full ROM changes only seven formerly unrelocated table entries; all122 targets audited.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C character parameter switch including case122. Corrected table size to122 entries; preserved interior data symbol via linker alias.",
       "verification": [
         "build/main100-nov15/chr-switch-original-proof.log",
         "build/main100-nov15/chr-switch-full-verify.log",
         "build/main100-nov15/chr-switch-rom-audit.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_0021BDC8",
       "address": "0x0021bdc8",
       "size": 92,
       "source": "src/game/menu/to/to_218A78.c",
-      "result": "Exact92 original bytes including all relocations; full rebuilt ROM unchanged from audited post-table-fix reference.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C menu update subtracting the returned step and setting the callback. Preserves the original local RGB structure initializer, as in the adjacent existing C function.",
       "verification": [
         "build/main100-nov15/menu-subtract-original-proof.log",
         "build/main100-nov15/menu-subtract-full-verify.log"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_003003B0",
       "address": "0x003003b0",
       "size": 236,
       "source": "src/sdk/libkernl/iopreset.c",
-      "result": "Exact236 original function bytes with original helper addresses. Full ROM differs only in audited pre-existing helper-call targets corrected by symbolic linker aliases.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C unsigned64 conversion from double, split into high32bits and remainder. Corrected unsigned return declaration and compiler helper aliases.",
       "verification": [
         "build/main100-nov15/fixuns-original-proof.log",
         "build/main100-nov15/fixuns-full-verify.log",
         "build/main100-nov15/fixuns-rom-audit.log",
         "build/main100-nov15/fixuns-helper-call-audit.json"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002EA358",
       "address": "0x002ea358",
       "size": 244,
       "source": "src/sdk/libgcc/libgcc_2E9828.c",
-      "result": "Exact244 original function bytes including every helper-call address. Full ROM changes only audited pre-existing fptodp call targets.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C float-to-unsigned64 conversion through a double intermediate. Corrected existing fptodp linker alias to track the real function symbol.",
       "verification": [
         "build/main100-nov15/fixuns-float-original-proof.log",
         "build/main100-nov15/fixuns-float-full-verify.log",
         "build/main100-nov15/fixuns-float-rom-audit.log",
         "build/main100-nov15/fixuns-float-call-audit.json"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_002EA4E8",
       "address": "0x002ea4e8",
       "size": 224,
       "source": "src/sdk/libgcc/libgcc_2E9828.c",
-      "result": "Exact224 original function bytes including all helper calls; full ROM differences limited to audited litodp/dptofp call-target corrections.",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "implementation": "C signed64-to-float conversion preserving the sticky bit needed before rounding through double. Explicitly masks the low32bits.",
       "verification": [
         "build/main100-nov15/int64-float-original-proof.log",
         "build/main100-nov15/int64-float-full-verify.log",
         "build/main100-nov15/int64-float-rom-audit.log",
         "build/main100-nov15/int64-float-call-audit.json"
-      ]
+      ],
+      "verified": true
     },
     {
       "name": "func_00203FC0",
@@ -500,7 +544,8 @@
       "size": 192,
       "source": "src/game/menu/to/to_203FC0.c",
       "original_source": "src/game/menu/to/to_2021E8.c",
-      "result": "Exact original function bytes, including relocations. Entire rebuilt ROM unchanged from current regression reference. Message timing isolated for delay-slot assembler; named MenuCmd offset 0xA0 field."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002F9090",
@@ -508,203 +553,232 @@
       "size": 212,
       "source": "src/sdk/libkernl/tty_2F9090.c",
       "original_source": "src/sdk/libkernl/tty.c",
-      "result": "Exact original function bytes including relocations. Entire rebuilt ROM unchanged from current regression reference. Typed C kernel patch initialization split from legacy syscall wrappers."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "AtelPopMember",
       "address": "0x0014a260",
       "size": 208,
       "source": "src/game/atel/atel_148F40.c",
-      "result": "Exact original function bytes including relocations, verified from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C restores seven character join flags and three party members."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0014D180",
       "address": "0x0014d180",
       "size": 220,
       "source": "src/game/atel/tk_14CE18.c",
-      "result": "Exact original function bytes including relocation, verified from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C interpolates Atel record values; corrected prototype and existing caller to explicitly pass the duration already present in original A2."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001CC648",
       "address": "0x001cc648",
       "size": 220,
       "source": "src/game/battle/ms_1C8C80.c",
-      "result": "Exact original function bytes including relocations, verified from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C checks selected battle targets using BtlChr and OfsTbl fields."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOBtlSetChangeHelpMes",
       "address": "0x002187b8",
       "size": 228,
       "source": "src/game/menu/to/to_2180A0.c",
-      "result": "Exact original function bytes including relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C prepares change-character help text and measures it using existing width/height symbols."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00236720",
       "address": "0x00236720",
       "size": 228,
       "source": "src/game/menu/to/to_2362B8.c",
-      "result": "Exact original function bytes including relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C initializes and registers a yes/no menu window using existing Task fields."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0020F750",
       "address": "0x0020f750",
       "size": 252,
       "source": "src/game/menu/tk/tk_20EC90.c",
-      "result": "Exact original function bytes including relocation from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C implements linear, quadratic and cosine menu interpolation, preserving zero-duration behavior."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002D6A28",
       "address": "0x002d6a28",
       "size": 264,
       "source": "src/game/snd/snd_2D6808.c",
-      "result": "Exact original 264 function bytes and 64-byte jump table from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C clears sound channel state through the existing indexed accessor."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00207988",
       "address": "0x00207988",
       "size": 248,
       "source": "src/game/menu/to/to_207648.c",
-      "result": "Exact original 248 function bytes including relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C clamps menu selection and lays out equally spaced entries."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOBtlInitCtbWindow",
       "address": "0x00213158",
       "size": 276,
       "source": "src/game/menu/to/to_212EA8.c",
-      "result": "Exact original 276 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C initializes CTB window entries and pointer ordering."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOCheckBtlCommandUse",
       "address": "0x002156d0",
       "size": 280,
       "source": "src/game/menu/to/to_214650.c",
-      "result": "Exact original 280 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C checks battle command availability and selection-list status."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001D3350",
       "address": "0x001d3350",
       "size": 288,
       "source": "src/game/battle/ms_1D27C0.c",
-      "result": "Exact original 288 function bytes and 32 bytes of double constants from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C adjusts battle rotation across the angular wrap boundary."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00223E98",
       "address": "0x00223e98",
       "size": 288,
       "source": "src/game/menu/tk/tk_220F30.c",
-      "result": "Exact original 288 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C counts battle reward participants and initializes their display rows."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001A2880",
       "address": "0x001a2880",
       "size": 288,
       "source": "src/game/rc/rcef_1A21E0.c",
-      "result": "Exact original 288 function bytes and 8-byte double literal from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C updates angular activation flags and timers; rodata splitter preserves compiler literal boundaries."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TODrawMessage",
       "address": "0x002044f0",
       "size": 296,
       "source": "src/game/menu/to/to_204080.c",
-      "result": "Exact original 296 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C dispatches message drawing and places selection cursor before or after it."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00208458",
       "address": "0x00208458",
       "size": 304,
       "source": "src/game/menu/to/to_208448.c",
-      "result": "Exact original 304 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C converts encoded message characters through the two-byte font lookup table."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOGetWordCount",
       "address": "0x002049a8",
       "size": 312,
       "source": "src/game/menu/to/to_204080.c",
-      "result": "Exact original 312 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C counts message characters and expanded macros."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOGetWordCountLimit",
       "address": "0x00204ae0",
       "size": 324,
       "source": "src/game/menu/to/to_204080.c",
-      "result": "Exact original 324 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C counts message characters and expanded macros until a character at or below the supplied terminator limit."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0023CE38",
       "address": "0x0023ce38",
       "size": 312,
       "source": "src/game/menu/tk/tk_23CBD0.c",
-      "result": "Exact original 312 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C formats decimal digits into game text, optionally replacing leading zeroes with padding."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0024F400",
       "address": "0x0024f400",
       "size": 312,
       "source": "src/game/menu/tk/tk_24B828.c",
-      "result": "Exact original 312 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C rebuilds inventory buffers in the configured item order and refreshes the menu."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F8258",
       "address": "0x001f8258",
       "size": 312,
       "source": "src/game/menu/to/to_1F5060.c",
-      "result": "Exact original 312 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C formats and draws a right-aligned number through the game glyph renderer."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOSwapInternationalMessageWindow",
       "address": "0x0020c040",
       "size": 324,
       "source": "src/game/menu/to/to_20C040.c",
-      "result": "Exact original 324 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C switches active message sources and refreshes window layout; isolated -fno-strict-aliasing flag preserves surrounding functions."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00201F50",
       "address": "0x00201f50",
       "size": 332,
       "source": "src/game/menu/menu_201760.c",
-      "result": "Exact original 332 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C advances the window animation and emits three shape packets, returning the updated display-list cursor."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOSetBtlActiveChr",
       "address": "0x00214cc8",
       "size": 332,
       "source": "src/game/menu/to/to_214650.c",
-      "result": "Exact original 332 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C initializes battle UI state, records the active character, and selects its next action."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOFuncPadMessageSelect",
       "address": "0x00207ac8",
       "size": 328,
       "source": "src/game/menu/to/to_207648.c",
-      "result": "Exact original 328 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C handles message-choice confirmation, cancel selection, wrapped movement, and selection sounds."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0014F228",
       "address": "0x0014f228",
       "size": 340,
       "source": "src/game/atel/atel_14D940.c",
-      "result": "Exact original 340 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C counts monsters meeting a capture threshold, optionally filtered by either group field."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002239A8",
       "address": "0x002239a8",
       "size": 340,
       "source": "src/game/menu/tk/tk_220F30.c",
-      "result": "Exact original 340 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C measures and draws the centered reward message, scaling its window width and restoring the scissor rectangle."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002384D8",
       "address": "0x002384d8",
       "size": 340,
       "source": "src/game/menu/tk/tk_237888.c",
-      "result": "Exact original 340 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C draws the weapon list row, its price and enabled state, with scroll offset and index bounds."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00238A08",
       "address": "0x00238a08",
       "size": 344,
       "source": "src/game/menu/tk/tk_237888.c",
-      "result": "Exact original 344 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference. C draws a weapon sale row from the inventory table, with scroll offset, price, and enabled state."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002638C0",
@@ -712,7 +786,8 @@
       "size": 244,
       "source": "src/game/abm/ei_260A70.c",
       "sha256": "ac24f6bf033d19f7be9012169fbf1e1a9cff3460bb0b8b746c42916de9048520",
-      "result": "Exact original 244 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001ACD48",
@@ -720,7 +795,8 @@
       "size": 112,
       "source": "src/game/battle/ms_1AC0B8.c",
       "sha256": "e599d74d92e8d37163cc4d7b3191cc36e6793e445aeb328045a6fd47123094dd",
-      "result": "Exact original 112 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TkBtlEndDraw",
@@ -728,7 +804,8 @@
       "size": 468,
       "source": "src/game/menu/tk/tk_220F30.c",
       "sha256": "49896d9f8a8d43e093b6dae4ccf364482226866e06c60d3364e6b2d90c11c6f6",
-      "result": "Exact original 468 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0023B298",
@@ -736,7 +813,8 @@
       "size": 324,
       "source": "src/game/menu/tk/tk_23A450.c",
       "sha256": "fa287b8e16df330f711eb5519ae9bde755af3b5c04246898de9560fbb89f34ae",
-      "result": "Exact original 324 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0024C238",
@@ -744,7 +822,8 @@
       "size": 352,
       "source": "src/game/menu/tk/tk_24B828.c",
       "sha256": "a2d93d13fbcfc8bc877a95071f6c26ece6f8514714ffa4c38e2ede466958d399",
-      "result": "Exact original 352 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F0870",
@@ -752,7 +831,8 @@
       "size": 432,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "35f55f37aafcdff589ec72d89e01535d9b63cf2ed50a7ab457b3189fd0ead6a7",
-      "result": "Exact original 432 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F1028",
@@ -760,7 +840,8 @@
       "size": 440,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "6cd887fbe0d261321a29cae8e7efed087624046749df3def421812969a360fad",
-      "result": "Exact original 440 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F11E0",
@@ -768,7 +849,8 @@
       "size": 548,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "ad4dec4f516c35dfaf1c4f121fd5afc04f61580338fb401a3064cd1b9e4f2a4d",
-      "result": "Exact original 548 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F1408",
@@ -776,7 +858,8 @@
       "size": 548,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "fb17d621e2c9f3831d10d6692e402411d697b8de2544ac123855057323b26562",
-      "result": "Exact original 548 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F1630",
@@ -784,7 +867,8 @@
       "size": 540,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "def277f4eaa8a89cffd9132cc5b7dfedc67639ac1d61afe41fad64451d3c4d1e",
-      "result": "Exact original 540 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F1850",
@@ -792,7 +876,8 @@
       "size": 504,
       "source": "src/game/menu/to/to_1EF910.c",
       "sha256": "838226dc0017f722e39352953e8b4c631ef34181ca7d321b6f58c73312cdd08f",
-      "result": "Exact original 504 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F26B0",
@@ -800,7 +885,8 @@
       "size": 396,
       "source": "src/game/menu/to/to_1F1EB8.c",
       "sha256": "941400266b1822b4e709e595f56d6a4ec8d1c41e20b31f0e7ac69230cc308cc5",
-      "result": "Exact original 396 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001F7798",
@@ -808,7 +894,8 @@
       "size": 252,
       "source": "src/game/menu/to/to_1F5060.c",
       "sha256": "cef8fe819e9a42e04db675a48e45b90a399e3aa1a6d9d0969db3090d3c2b3851",
-      "result": "Exact original 252 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0020B308",
@@ -816,7 +903,8 @@
       "size": 252,
       "source": "src/game/menu/to/to_209460.c",
       "sha256": "ceead06c99b6a428a3c1d2616b0f541cd8e037456b767ea0f46ca2e583faac6c",
-      "result": "Exact original 252 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0020B520",
@@ -824,7 +912,8 @@
       "size": 392,
       "source": "src/game/menu/to/to_209460.c",
       "sha256": "bc63ee38ce4ff377dc04889fe1e45afcb6b46df90c96a19adad77df870e9984b",
-      "result": "Exact original 392 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0020CA38",
@@ -832,7 +921,8 @@
       "size": 432,
       "source": "src/game/menu/to/to_20C188.c",
       "sha256": "b492e94ddab2674e49d6d287442a04b7012a49bf955b3e1086381f8e07dc6ed3",
-      "result": "Exact original 432 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOBtlMakeTargetGroupBit",
@@ -840,7 +930,8 @@
       "size": 460,
       "source": "src/game/menu/to/to_21D048.c",
       "sha256": "768197cabaf0831b2e51d8eeb31336234c7ae86ac5e6e44e939132dc3ecfb3b4",
-      "result": "Exact original 460 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "TOBtlDrawDamageValue2",
@@ -848,7 +939,8 @@
       "size": 284,
       "source": "src/game/menu/to/to_21D048.c",
       "sha256": "2d2f2cec31a17aeb64276d112c652f609af7302fae25e85f42b52e523eec1f99",
-      "result": "Exact original 284 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "op1_md_draw",
@@ -856,7 +948,8 @@
       "size": 196,
       "source": "src/game/op/op_2B6B50.c",
       "sha256": "ab079ee44a8858229216d7894269f1a50aee5f9f67980add2544a9dfdba9b413",
-      "result": "Exact original 196 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_001A2400",
@@ -864,7 +957,8 @@
       "size": 196,
       "source": "src/game/rc/rcef_1A21E0.c",
       "sha256": "0bbd366de71f9caf65299da9488aff542efe80f3170a6ee5fad4a973d2b02fa9",
-      "result": "Exact original 196 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002D2060",
@@ -872,7 +966,8 @@
       "size": 112,
       "source": "src/game/tk/tk_2D1D68.c",
       "sha256": "a71f0b0df3197470df7cb9cda66bebb1764d15137118fcae2e032c6d57e461d8",
-      "result": "Exact original 112 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_00188F48",
@@ -880,7 +975,8 @@
       "size": 248,
       "source": "src/game/yi/yi_188D98.c",
       "sha256": "a0976c9739a49efbf2acb8711132ca83f6d19c74679f1abe5dd6df74f93ce836",
-      "result": "Exact original 248 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002DA578",
@@ -888,42 +984,80 @@
       "size": 148,
       "source": "src/sdk/libgraph/libgraph.c",
       "sha256": "3ed5d24bd34ca123fb90b32a196dd39774b7125603a2279458ca806ed66f9d71",
-      "result": "Exact original 148 function bytes including all relocations from final translation-unit object. Entire rebuilt ROM unchanged from current regression reference (SHA256 c9bdb6f5c78a2cc47bdbc88e1999395272ed5dcde50ab2d729a00b304ddae6a9)."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0020E468",
       "address": "0x0020e468",
       "size": 160,
       "source": "src/game/menu/menu_20E248.c",
-      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_0023AA00",
       "address": "0x0023aa00",
       "size": 144,
       "source": "src/game/menu/tk/tk_23A450.c",
-      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "opu_et_init",
       "address": "0x00297140",
       "size": 176,
       "source": "src/game/op/op_2967E8.c",
-      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002D0180",
       "address": "0x002d0180",
       "size": 184,
       "source": "src/game/op/op_2CEFF0.c",
-      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     },
     {
       "name": "func_002D0238",
       "address": "0x002d0238",
       "size": 176,
       "source": "src/game/op/op_2CEFF0.c",
-      "result": "Exact original bytes; rebuilt ROM SHA256 identical to regression reference."
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "Ch_TextureGetImageBase",
+      "address": "0x10d2c0",
+      "size": 48,
+      "source": "src/game/chr/ch_10D0A0.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_0010D2F0",
+      "address": "0x10d2f0",
+      "size": 48,
+      "source": "src/game/chr/ch_10D0A0.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_0010D320",
+      "address": "0x10d320",
+      "size": 48,
+      "source": "src/game/chr/ch_10D0A0.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_0010D350",
+      "address": "0x10d350",
+      "size": 48,
+      "source": "src/game/chr/ch_10D0A0.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
     }
   ],
   "verification_log": "build/main100-nov15/int64-float-rom-audit.log",
