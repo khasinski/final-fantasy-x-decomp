@@ -31,7 +31,17 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraInit);
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraProcess);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DE80);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsNearRag);
+float MsNearRag(float a, float b)
+{
+    register float base __asm__("$f3") = a;
+    register float d __asm__("$f12");
+    d = b - base;
+    d -= (int)(d / 6.2831855f) * 6.2831855f;
+    if (d < 0.0f) d += 6.2831855f;
+    if (d < 3.1415927f) return base + d;
+    return (base - 6.2831855f) + d;
+}
+
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraMoveCalc);
 

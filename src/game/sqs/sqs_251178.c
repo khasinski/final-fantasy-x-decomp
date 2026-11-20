@@ -1056,7 +1056,26 @@ int func_00253C60(int a)
     return *D_00327020;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00253C98);
+int func_00253C98(void)
+{
+    int result = 0;
+    int total;
+    long prod;
+    register long a __asm__("$2");
+    register int *p __asm__("$3");
+    func_00251178(30, 1);
+    p = D_00327020;
+    total = p[0];
+    if (total != 0) {
+        a = (long)p[1];
+        prod = ((a * 2 + a) * 8 + a) * 4;
+        result = (int)func_002E9C38(prod, total);
+        a = prod - result * total;
+        result *= 1000;
+        result |= (int)func_002E9C38(a * 1000, total);
+    }
+    return result;
+}
 
 int func_00253D58(int a)
 {
