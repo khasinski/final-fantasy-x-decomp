@@ -36,5 +36,137 @@
       "-O2",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09473_norm.c",
+    "containers": [
+      9064,
+      9142,
+      9232,
+      9395,
+      9473,
+      9487,
+      9574,
+      9575,
+      9706,
+      9730
+    ],
+    "text_start": "0x01B0C810",
+    "text_end": "0x01B0C8C0",
+    "discovered_code_bytes": 176,
+    "functions": 1,
+    "syms": {
+      "fptodp": "0x002ED038",
+      "sqrt": "0x002E9290",
+      "dptofp": "0x002EC440"
+    },
+    "container_layouts": [
+      {
+        "cid": 9064,
+        "text_start": "0x01B0C810",
+        "text_end": "0x01B0C8C0",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9142,
+        "text_start": "0x01B03138",
+        "text_end": "0x01B031E8",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9232,
+        "text_start": "0x01B028B8",
+        "text_end": "0x01B02968",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9395,
+        "text_start": "0x01B03B60",
+        "text_end": "0x01B03C10",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9473,
+        "text_start": "0x01B01208",
+        "text_end": "0x01B012B8",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9487,
+        "text_start": "0x01B050E0",
+        "text_end": "0x01B05190",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9574,
+        "text_start": "0x01B01A68",
+        "text_end": "0x01B01B18",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9575,
+        "text_start": "0x01B01A08",
+        "text_end": "0x01B01AB8",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9706,
+        "text_start": "0x01B011F8",
+        "text_end": "0x01B012A8",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      },
+      {
+        "cid": 9730,
+        "text_start": "0x01B04FD8",
+        "text_end": "0x01B05088",
+        "syms": {
+          "fptodp": "0x002ED038",
+          "sqrt": "0x002E9290",
+          "dptofp": "0x002EC440"
+        }
+      }
+    ],
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]
