@@ -192,7 +192,34 @@ void func_001A6E10(int a, int b, int v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A6E90);
+void func_001A6E90(int h, int which, float x, float y, float z) {
+    Unk317120Rec *rec;
+    R2Area *area;
+    int r;
+    register float fz __asm__("$f20") = z;
+    register float fx __asm__("$f21") = x;
+    register float fy __asm__("$f22") = y;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        rec = &D_00314870[h & 0xFF].rec[which];
+        area = &rec->area[(h & 0xFF00) >> 8];
+        area->b00 = 1;
+        area->b02 = 2;
+        area->b07 = 0;
+        area->v40[0] = fx;
+        area->v40[1] = fy;
+        area->v40[2] = fz;
+        r = func_001A6738(h);
+        if (r == h) {
+            rec->v60[2] = fz;
+            rec->v60[0] = fx;
+            rec->v60[1] = fy;
+            *(int *)rec->pad6C = 0;
+            MsSetCheckChange(r, which, 1, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A6FA0);
 
@@ -230,13 +257,72 @@ void MsCameraSetSpline(s32 h, s32 which, s32 var, float x, float y, s32 n)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7308);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7530);
+void func_001A7648(int id, int which, Unk317120Rec *rec, R2Area *area, R2Area *area2);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7648);
+void func_001A7530(int h, int which, R2AreaObj *var, int n) {
+    Unk317120Rec *record;
+    R2Area *area;
+    int current;
+
+    if (MsCameraIDcheck(h) != 0 && var != 0) {
+        which &= 1;
+        record = &D_00314870[h & 0xFF].rec[which];
+        area = &record->area[(h & 0xFF00) >> 8];
+        area->obj = var;
+        area->b02 = 0x11;
+        area->b1C = n;
+        area->b07 = 0;
+        area->b00 = 0;
+        current = func_001A6738(h);
+        if (current == h) {
+            func_001A7648(current, which, record, area, area);
+            MsSetCheckChange(current, which, 0, 0);
+        }
+    }
+}
+
+void _m2c_func_002D5448() __asm__("func_002D5448");
+void _m2c_TkMtCalcSpline() __asm__("TkMtCalcSpline");
+
+void func_001A7648(int id, int which, Unk317120Rec *rec, R2Area *area, R2Area *area2) {
+    float pos[4];
+    int c = *(s8 *)&area->b1C;
+
+    if ((c & 3) == 3) {
+        _m2c_func_002D5448(pos, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area2->f24);
+    } else {
+        _m2c_TkMtCalcSpline(pos, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area2->f24);
+    }
+    MMI_COPY_LQ_T0(rec->v50, pos);
+    MMI_COPY_SQ_T0(rec->v50);
+    *(int *)rec->pad6C = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A76E0);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetRect);
+void MsCameraSetRect(int h, int which, void *v) {
+    Unk317120Rec *record;
+    R2Area *area;
+    int current;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        record = &D_00314870[h & 0xFF].rec[which];
+        area = &record->area[(h & 0xFF00) >> 8];
+        area->b02 = 1;
+        area->b07 = 0;
+        area->b00 = 0;
+        MMI_COPY_LQ_T0(area->v30, v);
+        MMI_COPY_SQ_T0(area->v30);
+        current = func_001A6738(h);
+        if (current == h) {
+            *(int *)record->pad6C = 0;
+            MMI_COPY_LQ_T0(record->v50, v);
+            MMI_COPY_SQ_T0(record->v50);
+            MsSetCheckChange(current, which, 0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetAct);
 
@@ -803,7 +889,35 @@ void func_001A9C50(int a) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A9C98);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraResetMove);
+int MsCameraResetMove(int id, int which) {
+    Unk314840 *cam;
+    Unk317120Rec *rec;
+    int flag;
+    int i;
+
+    if (func_001A6738(id) == id) {
+        flag = which & 8;
+        cam = &D_00314840[id & 0xFF];
+        which &= 1;
+        rec = &cam->rec[which];
+        if (which == 1) {
+            for (i = 0; i < 2; i++) {
+                cam->fadeD80[i].total = 0;
+            }
+        }
+        for (i = 0; i < 3; i++) {
+            rec->fade[i].total = 0;
+        }
+        if (flag == 0) {
+            MsCameraSetRect(id, which, rec->v50);
+            if (which == 1) {
+                MsCameraSetScrDpt(id, cam->fCA8);
+                MsCameraSetRoll(id, cam->fC9C);
+            }
+        }
+    }
+    return 0;
+}
 
 void *func_001A9ED0(void) {
     return D_003142A0;
@@ -932,7 +1046,38 @@ void MsSetNormalUpVector(Vec4 *p) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraReset);
+extern char D_0056DEE8[];
+int func_001A9C98(int a, int b);
+
+int MsCameraReset(int id, int which) {
+    int cur;
+    Unk314840 *cam;
+    Unk317120Rec *rec;
+    struct Unk314840Ent *ent;
+    R2Area *area;
+
+    func_002EF240(D_0056DEE8, which, func_001A6738(id), id, func_001A9C98(id, which));
+    cur = func_001A6738(id);
+    if (cur == id) {
+        int k = (cur & 0xFF00) >> 8;
+
+        cam = &D_00314840[cur & 0xFF];
+        rec = &cam->rec[which];
+        ent = &cam->eCC0[k];
+        area = &rec->area[k];
+        MMI_COPY_LQ_T0(rec->v20, area->pad_80);
+        MMI_COPY_SQ_T0(rec->v20);
+        MMI_COPY_LQ_T0(rec->v50, area->pad_80);
+        MMI_COPY_SQ_T0(rec->v50);
+        if (which == 1) {
+            cam->fC9C = *(float *)&ent->pad1C[0];
+            ((Unk317120 *)cam)->fC98 = *(float *)&ent->pad1C[0];
+            cam->fCA8 = *(float *)&ent->pad1C[4];
+            ((Unk317120 *)cam)->fCA4 = *(float *)&ent->pad1C[4];
+        }
+    }
+    return 0;
+}
 
 void MsEffectCameraInit(void) {
     ms_effect_camera_flag = 0;
@@ -1089,9 +1234,45 @@ int func_001AAAB0(u32 idx, int b) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AAB10);
+void func_001AAB10(u32 idx, int b, int c, int d) {
+    if (idx < 3) {
+        Rec142F0 *p = &ms_screen[idx];
+        struct Rec142F0Slot *s;
+        int i;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AAB88);
+        b &= 1;
+        s = p->sl[b];
+        for (i = 0; i < 4; i++) {
+            s[i].h0 = d;
+            s[i].hC = c;
+            s[i].hE = 0;
+        }
+        MMI_COPY_LQ_T0(((float (*)[4])p->padA0)[b], p->f40[b]);
+        MMI_COPY_SQ_T0(((float (*)[4])p->padA0)[b]);
+    }
+}
+
+void func_001AAB88(u32 idx, int b, int t0, int t1, int t2) {
+    if (idx < 3) {
+        Rec142F0 *p = &ms_screen[idx];
+        R2Fade *s;
+        int i;
+
+        b &= 1;
+        s = (R2Fade *)p->sl[b];
+        for (i = 0; i < 4; i++) {
+            s[i].mode = 2;
+            s[i].total = t0 + t1 + t2;
+            s[i].time = 0;
+            s[i].h4 = 0;
+            s[i].t0 = t0;
+            s[i].t1 = t1;
+            s[i].t2 = t2;
+        }
+        MMI_COPY_LQ_T0(((float (*)[4])p->padA0)[b], p->f40[b]);
+        MMI_COPY_SQ_T0(((float (*)[4])p->padA0)[b]);
+    }
+}
 
 void func_001AAC18(float a, float b) {
     ms_screen_now->f30 = a;

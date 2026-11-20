@@ -66,7 +66,9 @@ typedef struct LpaView {
     u8 pad11570[0x11575 - 0x11570];
     u8 f11575;
     u8 f11576;
-    u8 pad11577[0x1157E - 0x11577];
+    u8 pad11577[3];
+    u8 f1157A;
+    u8 pad1157B[3];
     s16 f1157E;
     s16 f11580;
     u8 pad11582[2];
@@ -74,7 +76,12 @@ typedef struct LpaView {
     float f11588;
     float f1158C;
     float f11590;
-    u8 pad11594[0x115CC - 0x11594];
+    float f11594;
+    u8 pad11598[0x115BC - 0x11598];
+    float f115BC;
+    float f115C0;
+    float f115C4;
+    float f115C8;
     int f115CC;
     u8 pad115D0[0x115F0 - 0x115D0];
     float f115F0[4];
@@ -245,7 +252,57 @@ void func_002614B8(void)
     func_00260A70(D_006A3610);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002614E0);
+typedef struct {
+    u8 pad0[0x10];
+    u16 h10;
+    u16 h12;
+    u8 b14;
+} EiParaEnt14;
+
+void func_002614E0(int ch, int idx) __attribute__((register_precision(s3, 128)));
+void func_002614E0(int ch, int idx)
+{
+    int out;
+    s32 pos;
+    EiParaEnt14 *ent = (EiParaEnt14 *)func_00256F08(lpamng->ents[idx].f06, &out);
+    u16 f = ent->h10;
+
+    LPV->f1161A = 0x78;
+    LPV->f11610 = 0;
+    LPV->f1160C = 0;
+    LPV->f11614 = ent->b14;
+    LPV->f11608 = func_00256FA0(0x21);
+    LPV->f1160C = TOGetSaveChrName(ch);
+    LPV->f11618 = 0;
+    if (f & 1) {
+        LPV->f11610 = func_00257010(7);
+    } else if (f & 2) {
+        LPV->f11610 = func_00257010(8);
+    } else if (f & 4) {
+        LPV->f11610 = func_00257010(9);
+    } else if (f & 8) {
+        LPV->f11610 = func_00257010(10);
+    } else if (f & 0x10) {
+        LPV->f11610 = func_00257010(11);
+    } else if (f & 0x20) {
+        LPV->f11610 = func_00257010(12);
+    } else if (f & 0x40) {
+        LPV->f11610 = func_00257010(13);
+    } else if (f & 0x80) {
+        LPV->f11610 = func_00257010(14);
+    } else if (f & 0x100) {
+        LPV->f11610 = func_00257010(0);
+        LPV->f11614 *= 50;
+    } else if (f & 0x200) {
+        LPV->f11610 = func_00257010(1);
+        LPV->f11614 *= 5;
+    } else if (ent->h12 != 0) {
+        Pt16 *cmd = (Pt16 *)MsGetRomPlyCommand(ent->h12, &pos);
+        LPV->f11608 = func_00256FA0(0x20);
+        LPV->f11610 = func_00256F58(pos, cmd);
+        LPV->f11618 = 1;
+    }
+}
 
 void func_002560D0(void *o, int id, float x, float y, float z, float rx, float ry, float rz, float sx, float sy, float sz);
 void func_002614E0(int ch, int idx);

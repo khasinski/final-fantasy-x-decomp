@@ -14,6 +14,7 @@
 
 void func_00245978(int x, int y, int w, int h);
 void func_002471B8(Task *o, int mode, int v);
+GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y);
 
 typedef struct TkSprPart {
     u8 u;
@@ -1333,7 +1334,34 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248D50);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248E18);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248ED8);
+GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y)
+{
+    if (n > 0) {
+        u8 *p = src + 4;
+        int y0 = y + 0x730;
+        int y1 = y0 + n;
+        int x0 = x + 0x700;
+        int x1 = x0 + n1;
+        int v1 = (p[1] + *(u16 *)(p + 6) - 1) << 4;
+        int u1 = (src[4] << 4) + 8;
+        int w1 = *(u16 *)(p + 4) << 4;
+        v1 += 8;
+        y0 <<= 4;
+        y1 <<= 4;
+        x0 <<= 4;
+        x1 <<= 4;
+
+        q[0].data = 0x6400000000008001UL;
+        q[0].reg = 0xF53530UL;
+        q[1].data = 0x156;
+        q[1].reg = u1 | ((u64)v1 << 16);
+        q[2].data = x0 | ((u64)y0 << 16);
+        q[2].reg = (u1 + w1) | ((u64)v1 << 16);
+        q[3].data = x1 | ((u64)y1 << 16);
+        q += 4;
+    }
+    return q;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248F98);
 

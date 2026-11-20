@@ -429,7 +429,74 @@ W11Bigint *func_002F6878(W11Reent *r, int i)
     return b;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F68B0);
+W11Bigint *func_002F68B0(W11Reent *ptr, W11Bigint *a, W11Bigint *b)
+{
+    W11Bigint *c;
+    int k, wa, wb, wc;
+    u32 carry, y, z;
+    u32 *x, *xa, *xae, *xb, *xbe, *xc, *xc0;
+    u32 z2, xi;
+
+    if (a->_wds < b->_wds) {
+        c = a;
+        a = b;
+        b = c;
+    }
+    k = a->_k;
+    wa = a->_wds;
+    wb = b->_wds;
+    wc = wa + wb;
+    if (wc > a->_maxwds) {
+        k++;
+    }
+    c = func_002F63F8(ptr, k);
+    for (x = c->_x, xa = x + wc; x < xa; x++) {
+        *x = 0;
+    }
+    xa = a->_x;
+    xae = xa + wa;
+    xb = b->_x;
+    xbe = xb + wb;
+    xc0 = c->_x;
+    for (; xb < xbe; xb++, xc0++) {
+        if ((y = *xb & 0xffff) != 0) {
+            x = xa;
+            xc = xc0;
+            carry = 0;
+            do {
+                z = (*x & 0xffff) * y + (*xc & 0xffff) + carry;
+                carry = z >> 16;
+                z2 = (*x++ >> 16) * y + (*xc >> 16) + carry;
+                carry = z2 >> 16;
+                ((u16 *)xc)[1] = z2;
+                ((u16 *)xc)[0] = z;
+                xc++;
+            } while (x < xae);
+            *xc = carry;
+        }
+        if ((y = *xb >> 16) != 0) {
+            x = xa;
+            xc = xc0;
+            carry = 0;
+            z2 = *xc;
+            do {
+                xi = *x++;
+                z = (xi & 0xffff) * y + (*xc >> 16) + carry;
+                carry = z >> 16;
+                ((u16 *)xc)[0] = z2;
+                ((u16 *)xc)[1] = z;
+                xc++;
+                z2 = (xi >> 16) * y + (*xc & 0xffff) + carry;
+                carry = z2 >> 16;
+            } while (x < xae);
+            *xc = z2;
+        }
+    }
+    for (xc0 = c->_x, xc = xc0 + wc; wc > 0 && !*--xc; --wc) {
+    }
+    c->_wds = wc;
+    return c;
+}
 
 W11Bigint *func_002F6AE0(W11Reent *ptr, W11Bigint *b, int k)
 {

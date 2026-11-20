@@ -49,7 +49,29 @@ int func_001D8CD0(int id) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsRegistCommandCue);
+int MsUseItem(int id, GsEnt48 *e, int v);
+
+int MsRegistCommandCue(int id, u8 *p, int a, int b, int c)
+{
+    int n = D_003172F0.f1511;
+    if (n < 0x3E) {
+        BtlChr *ch = MsGetChr(id);
+        GsEnt48 *e = &D_003172F0.ent48[n];
+        ch->fAA7++;
+        *e = *(GsEnt48 *)p;
+        e->f7 = b;
+        e->sub = c;
+        e->f4 = 0;
+        e->f2 = 0;
+        e->pad5[0] = 0;
+        e->pad5[1] = a;
+        e->id = id;
+        MsUseItem(id, (GsEnt48 *)p, -1);
+        D_003172F0.f1511 = n + 1;
+        return -1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsInsertCommandCue);
 
@@ -297,10 +319,11 @@ void func_001DAB28(Chr *a, int b, BtlChr *c)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", func_001DAB90);
 
-extern s8 D_00317306;
 void func_001AC528(void *dst, void *src, float a);
 void func_001AC698(void *dst, void *src, float a);
 void func_001AC200(void *dst, void *mat, void *src);
+
+extern s8 D_00317306;
 
 typedef struct Blk662D28_Sp {
     u8 pad0[0x7C0];
@@ -478,7 +501,38 @@ void MsPoisonProcess(int id, BtlChr *c) {
     D_003172F0.f2114 = -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsDefenseStartProcess);
+void func_001AC258(float *dst, float *a, float *b, float t);
+void func_001AC3D0(float *dst, float *a, float *b);
+
+void MsDefenseStartProcess(void)
+{
+    float pos0[4];
+    float pos2[4];
+    float posMid[4];
+    int i;
+
+    for (i = 0; i < 0x1F; i++) {
+        BtlChr *c = MsGetChr(i);
+        if (c->fA88 != 0) {
+            int s0 = c->f394;
+            int s2 = c->f393;
+            if (s0 != 0xFF) {
+                c->fD1 = 1;
+                MsGetChr(s0);
+                MsGetChrBtlPos(s2, pos2);
+                MsGetChrBtlPos(s0, pos0);
+                func_001AC258(posMid, pos2, pos0, (MsGetChrWidth(i) + MsGetChrWidth(s0)) + 5.0);
+                func_001AC3D0((float *)c->pad70, pos0, posMid);
+                MsVectorRect2Polar(pos2, c->pad70, (s32)&c->f1D4[3], 0, 0);
+                MsSetDirThetaMode(c);
+                MsSetMotion(i, ((c->f2D6 >> 13) & 1) ? 0x3D : 0x3C, 0, 0, 1, 0, 0);
+                if (func_001DAF88(MsGetChr(s2), 0)) {
+                    MsSetMotion(s2, 0x34, 0, 0, 1, 0, 0);
+                }
+            }
+        }
+    }
+}
 
 int MsDefenseProcess(void) {
     int r = 1;

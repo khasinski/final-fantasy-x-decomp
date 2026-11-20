@@ -368,7 +368,33 @@ void func_002B2B30(OpChain10 *pkt, int qwc, int prio)
     head->last = pkt;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2B88);
+extern char D_00575B00[];
+extern char D_00575B18[];
+extern char D_00575B30[];
+
+void func_002B2B88(void)
+{
+    OpChain10 *p = _chain_D_006F3960;
+    OpChain10 *prev = 0;
+
+    do {
+        u32 tag = p->tag & 0x70000000;
+
+        if (tag == 0x70000000) {
+            return;
+        }
+        if (tag != 0x20000000) {
+            func_00120108(D_00575B00);
+            func_00120108(D_00575B18, prev);
+            func_00120108(D_00575B30, p);
+            *(volatile OpChain10 **)0x70003F80 = prev;
+            *(volatile OpChain10 **)0x70003F90 = p;
+            __asm__ volatile("sw $0, 0x0($0)");
+        }
+        prev = p;
+        p = (OpChain10 *)p->next;
+    } while (1);
+}
 
 void op_wot_triger(s32 on) {
     if (on) {

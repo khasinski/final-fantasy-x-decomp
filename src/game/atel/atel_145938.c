@@ -2,6 +2,7 @@
 #define func_001478B8 _hdr_func_001478B8
 #define func_00146B40 _hdr_func_00146B40
 #define func_00147A28 _hdr_func_00147A28
+#define Ch_SoundSetId _hdr_Ch_SoundSetId
 #include "common.h"
 #include "ffx/q1.h"
 #include "ffx/r1.h"
@@ -12,6 +13,8 @@
 #undef func_001478B8
 #undef func_00146B40
 #undef func_00147A28
+#undef Ch_SoundSetId
+void Ch_SoundSetId(Chr *, int);
 
 void func_00145938(void) {
     D_0058E3F8 = 0x10001;
@@ -434,7 +437,57 @@ void func_00146FB8(int a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147048);
+extern u8 D_0058E431;
+
+void func_00147048(Actor *a, s32 arg1) {
+    u32 w38 = a->w38;
+    int b2 = (w38 >> 2) & 1;
+    int b8 = (w38 >> 8) & 1;
+    int b3 = (w38 >> 3) & 1;
+    float *pos;
+    int i;
+
+    a->w38 &= ~4;
+    a->w38 &= ~8;
+    a->w38 &= ~0x100;
+    pos = (float *)AtelGetPosWorkAdrs(a);
+    if (arg1 == 0 || (u32)(*(u8 *)&D_0058E3FC - 3) >= 2 || a->w40 != D_0058E404) {
+        if (b2 && AR(a)->stateAA == 1 && a->ptr9C != 0) {
+            Ch_GetPos(a->ptr9C, &pos[0], &pos[1], &pos[2]);
+            func_0013E850(a);
+            pos[13] = pos[8];
+        }
+        func_00145F78(a, b3, b8);
+        a->b33 &= 0x7F;
+        graphicPreviousLevelGetNameHash(a->ptr9C, pos[0], pos[1] - 0.1f, pos[2]);
+        Ch_ClothReset(a->ptr9C);
+        Ch_SetDirF(a->ptr9C, pos[8]);
+        func_00110300(a->ptr9C, pos[13]);
+        Ch_SoundSetId(a->ptr9C, *((u8 *)a + 0xAF));
+        SndEventSetPcToActorFoot(*((u8 *)a + 0xAF), a->id);
+        AtelRecoverFPFromBattle(a);
+        if (AR(a)->hA8 == 3 && D_0058E431 == 0) {
+            TkChPatchM160(a->ptr9C, 1);
+        }
+        if (AR(a)->hA8 == 7 && a->ptr9C != 0) {
+            if (AR(a)->hB14 & 1) {
+                graphicCharacterInstanceSetMeshSegmentAlpha((s32)a->ptr9C, 1, 1);
+            } else {
+                graphicCharacterInstanceSetMeshSegmentAlpha((s32)a->ptr9C, 1, 0);
+            }
+        }
+        if (AR(a)->hA8 == 0x5001) {
+            for (i = 0; i < 4; i++) {
+                int v = AR(a)->ent[i].h0 & ~0x8000;
+                if (v) {
+                    pppFpIDdispOn(v);
+                }
+            }
+        }
+        *(s32 *)((u8 *)a + 0xB10) |= 1;
+        a->w38 |= 1;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147290);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_145938/rodata", jtbl_0056AE30);

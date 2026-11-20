@@ -180,7 +180,44 @@ void *func_001F5918(void *list, int str, int x, int y, int a, int b, int c, int 
     return list;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F59F0);
+void *func_001F59F0(void *list, u8 *s, int x, int y, int a, int r, int g, int b, int alpha)
+{
+    Qword *p = (Qword *)list;
+    int ch;
+    int u0;
+    int v0;
+    int csa0;
+    int csa1;
+
+    if (*s < 0x30) {
+        ch = s[1] + 0xA0;
+    } else {
+        ch = *s - 0x30;
+    }
+    u0 = ((ch % 24) / 2) * 10;
+    v0 = (ch / 24) * 12;
+    csa0 = (a & 0xF) * 2 + (ch & 1);
+    csa1 = ((a >> 4) & 0xF) * 2 + (ch & 1);
+
+    p->ul64[0] = 0xE0AB400000008001UL;
+    p->ul64[1] = 0x43431EE43431EEUL;
+    p++;
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EBC, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EBC, 0, 0, csa1, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 1, y + 1);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 10, v0 + 12);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 11, y + 13);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EB8, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EB8, 0, 0, csa0, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x, y);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 10, v0 + 12);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 10, y + 12);
+    return p;
+}
 
 void TOMkpEasyStrFontM(int a, int b, int c)
 {
@@ -252,7 +289,35 @@ void func_001F60B0(int a, int b, int c)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", TOAdpFontM_ASCII);
+void *TOAdpFontM_ASCII(void *list, int str, int x, int y, int a, int r, int g, int b, int alpha)
+{
+    Qword *p = (Qword *)list;
+    char *s = (char *)str;
+    int ch = *s - 0x20;
+    int u0 = ((ch % 24) / 2) * 10;
+    int v0 = (ch / 24) * 12 + 0x90;
+    int csa0 = (a & 0xF) * 2 + (ch & 1);
+    int csa1 = ((a >> 4) & 0xF) * 2 + (ch & 1);
+
+    p->ul64[0] = 0xE0AB400000008001UL;
+    p->ul64[1] = 0x43431EE43431EEUL;
+    p++;
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EBC, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EBC, 0, 0, csa1, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 1, y + 1);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 10, v0 + 12);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 11, y + 13);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EB8, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EB8, 0, 0, csa0, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x, y);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 10, v0 + 12);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 10, y + 12);
+    return p;
+}
 
 void func_001F63B8(int a, int b, int c, int d)
 {
@@ -305,7 +370,35 @@ void *func_001F6628(void *list, int str, int x, int y, int a, int b, int c, int 
     return list;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F66E8);
+void *func_001F66E8(void *list, int str, int x, int y, int a, int r, int g, int b, int alpha)
+{
+    Qword *p = (Qword *)list;
+    char *s = (char *)str;
+    int ch = *s - 0x20;
+    int u0 = ((ch % 32) / 2) * 8;
+    int v0 = (ch / 32) * 10 + 0xC0;
+    int csa0 = (a & 0xF) * 2 + (ch & 1);
+    int csa1 = ((a >> 4) & 0xF) * 2 + (ch & 1);
+
+    p->ul64[0] = 0xE0AB400000008001UL;
+    p->ul64[1] = 0x43431EE43431EEUL;
+    p++;
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EBC, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EBC, 0, 0, csa1, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 1, y + 1);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 8, v0 + 10);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 9, y + 11);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EB8, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EB8, 0, 0, csa0, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x, y);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 8, v0 + 10);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 8, y + 10);
+    return p;
+}
 
 void func_001F6990(int a, int b, int c)
 {
@@ -344,7 +437,34 @@ void *func_001F6B18(void *list, int a, int b, int c, int d, int e, int f, int g,
     return list;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F6BD8);
+void *func_001F6BD8(void *list, char *s, int x, int y, int a, int r, int g, int b, int alpha)
+{
+    Qword *p = (Qword *)list;
+    int ch = *s - 0x20;
+    int u0 = ((ch % 32) / 2) * 8;
+    int v0 = (ch / 32) * 8 + 0xF0;
+    int csa0 = (a & 0xF) * 2 + (ch & 1);
+    int csa1 = ((a >> 4) & 0xF) * 2 + (ch & 1);
+
+    p->ul64[0] = 0xE0AB400000008001UL;
+    p->ul64[1] = 0x43431EE43431EEUL;
+    p++;
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EBC, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EBC, 0, 0, csa1, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 1, y + 1);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 8, v0 + 8);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 9, y + 9);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x13, 7, 8, 1, 0, 0x2EB8, 0, 0, 0, 1);
+    p = (Qword *)func_001FB9D0((GsAdPacket *)p, 0x3D80, 2, 0x14, 7, 8, 1, 0, 0x2EB8, 0, 0, csa0, 0);
+    p = (Qword *)func_001FBB30((Quad32 *)p, r, g, b, alpha);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0, v0);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x, y);
+    p = (Qword *)func_001FBAF0((Quad32 *)p, u0 + 8, v0 + 8);
+    p = (Qword *)func_001FBBB0((Quad32 *)p, x + 8, y + 8);
+    return p;
+}
 
 void TOInitAddPkt(void)
 {

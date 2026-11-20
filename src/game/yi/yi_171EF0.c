@@ -176,7 +176,36 @@ int func_001723D8(struct Q3Ent *p, int n)
     return (int)(d + ofs);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00172450);
+int func_00172450(SecHdr *hdr, int n, int total)
+{
+    int i;
+    int zero = 0;
+    int *p;
+
+    if (hdr->ofs[n] == 0) {
+        return 0;
+    }
+    i = n + 1;
+    p = hdr->ofs;
+    if (i < 0x1C) {
+        __asm__("" : "+r"(p));
+        if (zero) goto found;
+        do {
+            if (*(int *)((u8 *)p + (i << 2)) != 0) {
+                goto found;
+            }
+            i++;
+            __asm__("" : "+r"(i));
+        } while (i < 0x1C);
+        goto not_found;
+    found:
+        return *(int *)((u8 *)p + (i << 2)) - *(int *)((u8 *)p + (n << 2));
+    } else {
+        __asm__("" : "+r"(p));
+    }
+not_found:
+    return total - *(int *)((u8 *)p + (n << 2));
+}
 
 int func_001724C8(u32 group, int idx) {
     u32 size;
@@ -569,7 +598,37 @@ void func_00173450(float *m, float *n)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiGetBackColor);
+void yiGetBackColor(int *v)
+{
+    Sys597F00 *s = &D_00597F00;
+    float col[4];
+    int i;
+    int fl = s->w67F20;
+
+    if ((fl & 1) && (s->w67F20 & 4)) {
+        col[0] = s->b683A8;
+        col[1] = s->b683A9;
+        col[2] = s->b683AA;
+        col[3] = s->b683AB;
+        for (i = 0; i < 4; i++) {
+            __asm__(".set mips3");
+            col[i] = col[i] * s->f68230[i] + s->f68240[i];
+            if (col[i] < 0.0f) {
+                col[i] = 0.0f;
+                __asm__(".set mips4");
+            }
+            if (col[i] > 255.0f) {
+                col[i] = 255.0f;
+            }
+            v[i] = col[i];
+        }
+    } else {
+        v[0] = s->b683A8;
+        v[1] = s->b683A9;
+        v[2] = s->b683AA;
+        v[3] = s->b683AB;
+    }
+}
 
 void func_00173650(void *src) {
     Q3Px *p = src;
@@ -644,7 +703,39 @@ void func_00173828(float *x, float *y, float *z)
     *z = D_00597F00.f68374;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00173888);
+void func_00173888(int *v)
+{
+    Sys597F00 *s = &D_00597F00;
+    float col[4];
+    int i;
+
+    if (s->w67F20 & 4) {
+        col[0] = s->b68370;
+        col[1] = s->b68371;
+        col[2] = s->b68372;
+        col[3] = s->b68373;
+        for (i = 0; i < 4; i++) {
+            __asm__(".set mips3\n.macro bc1tl, lbl\n.purgem bc1tl\nnop\nbc1tl \\lbl\n.endm");
+            col[i] = col[i] * s->f68230[i] + s->f68240[i];
+            if (col[i] < 0.0f) {
+                col[i] = 0.0f;
+                __asm__(".set mips4");
+            }
+            if (col[i] > 255.0f) {
+                col[i] = 255.0f;
+            }
+        }
+        v[0] = col[0];
+        v[1] = col[1];
+        v[2] = col[2];
+        v[3] = col[3];
+    } else {
+        v[0] = s->b68370;
+        v[1] = s->b68371;
+        v[2] = s->b68372;
+        v[3] = s->b68373;
+    }
+}
 
 void func_001739D0(float x, float y, float z)
 {
@@ -690,7 +781,17 @@ int func_00173AF0(u32 i) {
     return D_00597F00.ent[i].h84;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", func_00173B30);
+int func_00173B30(u32 i)
+{
+    u8 unused[0x20];
+    int k = 0x68000;
+
+    if (i >= D_00597F00.w687B8) {
+        return -1;
+    }
+    __asm__ volatile("" : "+r"(k) : "r"(i), "r"(&D_00597F00) : "$2", "$3");
+    return 0;
+}
 
 int yiDObjToOMD(int a, int b) {
     return yiPacketConvToOMD(&D_00597F00, a, b);

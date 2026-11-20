@@ -281,7 +281,75 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppStartPart);
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppInitPdt);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppInitData);
+typedef struct PppDataSub1 {
+    u8 pad0[0x14];
+    s32 w14;
+    s32 w18;
+    s32 w1C;
+} PppDataSub1;
+
+typedef struct PppDataSub3 {
+    s32 w0;
+    s32 w4;
+} PppDataSub3;
+
+typedef struct PppDataHdr {
+    u8 pad0[6];
+    u16 n0;
+    u16 n1;
+    u16 n2;
+    u16 n3;
+    u8 padE[2];
+    s32 *p0;
+    PppDataSub1 *p1;
+    s32 *p2;
+    PppDataSub3 *p3;
+} PppDataHdr;
+
+void _pppInitPdt(void *arg0, void *arg1);
+
+void _pppInitData(void *arg0, void *arg1)
+{
+    PppDataHdr *a = (PppDataHdr *)arg0;
+    s32 base = (s32)arg0;
+    s32 *p0;
+    PppDataSub1 *p1;
+    s32 *p2;
+    PppDataSub3 *p3;
+    int i, j, k, l;
+
+    a->p0 = (s32 *)((s32)a->p0 + base);
+    a->p1 = (PppDataSub1 *)((s32)a->p1 + base);
+    a->p2 = (s32 *)((s32)a->p2 + base);
+    a->p3 = (PppDataSub3 *)((s32)a->p3 + base);
+    p0 = a->p0;
+    i = a->n0;
+    while (i-- != 0) {
+        *p0 += base;
+        _pppInitPdt((void *)*p0, arg1);
+        p0++;
+    }
+    p1 = a->p1;
+    j = a->n1;
+    while (j-- != 0) {
+        p1->w14 += base;
+        p1->w18 += base;
+        p1->w1C += base;
+        p1++;
+    }
+    p2 = a->p2;
+    k = a->n2;
+    while (k-- != 0) {
+        *p2 += base;
+        p2++;
+    }
+    p3 = a->p3;
+    l = a->n3;
+    while (l-- != 0) {
+        p3->w4 += base;
+        p3++;
+    }
+}
 
 void pppInitEnv(HeapMgr *m, HeapCfg *cfg, void *buf, int size)
 {

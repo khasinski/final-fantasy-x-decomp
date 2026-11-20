@@ -1,5 +1,7 @@
 /* tu_273 0x24b828-0x250d00: low; ~Tk (config/tu_map.tsv) */
 #define TkMsImportantGet _hdr_TkMsImportantGet
+#define TkMenuGetArmor _hdr_TkMenuGetArmor
+#define TkMenuGetWeapon _hdr_TkMenuGetWeapon
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -11,8 +13,13 @@
 #include "ffx/w8.h"
 #include "ffx/r6.h"
 #include "ffx/s6.h"
+#undef TkMenuGetWeapon
+#undef TkMenuGetArmor
 #undef TkMsImportantGet
 int TkMsImportantGet(int id);
+int TkMenuGetArmor(int idx);
+int TkMenuGetWeapon(int idx);
+void func_00237E28(int x, int y, void *w);
 void func_002274A0(int a, int b, int c, int d);
 
 void func_0024B828(void)
@@ -83,9 +90,46 @@ int func_0024BCE0(SysEntry *tbl, int i, int end) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024BD20);
+void func_0024BD20(void) {
+    SysEntry *table = (SysEntry *)0x1d57300;
+    int next = 0;
+    int count = func_002249A8();
+    int i;
+    for (i = 0; i < count; i++) {
+        if (table[i].b2 == 0) {
+            unsigned char tmp;
+            next = func_0024BCE0(table, next < i + 1 ? i + 1 : next, count);
+            if (next < 0) break;
+            func_001C03B0(table[i].h0, table[next].h0);
+            tmp = table[i].b2;
+            table[i].b2 = table[next].b2;
+            table[next].b2 = tmp;
+        }
+    }
+    func_002394F0();
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024BDF8);
+void func_0024BDF8(void) {
+    s32 buf;
+    SysEntry *e = (SysEntry *)0x1d57300;
+    int i;
+    int j;
+    int count = func_002249A8();
+
+    for (i = 0; i < 7; i++) {
+        for (j = 1; j >= 0; j--) {
+            D_0069BEA8[i][j] = 0;
+        }
+    }
+    for (i = 0; i < count; i++, e++) {
+        Unk1BFED8 *w = MsGetSaveWeapon(e->h0, &buf);
+        int c = w->b4;
+        if (c < 7) {
+            int b = w->b5 != 0;
+            D_0069BEA8[c][b]++;
+        }
+    }
+}
 
 int func_0024BEE8(u8 *buf, int ch, int start, int end) {
     for (;;) {
@@ -889,7 +933,79 @@ void func_0024ECB8(void)
 void func_0024ECE0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024ECE8);
+void func_00226770(int a, int b, int c, int d);
+
+void func_0024ECE8(Task *t, int x, int y, int idx, int mode)
+{
+    s32 pos;
+    SysEntry *e;
+    OfsTbl *cmd;
+    int dim;
+
+    switch (mode) {
+    case 0:
+        y -= t->x46 / 0x80;
+        idx += t->x32 * 2;
+        break;
+    case 1:
+        idx += t->x34 * 2;
+        break;
+    case 2:
+        idx += t->x32 * 2;
+        break;
+    }
+    switch (t->b43) {
+    case 0:
+        if (idx < 0 || idx >= func_0024CB28()) {
+            return;
+        }
+        e = SYS_TBL;
+        e += idx;
+        dim = e->b3 == 0;
+        func_00226D88(x, y, 0xA);
+        if (e->b2 != 0) {
+            func_00226890(e->h0, x, y, dim);
+            func_00226C78(x + 0xD3, y + 6, e->b2, dim);
+        }
+        break;
+    case 1:
+        if (idx < 0 || idx >= TkMenuImportantListMax()) {
+            return;
+        }
+        idx = ((u16 *)0x1D56B00)[idx];
+        if (idx != 0 && TkMsImportantGet(idx) != 0) {
+            func_00226D88(x, y, 1);
+            func_00226920(idx, x, y, 0);
+        }
+        break;
+    case 2:
+        e = SYS_TBL;
+        e += idx;
+        if (idx < 0 || idx >= func_0024CD68()) {
+            return;
+        }
+        dim = e->b3 == 0;
+        switch (e->b2) {
+        case 1:
+            cmd = MsGetRomPlyCommand(e->h0, &pos);
+            func_00226D88(x, y, 0x12);
+            func_00226770(e->h0, x, y, dim);
+            if (cmd->b25 != 0) {
+                func_00226C78(x + 0xD3, y + 6, cmd->b25, dim);
+            }
+            break;
+        case 2:
+            func_00226D88(x, y, 2);
+            break;
+        }
+        break;
+    }
+    if (t->b42 == 2 && t->b45 > 0 && t->x2C * 2 + t->ext[0] == idx) {
+        if ((func_00242040() / 2) & 1) {
+            func_002270F8(x + 2, y + 1, 0);
+        }
+    }
+}
 
 void func_0024EFC8(Task *t, int x, int y)
 {

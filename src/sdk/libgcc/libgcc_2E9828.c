@@ -8,7 +8,51 @@
 
 INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002E9828);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002E9938);
+#define INSERT_WORDS(d, ix0, ix1) \
+    do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
+
+double func_002E9938(double x, double *iptr) {
+    s32 i0, i1, j0;
+    u32 i;
+    EXTRACT_WORDS(i0, i1, x);
+    j0 = ((i0 >> 20) & 0x7ff) - 0x3ff;
+    if (j0 < 20) {
+        if (j0 < 0) {
+            INSERT_WORDS(*iptr, i0 & 0x80000000, 0);
+            return x;
+        } else {
+            i = (0x000fffff) >> j0;
+            if (((i0 & i) | i1) == 0) {
+                u32 high;
+                *iptr = x;
+                GET_HIGH_WORD(high, x);
+                INSERT_WORDS(x, high & 0x80000000, 0);
+                return x;
+            } else {
+                INSERT_WORDS(*iptr, i0 & (~i), 0);
+                return x - *iptr;
+            }
+        }
+    } else if (j0 > 51) {
+        u32 high;
+        *iptr = x;
+        GET_HIGH_WORD(high, x);
+        INSERT_WORDS(x, high & 0x80000000, 0);
+        return x;
+    } else {
+        i = ((u32)(0xffffffff)) >> (j0 - 20);
+        if ((i1 & i) == 0) {
+            u32 high;
+            *iptr = x;
+            GET_HIGH_WORD(high, x);
+            INSERT_WORDS(x, high & 0x80000000, 0);
+            return x;
+        } else {
+            INSERT_WORDS(*iptr, i0, i1 & (~i));
+            return x - *iptr;
+        }
+    }
+}
 
 void func_002E9B10(void)
 {

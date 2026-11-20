@@ -42,7 +42,33 @@ void func_001BCC50(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsDebugFullCommand);
+extern u8 D_0056E528[];
+
+void MsDebugFullCommand(void) {
+    int i, j;
+    int sz;
+    void *buf;
+
+    GetCD()->f10(0xD);
+    sz = GetCD()->f14(1);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E528, -1);
+    GetCD()->f0(1, buf, 0, 0);
+    GetCD()->f8(0);
+    for (i = 0; i < 0x12; i++) {
+        PartySlot *p = &D_0031EA9C[i];
+        u16 *src = (u16 *)((u8 *)MsGetExcelData((i <= 7) ? 0x12 : 0x13, buf, 0) + 0x3E);
+        u16 *dst = p->h3E;
+        for (j = 0; j < 6; j++) {
+            *dst |= *src++;
+            dst++;
+        }
+    }
+    func_0011D590((s32)buf, 5);
+    for (i = 0; i < 0x83; i++) {
+        D_003194D0.h3D6C[i / 16] |= (1 << (i & 15));
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BCE30);
 

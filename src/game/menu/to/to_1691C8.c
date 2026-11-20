@@ -237,9 +237,64 @@ int func_0016C318(void) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C328);
 
+typedef union {
+    u_long128 q;
+    struct {
+        u64 d0;
+        u64 d1;
+    } ad;
+    struct {
+        u32 w0;
+        u32 w1;
+        u32 w2;
+        u32 w3;
+    } w;
+} ToGifQword;
+
+#define SET_AD(p, d_val, r_val) \
+    { \
+        ToGifQword *_q = (p); \
+        _q->ad.d0 = (d_val); \
+        _q->ad.d1 = (r_val); \
+    }
+
+#define SET_W4(p, a, b, c, d) \
+    { \
+        ToGifQword *_q = (p); \
+        _q->w.w0 = (a); \
+        _q->w.w1 = (b); \
+        _q->w.w2 = (c); \
+        _q->w.w3 = (d); \
+    }
+
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C688);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C920);
+void func_0016C920(ToGifQword *p, int x, int y, int w, int h)
+{
+    p[0].q = 0;
+    SET_AD(&p[1], 0x1000000000000004UL, 0xE);
+    SET_AD(&p[2], 0x44, 0x42);
+    SET_AD(&p[3], 0x5001D, 0x47);
+    SET_AD(&p[4], 0, 0x49);
+    SET_AD(&p[5], 0, 0x14);
+    SET_AD(&p[6], 0x8022400000008001UL, 0x41414141);
+
+    x += 0x700;
+    y += 0x730;
+
+    SET_W4(&p[7], 0x20, 0x20, 0x20, 0x40);
+    SET_W4(&p[8], (x - 4) << 4, (y - 4) << 4, 0xFFFFFF, 0);
+    SET_W4(&p[9], 0x20, 0x20, 0x20, 0x40);
+    SET_W4(&p[10], (x + w + 4) << 4, (y - 4) << 4, 0xFFFFFF, 0);
+    SET_W4(&p[11], 0x20, 0x20, 0x20, 0x40);
+    SET_W4(&p[12], (x - 4) << 4, (y + h + 6) << 4, 0xFFFFFF, 0);
+    SET_W4(&p[13], 0x20, 0x20, 0x20, 0x40);
+    SET_W4(&p[14], (x + w + 4) << 4, (y + h + 6) << 4, 0xFFFFFF, 0);
+
+    p[15].q = 0;
+    p[15].w.w0 = 0x70000000;
+    p[0].w.w0 = 0x1000000E;
+}
 
 PartySlot *func_0016CAC8(int id) {
     return MsGetSavePlayerPtr(id);

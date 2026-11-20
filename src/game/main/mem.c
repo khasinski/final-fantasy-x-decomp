@@ -1,5 +1,6 @@
 /* tu_030 0x11ba20-0x11d598: medium; mem (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
@@ -86,7 +87,18 @@ char *func_0011BAB8(AllocHdr *p)
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BB08);
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", Sg_MemSetCurrentAddr);
+void Sg_MemSetCurrentAddr(int a)
+{
+    s32 ra_save;
+    MemBlk *hdr = (MemBlk *)((u8 *)a - 0x10);
+
+    if (a != 0) {
+        register void *t7 __asm__("$15") = &ra_save;
+        MIPS_STORE_RA(t7);
+        func_0011BFE0(ra_save);
+        hdr->pc = D_00580910;
+    }
+}
 
 /* DEBT(TYPE): global type guessed from the access width only */
 void func_0011BD70(u8 v)
@@ -677,7 +689,25 @@ INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D230);
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", user_malloc);
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D420);
+void func_0011BB08(void *h, u8 *s, s32 v);
+
+void *func_0011D420(s32 size, s32 align, u8 *name, s32 line)
+{
+    s32 ra_save;
+    void *p;
+
+    if (!ffx_debugmode) {
+        return 0;
+    }
+    {
+        register void *t7 __asm__("$15") = &ra_save;
+        MIPS_STORE_RA(t7);
+    }
+    func_0011BFE0(ra_save);
+    p = Sg_MemGet(0, 1, align + 1, size, 0);
+    func_0011BB08(p, name, line);
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D4B8);
 

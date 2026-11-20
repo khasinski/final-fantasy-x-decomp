@@ -246,7 +246,187 @@ void pppKeLnsLpTDraw(ScriptWork *base, T6_MsgBC58 *msg, ScriptCtx *ctx)
     w->hCC = D_0036F1F0.hE;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", func_0028BD28);
+typedef struct {
+    unsigned long FBP : 9;
+    unsigned long pad09 : 7;
+    unsigned long FBW : 6;
+    unsigned long pad22 : 2;
+    unsigned long PSM : 6;
+    unsigned long pad30 : 2;
+    unsigned long FBMSK : 32;
+} GsFrameBD28;
+
+typedef struct {
+    unsigned long ZBP : 9;
+    unsigned long pad09 : 15;
+    unsigned long PSM : 4;
+    unsigned long pad28 : 4;
+    unsigned long ZMSK : 1;
+    unsigned long pad33 : 31;
+} GsZbufBD28;
+
+typedef struct {
+    unsigned long OFX : 16;
+    unsigned long pad16 : 16;
+    unsigned long OFY : 16;
+    unsigned long pad48 : 16;
+} GsXyoffsetBD28;
+
+typedef struct {
+    unsigned long SCAX0 : 11;
+    unsigned long pad11 : 5;
+    unsigned long SCAX1 : 11;
+    unsigned long pad27 : 5;
+    unsigned long SCAY0 : 11;
+    unsigned long pad43 : 5;
+    unsigned long SCAY1 : 11;
+    unsigned long pad59 : 5;
+} GsScissorBD28;
+
+typedef struct {
+    GsFrameBD28 frame1;
+    u64 frame1addr;
+    GsZbufBD28 zbuf1;
+    u64 zbuf1addr;
+    GsXyoffsetBD28 xyoffset1;
+    u64 xyoffset1addr;
+    GsScissorBD28 scissor1;
+    u64 scissor1addr;
+} GsDrawEnvBD28;
+
+typedef struct {
+    u8 pad0[0x7C];
+    float f7C;
+    u8 pad80[0xC];
+    u8 b8C;
+    u8 b8D;
+    u8 pad8E[0x1E];
+    float fAC;
+    u8 padB0[0x10];
+    u8 mC0[0xC];
+    u16 hCC;
+    u8 padCE[2];
+    u8 bD0;
+    u8 bD1;
+} WkBD28;
+
+void func_002DD0E8(void *out, void *in);
+void func_002B39C0(int size);
+
+void func_0028BD28(int a, int b, int c)
+{
+    WkBD28 *w = (WkBD28 *)a;
+    int v0[4];
+    int v10[4];
+    int rect1[4];
+    int rect2[4];
+    u_long128 store_img[7];
+    int i;
+    int d0;
+    int d1;
+    u8 *db;
+    GsDrawEnvBD28 *s1;
+    int s6;
+    int s7;
+    int s2;
+    int s5;
+    int s4;
+    int s0_h;
+    float f20;
+    u8 *p;
+    int z;
+    int j;
+    int b8c;
+    int div;
+
+    if (w->hCC != D_0036F1F0.hE) {
+        w->f7C = 0.0f;
+        return;
+    }
+    if (w->f7C == 0.0f) {
+        return;
+    }
+    div = w->b8D + 1;
+    b8c = w->b8C;
+    i = div;
+    if ((b8c % div) != (c % div)) {
+        w->f7C *= w->fAC;
+        return;
+    }
+    db = (u8 *)Sg_GetDBuffDC(&i);
+    s1 = (GsDrawEnvBD28 *)((i & 1) ? (db + 0x1D0) : (db + 0x60));
+    s6 = s1->xyoffset1.OFY;
+    s7 = s1->xyoffset1.OFX;
+    rect2[0] = s1->scissor1.SCAX0;
+    rect2[1] = s1->scissor1.SCAY0;
+    rect2[2] = s1->scissor1.SCAX1;
+    rect2[3] = s1->scissor1.SCAY1;
+    rect2[0] = s7 + (rect2[0] << 4);
+    rect2[1] = s6 + (rect2[1] << 4);
+    rect2[2] = s7 + ((rect2[2] + 1) << 4);
+    rect2[3] = s6 + ((rect2[3] + 1) << 4);
+    func_002DD0E8(v10, w->mC0);
+    d0 = w->bD0;
+    d1 = w->bD1;
+    rect1[0] = v10[0] - (d0 << 3);
+    rect1[2] = v10[0] + (d0 << 3);
+    rect1[1] = v10[1] - (d1 << 3);
+    rect1[3] = v10[1] + (d1 << 3);
+    if (rect1[0] < rect2[0]) {
+        rect1[0] = rect2[0];
+    } else if (rect1[0] > rect2[2]) {
+        rect1[0] = rect2[2];
+    }
+    if (rect1[1] < rect2[1]) {
+        rect1[1] = rect2[1];
+    } else if (rect1[1] > rect2[3]) {
+        rect1[1] = rect2[3];
+    }
+    if (rect1[2] < rect2[0]) {
+        rect1[2] = rect2[0];
+    } else if (rect1[2] > rect2[2]) {
+        rect1[2] = rect2[2];
+    }
+    if (rect1[3] < rect2[1]) {
+        rect1[3] = rect2[1];
+    } else if (rect1[3] > rect2[3]) {
+        rect1[3] = rect2[3];
+    }
+    s2 = (rect1[2] - rect1[0] + 0xF) >> 4;
+    s5 = (rect1[3] - rect1[1] + 0xF) >> 4;
+    if (s2 <= 0 || s5 <= 0) {
+        w->f7C = 0.0f;
+        w->fAC = 0.0f;
+        return;
+    }
+    s4 = (s2 + 7) & ~7;
+    s7 = (rect1[0] - s7) >> 4;
+    s0_h = (s5 + 3) & ~3;
+    s6 = (rect1[1] - s6) >> 4;
+    f20 = 0.0f;
+    p = (u8 *)func_002B3888(0x3060);
+    ((void (*)(void *, u16, u16, int, s16, s16, s16, s16))func_002DAB10)(
+        store_img, s1->zbuf1.ZBP << 5, s1->frame1.FBW, 0x31, s7, s6, s4, s0_h);
+    p += 0x60;
+    func_002F8660(0);
+    func_002DADD0(store_img, (int)p);
+    func_002DA610(0, 0);
+    z = v10[2] >> 4;
+    for (i = 0; i < s5; i++) {
+        for (j = 0; j < s2; j++) {
+            u32 px = p[0] | (p[1] << 8) | (p[2] << 16);
+            if (px < (u32)z) {
+                f20 += 1.0f;
+            }
+            p += 3;
+        }
+        p += (s4 - s2) * 3;
+    }
+    func_002B39C0(0x3060);
+    f20 /= (float)(d0 * d1);
+    w->fAC = f20;
+    w->f7C *= f20;
+}
 
 void func_0028C150(char *base, ScriptCtx *ctx) {
     WkB0 *w = SLOT_WORK(WkB0, base, ctx, 0);
@@ -560,7 +740,76 @@ void func_0028CEF8(char *base, ScriptCtx *ctx) {
     w->b0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", pppKeHitChkPxB);
+typedef struct {
+    Vec4 pos;
+    u8 b10;
+    u8 pad11[3];
+    R6FPtr *p14;
+} WkHitChkPxB;
+
+typedef struct {
+    Vec4 p;
+    Vec4 d;
+    float r;
+    float t;
+    float pad[2];
+} BallLineReq;
+
+extern float D_005744A8;
+extern int _hit_D_006A3BC4 __asm__("D_006A3BC4.NON_MATCHING");
+int KeVu0ItrsBallLine(BallLineReq *req);
+void func_00282810(void *a, void *b, void *c);
+
+void pppKeHitChkPxB(ScriptWork *base, T6_MsgCDB0 *msg, ScriptCtx *ctx)
+{
+    BallLineReq ball;
+    Vec4 sp30;
+    WkHitChkPxB *s1 = SLOT_WORK(WkHitChkPxB, base, ctx, 2);
+    R6FPtr *a1;
+    Vec4 *s4;
+    Vec4 *s5;
+
+    if (s1->b10 & 1) {
+        return;
+    }
+    if (base->owner == msg->id) {
+        if (msg->idx != 0xFFFFFFFF) {
+            s1->p14 = (R6FPtr *)(ppvMng->p3C[msg->idx].base + (msg->ofs + 0xA0));
+        } else {
+            s1->p14 = (R6FPtr *)D_006EA450;
+        }
+        if (msg->bC != 0) {
+            s1->b10 |= 2;
+        }
+        if (base->owner == 0) {
+            return;
+        }
+    }
+    if (_hit_D_006A3BC4 == 0) {
+        a1 = s1->p14;
+        if (a1 != (R6FPtr *)D_006EA450) {
+            s5 = SLOT_WORK(Vec4, base, ctx, 0);
+            s4 = SLOT_WORK(Vec4, base, ctx, 1);
+            if (a1->f0 != 0.0f) {
+                ball.r = a1->f0;
+                func_002DD038(&ball.p, s5, a1->p4);
+                func_002DD0B0(&ball.d, s4);
+                if (KeVu0ItrsBallLine(&ball) != 0) {
+                    if (!(ball.t < D_005744A8) && !(ball.t > 1.0f)) {
+                        s1->b10 |= 1;
+                        func_002DD068(&sp30, &ball.d, ball.t);
+                        func_002DD020(&sp30, &sp30, &ball.p);
+                        func_002DD020(&s1->pos, s1->p14->p4, &sp30);
+                        if (s1->b10 & 2) {
+                            func_00282810(s4, &s1->pos, s5);
+                            base->owner = 0xFFFF0000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_0028D100(char *base, ScriptCtx *ctx)
 {

@@ -2,10 +2,12 @@
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q4.h"
-#include "ffx/r3.h"
 #define func_001E5538 _hdr_func_001E5538
 #define MsGetTargetList _hdr_MsGetTargetList
+#define MsGetDamageInfo _hdr_MsGetDamageInfo
+#include "ffx/r3.h"
 #include "ffx/u2.h"
+#undef MsGetDamageInfo
 #undef MsGetTargetList
 #undef func_001E5538
 #include "ffx/v3.h"
@@ -188,7 +190,51 @@ u8 *MsGetTargetLinkList(u8 id, int *out) {
     return res;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetRandomList);
+int MsGetDamageInfo(int a, int b, int *x, int *y, int *z);
+extern char D_0056F9F0[];
+
+u8 *MsGetTargetRandomList(u8 id, int *out, int shuffle) {
+    u8 *res = 0;
+    int count = 0;
+    int sp0;
+
+    if (MsBtlChrNumCheck(id) != 0) {
+        int i;
+        u8 *list;
+
+        res = MsGetChr(id)->fA40;
+        list = MsGetTargetList(id, &sp0);
+        for (i = 0; i < sp0; i++) {
+            u8 target = list[i];
+            int j;
+            int n = MsGetDamageInfo(id, target, 0, 0, 0);
+
+            for (j = 0; j < n; j++) {
+                if (count < 0x40) {
+                    res[count] = target;
+                    count++;
+                } else {
+                    MsBattleError(D_0056F9F0);
+                }
+            }
+        }
+        if (shuffle != 0) {
+            for (i = 0; i < count; i++) {
+                int idx1 = brnd(0x10) % count;
+                int off = count >= 3 ? brnd(0x10) % (count - 2) : 0;
+                int idx2 = (idx1 + off + 1) % count;
+                u8 tmp = res[idx1];
+
+                res[idx1] = res[idx2];
+                res[idx2] = tmp;
+            }
+        }
+    }
+    if (out != 0) {
+        *out = count;
+    }
+    return res;
+}
 
 u8 *func_001E58F8(u8 id, int *out)
 {
@@ -666,7 +712,52 @@ int func_001E6A30(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", func_001E6A40);
+extern char D_0056FAF0[];
+extern char D_0056FB18[];
+extern char D_0056FAD0[];
+
+int func_001E6A40(void) {
+    int ret = 5;
+    int i;
+
+    if (D_003172F0.f14 != 0 && D_003172F0.f15 == 1) {
+        D_003172F0.f15 = 0;
+    }
+    if (D_003172F0.f2114 >= 0 || D_003172F0.f2100 != 0 || (s8)D_003172F0.pad2108[0] != 0 || D_003172F0.f1511 != 0 || D_003172F0.f2074 != 0) {
+        D_003172F0.f2138 = -1;
+        ret = 0;
+        D_003172F0.f2139 = 0xDE;
+        if (D_003172F0.f3B != 0) {
+            func_002EF240(D_0056FAD0, D_003172F0.f2114, D_003172F0.f2100, (s8)D_003172F0.pad2108[0], D_003172F0.f1511);
+        }
+    } else {
+        for (i = 0; i < 0x1F; i++) {
+            BtlChr *c = MsGetChr(i);
+            int hit = 0;
+
+            if (c->fA88 != 0 && (c->f1C8 != 0 || c->fF2 != 0 || c->fABB != 0)) {
+                D_003172F0.f2139 = 0xDF;
+                D_003172F0.f2138 = i;
+                if (D_003172F0.f3B != 0) {
+                    func_002EF240(D_0056FAF0, i, c->f1C8, c->fF2, c->fABB);
+                }
+                hit = 1;
+            } else if (c->f10 != 0 && (c->fF6 != 0 || c->fAB0 != 0)) {
+                D_003172F0.f2139 = 0xDD;
+                D_003172F0.f2138 = i;
+                if (D_003172F0.f3B != 0) {
+                    func_002EF240(D_0056FB18, i, c->fF6, c->fAB0);
+                }
+                hit = 1;
+            }
+            if (hit != 0) {
+                ret = 0;
+                break;
+            }
+        }
+    }
+    return ret;
+}
 
 int func_001E6C08(void)
 {

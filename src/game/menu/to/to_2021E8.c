@@ -8,10 +8,83 @@
 #include "ffx/v4.h"
 #include "ffx/u3.h"
 
+typedef struct ToItem {
+    /* 0x00 */ V4Rgba4 col;
+    /* 0x04 */ U3Rect box;
+    /* 0x0C */ u8 pad0C[6];
+    /* 0x12 */ u8 f12;
+    /* 0x13 */ u8 f13;
+} ToItem;
+
+typedef struct ToWin {
+    /* 0x00 */ s16 h00;
+    /* 0x02 */ s16 h02;
+    /* 0x04 */ s16 font;
+    /* 0x06 */ u8 pad06[8];
+    /* 0x0E */ s16 h0E;
+    /* 0x10 */ u16 h10;
+    /* 0x12 */ u8 pad12[8];
+    /* 0x1A */ s16 style;
+    /* 0x1C */ s16 h1C;
+    /* 0x1E */ s16 h1E;
+    /* 0x20 */ s16 h20;
+    /* 0x22 */ s16 h22;
+    /* 0x24 */ s16 h24;
+    /* 0x26 */ s16 h26;
+    /* 0x28 */ s16 h28;
+    /* 0x2A */ s16 h2A;
+    /* 0x2C */ s16 h2C;
+    /* 0x2E */ s16 h2E;
+    /* 0x30 */ s16 h30;
+    /* 0x32 */ s16 h32;
+    /* 0x34 */ s16 h34;
+    /* 0x36 */ s16 h36;
+    /* 0x38 */ s16 h38;
+    /* 0x3A */ s16 h3A;
+    /* 0x3C */ s16 h3C;
+    /* 0x3E */ s16 h3E;
+    /* 0x40 */ U3Rect box40;
+    /* 0x48 */ V4Rgba4 col48;
+    /* 0x4C */ s32 w4C;
+    /* 0x50 */ u8 *p50;
+    /* 0x54 */ u8 *p54;
+    /* 0x58 */ u8 pad58[0x10];
+    /* 0x68 */ u8 *p68;
+    /* 0x6C */ u8 *p6C;
+    /* 0x70 */ u8 pad70[0xC];
+    /* 0x7C */ u8 *cur;
+    /* 0x80 */ u8 *p80;
+    /* 0x84 */ u8 *p84;
+    /* 0x88 */ u8 *p88;
+    /* 0x8C */ s32 w8C;
+    /* 0x90 */ s32 w90;
+    /* 0x94 */ s32 w94;
+    /* 0x98 */ s32 w98;
+    /* 0x9C */ s32 w9C;
+    /* 0xA0 */ s32 wA0;
+    /* 0xA4 */ s32 wA4;
+    /* 0xA8 */ ToItem itemA8;
+    /* 0xBC */ ToItem itemBC;
+    /* 0xD0 */ u8 padD0[0x24];
+    /* 0xF4 */ s32 wF4;
+    /* 0xF8 */ s32 wF8;
+    /* 0xFC */ s32 wFC;
+} ToWin;
+
+extern u8 D_00323910[];
+int TOGetChangeMacroWidth(int a, u8 *b, int c);
+
 void *TOGetFFXToAlbhedTblAdrs(void)
 {
     return &D_006673D8;
 }
+
+typedef struct AlbhedEnt {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+} AlbhedEnt;
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_002021F8);
 
@@ -442,7 +515,40 @@ int func_00203198(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TOFirstInitMessageNamesp);
+int _TOFirstInitMessageNamesp(ToWin *win)
+{
+    s16 w = 0;
+    s16 h = 0;
+    u8 *p;
+    s16 w0;
+
+    win->h38 = 0;
+    win->h3A = 0;
+    win->h3C = 0;
+    win->h3E = 0;
+    p = win->p80;
+    while (*p != 0) {
+        p = (u8 *)_TOGetMessageWH(win->font, p, &w, &h, win->style, win->h10 | 3);
+        if (win->h22 == 1) {
+            if (w > 0) {
+                w += TOGetChangeMacroWidth(0, D_00323910, win->style);
+            }
+            w0 = w;
+            h = 0;
+        } else {
+            h = 0;
+            w0 = 0;
+        }
+        p = (u8 *)_TOGetMessageWH(win->font, p, &w, &h, win->style, win->h10 | 1);
+        if (win->h38 < w0 + w) {
+            win->h38 = w0 + w;
+        }
+        if (win->h3A < h) {
+            win->h3A = h;
+        }
+    }
+    return 0;
+}
 
 int _TOInitMessageWaitNamesp(R4Menu *o)
 {

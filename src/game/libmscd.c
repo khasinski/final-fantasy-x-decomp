@@ -423,7 +423,69 @@ int func_001632B0(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_001632D8);
+extern s8 _mscd_D_0030DE24 __asm__("D_0030DE24.NON_MATCHING");
+extern s8 _mscd_D_0030DE25 __asm__("D_0030DE25");
+extern int _mscd_D_00595F50 __asm__("D_00595F50.NON_MATCHING");
+extern s32 _mscd_D_0030DE18 __asm__("D_0030DE18.NON_MATCHING");
+extern s32 dvd_hdd_copy_system_cnf_buff;
+int func_002EEE88(const void *a, const void *b, int n);
+
+int func_001632D8(void)
+{
+    int s;
+    int r;
+
+    if (func_002E1F00() == 1) {
+    next_outer:
+        for (;;) {
+            if (func_002E1700(1) == 2) {
+                if (func_002E1F00() != 1) {
+                check_de25:
+                    if (_mscd_D_0030DE25 == 0) {
+                        return 0;
+                    }
+                    if (dvd_hdd_copy_system_cnf_buff == 0) {
+                        return 1;
+                    }
+                    func_0017135C(1);
+                    func_0015B350();
+                    s = func_00163188(1, 1);
+                    func_002F8660(0);
+                    if (func_002E19C0(s, 1, _mscd_D_00595F50, &_mscd_D_0030DE18) == 0) {
+                        goto next_outer;
+                    }
+                    while ((r = func_0015B850()) != 0) {
+                        if (r != -1) {
+                            goto next_outer;
+                        }
+                        func_0017135C(1);
+                    }
+                    func_002F8660(0);
+                    ((char *)_mscd_D_00595F50)[0x20] = 0;
+                    if (func_002EEE88((void *)_mscd_D_00595F50, (void *)dvd_hdd_copy_system_cnf_buff, 0x20) == 0) {
+                        return 0;
+                    }
+                    for (;;) {
+                        if (func_002E1700(1) == 2) {
+                            if (func_002E1F00() == 1) {
+                                goto next_outer;
+                            }
+                            goto check_de25;
+                        }
+                        func_0017135C(1);
+                    }
+                } else {
+                    _mscd_D_0030DE24 = 1;
+                    func_0017135C(1);
+                }
+            } else {
+                _mscd_D_0030DE24 = 1;
+                func_0017135C(1);
+            }
+        }
+    }
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", Sa_CdRead_task);
 
@@ -445,15 +507,26 @@ int func_00163710(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", cd_decode_data);
-
-void func_00163958(Q3Obj20 *o) {
-    func_00171530(D_00591F50, 0x4000, o->fn, o);
-}
-
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163970);
-
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163D40);
+typedef struct Rec78E530View {
+    s32 w00;
+    s32 w04;
+    s32 w08;
+    s32 w0C;
+    s32 w10;
+    s32 w14;
+    s32 w18;
+    s32 w1C;
+    s32 w20;
+    s32 id;
+    s32 w28;
+    s32 w2C;
+    s8 b30;
+    s8 used;
+    s8 flag;
+    s8 b33;
+    s8 b34;
+    u8 pad35[3];
+} Rec78E530View;
 
 typedef struct Vt78E498View {
     void *f00;
@@ -482,6 +555,104 @@ typedef struct Vt78E498View {
     void *f8C;
     void *f90;
 } Vt78E498View;
+
+int func_00255CF8(u8 *dst, u8 *src, int len, int buf);
+int func_00255EC8(u8 *dst, u8 *src, int len, int buf);
+
+void cd_decode_data(s32 a)
+{
+    Rec78E530View *rec = (Rec78E530View *)a;
+    u8 *p = (u8 *)rec->w04;
+    u32 sz = rec->w2C;
+    int out_sz = p[1] + (p[2] << 8) + (p[3] << 16) + (p[4] << 24);
+
+    if (sz <= 0x1800) {
+        func_002EEF1C((void *)D_00595F50, p, sz);
+        sa_decode((int)p, (u8 *)D_00595F50);
+    } else {
+        int rem = sz - 0x1800;
+        u8 *dst;
+        int i;
+
+        __builtin_memcpy((void *)D_00595F50, p + rem, 0x1800);
+        dst = p + out_sz - 1;
+        i = 0;
+        if (rem > 0) {
+            do {
+                *dst-- = p[rem - i - 1];
+                i++;
+            } while (i < rem);
+        }
+        dst++;
+        switch (*dst) {
+        case 1:
+            func_00255CF8(dst, p, rem, D_00595F50);
+            break;
+        case 2:
+            func_00255EC8(dst, p, rem, D_00595F50);
+            break;
+        }
+    }
+}
+
+void func_00163958(Q3Obj20 *o) {
+    func_00171530(D_00591F50, 0x4000, o->fn, o);
+}
+
+INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163970);
+
+extern s8 _mscd_D_005661F4 __asm__("D_005661F4");
+extern G1Rec78E530 _mscd_D_0078E530[] __asm__("D_0078E530.NON_MATCHING");
+
+void func_00163D40(SysVt *cd, G1Rec78E530 *rec, int idx)
+{
+    int i;
+    int j;
+    int cnt;
+
+    if (_mscd_D_005661F4 == 0) {
+        ((Vt78E498View *)cd)->w74 = idx;
+        cnt = 0;
+        for (i = 0; i < 0x40; i++) {
+            if (_mscd_D_0078E530[i].used != 0) {
+                cnt++;
+            }
+        }
+        if (cnt == 1) {
+            for (j = 0; j < 16; j++) {
+                if (func_002E1BA0(((Rec78E530View *)rec)->w1C) == 1) {
+                    break;
+                }
+                func_0017135C(1);
+            }
+            if (j != 16) {
+                for (;;) {
+                    cnt = 0;
+                    for (i = 0; i < 0x40; i++) {
+                        if (_mscd_D_0078E530[i].used != 0) {
+                            cnt++;
+                        }
+                    }
+                    if (cnt != 1) {
+                        while (func_002E1FB8() == 0) {
+                            func_0017135C(1);
+                        }
+                        break;
+                    }
+                    if (func_00163710() == 0) {
+                        break;
+                    }
+                    func_0017135C(1);
+                }
+            }
+        }
+    }
+    ((Vt78E498View *)cd)->w70 = 0;
+    ((Vt78E498View *)cd)->w74 = -1;
+    cd->fd5C = -1;
+    rec->used = 0;
+    rec->id = 0;
+}
 
 void func_00163970(SysVt *cd, G1Rec78E530 *rec, int idx);
 void func_00163D40(SysVt *cd, G1Rec78E530 *rec, int idx);
@@ -556,7 +727,63 @@ INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164060);
 
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164340);
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164648);
+extern char D_0056BB90[];
+extern char _f4648_D_0056BB20[] __asm__("D_0056BB20.NON_MATCHING");
+extern char _f4648_D_0056BBB8[] __asm__("D_0056BBB8.NON_MATCHING");
+extern s32 _f4648_D_0030DDF8 __asm__("D_0030DDF8.NON_MATCHING");
+extern SysVt _f4648_D_0078E498 __asm__("D_0078E498.NON_MATCHING");
+extern char _f4648_D_0078F330[][0x80] __asm__("D_0078F330");
+
+int func_00164648(int a0, int a1, int a2, int a3, Rec78E530View *a4)
+{
+    int i;
+    Rec78E530View *rec;
+    char *s;
+
+    for (i = 0; i < 0x40 && _mscd_D_0078E530[i].used != 0; i++)
+        ;
+    if (i == 0x40) {
+        func_001577A8(D_0056BB90, _f4648_D_0056BB20, 0x604);
+    }
+    rec = (Rec78E530View *)&_mscd_D_0078E530[i];
+    rec->used = 1;
+    rec->w04 = a1;
+    rec->w08 = -1;
+    rec->w28 = -1;
+    if (a4 == 0) {
+        rec->w0C = 0;
+        rec->w10 = 0;
+        rec->w14 = 0;
+        rec->w18 = 0;
+    } else {
+        rec->w0C = a4->w0C;
+        rec->w10 = a4->w10;
+        rec->w14 = a4->w14;
+        rec->w18 = a4->w18;
+    }
+    rec->w20 = a3;
+    _f4648_D_0030DDF8++;
+    if (_f4648_D_0030DDF8 > 0xFFFF) {
+        _f4648_D_0030DDF8 = 1;
+    }
+    rec->id = _f4648_D_0030DDF8;
+    rec->w00 = a2;
+    rec->w2C = a2;
+    rec->w1C = a0;
+    s = _f4648_D_0056BBB8;
+    if (((Vt78E498View *)&_f4648_D_0078E498)->w18 == 0) {
+        int j;
+
+        for (j = 0; j < 0x80; j++) {
+            if ((_f4648_D_0078F330[i][j] = s[j]) == 0) {
+                break;
+            }
+        }
+    }
+    rec->b33 = 0;
+    rec->b34 = 0;
+    return _f4648_D_0030DDF8;
+}
 
 extern char D_0056BC00[];
 extern char D_0056BC18[];
@@ -861,7 +1088,71 @@ void func_00165B08(void) {
     func_002F8660(2);
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", printf_write);
+extern s32 _pw_D_0030DE48 __asm__("D_0030DE48.NON_MATCHING");
+extern char _pw_D_00596070[0x80][0x28] __asm__("D_00596070.NON_MATCHING");
+
+void printf_write(void)
+{
+    int idx;
+    int i;
+    int fd;
+    int len;
+    int total;
+    char *s;
+    char *buf;
+    char *p;
+
+    if (FFXIsPC() == 1 && D_0030DE4C != 0) {
+        switch (D_0030DE4D) {
+        case 0:
+            break;
+        case 1:
+            idx = _pw_D_0030DE48;
+            fd = func_002FC4E0(D_0056BD40, 0x602);
+            if (fd < 0) {
+                return;
+            }
+            for (i = 0; i < 0x80; i++) {
+                s = _pw_D_00596070[idx];
+                len = func_002F0840(s);
+                if (len != 0) {
+                    func_002FCD90(fd, s, len);
+                }
+                idx++;
+                idx &= 0x7F;
+            }
+            func_002FC768(fd);
+            break;
+        case 2:
+            idx = _pw_D_0030DE48;
+            total = 0;
+            for (i = 0; i < 0x80; i++) {
+                char *s0 = _pw_D_00596070[idx];
+                idx++;
+                idx &= 0x7F;
+                total += func_002F0840(s0);
+            }
+            if (total != 0) {
+                buf = (char *)user_malloc(total, 10, (const char *)D_0056BB20, 0x928);
+                idx = _pw_D_0030DE48;
+                p = buf;
+                for (i = 0; i < 0x80; i++) {
+                    s = _pw_D_00596070[idx];
+                    len = func_002F0840(s);
+                    if (len != 0) {
+                        func_002F0C10(p, s, len);
+                        p += len;
+                    }
+                    idx++;
+                    idx &= 0x7F;
+                }
+                func_0011D590((s32)buf, 10);
+            }
+            break;
+        }
+        _pw_D_0030DE48 = 0;
+    }
+}
 
 Rec595F6C *func_00165D20(int type, int id)
 {

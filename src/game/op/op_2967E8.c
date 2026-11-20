@@ -72,12 +72,6 @@ int func_002971F0(int a, int b, int c, int d) /* DEBT(TYPE): b..d only forwarded
     return opu_et_unit(a + 0x10, b, c, d);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00297210);
-
-void func_002973A8(int a) {
-    func_00297210(D_0054D5E8[0], a);
-}
-
 typedef struct R6Obj10 {
     u8 pad0[0x10];
     s16 *p10;
@@ -91,6 +85,51 @@ typedef struct OpuEndUnit {
     u8 pad0[0x14];
     u16 h14;
 } OpuEndUnit;
+
+void func_00297210(R6Obj *obj, int a)
+{
+    R6Obj10 *o = (R6Obj10 *)obj;
+    int eff = func_00299E68(o, a, 0);
+    SlotEntry *e;
+    int i;
+    s16 *p;
+    int idx;
+
+    if (eff != 0xFF) {
+        e = owu_eff_status;
+        for (i = 0; i < 0x200; i++, e++) {
+            if (e->b1C == eff) {
+                opus_free_eff_status(e->key);
+            }
+        }
+        func_00299EE0((char *)o, a);
+        for (p = o->p10; (idx = *p) >= 0; p++) {
+            if (((ScriptSub *)(o->p20 + (idx << 8)))->b1E == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+        for (p = o->p14; (idx = *p) >= 0; p++) {
+            if (((ScriptSub *)(o->p20 + (idx << 8)))->b1E == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+        for (p = o->p18; (idx = *p) >= 0; p++) {
+            if (((ScriptSub *)(o->p20 + (idx << 8)))->b1E == eff) {
+                func_00295EB8((IdList *)o, idx);
+                p--;
+                opus_draw_off((IdList *)o, idx);
+            }
+        }
+    }
+}
+
+void func_002973A8(int a) {
+    func_00297210(D_0054D5E8[0], a);
+}
 
 void func_002973B8(R6Obj *obj, int a)
 {
@@ -233,7 +272,64 @@ found:
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_monster_free);
+extern char D_00574BD8[];
+extern char D_00574C08[];
+extern char D_00574C30[];
+extern char D_00574C60[];
+void func_002996E0(Chr *key);
+void op_mdc_mem_transfer_cue_free(Chr *key);
+int func_00298A80(Chr *key);
+void opus_mdc_free(int res, Chr *chr, void *addr);
+extern ResEntry _mfree_owu_chr_status[] __asm__("owu_chr_status.NON_MATCHING");
+extern char _mfree_D_00764A30[] __asm__("D_00764A30.NON_MATCHING");
+extern HandlePool _mfree_D_00703E20 __asm__("D_00703E20.NON_MATCHING");
+
+void op_et_monster_free(Chr *key)
+{
+    int i = opus_get_chr_status_index(key, 0, 0);
+    ResEntry *e;
+    int idx;
+    R6Obj *o;
+    int n;
+    int mask;
+    int j;
+
+    if (i < 0) {
+        if (D_007649A0 == 0) {
+            func_00120108(D_00574BD8);
+            func_002EA328(1);
+        }
+        func_00120108(D_00574C08);
+        return;
+    }
+    e = &_mfree_owu_chr_status[i];
+    op_et_bindeff_off(e->chr);
+    func_002996E0(e->chr);
+    op_et_astatus_effect_off(e->chr);
+    op_mdc_mem_transfer_cue_free(key);
+    func_00120108(D_00574C30, e->key, e->chr);
+    if (func_00298A80(e->chr) < 3) {
+        if (e->w8 != 0) {
+            idx = func_00296390(e->w8);
+            if (idx < 0) {
+                func_00120108(D_00574C60);
+            } else {
+                o = (R6Obj *)_mfree_D_00764A30;
+                n = func_00299E68(o, e->w8, 0);
+                mask = 0x10000;
+                for (j = 0; j < n; j++) {
+                    mask <<= 1;
+                }
+                op_oef2_sep_free_all(mask);
+                func_002973A8(_mfree_D_00703E20.b[idx]);
+                _mfree_D_00703E20.b[idx] = 0;
+                _mfree_D_00703E20.b60[idx] = 0;
+                opus_mdc_free(e->w8, key, o->pA8);
+            }
+        }
+    }
+    func_00298740(i);
+}
 
 void func_002979B8(void) {
     int i;
@@ -434,6 +530,24 @@ void op_event_effect_free(void)
     ((int (*)(void))func_00299AD8)(); /* DEBT(CAST): the original call site sees an int-returning declaration */
     D_00703FFB = 0;
 }
+
+typedef struct HwRegs2008250_Full {
+    u8 pad0[0x40];
+    u16 h40;
+    u8 pad42[0x3E];
+    int w80;
+    int w84;
+    int w88;
+    int w8C;
+    int w90;
+    int w94;
+    int w98;
+    u8 pad9C[0x14];
+    int wB0;
+    int wB4;
+    int wB8;
+    int wBC;
+} HwRegs2008250_Full;
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_eff);
 
@@ -878,7 +992,82 @@ void func_00298EE0(Chr *key) {
     D_0054D5E0 = obj;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_bindeff);
+extern char D_00575110[];
+extern char D_00575138[];
+extern char D_00575178[];
+
+void op_et_bindeff(Chr *key)
+{
+    extern HwRegs2008250_Full _bind_D_2008250 __asm__("D_2008250");
+    extern u8 _bind_D_00703FF5 __asm__("D_00703FF5.NON_MATCHING");
+    HwRegs2008250_Full *hw = &_bind_D_2008250;
+    int i;
+    ResEntry *e;
+    int h;
+    u16 h40;
+    s16 saved_h40;
+    int id;
+
+    if (_bind_D_00703FF5 != 0) {
+        return;
+    }
+    if (key != 0) {
+        i = opus_get_chr_status_index(key, 0, 0);
+        if (i < 0) {
+            return;
+        }
+        e = &owu_chr_status[i];
+        if (e->flags & 1) {
+            return;
+        }
+        h = e->w8;
+        if (h == 0) {
+            return;
+        }
+    }
+    if (D_00764990.mirror != 0) {
+        h40 = hw->h40;
+        saved_h40 = hw->h40;
+        if (key == 0) {
+            key = (Chr *)opd_target_handle_by_index(0);
+            i = opus_get_chr_status_index(key, 0, 0);
+            h = e->w8;
+            if (func_00297A10(h) < 0) {
+                func_00120108(D_00575110);
+                return;
+            }
+            h40 = hw->h40;
+        }
+        if ((h40 & 2) && (u32)h <= 0x1FFFFFF) {
+            h = hw->w88;
+            goto ok;
+        }
+        if (h40 != 0) {
+            if (h == 0) {
+                return;
+            }
+            hw->h40 = 0;
+        }
+    }
+    if (func_00296390(h) < 0) {
+        func_00120108(D_00575138, e->key, key, h);
+        if (D_00764990.mirror != 0) {
+            hw->h40 = saved_h40;
+        }
+        return;
+    }
+ok:
+    func_00120108(D_00575178, e->key, key, h);
+    id = i + 0x40000000;
+    op_et_eff(h, 0, 4, id + 0x400);
+    op_et_eff(h, 0, 5, id + 0x500);
+    op_et_eff(h, 0, 6, id + 0x600);
+    op_et_eff(h, 0, 7, id + 0x700);
+    e->flags = (e->flags | 1) & 0xFFFD;
+    if (D_00764990.mirror != 0) {
+        hw->h40 = saved_h40;
+    }
+}
 
 void op_et_bindeff_off(Chr *key)
 {
@@ -1455,7 +1644,62 @@ int func_0029A3D8(OpuEndHost *h)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opus_end_all_sub);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_astatus_effect_change);
+extern ScriptSub *D_00551F00;
+extern char D_00575338[];
+extern SlotEntry _astatus_owu_eff_status[] __asm__("owu_eff_status.NON_MATCHING");
+extern HandlePool _astatus_D_00703E20 __asm__("D_00703E20");
+
+#define MMI_SQ_SW_ZERO(p) __asm__ volatile("sq $0, 0(%0); sw $0, 0x10(%0)" : : "r"(p) : "memory")
+
+void op_et_astatus_effect_change(Chr *key, int v)
+{
+    int i = opus_get_chr_status_index(key, 0, 0);
+    int id;
+    int e;
+    register ScriptSub *sub __asm__("$16");
+    u16 bits;
+    s16 *p;
+
+    if (i >= 0) {
+        ResEntry *ce = &owu_chr_status[i];
+
+        id = i + 0x60004000;
+        func_00120108(D_00575338, ce->key, key, v);
+        e = opus_get_eff_status_index((Chr *)id, 0, 0);
+        if (e <= 0) {
+            opu_et_unit(_astatus_D_00703E20.cur, 0, 0x40, id);
+            sub = D_00551F00;
+        } else {
+            SlotEntry *se = &_astatus_owu_eff_status[e];
+
+            sub = se->sub;
+        }
+        bits = (v & 1) << 1;
+        if (v & 4) {
+            bits |= 1;
+        }
+        if (v & 0x20) {
+            bits |= 4;
+        }
+        if (v & 2) {
+            bits |= 8;
+        }
+        p = (s16 *)op_oef2_obj_a_get(_astatus_D_00703E20.cur, 0, 0x40);
+        if (!(bits & 8)) {
+            if (!(sub->hB0 & 0xF)) {
+                MMI_SQ_SW_ZERO(sub);
+                sub->reg[0] = (int)((char *)p + *p);
+            }
+        } else {
+            if (!(sub->hB0 & 8)) {
+                p++;
+                MMI_SQ_SW_ZERO(sub);
+                sub->reg[0] = (int)((char *)p + *p);
+            }
+        }
+        sub->hB0 = bits;
+    }
+}
 
 void op_et_astatus_effect_off(Chr *key)
 {

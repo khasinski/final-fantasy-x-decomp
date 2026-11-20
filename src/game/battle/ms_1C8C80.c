@@ -4,6 +4,8 @@
 #define MsInsertBtlCommand _hdr_MsInsertBtlCommand
 #define MsInsertInputCue _hdr_MsInsertInputCue
 #define MsInsertCommandCue _hdr_MsInsertCommandCue
+#define MsGetChrCursorFlag _hdr_MsGetChrCursorFlag
+#define MsGetChrDist _hdr_MsGetChrDist
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -15,9 +17,13 @@
 #undef MsInsertBtlCommand
 #undef func_001CB7A0
 #undef MsStructClear
+#undef MsGetChrCursorFlag
+#undef MsGetChrDist
 
 int MsInsertInputCue(int id, int a, int b, int c, int d, int e);
 int MsInsertCommandCue(int id, GsEnt48 *e, int n, int a, int b, int c, int d);
+s8 MsGetChrCursorFlag(int id);
+s8 MsGetChrDist(int id);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C8C80);
 
@@ -167,7 +173,62 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C9920);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E6C0);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E740);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CA248);
+u8 *MsOrderCalc(int *n);
+int MsRegistInputCue(int id, int a, int b, int c);
+void MsLimitTypeTurnCheck(int id, BtlChr *c);
+
+int func_001CA248(void) {
+    int count;
+    u8 *order;
+    int i;
+
+    if ((s8)D_003172F0.pad11[0] != 0 || D_003172F0.f1510 != 0) {
+        return 0;
+    }
+    MsOrderInit();
+    for (i = 0; i < 31; i++) {
+        register BtlChr *c __asm__("$4") = MsGetChr(i);
+        __asm__ volatile("" : "+r"(c));
+        if (c->fAA6 == 0 && c->fA88 != 0 && c->fA8C == 0 && !((c->f2C6 >> 2) & 1) && c->f31C == 0 && (s8)c->padA96[0] != 0) {
+            MsOrderRegist(i);
+        }
+    }
+    order = MsOrderCalc(&count);
+    if (count > 0) {
+        if (MsRegistInputCue(*order, 0, 1, 0) != 0) {
+            BtlChr *c = MsGetChr(*order);
+            MsLimitTypeTurnCheck(*order, c);
+        }
+    } else {
+        D_003172F0.pad1512[0]++;
+        if ((s8)D_003172F0.pad1512[0] >= (s8)D_003172F0.pad1512[1]) {
+            D_003172F0.pad1512[0] = 0;
+            for (i = 0; i < 31; i++) {
+                BtlChr *c = MsGetChr(i);
+                if (c->fAA6 == 0 && c->fA88 != 0 && c->fA8C == 0 && !((c->f2C6 >> 2) & 1)) {
+                    register int next_ctb __asm__("$3");
+                    if (c->f392 < 0xFF) {
+                        c->f392++;
+                    }
+                    next_ctb = c->f31C;
+                    __asm__ volatile("" : "+r"(next_ctb));
+                    next_ctb = next_ctb - 1;
+                    if (next_ctb <= 0) {
+                        next_ctb = 0;
+                        c->fAA8 = 3;
+                        if ((s8)c->padA96[0] == 0) {
+                            next_ctb = c->f31D;
+                        }
+                    } else if ((s8)D_003172F0.pad2A[1] != 0) {
+                        next_ctb = 1;
+                    }
+                    c->f31C = next_ctb;
+                }
+            }
+        }
+    }
+    return -1;
+}
 
 int func_001CA438(BtlChr *c) {
     int r = 0;
@@ -325,7 +386,77 @@ int MsSetBerserkCommand(int id, BtlChr *c, GsEnt48 *e, int arg, int mode) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsSetProvokingCommand);
+int MsSetProvokingCommand(int id, BtlChr *c, GsEnt48 *e, int arg) {
+    int r = 0;
+
+    if (e != 0) {
+        int prov_id = c->f284;
+        register int k __asm__("$20") = c->f386;
+        register int cmd __asm__("$7");
+        BtlChr *prov = MsGetChr(prov_id);
+        if (prov->fA88 == 0 || (*(int *)&prov->fA8C & 0x00FF00FF) != 0) {
+            c->f2C6 &= 0xFBFF;
+            return 0;
+        }
+        if (c->f28B != 0) {
+            return 0;
+        }
+        {
+            register int kind __asm__("$17") = -15;
+            register OfsTbl *t __asm__("$16");
+            int mask;
+            if (MsGetRamChrMonster(prov_id) == 0) {
+                kind = -14;
+            }
+            t = MsGetComData(k, 0);
+            mask = MsGetCursorTarget(id, kind, t, k, 1);
+            if ((mask >> prov_id) & 1) {
+                switch ((t->h1A >> 2) & 3) {
+                case 0:
+                case 3:
+                    mask = 1 << prov_id;
+                    break;
+                case 1:
+                    {
+                        int i;
+                        int grp = MsGetChrGroup(prov_id);
+                        for (i = 0; i < 31; i++) {
+                            if ((mask >> i) & 1) {
+                                if (MsGetChrGroup(i) != grp) {
+                                    mask &= ~(1 << i);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    mask = 0;
+                    break;
+                }
+            } else {
+                mask = 0;
+            }
+            if (k != 0 && mask > 0) {
+                cmd = k;
+                __asm__ volatile("" : "+r"(cmd));
+                r = -1;
+            } else {
+                r = -2;
+                cmd = 0xFF;
+                mask = 0;
+            }
+            e->id = id;
+            e->f8[0].targets = mask;
+            e->f3 = 1;
+            e->f8[0].h0 = cmd;
+            e->f8[0].h2 = 0xFF;
+            MsSetBtlCommand((u8 *)e, 0, arg);
+        }
+    }
+    return r;
+}
 
 int MsGetCommandTarget(int id, int k, int mode, int arg) {
     OfsTbl *t = MsGetComData(k, 0);
@@ -360,7 +491,52 @@ int MsGetCommandTarget(int id, int k, int mode, int arg) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsGetCursorTarget);
+int MsGetCursorTarget(int id, int kind, OfsTbl *t, int k, int arg) {
+    int mask;
+    int i;
+    int fail;
+    int far;
+
+    mask = MsGetChrBit(id, kind, 0, 1);
+    for (i = 0; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            fail = 0;
+            if (MsGetChrCursorFlag(i) == 0) {
+                fail = 1;
+            }
+            switch (MsGetChrEventFlag(i, k)) {
+            case 1:
+                if (!((t->h1A >> 11) & 1)) {
+                    fail = 1;
+                }
+                break;
+            case 0:
+                if (!((t->h1A >> 10) & 1)) {
+                    fail = 1;
+                }
+                break;
+            case 2:
+                fail = 1;
+                break;
+            }
+            far = MsGetCommandFar(id, (Obj1A *)t);
+            if (far < MsGetChrDist(i)) {
+                if (id != i) {
+                    fail = 1;
+                }
+            }
+            if (MsGetChrStatDeath(i) != 0) {
+                if (!((t->h1A >> 6) & 1)) {
+                    fail = 1;
+                }
+            }
+            if (fail != 0) {
+                mask &= ~(1 << i);
+            }
+        }
+    }
+    return mask;
+}
 
 int MsSetDeathSentence(int id, BtlChr *c, GsEnt48 *e, int arg) {
     int r = 0;

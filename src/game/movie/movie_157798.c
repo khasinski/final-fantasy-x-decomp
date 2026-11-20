@@ -3,6 +3,7 @@
 #define func_00158FE8 _hdr_func_00158FE8
 #define func_00158D60 _hdr_func_00158D60
 #define func_0011A5A0 _hdr_func_0011A5A0
+#define func_00158200 _hdr_func_00158200
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/w2.h"
@@ -13,6 +14,7 @@
 #include "ffx/u1.h"
 #include "ffx/v1.h"
 #include "ffx/g0.h"
+#undef func_00158200
 #undef func_0011A5A0
 #undef func_00158D60
 #undef func_00158FE8
@@ -107,7 +109,81 @@ INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157968);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157BE8);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158200);
+typedef union {
+    u_long128 q;
+    struct {
+        u64 d0;
+        u64 d1;
+    } ad;
+    struct {
+        u32 w0;
+        u32 w1;
+        u32 w2;
+        u32 w3;
+    } w;
+} MovGifQword;
+
+#define SET_AD(q_elem, d_val, r_val) \
+    { \
+        (q_elem).ad.d0 = (d_val); \
+        (q_elem).ad.d1 = (r_val); \
+    }
+
+#define SET_W4(q_elem, a, b, c, d) \
+    { \
+        (q_elem).w.w0 = (a); \
+        (q_elem).w.w1 = (b); \
+        (q_elem).w.w2 = (c); \
+        (q_elem).w.w3 = (d); \
+    }
+
+#define SCE_GS_SET_TEX0_MOV(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
+    ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) | \
+     ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) | \
+     ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
+
+#define SET_UV(q_elem, u_val, v_val) \
+    { \
+        (q_elem).w.w0 = (u_val) << 4; \
+        (q_elem).w.w1 = (v_val) << 4; \
+        (q_elem).w.w2 = 0x3F800000; \
+        (q_elem).w.w3 = 0; \
+    }
+
+void func_00158200(MovGifQword *p, u32 tbp0, int x, int y, int w, int h, int psm)
+{
+    int tw = 1;
+
+    if (w > 0x10) tw = 5;
+    if (w > 0x20) tw = 6;
+    if (w > 0x40) tw = 7;
+    if (w > 0x80) tw = 8;
+    if (w > 0x100) tw = 9;
+    if (w > 0x200) tw = 10;
+
+    p[0].q = 0;
+    p[0].w.w0 = 0x1000000B;
+    SET_AD(p[1], 0x1000000000000003UL, 0xE);
+    SET_AD(p[2], 0, 0x3F);
+    SET_AD(p[3], SCE_GS_SET_TEX0_MOV(tbp0, w / 64, psm, tw, tw, 0, 0, 0, 0, 0, 0, 0), 6);
+    SET_AD(p[4], 0x60, 0x14);
+    SET_AD(p[5], 0x608B400000008001UL, 0x413413);
+
+    x += 0x800;
+    y += 0x800;
+    x -= w / 2;
+    y -= h / 2;
+
+    SET_UV(p[6], 1, 1);
+    SET_W4(p[7], 0x80, 0x80, 0x80, 0x80);
+    SET_W4(p[8], x << 4, y << 4, 0xFFFFFF, 0);
+    SET_UV(p[9], w, h);
+    SET_W4(p[10], 0x80, 0x80, 0x80, 0x80);
+    SET_W4(p[11], (x + w) << 4, (y + h) << 4, 0xFFFFFF, 0);
+
+    p[12].q = 0;
+    p[12].w.w0 = 0x70000000;
+}
 
 extern s32 _m2c_func_00158410_D_0030D408 __asm__("D_0030D408");
 extern s32 _m2c_func_00158410_D_0030D410 __asm__("D_0030D410");

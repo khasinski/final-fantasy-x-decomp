@@ -1,4 +1,5 @@
 /* tu_283 0x25aeb0-0x260a70: low; unk_25AEB0 (config/tu_map.tsv) */
+#define func_0025B558 _hdr_func_0025B558
 #include "common.h"
 #include "vu0.h"
 #include "ffx/w8.h"
@@ -8,6 +9,7 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/g4.h"
+#undef func_0025B558
 
 void func_0025AEB0(ChrWork *chr)
 {
@@ -121,7 +123,111 @@ void func_0025B108(void)
     } while (--n != 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025B160);
+#define PLAY_SE(h) ((int (*)(int))SndSepPlaySimple)(h)
+typedef void (*AbmMenuReqFn)(ChrWork *w, ChrSub *sub, int idx, int ok);
+
+void func_0025B160(void)
+{
+    s16 slot = D_006A391C[12].a.req.id;
+    ChrWork *w;
+    u16 pad;
+
+    if (slot < 0) {
+        return;
+    }
+    w = &D_006A391C[slot];
+    if (w->f26 != 0) {
+        return;
+    }
+    {
+        s16 count = w->f1E;
+        s16 rows = w->f16;
+        pad = *(u16 *)((u8 *)lpamng + 0x11628);
+        if (count > rows) {
+            if (pad & 1) {
+                if (w->f1A > 0) {
+                    PLAY_SE(0x80000001);
+                    w->f1C = w->f1A;
+                    w->f1A -= w->f16;
+                    if (w->f1A < 0) {
+                        w->f1A = 0;
+                    }
+                    w->f26 = 3;
+                    w->f27 = 0;
+                    w->f18 += w->f1A - w->f1C;
+                    return;
+                }
+            } else if (pad & 2) {
+                if (w->f1A < count - rows) {
+                    PLAY_SE(0x80000001);
+                    w->f1C = w->f1A;
+                    w->f1A += w->f16;
+                    if (w->f1A >= w->f1E - (s16)w->f16) {
+                        w->f1A = w->f1E - w->f16;
+                    }
+                    w->f26 = 4;
+                    w->f27 = 0;
+                    w->f18 += w->f1A - w->f1C;
+                    return;
+                }
+            }
+        }
+    }
+    if (pad & 0x1000) {
+        if (w->f18 > 0) {
+            PLAY_SE(0x80000001);
+        }
+        w->f18--;
+        if (w->f18 <= 0) {
+            w->f18 = 0;
+        }
+        if (w->f1A > w->f18) {
+            w->f1A = w->f18;
+            w->f26 = 1;
+            w->f27 = 0;
+        }
+    } else if (pad & 0x4000) {
+        if (w->f18 < w->f1E - 1) {
+            PLAY_SE(0x80000001);
+        }
+        w->f18++;
+        if (w->f18 >= w->f1E) {
+            w->f18 = w->f1E - 1;
+        }
+        if (w->f18 >= w->f1A + (s16)w->f16) {
+            w->f27 = 0;
+            w->f26 = 2;
+            w->f1A = w->f18 - w->f16 + 1;
+        }
+    }
+    if (lpamng->f11622 & 0x20) {
+        ChrSub *sub = &w->sub[w->f18];
+        if (sub->off == 0) {
+            if (!(w->f24 & 8)) {
+                PLAY_SE(0x80000001);
+            }
+            w->f23 = 0;
+            D_006A391C[12].a.req.id = -1;
+            ((AbmMenuReqFn)D_006A391C[12].a.req.fn)(w, sub, w->f18, 1);
+        } else {
+            PLAY_SE(0x80000003);
+        }
+    } else if (lpamng->f11622 & 0x40) {
+        if (w->f24 & 6) {
+            if (w->f24 & 4) {
+                PLAY_SE(0x80000001);
+                w->f18 = 1;
+            } else {
+                PLAY_SE(0x80000004);
+                w->f23 = 0;
+                D_006A391C[12].a.req.id = -1;
+                ((AbmMenuReqFn)D_006A391C[12].a.req.fn)(w, &w->sub[w->f18], w->f18, 0);
+            }
+        } else {
+            PLAY_SE(0x80000003);
+        }
+    }
+}
 
 void func_0025B4E0(ChrWork *w, int top, int ofs)
 {
@@ -134,7 +240,37 @@ void func_0025B4E0(ChrWork *w, int top, int ofs)
     func_002B2A80(start, (end - start) >> 4, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025B558);
+void func_002567F0(int x0, int y0, int x1, int y1, s64 color);
+void func_002568C8(int x0, int y0, int x1, int y1, s64 color);
+
+void func_0025B558(s16 x, s16 y, s16 h, int pos, int count, int view)
+{
+    int y0 = y;
+    int y1 = y0 + h;
+    int x1 = x + 7;
+    s16 y_start;
+    s16 y_end;
+
+    func_002567F0(x, y0, x1, y1 - 1, 0x3F80000080FFFFFFL);
+    y0++;
+    func_002568C8(x + 1, y0, x + 6, y1 - 2, 0x3F80000060100000L);
+    y = y0;
+    h--;
+    if (pos == 0) {
+        y_start = y;
+    } else {
+        y_start = y + pos * (h - 2) / count + 2;
+    }
+    if (pos + view == count) {
+        y_end = y + h - 1;
+    } else {
+        y_end = y + (pos + view) * (h - 2) / count - 1;
+    }
+    if (y_start >= y_end) {
+        y_end = y_start + 1;
+    }
+    func_002568C8(x + 1, y_start, x1, y_end, 0x3F80000080FFFFFFL);
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025B6E8);
 INCLUDE_RODATA("build/ee_asm/game/abm/abm_25AEB0/rodata", jtbl_00573A10);

@@ -1,12 +1,65 @@
 /* tu_347 0x2d98a8-0x2dba00: low; libgraph; split at 0x2d98a8: library split: 0x2D9730-0x2D98A8 is FFX platform glue (FFXIsPC, FFXGetLang, FFXSetVideoMode: Switch-port names), 0x2D98A8 is sceGsResetGraph (libgraph); tu_map's low boundary 0x2D9730 put both in one TU (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
 #include "ffx/g4.h"
 #include "ffx/r7.h"
 #include "ffx/v7.h"
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D98A8);
+typedef struct GsGParam {
+    s16 interlace;
+    s16 omode;
+    s16 ffmode;
+    s16 version;
+    s32 vimode;
+    s32 vblank_id;
+} GsGParam;
+
+u8 *func_002D9A38(void);
+void func_002F8720(int mask);
+void func_002F8E08(int irq);
+void func_002F80E0(int irq, int id);
+void func_002F7FE0(int interlace, int omode, int ffmode);
+
+void func_002D98A8(s16 mode, s16 interlace, s16 omode, s16 ffmode)
+{
+    GsGParam *gp;
+
+    switch (mode) {
+    case 0:
+        gp = (GsGParam *)func_002D9A38();
+        *(volatile unsigned long *)0x12001000 = 0x200;
+        gp->interlace = interlace;
+        gp->omode = omode;
+        gp->version = (s16)((*(volatile unsigned long *)0x12001000 >> 16) & 0xFF);
+        func_002F8720(0xFF00);
+        {
+            register int ff __asm__("$3") = (ffmode != 0);
+            __asm__ volatile("" : "+r"(ff));
+            gp->ffmode = ff;
+        }
+        if (gp->vimode != 0) {
+            func_002F8E08(2);
+            func_002F80E0(2, gp->vblank_id);
+            gp->vimode = 0;
+            gp->vblank_id = 0;
+        }
+        func_002F7FE0(interlace & 1, omode & 0xFF, ffmode & 1);
+        break;
+    case 1:
+        *(volatile unsigned long *)0x12001000 = 0x100;
+        break;
+    case 5:
+        gp = (GsGParam *)func_002D9A38();
+        gp->ffmode = (ffmode != 0);
+        gp->interlace = interlace;
+        gp->omode = omode;
+        gp->version = (s16)((*(volatile unsigned long *)0x12001000 >> 16) & 0xFF);
+        func_002F7FE0(interlace & 1, omode & 0xFF, ffmode & 1);
+        break;
+    }
+}
 
 u8 *func_002D9A38(void)
 {
@@ -45,7 +98,39 @@ s16 func_002D9DE0(s16 format, s16 width, s16 height) {
     return columns * rows * 2;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002D9EA8);
+int func_002D9EA8(unsigned long *p, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm)
+{
+    p[1] = 0x4C;
+    p[0] = ((unsigned long)(((w + 63) >> 6) & 0x3F) << 16) | ((unsigned long)(psm & 0xF) << 24);
+    p[3] = 0x4E;
+    if (ztest == 0) {
+        p[2] = func_002D9DE0(psm, w, h) | ((unsigned long)(zpsm & 0xF) << 24) | (1UL << 32);
+    } else {
+        p[2] = func_002D9DE0(psm, w, h) | ((unsigned long)(zpsm & 0xF) << 24);
+    }
+    p[5] = 0x18;
+    p[4] = ((0x800UL - (s16)(w >> 1)) << 4) | ((0x800UL - (s16)(h >> 1)) << 36);
+    p[7] = 0x40;
+    p[6] = ((unsigned long)(w - 1) << 16) | ((unsigned long)(s16)(h - 1) << 48);
+    p[9] = 0x1A;
+    p[8] |= 1;
+    p[11] = 0x46;
+    p[10] |= 1;
+    p[13] = 0x45;
+    if (psm & 2) {
+        p[12] |= 1;
+    } else {
+        p[12] &= ~1UL;
+    }
+    p[15] = 0x47;
+    if (ztest != 0) {
+        p[14] = ((unsigned long)(ztest & 3) << 17) | 0x10000;
+    } else {
+        p[14] = 0x30000;
+    }
+    SYNC();
+    return 8;
+}
 
 int func_002DA090(unsigned long *p, s16 test, s16 x, s16 y, s16 width, s16 height, u8 r, u8 g, u8 b, u8 a, u32 z) {
     unsigned long color = r | ((unsigned long)g << 8) | ((unsigned long)b << 16) | ((unsigned long)a << 24) | 0x3f80000000000000UL;
@@ -139,12 +224,77 @@ INCLUDE_RODATA("build/ee_asm/sdk/libgraph/libgraph/rodata", jtbl_005766B0);
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DAB10);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DAC50);
+extern char D_005767A0[];
+
+int func_002DAC50(void *packet, void *src)
+{
+    unsigned int timeout = 0;
+
+    while (*(volatile unsigned int *)0x1000A000 & 0x100) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_005767A0);
+            return -1;
+        }
+    }
+    *(volatile unsigned int *)0x1000A020 = 6;
+    if (((unsigned int)packet & 0x70000000) == 0x70000000) {
+        *(volatile unsigned int *)0x1000A010 = ((unsigned int)packet & 0xfffffff) | 0x80000000;
+    } else {
+        *(volatile unsigned int *)0x1000A010 = (unsigned int)packet & 0xfffffff;
+    }
+    *(volatile unsigned int *)0x1000A000 = 0x101;
+    while (*(volatile unsigned int *)0x1000A000 & 0x100) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_005767A0);
+            return -1;
+        }
+    }
+    *(volatile unsigned int *)0x1000A020 = (int)(*((unsigned long *)packet + 10) & 0x7fff);
+    if (((unsigned int)src & 0x70000000) == 0x70000000) {
+        *(volatile unsigned int *)0x1000A010 = ((unsigned int)src & 0xfffffff) | 0x80000000;
+    } else {
+        *(volatile unsigned int *)0x1000A010 = (unsigned int)src & 0xfffffff;
+    }
+    *(volatile unsigned int *)0x1000A000 = 0x101;
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DADD0);
 INCLUDE_RODATA("build/ee_asm/sdk/libgraph/libgraph/rodata", jtbl_005768C0);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DB460);
+int func_002DB460(unsigned long *p, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm)
+{
+    p[1] = 0x4D;
+    p[0] = ((unsigned long)((w >> 6) & 0x3F) << 16) | ((unsigned long)(psm & 0xF) << 24);
+    p[3] = 0x4F;
+    if (ztest == 0) {
+        p[2] = func_002D9DE0(psm, w, h) | ((unsigned long)(zpsm & 0xF) << 24) | (1UL << 32);
+    } else {
+        p[2] = func_002D9DE0(psm, w, h) | ((unsigned long)(zpsm & 0xF) << 24);
+    }
+    p[5] = 0x19;
+    p[4] = ((0x800UL - (s16)(w >> 1)) << 4) | ((0x800UL - (s16)(h >> 1)) << 36);
+    p[7] = 0x41;
+    p[6] = ((unsigned long)(w - 1) << 16) | ((unsigned long)(s16)(h - 1) << 48);
+    p[9] = 0x1A;
+    p[8] |= 1;
+    p[11] = 0x46;
+    p[10] |= 1;
+    p[13] = 0x45;
+    if (psm & 2) {
+        p[12] |= 1;
+    } else {
+        p[12] &= ~1UL;
+    }
+    p[15] = 0x48;
+    if (ztest != 0) {
+        p[14] = ((unsigned long)(ztest & 3) << 17) | 0x10000;
+    } else {
+        p[14] = 0x30000;
+    }
+    SYNC();
+    return 8;
+}
 
 /* Module: sound/misc glue, VU0 helpers */
 
@@ -212,7 +362,66 @@ int func_002DB7E0(int v)
     return old;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DB7F0);
+typedef struct DmaEnv {
+    u8 sts;
+    u8 std;
+    u8 mfd;
+    u8 rcycle;
+    u16 express;
+    u16 notify;
+    u16 sqwc;
+    u16 tqwc;
+    void *rbadr;
+    u32 rbsiz;
+} DmaEnv;
+
+extern u8 D_005662B8[];
+extern u8 D_005662C8[];
+extern u8 D_005662D8[];
+
+int func_002DB7F0(void *arg)
+{
+    DmaEnv *env = arg;
+    u32 ctrl, pcr, sqwc, rbsiz, rbadr;
+
+    ctrl = *(volatile u32 *)0x1000E000;
+    pcr = *(volatile u32 *)0x1000E020;
+    sqwc = *(volatile u32 *)0x1000E030;
+    rbadr = *(volatile u32 *)0x1000E050;
+    rbsiz = *(volatile u32 *)0x1000E040;
+    if (env->sts >= 10) {
+        return -1;
+    }
+    if (env->std >= 10) {
+        return -2;
+    }
+    if (env->mfd >= 10) {
+        return -3;
+    }
+    if (env->rcycle >= 7) {
+        return -4;
+    }
+    ctrl = (ctrl & 0xFFFFFFCF) | (D_005662B8[env->sts] << 4);
+    ctrl = (ctrl & 0xFFFFFF3F) | (D_005662C8[env->std] << 6);
+    ctrl = (ctrl & 0xFFFFFFF3) | (D_005662D8[env->mfd] << 2);
+    if (env->rcycle != 0) {
+        ctrl |= 2;
+        ctrl = (ctrl & 0xFFFFFCFF) | ((env->rcycle - 1) << 8);
+    } else {
+        ctrl &= 0xFFFFFFFD;
+    }
+    pcr = (env->express << 16) | env->notify;
+    sqwc = (env->tqwc << 16) | env->sqwc;
+    rbadr = (u32)env->rbadr;
+    rbsiz = env->rbsiz;
+    *(volatile u32 *)0x1000E000 = ctrl;
+    *(volatile u32 *)0x1000E020 = pcr;
+    *(volatile u32 *)0x1000E030 = sqwc;
+    *(volatile u32 *)0x1000E050 = rbadr;
+    *(volatile u32 *)0x1000E040 = rbsiz;
+    D_005662E8 = *(R7Blk20 *)env;
+    return 0;
+}
 
 R7Blk20 *func_002DB9C8(R7Blk20 *d)
 {

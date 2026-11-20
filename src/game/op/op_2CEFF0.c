@@ -196,6 +196,14 @@ typedef struct Oef2Hdr {
 } Oef2Hdr;
 
 int func_002CFE38(void *p, int mask, int kind);
+typedef struct EvSlotsFull {
+    u16 h00;
+    u8 pad02[0xE];
+    u32 w10[64];
+    u8 b110[64];
+    void *p150[64];
+} EvSlotsFull;
+
 void op_oef2_texture_load(void *p, int a);
 
 int func_002D0180(void *p, int mask);
@@ -306,7 +314,43 @@ int func_002D02E8(Oef2Hdr *p, u16 start, u16 end, int mask)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002D0408);
+void func_002D0408(void)
+{
+    EvQueueTyped *q = (EvQueueTyped *)&D_00764430;
+    u16 base;
+    u16 i;
+    int total;
+
+    if (q->h302 != 0) {
+        total = 0;
+        base = q->h300;
+        for (i = 0; i < q->h302;) {
+            u16 idx = (base + i) % 64;
+            Oef2Tex *tex = q->a[idx];
+            Oef2Clut *clut;
+
+            if (tex != 0) {
+                op_oef2_texture_load(tex, 1);
+                q->a[idx] = 0;
+                q->c[idx] = 0;
+                total += tex->w10;
+            }
+            clut = q->b[idx];
+            if (clut != 0) {
+                op_oef2_clut_load(clut, 1);
+                q->b[idx] = 0;
+                q->c[idx] = 0;
+                total += clut->h2 * 16;
+            }
+            i++;
+            if (total > 0xFFFFF) {
+                break;
+            }
+        }
+        q->h302 -= i;
+        q->h300 = (base + i) % 64;
+    }
+}
 
 int func_002D0570(int mask)
 {
@@ -322,14 +366,6 @@ int func_002D0570(int mask)
     }
     return 0;
 }
-
-typedef struct EvSlotsFull {
-    u16 h00;
-    u8 pad02[0xE];
-    u32 w10[64];
-    u8 b110[64];
-    void *p150[64];
-} EvSlotsFull;
 
 void op_oef2_texture_load(void *p, int a);
 

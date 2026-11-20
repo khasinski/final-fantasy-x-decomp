@@ -2,6 +2,7 @@
 #define msResetHeadTarget _hdr_msResetHeadTarget
 #define func_001E2560 _hdr_func_001E2560
 #define MsMessageCueRegist _hdr_MsMessageCueRegist
+#define MsLimitUp _hdr_MsLimitUp
 #define D_003172F0 _hdr_D_003172F0
 #include "common.h"
 #include "ffx/g3.h"
@@ -13,6 +14,7 @@
 #undef msResetHeadTarget
 #undef func_001E2560
 #undef MsMessageCueRegist
+#undef MsLimitUp
 #undef D_003172F0
 
 int MsMessageCueRegist(int a, int b, int c, int d, int e);
@@ -46,7 +48,50 @@ int func_001E2360(void) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeProcess);
+void MsLimitTypeProcess(void) {
+    register GameStateLocal *g __asm__("s0") = &D_003172F0;
+    int flag;
+    int i;
+    int j;
+    u8 id;
+    PartySlot *p;
+    s32 m;
+    u16 *h;
+    u16 cmd;
+
+    if (g->f14 == 0 && g->f1752 == 1 && g->f175B != 0 && func_001E2360() == 0) {
+        flag = 0;
+        for (i = 0; i < 7; i++) {
+            id = D_003192B5[i];
+            if (id != 0xFF) {
+                p = &D_0031EA9C[id];
+                MsGetChr(id);
+                m = p->v88;
+                h = p->h60;
+                for (j = 0; j < 20; j++, h++) {
+                    if (!((m >> j) & 1) && *h == 0) {
+                        flag = 1;
+                        if (MsMessageCueRegist(7, id, j, 0x1E, 0x32) != 0) {
+                            m |= 1 << j;
+                        }
+                    }
+                }
+                p->v88 = m;
+            }
+        }
+        cmd = D_003172F0.h207A;
+        if (cmd != 0) {
+            flag = 1;
+            if (MsMessageCueRegist(6, 0, cmd, 0x1E, 0x32) != 0) {
+                MsSetSaveCommand(0, cmd, 1);
+                D_003172F0.h207A = 0;
+            }
+        }
+        if (flag == 0) {
+            D_003172F0.f175B = 0;
+        }
+    }
+}
 
 typedef struct {
     u8 pad0[0x3DAC];
@@ -105,9 +150,104 @@ int func_001E2658(int i, int k, int force) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitUp);
+extern s8 D_00317336;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeDamageCheck);
+int MsLimitUp(int a, BtlChr *c, int b) {
+    u8 old;
+    int val;
+
+    if (D_00317336 == 0 && !((c->f2D6 >> 10) & 1) && c->fA8C == 0 && c->fA8E == 0) {
+        if ((c->f37E >> 1) & 1) {
+            b *= 3;
+        } else if (c->f37E & 1) {
+            b *= 2;
+        } else if ((c->f37E >> 2) & 1) {
+            b <<= MsCalcWeakLevel(c->f290, c->f254) > 0;
+        }
+        if ((c->f300 >> 5) & 1) {
+            b = (b * 3) / 2;
+        }
+        b <<= (c->f300 >> 6) & 1;
+        if ((c->f2D6 >> 6) & 1) {
+            b = 0;
+        }
+        b <<= (c->f2D6 >> 7) & 1;
+        if ((c->f37E >> 3) & 1) {
+            register double v __asm__("v0");
+            register double k __asm__("a1");
+            MsApUp(a, c, (int)((MsGetNextAP(a) * b / c->f27D) * *(float *)&c->pad3C2[0xA]), 0);
+            b = 0;
+            v = *(float *)&c->pad3C2[0xA];
+            __asm__(".set noat\n\tlui $1, %%hi(D_0056F8D8)\n\tld %0, %%lo(D_0056F8D8)($1)\n\t.set at" : "=r"(k), "+r"(v));
+            *(float *)&c->pad3C2[0xA] = v * k;
+        }
+        old = c->f27C;
+        val = MsCheckRange(old + b, 0, c->f27D);
+        c->f27C = val;
+        if (old < val && val == c->f27D) {
+            MsSaveAddInfoData(a, 3);
+        }
+    }
+    return b;
+}
+
+int MsLimitTypeDamageCheck(int src_id, BtlChr *src, int dst_id, BtlChr *dst, int dmg, int dmg2, int flag) {
+    int count = 0;
+    int src_mon = MsGetRamChrMonster(src_id);
+    int dst_mon = MsGetRamChrMonster(dst_id);
+    int i;
+
+    if (dst->f27B == 0x13 && dmg >= 0 && src_mon == 1 && dst_mon == 0) {
+        MsLimitUp(dst_id, dst, (u32)(dmg2 * 18) / dst->f254 + 1);
+    }
+    if (dmg > 0) {
+        if (src_mon == 1 && dst_mon == 0) {
+            count++;
+            func_001E2658(dst_id, 2, 0);
+            if (dst->f27B == 2) {
+                MsLimitUp(dst_id, dst, (u32)(dmg * 30) / dst->f254 + 1);
+            }
+            for (i = 0; i < 7; i++) {
+                BtlChr *c = MsGetChr(i);
+                if (c->fA88 != 0 && i != dst_id) {
+                    count++;
+                    func_001E2658(i, 1, 0);
+                    if (c->f27B == 1) {
+                        MsLimitUp(i, c, (u32)(dmg * 20) / dst->f254 + 1);
+                    }
+                }
+            }
+        } else if (src_mon == 0 && dst_mon == 1) {
+            count++;
+            if (flag != 0) {
+                func_001E2658(src_id, 0, 0);
+                if (src->f27B == 0) {
+                    int v = (dmg * 10) / src->f3B4 + 1;
+                    if (v > 16) {
+                        v = 16;
+                    }
+                    MsLimitUp(src_id, src, v);
+                }
+                if (src->f27B == 0x13) {
+                    MsLimitUp(src_id, src, ((dmg * 16) / src->f3B4) / 10 + 1);
+                }
+            }
+        }
+    } else if (dmg < 0) {
+        if (src_mon == 0 && dst_mon == 0 && src_id != dst_id) {
+            count++;
+            func_001E2658(src_id, 3, 0);
+            if (src->f27B == 3) {
+                dmg = -dmg;
+                if (dmg > dst->f254 - dst->f290) {
+                    dmg = dst->f254 - dst->f290;
+                }
+                MsLimitUp(src_id, src, (u32)(dmg * 16) / dst->f254 + 1);
+            }
+        }
+    }
+    return count;
+}
 
 int MsLimitTypeStatusCheck(int source_id, BtlChr *source, int target_id, BtlChr *target, int a, int b) {
     int count = 0;
@@ -202,7 +342,52 @@ s32 MsLimitTypeDeathCheck(s32 source_id, BtlChr *source, s32 target_id, BtlChr *
     return count;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsLimitTypeTurnCheck);
+int MsLimitTypeTurnCheck(int id, BtlChr *c) {
+    int count = 0;
+    int n;
+    int i;
+    BtlChr *t;
+
+    if (id >= 0 && id < 7) {
+        count = 1;
+        func_001E2658(id, 0xD, 0);
+        if (c->f27B == 0xD) {
+            MsLimitUp(id, c, 3);
+        }
+        if (MsCalcWeakLevel(c->f290, c->f254) > 0) {
+            count = 2;
+            func_001E2658(id, 0xF, 0);
+            if (c->f27B == 0xF) {
+                MsLimitUp(id, c, 5);
+            }
+        }
+        n = 0;
+        for (i = 0; i < 18; i++) {
+            if (i != id) {
+                t = MsGetChr(i);
+                if (t->fA88 != 0 && *(s8 *)&t->padA96[0] != 0 && t->fA8C == 0 && t->fA8E == 0) {
+                    n++;
+                }
+            }
+        }
+        if (n == 0) {
+            count++;
+            func_001E2658(id, 0x10, 0);
+            if (c->f27B == 0x10) {
+                MsLimitUp(id, c, 0x10);
+            }
+        }
+        if (((c->f2C6 >> 1) & 1) || ((c->f2C6 >> 3) & 1) || ((c->f2C6 >> 8) & 1) ||
+            c->f2C8 != 0 || c->f2C9 != 0 || c->f2CA != 0 || c->f2D4 != 0 || ((c->f2D6 >> 14) & 1)) {
+            count++;
+            func_001E2658(id, 0xE, 0);
+            if (c->f27B == 0xE) {
+                MsLimitUp(id, c, 0x10);
+            }
+        }
+    }
+    return count;
+}
 
 int MsLimitTypeEscapeCheck(int a, BtlChr *c)
 {

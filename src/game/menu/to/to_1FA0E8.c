@@ -75,7 +75,26 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FA7D0);
 /* GS display-list helpers: wrappers appending SCE_GS_SET_* packets at the cursor InvokedFromSelectCursor.
  * Module name unknown (no source-file string found nearby). */
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FA988);
+void func_001FA988(int u0, int v0, int w, int h, int x0, int y0)
+{
+    GIF_CUR()->ul64[0] = 0x1000000000008005UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    func_001FB290();
+    func_001FB310(0, 0x1FF, 0, 0x19F);
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x2005D40621313E00UL, 6);
+    GIF_CUR()->ul64[0] = 0x50AF400000008001UL;
+    GIF_CUR()->ul64[1] = 0x43431;
+    GIF_NEXT();
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(u0, v0);
+    func_001FB678(x0, y0);
+    func_001FB550(u0 + w + 1, v0 + h + 1);
+    func_001FB678(x0 + w + 1, y0 + h + 1);
+    func_001EFA30();
+}
 
 void func_001FAB08(void)
 {
@@ -531,11 +550,65 @@ void func_001FBD08(int x0, int y0, int x1, int y1, int z)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FBE20);
+void func_001FBE20(int x, int y, int n)
+{
+    float dy;
+
+    GIF_CUR()->ul64[0] = 0x1000000000000003UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    GIF_AD(0x3000F, 0x47);
+    GIF_AD(0x2005D48621313F00UL, 6);
+    GIF_CUR()->ul64[0] = 0x30A3400000008001UL;
+    GIF_CUR()->ul64[1] = 0x441;
+    GIF_NEXT();
+    dy = n * 10.0f;
+    locNameTmpSetLanguage(0xE3, 0xE3, 0xE3, 0x80);
+    if (n == 0) {
+        func_001FB678(x, y);
+    } else {
+        func_001FB678(x, (int)(y + dy));
+    }
+    if (n == 8) {
+        func_001FB678(x + 2, y + 0xAC);
+    } else {
+        func_001FB678(x + 2, (int)(y + dy + 80.0f));
+    }
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FBFB8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FC1F0);
+void func_001FC1F0(int x, int y, int scale, int alpha)
+{
+    float fx, fy, x0, y0, x1, y1, dw, dh;
+
+    GIF_CUR()->ul64[0] = 0x1000000000000004UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(GS_SET_SCISSOR(0, 0x1FF, 0, 0x19F), 0x40);
+    GIF_AD(0x4005D48621313F00UL, 6);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    fx = x;
+    fy = y;
+    dw = ((scale * 32) / 100) * 0.5f;
+    dh = ((scale * 11) / 100) * 0.5f;
+    x0 = fx - dw;
+    x1 = fx + dw;
+    y0 = fy - dh;
+    y1 = fy + dh;
+    GIF_CUR()->ul64[0] = 0x50AF400000008001UL;
+    GIF_CUR()->ul64[1] = 0x43431;
+    GIF_NEXT();
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, alpha);
+    func_001FB550(0xDF, 0x8D);
+    func_001FB678((int)x0, (int)y0);
+    func_001FB550(0xFF, 0x98);
+    func_001FB678((int)x1, (int)y1);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FC3C8);
 
@@ -833,7 +906,31 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FE578);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FE7F8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FECB8);
+void func_001FEE30(int a, int b, int c);
+
+void func_001FECB8(int a, int x, int y)
+{
+    int r;
+
+    GIF_CUR()->ul64[0] = 0x3000000000000001UL;
+    GIF_CUR()->ul64[1] = 0xEEE;
+    GIF_NEXT();
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    if (a < 0xC8) {
+        GIF_AD(0x2005D40621313E00UL, 6);
+        r = func_001FD6F0(a);
+    }
+    if ((u32)(a - 0xC8) < 0xC8) {
+        GIF_AD(0x2005D40621313E00UL, 6);
+        r = func_001FD6F0(a - 0xC8);
+    }
+    if (a >= 0x190) {
+        GIF_AD(0x2005D48621313F00UL, 6);
+        r = func_001FD718(a - 0x190);
+    }
+    func_001FEE30(r, x, y);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FEE30);
 
@@ -871,11 +968,56 @@ void TODrawMenuPlateXYWC2_Rfix(int a, int b, int x, int y, int w, u32 c0, u32 c1
     InvokedFromSelectCursor = func_001FDDD8(InvokedFromSelectCursor, b, x + w - t->w, y, 0, 0, c1, c1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF398);
+void func_001FF398(int x, int y, int w, int h, int c0, int c1)
+{
+    GIF_CUR()->ul64[0] = 0x3000000000000001UL;
+    GIF_CUR()->ul64[1] = 0xEEE;
+    GIF_NEXT();
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x2005D40621313E00UL, 6);
+    GIF_CUR()->ul64[0] = 0x80A6400000008001UL;
+    GIF_CUR()->ul64[1] = 0x41414141;
+    GIF_NEXT();
+    func_001FB618(c0);
+    func_001FB678(x, y);
+    func_001FB618(c1);
+    func_001FB678(x + w, y);
+    func_001FB618(c0);
+    func_001FB678(x, y + h);
+    func_001FB618(c1);
+    func_001FB678(x + w, y + h);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF500);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF828);
+void func_001FF828(int x, int y)
+{
+    GIF_CUR()->ul64[0] = 0x1000000000000004UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(GS_SET_SCISSOR(0, 0x1FF, 0, 0x19F), 0x40);
+    GIF_AD(0x4005D48621313F00UL, 6);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_CUR()->ul64[0] = 0x30AE400000008004UL;
+    GIF_CUR()->ul64[1] = 0x431;
+    GIF_NEXT();
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0, 0);
+    func_001FB678(x, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xB2, 0);
+    func_001FB678(x + 0xB2, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0, 0x41);
+    func_001FB678(x, y + 0x41);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xB2, 0x41);
+    func_001FB678(x + 0xB2, y + 0x41);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF9F0);
 
@@ -901,7 +1043,28 @@ void func_001FFE00(int a, int b, int c)
     InvokedFromSelectCursor = func_001FFE50(InvokedFromSelectCursor, a, b, c, 0x80, 0x80, 0x80, 0x80);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FFE50);
+void *func_001FFE50(void *list, int a, int b, int c, int d, int e, int f, int g)
+{
+    GsAdPacket *p = list;
+    int v, u;
+
+    if ((u32)a >= 8) {
+        return p;
+    }
+    p->data = 0x1000000000000002UL;
+    p->reg = 0xE;
+    p = func_001FB980(p + 1, 1, 7, 0, 0, 0, 0, 0, 0);
+    p = func_001FB9D0(p, 0x3100, 4, 0x13, 8, 7, 1, 0, 0x2ED8, 0, 0, 0, 2);
+    p->data = 0x508F400000008001UL;
+    p->reg = 0x43431;
+    p = (GsAdPacket *)func_001FBB30((Quad32 *)(p + 1), d, e, f, g);
+    v = (a / 4) * 64;
+    u = (a % 4) * 64;
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, u, v);
+    p = (GsAdPacket *)func_001FBBB0((Quad32 *)p, b, c);
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, u + 64, v + 64);
+    return func_001FBBB0((Quad32 *)p, b + 64, c + 64);
+}
 
 void func_001FFFF0(int a, int b, int c)
 {
@@ -915,4 +1078,27 @@ void func_002002D0(int a, int b, int c, int d)
     InvokedFromSelectCursor = func_00200318(InvokedFromSelectCursor, a, b, c, d);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_00200318);
+void *func_00200318(void *list, int a, int b, int c, int d)
+{
+    GsAdPacket *p = list;
+
+    p[0].data = 0xF0AE400000008001UL;
+    p[0].reg = 0x431431431431EEEUL;
+    p[1].data = 0x8000000044UL;
+    p[1].reg = 0x42;
+    p[2].data = 0x70000;
+    p[2].reg = 0x47;
+    p = func_001FB9D0(p + 3, 0x3800, 8, 0x13, 9, 9, 1, 0, 0x2EAC, 0, 0, 0, 2);
+    p = (GsAdPacket *)func_001FBB48((Quad32 *)p, c);
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, 0, 0);
+    p = (GsAdPacket *)func_001FBC10((Quad32 *)p, a, b, 0x400, 0xC8);
+    p = (GsAdPacket *)func_001FBB48((Quad32 *)p, d);
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, 0x200, 0);
+    p = (GsAdPacket *)func_001FBC10((Quad32 *)p, a + 0x200, b, 0x400, 0xC8);
+    p = (GsAdPacket *)func_001FBB48((Quad32 *)p, c);
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, 0, 0x200);
+    p = (GsAdPacket *)func_001FBBE0((Quad32 *)p, a, b + 0x200, 0x400);
+    p = (GsAdPacket *)func_001FBB48((Quad32 *)p, d);
+    p = (GsAdPacket *)func_001FBAF0((Quad32 *)p, 0x200, 0x1A0);
+    return func_001FBBE0((Quad32 *)p, a + 0x200, b + 0x1A0, 0x400);
+}

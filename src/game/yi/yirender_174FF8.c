@@ -91,7 +91,45 @@ int func_001751E8(u32 i, int *a, int *b)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175270);
+typedef struct YiRenderBCB {
+    u8 pad_00000[0xBCB20];
+    u8 *pBCB20;
+    u8 *pBCB24;
+    u8 *pBCB28;
+    u32 wBCB2C;
+    u_long128 *pBCB30;
+    u_long128 *pBCB34;
+    u_long128 *pBCB38;
+    u32 wBCB3C;
+    u32 wBCB40;
+} YiRenderBCB;
+
+void func_00175270(YiRenderBCB *s)
+{
+    u_long128 *src;
+    u_long128 *dst;
+    u32 i;
+    int n;
+    int j;
+
+    func_002F8660(0);
+    SYNC();
+    SYNC_P();
+    i = 0;
+    dst = (u_long128 *)func_0010E260();
+    src = s->pBCB30;
+    while (i < s->wBCB3C) {
+        n = s->wBCB3C - i;
+        if (n > 0x200) {
+            n = 0x200;
+        }
+        i += n;
+        for (j = 0; j < n; j++) {
+            *dst++ = *src++;
+        }
+        dst = (u_long128 *)func_0010E280((s32)dst);
+    }
+}
 
 int yiGetVCount(void) {
     return D_00307F30;
@@ -129,7 +167,20 @@ void func_00175358(V1Record1753 *record)
         record->color[0] = record->color[1] = record->color[2] = record->color[3] = 0x80;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setfogparam);
+void yiRender_setfogparam(Sys597F00 *s)
+{
+    float f = s->f68210[0] * 0.03125f * 32.0f;
+    float far_f = f * s->f6837C;
+    float near_f = f * s->f68378;
+
+    s->f68380 = -(255.0f / (far_f - near_f));
+    s->f68384 = 255.0f - s->f68374;
+    s->f68388 = -near_f;
+    *(void **)&s->w6838C = 0;
+    if (s->w67F20 & 8) {
+        s->f68384 = 255.0f;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175468);
 
@@ -211,18 +262,186 @@ void func_00175F58(void *p)
     s->wBCB24 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175FA8);
+typedef struct YiSub5FA8 {
+    u8 pad_00[0xE];
+    u16 h0E;
+    u8 pad_10[0x10];
+    float v20[16][4];
+} YiSub5FA8;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176138);
+typedef struct YiObj5FA8 {
+    u8 pad_00[0x14];
+    s32 w14;
+    u8 pad_18[8];
+    YiSub5FA8 *subs;
+    u32 count;
+} YiObj5FA8;
+
+typedef struct YiSys5FA8 {
+    u8 pad_00000[0x681E0];
+    float min681E0[4];
+    float max681F0[4];
+    float size68200[4];
+    u8 pad_68210[0x1A4];
+    u32 n683B4;
+    YiObj5FA8 *objs683B8[1];
+} YiSys5FA8;
+
+void func_00175FA8(Sys597F00 *s0)
+{
+    YiSys5FA8 *s = (YiSys5FA8 *)s0;
+    u32 i;
+    u32 j;
+    int k;
+    int m;
+
+    for (i = 0; i < s->n683B4; i++) {
+        if (s->objs683B8[i]->w14 != 1) {
+            for (j = 0; j < s->objs683B8[i]->count; j++) {
+                YiSub5FA8 *sub = &s->objs683B8[i]->subs[j];
+                for (k = 0; k < sub->h0E; k++) {
+                    for (m = 0; m < 3; m++) {
+                        if (s->min681E0[m] > sub->v20[k][m]) {
+                            s->min681E0[m] = sub->v20[k][m];
+                        }
+                        if (s->max681F0[m] < sub->v20[k][m]) {
+                            s->max681F0[m] = sub->v20[k][m];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    s->size68200[0] = s->max681F0[0] - s->min681E0[0];
+    s->size68200[1] = s->max681F0[1] - s->min681E0[1];
+    s->size68200[2] = s->max681F0[2] - s->min681E0[2];
+    s->size68200[3] = s->max681F0[3] = s->min681E0[3] = 1.0f;
+}
+
+extern float D_0065B530;
+extern float D_0065B534;
+extern float D_0065B538;
+extern float D_0065B53C;
+extern float D_0065B540;
+extern float D_0065B544;
+double func_002E9290(double);
+
+void func_00176138(float a, float b)
+{
+    D_0065B530 = ((b * 3.0f + 512.0f) / 1.6f) / a;
+    D_0065B534 = ((b * 3.0f + 416.0f) / 1.6f) / a;
+    func_002ED038(1.0f / (D_0065B530 * D_0065B530 + 1.0f));
+    D_0065B538 = func_002E9290(1.0f / (D_0065B530 * D_0065B530 + 1.0f));
+    func_002ED038(1.0f / (D_0065B534 * D_0065B534 + 1.0f));
+    D_0065B53C = func_002E9290(1.0f / (D_0065B534 * D_0065B534 + 1.0f));
+    func_002ED038(D_0065B530 * D_0065B530 + 1.0f);
+    D_0065B540 = -func_002EBF18(1.0, func_002E9290(D_0065B530 * D_0065B530 + 1.0f));
+    func_002ED038(D_0065B534 * D_0065B534 + 1.0f);
+    D_0065B544 = -func_002EBF18(1.0, func_002E9290(D_0065B534 * D_0065B534 + 1.0f));
+}
 
 void func_00176360(void) {
 }
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176368);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001764A0);
+typedef struct YiQw {
+    u32 w[4];
+} YiQw;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_001765D0);
+void func_001764A0(Sys597F00 *s0, void *src0, u32 count)
+{
+    YiRenderBCB *s = (YiRenderBCB *)s0;
+    YiQw *src;
+    YiQw *tag = (YiQw *)s->pBCB34;
+    YiQw *p;
+    u32 i;
+
+    if ((u32)s->pBCB24 & 0x3F) {
+        s->pBCB24 = (u8 *)((YiQw *)s->pBCB24 + ((0x40 - ((u32)s->pBCB24 & 0x3F)) >> 4));
+    }
+    p = (YiQw *)s->pBCB24;
+    s->pBCB24 = (u8 *)p + ((count << 4) + 0x10);
+    if ((u8 *)s->pBCB28 < s->pBCB24) {
+        BREAK();
+    }
+    if (s->wBCB3C >= s->wBCB40) {
+        BREAK();
+    }
+    tag->w[1] = (u32)p;
+    tag->w[2] = 0;
+    tag->w[0] = ((count + 1) & 0xFFFF) | 0x30000000;
+    tag->w[3] = 0;
+    s->pBCB34 = (u_long128 *)(tag + 1);
+    s->wBCB3C++;
+    p->w[0] = 0x11000000;
+    p->w[1] = 0x05000000;
+    p->w[2] = 0x01000404;
+    p->w[3] = count | 0x51000000;
+    p++;
+    src = (YiQw *)src0;
+    for (i = 0; i < count; i++, p++, src++) {
+        u32 *sub = (u32 *)src0 + (i * 4 + 1);
+        p->w[0] = src->w[0];
+        p->w[1] = sub[0];
+        p->w[2] = sub[1];
+        p->w[3] = src->w[3];
+    }
+}
+
+void func_001765D0(Sys597F00 *s)
+{
+    R2Qw *p = (R2Qw *)((u8 *)s + 0x27630);
+
+    p->w[3] = 0x51000005;
+    p->w[0] = 0;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p++;
+    p->w[0] = 4;
+    p->w[1] = 0x10030000;
+    p->w[2] = 0xE;
+    p->w[3] = 0;
+    p++;
+    {
+        R2Qw *q = p++;
+        q->w[0] = 0;
+        q->w[1] = 0x23C00;
+        q->w[2] = 0x50;
+        q->w[3] = 0;
+    }
+    {
+        R2Qw *q = p++;
+        q->w[0] = 0;
+        q->w[1] = 0;
+        q->w[2] = 0x51;
+        q->w[3] = 0;
+    }
+    {
+        R2Qw *q = p++;
+        int addr = 0x52;
+        q->w[0] = 0x80;
+        q->w[1] = 0x200;
+        q->w[2] = addr;
+        q->w[3] = 0;
+    }
+    {
+        R2Qw *q = p++;
+        q->w[0] = 0;
+        q->w[1] = 0;
+        q->w[2] = 0x53;
+        q->w[3] = 0;
+    }
+    p->w[3] = 0x51004001;
+    p->w[0] = 0;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p++;
+    p->w[0] = 0xC000;
+    p->w[1] = 0x8000000;
+    p->w[2] = 0;
+    p->w[3] = 0;
+}
 
 void func_001766D0(Sys597F00 *s) {
     R2Qw pkt[16];
@@ -254,7 +473,104 @@ void func_001766D0(Sys597F00 *s) {
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176778);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setupparamVU1);
+typedef struct YiBlk10 {
+    unsigned long d[2];
+} YiBlk10;
+
+typedef struct YiSysVU1 {
+    u8 pad_00000[0x676C0];
+    YiQw pkt676C0[10];
+    u8 pad_67760[0x7F0];
+    float f67F50;
+    u8 pad_67F54[0x10];
+    float f67F64;
+    u8 pad_67F68[0x258];
+    YiBlk10 v681C0;
+    YiBlk10 v681D0;
+    u8 pad_681E0[0x50];
+    YiBlk10 v68230;
+    YiBlk10 v68240;
+    u8 pad_68250[0x130];
+    YiBlk10 v68380;
+    u8 pad_68390[8];
+    float f68398;
+    float f6839C;
+    float f683A0;
+} YiSysVU1;
+
+void yiRender_setupparamVU1(Sys597F00 *s0)
+{
+    YiSysVU1 *s = (YiSysVU1 *)s0;
+    YiQw *p;
+    int dx;
+    int dy;
+    int max_v;
+    int min_v;
+
+    yiRender_setfogparam(s0);
+    dx = (int)(s->f68398 - 2048.0f);
+    dy = (int)(s->f6839C - 2048.0f);
+    p = s->pkt676C0;
+    p->w[0] = 0x20000009;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+    p++;
+    p->w[0] = 0x11000000;
+    p->w[2] = 0x01000101;
+    p->w[3] = 0x6C080000;
+    p->w[1] = 0;
+    p++;
+    max_v = 0;
+    min_v = 0;
+    if (dx > max_v) {
+        max_v = dx;
+    }
+    if (dx < min_v) {
+        min_v = dx;
+    }
+    if (dy > max_v) {
+        max_v = dy;
+    }
+    if (dy < min_v) {
+        min_v = dy;
+    }
+    ((float *)p)[0] = (float)(0x800 - max_v) - 128.0f;
+    ((float *)p)[1] = (float)(-0x800 - min_v) + 128.0f;
+    ((float *)p)[2] = 1.0f;
+    s->f683A0 = 0.0f;
+    if (s->f683A0 < (float)(dx < 0 ? -dx : dx)) {
+        s->f683A0 = (float)(dx < 0 ? -dx : dx);
+    }
+    if (s->f683A0 < (float)(dy < 0 ? -dy : dy)) {
+        s->f683A0 = (float)(dy < 0 ? -dy : dy);
+    }
+    if (s->f67F50 < s->f67F64) {
+        ((float *)p)[3] = s->f67F64;
+    } else {
+        ((float *)p)[3] = s->f67F50;
+    }
+    p++;
+    *(YiBlk10 *)p = s->v681C0;
+    p++;
+    *(YiBlk10 *)p = s->v681D0;
+    p++;
+    *(YiBlk10 *)p = s->v68380;
+    p++;
+    p->w[0] = 0xA000;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+    p++;
+    p->w[0] = 0xFFFF;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+    p++;
+    *(YiBlk10 *)p = s->v68230;
+    p++;
+    *(YiBlk10 *)p = s->v68240;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setupparamGS);
 

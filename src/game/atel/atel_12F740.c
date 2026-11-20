@@ -1627,7 +1627,53 @@ int func_00133E50(void) {
     return mask;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00133EB0);
+int func_00133EB0(Actor *a, void *op, ScriptCtx *ctx)
+{
+    char tmp[32];
+    int n = 0;
+    int cnt = 0;
+    int i;
+    int dst = AtelPopStackInteger(a, ctx);
+    int mask1 = AtelPopStackInteger(a, ctx);
+    int mask2 = AtelPopStackInteger(a, ctx);
+    int mask = mask1 | mask2;
+
+    dst = AtelGetRealVarAdrs(a, dst);
+    *(char *)dst = 0;
+    func_002F032C((char *)dst, D_0056A400);
+    for (i = 8; i < 16; i++) {
+        int st = 0;
+
+        if ((mask >> i) & 1) {
+            if ((mask2 >> i) & 1) {
+                st = 2;
+            } else {
+                st = 1;
+            }
+        }
+        if (st != 0) {
+            if (n != 0) {
+                func_002F032C((char *)dst, D_0056A3F0);
+            }
+            switch (st) {
+            case 1:
+                func_002F032C((char *)dst, D_0056A3E8);
+                break;
+            case 2:
+                tmp[0] = 0x10;
+                tmp[1] = cnt + '0';
+                tmp[2] = 0;
+                func_002F032C((char *)dst, D_0056A3E0);
+                cnt++;
+                func_002F032C((char *)dst, tmp);
+                break;
+            }
+            n++;
+            func_002F032C((char *)dst, func_0014F1C0(i));
+        }
+    }
+    return cnt << 8;
+}
 
 int func_00134040(Actor *a, void *op, ScriptCtx *ctx) {
     int mask = AtelPopStackInteger(a, ctx);
@@ -1711,7 +1757,54 @@ int func_00134300(Actor *a, void *op, ScriptCtx *ctx) {
     return func_0014F380(y, x, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00134360);
+void func_00134360(Actor *a, OpBlkR *op, ScriptCtx *ctx)
+{
+    int cmd = AtelPopStackInteger(a, ctx);
+    int chr = AtelPopStackInteger(a, ctx);
+    int win = AtelPopStackInteger(a, ctx);
+    int mes;
+    EvGameState *ev;
+    Effect *eff;
+
+    if (MsGetSaveCommand(chr, cmd)) {
+        op->hE = 2;
+        return;
+    }
+    SndSepPlaySimple(0x80000026);
+    mes = TkBtlEndGetText(0x401E);
+    ev = AtelGetCurCtrlWork();
+    ev->flags.w |= 0x4000000;
+    func_00206860(win, 0, 0);
+    func_00206860(win, 1, 0);
+    func_00206888(win, 0, TOGetSaveChrName(chr));
+    func_00206888(win, 1, TkMn2GetCommandName(cmd));
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0x100);
+    AtelPushStackInteger(a, ctx, 0xD0);
+    AtelPushStackInteger(a, ctx, 4);
+    func_00129F60(a, op, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_00129FF8(a, op, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    AtelPushStackInteger(a, ctx, mes);
+    func_00129E88(a, op, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_0012A058(a, op, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_0012A238(a, op, ctx);
+    op->hC = cmd;
+    op->w8 = chr;
+    op->hE = 0;
+    op->w0 = win;
+    op->w4 = 1;
+    func_00145400();
+    eff = AtelGetMesWinWork(win);
+    eff->b1D |= 0x10;
+}
 
 int func_001345D0(Actor *a, OpBlkR *op) {
     int bits = CALL_func_0012A7E0();

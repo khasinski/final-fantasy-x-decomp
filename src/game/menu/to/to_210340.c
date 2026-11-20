@@ -212,6 +212,47 @@ int func_00210D90(void)
     return 0;
 }
 
+typedef struct {
+    u8 pad0[6];
+    s16 kind;
+    s16 owner;
+    s8 b0A;
+    s8 b0B;
+    u16 h0C;
+    u16 h0E[4];
+    u16 h16[4];
+    u16 h1E;
+    s16 *items;
+    s32 count;
+    s16 nfields;
+    s16 showZero;
+    u16 fields[6];
+    s16 cols;
+    s16 rows;
+    s16 h3C;
+    u8 pad3E[2];
+    s16 top;
+    s16 cursor;
+    s16 h44;
+    u8 pad46[0x56 - 0x46];
+    s16 posX;
+    s16 posY;
+    u8 pad5A[0x62 - 0x5A];
+    s16 colWidth;
+    s16 h64;
+    s16 nameWidth;
+    s16 frame[4];
+    s16 area[4];
+    void (*draw)(void *list);
+    u8 pad7C[0xA0 - 0x7C];
+    s32 nlabels;
+    s32 label[2];
+} MenuListLocal;
+
+extern int D_00307F2C;
+int _func_00211E80(MenuListLocal *o) __asm__("func_00211E80");
+void _func_0021F448(int a, s16 x, s16 y) __asm__("func_0021F448");
+
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00210D98);
 
 int func_00210F58(void)
@@ -246,7 +287,31 @@ int func_00211518(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00211520);
+int func_00211520(MenuListLocal *o)
+{
+    int i;
+    int x;
+    int y;
+
+    _func_00211E80(o);
+    for (i = 0; i < o->b0B; i++) {
+        if (o->h0E[i] >= o->top && o->h0E[i] < o->top + o->rows * o->cols) {
+            if ((D_00307F2C & 1) && o->h0E[i] >= o->top && o->h0E[i] <= o->top + o->rows * o->cols) {
+                x = o->area[0];
+                x += (o->h0E[i] % o->cols) * (o->colWidth + 0x10);
+                y = o->area[1] + ((o->h0E[i] - o->top) / o->cols) * 0x14;
+                _func_0021F448(0, x, y);
+            }
+        }
+    }
+    if (o->cursor >= o->top && o->cursor < o->top + o->rows * o->cols) {
+        x = o->area[0];
+        x += (o->cursor % o->cols) * (o->colWidth + 0x10);
+        y = o->area[1] + ((o->cursor - o->top) / o->cols) * 0x14;
+        _func_0021F448(0, x, y);
+        return 0;
+    }
+}
 
 int func_002116E0(void)
 {
@@ -290,7 +355,31 @@ int func_00211CB0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00211CB8);
+int func_00211CB8(MenuListLocal *o)
+{
+    int i;
+    int x;
+    int y;
+
+    _func_00211E80(o);
+    for (i = 0; i < o->b0B; i++) {
+        if (o->h0E[i] >= o->top && o->h0E[i] < o->top + o->rows * o->cols) {
+            if ((D_00307F2C & 1) && o->h0E[i] >= o->top && o->h0E[i] <= o->top + o->rows * o->cols) {
+                x = o->area[0];
+                x += (o->h0E[i] % o->cols) * (o->colWidth + 0x10);
+                y = o->area[1] + ((o->h0E[i] - o->top) / o->cols) * 0x14;
+                _func_0021F448(0, x, y);
+            }
+        }
+    }
+    if (o->cursor >= o->top && o->cursor < o->top + o->rows * o->cols) {
+        x = o->area[0];
+        x += (o->cursor % o->cols) * (o->colWidth + 0x10);
+        y = o->area[1] + ((o->cursor - o->top) / o->cols) * 0x14;
+        _func_0021F448(0, x, y);
+        return 0;
+    }
+}
 
 int func_00211E78(void)
 {
@@ -451,7 +540,31 @@ int func_002126B8(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_002126C0);
+int func_002126C0(MenuListLocal *o)
+{
+    int i;
+    int x;
+    int y;
+
+    _func_00211E80(o);
+    for (i = 0; i < o->b0B; i++) {
+        if (o->h0E[i] >= o->top && o->h0E[i] < o->top + o->rows * o->cols) {
+            if ((D_00307F2C & 1) && o->h0E[i] >= o->top && o->h0E[i] <= o->top + o->rows * o->cols) {
+                x = o->area[0] - 10;
+                x += (o->h0E[i] % o->cols) * (o->colWidth + 0x10);
+                y = o->area[1] + ((o->h0E[i] - o->top) / o->cols) * 0x14;
+                _func_0021F448(0, x, y);
+            }
+        }
+    }
+    if (o->cursor >= o->top && o->cursor < o->top + o->rows * o->cols) {
+        x = o->area[0];
+        x += (o->cursor % o->cols) * (o->colWidth + 0x10);
+        y = o->area[1] + ((o->cursor - o->top) / o->cols) * 0x14;
+        _func_0021F448(0, x, y);
+        return 0;
+    }
+}
 
 int func_00212880(void)
 {

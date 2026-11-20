@@ -2,6 +2,9 @@
 #define func_0021BAB8 _hdr_func_0021BAB8
 #define func_001FCB88 _hdr_func_001FCB88
 #define D_00692658 _hdr_D_00692658
+#define D_00692560 _hdr_D_00692560
+#define D_00692478 _hdr_D_00692478
+#define D_006925C0 _hdr_D_006925C0
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q5.h"
@@ -15,6 +18,9 @@
 #undef func_0021BAB8
 #undef func_001FCB88
 #undef D_00692658
+#undef D_00692560
+#undef D_00692478
+#undef D_006925C0
 
 int func_001FCB88(float f, int x, int y, u32 c);
 
@@ -39,12 +45,121 @@ typedef struct LimitTimerState {
     float f18;
 } LimitTimerState;
 
+typedef struct Popup {
+    s16 h0;
+    s16 h2;
+    s16 h4;
+    s16 h6;
+    s16 h8;
+    s16 hA;
+    s16 hC;
+    s16 hE;
+    s32 w10;
+} Popup;
+
+extern u16 D_00692478;
+extern u16 D_00692502;
 extern InfoWinParam D_00692508;
+extern Popup D_00692560[4];
 extern LimitTimerState D_00692658;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_00218A78);
+extern char D_00570E30[];
+extern void func_002198D8(int x, int y, int w, int h, int c);
+void func_00219688(int id, int kind, int x, int y);
+void func_00219798(int a, int x, int y);
+
+void func_00218A78(int id, int x, int y)
+{
+    s16 h;
+    s16 y1;
+    s16 x1;
+    int y2;
+    int f0;
+    int f1;
+    int f2;
+    int f3;
+
+    if (D_003249AC != 0) {
+        f0 = func_002195F8(id, 0);
+        f1 = func_002195F8(id, 1);
+        f2 = func_002195F8(id, 2);
+        f3 = func_002195F8(id, 3);
+        h = 0x16;
+        if (f0 != 0) {
+            h = 0x26;
+        }
+        if (f1 != 0) {
+            h += 0x10;
+        }
+        if (f2 != 0) {
+            h += 0x10;
+        }
+        if (f3 != 0) {
+            h += 0x10;
+        }
+        if (func_0020B850() == 0 && func_001BD360() == 0) {
+            if (D_00692508.h6 > 0) {
+                h += 0x12;
+            }
+        } else {
+            if (D_00692508.h6 > 0) {
+                h += 0x18;
+            }
+        }
+        TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+        func_001FA7D0(x, y, 0xA9, h);
+        TOMkpShapeXY(0x1AA, x + 0x24, y);
+        y1 = y + 3;
+        x1 = x + 3;
+        y2 = y1 + 2;
+        TOMkpShapeXY(0xE9, x1 + 2, y2);
+        func_001F63B8(MsGetRamChrHP(id), x1 + 0x54, y2, 0);
+        func_001F64A0((int)D_00570E30, x1 + 0x5A, y2);
+        func_001F63B8(MsGetRamChrHPmax(id), x1 + 0xA0, y2, 0);
+        {
+            register int tmp __asm__("$2") = y1 + 0x10;
+            y1 = tmp;
+        }
+        if (f0 != 0) {
+            func_002198D8(x1, y1, 0xA3, 0x10, 0);
+            func_002198D8(x1, y1, 0xA3, 1, 6);
+            func_00219688(id, 0, x1, y1);
+            y1 += 0x10;
+        }
+        if (f1 != 0) {
+            func_002198D8(x1, y1, 0xA3, 0x10, 1);
+            func_002198D8(x1, y1, 0xA3, 1, 6);
+            func_00219688(id, 1, x1, y1);
+            y1 += 0x10;
+        }
+        if (f2 != 0) {
+            func_002198D8(x1, y1, 0xA3, 0x10, 2);
+            func_002198D8(x1, y1, 0xA3, 1, 6);
+            func_00219688(id, 2, x1, y1);
+            y1 += 0x10;
+        }
+        if (f3 != 0) {
+            func_002198D8(x1, y1, 0xA3, 0x10, 3);
+            func_002198D8(x1, y1, 0xA3, 1, 6);
+            func_00219688(id, 3, x1, y1);
+            y1 += 0x10;
+        }
+        if (D_00692508.h6 > 0) {
+            y1 += 2;
+            if (func_0020B850() == 0 && func_001BD360() == 0) {
+                func_002198D8(x1, y1, 0xA3, 0x10, 5);
+            } else {
+                func_002198D8(x1, y1, 0xA3, 0x16, 5);
+            }
+            ((int (*)(int, int, int))func_00219798)(id, x1, y1 + 2);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitInfoWinMes);
+
+extern s8 D_00325020;
+void TOBtlSetInfoWinMes(int a);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlInfoWinMes);
 
@@ -55,8 +170,8 @@ void TOBtlDrawInfoWinMes(void)
     if (D_003249AD != 0 && (*(s32 *)MsGetSaveMenu() >> 10) & 1) { /* DEBT(CAST): flag word untyped */
         func_001F1D60(D_006925B6, D_006925B8, D_006925BA, D_006925BC);
         for (i = 0; i < 4; i++) {
-            if ((&D_00692560)[i].h0 != 0) { /* DEBT(TYPE): D_00692560 is the first of 4 records */
-                func_001F37C8((&D_00692560)[i].w10, (&D_00692560)[i].hA, (&D_00692560)[i].hC);
+            if (D_00692560[i].h0 != 0) {
+                func_001F37C8(D_00692560[i].w10, D_00692560[i].hA, D_00692560[i].hC);
             }
         }
         TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
@@ -73,16 +188,16 @@ void TOBtlSetInfoWinMes(int a)
     TOBtlInitInfoWinMes(a);
     text = MsGetMenuChrInfo(a, 1);
     _TOGetMessageWH(0, (u8 *)text, &size[0], &size[1], 0, 0); /* DEBT(CAST): message text comes back as int */
-    if (size[0] < D_00692560.h6) {
-        D_00692560.h0 = 8;
+    if (size[0] < D_00692560[0].h6) {
+        D_00692560[0].h0 = 8;
     } else {
-        D_00692560.h0 = 2;
+        D_00692560[0].h0 = 2;
     }
     D_006925B0 = 1;
-    D_00692560.hA = D_006925B2;
-    D_00692560.hC = D_006925B4;
-    D_00692560.hE = size[0];
-    D_00692560.w10 = text;
+    D_00692560[0].hA = D_006925B2;
+    D_00692560[0].hC = D_006925B4;
+    D_00692560[0].hE = size[0];
+    D_00692560[0].w10 = text;
 }
 
 int func_002195F8(int id, int kind)
@@ -150,27 +265,78 @@ void func_00219798(int a, int x, int y)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_002198D8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_00219DA0);
+typedef struct LibraState {
+    s16 h0;
+    s16 h2;
+    s16 h4;
+    s16 h6;
+    s16 h8;
+    u16 hA[36];
+    s16 h52;
+    s16 h54;
+    s16 h56;
+    s16 h58;
+} LibraState;
+
+extern LibraState D_006925C0;
+
+void func_00219DA0(int v)
+{
+    int i;
+    u8 *p;
+    u16 b;
+
+    D_006925C0.h4 = 20;
+    D_006925C0.h2 = v;
+    D_006925C0.h6 = 0;
+    D_006925C0.h8 = 0;
+    D_006925C0.h56 = MsGetRamChrHP(v);
+    D_006925C0.h58 = MsGetRamChrHPmax(v);
+    p = (u8 *)((int (*)(int))func_001DC300)(v);
+    for (i = 0; i < 12; i++) {
+        if (i == 11) {
+            if (p[11] == 0) {
+                D_006925C0.hA[D_006925C0.h8++] = 0x1011;
+            }
+        } else {
+            if (p[i] == 0xFF) {
+                D_006925C0.hA[D_006925C0.h8++] = i + 0x1006;
+            }
+        }
+    }
+    p = (u8 *)((int (*)(int))func_001DC320)(v);
+    for (i = 0; i < 13; i++) {
+        if (p[i] == 0xFF) {
+            D_006925C0.hA[D_006925C0.h8++] = i + 0x1012;
+        }
+    }
+    b = ((u16 (*)(int))func_001DC340)(v);
+    for (i = 0; i < 15; i++) {
+        if (i != 9 && ((b >> i) & 1)) {
+            D_006925C0.hA[D_006925C0.h8++] = i + 0x1020;
+        }
+    }
+}
 
 s16 func_00219F40(void)
 {
-    return D_006925C0;
+    return D_006925C0.h0;
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitLibraWindow);
 
 void func_0021A128(void)
 {
-    switch (D_006925C0) {
+    switch (D_006925C0.h0) {
     case 0:
         break;
     case 1:
         TOSeqStartSceneDrawContinue(2, D_00570F10);
-        D_006925C0++;
+        D_006925C0.h0++;
         break;
     case 2:
         if (TOSeqCheckTermScene(2, D_00570F10) == 1) {
-            D_006925C0++;
+            D_006925C0.h0++;
         }
         break;
     case 4:
@@ -181,21 +347,21 @@ void func_0021A128(void)
         /* fallthrough */
     case 3:
     case 6:
-        D_006925C0++;
+        D_006925C0.h0++;
         break;
     case 7:
         TOSeqStopScene(2, D_00570F10);
-        D_006925C0++;
+        D_006925C0.h0++;
         break;
     case 8:
-        D_006925C0 = 0;
+        D_006925C0.h0 = 0;
         break;
     }
 }
 
 void func_0021A200(void)
 {
-    switch (D_006925C0) {
+    switch (D_006925C0.h0) {
     case 0:
     case 1:
     case 2:
@@ -215,14 +381,14 @@ void func_0021A200(void)
 
 void func_0021A280(int v)
 {
-    D_006925C0 = 1;
-    (&D_006925C0)[1] = v;
+    D_006925C0.h0 = 1;
+    D_006925C0.h2 = v;
     func_00219DA0(v);
 }
 
 void func_0021A2A0(void)
 {
-    D_006925C0 = 6;
+    D_006925C0.h0 = 6;
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", _TOBtlDrawLibraLeft);

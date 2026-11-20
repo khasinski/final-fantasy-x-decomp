@@ -550,7 +550,43 @@ void func_002B59A0(u32 a0, u32 a1, float f12)
         :  : "r"(a0), "r"(a1) : "$3");
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B59B8);
+void func_002B59B8(float *m, float *x, float *y, int n)
+{
+    int stride = (n + 3) & 0xFC;
+    int sz = stride * 8;
+    float *h = func_002B3888(sz);
+    float *d = h + stride;
+    int i;
+
+    m[0] = 0.0f;
+    m[n - 1] = 0.0f;
+    for (i = 0; i < n - 1; i++) {
+        h[i] = x[i + 1] - x[i];
+        if (h[i] != 0.0f) {
+            d[i + 1] = (y[i + 1] - y[i]) / h[i];
+        } else {
+            d[i + 1] = 0.0f;
+        }
+    }
+    m[1] = d[2] - d[1] - h[0] * m[0];
+    d[1] = 2.0f * (x[2] - x[0]);
+    for (i = 1; i < n - 2; i++) {
+        float t = h[i] / d[i];
+        m[i + 1] = d[i + 2] - d[i + 1] - m[i] * t;
+        d[i + 1] = 2.0f * (x[i + 2] - x[i]) - h[i] * t;
+    }
+    m[n - 2] -= h[n - 2] * m[n - 1];
+    for (i = n - 2; i > 0; i--) {
+        if (h[i] == 0.0f) {
+            m[i] = 0.0f;
+        } else {
+            m[i] = (m[i] - h[i] * m[i + 1]) / d[i];
+        }
+    }
+    func_002B39C0(sz);
+}
+
+double func_002E9290(double);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_spline_xyz_table);
 
@@ -592,9 +628,68 @@ float func_002B5EC0(float *y, float *x, float *m, int n, float t)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_spline_xyz);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_deg_get);
+double func_002E9290(double);
+double func_002E8C28(double, double);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6278);
+float op_deg_get(float *dist, float x0, float y0, float x1, float y1)
+{
+    float dx = x0 - x1;
+    float dy = y0 - y1;
+    float a;
+
+    if (dist != 0) {
+        float d2 = dx * dx + dy * dy;
+        func_002ED038(d2);
+        *dist = func_002EC440(func_002E9290(func_002ED038(d2)));
+    }
+    a = func_002EC440(func_002E8C28(func_002ED038(dy), func_002ED038(dx)));
+    a = -(a * 2048.0f / 3.141592f) + -1024.0f;
+    __asm__(
+        ".set noreorder\n"
+        "cvt.w.s $f1, %0\n"
+        "mfc1    $2, $f1\n"
+        "andi    $2, $2, 0xFFF\n"
+        "mtc1    $2, %0\n"
+        "cvt.s.w %0, %0\n"
+        ".set reorder"
+        : "+f"(a) : : "$2", "$f1");
+    return a;
+}
+
+extern float D_004F4120[4];
+extern float D_004F4130[4];
+void func_002DCE80(void *a, void *b, void *c);
+
+int func_002B6278(float *a, void *b, float *c)
+{
+    float m[4][4];
+    float v[4];
+    register int flag __asm__("$7");
+
+    __asm__ volatile(
+        ".set noreorder\n"
+        "lw    $2, 0x0(%1)\n"
+        "lw    $3, 0x8(%1)\n"
+        "or    $2, $2, $3\n"
+        "beqz  $2, 1f\n"
+        " move %0, $0\n"
+        "nop\n"
+        "addiu %0, %0, 1\n"
+        "1:\n"
+        "nop\n"
+        ".set reorder\n"
+        : "=r"(flag) : "r"(c) : "$2", "$3");
+    if (flag != 0) {
+        func_002DCE80(v, D_004F4120, c);
+    } else {
+        func_002DCE80(v, D_004F4130, c);
+    }
+    func_002DD128(m);
+    func_002DCEC8(m[0], v);
+    func_002DCEC8(m[2], c);
+    func_002DCE80(m[1], m[2], m[0]);
+    func_002DD080((Blk64 *)a, (Blk64 *)m, b);
+}
 
 int func_002B6358(float *a, void *b, void *c)
 {
@@ -705,7 +800,110 @@ void func_002B64B0(void *a, void *b, void *c, float angle)
         : : "r"(tmp), "r"(save), "r"(b), "r"(a), "r"(c) : "memory");
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", op_point_get_line_circle);
+int func_002B69A8(float *rx, float *ry, float cx, float cy, float r, float x0, float y0, float x1, float y1);
+float _op_deg_get(float x0, float y0, float x1, float y1, float *dist) __asm__("op_deg_get");
+
+int op_point_get_line_circle(float *out0, float *out1, float cx, float cy, float r, float x0, float y0, float x1, float y1)
+{
+    float pad[4];
+    float p0[4];
+    float p1[4];
+    float rx[8];
+    float ry[4];
+    float d0, d1, d2;
+    int n;
+    float a0, a1, a2;
+
+    (void)pad;
+    n = func_002B69A8(rx, ry, cx, cy, r, x0, y0, x1, y1);
+    MMI_SQ_ZERO(0x0, p0);
+    MMI_SQ_ZERO(0x0, p1);
+    p0[0] = rx[0];
+    p0[2] = ry[0];
+    p1[0] = rx[1];
+    p1[2] = ry[1];
+    if (n == 0) {
+        return 0;
+    }
+    if (n == 1) {
+        __asm__ volatile(
+            "lq $2, 0x0(%1)\n\t"
+            "sq $2, 0x0(%0)"
+            : : "r"(out0), "r"(p0) : "$2", "memory");
+        return 1;
+    }
+    a0 = _op_deg_get(x0, y0, x1, y1, &d0);
+    a1 = _op_deg_get(x0, y0, p0[0], p0[2], &d1);
+    a2 = _op_deg_get(x0, y0, p1[0], p1[2], &d2);
+    if (d2 < d1) {
+        u_long128 tq = *(u_long128 *)p0;
+        float ta = a1;
+        float td = d1;
+
+        a1 = a2;
+        d1 = d2;
+        a2 = ta;
+        d2 = td;
+        *(u_long128 *)p0 = *(u_long128 *)p1;
+        *(u_long128 *)p1 = tq;
+    }
+    if (d0 < d1) {
+        return 0;
+    }
+    if (d0 < d2) {
+        register float f12 __asm__("$f12") = a1;
+        register float c128 __asm__("$f13");
+        register float hi __asm__("$f14");
+        __asm__(
+            ".set noreorder\n\t"
+            ".set noat\n\t"
+            "lui   $1, 0x4300\n\t"
+            "mtc1  $1, %0\n\t"
+            "add.s %1, %2, %0\n\t"
+            ".set at\n\t"
+            ".set reorder"
+            : "=&f"(c128), "=f"(hi) : "f"(a0), "f"(f12));
+        if (op_deg_in_check(f12, a0 - c128, hi) != 0) {
+            out0[0] = p0[0];
+            out0[2] = p0[2];
+            return 1;
+        }
+        return 0;
+    }
+    {
+        register float f12 __asm__("$f12") = a1;
+        register float c128 __asm__("$f0");
+        float lo, hi;
+        __asm__(
+            ".set noreorder\n\t"
+            ".set noat\n\t"
+            "lui   $1, 0x4300\n\t"
+            "mtc1  $1, %0\n\t"
+            "add.s %1, %2, %0\n\t"
+            ".set at\n\t"
+            ".set reorder"
+            : "=&f"(c128), "=f"(hi) : "f"(a0), "f"(f12));
+        lo = a0 - c128;
+        if (op_deg_in_check(f12, lo, hi) != 0) {
+            if (op_deg_in_check(a2, lo, hi) != 0) {
+                out0[0] = p0[0];
+                out0[2] = p0[2];
+                out1[0] = p1[0];
+                out1[2] = p1[2];
+                return 2;
+            }
+            out0[0] = p0[0];
+            out0[2] = p0[2];
+            return 1;
+        }
+        if (op_deg_in_check(a2, lo, hi) != 0) {
+            out0[0] = p1[0];
+            out0[2] = p1[2];
+            return 1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6768);
 
@@ -724,4 +922,31 @@ void func_002B68D0(float *px, float *py, float x0, float y0, float angle, float 
     *py = -dx * s + dy * c + y0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B69A8);
+float func_002B6768(float x0, float y0, float x1, float y1);
+void _func_002B68D0(float x0, float y0, float angle, float x1, float y1, float *px, float *py) __asm__("func_002B68D0");
+
+int func_002B69A8(float *rx, float *ry, float cx, float cy, float r, float x0, float y0, float x1, float y1)
+{
+    float lx, ly;
+    float angle;
+    double dly;
+    float dx;
+
+    angle = func_002B6768(x0, y0, x1, y1);
+    _func_002B68D0(0.0f, 0.0f, -angle, cx - x0, cy - y0, &lx, &ly);
+    dly = func_002ED038(ly);
+    if (func_002EC198(dly, 0.0) < 0) {
+        dly = func_002EBC08(0.0, dly);
+    }
+    if (func_002EC198(dly, func_002ED038(r)) > 0) {
+        return 0;
+    }
+    func_002ED038(r * r - ly * ly);
+    dx = func_002EC440(func_002E9290(func_002ED038(r * r - ly * ly)));
+    _func_002B68D0(cx, cy, angle, cx + dx, cy - ly, rx, ry);
+    if (dx == 0.0f) {
+        return 1;
+    }
+    _func_002B68D0(cx, cy, angle, cx - dx, cy - ly, rx + 1, ry + 1);
+    return 2;
+}

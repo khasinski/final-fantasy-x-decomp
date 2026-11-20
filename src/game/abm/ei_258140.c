@@ -226,7 +226,89 @@ void func_002587A0(int ch, int idx, int item)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", eiAbmParaGet);
+typedef struct {
+    u8 b0;
+    u8 b1;
+} SaveAbmNode;
+
+typedef struct {
+    SaveAbmNode nodes[0x500];
+    u8 links[0x500];
+    u16 pos[12];
+    u8 bF18;
+    u8 bF19;
+} SaveAbmMap;
+
+typedef struct {
+    u8 pad00[0x10];
+    u16 h10;
+    u16 h12;
+    u8 b14;
+} EiParaEnt;
+
+typedef struct {
+    int v[7];
+} EiArr7;
+
+extern EiArr7 D_00573988;
+
+void eiAbmParaGet(int a)
+{
+    int i;
+    EiArr7 tbl = D_00573988;
+    int out;
+    s64 s0 = 0;
+    s64 s1 = 0;
+    int b0 = 0;
+    int b1 = 0;
+    int b2 = 0;
+    int b3 = 0;
+    int b4 = 0;
+    int b5 = 0;
+    int b6 = 0;
+    int b7 = 0;
+    W5Bits *dst = func_001E0378(tbl.v[a]);
+    SaveAbmMap *save = (SaveAbmMap *)MsGetSaveAbilityMap();
+
+    for (i = 0; i < 0x400; i++) {
+        if ((save->nodes[i].b1 >> a) & 1) {
+            EiParaEnt *ent = (EiParaEnt *)func_00256F08(save->nodes[i].b0, &out);
+            u16 f = ent->h10;
+
+            if (f & 1) b0 += ent->b14;
+            if (f & 2) b1 += ent->b14;
+            if (f & 4) b2 += ent->b14;
+            if (f & 8) b3 += ent->b14;
+            if (f & 0x10) b4 += ent->b14;
+            if (f & 0x20) b5 += ent->b14;
+            if (f & 0x40) b6 += ent->b14;
+            if (f & 0x80) b7 += ent->b14;
+            if (f & 0x100) s0 += ent->b14;
+            if (f & 0x200) s1 += ent->b14;
+            func_001E03A0(tbl.v[a], ent->h12);
+        }
+    }
+    if (s0 > 0xFFFFFFFF) s0 = 0xFFFFFFFF;
+    if (s1 > 0xFFFFFFFF) s1 = 0xFFFFFFFF;
+    if (b0 > 0xFF) b0 = 0xFF;
+    if (b1 > 0xFF) b1 = 0xFF;
+    if (b2 > 0xFF) b2 = 0xFF;
+    if (b3 > 0xFF) b3 = 0xFF;
+    if (b4 > 0xFF) b4 = 0xFF;
+    if (b5 > 0xFF) b5 = 0xFF;
+    if (b6 > 0xFF) b6 = 0xFF;
+    if (b7 > 0xFF) b7 = 0xFF;
+    dst->w0 = s0;
+    dst->w4 = s1;
+    dst->b8[0] = b0;
+    dst->b8[1] = b1;
+    dst->b8[2] = b2;
+    dst->b8[3] = b3;
+    dst->b8[4] = b4;
+    dst->b8[5] = b5;
+    dst->b8[6] = b6;
+    dst->b8[7] = b7;
+}
 
 void func_00258B48(void)
 {
@@ -624,20 +706,78 @@ u8 *func_0025A478(u8 *dst, u8 *src, int n)
     return src;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_0025A4B0);
+void func_00256530(void *e);
 
-typedef struct {
-    u8 b0;
-    u8 b1;
-} SaveAbmNode;
+void func_0025A4B0(void)
+{
+    u8 *src = (u8 *)0x01F00010;
+    s32 *save = (s32 *)MsGetSaveMenu();
 
-typedef struct {
-    SaveAbmNode nodes[0x500];
-    u8 links[0x500];
-    u16 pos[12];
-    u8 bF18;
-    u8 bF19;
-} SaveAbmMap;
+    *(u8 *)0x01F00000 = 0;
+    switch ((*save >> 14) & 3) {
+    case 0:
+        func_0025A158((u8 *)1, 0x01F00000);
+        break;
+    case 1:
+        func_0025A158((u8 *)2, 0x01F00000);
+        break;
+    default:
+        func_0025A158((u8 *)3, 0x01F00000);
+        break;
+    }
+    if (*(u8 *)0x01F00000 == 0x31) {
+        int n0;
+        int n;
+        EiEnt10 *e0;
+        WorkEnt *e1;
+        WorkEnt2 *e2;
+        int c2;
+
+        ((EiBoundsWork *)lpamng)->count0 = *(u16 *)0x01F00002;
+        e0 = ((EiBoundsWork *)lpamng)->ents08;
+        n0 = ((EiBoundsWork *)lpamng)->count0;
+        lpamng->count = *(u16 *)0x01F00004;
+        lpamng->count2 = *(u16 *)0x01F00006;
+        while (--n0 != -1) {
+            src = func_0025A478((u8 *)e0, src, 0x10);
+            e0++;
+        }
+        e1 = lpamng->ents;
+        n = lpamng->count;
+        while (--n != -1) {
+            int rev = 0;
+
+            if (n & 1) rev |= 0x200;
+            if (n & 2) rev |= 0x100;
+            if (n & 4) rev |= 0x80;
+            if (n & 8) rev |= 0x40;
+            if (n & 0x10) rev |= 0x20;
+            if (n & 0x20) rev |= 0x10;
+            if (n & 0x40) rev |= 8;
+            if (n & 0x80) rev |= 4;
+            if (n & 0x100) rev |= 2;
+            if (n & 0x200) rev |= 1;
+            src = func_0025A478((u8 *)e1, src, 0xC);
+            *(u16 *)e1->pad26 = rev << 6;
+            func_00256530(e1);
+            e1++;
+        }
+        c2 = 0;
+        e2 = lpamng->ents2;
+        n = lpamng->count2;
+        while (--n != -1) {
+            src = func_0025A478((u8 *)e2, src, 8);
+            if (e2->h0 != e2->h2 && e2->h0 < lpamng->count && e2->h2 < lpamng->count) {
+                c2++;
+                func_00256558((EntRef *)e2);
+                e2++;
+            }
+        }
+        lpamng->count2 = c2;
+    }
+    func_0025A340();
+    func_0025A1C8();
+}
 
 float func_00260D50(void);
 float func_00260B68(void);

@@ -1,3 +1,4 @@
+#define D_003238D0 _hdr_D_003238D0
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -6,6 +7,26 @@
 #include "ffx/t4.h"
 #include "ffx/v4.h"
 #include "ffx/u3.h"
+#undef D_003238D0
+
+typedef struct {
+    /* 0x00 */ s8 b0;
+    /* 0x01 */ s8 b1;
+    /* 0x02 */ s8 timer[16];
+    /* 0x12 */ u16 h12;
+    /* 0x14 */ u16 h14;
+    /* 0x16 */ u16 h16;
+    /* 0x18 */ u8 pad18[6];
+    /* 0x1E */ u8 b1E;
+    /* 0x1F */ u8 b1F;
+    /* 0x20 */ u8 b20;
+    /* 0x21 */ u8 b21;
+    /* 0x22 */ u16 h22;
+    /* 0x24 */ u16 h24;
+    /* 0x26 */ u16 h26;
+    /* 0x28 */ u8 pad28[0x18];
+} ToPadBlock;
+extern ToPadBlock D_003238D0;
 
 u8 *func_00204080(u8 *s, int n)
 {
@@ -52,7 +73,43 @@ void func_00204168(int i)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOSetExeMessageArea);
+typedef struct {
+    u8 pad[0x138];
+} SlotZFull;
+
+extern MenuCmd D_00667640[];
+extern MenuCmd D_00667EC0[];
+extern SlotZFull D_00668760[];
+extern SlotZFull D_00669120[];
+extern Cell D_00669B00[][32];
+extern Cell D_0066A300[][32];
+
+void TOSetExeMessageArea(s32 a)
+{
+    int i, j;
+
+    if (a == 0) {
+        for (i = 0; i < 8; i++) {
+            D_00668740[i] = &D_00667640[i];
+            D_00669AE0[i] = (SlotZ *)&D_00668760[i];
+        }
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 32; j++) {
+                D_0066AB00[i][j] = &D_00669B00[i][j];
+            }
+        }
+    } else {
+        for (i = 0; i < 8; i++) {
+            D_00668740[i] = &D_00667EC0[i];
+            D_00669AE0[i] = (SlotZ *)&D_00669120[i];
+        }
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 32; j++) {
+                D_0066AB00[i][j] = &D_0066A300[i][j];
+            }
+        }
+    }
+}
 
 void TOInitMacroCmd(int r)
 {
@@ -131,9 +188,82 @@ void TODrawMessage(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TODrawSelectCursor);
+extern UiFrame D_00323918;
+void func_001F0328(int x, int y, int w, int h, u32 c0, u32 c1);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOSetMessageType);
+void TODrawSelectCursor(int i)
+{
+    UiFrame *p = &D_00323918;
+
+    func_002EF0D0(p, 0, 0x14);
+    if (D_00668740[i]->state == 2) {
+        if (D_00669AE0[i]->b1 == 0) {
+            D_00669AE0[i]->b1 = 1;
+        }
+    }
+    if (D_00669AE0[i]->b1 == 1) {
+        p->col.r = 0x70;
+        p->col.g = 0x70;
+        p->col.b = 0x10;
+        p->col.a = 0x80;
+        p->box.x0 = ((TextWin *)D_00668740[i])->x0 + D_00669AE0[i]->ent[D_00669AE0[i]->b2].h4;
+        p->box.y0 = ((TextWin *)D_00668740[i])->y0 + D_00669AE0[i]->ent[D_00669AE0[i]->b2].h6 - 2;
+        p->box.x1 = p->box.x0 + D_00669AE0[i]->ent[D_00669AE0[i]->b2].h2;
+        p->box.y1 = p->box.y0 + 2;
+        if (D_00668740[i]->w1C == 2) {
+            if (func_0020B850() == 0 && func_001BD360() == 0) {
+                func_001F0328(p->box.x0, p->box.y0 - 0x12, 0xC, 0x16, 0x80008080, 0x80008080);
+            } else {
+                func_001F0328(p->box.x0, p->box.y0 - 0x12, 8, 0x14, 0x80008080, 0x80008080);
+            }
+        } else {
+            func_001FE7F8(0, p->box.x0, p->box.y0 - 0x14);
+        }
+    }
+}
+
+void TOInitMessageCallBack(MenuCmd *m);
+
+int TOSetMessageType(int i, int v)
+{
+    D_00668740[i]->x08 = v & 0xF;
+    if (v & 0x4000) {
+        D_00668740[i]->h10 = 0x4000;
+    } else {
+        D_00668740[i]->h10 = 0;
+    }
+    if (v & 0x2000) {
+        if (v & 0x8000) {
+            D_00668740[i]->h1A = 3;
+        } else {
+            D_00668740[i]->h1A = 1;
+        }
+    } else {
+        D_00668740[i]->h1A = 0;
+    }
+    if (v & 0x1000) {
+        D_00668740[i]->h0C = 1;
+    } else {
+        D_00668740[i]->h0C = 0;
+    }
+    if (v & 0x400) {
+        D_00668740[i]->w12 = 1;
+    } else {
+        D_00668740[i]->w12 = 0;
+    }
+    if (!((*(s32 *)MsGetSaveMenu() >> 8) & 1)) {
+        D_00668740[i]->h0C = 1;
+    }
+    if (D_00668740[i]->x08 == 3) {
+        if (v & 0x8000) {
+            D_00668740[i]->h1A = 3;
+        } else {
+            D_00668740[i]->h1A = 1;
+        }
+    }
+    TOInitMessageCallBack(D_00668740[i]);
+    return 0;
+}
 
 void TOSetMessageFunc(s32 i, s32 k)
 {
@@ -333,7 +463,82 @@ u8 *func_00205AA0(int i)
     return z->x18;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOGetPadStatus);
+void TOGetPadStatus(void)
+{
+    int i;
+    u16 mask;
+    u16 *p_cur;
+    u16 *p_trg;
+    u16 *p_rep;
+    u16 old12 = D_003238D0.h12;
+    u16 old22 = D_003238D0.h22;
+
+    D_003238D0.h12 = 0;
+    D_003238D0.h14 = 0;
+    D_003238D0.h16 = 0;
+    D_003238D0.h22 = 0;
+    D_003238D0.h24 = 0;
+    D_003238D0.h26 = 0;
+    if (D_003238D0.b0 == 0 && D_003238D0.b1 == 0) {
+        return;
+    }
+    D_003238D0.h12 = TkGetControlerHist(0, 0, 0);
+    D_003238D0.h14 = D_003238D0.h12 & (old12 ^ D_003238D0.h12);
+    D_003238D0.b1E = TkGetControlerAnalogHist(0, 0, 2, 0);
+    D_003238D0.b1F = TkGetControlerAnalogHist(0, 0, 3, 0);
+    D_003238D0.h22 = D_003238D0.h12 & 0xFFF;
+    if (D_003238D0.b1F < 0x18) {
+        D_003238D0.h22 |= 0x1000;
+    }
+    if (D_003238D0.b1F > 0xE8) {
+        D_003238D0.h22 |= 0x4000;
+    }
+    if (D_003238D0.b1E < 0x18) {
+        D_003238D0.h22 |= 0x8000;
+    }
+    if (D_003238D0.b1E > 0xE8) {
+        D_003238D0.h22 |= 0x2000;
+    }
+    D_003238D0.h24 = D_003238D0.h22 & (old22 ^ D_003238D0.h22);
+    if ((D_003238D0.h12 & 0xF000) == 0) {
+        p_cur = &D_003238D0.h22;
+        p_trg = &D_003238D0.h24;
+        p_rep = &D_003238D0.h26;
+    } else {
+        p_cur = &D_003238D0.h12;
+        p_trg = &D_003238D0.h14;
+        p_rep = &D_003238D0.h16;
+    }
+    for (i = 0; i < 16; i++) {
+        mask = 1 << i;
+        if (mask == 0x800 || mask == 0x100) {
+            continue;
+        }
+        if ((*p_trg & mask) && D_003238D0.timer[i] == 0) {
+            *p_rep |= mask;
+        }
+        if (!(*p_trg & mask)) {
+            D_003238D0.timer[i]++;
+        }
+        if (!(*p_cur & mask)) {
+            D_003238D0.timer[i] = 0;
+        }
+        if (D_003238D0.timer[i] == 7) {
+            *p_rep |= mask;
+            D_003238D0.timer[i] = 4;
+        }
+    }
+    if ((D_003238D0.h12 & 0xF000) == 0) {
+        D_003238D0.h12 = D_003238D0.h22;
+        D_003238D0.h14 = D_003238D0.h24;
+        D_003238D0.h16 = D_003238D0.h26;
+    } else {
+        D_003238D0.h22 = D_003238D0.h12;
+        D_003238D0.h24 = D_003238D0.h14;
+        D_003238D0.h26 = D_003238D0.h16;
+    }
+    D_003238D0.b0 = 0;
+}
 
 void TOGetControlPadStatus(int i)
 {
@@ -525,11 +730,93 @@ int TOGetChangeMacroWidth(int a, u8 *b, int flags)
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_002070A8);
+extern u8 D_00323930[];
+void func_00204CA8(u8 *s, void *out);
+void TOMakePktFont1612(TextItem *item, void *info);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TODrawChangeMacro2);
+int func_002070A8(int id, u8 *s, TextItem *item, int count, int limit)
+{
+    func_002EF0D0(D_00323930, 0, 0x20);
+    s = TOGetChangeMacroAddress(id, s);
+    if (s == 0) {
+        return 0;
+    }
+    while (*s != 0 && count < limit) {
+        if (*s == 7) {
+            if (s[1] >= 0xE0 && s[1] < 0xF0) {
+                item->x += s[1] - 0xE0;
+            }
+            s = TOSkipCode(s);
+        } else if (TOGetGroup(*s) == 3) {
+            count = func_002070A8(id, s, item, count, limit);
+            s = TOSkipCode(s);
+        } else {
+            func_00204CA8(s, D_00323930);
+            count++;
+            TOMakePktFont1612(item, D_00323930);
+            s = TOSkipCode(s);
+        }
+    }
+    return count;
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TODrawMovieChangeMacro2);
+void TOMakePktMovieFont1612(TextItem *item, void *info);
+
+void TODrawChangeMacro2(MenuCmd *m, u8 *s, TextItem *item)
+{
+    func_002EF0D0(D_00323930, 0, 0x20);
+    s = TOGetChangeMacroAddress(m->id, s);
+    if (s == 0) {
+        return;
+    }
+    while (*s != 0 && m->x8C < m->x90) {
+        if (*s == 7) {
+            if (s[1] >= 0xE0 && s[1] < 0xF0) {
+                item->x += s[1] - 0xE0;
+            }
+            s = TOSkipCode(s);
+        } else if (TOGetGroup(*s) == 3) {
+            TODrawChangeMacro2(m, s, item);
+            s = TOSkipCode(s);
+        } else {
+            func_00204CA8(s, D_00323930);
+            TOMakePktFont1612(item, D_00323930);
+            s = TOSkipCode(s);
+            m->x8C++;
+            if (m->xA4 == 0 && m->x9C == 0 && m->x90 < m->x98) {
+                m->x90++;
+            }
+        }
+    }
+}
+
+void TODrawMovieChangeMacro2(MenuCmd *m, u8 *s, TextItem *item)
+{
+    func_002EF0D0(D_00323930, 0, 0x20);
+    s = TOGetChangeMacroAddress(m->id, s);
+    if (s == 0) {
+        return;
+    }
+    while (*s != 0 && m->x8C < m->x90) {
+        if (*s == 7) {
+            if (s[1] >= 0xE0 && s[1] < 0xF0) {
+                item->x += s[1] - 0xE0;
+            }
+            s = TOSkipCode(s);
+        } else if (TOGetGroup(*s) == 3) {
+            TODrawChangeMacro2(m, s, item);
+            s = TOSkipCode(s);
+        } else {
+            func_00204CA8(s, D_00323930);
+            TOMakePktMovieFont1612(item, D_00323930);
+            s = TOSkipCode(s);
+            m->x8C++;
+            if (m->xA4 == 0 && m->x9C == 0 && m->x90 < m->x98) {
+                m->x90++;
+            }
+        }
+    }
+}
 
 char *func_00207538(U3NumFmt *f)
 {

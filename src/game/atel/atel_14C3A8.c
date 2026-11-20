@@ -298,7 +298,22 @@ void func_0014CB90(u32 arg0, s8 *arg1, s32 arg2) {
 
 extern u32 D_0030BAC0[];
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", func_0014CC10);
+void func_0014CC10(s64 val, char *dst, int base_char)
+{
+    u32 *tbl = D_0030BAC0;
+    u32 d = *tbl++;
+
+    while (d != 0) {
+        register s32 digit __asm__("$3") = 0;
+        while (val >= (s64)d) {
+            val -= d;
+            digit++;
+        }
+        *dst++ = digit + base_char;
+        d = *tbl++;
+    }
+    *dst = 0;
+}
 
 void func_0014CC98(char *p, int n, int from, int to)
 {

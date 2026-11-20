@@ -116,7 +116,53 @@ void func_0023D190(SaveDataBody *dst, u8 *src)
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D268);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D4B8);
+typedef struct Blk40 { u8 d[0x40]; } Blk40;
+typedef struct Blk30 { u8 d[0x30]; } Blk30;
+typedef struct Blk10 { u8 d[0x10]; } Blk10;
+extern Blk40 D_00326330;
+extern Blk30 D_00326370, D_003263A0;
+extern Blk10 D_003263D0;
+void func_0023CF70(char *arg0, int arg1, int arg2, int arg3);
+
+typedef struct McIconSys {
+    u8 head[4];
+    u8 pad4[2];
+    u16 h6;
+    u8 pad8[4];
+    s32 wC;
+    Blk40 b10;
+    Blk30 b50;
+    Blk30 b80;
+    Blk10 bB0;
+    char title[0x44];
+    char icon1[0x40];
+    char icon2[0x40];
+    char icon3[0x40];
+} McIconSys;
+
+void func_0023D4B8(int arg0, int arg1, int arg2)
+{
+    char buf[0x100];
+    McIconSys *sys = (McIconSys *)0x01D5E000;
+
+    func_002EF0D0(sys, 0, 0x3C4);
+    sys->head[0] = 'P';
+    sys->head[1] = 'S';
+    sys->head[2] = '2';
+    sys->head[3] = 'D';
+    sys->h6 = 0x20;
+    sys->wC = 0x60;
+    sys->b10 = D_00326330;
+    sys->b50 = D_00326370;
+    sys->b80 = D_003263A0;
+    sys->bB0 = D_003263D0;
+    func_0023CF70(buf, arg0, arg1, arg2);
+    func_002F072C(sys->title, buf);
+    func_0023CCF0(buf, arg0);
+    func_002F072C(sys->icon1, buf);
+    func_002F072C(sys->icon2, buf);
+    func_002F072C(sys->icon3, buf);
+}
 
 void func_0023D748(void) {
 }
@@ -332,7 +378,46 @@ void func_0023E6B0(Task *o, int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E798);
+void func_0023E390(Task *o, int x, int y, int idx, int mode);
+void func_00200A58(int a0, int a1, int a2, int a3, int t0, int t1, int t2);
+
+void func_0023E798(Task *o)
+{
+    int i;
+    int y = 0x5A;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    TOMakePktScissor(0, 0x5A, 0x1FF, 0x146);
+    if (o->x32 == o->x34) {
+        y = 0x2A;
+        for (i = -1; i < 6; i++, y += 0x30) {
+            func_0023E390(o, 0x1E, y, i, 0);
+        }
+    } else {
+        for (i = 0; i < 5; i++, y += 0x30) {
+            func_0023E390(o, 0x1E, y, i, 2);
+        }
+        i = 0;
+        {
+            register int d __asm__("$2") = (o->x46 * 0xEC) / 4096;
+            register int c __asm__("$3");
+            __asm__ volatile("" : "+r"(d));
+            c = 0x5A;
+            __asm__ volatile("" : "+r"(c));
+            y = c - d;
+        }
+        for (; i < 5; i++, y += 0x30) {
+            func_0023E390(o, 0x1E, y, i, 1);
+        }
+    }
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    func_0023E6B0(o, 0x2A, 0x153);
+    func_001FE7F8(0, 0x1E, (o->x48 - o->x32) * 0x30 + 0x5A);
+    func_00200A58(0x1E3, 0x52, 0xA, 0xFC, o->x32, (u16)o->x3A, (u16)o->x30);
+    TOMenuDrawKickTmp();
+    func_00124F08();
+}
 
 void func_0023E928(Task *o) { o->state = 0; }
 

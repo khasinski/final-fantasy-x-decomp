@@ -1,6 +1,7 @@
 /* tu_008 0x1074a8-0x10ad70: low; ~Ch (config/tu_map.tsv) */
 #define Ch_ElemCalcQuaternion _hdr_Ch_ElemCalcQuaternion
 #define tex_anim_no_set _hdr_tex_anim_no_set
+#define Ch_ElemGetAttr _hdr_Ch_ElemGetAttr
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -9,6 +10,7 @@
 #include "ffx/v0.h"
 #undef Ch_ElemCalcQuaternion
 #undef tex_anim_no_set
+#undef Ch_ElemGetAttr
 
 s32 func_001074A8(s32 i)
 {
@@ -21,6 +23,9 @@ void func_001074C0(s32 i, s32 v)
 }
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001074D8);
+
+float func_001074D8(float a, float b, float step);
+void func_00106E58(Chr *chr, s32 a);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107600);
 
@@ -39,6 +44,8 @@ void func_001078B0(float v)
 {
     D_0057E9D4 = v;
 }
+
+extern double D_005695B8;
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001078C0);
 
@@ -169,9 +176,130 @@ void func_00107D80(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107EC8);
+typedef struct {
+    u16 h00;
+    u16 h02;
+    u16 h04;
+    s16 h06;
+    s32 w08;
+} NormEntry12;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00108178);
+typedef struct {
+    u8 pad00[6];
+    u16 h06;
+    u16 h08;
+    u8 pad0A[10];
+    NormEntry12 *p14;
+    u8 pad18[12];
+    NormEntry12 *p24;
+} ChrHdrNormView;
+
+void func_002DCF48(void *dst, void *src);
+void func_00123EC4(s32 a, s32 b, void *m);
+void func_00123CD8(s32 a, s32 b, void *m);
+void func_00124260(s32 a, s32 b, void *m);
+void func_00124058(s32 a, s32 b, void *m);
+void func_001243E8(s32 a, s32 b);
+
+void func_00107EC8(Chr *chr)
+{
+    float m0[4][4];
+    float m1[4][4];
+    s32 do_norm = 0;
+    s32 prev;
+    s32 i;
+
+    if (D_0057E9D8 != 0 || ((s32)chr->flags & 1) || (FLAGS_BIT(chr, 3) && D_0057E9DC != 0) || FLAGS_BIT(chr, 4)) {
+        s32 b4;
+
+        do_norm = 1;
+        if (FLAGS_BIT(chr, 3)) {
+            chr->flags &= ~8;
+            D_0057E9DC--;
+        }
+        b4 = FLAGS_BIT(chr, 4);
+        if (b4 != 0) {
+            chr->flags = (chr->flags & ~0x10) | ((s64)(b4 ^ 1) << 4);
+        }
+    }
+    prev = -1;
+    for (i = 0; i < ((ChrHdrNormView *)chr->hdr)->h08; i++) {
+        NormEntry12 *e = &((ChrHdrNormView *)chr->hdr)->p14[i];
+
+        if (prev != e->h04) {
+            prev = e->h04;
+            func_002DCF48(m1, chr->slots[prev].u90);
+        }
+        func_002DCE38(m0, m1, chr->slots[e->h00].u90);
+        if (e->h06 != 0) {
+            func_00123EC4(e->w08, chr->ents[e->h02].w08, m0);
+        } else {
+            func_00123CD8(e->w08, chr->ents[e->h02].w08, m0);
+        }
+        if (do_norm != 0) {
+            e = &((ChrHdrNormView *)chr->hdr)->p24[i];
+            if (e->w08 != 0) {
+                if (e->h06 != 0) {
+                    func_00124260(e->w08, chr->ents[e->h02].w04, m0);
+                } else {
+                    func_00124058(e->w08, chr->ents[e->h02].w04, m0);
+                }
+            }
+        }
+    }
+    if (do_norm != 0) {
+        for (i = 0; i < ((ChrHdrNormView *)chr->hdr)->h06; i++) {
+            ChrEnt *ent = &chr->ents[i];
+
+            func_001243E8(ent->w04, *(u16 *)((u8 *)ent->data + 0x16));
+        }
+    }
+}
+
+void func_00108178(Chr *chr, float a, float b)
+{
+    register u8 *saved_reg_gp __asm__("$28");
+    float c;
+
+    if (b != 0.0f) {
+        __asm__ volatile("" : "+r"(saved_reg_gp));
+        c = *(float *)(saved_reg_gp - 0x7EEC);
+        if (a > c) {
+            do {
+                a -= *(float *)(saved_reg_gp - 0x7EE8);
+            } while (a > c);
+        }
+        __asm__ volatile("" : "+r"(saved_reg_gp));
+        c = *(float *)(saved_reg_gp - 0x7EE4);
+        if (a < c) {
+            do {
+                a += *(float *)(saved_reg_gp - 0x7EE0);
+            } while (a < c);
+        }
+        __asm__ volatile("" : "+r"(saved_reg_gp));
+        c = *(float *)(saved_reg_gp - 0x7EDC);
+        *(float *)((u8 *)chr + 0x16C) = a;
+        *(float *)((u8 *)chr + 0x170) = b * c / 180.0f;
+    } else {
+        __asm__ volatile("" : "+r"(saved_reg_gp));
+        c = *(float *)(saved_reg_gp - 0x7ED8);
+        if (a > c) {
+            do {
+                a -= *(float *)(saved_reg_gp - 0x7ED4);
+            } while (a > c);
+        }
+        __asm__ volatile("" : "+r"(saved_reg_gp));
+        c = *(float *)(saved_reg_gp - 0x7ED0);
+        if (a < c) {
+            do {
+                a += *(float *)(saved_reg_gp - 0x7ECC);
+            } while (a < c);
+        }
+        *(float *)((u8 *)chr + 0x16C) = a;
+        *(float *)((u8 *)chr + 0x168) = a;
+        *(float *)((u8 *)chr + 0x170) = 0.0f;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_CalcElement);
 
@@ -193,7 +321,60 @@ s32 func_00108750(Chr *chr, s32 key)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_ElemGetAttr);
+s32 Ch_ElemGetAttr(Chr *chr, s32 key, s32 *out, void *vec)
+{
+    Vec4 *d = (Vec4 *)vec;
+    ChrParam *p;
+    ParamTbl *t;
+    ParamEntry *e;
+    s32 n;
+
+    *out = 0;
+    if (d != 0) {
+        d->x = d->y = d->z = 0.0f;
+        d->w = 1.0f;
+    }
+    p = chr->param;
+    t = p->tbl6C;
+    if (t == 0) {
+        return 0;
+    }
+    n = t->count;
+    n--;
+    e = t->ents;
+    while (n != -1) {
+        if ((e->key & 0x3FFF) == key) {
+            *out = e->val;
+            switch (e->key & 0xC000) {
+            case 0:
+                if (d != 0) {
+                    d->x = d->y = d->z = 0.0f;
+                    d->w = 1.0f;
+                }
+                return 0;
+            case 0x4000:
+                if (d != 0) {
+                    float c;
+                    float s;
+
+                    __asm__("lwc1 %0, -0x7EA8($gp)" : "=f"(c));
+                    s = c / p->f30 / p->f30 * p->f38;
+                    d->x = *(float *)&e->pad[0] * s;
+                    d->y = *(float *)&e->pad[4] * s;
+                    d->z = *(float *)&e->pad[8] * s;
+                    d->w = 1.0f;
+                }
+                return 1;
+            case 0x8000:
+                return 2;
+            }
+            return 0;
+        }
+        e++;
+        n--;
+    }
+    return 0;
+}
 
 s32 func_001088E0(Chr *chr, s32 i)
 {
@@ -266,6 +447,8 @@ void func_00108A40(Chr *chr, V128 *dst)
 {
     *dst = chr->v6B0;
 }
+
+void func_002DCE08(void *dst, void *m, void *v);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_OptposCalc);
 
@@ -581,6 +764,22 @@ void func_00109BF8(void *arg0) {
     (*(float *)((u8 *)(arg0) + (0x4E4))) = (float) (*(float *)((u8 *)(saved_reg_gp) + (-0x7E90)));
 }
 
+typedef struct {
+    s8 b00;
+    u8 pad01[3];
+    float f04;
+    s16 h08;
+    s16 h0A;
+    u8 pad0C;
+    u8 b0D;
+    u8 pad0E;
+    u8 b0F;
+} ChrMouth;
+
+extern u8 D_00303640[];
+s32 func_002EFD78(void);
+void tex_anim_pos_set(s32 a, s32 b, s32 c);
+
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_Mouth);
 
 void _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion(void *, s32 *) __asm__("Sg_MatrixToQuaternion");
@@ -692,6 +891,11 @@ void func_0010A270(Chr *chr, float x, float y)
     chr->f428 = x;
     chr->f42C = y;
 }
+
+void func_002DD128(void *m);
+void func_002DD270(void *dst, void *src, float a);
+void func_002DD318(void *dst, void *src, float a);
+void func_002DD1C8(void *dst, void *src, float a);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_NeckInit);
 

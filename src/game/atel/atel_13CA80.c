@@ -1,10 +1,15 @@
 /* tu_074 0x13ca80-0x141ff0: low; ~Atel (config/tu_map.tsv) */
 #include "common.h"
+#define func_0013EF90 _hdr_func_0013EF90
+#define func_002D47E8 _hdr_func_002D47E8
 #include "ffx/q1.h"
+#undef func_0013EF90
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/s0.h"
 #include "ffx/v1.h"
+#undef func_002D47E8
+int func_002D47E8(float a, float b, float c, float d, float e, float f);
 
 int func_0013CA80(Actor *s, int i) {
     return ((int *)((char *)s->blob + s->hdr->o24))[i];
@@ -656,7 +661,66 @@ INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013EC80);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A980);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A9A0);
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013EF90);
+int func_002D5458(float *a, float *b, float *c, float *d);
+float func_002D5540(float *a, float *b, float *c, float *d);
+
+void func_0013EF90(Actor *a, void *op, int id, PoolEntQ *entry) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    float f1C;
+
+    if (id == 0xFFFF) {
+        v2[0] = D_0058E3D8->prev[0];
+        v2[1] = D_0058E3D8->prev[1];
+        v2[2] = D_0058E3D8->prev[2];
+        v3[0] = D_0058E3D8->cur[0];
+        v3[1] = D_0058E3D8->cur[1];
+        v3[2] = D_0058E3D8->cur[2];
+    } else {
+        ActorState *st2 = AtelGetPosWorkAdrs(AtelGetBasicWork(id));
+        v2[0] = st2->px;
+        v2[1] = st2->py;
+        v2[2] = st2->pz;
+        v3[0] = st2->x;
+        v3[1] = st2->y;
+        v3[2] = st2->z;
+    }
+    v0[0] = st->x;
+    v0[1] = st->y;
+    v0[2] = st->z;
+    v1[0] = st->f30;
+    v1[1] = st->f34;
+    v1[2] = st->f38;
+    f1C = st->f1C;
+    if (v2[0] != v3[0] || v2[2] != v3[2] || (a->flags34.w & 0x10000)) {
+        int res;
+        a->flags34.w &= ~0x10000;
+        res = func_002D5458(v2, v3, v0, v1);
+        if (res != 0) {
+            float d = func_002D5540(v2, v3, v0, v1);
+            if (f1C <= 0.0f || d <= f1C) {
+                if (entry == 0) {
+                    if (res > 0) {
+                        a->flags34.w = (a->flags34.w & ~0x60000) | 0x20000;
+                    } else {
+                        a->flags34.w &= ~0x60000;
+                    }
+                    func_0014B720(0xFFFF, a->id, 4);
+                } else {
+                    if (res > 0) {
+                        entry->b4 = 1;
+                    } else {
+                        entry->b4 = 0;
+                    }
+                    func_0014B780(0xFFFF, a->id, 4, entry->h2);
+                }
+            }
+        }
+    }
+}
 
 void func_0013F1D8(Actor *a, void *op) {
     PoolEntQ *pool, *entry;

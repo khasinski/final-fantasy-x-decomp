@@ -4,10 +4,18 @@
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
+#define func_00295EB8 _proto_func_00295EB8
+#define opus_no_get _proto_opus_no_get
 #include "ffx/t6.h"
+#undef func_00295EB8
+#undef opus_no_get
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/g4.h"
+
+void func_00295EB8(void *obj300, s16 id, ScriptSub *sub, u16 *pc);
+ScriptSub *opus_no_get(void *obj300, ScriptSub *sub, s16 id);
+void op_free(void *heap, void *p);
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00294CD8);
 
@@ -123,6 +131,8 @@ u16 *func_00295418(ScriptThread *th, u16 *pc)
     return pc;
 }
 
+extern void (*_opu_jtbl_00373518[])(ScriptThread *, u16 *) __asm__("jtbl_00373518");
+
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295560);
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opu_gw);
@@ -200,6 +210,11 @@ void func_00295D28(u_long128 *a, u_long128 *b)
     } while (--n >= 0);
 }
 
+typedef struct OpusVt54 {
+    u8 pad00[0x54];
+    void (*f54)(ScriptSub *);
+} OpusVt54;
+
 typedef struct OpusPool {
     u8 pad00[0x10];
     s16 *lists[3];
@@ -209,6 +224,10 @@ typedef struct OpusPool {
     u16 count;
     u16 max_used;
     u16 cur_used;
+    u8 pad3A[0x16];
+    OpusVt54 *vt50;
+    u8 pad54[0x54];
+    void *pA8;
 } OpusPool;
 
 int func_00295D58(T6_BlkPool *pool, int key)
@@ -428,12 +447,39 @@ int func_00296538(Counter16 *c) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_cscale_get);
-
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_002965F8);
-
 /* DEBT(TYPE): func_00110910 returns float, but this TU compiled without its prototype (implicit int return converted to float) */
 extern int _func_00110910(Chr *) __asm__("func_00110910");
+
+float opus_cscale_get(int id, int live)
+{
+    Chr *chr = owu_chr_hd[id];
+    float a;
+    float b;
+    float m;
+    u8 unused[0x10];
+
+    if (live) {
+        a = MsGetChrHeight(id);
+        b = MsGetChrWidth(id);
+    } else {
+        a = T6_INTCALL(Ch_GetFixHeight, chr);
+        b = _func_00110910(chr);
+    }
+    __asm__(".set mips3");
+    m = a < b ? b : a;
+    __asm__(".set mips4");
+    return m / 18.0f;
+}
+
+float func_002965F8(int id, int live)
+{
+    u8 unused[0x10]; /* DEBT(PADDING): the original frame has an unused 16-byte local */
+
+    if (live) {
+        return MsGetChrHeight(id);
+    }
+    return T6_INTCALL(Ch_GetFixHeight, owu_chr_hd[id]);
+}
 
 float func_00296640(int id, int in_battle)
 {

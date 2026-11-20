@@ -131,7 +131,45 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027C9C8);
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027CAB0);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027D6E0);
+void func_0027D6E0(PtEmitter *e, T6_PSysC *o)
+{
+    PtAnim *anim = D_006A3924->tbl[e->id];
+    Particle *p = (Particle *)o->parts;
+    PtKey *k;
+    int i;
+    u16 f;
+    int n = e->count;
+
+    for (i = 0; i < n; i++, p++) {
+        if (p->flags & 1) {
+            k = &anim->keys[p->frame];
+            func_002DD020(&p->v10, &p->v10, (Vec4 *)o->vec[p->age]);
+            p->acc.x += e->accB.x;
+            p->acc.y += e->accB.y;
+            p->acc.z += e->accB.z;
+            p->pos.x += p->acc.x;
+            p->pos.y += p->acc.y;
+            p->pos.z += p->acc.z;
+            p->time += e->speed.h;
+            if (p->time >= k->dur) {
+                p->time -= k->dur;
+                f = p->frame;
+                if (++p->frame >= anim->frames) {
+                    if (k->flags & 0x80) {
+                        p->frame = 0;
+                    } else {
+                        p->frame = f;
+                    }
+                    p->time = 0;
+                }
+            }
+            p->age++;
+            if (p->age >= o->nrec) {
+                p->flags &= ~1;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027D888);
 
@@ -180,6 +218,20 @@ void func_0027DBD8(char *base, ScriptCtx *ctx)
     }
 }
 
+typedef struct ParticleB { /* 0xB0 bytes */
+    u32 flags;
+    u16 time;
+    u16 frame;
+    u32 age;
+    u8 padC[4];
+    Vec4 v10;
+    Vec4 vel;
+    Vec4 v30;
+    Vec4 pos;
+    Vec4 acc;
+    u8 pad60[0x50];
+} ParticleB;
+
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027DC40);
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027DE20);
@@ -188,4 +240,43 @@ INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027DF48);
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027E080);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027EBD8);
+void func_0027EBD8(PtEmitter *e, PtOwnerB *o)
+{
+    PtAnim *anim = D_006A3924->tbl[e->id];
+    ParticleB *p = (ParticleB *)o->parts;
+    PtKey *k;
+    int i;
+    u16 f;
+    int n = e->count;
+
+    for (i = 0; i < n; i++, p++) {
+        if (p->flags & 1) {
+            p->age++;
+            k = &anim->keys[p->frame];
+            if (p->age >= o->nrec) {
+                p->flags &= ~1;
+            }
+            func_002DD020(&p->vel, &p->vel, &p->v30);
+            func_002DD020(&p->v10, &p->v10, &p->vel);
+            p->acc.x += e->acc.x;
+            p->acc.y += e->acc.y;
+            p->acc.z += e->acc.z;
+            p->pos.x += p->acc.x;
+            p->pos.y += p->acc.y;
+            p->pos.z += p->acc.z;
+            p->time += e->speed.h;
+            if (p->time >= k->dur) {
+                p->time -= k->dur;
+                f = p->frame;
+                if (++p->frame >= anim->frames) {
+                    if (k->flags & 0x80) {
+                        p->frame = 0;
+                    } else {
+                        p->frame = f;
+                    }
+                    p->time = 0;
+                }
+            }
+        }
+    }
+}

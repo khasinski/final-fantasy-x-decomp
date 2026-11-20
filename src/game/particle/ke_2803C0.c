@@ -897,7 +897,47 @@ void func_00284B20(char *base, ScriptCtx *ctx) {
     w->h0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284B38);
+typedef struct KeEvB {
+    u8 pad0[0xC];
+    int idx;
+    int ofs10;
+    u8 pad14[4];
+    int ofs18;
+} KeEvB;
+
+void func_00284B38(char *base, void *p, void *entry, int *out)
+{
+    KeEvB *ev = p;
+    s16 *pos = entry;
+    T6_Mem **mp = (T6_Mem **)out;
+    T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+    T6_Mem *m;
+    char *dir;
+    char *at;
+    Vec4 v;
+
+    if (e == 0) {
+        *mp = 0;
+    } else {
+        m = func_00267320(ppvMng, e);
+        *mp = m;
+        if (m == 0) {
+            return;
+        }
+        m->user = (ScriptWork *)base;
+    }
+    v.x = pos[0];
+    v.y = pos[1];
+    v.z = pos[2];
+    v.w = 1.0f;
+    at = (char *)*mp + (ev->ofs10 + 0xA0);
+    dir = (char *)*mp + (ev->ofs18 + 0xA0);
+    func_002DCE08(&v, base + 0x10, &v);
+    func_00282798(at, &v);
+    func_002DD038(&v, &v, (Vec4 *)(base + 0x40));
+    func_002DCEC8(&v, &v);
+    func_00282798(dir, &v);
+}
 
 int func_00284C50(char *base, EvMsgB *ev, ScriptCtx *ctx) {
     if (D_006A3BC4 == 0) {
@@ -917,7 +957,55 @@ void func_00284D10(char *base, ScriptCtx *ctx) {
     w->h0 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284D28);
+typedef struct KeEvC {
+    u8 pad0[8];
+    float f8;
+    u8 padC[4];
+    int idx;
+    int ofs14;
+    u8 pad18[4];
+    int ofs1C;
+    u8 pad20[4];
+    int ofs24;
+} KeEvC;
+
+void func_00284D28(char *base, void *p, void *entry, int *out)
+{
+    KeEvC *ev = p;
+    s16 *pos = entry;
+    T6_Mem **mp = (T6_Mem **)out;
+    T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+    T6_Mem *m;
+    char *dir;
+    char *at;
+    char *norm;
+    Vec4 v;
+
+    if (e == 0) {
+        *mp = 0;
+    } else {
+        m = func_00267320(ppvMng, e);
+        *mp = m;
+        if (m == 0) {
+            return;
+        }
+        m->user = (ScriptWork *)base;
+    }
+    v.x = pos[0];
+    v.y = pos[1];
+    v.z = pos[2];
+    v.w = 1.0f;
+    at = (char *)*mp + (ev->ofs14 + 0xA0);
+    dir = (char *)*mp + (ev->ofs1C + 0xA0);
+    norm = (char *)*mp + (ev->ofs24 + 0xA0);
+    func_002DCE08(&v, base + 0x10, &v);
+    func_00282798(at, &v);
+    func_002DD038(&v, &v, (Vec4 *)(base + 0x40));
+    func_002DCEC8(&v, &v);
+    func_00282798(norm, &v);
+    func_002DD068(&v, &v, ev->f8);
+    func_00282798(dir, &v);
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284E70);
 
@@ -1030,4 +1118,59 @@ int func_002853C0(float *v, float *out)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00285540);
+extern double D_005743F8;
+extern double D_00574400;
+double func_002EBF18(double a, double b);
+int func_002EC2A0(double a);
+
+void func_00285540(char *base, void *p, void *entry, int *out)
+{
+    KeEvB *ev = p;
+    s16 *pos = entry;
+    T6_Mem **mp = (T6_Mem **)out;
+    T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+    T6_Mem *m;
+    int *rot;
+    char *at;
+    Vec4 v;
+    float ang;
+    float vx;
+    float vy;
+
+    if (e == 0) {
+        *mp = 0;
+    } else {
+        m = func_00267320(ppvMng, e);
+        *mp = m;
+        if (m == 0) {
+            return;
+        }
+        m->user = (ScriptWork *)base;
+    }
+    v.x = pos[0];
+    v.y = pos[1];
+    v.z = pos[2];
+    v.w = 1.0f;
+    at = (char *)*mp + (ev->ofs10 + 0xA0);
+    func_00282798(at, &v);
+    vy = v.y;
+    rot = (int *)((char *)*mp + (ev->ofs18 + 0xA0));
+    vx = v.x;
+    v.y = vx;
+    v.x = -vy;
+    if (func_002853C0((float *)&v, &ang) != 0) {
+        register double x __asm__("$2") = func_002ED038(ang * 32768.0f);
+        register double d __asm__("$5");
+        __asm__ volatile(".set noat; lui $1, %%hi(D_005743F8); ld %0, %%lo(D_005743F8)($1); .set at" : "=r"(d));
+        rot[2] = func_002EC2A0(func_002EBF18(x, d));
+    }
+    v.x = func_00282A58(vy * vy + vx * vx);
+    v.y = -v.z;
+    if (func_002853C0((float *)&v, &ang) != 0) {
+        register double x __asm__("$2") = func_002ED038(ang * 32768.0f);
+        register double d __asm__("$5");
+        __asm__ volatile(".set noat; lui $1, %%hi(D_00574400); ld %0, %%lo(D_00574400)($1); .set at" : "=r"(d));
+        rot[0] = func_002EC2A0(func_002EBF18(x, d));
+    }
+    rot[1] = 0;
+}
