@@ -199,12 +199,12 @@ void func_01B008B0(int cur, int start, int fin, int hold, int fout, int unused,
 void func_01B00938(int cur, int start, int fin, int fout, u8 r, u8 g, u8 b, int prio)
 {
     int t = cur - start;
-    register int total __asm__("$8");
+    register int total __asm__("$8"); /* DEBT(FAKE): pin $t0 to match register allocation */
     u8 alpha;
-    register int pr __asm__("$24") = prio;
-    register int rr __asm__("$11") = r;
+    register int pr __asm__("$24") = prio; /* DEBT(FAKE): pin $t8 to match register allocation */
+    register int rr __asm__("$11") = r; /* DEBT(FAKE): pin $t3 to match register allocation */
     unsigned long long col;
-    register unsigned long long *p __asm__("$15");
+    register unsigned long long *p __asm__("$15"); /* DEBT(FAKE): pin $t7 to match register allocation */
 
     if (t > 0) {
         total = fin + fout;
@@ -419,9 +419,9 @@ int func_01B01198(void)
     P49Ent *e;
     float v[4];
     float ry;
-    register float sz __asm__("$f2");
-    register float tt __asm__("$f2");
-    register float mm __asm__("$f0");
+    register float sz __asm__("$f2"); /* DEBT(FAKE): pin $f2 to match register allocation */
+    register float tt __asm__("$f2"); /* DEBT(FAKE): pin $f2 to match register allocation */
+    register float mm __asm__("$f0"); /* DEBT(FAKE): pin $f0 to match register allocation */
     P49Ent *e2;
     static void *keep[5] = { &&L_c0, &&L_c1, &&L_c2, &&L_c3, &&L_c4 };
 
@@ -556,7 +556,7 @@ int func_01B01770(void)
     int alive;
 
     if (D_01B00548 == 0 || D_01D02B00 < 0) {
-        __asm__ volatile("");
+        __asm__ volatile(""); /* DEBT(FAKE): prevent early-return block merge */
         return 0;
     }
     D_006A3BCC = D_01C02B00;
@@ -569,7 +569,7 @@ int func_01B01770(void)
     func_01B00DD8(&D_01B01BD0);
     func_01B00DD8(&D_01B01C50);
     p = D_01B01CD0;
-    for (i = 15; i >= 0; i--, p++) {
+    for (i = 0; i < 16; i++, p++) {
         func_01B00DD8(p);
         if (p->enabled != 0) {
             alive = 0;
@@ -596,7 +596,7 @@ int func_01B01770(void)
     }
     func_01B00AB8(D_01B01BC4, 0, 1, 100, 20, 96);
     if (D_006A3BC4 == 0) {
-        register int c __asm__("$3");
+        register int c __asm__("$3"); /* DEBT(FAKE): pin $v1 to match increment reg */
         c = D_01D02B00;
         D_01D02B00 = c + 1;
     }
