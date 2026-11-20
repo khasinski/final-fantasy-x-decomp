@@ -440,7 +440,27 @@ void func_0021A7C0(float f)
     D_00692658.on = 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlLimitTimer);
+void TOBtlCtrlLimitTimer(void)
+{
+    int r;
+
+    if (D_00692658.on == 2) {
+        D_00692658.fC += 1.0f;
+        if (TOGetFFXVideoMode() == 0) {
+            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 30.0f;
+        } else {
+            D_00692658.f14 = D_00692658.f10 - D_00692658.fC / 25.0f;
+        }
+        if (D_00692658.f14 <= 0.0) {
+            D_00692658.f14 = 0.0f;
+            D_00692658.f18 = 0.0f;
+        } else {
+            r = func_001ACEA0() % 10;
+            D_00692658.f18 = (float)((int)(D_00692658.f14 * 10.0f) * 10 + r) / 100.0f;
+        }
+    }
+}
+
 
 int func_0021A8F0(void)
 {
