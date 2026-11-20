@@ -578,7 +578,46 @@ void func_001FBE20(int x, int y, int n)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FBFB8);
+void func_001FBFB8(int x, int y, int w, int h, int total, int page, int pos)
+{
+    int ix1;
+    int ix2;
+    int iy2;
+    int iy1;
+    double dx1;
+    double dx2;
+    double dy1;
+    double dy2;
+    int x2;
+    int y2;
+
+    x2 = x + w;
+    y2 = y + h;
+    ix1 = x + 1;
+    iy1 = y + 1;
+    ix2 = x2 - 1;
+    iy2 = y2 - 1;
+    dx1 = ix1;
+    dy1 = iy1;
+    dx2 = ix2;
+    dy2 = iy2;
+
+    if (page < total) {
+        double step = (dy2 - dy1) / (double)total;
+        dy1 += step * (double)pos;
+        dy2 = dy1 + step * (double)page;
+        if (pos == 0) {
+            dy1 = iy1;
+        }
+        if (pos + page >= total) {
+            dy2 = iy2;
+        }
+        func_001EFDF8(x, y, x2, y2, 0x70, 0x70, 0x70, 0x80);
+        func_001EFDF8(ix1, iy1, ix2, iy2, 0, 0, 0, 0x80);
+        func_001EFDF8((int)dx1, (int)dy1, (int)dx2, (int)dy2, 0xC0, 0xC0, 0xC0, 0x80);
+        func_001EFA30();
+    }
+}
 
 void func_001FC1F0(int x, int y, int scale, int alpha)
 {

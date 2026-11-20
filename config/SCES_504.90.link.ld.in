@@ -10,6 +10,7 @@ func_0017A540 = 0x17A540;
 /* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */
 dpadd = func_002EBBB0;
 dpsub = func_002EBC08;
+dpdiv = func_002EBF18;
 dpcmp = func_002EC198;
 litodp = func_002EC1E8;
 dptoli = 0x2EC2A0;

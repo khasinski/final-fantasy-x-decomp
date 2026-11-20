@@ -124,7 +124,64 @@ void func_002246C0(Task *o) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_224430", TOMenuDrawWorldMapWindow);
+extern s16 D_00324270;
+extern s16 D_00324272;
+extern s16 D_00324274;
+extern s32 D_00324278;
+extern s32 D_0032427C;
+extern s16 D_00324280;
+extern s16 D_00324282;
+extern s16 D_00324284;
+extern s32 D_00324288;
+extern s32 D_0032428C;
+extern s16 D_00324290;
+extern s16 D_00324292;
+extern s16 D_00324294;
+extern s16 D_00324296;
+extern char D_005712E0[];
+void func_002002D0(int, int, int, int);
+void func_00207F50(int, int, int);
+void func_0020DF10(int, void *, int, int);
+
+void TOMenuDrawWorldMapWindow(Task *t)
+{
+    int col;
+
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    col = (*(s32 *)((u8 *)t + 0x64) << 24) | 0x808080;
+    func_002002D0(0, 0, col, col);
+    if (*(s32 *)((u8 *)t + 0x64) == 0x80) {
+        int mx = AtelGetItemMapX();
+        int my = AtelGetItemMapY();
+        int minx;
+        int r1;
+        int r2;
+        int dx;
+        int a;
+
+        if (mx != 0 || my != 0) {
+            mx /= 2;
+            my = my / 2 - 0x10;
+            TOSeqStartScene(1, D_005712E0);
+            func_0020DF10(1, D_005712E0, mx, my);
+        }
+        if (D_00324270 < D_00324280) {
+            minx = D_00324270;
+        } else {
+            minx = D_00324280;
+        }
+        r1 = D_00324270 + D_00324274;
+        r2 = D_00324280 + D_00324284;
+        minx = (0x200 - (((r1 < r2) ? r1 : r2) - minx)) / 2 - minx;
+        func_001FF1D8(0xD2, 0xD3, D_00324270 + minx, D_00324272, D_00324274, D_00324278, D_0032427C);
+        func_001FF1D8(0xD8, 0xD9, D_00324280 + minx, D_00324282, D_00324284, D_00324288, D_0032428C);
+        TOMkpShapeXY(0xEF, D_00324280 + D_00324290 + minx, D_00324282 + D_00324292);
+        a = func_001487D0();
+        func_00207F50(AtelGetSaveDicName(a, func_001BD360()), D_00324280 + D_00324294 + minx, D_00324282 + D_00324296);
+    }
+    TOMenuDrawKickTmp();
+}
 
 s32 func_00224910(void)
 {

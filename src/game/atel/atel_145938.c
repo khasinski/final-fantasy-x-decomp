@@ -793,7 +793,70 @@ void func_00147F10(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147FA8);
+void func_00147FA8(void)
+{
+    int (**cd)(int);
+    s32 prev;
+
+    cd = (int (**)(int))GetCD();
+    MsBtlGetInit();
+    func_0014D4B0();
+    func_0014CED0(-1, 1);
+    TOReset1();
+    while (TkSndIsReadVoice() != 0) {
+        SndSeqIopCommandSendMain();
+        func_002D3FF0(0);
+        func_002D6630();
+    }
+    if (func_002D6768() != 0 || cd[2](1) != 0) {
+        func_002D3FF0(0);
+        func_002D6630();
+    }
+    if (AtelGetMusicNumber() >= 0) {
+        SndMusicReplayPointClear(AtelGetMusicNumber());
+    }
+    if (SndGetNowPlayMusic() >= 0) {
+        SndMusicReplayPointClear(SndGetNowPlayMusic());
+        SndMusicVolumeFadeOut(SndGetNowPlayMusic(), 0x78);
+    }
+    SndMusicStop(0x8A);
+    SndMusicClear(0x8A);
+    AtelRegistMusicNumber(-1);
+    func_0014AE30();
+    func_0014DD38(1);
+    if (func_0015A550() != 0) {
+        func_00158D60();
+    }
+    SndSepClearAll();
+    AtelStopSoundAll();
+    func_002D7C28(-2);
+    func_00149200();
+    func_00138C08();
+    SndStopStream();
+    SndSeqIopCommandSendMain();
+    func_002D3FF0(0);
+    func_002D6630();
+    func_002D3FF0(0);
+    func_002D6630();
+    func_002D3FF0(0);
+    func_002D6630();
+    while (func_002D6768() != 0) {
+        func_002D3FF0(2);
+        func_002D6630();
+    }
+    TkCdReadSync(0);
+    func_002D3FF0(0);
+    func_00111AC0();
+    prev = AtelChangeCurrentCtrl(0);
+    D_0058E3D8->flags |= 0x80;
+    D_0058E3D8->f210.w |= 2;
+    func_00147EE0();
+    func_00147F10();
+    func_00209B68();
+    func_00138260();
+    func_0013A1B0(0x17, 0);
+    AtelSetCurrentCtrl(prev);
+}
 
 s32 _m2c_func_001481F0_AtelStopSoundAll() __asm__("AtelStopSoundAll");
 s32 _m2c_func_001481F0_TOReset1() __asm__("TOReset1");

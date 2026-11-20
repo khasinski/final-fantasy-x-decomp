@@ -232,7 +232,76 @@ void func_0022D6C8(int a, int b, int c, int x, int y)
 
 void func_0022D768(Task *o, int a1, int a2) { func_002270F8(a1, a2 + ((o->x48 - o->x32) << 5), 0); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022D790);
+typedef struct {
+    s16 rect[4];
+    s32 w8;
+    s32 wC;
+} Box16;
+
+void func_00226FE0(DrawArgs *a);
+void func_002277F8(int x, int y, int id, int a3, int a4);
+void func_002274A0(int y, int h, int mode, int a3);
+void func_00225E88(int a, int b, int c, int d, int e, int f, int g);
+
+void func_0022D790(Task *t)
+{
+    FlagRec box;
+    s32 chr;
+    SysEntry *e;
+    s32 item;
+    u8 cnt;
+    int x;
+    s16 y;
+
+    func_00225A38();
+    chr = func_00242940();
+    e = SYS_TBL;
+    e += t->x48;
+    if (e->b2 != 0) {
+        u8 *g = (u8 *)TkMn2GetSummonGrow() + e->b3 * 8;
+        item = *(u16 *)(g + 4);
+        cnt = g[6];
+    } else {
+        item = -1;
+        cnt = 0;
+    }
+    if (item >= 0) {
+        func_002277F8(D_00325A40.rect[0], D_00325A40.rect[1], item, cnt, 0);
+    }
+    func_0022A768(0, 0, chr, 3, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4, 0x1000);
+    /* DEBT(CAST): header declares fewer args for func_0022A728 */
+    ((int (*)(int, int, int, int, s32 *, s32 *, s32 *, s32 *))func_0022A728)(0, 0, chr, 3, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4);
+    func_00226210(D_00693BD8[0], D_00693BD8[1], 0xF);
+    if (item >= 0) {
+        func_00226210(D_00693BE0[0], D_00693BE0[1], 0x10);
+    }
+    y = D_00693BD0[1];
+    if (t->x32 == t->x34) {
+        func_002274A0(y, 0x120, 0, t->x46);
+        func_0022D6C8((int)t, 0, t->x32, 0, -0x20);
+    } else {
+        func_002274A0(y, 0x120, 1, t->x46);
+        func_0022D6C8((int)t, 1, t->x32, 0, -0x20);
+        func_002274A0(y, 0x120, 2, t->x46);
+        func_0022D6C8((int)t, 2, t->x34, 0, -(t->x46 * 0x120) / 0x1000 - 0x20);
+    }
+    func_00225908();
+    func_0022D768(t, D_00693BD0[0] + 0xC, D_00693BD0[1] + 1);
+    func_00225E88(D_00693BF8[0], D_00693BF8[1], D_00693BF8[2], D_00693BF8[3], t->x32, *(u16 *)((u8 *)t + 0x3A), (u16)t->x30);
+    x = 0x1E0 - func_00226AD0((void *)TOMenuGetSummonMes(5));
+    x -= D_003258A8[0];
+    box.rect[1] = D_00325888.rect[1];
+    box.rect[3] = D_00325888.rect[3];
+    box.rect[2] = 0x200 - x;
+    box.x08 = D_00325888.x08;
+    box.x0C = D_00325888.x0C;
+    box.rect[0] = x;
+    func_00226FE0((DrawArgs *)&box);
+    ((int (*)(int, int, int))func_00226E10)(box.rect[0] + D_003258A0[0], box.rect[1] + D_003258A0[1], 0xF3);
+    func_00226350(box.rect[0] + D_003258A8[0], box.rect[1] + D_003258A8[1], TOMenuGetSummonMes(5), 0);
+    func_002297A0(func_00228B80(), 1);
+    func_00225B00();
+}
 
 int func_0022DAE8(Task *t)
 {
@@ -444,8 +513,43 @@ void func_0022E468(int a0)
     }
 }
 
-void func_0022E538(Task *t);
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022E538);
+void func_0022E538(Task *t)
+{
+    FlagRec box; /* DEBT(PADDING): unused local matching original stack frame size */
+    s32 item;
+    s32 cnt;
+    s32 chr;
+    s16 y;
+
+    func_00225A38();
+    chr = func_00242940();
+    func_0022E380(t->x48, chr, &item, &cnt);
+    if (item >= 0) {
+        func_002277F8(D_00325A40.rect[0], D_00325A40.rect[1], item, cnt, 0);
+    }
+    func_0022A768(0, 0, chr, 3, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4, 0x1000);
+    /* DEBT(CAST): header declares fewer args for func_0022A728 */
+    ((int (*)(int, int, int, int, s32 *, s32 *, s32 *, s32 *))func_0022A728)(0, 0, chr, 3, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4);
+    func_00226210(D_00693BD8[0], D_00693BD8[1], 0x11);
+    if (item >= 0) {
+        func_00226210(D_00693BE0[0], D_00693BE0[1], 0x10);
+    }
+    y = D_00693BD0[1];
+    if (t->x32 == t->x34) {
+        func_002274A0(y, 0x120, 0, t->x46);
+        func_0022E158((int)t, 0, t->x32, 0, -0x20);
+    } else {
+        func_002274A0(y, 0x120, 1, t->x46);
+        func_0022E158((int)t, 1, t->x32, 0, -0x20);
+        func_002274A0(y, 0x120, 2, t->x46);
+        func_0022E158((int)t, 2, t->x34, 0, -(t->x46 * 0x120) / 0x1000 - 0x20);
+    }
+    func_00225908();
+    func_0022D768(t, D_00693BD0[0] + 0xC, D_00693BD0[1] + 1);
+    func_00225E88(D_00693BF8[0], D_00693BF8[1], D_00693BF8[2], D_00693BF8[3], t->x32, *(u16 *)((u8 *)t + 0x3A), (u16)t->x30);
+    func_002297A0(func_00228B80(), 1);
+    func_00225B00();
+}
 
 void func_0022E7A0(void) {
 }

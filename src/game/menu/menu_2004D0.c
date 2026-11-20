@@ -29,6 +29,38 @@ void func_00200798(int text, int x, int y, int z)
     func_001F3808(text, x + 0xF, y + 2, z);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_2004D0", func_00200870);
+void *func_00200870(void *pkt, int x, int y, int w, int h, int pos, int page, int total)
+{
+    int y2;
+    double dx1;
+    double dx2;
+    int x2;
+    int ix2;
+    double dy1;
+    double dy2;
+    double step;
+
+    x2 = x + w;
+    y2 = y + h;
+    ix2 = x2 - 1;
+    dx1 = x + 1;
+    dy1 = y;
+    dx2 = ix2;
+    dy2 = y2;
+    if (page >= total) {
+        return pkt;
+    }
+    step = (dy2 - dy1) / (double)total;
+    dy1 += step * (double)pos;
+    dy2 = dy1 + step * (double)page;
+    if (pos == 0) {
+        dy1 = y;
+    }
+    if (pos + page >= total) {
+        dy2 = y2;
+    }
+    pkt = func_001EFCE0(pkt, x, y, x2, y2, 0x11, 0x11, 0x11, 0x80);
+    return func_001EFCE0(pkt, (int)dx1, (int)dy1, (int)dx2, (int)dy2, 0xF0, 0xF0, 0xF0, 0x80);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/menu_2004D0", func_00200A58);

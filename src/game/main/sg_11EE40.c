@@ -158,4 +158,71 @@ s8 func_0011F2A8(void)
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_11EE40", Sg_CaptureToFile);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11EE40", func_0011F658);
+extern char D_00569E30[];
+extern u8 D_00307FA8[];
+extern u8 D_00580A90[];
+void func_002DAB10(void *, int, int, int, int, int, int, int);
+void func_002F8660(int);
+void func_202CF08(char *, ...);
+void *user_malloc(int, int, const char *, int);
+
+void func_0011F658(char *name)
+{
+    char path[0x100];
+    int fd;
+    u8 *buf1;
+    u8 *buf2;
+    u8 *line;
+    /* DEBT(FAKE): register pins align inner-loop pointer allocation. */
+    register u8 *dst __asm__("$5");
+    u8 *src;
+    int y;
+    int x;
+
+    func_002F0008(path, D_00569DF0, D_00569DF8, name);
+    fd = func_002FC4E0(path, 0x602);
+    buf1 = (u8 *)user_malloc(0xD0000, 6, D_00569DE8, 0x19D);
+    buf2 = (u8 *)user_malloc(0xD0000, 6, D_00569DE8, 0x19E);
+    line = (u8 *)user_malloc(0xC00, 6, D_00569DE8, 0x19F);
+    func_002DAB10(D_00580A90, 0x1A00, 8, 0x30, 0, 0, 0x200, 0x1A0);
+    func_002F8660(0);
+    func_002DADD0(D_00580A90, buf1);
+    func_002DA610(0, 0);
+    func_002DAB10(D_00580A90, 0x1A00, 8, 0x30, 0, 0, 0x200, 0x1A0);
+    func_002F8660(0);
+    func_002DADD0(D_00580A90, buf2);
+    func_002DA610(0, 0);
+    func_002FCD90(fd, D_00307FA8, 0x36);
+    for (y = 0x1A0; y >= 0; y--) {
+        dst = line;
+        src = buf1 + (y << 11) + 1;
+        for (x = 0; x < 0x200; x++) {
+            /* DEBT(FAKE): register pin aligns z temporary to $a0. */
+            register int t __asm__("$4") = src[-1];
+            int z = (t | (src[0] << 8) | (src[1] << 16)) >> 10;
+            src += 4;
+            dst[0] = z;
+            dst[1] = z;
+            dst[2] = z;
+            dst += 3;
+        }
+        src = buf2 + (y << 11) + 1;
+        for (x = 0; x < 0x200; x++) {
+            /* DEBT(FAKE): register pin aligns z temporary to $a0. */
+            register int t __asm__("$4") = src[-1];
+            int z = (t | (src[0] << 8) | (src[1] << 16)) >> 10;
+            src += 4;
+            dst[0] = z;
+            dst[1] = z;
+            dst[2] = z;
+            dst += 3;
+        }
+        func_002FCD90(fd, line, 0xC00);
+    }
+    func_002FC768(fd);
+    func_002F0008(path, D_00569E30, name);
+    func_202CF08(path, line);
+    func_0011D590(line, 6);
+    func_0011D590(buf2, 6);
+    func_0011D590(buf1, 6);
+}

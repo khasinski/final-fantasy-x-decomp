@@ -304,7 +304,115 @@ int func_00130370(Actor *a, void *op, ScriptCtx *ctx)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00130400);
+typedef struct {
+    u8 pad0[0xCC];
+    s32 gil;
+    s8 bD0;
+    s8 bD1;
+    s8 bD2;
+    u8 padD3;
+    u16 hD4[8];
+    u8 bE4[8];
+    u16 hEC;
+    u16 hEE[8];
+} BtlGetData;
+
+typedef struct {
+    s32 w0;
+    s32 w4;
+    s16 h8;
+    s16 hA;
+    s32 wC;
+} BtlGetState;
+
+#define BTLGET ((BtlGetData *)&btlgetdata)
+
+void func_00130400(Actor *a, BtlGetState *st, ScriptCtx *ctx)
+{
+    s32 buf[2];
+    u16 wpn;
+    s32 box_id;
+    s32 win;
+    s32 text;
+
+    u32 *ctrl;
+
+    wpn = 0;
+    SndSepPlaySimple(0x80000026);
+    ctrl = (u32 *)AtelGetCurCtrlWork();
+    buf[1] = 0;
+    *ctrl |= 0x04000000;
+    box_id = AtelPopStackInteger(a, ctx);
+    win = AtelPopStackInteger(a, ctx);
+    func_001DD578(box_id);
+    func_00206860(win, 0, 0);
+    func_00206860(win, 1, 1);
+    text = TkBtlEndGetText(0x401D);
+    if (BTLGET->bD0 != 0) {
+        TkMsGetRomItem(BTLGET->hD4[0], &buf[0]);
+        func_00206888(win, 1, BTLGET->bE4[0]);
+        if (BTLGET->bE4[0] == 1) {
+            text = TkBtlEndGetText(0x4018);
+        } else {
+            text = TkBtlEndGetText(0x4019);
+        }
+        MsSaveItemUse(BTLGET->hD4[0], BTLGET->bE4[0]);
+    }
+    if (BTLGET->bD1 != 0) {
+        buf[0] = (s32)MsImportantName(BTLGET->hEC);
+        text = TkBtlEndGetText(0x4017);
+        TkMsImportantSet(BTLGET->hEC);
+    }
+    if (BTLGET->bD2 != 0) {
+        wpn = BTLGET->hEE[0];
+        text = TkBtlEndGetText(0x4016);
+        if (func_001C0598(MsGetSaveWeapon(wpn, &buf[0])) != 0) {
+            buf[1] = 0;
+        } else {
+            buf[1] = 1;
+        }
+    }
+    if (BTLGET->gil != 0) {
+        func_00206888(win, 1, BTLGET->gil);
+        text = TkBtlEndGetText(0x401A);
+        MsPayGIL(-BTLGET->gil);
+    }
+    func_00206888(win, 0, buf[0]);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0x100);
+    AtelPushStackInteger(a, ctx, 0xD0);
+    AtelPushStackInteger(a, ctx, 4);
+    func_00129F60(a, st, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_00129FF8(a, st, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    AtelPushStackInteger(a, ctx, text);
+    func_00129E88(a, st, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_0012A058(a, st, ctx);
+    AtelPushStackInteger(a, ctx, win);
+    AtelPushStackInteger(a, ctx, 0);
+    func_0012A238(a, st, ctx);
+    st->wC = wpn;
+    st->w4 = 1;
+    st->w0 = win;
+    {
+        /* DEBT(FAKE): barrier keeps buf[1] load after st->w0 store. */
+        s32 f;
+        __asm__ volatile("" : : : "memory");
+        f = buf[1];
+        st->hA = 0;
+        st->h8 = f;
+        if (f == 0) {
+            MsBtlGetInit();
+        }
+    }
+    func_00145400();
+    AtelGetMesWinWork(win)->b1D |= 0x10;
+}
 
 int func_00130768(Actor *a, OpBlkH *op, ScriptCtx *ctx)
 {
