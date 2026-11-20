@@ -129,10 +129,77 @@ int func_01B012C8(TtRing *r);
 
 
 extern int D_01B00488;
+extern float D_01B00480;
+extern float D_01B00484;
 extern float D_01B00700[4];
-extern char D_01B013B8[], D_01B013D0[], D_01B013E8[], D_01B01418[], D_01B01428[], D_01B01438[];
+extern char D_01B01390[], D_01B013A8[], D_01B013B8[], D_01B013D0[], D_01B013E8[], D_01B01418[], D_01B01428[], D_01B01438[];
 void func_0010D720(void);
+void Sg_PLightAllocate(int);
+void Sg_PLightDefine(int, int, int, int, int, float, float, float, float);
+void func_0010DC38(void *, int);
+void func_00107428(void *, int, void *, void *);
+void func_002DD0B0(void *, void *);
 int func_00117F58(int,int,int,int);
+
+int func_01B00718(void)
+{
+    return 1;
+}
+
+void func_01B00720(TtPart *p)
+{
+    func_01B01020(D_01B01390, D_01B005E4);
+    D_006A3924 = &D_01B004B0;
+    _pppStartPart(p, 0x1000, D_01B004A8->w10[0], 1);
+    p->f40 = 0.0f;
+    p->f44 = 0.0f;
+    p->f48 = 0.0f;
+    p->f4C = 1.0f;
+    p->w50 = 0;
+    p->w54 = 0;
+    p->w58 = 0;
+    p->w5C = 1;
+    p->f60 = 0.237697f;
+    p->f64 = 0.237697f;
+    p->f68 = 0.237697f;
+    p->f6C = 1.0f;
+    Sg_PLightAllocate(1);
+    Sg_PLightDefine(0, 0xFF, 0, 0, 0, 0.0f, 0.0f, 0.0f, 1000.0f);
+    func_0010DC38(D_01B005E0, 4);
+}
+
+int func_01B00810(TtPart *p)
+{
+    if (D_01B005E8.frame < 0x9C) {
+        float pos[4];
+        pos[0] = 0.0f;
+        pos[1] = 0.0f;
+        pos[2] = 1500.0f;
+        pos[3] = 1.0f;
+        func_00107428(D_01B005E0, 0x5D, pos, &p->f40);
+        Sg_PLightDefine(0, 0xDC, 0xC8, 0xA0, 2, p->f40, p->f44, p->f48, D_01B00484);
+        D_01B00484 += 2.0f / 7.0f;
+        if (D_01B00484 > 10.0f) {
+            D_01B00484 = 10.0f;
+        }
+        func_01B01020(D_01B013A8, (double)D_01B00484);
+    } else {
+        p->f44 -= D_01B00480;
+        D_01B00480 -= 0.3f;
+        func_002DD0B0(D_01B00700, &p->f40);
+    }
+    pppSetMatrix(p);
+    func_002DCE38(D_006A39B0, D_006A3970, D_006A3930);
+    func_002DCE38(D_006A3AB0, D_006A3A70, D_006A39B0);
+    D_006A3924 = &D_01B004B0;
+    if (_pppRunPart(p, 0x30) != 0) {
+        D_006A3924 = &D_01B004B0;
+        _pppAllFreePObject(p);
+        D_006A3924 = &D_01B004B0;
+        _pppStartPart(p, 0x1000, D_01B004A8->w10[0], 1);
+    }
+    return 1;
+}
 
 int func_01B009E0(TtPart *p)
 {

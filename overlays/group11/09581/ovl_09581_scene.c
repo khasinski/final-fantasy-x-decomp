@@ -180,3 +180,38 @@ int func_01B00D00(void)
     }
     return D_01B00528;
 }
+
+extern int D_01B00694;
+extern char D_01B01338[];
+extern char D_01B01340[];
+int func_01B00FE0(char *fmt, ...);
+void func_01B01020(int, int);
+int func_01B010D8(TtRing *r);
+int func_01B01230(TtRing *r);
+
+int func_01B00DB8(void)
+{
+    /* DEBT(PADDING): unused local matching original 0x30 stack frame. */
+    int pad[4];
+    (void)pad;
+    if (Sg_GetCurExecFrames() == 0 || D_01B00528 == 0) {
+        return 0;
+    }
+    D_006A3924 = &D_01B00540;
+    func_001AACA0(D_006A3A70);
+    func_001A9EE0(D_006A3970);
+    D_006A3BCC = (int)D_01B00530;
+    if (func_0014AA50(0) != 0) {
+        func_01B01020(0x820, 0x80E);
+        func_01B00FE0(D_01B01338, D_01B00698.frame);
+        func_01B010D8(&D_01B00698);
+    }
+    if (func_0014AA50(1) != 0) {
+        func_01B01230(&D_01B00698);
+        func_01B00F88(D_01B01340, D_01B00694);
+        MsEffectTerminate(D_01B00534);
+        return 1;
+    }
+    D_01B00694++;
+    return 1;
+}

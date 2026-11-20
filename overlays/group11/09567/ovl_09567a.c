@@ -76,7 +76,7 @@ extern char D_01B01D68[];
 void func_00107428(void *, int, int, void *);
 extern int D_01B00760[];
 extern float D_01B00478[];
-extern double D_01B01D20;
+extern const double D_01B01D20;
 extern char D_01B01D28[];
 int func_002EFD78(void);
 double func_002EBC70(double,double);
@@ -139,6 +139,36 @@ void func_01B01A40(TtRing *r, TtEnt *tbl, int n);
 int func_01B01AF0(TtRing *r);
 int func_01B01C48(TtRing *r);
 
+extern float D_01B00F00[][4];
+
+int func_01B00FB8(void)
+{
+    return 1;
+}
+
+void func_01B00FC0(TtPart *p)
+{
+    int index = p - D_01B00860;
+    int i;
+    D_006A3924 = &D_01B007B0;
+    _pppStartPart(p, 0x1000, D_01B007A8->w10[0], 1);
+    func_00107428(D_01B00DE4, D_01B00760[index], 0, &p->f40);
+    p->w50 = 0;
+    p->w54 = 0;
+    p->w58 = 0;
+    p->w5C = 1;
+    p->f60 = 0.013197f;
+    p->f64 = 0.013197f;
+    p->f68 = 0.013197f;
+    p->f6C = 1.0f;
+    for (i = 0; i < 11; i++) {
+        D_01B00F00[i][0] = ((float)(func_002EFD78() & 0x7FFF) / 32767.0f) * 1000.0f;
+        D_01B00F00[i][1] = ((float)(func_002EFD78() & 0x7FFF) / 32767.0f) * 1000.0f;
+        D_01B00F00[i][2] = ((float)(func_002EFD78() & 0x7FFF) / 32767.0f) * 1000.0f;
+        D_01B00F00[i][3] = 1.0f;
+    }
+}
+
 int func_01B01148(TtPart *p)
 {
     int index = p - D_01B00860;
@@ -155,4 +185,27 @@ int func_01B01208(TtPart *p)
     D_006A3924 = &D_01B007B0;
     _pppAllFreePObject(p);
     return 1;
+}
+
+void func_01B01258(TtPart *p)
+{
+    float s;
+    D_006A3924 = &D_01B007B0;
+    _pppStartPart(p, 0x1000, D_01B007A8->w10[1], 1);
+    p->f40 = 19.899818f;
+    p->f44 = -12.19992f;
+    p->f48 = 49.39981f;
+    p->f4C = 1.0f;
+    p->w50 = 0;
+    p->w54 = 0;
+    p->w58 = 0;
+    p->w5C = 1;
+    s = (float)((double)((((float)(func_002EFD78() & 0x7FFF) / 32767.0f) - 0.5f) * 2.0f) * 0.037697 + 0.037697);
+    p->f60 = s;
+    p->f64 = s;
+    p->f68 = s;
+    p->f6C = 1.0f;
+    Sg_PLightAllocate(1);
+    Sg_PLightDefine(0, 0xFF, 0, 0, 0, 19.899818f, -12.19992f, 49.39981f, 1000.0f);
+    func_0010DC38(D_01B00DE0, 1);
 }

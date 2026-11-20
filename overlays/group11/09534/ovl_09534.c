@@ -122,6 +122,11 @@ void func_01B00B88(TtRing *r, TtEnt *tbl, int n);
 int func_01B00C38(TtRing *r);
 int func_01B00D90(TtRing *r);
 
+int func_01B00590(void)
+{
+    return 1;
+}
+
 int func_01B00598(void)
 {
     TtPart *p = &D_01B003F0;

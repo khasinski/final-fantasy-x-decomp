@@ -4,11 +4,13 @@
     "containers": [
       9567
     ],
-    "text_start": "0x01B01148",
-    "text_end": "0x01B01258",
-    "discovered_code_bytes": 272,
-    "functions": 2,
+    "text_start": "0x01B00FB8",
+    "text_end": "0x01B013D0",
+    "rodata_start": "0x01B01D20",
+    "discovered_code_bytes": 1048,
+    "functions": 5,
     "syms": {
+      "D_01B00F00": "0x01B00F00",
       "D_01B0078C": "0x01B0078C",
       "D_01B00790": "0x01B00790",
       "D_01B00794": "0x01B00794",

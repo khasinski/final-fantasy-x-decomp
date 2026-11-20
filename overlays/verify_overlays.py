@@ -176,6 +176,7 @@ def main(argv=None) -> int:
                 "cid": cid,
                 "text_start": unit["text_start"],
                 "text_end": unit["text_end"],
+                "rodata_start": unit.get("rodata_start"),
                 "syms": unit["syms"],
             }
             for cid in unit["containers"]
@@ -183,28 +184,36 @@ def main(argv=None) -> int:
         if args.container:
             layouts = [item for item in layouts if item["cid"] in args.container]
 
-        link_cache: dict[tuple, bytes] = {}
+        link_cache: dict[tuple, tuple[bytes, bytes | None]] = {}
         for item in layouts:
             cid = item["cid"]
             ts = item["text_start"]
             te = item["text_end"]
+            rs = item.get("rodata_start", unit.get("rodata_start"))
             syms = item["syms"]
-            cache_key = (ts, te, tuple(sorted(syms.items())))
+            cache_key = (ts, te, rs, tuple(sorted(syms.items())))
             if cache_key not in link_cache:
                 sym_lines = [f"{k} = 0x{v:08x};" for k, v in sorted({**RESIDENT_SYMS, **resident, **syms}.items())]
+                rodata_sec = f"    . = 0x{rs:08x};\n    .rodata : {{ {obj.as_posix()}(.rodata) }}\n" if rs is not None else ""
                 ld_script = (
                     "SECTIONS\n{\n"
                     f"    . = 0x{ts:08x};\n"
                     f"    .text : {{ {obj.as_posix()}(.text) }}\n"
+                    f"{rodata_sec}"
                     "    /DISCARD/ : { *(*) }\n"
                     "}\n" + "\n".join(sym_lines) + "\n"
                 )
                 ld.write_text(ld_script)
                 subprocess.run(["mipsel-linux-gnu-ld", "-EL", "-T", str(ld), "-o", str(elf)], check=True)
-                subprocess.run(["mipsel-linux-gnu-objcopy", "-O", "binary", str(elf), str(text_bin)], check=True)
-                link_cache[cache_key] = text_bin.read_bytes()
+                subprocess.run(["mipsel-linux-gnu-objcopy", "-O", "binary", "-j", ".text", str(elf), str(text_bin)], check=True)
+                ro_bytes = None
+                if rs is not None:
+                    ro_bin = out_dir / f"{stem}.rodata.bin"
+                    subprocess.run(["mipsel-linux-gnu-objcopy", "-O", "binary", "-j", ".rodata", str(elf), str(ro_bin)], check=True)
+                    ro_bytes = ro_bin.read_bytes()
+                link_cache[cache_key] = (text_bin.read_bytes(), ro_bytes)
 
-            built_text = link_cache[cache_key]
+            built_text, built_rodata = link_cache[cache_key]
             off_start = ts - BASE
             off_end = te - BASE
             expected_len = off_end - off_start
@@ -218,6 +227,11 @@ def main(argv=None) -> int:
             if built_text != orig_text:
                 print(f"FAIL {stem} against container {cid}: .text mismatch")
                 return 1
+            if built_rodata is not None and rs is not None:
+                ro_off = rs - BASE
+                if orig[ro_off:ro_off + len(built_rodata)] != built_rodata:
+                    print(f"FAIL {stem} against container {cid}: .rodata mismatch at {rs:#x}")
+                    return 1
             rebuilt = orig[:off_start] + built_text + orig[off_end:]
             rebuilt_sha = hashlib.sha256(rebuilt).hexdigest()
             orig_sha = hashlib.sha256(orig).hexdigest()

@@ -4,10 +4,10 @@
     "containers": [
       9416
     ],
-    "text_start": "0x01B00700",
+    "text_start": "0x01B006F8",
     "text_end": "0x01B0114C",
-    "discovered_code_bytes": 2584,
-    "functions": 23,
+    "discovered_code_bytes": 2592,
+    "functions": 24,
     "syms": {
       "D_01B00480": "0x01B00480",
       "D_01B00484": "0x01B00484",

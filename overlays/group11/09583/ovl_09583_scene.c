@@ -181,3 +181,42 @@ int func_01B014F0(void)
     }
     return D_01B00BA8;
 }
+
+extern int D_01B00D84;
+extern char D_01B01B98[];
+extern char D_01B01BA0[];
+int func_01B01810(char *fmt, ...);
+void func_01B01850(int, int);
+int func_01B01908(TtRing *r);
+int func_01B01A60(TtRing *r);
+
+int func_01B015A8(void)
+{
+    if (D_01B00BA8 == 0) {
+        return 0;
+    }
+    D_006A3924 = &D_01B00BC8;
+    func_001AACA0(D_006A3A70);
+    func_001A9EE0(D_006A3970);
+    D_006A3BCC = (int)D_01B00BB0;
+    if (func_0014AA50(0) != 0) {
+        func_01B01850(0x20, 0x1A);
+        func_01B01850(0x20, 0);
+        func_01B01810(D_01B01B98, D_01B00D88.frame);
+        func_01B01908(&D_01B00D88);
+    }
+    if (func_0014AA50(1) != 0) {
+        func_01B01850(0x20, 1);
+        func_01B01810(D_01B01B98, D_01B00E98.frame);
+        func_01B01908(&D_01B00E98);
+    }
+    if (func_0014AA50(2) != 0) {
+        func_01B01A60(&D_01B00D88);
+        func_01B01A60(&D_01B00E98);
+        func_01B017B8(D_01B01BA0, D_01B00D84);
+        MsEffectTerminate(D_01B00BB4);
+        return 1;
+    }
+    D_01B00D84++;
+    return 1;
+}

@@ -1,7 +1,7 @@
 # Battle-effect overlays
 
 584 overlays from disc group `0x11`, loaded at `0x01B00000`.
-47 are complete and 537 have some matching C code. None are untouched.
+58 are complete and 526 have some matching C code. None are untouched.
 
 ## Files
 
