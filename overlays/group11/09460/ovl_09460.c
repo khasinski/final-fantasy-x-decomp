@@ -252,6 +252,7 @@ void func_01B00EA8(W3Task *t)
     float p[4];
     float tmp[4];
     float x;
+    /* DEBT(FAKE): register pins for ee-gcc2.9 float register allocation in func_01B00EA8 */
     register float h __asm__("$f0");
     register float r __asm__("$f1");
     register float y __asm__("$f0");
@@ -310,12 +311,15 @@ void func_01B00EA8(W3Task *t)
     VEC3_COPY(p, o->pos);
     dy = y - old;
     g = p[2];
+    /* DEBT(FAKE): scheduler barrier to preserve p[2] load before p[1]/p[0] */
     __asm__ volatile("" : : "f"(y), "f"(old));
     h = p[1];
     r = p[0];
     h = h + dy;
     p[1] = h;
     o->pos[0] = r;
+    /* DEBT(FAKE): order o->pos[2] store after o->pos[0] */
+    __asm__("" : "+f"(g) : "f"(h));
     o->pos[2] = g;
     o->pos[1] = h;
     o->pos_w = 0;
