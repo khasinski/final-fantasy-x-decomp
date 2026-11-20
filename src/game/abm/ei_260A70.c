@@ -508,7 +508,29 @@ void func_002628F0(void)
     lpamng->f11573 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262930);
+void func_002639B8(void);
+
+void func_00262930(int a, int b, int c)
+{
+    u8 buf[16];
+    WorkEnt *p;
+    int idx;
+
+    func_00258370(0xFC);
+    func_002580B0(a, b, c, 3);
+    lpamng->cb_a = func_002639B8;
+    lpamng->cb_b = func_0025C308;
+    LPV->f11650 = LPV->f11654 = 0;
+    p = (WorkEnt *)func_00261130(buf, (char *)lpamng + (LPV->f1156C * 0x50 + 0x11090), func_002638B0);
+    idx = p - lpamng->ents;
+    if (p != 0) {
+        if (idx != LPA(u16, 0x11304)) {
+            /* DEBT(CAST): func_00261430 takes its argument in $f12 */
+            ((void (*)(float))func_00261430)(0.5f);
+        }
+    }
+    lpamng->f11573 = 1;
+}
 
 void func_002638C0(void);
 
