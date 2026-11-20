@@ -205,7 +205,16 @@ int func_002D9050(int port, u32 *type, u32 *free, u32 *format)
     return func_002DFA28(port, 0, type, free, format);
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D89C8", func_002D90C0);
+/* DEBT(FAKE): second alias prevents CSE from merging the address and value of D_0078BC00 */
+extern u32 _D_0078BC00 __asm__("D_0078BC00");
+
+void func_002D90C0(void)
+{
+    D_0078BC08 = D_0078BC00;
+    if (TkGetTGS() == 0) {
+        func_002D9050(D_0078BC00, &_D_0078BC00, 0, 0);
+    }
+}
 
 void func_002D9118(void)
 {

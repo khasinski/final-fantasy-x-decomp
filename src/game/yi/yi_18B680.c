@@ -50,7 +50,32 @@ void func_0018B810(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B950);
+void func_0018B950(u8 *p)
+{
+    u8 unused[0x1000];
+    float a[4];
+    float b[4];
+    u8 *q;
+    int i;
+
+    func_002EF0D0(a, 0, 0x10);
+    q = p + 0x70;
+    i = 0x47;
+    a[0] = 1.0f;
+    func_002EF0D0(b, 0, 0x10);
+    {
+        register volatile int *reg __asm__("$2") = (volatile int *)0x10000000;
+        __asm__("" : "+r"(reg));
+        b[2] = 64.0f;
+        *reg = 0;
+    }
+    do {
+        func_0018C468(q, q, a, b, 0x100);
+        q += 0x460;
+        i--;
+    } while (i >= 0);
+    *(volatile int *)0x10000000;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018BA08);
 

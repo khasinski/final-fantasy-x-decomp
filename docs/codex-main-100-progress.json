@@ -1,7 +1,7 @@
 {
   "objective": "1000 correctly decompiled functions in the main ELF, each proven byte-exact",
   "baseline": "a553c3d3380a8baea9be4db6f972185d39f448e5",
-  "verified_new_functions": 1106,
+  "verified_new_functions": 1118,
   "target": 1000,
   "functions": [
     {
@@ -9057,6 +9057,102 @@
       "size": 184,
       "source": "src/game/tk/tk_126768.c",
       "result": "Byte-exact vs original ROM (region compare); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_00296640",
+      "address": "0x296640",
+      "size": 72,
+      "source": "src/game/op/opus_294CD8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "opus_cwidth_scale_get",
+      "address": "0x296688",
+      "size": 92,
+      "source": "src/game/op/opus_294CD8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_002B7E18",
+      "address": "0x2b7e18",
+      "size": 132,
+      "source": "src/game/op/op_2B6B50.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_002D90C0",
+      "address": "0x2d90c0",
+      "size": 84,
+      "source": "src/game/tk/tk_2D89C8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_00298518",
+      "address": "0x298518",
+      "size": 164,
+      "source": "src/game/op/op_2967E8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_0018B950",
+      "address": "0x18b950",
+      "size": 184,
+      "source": "src/game/yi/yi_18B680.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_002D1DB0",
+      "address": "0x2d1db0",
+      "size": 192,
+      "source": "src/game/tk/tk_2D1D68.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "MsSetScreenData",
+      "address": "0x1aa8a0",
+      "size": 104,
+      "source": "src/game/battle/ms_1A56F8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "MsSetDrawData",
+      "address": "0x1aa908",
+      "size": 100,
+      "source": "src/game/battle/ms_1A56F8.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_00163110",
+      "address": "0x163110",
+      "size": 68,
+      "source": "src/game/libmscd.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_002DC110",
+      "address": "0x2dc110",
+      "size": 72,
+      "source": "src/game/platform/platform_2DC110.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
+      "verified": true
+    },
+    {
+      "name": "func_0011D678",
+      "address": "0x11d678",
+      "size": 80,
+      "source": "src/game/main/mem2.c",
+      "result": "Byte-exact vs original ROM (tools/fdiff.py MATCH); whole built image green (hash a553c3d3380a8baea9be4db6f972185d39f448e5).",
       "verified": true
     }
   ],

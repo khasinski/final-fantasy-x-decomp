@@ -20,7 +20,32 @@ s32 func_002D1DA0(void) {
     return D_0078ACBC;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D1D68", func_002D1DB0);
+extern char D_00575FD8[];
+extern char D_00575FE0[];
+s32 func_002E2070(void *);
+
+void func_002D1DB0(void *arg)
+{
+    u8 buf[16];
+
+    while (1) {
+        func_002F8420((s32)arg);
+        if (func_002D92B8() & 0x800) {
+            func_002FEC98(D_00575FD8, 0x5003, 0, 0, 0, 0);
+        }
+        while (func_002FEC98(D_00575FE0, 0x4806, 0, 0, 0, 0) < 0) {
+            func_002D1D68(0x186A0);
+        }
+        while (func_002E2070(buf) == 0) {
+            func_002D1D68(0x186A0);
+        }
+    }
+}
+
+void D_002D1E68(int sid)
+{
+    func_002F8410(sid);
+}
 
 extern u8 D_00788C20[];
 extern u8 D_00584670[];

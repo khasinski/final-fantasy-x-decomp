@@ -528,7 +528,54 @@ int func_002984F8(Chr *key) {
     return func_00298438(key, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_00298518);
+/* DEBT(FAKE) */
+int func_00298518(Chr *key, int off)
+{
+    register int i __asm__("$4") = opus_get_chr_status_index(key, 0, 0);
+    register ResEntry *e __asm__("$2");
+    register u8 *drawoff __asm__("$3");
+    register u16 hE_u16 __asm__("$5");
+    register int hE;
+    register u8 *p __asm__("$6");
+    u8 old;
+
+    if (i < 0) {
+        return 0;
+    }
+    e = owu_chr_status;
+    i <<= 5;
+    __asm__ volatile("" : "+r"(e), "+r"(i));
+    drawoff = owu_chr_drawoff;
+    e = (ResEntry *)(i + (int)e);
+    __asm__ volatile("" : "+r"(drawoff), "+r"(e));
+    hE_u16 = e->hE;
+    hE = hE_u16;
+    p = (u8 *)(hE + (int)drawoff);
+    __asm__ volatile("" : "+r"(p));
+    old = *p;
+    if (off == 0) {
+        register int hE2 __asm__("$4") = hE;
+        register u8 *back __asm__("$3") = owu_chr_drawoff_back;
+        register u8 *p1 __asm__("$5");
+        register u8 *p2 __asm__("$4");
+        register u8 bval __asm__("$2");
+        __asm__ volatile("" : "+r"(hE2), "+r"(back));
+        p1 = (u8 *)(hE + (int)back);
+        p2 = (u8 *)(hE2 + (int)back);
+        __asm__ volatile("" : "+r"(p1), "+r"(p2));
+        bval = *p1;
+        *p2 = 0;
+        *p = bval | 0x80;
+    } else {
+        register u8 *back __asm__("$2") = owu_chr_drawoff_back;
+        register u8 m __asm__("$3") = old & 0x7F;
+        __asm__ volatile("" : "+r"(back));
+        *p = 0;
+        __asm__ volatile("" : "+r"(m));
+        *(u8 *)(hE + (int)back) = m;
+    }
+    return old;
+}
 
 int func_002985C0(Chr *key) {
     return func_00298518(key, 0);

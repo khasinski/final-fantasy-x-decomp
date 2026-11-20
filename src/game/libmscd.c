@@ -363,7 +363,18 @@ int func_001630B0(int i)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163110);
+int func_00163110(int i)
+{
+    u32 *p = (u32 *)((G1_VT78E498->w20 + i) * 4 + D_0078E498.f28);
+    register int ret __asm__("$2") = 0;
+
+    if (!(*p & 0x800000)) {
+        if (*p & 0x400000) {
+            ret = 1;
+        }
+    }
+    return ret;
+}
 
 
 int func_00163158(u8 *p) {

@@ -1,5 +1,6 @@
 /* tu_031 0x11d598-0x11d750: medium; mem2 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/s0.h"
@@ -37,7 +38,19 @@ char *func_0011D640(const char *s)
     return func_002F072C(func_0011D5C0(func_002F0840(s) + 1), s);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem2", func_0011D678);
+void func_0011BFE0(s32 a);
+
+void *func_0011D678(s32 size)
+{
+    register void *v1 __asm__("$3") = &D_0058091C;
+    register void *t7 __asm__("$15");
+
+    __asm__ volatile("" : "+r"(v1));
+    t7 = v1;
+    MIPS_STORE_RA(t7);
+    func_0011BFE0(D_0058091C);
+    return Sg_MemGet(0, 0, 0xE, size, 0);
+}
 
 void func_0011D6C8(s32 a)
 {

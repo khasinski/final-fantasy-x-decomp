@@ -995,9 +995,32 @@ void func_001AA878(u32 i, int v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsSetScreenData);
+void MsSetScreenData(u32 idx, int a1, int a2, int a3, int a4, int a5) {
+    if (idx < 3) {
+        Rec142F0 *p = &ms_screen[idx];
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsSetDrawData);
+        p->f80[0][0] = a1;
+        p->f80[0][1] = a2;
+        p->f80[0][2] = a3;
+        p->f80[0][3] = a4;
+        MMI_COPY_LQ_T0(p->f40[0], p->f80[0]);
+        MMI_COPY_SQ_T0(p->f40[0]);
+        ((R2Cam30 *)p)->wC4 = a5;
+    }
+}
+
+void MsSetDrawData(u32 idx, int a1, int a2, int a3, int a4) {
+    if (idx < 3) {
+        Rec142F0 *p = &ms_screen[idx];
+
+        p->f80[1][0] = a1;
+        p->f80[1][1] = a2;
+        p->f80[1][2] = a3;
+        p->f80[1][3] = a4;
+        MMI_COPY_LQ_T0(p->f40[1], p->f80[1]);
+        MMI_COPY_SQ_T0(p->f40[1]);
+    }
+}
 
 int MsGetScreenData(int *a, int *b, int *c, int *d) {
     if (a != 0) {

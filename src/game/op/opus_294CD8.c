@@ -432,9 +432,29 @@ INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_cscale_get);
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_002965F8);
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00296640);
+/* DEBT(TYPE): func_00110910 returns float, but this TU compiled without its prototype (implicit int return converted to float) */
+extern int _func_00110910(Chr *) __asm__("func_00110910");
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_cwidth_scale_get);
+float func_00296640(int id, int in_battle)
+{
+    if (in_battle) {
+        return MsGetChrWidth(id);
+    } else {
+        return _func_00110910(owu_chr_hd[id]);
+    }
+}
+
+float opus_cwidth_scale_get(int id, int in_battle)
+{
+    float w;
+
+    if (in_battle) {
+        w = MsGetChrWidth(id);
+    } else {
+        w = _func_00110910(owu_chr_hd[id]);
+    }
+    return w / 6.0f;
+}
 
 int func_002966E8(int a, int b) {
     if (b != 0 && (MsGetChrFly(a) || func_001ADA00())) {
