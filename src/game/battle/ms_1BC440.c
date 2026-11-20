@@ -748,6 +748,7 @@ int func_001BF888(int cmd, int enabled)
             if (enabled) result = mask;
             p->a[i] = (p->a[i] & clear) | result;
         } else {
+            /* DEBT(FAKE): register pin plus empty asm barrier below keep mask and result in separate registers. */
             register int m2 __asm__("$4");
             cmd -= 0x3060;
             cmd &= 0xfff;
@@ -755,6 +756,7 @@ int func_001BF888(int cmd, int enabled)
             cmd &= 15;
             m2 = 1 << cmd;
             result = m2;
+            /* DEBT(FAKE): empty asm barrier prevents folding the conditional zero into movn. */
             __asm__("" : "+r"(result));
             if (!enabled) result = 0;
             clear = m2 ^ 0xffff;

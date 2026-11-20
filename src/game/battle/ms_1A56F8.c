@@ -33,6 +33,7 @@ INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DE80);
 
 float MsNearRag(float a, float b)
 {
+    /* DEBT(FAKE): register pins steer float allocation of the saved base and delta. */
     register float base __asm__("$f3") = a;
     register float d __asm__("$f12");
     d = b - base;

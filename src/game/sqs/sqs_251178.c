@@ -1061,6 +1061,7 @@ int func_00253C98(void)
     int result = 0;
     int total;
     long prod;
+    /* DEBT(FAKE): register pins steer allocation of the remainder and pointer temporaries. */
     register long a __asm__("$2");
     register int *p __asm__("$3");
     func_00251178(30, 1);
