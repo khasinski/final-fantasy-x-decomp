@@ -453,7 +453,47 @@ int func_002B7CE8(OpMdcHdr *mdc, OpMdDrawReq *req, void *m2, void *m3, void *m4,
     return req->w34;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7E18);
+int func_002B7E18(OpMdcHdr *mdc)
+{
+    register int n __asm__("$2") = mdc->count;
+    register int i __asm__("$7") = 0;
+    register OpMdcEntry *e __asm__("$4") = mdc->entries;
+    register int total __asm__("$6") = 0;
+
+    if (n != 0) {
+        register int count __asm__("$10") = n;
+        register int c10 __asm__("$8") = 0x10;
+        register int c1c __asm__("$9") = 0x1C;
+
+        do {
+            register u8 *md __asm__("$2") = (u8 *)e->md;
+            register u8 *p __asm__("$5") = md + 0x20;
+            register int tag __asm__("$3");
+            __asm__ volatile("" : "+r"(p));
+
+            e++;
+            tag = *(s8 *)(p + 1);
+            if (tag == c10) {
+                register int next_i __asm__("$3") = i + 1;
+                __asm__ volatile("" : "+r"(next_i));
+
+                do {
+                    int k = *(s16 *)(p + 2);
+
+                    total += k;
+                    p += k * c1c;
+                    p += 0x20;
+                } while (*(s8 *)(p + 1) == c10);
+                i = next_i;
+            } else {
+                register int next_i __asm__("$3") = i + 1;
+                __asm__ volatile("" : "+r"(next_i));
+                i = next_i;
+            }
+        } while (i < count);
+    }
+    return total;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7EA0);
 
