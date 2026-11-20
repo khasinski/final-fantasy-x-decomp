@@ -7,7 +7,7 @@ with compiled code that matches the original game.
 
 | Part | Files | Code in C | Functions in C |
 |---|---:|---:|---:|
-| Main ELF | 1 | 49.55% | 10,070 / 11,612 (86.72%) |
+| Main ELF | 1 | 49.57% | 10,072 / 11,612 (86.74%) |
 | Completed overlays | 48 | 100% | 932 / 932 (100%) |
 | Partially decompiled overlays | 536 | 38.30% | 51,454 / 98,618 (52.18%) |
 
