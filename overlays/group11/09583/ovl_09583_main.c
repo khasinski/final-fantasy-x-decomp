@@ -60,6 +60,11 @@ extern void func_002D02E8(void *, int, int, int);
 extern void func_002D05F0(int);
 extern void func_002DCE38(void *, void *, void *);
 
+int func_01B00FB0(void)
+{
+    return 1;
+}
+
 void func_01B00FB8(TtPObj *o)
 {
     func_01B017B8(D_01B01B28, D_01B00D84);

@@ -91,8 +91,8 @@
     "containers": [
       9583
     ],
-    "discovered_code_bytes": 1012,
-    "functions": 6,
+    "discovered_code_bytes": 1020,
+    "functions": 7,
     "src": "ovl_09583_main.c",
     "syms": {
       "D_006A3924": "0x006A3924",
@@ -128,7 +128,7 @@
       "func_002D05F0": "0x002D05F0",
       "func_002DCE38": "0x002DCE38"
     },
-    "text_start": "0x01B00FB8",
+    "text_start": "0x01B00FB0",
     "text_end": "0x01B013B0"
   }
 ]
