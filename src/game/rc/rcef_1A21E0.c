@@ -688,7 +688,19 @@ void func_001A3568(float *v)
     } while (v[0] == 0.0f && v[2] == 0.0f);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_1A21E0", func_001A3620);
+float func_001A3620(float start, float end, float t, int mode)
+{
+    end -= start;
+    switch (mode) {
+    case 1:
+        { register float p __asm__("$f1"); register float v __asm__("$f0"); v = (eff_sin_t[((unsigned int)(int)(t * 32768.0f - 16384.0f) >> 4) & 4095] + 1.0f) * 0.5f; p = end * v; return start + p; }
+    case 2:
+        return start + end * eff_sin_t[((unsigned int)(int)(t * 16384.0f) >> 4) & 4095];
+    default:
+        return start + end * t;
+    }
+}
+
 
 void func_001A36D8(u8 r, u8 g, u8 b, u8 a, int frames)
 {

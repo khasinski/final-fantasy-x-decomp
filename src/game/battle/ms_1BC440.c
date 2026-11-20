@@ -731,4 +731,36 @@ int MsGetSaveCommandMenuPanel(int cmd) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", func_001BF888);
+int func_001BF888(int cmd, int enabled)
+{
+    int result = 0;
+    if ((cmd >> 12) == 3) {
+        CmdMenuPanel *p = func_001BF400();
+        int i, clear;
+        int mask;
+        if (cmd < 0x3060) {
+            cmd &= 0xfff;
+            i = cmd / 16;
+            cmd &= 15;
+            mask = 1 << cmd;
+            clear = mask ^ 0xffff;
+            result = 0;
+            if (enabled) result = mask;
+            p->a[i] = (p->a[i] & clear) | result;
+        } else {
+            register int m2 __asm__("$4");
+            cmd -= 0x3060;
+            cmd &= 0xfff;
+            i = cmd / 16;
+            cmd &= 15;
+            m2 = 1 << cmd;
+            result = m2;
+            __asm__("" : "+r"(result));
+            if (!enabled) result = 0;
+            clear = m2 ^ 0xffff;
+            if (i < 10) p->b[i] = (p->b[i] & clear) | result;
+        }
+    }
+    return result;
+}
+
