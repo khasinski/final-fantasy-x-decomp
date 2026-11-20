@@ -319,9 +319,102 @@ int func_00242C58(int id)
     return MsCalcWeakLevel(a, b) > 0 ? 2 : 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00242D00);
+extern int _tk_D_0069BBC0 __asm__("D_0069bbc0");
+extern int _tk_D_0069BBA8 __asm__("D_0069bba8");
+extern int _tk_D_0069BBB0 __asm__("D_0069bbb0");
+extern int _tk_D_0069BBB0_2 __asm__("D_0069Bbb0");
+extern int _tk_D_0069BBB8 __asm__("D_0069bbb8");
+extern u8 _tk_D_0069BBA0[] __asm__("D_0069bba0");
+extern int D_0069BBC4;
+extern u8 *MsGetSaveInParty(int *);
+extern u8 *MsGetSaveOutParty(int *);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", TkMenuExchangePlayerPos);
+int func_00242D00(int a)
+{
+    int sp0;
+    int mode = a & 0xFFFF0000;
+    int joined_mask = 0;
+    int mask = 0;
+    int count = 0;
+    int i;
+    u8 *party;
+
+    _tk_D_0069BBC0 = 0;
+    D_0069BBC4 = 0;
+    party = MsGetSaveInParty(&sp0);
+    _tk_D_0069BBB8 = 0;
+    for (i = 0; i < sp0; i++) {
+        if (party[i] != 0xFF && party[i] != 7 && mode != 0x10000) {
+            _tk_D_0069BBA0[count] = party[i];
+            count++;
+            mask |= 1 << party[i];
+            _tk_D_0069BBB8 |= 1 << party[i];
+        }
+    }
+    _tk_D_0069BBB0 = count;
+    party = MsGetSaveOutParty(&sp0);
+    for (i = 0; i < sp0; i++) {
+        if (party[i] != 0xFF && party[i] != 7 && mode != 0x10000) {
+            _tk_D_0069BBA0[count] = party[i];
+            count++;
+            mask |= 1 << party[i];
+        }
+    }
+    _tk_D_0069BBA8 = count;
+    _tk_D_0069BBC0 = mask;
+    for (i = 0; i < 8; i++) {
+        if (MsGetSavePlyJoined(i) && i != 7 && mode != 0x10000) {
+            joined_mask |= 1 << i;
+            if (!((mask >> i) & 1)) {
+                _tk_D_0069BBA0[count] = i;
+                count++;
+            }
+        }
+    }
+    D_0069BBAC = count;
+    D_0069BBC4 = joined_mask | mask;
+    for (i = 0; i < count; i++) {
+    }
+    D_0069BBB4 = 0;
+}
+
+void TkMenuExchangePlayerPos(int first, int unused_a1)
+{
+    register int a1_in __asm__("$5");
+    int count[2];
+    register int position __asm__("$16") = a1_in;
+    int second = position;
+    int player = D_0069BBA0[first];
+    register int other __asm__("$17");
+    int i;
+    u8 *party;
+    if (second >= _tk_D_0069BBB0_2) {
+        other = D_0069BBA0[second];
+        position = -1;
+        party = MsGetSaveOutParty(&count[0]);
+        for (i = 0; i < count[0]; i++) {
+            if (other == party[i]) {
+                position = i + 3;
+                break;
+            }
+        }
+    } else {
+        u8 *in_party = MsGetSaveInParty(&count[1]);
+        for (i = 0; i < count[1]; i++) {
+            if (player == in_party[i]) break;
+        }
+    }
+    if (position >= 0) {
+        u8 tmp;
+        register u8 tmp2 __asm__("$2");
+        MsExchangeSaveParty(player, position);
+        tmp = D_0069BBA0[first];
+        tmp2 = D_0069BBA0[second];
+        D_0069BBA0[first] = tmp2;
+        D_0069BBA0[second] = tmp;
+    }
+    func_00242880();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00243088);
 
@@ -806,7 +899,60 @@ void func_00243EA8(void)
     TOSeqCtrl(1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00243F90);
+extern int _tk_D_0069A870 __asm__("D_0069a870");
+extern u8 D_003241FC, D_003241FD, D_003241FE, D_003241FF;
+extern u8 D_00324200, D_00324201, D_00324202, D_00324203;
+extern void func_00245548(void);
+extern void TkMenuDrawScissorClear(void);
+
+void func_00243F90(void)
+{
+    int (*draw)(int);
+    int *entry;
+    int handle;
+    int index;
+    u32 c0;
+    u32 c1;
+
+    func_00245548();
+    TkMenuDrawScissorClear();
+    c0 = D_003241FC | (D_003241FE << 8) | (D_003241FD << 16) | (D_003241FF << 24);
+    c1 = D_00324200 | (D_00324202 << 8) | (D_00324201 << 16) | (D_00324203 << 24);
+    if ((D_0069A87C & 0xFFFF0000) == 0x400000) {
+        c0 = 0x80000000;
+        c1 = 0x80000000;
+    }
+    TkMenuDrawRect(0, 0, 0x200, 0x1A0, c0, c1);
+    index = 0;
+    func_002492F0();
+    func_00124F08();
+    func_00243600(0);
+    entry = D_0069A808;
+    do {
+        handle = *entry;
+        if (handle != 0 && !((_tk_D_0069A870 >> index) & 1) && (*(u32 *)&((V5Proc *)handle)->b18 & 0xFF00FF00)) {
+            draw = *(int (**)(int))((V5Proc *)handle)->pad4;
+            if (draw != 0) {
+                draw(handle);
+            }
+        }
+        index++;
+        entry++;
+    } while (index < 0x19);
+    if (D_0069A7F4 != 0) {
+        (*(void (**)(void))D_0069A7F4)();
+    }
+    func_00243600(1);
+    func_00243600(2);
+    func_00243600(3);
+    func_00243600(4);
+    func_00243600(5);
+    func_00243600(6);
+    func_00243600(7);
+    func_00243600(8);
+    func_002492F0();
+    func_00124F08();
+}
 
 void func_00244150(void) {
     int i;
@@ -857,7 +1003,86 @@ int TkMn2GetMainFrameRatio(void) {
     return D_0069BCD4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244278);
+extern V5Proc D_00326DB0, D_00325850, D_00326440, D_003263E8, D_00326410;
+extern V5Proc D_00326DD8, D_00325A18, D_00326E00, D_00326008, D_003257B8;
+extern V5Proc D_00326E28, D_00325A78, D_00326FD8, D_003258D8, D_00325AA0;
+extern V5Proc D_00326468, D_00325D38, D_00326148, D_00326040, D_00326300, D_00326D50;
+extern void _void_TkMenuMainActiveMenu(int, int) __asm__("TkMenuMainActiveMenu");
+extern void TkMenuAppearMainCmdWindow(int, int);
+
+void func_00244278(u32 a0, u32 a1)
+{
+    if (a0 != 0x10000 && a0 != 0x80000 && a0 != 0x20000 && a0 != 0x40000) {
+        func_00243D58(0x13, &D_00326DB0);
+        func_00243D58(6, &D_00325850);
+        func_00243D58(0, &D_00326440);
+        func_00243D58(0xF, &D_003263E8);
+        func_00243D58(0x10, &D_00326410);
+        func_00243D58(3, &D_00326DD8);
+        func_00243D58(7, &D_00325A18);
+        func_00243D58(2, &D_00326E00);
+        func_00243D58(0xA, &D_00326008);
+        func_00243D58(0x17, &D_003257B8);
+        func_00243D58(0xB, &D_00326E28);
+        func_00243D58(0x15, &D_00325A78);
+        func_00243D58(0x14, &D_00326FD8);
+        func_00243D58(4, &D_003258D8);
+        func_00243D58(9, &D_00325AA0);
+        func_002439A0();
+    }
+    switch (a0) {
+    case 0x10000:
+        func_00243D58(0x11, &D_00326468);
+        _void_TkMenuMainActiveMenu(0x11, 0);
+        break;
+    case 0x80000:
+        func_00243D58(0, &D_00326440);
+        func_00243D58(0xE, &D_00325D38);
+        _void_TkMenuMainActiveMenu(0xE, a1);
+        if (a1 >= 0x20) {
+            TkMenuAppearMainCmdWindow(0, 0x18);
+        } else {
+            TkMenuAppearMainCmdWindow(0, 0xE);
+        }
+        func_002439A0();
+        break;
+    case 0x20000:
+        func_00243D58(0xD, &D_00326148);
+        TkMenuMainActiveMenu(0xD, a1);
+        TkMenuAppearMainCmdWindow(0, 0xD);
+        func_002439A0();
+        break;
+    case 0x40000:
+        func_00243D58(0xC, &D_00326040);
+        TkMenuMainActiveMenu(0xC, a1);
+        TkMenuAppearMainCmdWindow(0, 0xC);
+        func_002439A0();
+        break;
+    case 0x200000:
+        TkMenuMainActiveMenu(0xF, 0);
+        TkMenuAppearMainCmdWindow(0, 0xF);
+        func_002439A0();
+        break;
+    case 0x100000:
+        TkMenuMainActiveMenu(0x10, 0);
+        TkMenuAppearMainCmdWindow(0, 0x10);
+        func_002439A0();
+        break;
+    case 0x400000:
+        TkMn2SetMainFrameRatioDiff(-0x10);
+        TkMenuMainActiveMenu(0xB, a1);
+        break;
+    case 0x800000:
+        func_00243D58(0x16, &D_00326300);
+        TkMenuMainActiveMenu(0x16, a1);
+        break;
+    default:
+        func_00243D58(1, &D_00326D50);
+        TkMenuAppearMainCmdWindow(0, 1);
+        TkMenuMainActiveMenu(1, 0);
+        break;
+    }
+}
 
 void func_00244608(void) {
     int i;
@@ -901,7 +1126,33 @@ void func_002446E8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244780);
+extern void func_00225DE0(int, int, int, int);
+
+void func_00244780(int a0, int a1, int a2, int a3)
+{
+    int i;
+    int src = 0x1BD0000;
+    int y = a2;
+    int size = 0xC000;
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    func_00225920();
+    func_002DA610(0, 0);
+    for (i = 0; i < 13; i++) {
+        func_002DA928(D_0069BC70, (s16)(0x68000 / 64), 8, 1, 0, 0, 0x200, (s16)(size / 0x600));
+        func_002F8660(0);
+        func_002DA610(0, 0);
+        func_002DAC50(D_0069BC70, src);
+        func_002DA610(0, 0);
+        src += 0xC000;
+        func_00225DE0(a2, y, a0, a1);
+        y += 0x200;
+        func_00225B00();
+    }
+    func_002DA610(0, 0);
+}
 
 void func_002448C8(void) {
     int i;
@@ -957,6 +1208,43 @@ void func_002449E0(U4DispEnv *env, int i)
     func_002DA610(0, 0);
 }
 
+extern int _tk_D_0069A87C __asm__("D_0069a87c");
+extern int _tk_D_00326494 __asm__("D_00326494");
+extern int _tk_D_00326498 __asm__("D_00326498");
+extern int _tk_D_0032649C __asm__("D_0032649c");
+extern int _tk_D_0069BCD4 __asm__("D_0069bcd4");
+extern int _tk_D_0069BCD0 __asm__("D_0069bcd0");
+extern int _tk_D_0069BBF8_a __asm__("D_0069Bbf8");
+extern u8 _tk_D_0069A804_a __asm__("D_0069a804");
+extern u8 _tk_D_00326438 __asm__("D_00326438");
+extern int _tk_D_0069A870_a __asm__("D_0069A870");
+extern int _tk_D_0069A7FC __asm__("D_0069a7fc");
+extern int _tk_D_0069A800 __asm__("D_0069a800");
+extern int _tk_D_0069A86C __asm__("D_0069a86c");
+
+extern void func_0021FF58(void);
+extern void func_0020DC20(int);
+extern void AtelEnterMenuCallback(int);
+extern void func_00201CD0(void);
+extern void func_0014E5E0(int);
+extern void func_00265B50(void);
+extern void TOMenuGetPadStatus(void);
+extern void func_001656D8(void);
+extern void AtelExecMenuCtrl(void);
+extern void func_00243EA8(void);
+extern void func_0020AC10(void);
+extern void func_00241630(void);
+extern void func_0020CA38(void);
+extern void func_00241698(void);
+extern void TOMenuOpenPktBuffTmp(void);
+extern void TODrawScissorXYWH(int, int, int, int);
+extern int TkMenuGetDrawShadeRatio(void);
+extern void TOMenuDrawKickTmp(void);
+extern void TODrawMessageWindowForMenu(void);
+extern void func_0020EC88(void);
+extern void TOMenuAtelFree(void);
+extern void func_001486D0(void);
+
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244A90);
 
 void TkMenuRefreshPartyList(void) {
@@ -966,7 +1254,71 @@ void TkMenuRefreshPartyList(void) {
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244F00);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", TkMenuStart);
+extern char D_00573058[];
+extern char D_00573070[];
+extern int D_00326490;
+extern int D_0032648C;
+extern void func_00244F00(int);
+extern void TkMn2InitWork(void);
+extern void TkMn2GetMainPos(void);
+extern void func_00241FA0(int);
+extern void func_00241FB0(int);
+extern void func_00241FD0(int);
+extern void TkCalcImportantListMax(void);
+extern void func_00244A90(int);
+extern int sa_task_buff_size_get(int);
+extern void *sa_task_init2(int, void *, int);
+extern void yiAssert(int, char *, char *);
+extern s32 TkCdSize(int, int);
+
+typedef struct {
+    void (*enter)(void);
+    void (*leave)(void);
+} TkSaTask;
+
+extern int _tk_D_0069BBF8 __asm__("D_0069bbf8");
+
+void TkMenuStart(int a)
+{
+    int sp;
+    int mode = a & 0x7FFFFFFF;
+
+    mode &= 0xBFFFFFFF;
+    D_0069BB84 = 1;
+    if (mode & 0x1000000) {
+        func_00244F00(mode & 0xFFFF);
+        return;
+    }
+    TkMn2InitWork();
+    func_002EF0D0((void *)0x1B00000, 0, 0x500000);
+    TkMn2GetMainPos();
+    func_00241FA0(0);
+    func_00241FB0(0);
+    D_0069A7F4 = 0;
+    if (sa_task_buff_size_get(2) > 0x7FFF) {
+        yiAssert(1, D_00573058, D_00573070);
+    }
+    D_0069A7F4 = (SysIf *)sa_task_init2(2, (void *)0x1D46B00, 0);
+    func_00242D00(mode);
+    func_00243088(mode);
+    Sg_GetDBuffDC(&sp);
+    D_0069A804 = (sp ^ 1) & 1;
+    _tk_D_0069BBF8 = (sp ^ 1) & 1;
+    D_00326439 = 0;
+    Sg_SetTkAntiXYB(0, 0, 0x80);
+    func_0011FD00(0);
+    D_00326490 = TkCdSize(0x25, 0);
+    D_0032648C = TkCdSize(0x2A, 0);
+    TkCalcImportantListMax();
+    func_00241FD0(0);
+    func_00244A90(mode);
+    Sg_SetTkAntiXYB(2, 1, 0x80);
+    func_0011FD00(1);
+    if (D_0069A7F4 != 0) {
+        ((TkSaTask *)D_0069A7F4)->leave();
+    }
+    D_0069A7F4 = 0;
+}
 
 void func_00245450(void) {
 }
