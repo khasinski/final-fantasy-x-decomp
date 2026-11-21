@@ -672,5 +672,104 @@
     "cflags": [
       "-O0"
     ]
+  },
+  {
+    "src": "ovl_09086_89e8.c",
+    "containers": [
+      9086,
+      9114,
+      9196,
+      9199,
+      9208,
+      9577,
+      9614,
+      9621,
+      9641,
+      9645,
+      9653,
+      9657
+    ],
+    "text_start": "0x01B089E8",
+    "text_end": "0x01B08A04",
+    "functions": 1,
+    "discovered_code_bytes": 28,
+    "syms": {},
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9086,
+        "text_start": "0x01B089E8",
+        "text_end": "0x01B08A04",
+        "syms": {}
+      },
+      {
+        "cid": 9114,
+        "text_start": "0x01B121B0",
+        "text_end": "0x01B121CC",
+        "syms": {}
+      },
+      {
+        "cid": 9196,
+        "text_start": "0x01B0A6A0",
+        "text_end": "0x01B0A6BC",
+        "syms": {}
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0FD30",
+        "text_end": "0x01B0FD4C",
+        "syms": {}
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B11F48",
+        "text_end": "0x01B11F64",
+        "syms": {}
+      },
+      {
+        "cid": 9577,
+        "text_start": "0x01B09F70",
+        "text_end": "0x01B09F8C",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B111B8",
+        "text_end": "0x01B111D4",
+        "syms": {}
+      },
+      {
+        "cid": 9621,
+        "text_start": "0x01B09FE8",
+        "text_end": "0x01B0A004",
+        "syms": {}
+      },
+      {
+        "cid": 9641,
+        "text_start": "0x01B0DF60",
+        "text_end": "0x01B0DF7C",
+        "syms": {}
+      },
+      {
+        "cid": 9645,
+        "text_start": "0x01B08650",
+        "text_end": "0x01B0866C",
+        "syms": {}
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0F2F8",
+        "text_end": "0x01B0F314",
+        "syms": {}
+      },
+      {
+        "cid": 9657,
+        "text_start": "0x01B0F000",
+        "text_end": "0x01B0F01C",
+        "syms": {}
+      }
+    ]
   }
 ]
