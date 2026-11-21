@@ -1,0 +1,148 @@
+[
+  {
+    "src": "ovl_09425_0aa0.c",
+    "containers": [
+      9425
+    ],
+    "text_start": "0x01B00AA0",
+    "text_end": "0x01B00CE4",
+    "functions": 1,
+    "discovered_code_bytes": 580,
+    "syms": {
+      "fn_ovl_0ce8": "0x01B00CE8",
+      "fn_ovl_0e40": "0x01B00E40",
+      "fn_ovl_1068": "0x01B01068",
+      "fn_ovl_1190": "0x01B01190",
+      "fn_ovl_2b78": "0x01B02B78",
+      "fn_ovl_2fc0": "0x01B02FC0",
+      "fn_ovl_3158": "0x01B03158",
+      "fn_ovl_3750": "0x01B03750",
+      "fn_ovl_3918": "0x01B03918",
+      "fn_ovl_39d8": "0x01B039D8",
+      "fn_ovl_3ab0": "0x01B03AB0",
+      "fn_ovl_45e0": "0x01B045E0",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01B7B7C0",
+      "g_ovl_cfg": "0x01B006B0",
+      "g_ovl_ctx": "0x01B04930",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0658": "0x01B00658",
+      "g_ovl_dat_0668": "0x01B00668",
+      "g_ovl_dat_0d88": "0x01B00D88",
+      "g_ovl_fade": "0x01B04870",
+      "g_ovl_mgr": "0x01B048F0",
+      "g_ovl_ptr_4b90": "0x01B04B90",
+      "g_ovl_ptr_4b94": "0x01B04B94",
+      "g_ovl_res": "0x01B09CF0",
+      "g_ovl_snd0": "0x01B04828",
+      "g_ovl_snd1": "0x01B04848",
+      "g_ovl_w4820": "0x01B04820"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9425,
+        "text_start": "0x01B00AA0",
+        "text_end": "0x01B00CE4",
+        "syms": {
+          "fn_ovl_0ce8": "0x01B00CE8",
+          "fn_ovl_0e40": "0x01B00E40",
+          "fn_ovl_1068": "0x01B01068",
+          "fn_ovl_1190": "0x01B01190",
+          "fn_ovl_2b78": "0x01B02B78",
+          "fn_ovl_2fc0": "0x01B02FC0",
+          "fn_ovl_3158": "0x01B03158",
+          "fn_ovl_3750": "0x01B03750",
+          "fn_ovl_3918": "0x01B03918",
+          "fn_ovl_39d8": "0x01B039D8",
+          "fn_ovl_3ab0": "0x01B03AB0",
+          "fn_ovl_45e0": "0x01B045E0",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01B7B7C0",
+          "g_ovl_cfg": "0x01B006B0",
+          "g_ovl_ctx": "0x01B04930",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_0658": "0x01B00658",
+          "g_ovl_dat_0668": "0x01B00668",
+          "g_ovl_dat_0d88": "0x01B00D88",
+          "g_ovl_fade": "0x01B04870",
+          "g_ovl_mgr": "0x01B048F0",
+          "g_ovl_ptr_4b90": "0x01B04B90",
+          "g_ovl_ptr_4b94": "0x01B04B94",
+          "g_ovl_res": "0x01B09CF0",
+          "g_ovl_snd0": "0x01B04828",
+          "g_ovl_snd1": "0x01B04848",
+          "g_ovl_w4820": "0x01B04820"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09425_0ce8.c",
+    "containers": [
+      9425
+    ],
+    "text_start": "0x01B00CE8",
+    "text_end": "0x01B00D84",
+    "functions": 1,
+    "discovered_code_bytes": 156,
+    "syms": {
+      "fn_ovl_0a80": "0x01B00A80",
+      "fn_ovl_2c30": "0x01B02C30",
+      "fn_ovl_3b90": "0x01B03B90",
+      "g_ovl_mgr": "0x01B048F0",
+      "g_ovl_ptr_4b94": "0x01B04B94",
+      "g_ovl_snd0": "0x01B04828",
+      "g_ovl_snd1": "0x01B04848"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9425,
+        "text_start": "0x01B00CE8",
+        "text_end": "0x01B00D84",
+        "syms": {
+          "fn_ovl_0a80": "0x01B00A80",
+          "fn_ovl_2c30": "0x01B02C30",
+          "fn_ovl_3b90": "0x01B03B90",
+          "g_ovl_mgr": "0x01B048F0",
+          "g_ovl_ptr_4b94": "0x01B04B94",
+          "g_ovl_snd0": "0x01B04828",
+          "g_ovl_snd1": "0x01B04848"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09425_0d88.c",
+    "containers": [
+      9425
+    ],
+    "text_start": "0x01B00D88",
+    "text_end": "0x01B00DCC",
+    "functions": 1,
+    "discovered_code_bytes": 68,
+    "syms": {
+      "fn_ovl_1d08": "0x01B01D08",
+      "fn_ovl_2370": "0x01B02370"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9425,
+        "text_start": "0x01B00D88",
+        "text_end": "0x01B00DCC",
+        "syms": {
+          "fn_ovl_1d08": "0x01B01D08",
+          "fn_ovl_2370": "0x01B02370"
+        }
+      }
+    ]
+  }
+]
