@@ -1,0 +1,56 @@
+typedef unsigned char u8;
+extern void fn_ovl_1310(void);
+extern void fn_ovl_b7e8(void *);
+extern void fn_ovl_2110(void *);
+extern void fn_ovl_7420(void *);
+extern void fn_sys_2b4980(void *);
+extern void *fn_sys_2b49a0(void *, int, int);
+extern void fn_sys_2678e0(void *, void *);
+extern void fn_sys_267a68(void *, void *, void *, int);
+extern void fn_sys_2d02e8(void *, int, int, int);
+extern void fn_sys_2944b0(void *, int, int, int);
+extern void fn_sys_294468(void *, int, int);
+extern void fn_ovl_1608(void *);
+
+extern void *g_ovl_ptr_4c;
+extern u8 g_ovl_dat_50[];
+extern void *g_ovl_ptr_528;
+extern u8 g_ovl_dat_540;
+extern u8 g_ovl_dat_8f0[];
+extern u8 g_ovl_dat_908[];
+extern u8 g_ovl_dat_928[];
+extern u8 g_ovl_dat_950[];
+extern u8 g_ovl_dat_b60[];
+extern u8 g_ovl_dat_c880[];
+extern void *g_ovl_ptr_c8ac;
+extern u8 g_ovl_dat_1b975e0[];
+extern u8 g_ovl_dat_1c975e0[];
+
+int ovl_09134_1870(void) {
+    void *m0[2];
+    void *m1;
+    fn_ovl_1310();
+    g_ovl_ptr_4c = g_ovl_dat_1c975e0;
+    m1 = g_ovl_dat_8f0;
+    fn_ovl_b7e8(&m1);
+    m0[0] = g_ovl_dat_908;
+    m0[1] = 0;
+    fn_ovl_2110(m0);
+    g_ovl_dat_908[27] = 1;
+    m0[0] = g_ovl_dat_928;
+    m0[1] = 0;
+    fn_ovl_2110(m0);
+    m0[0] = g_ovl_dat_950;
+    m0[1] = g_ovl_dat_908;
+    fn_ovl_7420(m0);
+    g_ovl_dat_950[52] = g_ovl_dat_540;
+    fn_sys_2b4980(g_ovl_ptr_528);
+    g_ovl_ptr_c8ac = fn_sys_2b49a0(g_ovl_ptr_528, 8, 0);
+    fn_sys_2678e0(g_ovl_ptr_c8ac, g_ovl_dat_50);
+    fn_sys_267a68(g_ovl_dat_c880, g_ovl_ptr_c8ac, g_ovl_dat_1b975e0, 0x100000);
+    fn_sys_2d02e8(g_ovl_ptr_528, 0, 1000, 2);
+    fn_sys_2944b0(g_ovl_ptr_528, 0, 1000, 2);
+    fn_sys_294468(fn_sys_2b49a0(g_ovl_ptr_528, 6, 1), 0, 2);
+    fn_ovl_1608(g_ovl_dat_b60);
+    return 0;
+}
