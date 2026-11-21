@@ -1,0 +1,49 @@
+[
+  {
+    "name": "ovl_09472_open_2cf8",
+    "src": "ovl_09472_open_2cf8.c",
+    "compiler": "ee-gcc2.9-991111-01",
+    "cflags": [
+      "-O2",
+      "-G0",
+      "-mips3",
+      "-mcpu=r5900",
+      "-mno-abicalls"
+    ],
+    "containers": [
+      9472
+    ],
+    "text_start": "0x01B02CF8",
+    "text_end": "0x01B030E4",
+    "discovered_code_bytes": 1004,
+    "functions": 1,
+    "syms": {
+      "D_01B00500": "0x01B00500",
+      "D_01B00504": "0x01B00504",
+      "D_01B00630": "0x01B00630",
+      "D_01B00690": "0x01B00690",
+      "D_01B006C0": "0x01B006C0",
+      "D_01B008E8": "0x01B008E8",
+      "D_01B00908": "0x01B00908",
+      "D_01B00930": "0x01B00930",
+      "D_01B00E70": "0x01B00E70",
+      "D_01B01170": "0x01B01170",
+      "D_01B01BF0": "0x01B01BF0",
+      "D_01B023F0": "0x01B023F0",
+      "D_01B025B0": "0x01B025B0",
+      "D_01B0DB00": "0x01B0DB00",
+      "D_01B0DB2C": "0x01B0DB2C",
+      "func_01B03470": "0x01B03470",
+      "func_01B04748": "0x01B04748",
+      "func_01B077C0": "0x01B077C0",
+      "func_01B078F0": "0x01B078F0",
+      "func_01B079D0": "0x01B079D0",
+      "func_01B08478": "0x01B08478",
+      "func_01B09600": "0x01B09600",
+      "func_01B0AEB8": "0x01B0AEB8",
+      "func_01B0AEF0": "0x01B0AEF0",
+      "func_01B0B760": "0x01B0B760",
+      "func_01B0C7B8": "0x01B0C7B8"
+    }
+  }
+]
