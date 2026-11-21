@@ -38,5 +38,89 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09536_08b0.c",
+    "containers": [
+      9536
+    ],
+    "text_start": "0x01B008B0",
+    "text_end": "0x01B00BDC",
+    "functions": 1,
+    "discovered_code_bytes": 812,
+    "syms": {
+      "fn_ovl_0be0": "0x01B00BE0",
+      "fn_ovl_0df0": "0x01B00DF0",
+      "fn_ovl_0f18": "0x01B00F18",
+      "fn_ovl_1040": "0x01B01040",
+      "fn_ovl_1980": "0x01B01980",
+      "fn_ovl_2430": "0x01B02430",
+      "fn_ovl_2a28": "0x01B02A28",
+      "fn_ovl_2e70": "0x01B02E70",
+      "fn_ovl_30e8": "0x01B030E8",
+      "fn_ovl_3600": "0x01B03600",
+      "fn_ovl_37c8": "0x01B037C8",
+      "fn_ovl_3888": "0x01B03888",
+      "fn_ovl_3960": "0x01B03960",
+      "fn_ovl_4490": "0x01B04490",
+      "fn_ovl_46c8": "0x01B046C8",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01B56B80",
+      "g_ovl_cam_cfg": "0x01B00468",
+      "g_ovl_cfade_p": "0x01B048B0",
+      "g_ovl_ctx": "0x01B004B8",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0450": "0x01B00450",
+      "g_ovl_dat_3f20": "0x01B03F20",
+      "g_ovl_dat_4808": "0x01B04808",
+      "g_ovl_dat_c870": "0x01B0C870",
+      "g_ovl_fades": "0x01B04830",
+      "g_ovl_mgr": "0x01B048B8",
+      "g_ovl_objs": "0x01B04900",
+      "g_ovl_ptr_5c00": "0x01B05C00",
+      "g_ovl_ptr_5c04": "0x01B05C04"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9536,
+        "text_start": "0x01B008B0",
+        "text_end": "0x01B00BDC",
+        "syms": {
+          "fn_ovl_0be0": "0x01B00BE0",
+          "fn_ovl_0df0": "0x01B00DF0",
+          "fn_ovl_0f18": "0x01B00F18",
+          "fn_ovl_1040": "0x01B01040",
+          "fn_ovl_1980": "0x01B01980",
+          "fn_ovl_2430": "0x01B02430",
+          "fn_ovl_2a28": "0x01B02A28",
+          "fn_ovl_2e70": "0x01B02E70",
+          "fn_ovl_30e8": "0x01B030E8",
+          "fn_ovl_3600": "0x01B03600",
+          "fn_ovl_37c8": "0x01B037C8",
+          "fn_ovl_3888": "0x01B03888",
+          "fn_ovl_3960": "0x01B03960",
+          "fn_ovl_4490": "0x01B04490",
+          "fn_ovl_46c8": "0x01B046C8",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01B56B80",
+          "g_ovl_cam_cfg": "0x01B00468",
+          "g_ovl_cfade_p": "0x01B048B0",
+          "g_ovl_ctx": "0x01B004B8",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_0450": "0x01B00450",
+          "g_ovl_dat_3f20": "0x01B03F20",
+          "g_ovl_dat_4808": "0x01B04808",
+          "g_ovl_dat_c870": "0x01B0C870",
+          "g_ovl_fades": "0x01B04830",
+          "g_ovl_mgr": "0x01B048B8",
+          "g_ovl_objs": "0x01B04900",
+          "g_ovl_ptr_5c00": "0x01B05C00",
+          "g_ovl_ptr_5c04": "0x01B05C04"
+        }
+      }
+    ]
   }
 ]
