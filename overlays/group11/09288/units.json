@@ -1,0 +1,34 @@
+[
+  {
+    "src": "ovl_09288_0e18.c",
+    "containers": [
+      9288
+    ],
+    "text_start": "0x01B00E18",
+    "text_end": "0x01B00EAC",
+    "functions": 1,
+    "discovered_code_bytes": 148,
+    "syms": {
+      "fn_ovl_0c40": "0x01B00C40",
+      "fn_ovl_3c70": "0x01B03C70",
+      "g_ovl_mgr": "0x01B04688",
+      "g_ovl_ptr_4978": "0x01B04978"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9288,
+        "text_start": "0x01B00E18",
+        "text_end": "0x01B00EAC",
+        "syms": {
+          "fn_ovl_0c40": "0x01B00C40",
+          "fn_ovl_3c70": "0x01B03C70",
+          "g_ovl_mgr": "0x01B04688",
+          "g_ovl_ptr_4978": "0x01B04978"
+        }
+      }
+    ]
+  }
+]
