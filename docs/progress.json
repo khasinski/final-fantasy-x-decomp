@@ -14,13 +14,13 @@
   "ee_overlays": {
     "containers": 584,
     "distinct_payloads": 563,
-    "matched_units": 1005,
+    "matched_units": 1010,
     "containers_with_any_match": 584,
     "containers_fully_matched": 146,
     "containers_partially_matched": 438,
-    "matched_code_bytes": 10494780,
+    "matched_code_bytes": 10540148,
     "code_bytes": 17342672,
-    "coverage_percent": 60.51420450089813,
+    "coverage_percent": 60.77580202174152,
     "distinct_function_bytes": 1576784,
     "distinct_matched_bytes": 301012,
     "distinct_coverage_percent": 19.09024952054308,
@@ -29,10 +29,10 @@
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 11530804,
+    "c_or_matched_bytes": 11576172,
     "estimated_total_bytes": 19413792,
-    "coverage_percent": 59.394908526886454,
-    "span_scenario_percent": 58.841031904822366,
+    "coverage_percent": 59.62859806059527,
+    "span_scenario_percent": 59.07254220848011,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus overlay function bytes, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [
