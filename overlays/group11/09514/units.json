@@ -1,0 +1,68 @@
+[
+  {
+    "src": "ovl_09514_0a00.c",
+    "containers": [
+      9514
+    ],
+    "text_start": "0x01B00A00",
+    "text_end": "0x01B00C28",
+    "functions": 1,
+    "discovered_code_bytes": 552,
+    "syms": {
+      "fn_ovl_09a8": "0x01B009A8",
+      "fn_ovl_0c28": "0x01B00C28",
+      "fn_ovl_0ed8": "0x01B00ED8",
+      "fn_ovl_1000": "0x01B01000",
+      "fn_ovl_2e30": "0x01B02E30",
+      "fn_ovl_30a8": "0x01B030A8",
+      "fn_ovl_35c0": "0x01B035C0",
+      "fn_ovl_3788": "0x01B03788",
+      "fn_ovl_3848": "0x01B03848",
+      "fn_ovl_3920": "0x01B03920",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01B8D780",
+      "g_ovl_ctx": "0x01B04460",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0540": "0x01B00540",
+      "g_ovl_dat_0558": "0x01B00558",
+      "g_ovl_dat_3ec0": "0x01B03EC0",
+      "g_ovl_mgr": "0x01B04418",
+      "g_ovl_ptr_46c0": "0x01B046C0",
+      "g_ovl_ptr_46c4": "0x01B046C4",
+      "g_ovl_res": "0x01B09950"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9514,
+        "text_start": "0x01B00A00",
+        "text_end": "0x01B00C28",
+        "syms": {
+          "fn_ovl_09a8": "0x01B009A8",
+          "fn_ovl_0c28": "0x01B00C28",
+          "fn_ovl_0ed8": "0x01B00ED8",
+          "fn_ovl_1000": "0x01B01000",
+          "fn_ovl_2e30": "0x01B02E30",
+          "fn_ovl_30a8": "0x01B030A8",
+          "fn_ovl_35c0": "0x01B035C0",
+          "fn_ovl_3788": "0x01B03788",
+          "fn_ovl_3848": "0x01B03848",
+          "fn_ovl_3920": "0x01B03920",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01B8D780",
+          "g_ovl_ctx": "0x01B04460",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_0540": "0x01B00540",
+          "g_ovl_dat_0558": "0x01B00558",
+          "g_ovl_dat_3ec0": "0x01B03EC0",
+          "g_ovl_mgr": "0x01B04418",
+          "g_ovl_ptr_46c0": "0x01B046C0",
+          "g_ovl_ptr_46c4": "0x01B046C4",
+          "g_ovl_res": "0x01B09950"
+        }
+      }
+    ]
+  }
+]

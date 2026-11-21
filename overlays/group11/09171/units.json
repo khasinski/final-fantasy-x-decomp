@@ -1,0 +1,74 @@
+[
+  {
+    "src": "ovl_09171_0868.c",
+    "containers": [
+      9171
+    ],
+    "text_start": "0x01B00868",
+    "text_end": "0x01B00AA4",
+    "functions": 1,
+    "discovered_code_bytes": 572,
+    "syms": {
+      "fn_ovl_0810": "0x01B00810",
+      "fn_ovl_0c18": "0x01B00C18",
+      "fn_ovl_0e68": "0x01B00E68",
+      "fn_ovl_1258": "0x01B01258",
+      "fn_ovl_2c98": "0x01B02C98",
+      "fn_ovl_2f10": "0x01B02F10",
+      "fn_ovl_3428": "0x01B03428",
+      "fn_ovl_35f0": "0x01B035F0",
+      "fn_ovl_36b0": "0x01B036B0",
+      "fn_ovl_3788": "0x01B03788",
+      "fn_ovl_42b8": "0x01B042B8",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01B394C0",
+      "g_ovl_ctx": "0x01B045D0",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0388": "0x01B00388",
+      "g_ovl_dat_03a0": "0x01B003A0",
+      "g_ovl_dat_3d48": "0x01B03D48",
+      "g_ovl_fade": "0x01B04510",
+      "g_ovl_hdr": "0x01B00400",
+      "g_ovl_mgr": "0x01B04590",
+      "g_ovl_ptr_4f50": "0x01B04F50",
+      "g_ovl_ptr_4f54": "0x01B04F54",
+      "g_ovl_res": "0x01B0CA90"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9171,
+        "text_start": "0x01B00868",
+        "text_end": "0x01B00AA4",
+        "syms": {
+          "fn_ovl_0810": "0x01B00810",
+          "fn_ovl_0c18": "0x01B00C18",
+          "fn_ovl_0e68": "0x01B00E68",
+          "fn_ovl_1258": "0x01B01258",
+          "fn_ovl_2c98": "0x01B02C98",
+          "fn_ovl_2f10": "0x01B02F10",
+          "fn_ovl_3428": "0x01B03428",
+          "fn_ovl_35f0": "0x01B035F0",
+          "fn_ovl_36b0": "0x01B036B0",
+          "fn_ovl_3788": "0x01B03788",
+          "fn_ovl_42b8": "0x01B042B8",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01B394C0",
+          "g_ovl_ctx": "0x01B045D0",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_0388": "0x01B00388",
+          "g_ovl_dat_03a0": "0x01B003A0",
+          "g_ovl_dat_3d48": "0x01B03D48",
+          "g_ovl_fade": "0x01B04510",
+          "g_ovl_hdr": "0x01B00400",
+          "g_ovl_mgr": "0x01B04590",
+          "g_ovl_ptr_4f50": "0x01B04F50",
+          "g_ovl_ptr_4f54": "0x01B04F54",
+          "g_ovl_res": "0x01B0CA90"
+        }
+      }
+    ]
+  }
+]
