@@ -1,0 +1,28 @@
+[
+  {
+    "src": "ovl_09634_0c20.c",
+    "containers": [
+      9634
+    ],
+    "text_start": "0x01B00C20",
+    "text_end": "0x01B00C34",
+    "functions": 1,
+    "discovered_code_bytes": 20,
+    "syms": {
+      "fn_ovl_1498": "0x01B01498"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9634,
+        "text_start": "0x01B00C20",
+        "text_end": "0x01B00C34",
+        "syms": {
+          "fn_ovl_1498": "0x01B01498"
+        }
+      }
+    ]
+  }
+]

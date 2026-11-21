@@ -1,0 +1,30 @@
+[
+  {
+    "src": "ovl_09358_0df8.c",
+    "containers": [
+      9358
+    ],
+    "text_start": "0x01B00DF8",
+    "text_end": "0x01B00E1C",
+    "functions": 1,
+    "discovered_code_bytes": 36,
+    "syms": {
+      "fn_ovl_1680": "0x01B01680",
+      "g_ovl_tbl": "0x01B00670"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9358,
+        "text_start": "0x01B00DF8",
+        "text_end": "0x01B00E1C",
+        "syms": {
+          "fn_ovl_1680": "0x01B01680",
+          "g_ovl_tbl": "0x01B00670"
+        }
+      }
+    ]
+  }
+]
