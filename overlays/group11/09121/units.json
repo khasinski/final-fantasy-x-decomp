@@ -1,0 +1,68 @@
+[
+  {
+    "src": "ovl_09121_1e58.c",
+    "containers": [
+      9121
+    ],
+    "text_start": "0x01B01E58",
+    "text_end": "0x01B01F8C",
+    "functions": 1,
+    "discovered_code_bytes": 308,
+    "syms": {
+      "fn_ovl_1870": "0x01B01890",
+      "fn_ovl_1ce8": "0x01B01CE8",
+      "fn_ovl_26b0": "0x01B026D0",
+      "fn_ovl_a868": "0x01B0A888",
+      "func_002678E0": "0x002678E0",
+      "func_00267A68": "0x00267A68",
+      "func_00294468": "0x00294468",
+      "func_002944B0": "0x002944B0",
+      "func_002B4980": "0x002B4980",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01B5ADA0",
+      "g_ovl_buf_end": "0x01D5ADA0",
+      "g_ovl_dat_0050": "0x01B00050",
+      "g_ovl_dat_0750": "0x01B00770",
+      "g_ovl_dat_0768": "0x01B00788",
+      "g_ovl_dat_0788": "0x01B007A8",
+      "g_ovl_eff": "0x01B008E0",
+      "g_ovl_mgr": "0x01B0B920",
+      "g_ovl_p370": "0x01B00398",
+      "g_ovl_ptr_004c": "0x01B0004C",
+      "g_ovl_res": "0x01B0B94C"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9121,
+        "text_start": "0x01B01E58",
+        "text_end": "0x01B01F8C",
+        "syms": {
+          "fn_ovl_1870": "0x01B01890",
+          "fn_ovl_1ce8": "0x01B01CE8",
+          "fn_ovl_26b0": "0x01B026D0",
+          "fn_ovl_a868": "0x01B0A888",
+          "func_002678E0": "0x002678E0",
+          "func_00267A68": "0x00267A68",
+          "func_00294468": "0x00294468",
+          "func_002944B0": "0x002944B0",
+          "func_002B4980": "0x002B4980",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01B5ADA0",
+          "g_ovl_buf_end": "0x01D5ADA0",
+          "g_ovl_dat_0050": "0x01B00050",
+          "g_ovl_dat_0750": "0x01B00770",
+          "g_ovl_dat_0768": "0x01B00788",
+          "g_ovl_dat_0788": "0x01B007A8",
+          "g_ovl_eff": "0x01B008E0",
+          "g_ovl_mgr": "0x01B0B920",
+          "g_ovl_p370": "0x01B00398",
+          "g_ovl_ptr_004c": "0x01B0004C",
+          "g_ovl_res": "0x01B0B94C"
+        }
+      }
+    ]
+  }
+]
