@@ -2106,6 +2106,24 @@
         "text_start": "0x01B02618",
         "text_end": "0x01B02620",
         "syms": {}
+      },
+      {
+        "text_start": "0x01B00BD0",
+        "text_end": "0x01B00BD8",
+        "syms": {},
+        "cid": 9706
+      },
+      {
+        "text_start": "0x01B00DC8",
+        "text_end": "0x01B00DD0",
+        "syms": {},
+        "cid": 9706
+      },
+      {
+        "text_start": "0x01B00DD0",
+        "text_end": "0x01B00DD8",
+        "syms": {},
+        "cid": 9706
       }
     ]
   },
