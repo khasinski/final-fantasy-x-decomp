@@ -1,0 +1,76 @@
+[
+  {
+    "src": "ovl_09728_p6_2d78.c",
+    "containers": [
+      9728,
+      9729
+    ],
+    "text_start": "0x01B02D78",
+    "text_end": "0x01B03204",
+    "functions": 1,
+    "discovered_code_bytes": 1164,
+    "syms": {
+      "fn_ovl_2ad0": "0x01B02AB8",
+      "fn_ovl_3550": "0x01B03580",
+      "fn_ovl_78a0": "0x01B078D0",
+      "fn_ovl_79d0": "0x01B07A00",
+      "fn_ovl_7ab0": "0x01B07AE0",
+      "fn_ovl_c898": "0x01B0C8C8",
+      "fn_sys_1aced8": "0x001ACED8",
+      "fn_sys_1bb3f0": "0x001BB3F0",
+      "g_ovl_dat_a08": "0x01B00998",
+      "g_ovl_dat_a28": "0x01B009B8",
+      "g_ovl_dat_a50": "0x01B009E0",
+      "g_ovl_dat_b10": "0x01B00AA0",
+      "g_ovl_ptr_630": "0x01B005B8",
+      "g_ovl_ptr_634": "0x01B005BC"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9728,
+        "text_start": "0x01B02D78",
+        "text_end": "0x01B03204",
+        "syms": {
+          "fn_ovl_2ad0": "0x01B02AB8",
+          "fn_ovl_3550": "0x01B03580",
+          "fn_ovl_78a0": "0x01B078D0",
+          "fn_ovl_79d0": "0x01B07A00",
+          "fn_ovl_7ab0": "0x01B07AE0",
+          "fn_ovl_c898": "0x01B0C8C8",
+          "fn_sys_1aced8": "0x001ACED8",
+          "fn_sys_1bb3f0": "0x001BB3F0",
+          "g_ovl_dat_a08": "0x01B00998",
+          "g_ovl_dat_a28": "0x01B009B8",
+          "g_ovl_dat_a50": "0x01B009E0",
+          "g_ovl_dat_b10": "0x01B00AA0",
+          "g_ovl_ptr_630": "0x01B005B8",
+          "g_ovl_ptr_634": "0x01B005BC"
+        }
+      },
+      {
+        "cid": 9729,
+        "text_start": "0x01B02CF0",
+        "text_end": "0x01B0317C",
+        "syms": {
+          "fn_ovl_2ad0": "0x01B02AB8",
+          "fn_ovl_3550": "0x01B034F8",
+          "fn_ovl_78a0": "0x01B07848",
+          "fn_ovl_79d0": "0x01B07978",
+          "fn_ovl_7ab0": "0x01B07A58",
+          "fn_ovl_c898": "0x01B0C840",
+          "fn_sys_1aced8": "0x001ACED8",
+          "fn_sys_1bb3f0": "0x001BB3F0",
+          "g_ovl_dat_a08": "0x01B00998",
+          "g_ovl_dat_a28": "0x01B009B8",
+          "g_ovl_dat_a50": "0x01B009E0",
+          "g_ovl_dat_b10": "0x01B00AA0",
+          "g_ovl_ptr_630": "0x01B005B8",
+          "g_ovl_ptr_634": "0x01B005BC"
+        }
+      }
+    ]
+  }
+]
