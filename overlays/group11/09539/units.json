@@ -2678,5 +2678,137 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09539_p6_29f0.c",
+    "containers": [
+      9539
+    ],
+    "text_start": "0x01B029F0",
+    "text_end": "0x01B02C70",
+    "functions": 1,
+    "discovered_code_bytes": 640,
+    "syms": {
+      "fn_ovl_29d8": "0x01B028F8",
+      "fn_ovl_4860": "0x01B046A0",
+      "fn_ovl_8558": "0x01B076E0",
+      "fn_ovl_96e0": "0x01B08868",
+      "fn_ovl_af98": "0x01B0A120",
+      "fn_ovl_afd0": "0x01B0A158",
+      "fn_ovl_b840": "0x01B0A9C8",
+      "fn_ovl_c7f0": "0x01B0B978",
+      "fn_ovl_cbf8": "0x01B0BD80",
+      "fn_sys_1aced8": "0x001ACED8",
+      "fn_sys_1c5e90": "0x001C5E90",
+      "g_ovl_dat_7b0": "0x01B006F0",
+      "g_ovl_dat_7e0": "0x01B00720",
+      "g_ovl_dat_9f0": "0x01B00930",
+      "g_ovl_dat_a08": "0x01B00948",
+      "g_ovl_dat_a28": "0x01B00968",
+      "g_ovl_dat_dbe0": "0x01B0CD60",
+      "g_ovl_ptr_618": "0x01B00550",
+      "g_ovl_ptr_634": "0x01B0056C",
+      "g_ovl_ptr_dc0c": "0x01B0CD8C"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9539,
+        "text_start": "0x01B029F0",
+        "text_end": "0x01B02C70",
+        "syms": {
+          "fn_ovl_29d8": "0x01B028F8",
+          "fn_ovl_4860": "0x01B046A0",
+          "fn_ovl_8558": "0x01B076E0",
+          "fn_ovl_96e0": "0x01B08868",
+          "fn_ovl_af98": "0x01B0A120",
+          "fn_ovl_afd0": "0x01B0A158",
+          "fn_ovl_b840": "0x01B0A9C8",
+          "fn_ovl_c7f0": "0x01B0B978",
+          "fn_ovl_cbf8": "0x01B0BD80",
+          "fn_sys_1aced8": "0x001ACED8",
+          "fn_sys_1c5e90": "0x001C5E90",
+          "g_ovl_dat_7b0": "0x01B006F0",
+          "g_ovl_dat_7e0": "0x01B00720",
+          "g_ovl_dat_9f0": "0x01B00930",
+          "g_ovl_dat_a08": "0x01B00948",
+          "g_ovl_dat_a28": "0x01B00968",
+          "g_ovl_dat_dbe0": "0x01B0CD60",
+          "g_ovl_ptr_618": "0x01B00550",
+          "g_ovl_ptr_634": "0x01B0056C",
+          "g_ovl_ptr_dc0c": "0x01B0CD8C"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09539_p6_2c70.c",
+    "containers": [
+      9539,
+      9544
+    ],
+    "text_start": "0x01B02C70",
+    "text_end": "0x01B03038",
+    "functions": 1,
+    "discovered_code_bytes": 968,
+    "syms": {
+      "fn_ovl_2ad0": "0x01B029F0",
+      "fn_ovl_3550": "0x01B03390",
+      "fn_ovl_c898": "0x01B0BA20",
+      "fn_sys_1aced8": "0x001ACED8",
+      "fn_sys_1bb3f0": "0x001BB3F0",
+      "fn_sys_1ce050": "0x001CE050",
+      "fn_sys_1ce1a8": "0x001CE1A8",
+      "fn_sys_1ce2f0": "0x001CE2F0",
+      "g_ovl_dat_a08": "0x01B00948",
+      "g_ovl_dat_b10": "0x01B00A50",
+      "g_ovl_ptr_630": "0x01B00568",
+      "g_ovl_ptr_634": "0x01B0056C"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9539,
+        "text_start": "0x01B02C70",
+        "text_end": "0x01B03038",
+        "syms": {
+          "fn_ovl_2ad0": "0x01B029F0",
+          "fn_ovl_3550": "0x01B03390",
+          "fn_ovl_c898": "0x01B0BA20",
+          "fn_sys_1aced8": "0x001ACED8",
+          "fn_sys_1bb3f0": "0x001BB3F0",
+          "fn_sys_1ce050": "0x001CE050",
+          "fn_sys_1ce1a8": "0x001CE1A8",
+          "fn_sys_1ce2f0": "0x001CE2F0",
+          "g_ovl_dat_a08": "0x01B00948",
+          "g_ovl_dat_b10": "0x01B00A50",
+          "g_ovl_ptr_630": "0x01B00568",
+          "g_ovl_ptr_634": "0x01B0056C"
+        }
+      },
+      {
+        "cid": 9544,
+        "text_start": "0x01B02C40",
+        "text_end": "0x01B03008",
+        "syms": {
+          "fn_ovl_2ad0": "0x01B02970",
+          "fn_ovl_3550": "0x01B03360",
+          "fn_ovl_c898": "0x01B0B9F0",
+          "fn_sys_1aced8": "0x001ACED8",
+          "fn_sys_1bb3f0": "0x001BB3F0",
+          "fn_sys_1ce050": "0x001CE050",
+          "fn_sys_1ce1a8": "0x001CE1A8",
+          "fn_sys_1ce2f0": "0x001CE2F0",
+          "g_ovl_dat_a08": "0x01B00878",
+          "g_ovl_dat_b10": "0x01B00980",
+          "g_ovl_ptr_630": "0x01B004A0",
+          "g_ovl_ptr_634": "0x01B004A4"
+        }
+      }
+    ]
   }
 ]
