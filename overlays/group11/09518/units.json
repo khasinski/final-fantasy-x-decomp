@@ -1304,5 +1304,87 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09518_09f0.c",
+    "containers": [
+      9518
+    ],
+    "text_start": "0x01B009F0",
+    "text_end": "0x01B00CB0",
+    "functions": 1,
+    "discovered_code_bytes": 704,
+    "syms": {
+      "fn_ovl_0cb0": "0x01B00CB0",
+      "fn_ovl_0eb0": "0x01B00EB0",
+      "fn_ovl_0fd8": "0x01B00FD8",
+      "fn_ovl_1100": "0x01B01100",
+      "fn_ovl_1d70": "0x01B01D70",
+      "fn_ovl_2ae8": "0x01B02AE8",
+      "fn_ovl_2f30": "0x01B02F30",
+      "fn_ovl_31a8": "0x01B031A8",
+      "fn_ovl_36c0": "0x01B036C0",
+      "fn_ovl_3888": "0x01B03888",
+      "fn_ovl_3948": "0x01B03948",
+      "fn_ovl_3a20": "0x01B03A20",
+      "fn_ovl_4508": "0x01B04508",
+      "fn_ovl_46c0": "0x01B046C0",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_buf": "0x01BA25C0",
+      "g_ovl_ctx": "0x01B04A90",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0540": "0x01B00540",
+      "g_ovl_dat_0558": "0x01B00558",
+      "g_ovl_dat_3fc0": "0x01B03FC0",
+      "g_ovl_dat_4908": "0x01B04908",
+      "g_ovl_fade": "0x01B049D0",
+      "g_ovl_mgr": "0x01B04A50",
+      "g_ovl_obj": "0x01B04930",
+      "g_ovl_ptr_4cf0": "0x01B04CF0",
+      "g_ovl_ptr_4cf4": "0x01B04CF4",
+      "g_ovl_res": "0x01B0A020",
+      "g_ovl_tab_0570": "0x01B00570"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9518,
+        "text_start": "0x01B009F0",
+        "text_end": "0x01B00CB0",
+        "syms": {
+          "fn_ovl_0cb0": "0x01B00CB0",
+          "fn_ovl_0eb0": "0x01B00EB0",
+          "fn_ovl_0fd8": "0x01B00FD8",
+          "fn_ovl_1100": "0x01B01100",
+          "fn_ovl_1d70": "0x01B01D70",
+          "fn_ovl_2ae8": "0x01B02AE8",
+          "fn_ovl_2f30": "0x01B02F30",
+          "fn_ovl_31a8": "0x01B031A8",
+          "fn_ovl_36c0": "0x01B036C0",
+          "fn_ovl_3888": "0x01B03888",
+          "fn_ovl_3948": "0x01B03948",
+          "fn_ovl_3a20": "0x01B03A20",
+          "fn_ovl_4508": "0x01B04508",
+          "fn_ovl_46c0": "0x01B046C0",
+          "func_002B49A0": "0x002B49A0",
+          "g_ovl_buf": "0x01BA25C0",
+          "g_ovl_ctx": "0x01B04A90",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_0540": "0x01B00540",
+          "g_ovl_dat_0558": "0x01B00558",
+          "g_ovl_dat_3fc0": "0x01B03FC0",
+          "g_ovl_dat_4908": "0x01B04908",
+          "g_ovl_fade": "0x01B049D0",
+          "g_ovl_mgr": "0x01B04A50",
+          "g_ovl_obj": "0x01B04930",
+          "g_ovl_ptr_4cf0": "0x01B04CF0",
+          "g_ovl_ptr_4cf4": "0x01B04CF4",
+          "g_ovl_res": "0x01B0A020",
+          "g_ovl_tab_0570": "0x01B00570"
+        }
+      }
+    ]
   }
 ]
