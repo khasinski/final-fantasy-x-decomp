@@ -18,9 +18,9 @@
     "containers_with_any_match": 584,
     "containers_fully_matched": 100,
     "containers_partially_matched": 484,
-    "matched_code_bytes": 7935940,
+    "matched_code_bytes": 9776324,
     "code_bytes": 17342672,
-    "coverage_percent": 45.759615358002506,
+    "coverage_percent": 56.3714980021533,
     "distinct_function_bytes": 1576784,
     "distinct_matched_bytes": 223412,
     "distinct_coverage_percent": 14.168839866462369,
@@ -29,10 +29,10 @@
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 8971964,
+    "c_or_matched_bytes": 10812348,
     "estimated_total_bytes": 19413792,
-    "coverage_percent": 46.214382022842315,
-    "span_scenario_percent": 45.7834180489858,
+    "coverage_percent": 55.694158050112,
+    "span_scenario_percent": 55.174792116320965,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus overlay function bytes, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [
