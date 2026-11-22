@@ -601,7 +601,70 @@ int func_00212938(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00212970);
+typedef struct {
+    s32 v[9];
+} Pow10Tbl;
+
+extern Pow10Tbl D_00570C98;
+
+int func_00212970(MenuListLocal *o)
+{
+    Pow10Tbl pow10 = D_00570C98;
+    u16 pad = D_003238E6;
+
+    if (pad & 0x8000) {
+        D_006902A0.h4++;
+        func_002D70D8(1);
+    }
+    if (pad & 0x2000) {
+        D_006902A0.h4--;
+        func_002D70D8(1);
+    }
+    if (D_006902A0.h4 < 0) {
+        D_006902A0.h4 = D_006902A0.h2;
+    }
+    if (D_006902A0.h4 > D_006902A0.h2) {
+        D_006902A0.h4 = 0;
+    }
+    if (pad & 0x1000) {
+        if (D_006902A0.w10 < D_006902A0.wC) {
+            func_002D70D8(1);
+        }
+        D_006902A0.w10 += pow10.v[D_006902A0.h4];
+    }
+    if (pad & 0x4000) {
+        if (D_006902A0.w10 > 0) {
+            func_002D70D8(1);
+        }
+        D_006902A0.w10 -= pow10.v[D_006902A0.h4];
+    }
+    if (D_006902A0.w10 > D_006902A0.wC) {
+        D_006902A0.w10 = D_006902A0.wC;
+    }
+    if (D_006902A0.w10 < 0) {
+        D_006902A0.w10 = 0;
+    }
+    D_006902A0.w14 = D_006902A0.w8 - D_006902A0.w10;
+    if (pad & 0x20) {
+        if (TOBtlSetNextAction(o->owner, o->items[0]) == 1) {
+            D_00325670 = D_006902A0.w10;
+            func_002D70D8(1);
+        } else {
+            func_002D70D8(3);
+        }
+        return;
+    }
+    if (pad & 0x40) {
+        if (D_00325020 > 0) {
+            D_00325670 = 0;
+            TOBtlSetPrevAction();
+            ((u8 *)o)[1]++;
+            func_002D70D8(4);
+        }
+        return;
+    }
+    return 1;
+}
 
 int func_00212BD0(void)
 {

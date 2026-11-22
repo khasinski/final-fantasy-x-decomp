@@ -465,7 +465,104 @@ int func_0017F630(Sys597F00 *s, Q3Res *r, YiImage *img) {
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017F790);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017FA08);
+extern char D_0056CBE8[];
+extern char D_0056CBF8[];
+extern char D_0056CC08[];
+extern char D_0056CC28[];
+extern char D_0056CC40[];
+extern char D_0056CC68[];
+extern char D_0056CC78[];
+extern char D_0056CC90[];
+extern u32 D_0030EC08[];
+extern u32 D_0030EBF0[];
+void *func_0017DBA0(int size);
+
+typedef struct {
+    u32 flags;
+    u8 pad04[0x10C - 0x04];
+    u16 psm;
+    u8 pad10E[0x130 - 0x10E];
+    u16 clutPsm;
+    u16 clutFlag;
+    u8 pad134[0x13C - 0x134];
+    u32 w;
+    u32 h;
+    u8 *texData;
+    u8 *clutData;
+} YiImgLoadRec;
+
+u32 func_0017FA08(void *unused, char *name, YiImgLoadRec *img)
+{
+    u8 hdr[0x10];
+    u8 info[0x40];
+    char path[0x560];
+    int fd;
+    u8 *clut;
+    int i;
+
+    func_0017EA28(img);
+    func_002F0008(path, D_0056CBE8, name);
+    fd = func_002FC4E0(path, 1);
+    if (fd < 0) {
+        img->flags |= 2;
+        yiAssert(0, D_0056CBF8, D_0056CC08, path);
+        return 0xFFFFFFFFU;
+    }
+    func_002FCB20(fd, hdr, 0x10);
+    if (*(u16 *)(hdr + 6) != 0) {
+        func_002FCB20(fd, info, 0x30);
+        if (*(u16 *)(info + 0xC) != 0x30) {
+            yiAssert(0, D_0056CC28, D_0056CC40);
+        }
+        img->texData = func_0017DBA0(*(u32 *)(info + 8));
+        if (*(u32 *)(info + 8) != 0) {
+            func_002FCB20(fd, img->texData, *(u32 *)(info + 8));
+        }
+        {
+            register u32 *psmTbl __asm__("$4") = D_0030EC08; /* DEBT(REG): match $a0/$v1 allocation */
+
+            img->w = *(u16 *)(info + 0x14);
+            img->h = *(u16 *)(info + 0x16);
+            img->psm = psmTbl[info[0x13] & 0x7F];
+        }
+        if ((info[0x12] & 0x1F) != 0) {
+            img->clutFlag = 1;
+            img->clutPsm = D_0030EBF0[info[0x12] & 0x1F];
+            if (*(u32 *)(info + 4) != 0) {
+                img->clutData = func_0017DBA0(*(u32 *)(info + 4));
+                clut = img->clutData;
+                func_002FCB20(fd, clut, *(u32 *)(info + 4));
+            }
+            if (img->clutPsm != 0) {
+                img->flags |= 2;
+                yiAssert(0, D_0056CC68, D_0056CC78);
+            }
+            switch (img->psm) {
+            case 0x14:
+                for (i = 0; i < 0x10; i++) {
+                    if (clut[i * 4 + 3] == 0) {
+                        img->flags |= 1;
+                        break;
+                    }
+                }
+                break;
+            case 0x13:
+                for (i = 0; i < 0x100; i++) {
+                    if (clut[i * 4 + 3] == 0) {
+                        img->flags |= 1;
+                        break;
+                    }
+                }
+                break;
+            default:
+                yiAssert(0, D_0056CC68, D_0056CC90, img->psm, info[0x12]);
+                return 0xFFFFFFFFU;
+            }
+        }
+    }
+    func_002FC768(fd);
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017FC80);
 
