@@ -94,7 +94,74 @@ s8 func_0010B348(void)
     return D_0057EABD;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B358);
+extern s8 D_00303698[];
+extern void Ch_OptposGet(Chr *, int, void *);
+extern void func_002DD900(void *, void *, void *, int);
+
+s32 func_0010B358(Chr *chr, void *m)
+{
+    s32 pts[6][4];
+    s32 tmp[4];
+    register s32 min_y __asm__("$21") = 0x11C80; /* DEBT(REG): GCC swaps s4/s5 with &pts[0][1] */
+    s32 min_x = 0x12320;
+    u32 min_z = 0x7FFFFFFF;
+    s32 max_x = (s32)0xFFFF2320;
+    s32 max_y = (s32)0xFFFF1C80;
+    u32 i;
+    s8 *idx = D_00303698;
+    int dx, dy, d;
+    u64 vis;
+
+    for (i = 0; i < 6; i++) {
+        Ch_OptposGet(chr, *idx, tmp);
+        func_002DD900(pts[i], m, tmp, 0);
+        idx++;
+        if (pts[i][0] < min_x) {
+            min_x = pts[i][0];
+        }
+        if (pts[i][0] > max_x) {
+            max_x = pts[i][0];
+        }
+        if (pts[i][1] < min_y) {
+            min_y = pts[i][1];
+        }
+        if (pts[i][1] > max_y) {
+            max_y = pts[i][1];
+        }
+        if ((u32)pts[i][2] < min_z) {
+            min_z = pts[i][2];
+        }
+    }
+
+    dx = max_x - min_x;
+    dy = max_y - min_y;
+    if (dy < dx) {
+        dy = dx;
+    }
+    d = dy;
+    *(u32 *)((u8 *)chr + 0x6E0) = min_z;
+    *(float *)((u8 *)chr + 0x524) = (float)d;
+
+    vis = 0;
+    if (max_x <= 0x918F && min_x >= 0x6E71 && max_y <= 0x8E3F && min_y >= 0x71C1) {
+        vis = 1;
+    }
+    *(u64 *)((u8 *)chr + 0x1A0) = (*(u64 *)((u8 *)chr + 0x1A0) & 0xFFFFFFFFEFFFFFFFULL) | (vis << 28);
+
+    if (max_x < 0x6E70) {
+        return 6;
+    }
+    if (min_x > 0x9190) {
+        return 5;
+    }
+    if (max_y < 0x71C0) {
+        return 4;
+    }
+    if (min_y > 0x8E40) {
+        return 3;
+    }
+    return (min_z > 0x8000000U) ? 2 : 0;
+}
 
 s32 func_0010B358(Chr *chr, void *m);
 void func_002DD900(void *out, void *m, void *v, s32 w);

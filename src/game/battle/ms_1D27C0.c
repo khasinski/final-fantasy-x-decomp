@@ -55,8 +55,135 @@ s32 func_001D2878(s32 arg0, s32 arg1, float *arg2, float *arg3, float *arg4)
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", func_001D2958);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetDirMode);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D27C0/rodata", jtbl_0056EAC0);
+typedef struct {
+    u8 pad00[0xA0];
+    s32 fA0[4];
+    u8 padB0[0x26];
+    u8 fD6;
+    u8 padD7[0x14];
+    u8 fEB;
+    u8 fEC;
+    u8 fED;
+    u8 padEE[3];
+    u8 fF1;
+    u8 padF2[0xC2];
+    float f1B4;
+    u8 pad1B8[0x19];
+    s8 f1D1;
+    u8 pad1D2[2];
+    float f1D4[2];
+    u8 pad1DC[0x8D1];
+    s8 fAAD;
+} DirChr; /* DEBT(NAME): BtlChr offset view for MsGetDirMode */
+
+extern s8 D_00319408;
+extern u8 D_00319400;
+extern s32 D_00662CB0;
+float func_001D3350(BtlChr *c, float ang);
+
+float MsGetDirMode(int id, DirChr *c, void *pos, int flag, s32 *out_s3, s32 *out_s7)
+{
+    s32 self_pos[4];
+    float ang = 0.0f;
+    float add_ang = 0.0f;
+    int r;
+    int s7;
+
+    r = 0;
+    func_001B6790(id, self_pos);
+    s7 = 1;
+    switch (c->fEB) {
+    case 1:
+        r = -1;
+        ang = c->f1D4[c->f1D1];
+        break;
+    case 6: {
+        DirChr *p = (DirChr *)MsGetChr(D_00319408); /* DEBT(CAST): offset view */
+        r = -1;
+        ang = p->f1D4[p->f1D1];
+        break;
+    }
+    case 3:
+        MsGetChrBtlPos(id, pos);
+        r = -1;
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 9:
+        add_ang = 3.1415927f;
+        /* fallthrough */
+    case 2:
+        if (c->fF1 == 0xFF) {
+            D_00662CB0 = 4;
+            r = func_001D2878(id, 12, pos, 0, 0);
+        } else if (id != c->fF1) {
+            func_001B6790(c->fF1, pos);
+            r = -1;
+        }
+        if (r == 0) {
+            r = -1;
+            ang = c->f1D4[c->f1D1];
+        } else {
+            MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        }
+        break;
+    case 7:
+        D_00662CB0 = 4;
+        r = func_001D2878(D_00319400, 12, pos, 0, 0);
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 4:
+        func_001B6790(c->fD6, pos);
+        r = -1;
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 10:
+        add_ang = 3.1415927f;
+        /* fallthrough */
+    case 5:
+        func_001B6790(c->fAAD, pos);
+        r = -1;
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 13:
+        MsGetChrEscapePos(id, pos);
+        add_ang = 3.1415927f;
+        r = -1;
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 8:
+        r = -1;
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 11:
+        r = -1;
+        if (c->fED == 0 && flag != 0) {
+            c->fED = 1;
+            pos = c->fA0;
+            func_001B6790(c->fAAD, pos);
+        } else {
+            pos = c->fA0;
+        }
+        MsVectorRect2Polar(pos, self_pos, &ang, 0, 0);
+        break;
+    case 12:
+        ang = c->f1B4;
+        r = -1;
+        break;
+    }
+
+    if (c->fEC != 0) {
+        s7 = 0;
+        ang = func_001D3350(c, ang);
+    }
+    ang += add_ang;
+    if (out_s3 != 0) {
+        *out_s3 = r;
+    }
+    if (out_s7 != 0) {
+        *out_s7 = s7;
+    }
+    return ang;
+}
 
 float func_001D3350(BtlChr *chr, float angle)
 {

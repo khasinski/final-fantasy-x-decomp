@@ -540,7 +540,83 @@ void AtelUpdateWaterStatus(void) {
     AtelSetCurrentCtrl(old);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", AtelUpdateBattleStatus);
+typedef struct {
+    s32 f00;
+    u8 pad04[6];
+    u16 h0A;
+    u8 pad0C[0x1E8];
+    u32 f1F4;
+    u8 pad1F8[0x18];
+    u32 f210;
+    u8 pad214[4];
+    float f218;
+    float f21C;
+    float f220;
+    u8 pad224[4];
+    float f228;
+    float f22C;
+    float f230;
+} AtelBtlWork; /* DEBT(NAME): AtelCtrlWork offset view for AtelUpdateBattleStatus */
+
+typedef struct {
+    void *f0;
+    void *f4;
+    int (*f8)(int);
+} CdDrvView; /* DEBT(NAME): GetCD driver vtable view */
+
+extern int func_00145188(int);
+extern void MsBattleExeClear(void);
+extern float func_002D4278(float, float, float);
+extern float func_002D4290(float);
+extern int MsBattleCheck(void);
+extern void MsWalkAbilityProcess(float);
+extern int func_002D6768(void);
+extern int func_0013A278(void);
+extern int func_0014AF40(int);
+extern void MsBattleEncountExe(int, int, float);
+
+#define BTL_W ((AtelBtlWork *)D_0058E3D8) /* DEBT(CAST): offset view */
+
+void AtelUpdateBattleStatus(void)
+{
+    int enc = 0;
+    int walk = 0;
+    CdDrvView *cd = (CdDrvView *)GetCD(); /* DEBT(CAST): GetCD vtable view */
+    float enc_dist = 0.0f;
+
+    AtelChangeCurrentCtrl(0);
+    if (func_00145188(0) != 0) {
+        u32 *rec = (u32 *)func_00124828(); /* DEBT(CAST): Rec124828 word view */
+        float dist;
+        if ((BTL_W->f210 >> 1) & 1) {
+            MsBattleExeClear();
+        }
+        dist = func_002D4290(func_002D4278(
+            BTL_W->f228 - BTL_W->f218,
+            BTL_W->f22C - BTL_W->f21C,
+            BTL_W->f230 - BTL_W->f220));
+        if (BTL_W->h0A != 0xFFFF && (BTL_W->f00 & 0x8400051AU) == 0xA && BTL_W->f1F4 >= 7) {
+            u32 w = BTL_W->f210;
+            if ((w & 1) && (rec[4] & 0x6000000)) {
+                if (!((w >> 2) & 1)) {
+                    enc_dist = dist;
+                    enc = 1;
+                }
+            }
+            walk = 1;
+        }
+        if (walk != 0 && MsBattleCheck() == 0 && !(BTL_W->f00 & 0x3000000)) {
+            MsWalkAbilityProcess(dist);
+        }
+        if (MsBattleCheck() == 0 && !(BTL_W->f00 & 0x3000000) && func_002D6768() == 0 && cd->f8(1) == 0 && enc != 0) {
+            int a = func_0014AF40(func_0013A278());
+            int b = func_00148870();
+            MsBattleEncountExe(a, b, enc_dist);
+        }
+    }
+    BTL_W->f00 &= ~0x100;
+    BTL_W->f00 &= ~0x200;
+}
 
 void func_00143608(int id, float x, float y, float z) {
     int old = AtelChangeCurrentCtrl(0);
