@@ -1,6 +1,8 @@
 /* tu_201 0x1d48d0-0x1d8078: low; ~Ms (config/tu_map.tsv) */
 #include "common.h"
+#define MsActionRequest _hdr_MsActionRequest
 #include "ffx/q4.h"
+#undef MsActionRequest
 #define MsActCommandAdd _hdr_MsActCommandAdd
 #include "ffx/r3.h"
 #undef MsActCommandAdd
@@ -54,7 +56,96 @@ void MsActionInit(void) {
     ZanmatoSep = -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D48D0", MsActionRequest);
+extern int MsGetRamChrMonster(int);
+extern void MsAtelRequestInit(void);
+extern void MsAtelRequestAdd(int, int, int, int);
+extern int MsAtelRequestExe(int, int, int, int, int, int);
+extern void MsAtelParseSysTag(int, int, int);
+extern GsEnt48 _ent_D_00662CC8 __asm__("D_00662CC8");
+
+int MsActionRequest(int id_in, int a1, int a2, int a3, int a4, GsEnt48 *a5)
+{
+    u8 id = id_in;
+    BtlChr *c = MsGetChr(id);
+    int ret;
+
+    if (a1 != 0xFF) {
+        c->fAAD = a1;
+    }
+    ZanmatoSep = a4;
+    func_001D4EC0(id);
+
+    if (MsGetRamChrMonster(id) != 0) {
+        MsAtelRequestInit();
+        MsAtelRequestAdd(3, id, 0x3D, a2);
+        ret = MsAtelRequestExe(3, id, 0x3D, 1, 0, 0);
+        if (ret >= 0) {
+            MsAtelParseSysTag(3, id, 0x3D);
+        }
+    } else {
+        int tag = -1;
+        if (a3 != 0) {
+            switch (id) {
+                case 0xE:
+                    tag = 0x25;
+                    break;
+                case 0xF:
+                    tag = 0x26;
+                    break;
+                case 0x10:
+                    tag = 0x27;
+                    break;
+                case 0x11:
+                    tag = 0x28;
+                    break;
+            }
+        }
+        MsAtelRequestInit();
+        if (tag < 0) {
+            tag = id + 0x29;
+            MsAtelRequestAdd(2, 1, tag, a2);
+            ret = MsAtelRequestExe(2, 1, tag, 1, 0, 0);
+            if (ret >= 0) {
+                MsAtelParseSysTag(2, 1, tag);
+            }
+        } else {
+            MsAtelRequestAdd(2, 1, tag, a2);
+            MsAtelRequestAdd(2, 0, tag, a2);
+            ret = MsAtelRequestExe(2, 0, tag, 1, 0, 0);
+            if (ret >= 0) {
+                MsAtelParseSysTag(2, 0, tag);
+            }
+        }
+    }
+
+    if (_ent_D_00662CC8.f3 != 0 && (u32)a4 < 2) {
+        if (a5 != 0) {
+            *((u8 *)&_ent_D_00662CC8 + 4) = *((u8 *)a5 + 4); /* DEBT(CAST): GsEnt48 byte +4 */
+            *a5 = _ent_D_00662CC8;
+        } else if (a4 == 0) {
+            MsSetBtlCommand(&_ent_D_00662CC8, 0, 0);
+        } else {
+            BtlChr *chr = 0;
+            if (a1 != 0xFF && D_00662CBC == 0) {
+                chr = MsGetChr(a1);
+                if (chr != 0 && *((s8 *)chr + 0xAB1) == 0) { /* DEBT(CAST): BtlChr +0xAB1 */
+                    if (MsCheckCommandCue(id, 1) != 0) {
+                        chr = 0;
+                    }
+                }
+            }
+            if (chr == 0) {
+                MsInsertBtlCommand(&_ent_D_00662CC8, D_00662CC0, a4, a1);
+            }
+        }
+    }
+
+    if (a2 < 9) {
+        MsSetVoiceCheck(id, a2, 1, 0, 0);
+    }
+    ZanmatoSep = -1;
+    return ret;
+}
 
 int MsActionTarget(int mask, int v, int unused2, int unused3, int w, int mode) {
     int n = 0;

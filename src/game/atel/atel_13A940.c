@@ -806,8 +806,6 @@ void func_0013C330(void) {
     D_0058E3D8->b1E4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13A940", func_0013C340);
-
 typedef struct CtrlWork13C710 {
     struct {
         unsigned b0 : 2;
@@ -815,7 +813,9 @@ typedef struct CtrlWork13C710 {
         unsigned b3 : 1;
         unsigned rest : 28;
     } flags;
-    u8 pad04[0x44];
+    u8 pad04[4];
+    u8 b08;
+    u8 pad09[0x48 - 0x09];
     char *p48;
     u8 pad4C[0x20C - 0x4C];
     int w20C;
@@ -825,6 +825,137 @@ typedef struct CtrlWork13C710 {
         unsigned rest : 27;
     } w210;
 } CtrlWork13C710;
+
+extern int func_0013AB18(void);
+extern int func_0013AAD8(void);
+extern int func_0013AAE8(void);
+extern void func_001AEC30(int);
+extern int func_00144CD0(void);
+extern void func_0013C308(int);
+extern int func_00140B48(Actor *, int, int);
+extern void func_001395A8(int, int);
+extern void func_0014B720(int, int, int);
+extern void AtelDecodeSignal(int, int);
+extern int D_0058E3DC;
+extern int D_0058E3E0;
+
+typedef struct {
+    u8 pad00[0x34];
+    union {
+        u32 w;
+        struct {
+            unsigned b0_22 : 23;
+            unsigned b23_24 : 2;
+            unsigned b25_26 : 2;
+            unsigned b27 : 1;
+            unsigned b28 : 1;
+            unsigned rest : 3;
+        } bf;
+    } f34;
+} ActorBF34; /* DEBT(NAME): Actor +0x34 bitfield view for func_0013C340 */
+
+extern int _13C340_2D26C8(int, int, int) __asm__("func_002D26C8"); /* DEBT(TYPE): int return for u16 mask */
+
+void func_0013C340(int *w_raw, int flag, int clear_flag)
+{
+    CtrlWork13C710 *w = (CtrlWork13C710 *)w_raw; /* DEBT(CAST): CtrlWork view */
+    int b8;
+    s32 *unk124;
+    int total;
+    register int res __asm__("$18"); /* DEBT(REG): pin res to $s2 */
+    int i;
+    u16 trig;
+
+    unk124 = (s32 *)func_00124828(); /* DEBT(CAST): func_00124828 return ptr */
+    total = AtelGetCtrlworkActorTotal((char *)w);
+    b8 = w->b08;
+
+    do {
+        res = 0;
+        if (flag != 0) {
+            func_0013C330();
+            w->flags.b2 = 0;
+            if (D_0058E3E0 < 2) {
+                trig = _13C340_2D26C8(0, 0, func_0013AB18());
+                _13C340_2D26C8(0, 0, func_0013AAD8());
+                _13C340_2D26C8(0, 0, func_0013AAE8());
+            } else {
+                trig = 0;
+            }
+            func_001AEC30(0);
+            unk124[4] = (unk124[4] | 0x02000000) & ~0x04000000;
+            D_0058E3D8->flags &= ~0x10;
+            if (trig & 0xA0) {
+                switch (func_00144CD0()) {
+                    case 0:
+                        if (D_0058E3D8->flags & 0x22) {
+                            int arg = 1;
+                            if (trig & 0x20) {
+                                arg = 0;
+                            }
+                            func_0013C308(arg);
+                        }
+                        break;
+                    case 1:
+                        if (trig & 0x20) {
+                            w->flags.b2 = 1;
+                        }
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+        }
+
+        for (i = 0; i < total; i++) {
+            Actor *a;
+            int r;
+            D_0058E3DC = i;
+            a = AtelGetBasicWork(i);
+            if (flag != 0) {
+                r = func_00140B48(a, b8, 1);
+            } else if (a->flags34.w & 0x01800000) {
+                r = func_00140B48(a, b8, 0);
+            } else {
+                r = 0;
+            }
+            res |= r;
+        }
+
+        D_0058E3D8->flags &= ~0x00100000;
+        if (D_0058E3D8->b1E4 == 1 && D_0058E3D8->h1E8 != 0xFFFF && (D_0058E3D8->flags & 0x22) && flag != 0) {
+            func_001395A8(D_0058E3D8->h1E8, D_0058E3D8->b1E6);
+            func_0014B720(0xFFFF, D_0058E3D8->h1E8, D_0058E3D8->b1E6);
+        }
+
+        for (i = 0; i < total; i++) {
+            ActorBF34 *a = (ActorBF34 *)AtelGetBasicWork(i); /* DEBT(CAST): Actor bitfield view */
+            if (flag != 0) {
+                AtelDecodeSignal(i, -1);
+                a->f34.bf.b23_24 = a->f34.bf.b25_26;
+                a->f34.bf.b25_26 = 0;
+            } else {
+                if (a->f34.w & 0x06000000) {
+                    a->f34.bf.b23_24 = a->f34.bf.b25_26;
+                    a->f34.bf.b25_26 = 0;
+                }
+                if (a->f34.w & 0x01800000) {
+                    AtelDecodeSignal(i, -1);
+                    a->f34.bf.b23_24--;
+                }
+            }
+            if (clear_flag != 0) {
+                a->f34.bf.b28 = 0;
+            }
+        }
+
+        if (res & 0x8000) {
+            *((u8 *)D_0058E3D8 + 8) = 3; /* DEBT(CAST): D_0058E3D8 byte +8 */
+            res &= ~0x8000;
+        }
+        res &= ~0xC000;
+    } while (res != 0);
+}
 
 extern char D_0056A810[];
 extern char D_0056A828[];
