@@ -897,8 +897,99 @@ void func_00263D68(ChrWork *chr, ChrSub *sub, int cancel, int ok) /* DEBT(NAME):
     D_00327910 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00263DE8);
-INCLUDE_RODATA("build/ee_asm/game/abm/ei_260A70/rodata", jtbl_00573A40);
+void func_00263DE8(void)
+{
+    u16 pad;
+
+    func_002632D8(0);
+    if (LPA(u8, 0x1157D) != 0 || lpamng->next_a != 0) {
+        return;
+    }
+    func_00263580();
+    if (lpamng->next_a != 0) {
+        return;
+    }
+    if (LPA(u8, 0x11574) == 0) {
+        LPA(u8, 0x11574) = 1;
+        func_00263C58(6);
+    }
+    pad = LPV->f11622;
+    if (pad & 0x20) {
+        SndSepPlaySimple(0x80000001);
+        LPV->f1161A = 0;
+        func_00263B98(6);
+        func_00263B98(1);
+        func_00263B98(2);
+        func_00263B98(3);
+        func_00263B98(4);
+        func_00263B98(5);
+        LPA(u8, 0x11578) = 0;
+        func_00263CE8(LPV->pts11090[LPV->f1156C].h44, 0.25f);
+        return;
+    }
+    if (pad & 0x40) {
+        u8 *w;
+        SndSepPlaySimple(0x80000001);
+        func_00263B98(6);
+        func_00263B98(1);
+        func_00263B98(2);
+        func_00263B98(3);
+        func_00263B98(4);
+        func_00263B98(5);
+        LPA(u8, 0x11578) = 0;
+        func_0025AFA0(10);
+        w = (u8 *)func_0025B010(11, func_00263D68);
+        *(s16 *)(w + 0x18) = 0;
+        w[0x24] |= 0xC;
+        return;
+    }
+    if (*(s32 *)((u8 *)D_006A391C + 0x13B4) != 0 ||
+        *(s32 *)((u8 *)D_006A391C + 0x374) != 0 ||
+        *(s32 *)((u8 *)D_006A391C + 0x9F4) != 0 ||
+        *(s32 *)((u8 *)D_006A391C + 0x6B4) != 0 ||
+        *(s32 *)((u8 *)D_006A391C + 0xD34) != 0 ||
+        *(s32 *)((u8 *)D_006A391C + 0x1074) != 0) {
+        return;
+    }
+    if (!(pad & 0x10)) {
+        return;
+    }
+    SndSepPlaySimple(0x80000001);
+    LPA(u8, 0x11578)++;
+    if (LPA(u8, 0x11578) >= 6) {
+        LPA(u8, 0x11578) = 0;
+    }
+    switch (LPA(u8, 0x11578)) {
+    case 0:
+        func_00263B98(5);
+        func_00263C58(6);
+        break;
+    case 1:
+        func_0025AFC0(6);
+        func_00263C58(1);
+        break;
+    case 2:
+        func_002644C0(3);
+        func_0025AFC0(1);
+        func_00263C58(3);
+        break;
+    case 3:
+        func_002644C0(2);
+        func_0025AFC0(3);
+        func_00263C58(2);
+        break;
+    case 4:
+        func_002644C0(4);
+        func_0025AFC0(2);
+        func_00263C58(4);
+        break;
+    case 5:
+        func_002644C0(5);
+        func_0025AFC0(4);
+        func_00263C58(5);
+        break;
+    }
+}
 
 void func_00264108(void)
 {

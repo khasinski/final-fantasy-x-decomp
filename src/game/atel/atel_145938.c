@@ -2,6 +2,7 @@
 #define func_001478B8 _hdr_func_001478B8
 #define func_00146B40 _hdr_func_00146B40
 #define func_00147A28 _hdr_func_00147A28
+#define func_00146180 _hdr_func_00146180
 #define Ch_SoundSetId _hdr_Ch_SoundSetId
 #include "common.h"
 #include "ffx/q1.h"
@@ -13,6 +14,7 @@
 #undef func_001478B8
 #undef func_00146B40
 #undef func_00147A28
+#undef func_00146180
 #undef Ch_SoundSetId
 void Ch_SoundSetId(Chr *, int);
 
@@ -288,8 +290,92 @@ void func_001460E0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00146180);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_145938/rodata", jtbl_0056ADB0);
+int func_00146180(s32 *st)
+{
+    int ret = 0;
+    int s = *st;
+
+again:
+    switch (s) {
+    case 0:
+        *st = 1;
+        break;
+    case 1:
+        {
+            int (**cd)(int) = (int (**)(int))GetCD();
+            if (func_002D6768() != 0) {
+                break;
+            }
+            if (cd[2](1) != 0) {
+                break;
+            }
+            *st = 2;
+        }
+        break;
+    case 2:
+        func_00139A00(*(s32 *)((u8 *)D_0058E3D8 + 0x48), 0);
+        *st = 3;
+        break;
+    case 3:
+        func_00139D48(0xF, 0x3F, 1);
+        if (D_0058E9A0 == 0) {
+            ret = 1;
+        } else {
+            *st = 4;
+        }
+        break;
+    case 4:
+        if (SndGetNowPlayMusic() != 0x8A) {
+            SndMusicStop(0x8A);
+            SndMusicClear(0x8A);
+        }
+        if (AtelGetMusicNumber() >= 0 && !(D_0058E3F8 & 0x400) && AtelGetMusicNumber() != 0x10) {
+            func_002D85D0();
+            SndMusicStop(AtelGetMusicNumber());
+            SndMusicClear(AtelGetMusicNumber());
+        }
+        *st = 5;
+        break;
+    case 5:
+        {
+            int (**cd)(int) = (int (**)(int))GetCD();
+            if (func_002D6768() != 0) {
+                break;
+            }
+            if (cd[2](1) != 0) {
+                break;
+            }
+            s = 6;
+            goto again; /* DEBT(GOTO): re-enter switch on state 5 -> 6 */
+        }
+        break;
+    case 6:
+        {
+            int a = func_001245D8();
+            int b = func_001245E8();
+            SndMusicStandby(a, b);
+            *st = 7;
+        }
+        break;
+    case 7:
+        if (SndSyncMusicStandby(0) == 0) {
+            *st = 8;
+        }
+        break;
+    case 8:
+        if (SndGetNowPlayMusic() == 0x10) {
+            SndMusicStop(0x10);
+            SndMusicReplayPointClear(0x10);
+        }
+        SndMusicStart(0x10);
+        *st = 9;
+        break;
+    case 9:
+        ret = 1;
+        break;
+    }
+    return ret;
+}
 
 void func_001463B0(void)
 {

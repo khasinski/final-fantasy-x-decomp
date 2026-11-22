@@ -1,5 +1,7 @@
 /* tu_255 0x22ce70-0x22fb30: high; ~Tk (config/tu_map.tsv) */
 #define func_0022F720 _hdr_func_0022F720
+#define TkMn2CalcStatusBGRatio _hdr_TkMn2CalcStatusBGRatio
+#define TMn2SetStatusBGDiff _hdr_TMn2SetStatusBGDiff
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -7,7 +9,12 @@
 #include "ffx/s5.h"
 #include "ffx/u3.h"
 #include "ffx/v5.h"
+#undef TMn2SetStatusBGDiff
+#undef TkMn2CalcStatusBGRatio
 #undef func_0022F720
+
+int TkMn2CalcStatusBGRatio(void);
+int TMn2SetStatusBGDiff(int a);
 
 void func_0022CE70(void)
 {
@@ -312,8 +319,103 @@ int func_0022DAE8(Task *t)
 }
 int func_0022DB08(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022DB10);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_22CE70/rodata", jtbl_00571B80);
+void func_0022DB10(Task *t)
+{
+    int hold = func_00220318();
+    int trg;
+    s32 *st;
+    s32 s;
+
+    TOMenuGetControlPadRep();
+    trg = TOMenuGetControlPadTrg();
+    TkMn2CalcStatusBGRatio();
+    st = &D_00693C00;
+    s = D_00693C00;
+again:
+    switch (s) {
+    case 0:
+        *st = 2;
+        s = 2;
+        goto again; /* DEBT(GOTO): re-enter switch on state 0 -> 2 */
+    case 1:
+        TMn2SetStatusBGDiff(-0x155);
+        *st = 2;
+    case 2:
+        TkMenuCtrlSelFileWindow(t);
+        if (t->b45 == 0 && (trg & 0x10) && hold == 0x10) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuSetHelpMessage(0);
+            *st = 3;
+            return;
+        }
+        if (t->x48 < (u16)t->x30 && t->b45 == 0) {
+            TkMn2DrawSelItemsHelp(t);
+            return;
+        }
+        break;
+    case 3:
+        TMn2SetStatusBGDiff(0x155);
+        TkMenuOpenStatusPageWindow(1, 1, 0x42, 0);
+        *st = 4;
+        break;
+    case 4:
+        if (trg & 0x10) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(1);
+            *st = 5;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(1);
+            *st = 1;
+        }
+        break;
+    case 5:
+        TkMenuOpenStatusPageWindow(1, 2, 0x43, 0);
+        *st = 6;
+        break;
+    case 6:
+        if (trg & 0x10) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(2);
+            *st = 7;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(2);
+            *st = 1;
+        }
+        break;
+    case 7:
+        TkMenuOpenStatusPageWindow(1, 3, 0x47, 0);
+        *st = 8;
+        break;
+    case 8:
+        if (trg & 0x10) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(3);
+            *st = 9;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(3);
+            *st = 1;
+        }
+        break;
+    case 9:
+        TkMenuOpenStatusPageWindow(1, 4, 0x46, 0);
+        *st = 10;
+        break;
+    case 10:
+        if (trg & 0x10) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(4);
+            *st = 1;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(4);
+            *st = 1;
+        }
+        break;
+    }
+}
 
 void func_0022DDC8(Task *t)
 {
