@@ -376,7 +376,65 @@ int movie_hdd_file_open(int i, u64 sector) {
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00166AB0);
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", hdd_ins_check);
+typedef struct {
+    u8 data[0x24];
+    char name[0x10];
+} HddInsEntry;
+
+extern char D_0056BE08[];
+extern char D_0056BE28[];
+extern char D_0056BE40[];
+extern char D_0056BE58[];
+extern char D_0056BE68[];
+extern char D_0056BE80[];
+extern char D_0056BE90[];
+
+int hdd_ins_check(int a)
+{
+    HddInsEntry *out = (HddInsEntry *)a; /* DEBT(CAST): caller signature typed int */
+    char buf[0x100];
+    int count;
+    int subcount;
+    HddInsEntry *tmp;
+    int i;
+    int j;
+    int k;
+    int fd;
+    int total = 0;
+
+    TkyiAssert(D_0056BE28);
+    count = 0;
+    TkyiAssert(D_0056BE40);
+    func_00166AB0(D_0056BE58, &count, out);
+    TkyiAssert(D_0056BE68);
+    if (count == 0) {
+        return 0;
+    }
+    tmp = (HddInsEntry *)user_malloc(count * sizeof(HddInsEntry), 10, D_0056BE08, 0x4BA);
+    func_002EEF1C(tmp, out, count * sizeof(HddInsEntry));
+    for (i = 0; i < count; i++) {
+        func_002F0008(buf, D_0056BE80, tmp[i].name);
+        fd = func_002FC4E0(buf, 1);
+        if (fd >= 0) {
+            func_002FCB20(fd, &subcount, 4);
+            for (j = 0; j < subcount; j++) {
+                func_002FCB20(fd, &out[total], 0x24);
+                func_002EF0D0(out[total].name, 0, 0x10);
+                k = 0;
+                out[total].name[0] = tmp[i].name[0];
+                while (tmp[i].name[k] != 0) {
+                    k++;
+                    out[total].name[k] = tmp[i].name[k];
+                }
+                total++;
+            }
+            func_002FC768(fd);
+        }
+    }
+    func_0011D590(tmp, 10);
+    TkyiAssert(D_0056BE90);
+    return total;
+}
 
 int func_00166FC0(void)
 {

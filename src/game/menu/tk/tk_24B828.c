@@ -1241,7 +1241,52 @@ void func_00250A18(void) {
     TOSeqGetRect(1, D_00573670, &D_0069BEE8[0], &D_0069BEE8[1], &D_0069BEE8[2], &D_0069BEE8[3]);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_00250A60);
+extern s16 D_0069BE78[];
+extern s16 D_0069BE88[];
+extern s16 D_0069BE98[];
+
+void func_00250A60(Task *t)
+{
+    s16 arr0[8];
+    s16 arr1[8];
+    int i;
+
+    D_0069BED8 = 2;
+    t->x1C = 0;
+    D_0069BE58 = func_002500A0(2);
+    func_0024ECB8();
+    func_0024ECE0();
+    for (i = 0; i < 8; i++) {
+        int n;
+
+        func_0024CD78(i);
+        n = (D_0069BE50 + 1) / 2;
+        if (D_0069BE72 < 0) {
+            D_0069BE72 = 0;
+        }
+        D_0069BE78[i] = D_0069BE72 / 2;
+        D_0069BE88[i] = D_0069BE72 & 1;
+        D_0069BE98[i] = D_0069BE78[i] - ((u16)D_0069BE58->x3A >> 1) + 1;
+        arr0[i] = n;
+        arr1[i] = D_0069BE50;
+        if (D_0069BE98[i] >= n - (u16)D_0069BE58->x3A) {
+            D_0069BE98[i] = n - (u16)D_0069BE58->x3A;
+        }
+        if (D_0069BE98[i] < 0) {
+            D_0069BE98[i] = 0;
+        }
+    }
+    D_0069BE58->x48 = D_0069BE78[TkMenuGetCurrentPlayer()];
+    D_0069BE58->ext[0] = D_0069BE88[TkMenuGetCurrentPlayer()];
+    D_0069BE58->x34 = D_0069BE58->x32 = D_0069BE98[TkMenuGetCurrentPlayer()];
+    D_0069BE58->x30 = arr0[TkMenuGetCurrentPlayer()];
+    D_0069BE58->ext[15] = arr1[TkMenuGetCurrentPlayer()];
+    func_0024CD78(TkMenuGetCurrentPlayer());
+    D_0069BED4 = 0;
+    func_0020DC20(1);
+    TOSeqStartScene(1, D_00573608);
+    TOSeqStartScene(1, D_00573618);
+}
 
 void func_00250CB8(void) {
     func_0024C8C0();
