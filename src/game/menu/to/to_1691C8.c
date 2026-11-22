@@ -29,7 +29,177 @@ void func_001691E8(void)
     D_00597A1C = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_00169278);
+typedef struct {
+    s16 fnIdx;
+    s16 arg;
+    s8 mode;
+    u8 pad5[3];
+    s32 off;
+} To169278Link;
+
+typedef struct {
+    u8 b00;
+    u8 b01;
+    u8 b02;
+    u8 pad03[0x13];
+    s16 h16;
+    s16 h18;
+    s16 h1A;
+    u16 h1C;
+    s16 h1E;
+    u8 pad20[4];
+    s16 h24;
+    u8 pad26[4];
+    u8 b2A;
+    u8 pad2B[5];
+    To169278Link links[8];
+    u8 pad90[0x60];
+    s16 hF0;
+    s16 hF2;
+    s16 hF4;
+    s16 hF6;
+    s16 hF8;
+    s8 bFA;
+    s8 bFB;
+    s8 bFC;
+    u8 padFD;
+    s16 hFE;
+    s16 h100;
+    s16 h102;
+    u8 b104;
+    s8 b105;
+    s8 b106;
+    u8 pad107;
+    u16 h108;
+    u16 h10A;
+    s16 h10C;
+    u8 pad10E[2];
+    s8 b110;
+    u8 pad111[5];
+    u16 h116;
+    u8 pad118[0x20];
+} To169278Ent;
+
+typedef struct {
+    u8 pad00[0x14];
+    s32 w14;
+    s32 w18;
+    s32 w1C;
+    s32 w20;
+    s32 w24;
+    int (**fn)(int);
+    void *p2C;
+    s32 w30;
+    void *p34;
+} To30E070;
+
+extern To169278Ent *D_00597A10;
+extern To169278Ent *D_00597A20;
+extern s32 D_00597A28;
+typedef union {
+    s32 w;
+    u16 h;
+} ToRegVal;
+
+extern ToRegVal *_to_D_00597E30 __asm__("D_00597E30");
+extern void (**D_0030E064)(void);
+extern To30E070 _to_D_0030E070 __asm__("D_0030E070");
+extern int (**D_0030E098)(int);
+void TOMenuHelpSetExtMode(int, int);
+void TOMenuTermHelp(void);
+void func_0016B838(void);
+void func_0016A268(s32, s32, s32, int *, int);
+u16 func_00220318(void);
+u16 TOMenuGetControlPadTrg(void);
+u16 TOMenuGetControlPadRep(void);
+int func_0016B5B0(s32);
+void TOFTCTransfer(int);
+int sa_task_buff_size_get(int);
+void (**sa_task_init2(int, void *, int))(void);
+void func_00162CD8(int);
+void hdd_ins_size_check(void);
+void func_0016B898(void);
+void func_0016BA00(void);
+
+void func_00169278(void)
+{
+    u16 pad;
+    int dir;
+    To169278Ent *target;
+    int i;
+
+    D_0030E0C5 = 0;
+    if (D_0030E0A8 == 0) {
+        return;
+    }
+    if (D_00597A10 == 0) {
+        return;
+    }
+    pad = 0;
+    switch (D_00597A10->b02) {
+    case 0:
+        pad = D_00597A1A;
+        break;
+    case 1:
+        pad = D_00597A18;
+        break;
+    case 2:
+        pad = D_00597A1C;
+        break;
+    }
+    if (pad == 0) {
+        return;
+    }
+    dir = -1;
+    if (pad & 0x1000) dir = 0;
+    if (pad & 0x4000) dir = 1;
+    if (pad & 0x2000) dir = 3;
+    if (pad & 0x8000) dir = 2;
+    if (pad & 0x20) dir = 4;
+    if (pad & 0x40) dir = 7;
+    if (pad & 0x80) dir = 5;
+    if (pad & 0x10) dir = 6;
+    if (dir < 0) {
+        return;
+    }
+    target = (To169278Ent *)((s32)D_0030E0C8 + D_00597A10->links[dir].off);
+    if (target == 0) {
+        return;
+    }
+    if (D_0030E0A8 == 0) {
+        return;
+    }
+    for (i = 0; i < D_00597A0C; i++) {
+        s32 *hdr = (s32 *)((i * 8) + (s32)D_0030E0A8);
+        To169278Ent *p = (To169278Ent *)((s32)D_0030E0C8 + hdr[0]);
+        int n = *(s16 *)(hdr + 1);
+        int j;
+
+        for (j = 0; j < n; j++, p++) {
+            if (p == target) {
+                int blocked = 0;
+
+                if (D_00597A10->links[dir].fnIdx >= 0) {
+                    int r = _to_D_0030E070.fn[D_00597A10->links[dir].fnIdx](D_00597A10->links[dir].arg);
+
+                    if (D_00597A10->links[dir].mode == 0) {
+                        if (r == 0) {
+                            blocked = 1;
+                        }
+                    } else {
+                        if (r != 0) {
+                            blocked = 1;
+                        }
+                    }
+                }
+                if (blocked == 0) {
+                    D_0030E0C5 = 1;
+                    return;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_001694E8);
 
@@ -103,7 +273,6 @@ void func_0016B4E0(void)
 {
     extern s32 D_0030E05C, D_0030E0D0, D_0030E0D4, D_0030E0D8;
     extern s32 dvd_hdd_copy_system_cnf_buff;
-    extern void (**D_0030E064)(void);
 
     D_0030E0C8 = 0;
     D_00597E30 = 0;
@@ -151,7 +320,12 @@ typedef struct {
 } To16B838Hdr;
 
 typedef struct {
-    u8 pad0[0x114];
+    u8 b00;
+    u8 b01;
+    u8 pad02[0x1A];
+    u16 h1C;
+    s16 h1E;
+    u8 pad20[0xF4];
     u16 h114;
     u16 h116;
     s32 w118;
@@ -179,9 +353,80 @@ void func_0016B838(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B898);
+void func_0016B898(void)
+{
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BA00);
+    D_00597A28 = 0;
+    D_00597A20 = 0;
+    D_00597A10 = 0;
+    D_00597A14 = 0;
+    if (D_0030E0A8 == 0) {
+        return;
+    }
+    for (i = 0; i < D_00597A0C; i++) {
+        s32 *hdr = (s32 *)((i * 8) + (s32)D_0030E0A8);
+        To169278Ent *p = (To169278Ent *)((s32)D_0030E0C8 + hdr[0]);
+        int n = *(s16 *)(hdr + 1);
+        int j;
+
+        func_0016B838();
+        for (j = 0; j < n; j++, p++) {
+            if (p->b01 & 1) {
+                D_00597A10 = p;
+                D_00597A14 = i;
+                D_00597A28 = i - (s32)D_0030E0C8;
+                if (p->h1C != 0) {
+                    s32 *q = (s32 *)((s32)D_0030E0B4 + (p->h1E << 3));
+                    int k;
+
+                    for (k = 0; k < p->h1C; k++, q += 2) {
+                        _to_D_00597E30[q[0]].w = q[1];
+                    }
+                }
+                return;
+            }
+        }
+    }
+}
+
+void func_0016BA00(void)
+{
+    To169278Ent *target = (To169278Ent *)((s32)D_0030E0C8 + D_00597A28);
+    int i;
+
+    D_00597A28 = 0;
+    D_00597A20 = 0;
+    D_00597A10 = 0;
+    D_00597A14 = 0;
+    if (D_0030E0A8 == 0) {
+        return;
+    }
+    for (i = 0; i < D_00597A0C; i++) {
+        s32 *hdr = (s32 *)((i * 8) + (s32)D_0030E0A8);
+        To169278Ent *p = (To169278Ent *)((s32)D_0030E0C8 + hdr[0]);
+        int n = *(s16 *)(hdr + 1);
+        int j;
+
+        func_0016B838();
+        for (j = 0; j < n; j++, p++) {
+            if (p == target) {
+                D_00597A10 = p;
+                D_00597A14 = i;
+                D_00597A28 = i - (s32)D_0030E0C8;
+                if (p->h1C != 0) {
+                    s32 *q = (s32 *)((s32)D_0030E0B4 + (p->h1E << 3));
+                    int k;
+
+                    for (k = 0; k < p->h1C; k++, q += 2) {
+                        _to_D_00597E30[q[0]].w = q[1];
+                    }
+                }
+                return;
+            }
+        }
+    }
+}
 
 extern char D_0056C118[];
 

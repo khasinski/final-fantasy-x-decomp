@@ -1,4 +1,6 @@
 /* tu_238 0x210340-0x212ea8: low; ~TOBtlInitAnm (config/tu_map.tsv) */
+#define _TOBtlGetLeftPad _hdr_TOBtlGetLeftPad
+#define _TOBtlGetRightPad _hdr_TOBtlGetRightPad
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q5.h"
@@ -7,6 +9,11 @@
 #include "ffx/t4.h"
 #include "ffx/u3.h"
 #include "ffx/s4.h"
+#undef _TOBtlGetLeftPad
+#undef _TOBtlGetRightPad
+
+void _TOBtlGetLeftPad();
+void _TOBtlGetRightPad();
 
 void TOBtlInitAnm(void)
 {
@@ -119,8 +126,190 @@ void TOBtlSetCallback(R4Task *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_002105D0);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_210340/rodata", jtbl_00570B30);
+typedef struct {
+    u8 pad0[6];
+    s16 kind;
+    s16 owner;
+    s8 b0A;
+    s8 b0B;
+    u16 h0C;
+    u16 h0E[4];
+    u16 h16[4];
+    u16 h1E;
+    s16 *items;
+    s32 count;
+    s16 nfields;
+    s16 showZero;
+    u16 fields[6];
+    s16 cols;
+    s16 rows;
+    s16 h3C;
+    u8 pad3E[2];
+    s16 top;
+    s16 cursor;
+    s16 h44;
+    u8 pad46[0x56 - 0x46];
+    s16 posX;
+    s16 posY;
+    u8 pad5A[0x62 - 0x5A];
+    s16 colWidth;
+    s16 h64;
+    s16 nameWidth;
+    s16 frame[4];
+    s16 area[4];
+    void (*draw)(void *list);
+    u8 pad7C[0xA0 - 0x7C];
+    s32 nlabels;
+    s32 label[2];
+} MenuListLocal;
+
+extern int D_00307F2C;
+extern s16 D_00324300;
+extern s16 D_00324302;
+extern s16 D_00325022;
+typedef struct {
+    u8 pad0[0x14];
+    u16 h14;
+    u16 h16;
+} PadWorkLocal;
+extern PadWorkLocal _pad_D_003238D0 __asm__("D_003238D0");
+typedef struct {
+    u8 b0;
+    u8 pad1[2];
+    u8 b3;
+    u8 pad4[4];
+    s16 h8;
+    s16 hA;
+    u8 padC[4];
+    s32 w10;
+} BtlCmdWorkLocal;
+extern BtlCmdWorkLocal _cmd_D_003252A8 __asm__("D_003252A8");
+extern s32 _w_D_003250D8 __asm__("D_003250D8");
+extern s16 _h_D_003252A4 __asm__("D_003252A4");
+int _func_00211E80(MenuListLocal *o) __asm__("func_00211E80");
+void _func_0021F448(int a, s16 x, s16 y) __asm__("func_0021F448");
+void _func_001F0328(int x, int y, int w, int h, u32 c0, u32 c1) __asm__("func_001F0328");
+void _func_001FBFB8(int x, int y, int w, int h, int pages, int rows, int top) __asm__("func_001FBFB8");
+void _func_00207F60(void *text, int x, int y, int color) __asm__("func_00207F60");
+void _func_001F37C8(s32 text, int x, int y) __asm__("func_001F37C8");
+void _func_001F35D0(int a, int b, int c, int d, int e) __asm__("func_001F35D0");
+void _func_001F3068(int x, int y, int icon) __asm__("func_001F3068");
+void _func_001F3580(int digits, int val, int x, int y, int color) __asm__("func_001F3580");
+void _func_001F3808(void *text, int x, int y, int color) __asm__("func_001F3808");
+void _func_001BFEA8(int a) __asm__("func_001BFEA8");
+int _func_001BFE30(int a) __asm__("func_001BFE30");
+void _MsSetBtlCommand(void *a, int b, int c) __asm__("MsSetBtlCommand");
+void _func_00215360(int a) __asm__("func_00215360");
+void _func_002184B8(void) __asm__("func_002184B8");
+void _func_0020DC78(int a) __asm__("func_0020DC78");
+
+void func_002105D0(MenuListLocal *o)
+{
+    int w;
+    int h;
+
+    switch (o->kind) {
+    case 0:
+    case 12:
+    case 13:
+        o->showZero = 0;
+        o->nfields = 1;
+        o->fields[0] = 0x1000;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 1;
+        o->rows = 3;
+        break;
+    case 1:
+    case 2:
+        o->showZero = 0;
+        o->nfields = 2;
+        o->fields[0] = 0x1000;
+        o->fields[1] = 0x403;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 2;
+        o->rows = 3;
+        break;
+    case 3:
+    case 4:
+    case 14:
+        o->showZero = 0;
+        o->nfields = 2;
+        o->fields[0] = 0x1000;
+        o->fields[1] = 0x402;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 2;
+        o->rows = 3;
+        break;
+    case 6:
+    case 17:
+    case 20:
+        o->nfields = 3;
+        o->showZero = 1;
+        o->fields[0] = 0x100;
+        o->fields[1] = 0x1000;
+        o->fields[2] = 0x202;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 2;
+        o->rows = 3;
+        break;
+    case 7:
+    case 15:
+        o->nfields = 2;
+        o->showZero = 0;
+        o->fields[0] = 0x700;
+        o->fields[1] = 0x1000;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 1;
+        o->rows = 3;
+        break;
+    case 5:
+    case 10:
+        o->showZero = 1;
+        o->nfields = 1;
+        o->fields[0] = 0x1000;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 1;
+        o->rows = 3;
+        break;
+    case 21:
+    case 22:
+        o->label[0] = MsGetRomBtlText(0x3014, 0);
+        o->label[1] = MsGetRomBtlText(0x3015, 0);
+        o->nlabels = 2;
+        o->nfields = 2;
+        o->showZero = 1;
+        o->fields[0] = 0x1100;
+        o->fields[1] = 0x1200;
+        o->posX = D_00324300;
+        o->posY = D_00324302;
+        o->cols = 1;
+        o->rows = 3;
+        break;
+    }
+    o->top = 0;
+    o->h3C = 0;
+    o->h44 = o->count;
+    TOBtlScanCommandWH(o);
+    w = o->colWidth * o->cols + (o->cols - 1) * 16;
+    h = o->rows * 20;
+    o->frame[0] = 0;
+    o->frame[1] = o->posY;
+    o->frame[2] = o->posX + w + 32;
+    o->frame[3] = o->posY + h + 2;
+    if (o->frame[2] < D_00325022) {
+        o->frame[2] = D_00325022;
+    }
+    o->area[0] = o->posX + 16;
+    o->area[1] = o->posY + 1;
+    o->area[2] = o->area[0] + w;
+    o->area[3] = o->area[1] + h;
+}
 
 extern char D_00570B90[];
 extern char D_00570B98[];
@@ -212,55 +401,150 @@ int func_00210D90(void)
     return 0;
 }
 
-typedef struct {
-    u8 pad0[6];
-    s16 kind;
-    s16 owner;
-    s8 b0A;
-    s8 b0B;
-    u16 h0C;
-    u16 h0E[4];
-    u16 h16[4];
-    u16 h1E;
-    s16 *items;
-    s32 count;
-    s16 nfields;
-    s16 showZero;
-    u16 fields[6];
-    s16 cols;
-    s16 rows;
-    s16 h3C;
-    u8 pad3E[2];
-    s16 top;
-    s16 cursor;
-    s16 h44;
-    u8 pad46[0x56 - 0x46];
-    s16 posX;
-    s16 posY;
-    u8 pad5A[0x62 - 0x5A];
-    s16 colWidth;
-    s16 h64;
-    s16 nameWidth;
-    s16 frame[4];
-    s16 area[4];
-    void (*draw)(void *list);
-    u8 pad7C[0xA0 - 0x7C];
-    s32 nlabels;
-    s32 label[2];
-} MenuListLocal;
+int func_00210D98(MenuListLocal *o)
+{
+    int i;
+    int x;
+    int y;
 
-extern int D_00307F2C;
-int _func_00211E80(MenuListLocal *o) __asm__("func_00211E80");
-void _func_0021F448(int a, s16 x, s16 y) __asm__("func_0021F448");
-
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00210D98);
+    _func_00211E80(o);
+    for (i = 0; i < o->b0B; i++) {
+        if (o->h0E[i] >= o->top && o->h0E[i] < o->top + o->rows * o->cols) {
+            if ((D_00307F2C & 1) && o->h0E[i] >= o->top && o->h0E[i] <= o->top + o->rows * o->cols) {
+                x = o->area[0];
+                x += (o->h0E[i] % o->cols) * (o->colWidth + 0x10);
+                y = o->area[1] + ((o->h0E[i] - o->top) / o->cols) * 0x14;
+                _func_0021F448(0, x, y);
+            }
+        }
+    }
+    if (o->cursor >= o->top && o->cursor < o->top + o->rows * o->cols) {
+        x = o->area[0];
+        x += (o->cursor % o->cols) * (o->colWidth + 0x10);
+        y = o->area[1] + ((o->cursor - o->top) / o->cols) * 0x14;
+        _func_0021F448(0, x, y);
+        return 0;
+    }
+}
 
 int func_00210F58(void)
 {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", _TOBtlGetLeftPad);
+void _TOBtlGetLeftPad(MenuListLocal *o)
+{
+    s16 prev;
+
+    if (_pad_D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(o->owner, o->h16[o->b0B]) < 0) {
+            func_002D70D8(3);
+            return;
+        }
+        o->h16[o->b0B] = o->items[o->cursor];
+        o->h0E[o->b0B] = o->cursor;
+        o->b0B++;
+        if (o->b0B < o->b0A) {
+            _func_001BFEA8(o->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        if (TOBtlSetNextAction(o->owner, o->items[o->cursor]) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+    if (_pad_D_003238D0.h14 & 0x10) {
+        int cmd = MsMenuGetChrSkipCommand(o->owner);
+        if (cmd != 0) {
+            int bit;
+            _cmd_D_003252A8.b0 = o->owner;
+            _cmd_D_003252A8.b3 = 1;
+            _cmd_D_003252A8.h8 = cmd;
+            _cmd_D_003252A8.hA = 0xFF;
+            bit = 1 << o->owner;
+            _w_D_003250D8 = bit;
+            _cmd_D_003252A8.w10 = bit;
+            _MsSetBtlCommand(&_cmd_D_003252A8, 0, 0);
+            _func_00215360(_h_D_003252A4);
+            _func_002184B8();
+            _func_0020DC78(2);
+            _h_D_003252A4 = 0xFF;
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+    }
+    if (_pad_D_003238D0.h14 & 4) {
+        if (MsGetSaveChrSummon(o->owner) == 0) {
+            if (TOBtlSetNextAction(o->owner, 0x3002) == 1) {
+                func_002D70D8(1);
+                return;
+            }
+            func_002D70D8(3);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+    if (_pad_D_003238D0.h14 & 0x2000) {
+        if (o->b0B > 0) {
+            o->h16[o->b0B] = 0xFF;
+            o->h0E[o->b0B] = 0xFF;
+            o->b0B--;
+            o->cursor = o->h0E[o->b0B];
+            o->h1E = o->h16[o->b0B];
+            _func_001BFEA8(0);
+            func_002D70D8(4);
+            return;
+        }
+        if (D_00325020 > 0) {
+            TOBtlSetPrevAction();
+            ((u8 *)o)[1]++;
+            func_002D70D8(1);
+        }
+        return;
+    }
+    prev = o->cursor;
+    if (_pad_D_003238D0.h16 & 0x1000) {
+        o->cursor -= o->cols;
+    }
+    if (_pad_D_003238D0.h16 & 0x4000) {
+        o->cursor += o->cols;
+    }
+    if (o->cursor < 0) {
+        o->cursor += o->cols;
+    }
+    if (o->cursor >= o->h44) {
+        if (o->cursor / o->cols > (o->h44 - 1) / o->cols) {
+            o->cursor -= o->cols;
+        } else {
+            o->cursor = o->h44 - 1;
+        }
+    }
+    o->h16[o->b0B] = o->items[o->cursor];
+    o->h0E[o->b0B] = o->cursor;
+    if (o->cursor < o->top) {
+        o->top -= o->cols;
+    }
+    if (o->cursor >= o->top + o->rows * o->cols) {
+        o->top += o->cols;
+    }
+    if (o->h44 > o->rows * o->cols) {
+        int maxTop = ((o->h44 + o->cols - 1) / o->cols - o->rows) * o->cols;
+        o->top = (o->top > maxTop) ? maxTop : ((o->top < 0) ? 0 : o->top);
+    } else {
+        o->top = 0;
+    }
+    if (o->cursor != prev) {
+        o->h1E = o->items[o->cursor];
+        o->h0E[o->b0B] = o->cursor;
+        o->h16[o->b0B] = o->items[o->cursor];
+        func_002D70D8(1);
+    }
+}
 
 /* DEBT(CAST): message strings are passed to int parameters (prototype not yet typed) */
 int func_002114A0(void)
@@ -318,7 +602,119 @@ int func_002116E0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", _TOBtlGetRightPad);
+void _TOBtlGetRightPad(MenuListLocal *o)
+{
+    s16 prev;
+
+    if (_pad_D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(o->owner, o->h16[o->b0B]) < 0) {
+            func_002D70D8(3);
+            return;
+        }
+        o->h16[o->b0B] = o->items[o->cursor];
+        o->h0E[o->b0B] = o->cursor;
+        o->b0B++;
+        if (o->b0B < o->b0A) {
+            _func_001BFEA8(o->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        if (TOBtlSetNextAction(o->owner, o->items[o->cursor]) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+    if (_pad_D_003238D0.h14 & 0x10) {
+        int cmd = MsMenuGetChrSkipCommand(o->owner);
+        if (cmd != 0) {
+            int bit;
+            _cmd_D_003252A8.b0 = o->owner;
+            _cmd_D_003252A8.b3 = 1;
+            _cmd_D_003252A8.h8 = cmd;
+            _cmd_D_003252A8.hA = 0xFF;
+            bit = 1 << o->owner;
+            _w_D_003250D8 = bit;
+            _cmd_D_003252A8.w10 = bit;
+            _MsSetBtlCommand(&_cmd_D_003252A8, 0, 0);
+            _func_00215360(_h_D_003252A4);
+            _func_002184B8();
+            _func_0020DC78(2);
+            _h_D_003252A4 = 0xFF;
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+    }
+    if (_pad_D_003238D0.h14 & 4) {
+        if (MsGetSaveChrSummon(o->owner) == 0) {
+            if (TOBtlSetNextAction(o->owner, 0x3002) == 1) {
+                func_002D70D8(1);
+                return;
+            }
+            func_002D70D8(3);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+    if (_pad_D_003238D0.h14 & 0x8000) {
+        if (o->b0B > 0) {
+            o->h16[o->b0B] = 0xFF;
+            o->h0E[o->b0B] = 0xFF;
+            o->b0B--;
+            o->cursor = o->h0E[o->b0B];
+            o->h1E = o->h16[o->b0B];
+            _func_001BFEA8(0);
+            func_002D70D8(4);
+            return;
+        }
+        if (D_00325020 > 0) {
+            TOBtlSetPrevAction();
+            ((u8 *)o)[1]++;
+            func_002D70D8(1);
+        }
+        return;
+    }
+    prev = o->cursor;
+    if (_pad_D_003238D0.h16 & 0x1000) {
+        o->cursor -= o->cols;
+    }
+    if (_pad_D_003238D0.h16 & 0x4000) {
+        o->cursor += o->cols;
+    }
+    if (o->cursor < 0) {
+        o->cursor += o->cols;
+    }
+    if (o->cursor >= o->h44) {
+        if (o->cursor / o->cols > (o->h44 - 1) / o->cols) {
+            o->cursor -= o->cols;
+        } else {
+            o->cursor = o->h44 - 1;
+        }
+    }
+    o->h16[o->b0B] = o->items[o->cursor];
+    o->h0E[o->b0B] = o->cursor;
+    if (o->cursor < o->top) {
+        o->top -= o->cols;
+    }
+    if (o->cursor >= o->top + o->rows * o->cols) {
+        o->top += o->cols;
+    }
+    if (o->h44 > o->rows * o->cols) {
+        int maxTop = ((o->h44 + o->cols - 1) / o->cols - o->rows) * o->cols;
+        o->top = (o->top > maxTop) ? maxTop : ((o->top < 0) ? 0 : o->top);
+    } else {
+        o->top = 0;
+    }
+    if (o->cursor != prev) {
+        o->h1E = o->items[o->cursor];
+        o->h0E[o->b0B] = o->cursor;
+        o->h16[o->b0B] = o->items[o->cursor];
+        func_002D70D8(1);
+    }
+}
 
 int func_00211C28(void)
 {
@@ -386,8 +782,124 @@ int func_00211E78(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00211E80);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_210340/rodata", jtbl_00570C50);
+int func_00211E80(MenuListLocal *o)
+{
+    s16 pages;
+    int start;
+    u8 *text2;
+    int res;
+    int end;
+    int i;
+    int color;
+    int n;
+
+    n = o->count - 1;
+    pages = (n + o->cols) / o->cols;
+    _func_001F0328(o->frame[0], o->frame[1], o->frame[2] - o->frame[0], o->frame[3] - o->frame[1], D_00324304, D_00324308);
+    _func_001FBFB8(o->frame[2] - 10, o->area[1], 4, o->area[3] - o->area[1], pages, o->rows, o->top / o->cols);
+    TOMakePktScissor(o->area[0], o->area[1], o->area[2], o->area[3]);
+    o->draw(o);
+    if (o->top > o->count) {
+        start = o->count;
+    } else {
+        start = o->top;
+        if (start < 0) {
+            start = 0;
+        }
+    }
+    {
+        int tmp = o->rows * o->cols + start;
+        if (tmp > o->count) {
+            end = o->count;
+        } else {
+            end = tmp;
+            if (end < 0) {
+                end = 0;
+            }
+        }
+    }
+    for (i = start; i < end; i++) {
+        u8 *text;
+        u8 *com;
+        int x;
+        int y;
+        int j;
+
+        if (o->items[i] == 0xFF) {
+            continue;
+        }
+        res = TOCheckBtlCommandUse(o->owner, o->items[i]);
+        if (res == -4) {
+            continue;
+        }
+        com = (u8 *)MsGetComData(o->items[i], &text);
+        text2 = text + *(u16 *)com;
+        x = o->area[0];
+        x += (i % o->cols) * (o->colWidth + 16);
+        y = o->area[1] + ((i - o->top) / o->cols) * 20;
+        for (j = 0; j < o->nfields; j++) {
+            u16 f = o->fields[j];
+            int digits = f & 0xFF;
+            int val;
+            u8 *w;
+
+            switch (f >> 8) {
+            case 1:
+                _func_001F3068(x, y, com[0x14]);
+                x += 20;
+                break;
+            case 2:
+                x += 5;
+                val = _func_001BFE30(o->items[i]);
+                if (val > 0 || o->showZero == 1) {
+                    _func_001F3580(digits, val, x, y, color);
+                }
+                x += digits * 12;
+                break;
+            case 4:
+                x += 5;
+                val = MsGetCommandMP(o->owner, com);
+                if (val > 0 || o->showZero == 1) {
+                    _func_001F3580(digits, val, x, y, color);
+                }
+                x += digits * 12;
+                break;
+            case 5:
+                val = MsGetRamChrHP(o->items[i]);
+                if (val > 0 || o->showZero == 1) {
+                    _func_001F3580(digits, val, x, y, color);
+                }
+                x += digits * 12;
+                break;
+            case 6:
+                val = MsGetRamChrMP(o->items[i]);
+                if (val > 0 || o->showZero == 1) {
+                    _func_001F3580(digits, val, x, y, color);
+                }
+                x += digits * 12;
+                break;
+            case 7:
+                w = (u8 *)MsGetSaveWeapon(o->items[i], &text);
+                _func_001F3068(x, y, w[4] * 2 + w[5] + 1);
+                if (w[4] == w[6]) {
+                    _func_001F3068(x, y, 0x31);
+                }
+                x += 20;
+                break;
+            case 16:
+                if (res < 0) {
+                    color = 1;
+                } else {
+                    color = 0;
+                }
+                _func_001F3808(text2, x, y, color);
+                x += o->nameWidth;
+                break;
+            }
+        }
+    }
+    return 0;
+}
 
 void func_00212288(int p, int x, int y)
 {
@@ -677,4 +1189,66 @@ int func_00212BF0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00212BF8);
+int func_00212BF8(MenuListLocal *o)
+{
+    int x;
+    int y0;
+    register int y __asm__("$16");
+    s16 w;
+    s16 h;
+    int maxW;
+    int totalW;
+    int totalH;
+
+    maxW = 0;
+
+    o->label[0] = MsGetRomBtlText(0x3014, 0);
+    _TOGetMessageWH(0, o->label[0], &w, &h, 0, 0);
+    if (w > maxW) {
+        maxW = w;
+    }
+    o->label[1] = MsGetRomBtlText(0x3015, 0);
+    _TOGetMessageWH(0, o->label[1], &w, &h, 0, 0);
+    if (w > maxW) {
+        maxW = w;
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        totalW = maxW + 0x6C;
+        totalH = o->rows * 20;
+    } else {
+        totalW = maxW + 0x51;
+        totalH = o->rows * 20;
+    }
+    o->top = 0;
+    o->h3C = 0;
+    o->h44 = o->count;
+    o->frame[0] = 0;
+    o->frame[1] = o->posY;
+    o->frame[2] = o->posX + totalW + 32;
+    o->frame[3] = o->posY + totalH + 2;
+    if (o->frame[2] < D_00325022) {
+        o->frame[2] = D_00325022;
+    }
+    o->area[0] = o->posX + 16;
+    o->area[1] = o->posY + 1;
+    o->area[2] = o->area[0] + totalW;
+    o->area[3] = o->area[1] + totalH;
+    _func_001F0328(o->frame[0], o->frame[1], o->frame[2] - o->frame[0], o->frame[3] - o->frame[1], D_00324304, D_00324308);
+    TOMakePktScissor(o->area[0] - 20, o->area[1], o->area[2], o->area[3]);
+    x = o->area[2];
+    y0 = o->area[1];
+    y = y0 + 4;
+    _func_001F37C8(o->label[0], o->area[0] - 20, y);
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        int off = D_006902A0.h4 * 12 + 12;
+        _func_001F0328(x - off, y, 12, 20, 0x80008080, 0x80008080);
+    } else {
+        int off = D_006902A0.h4 * 9 + 9;
+        _func_001F0328(x - off, y, 9, 20, 0x80008080, 0x80008080);
+    }
+    _func_001F35D0(9, D_006902A0.w10, x, y, 0);
+    y = y0 + 0x22;
+    _func_001F37C8(o->label[1], o->area[0] - 20, y);
+    _func_001F35D0(9, D_006902A0.w14, x, y, 0);
+    return 0;
+}

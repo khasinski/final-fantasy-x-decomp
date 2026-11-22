@@ -1,4 +1,6 @@
 /* tu_074 0x13ca80-0x141ff0: low; ~Atel (config/tu_map.tsv) */
+#define func_0013BE58 _hdr_func_0013BE58
+#define func_00110270 _hdr_func_00110270
 #include "common.h"
 #define func_0013EF90 _hdr_func_0013EF90
 #define func_002D47E8 _hdr_func_002D47E8
@@ -9,7 +11,11 @@
 #include "ffx/s0.h"
 #include "ffx/v1.h"
 #undef func_002D47E8
+#undef func_0013BE58
+#undef func_00110270
 int func_002D47E8(float a, float b, float c, float d, float e, float f);
+void func_0013BE58(Actor *a, int n);
+void func_00110270(Chr *chr, float v);
 
 int func_0013CA80(Actor *s, int i) {
     return ((int *)((char *)s->blob + s->hdr->o24))[i];
@@ -590,8 +596,193 @@ void func_0013DA08(a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013DB38);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A930);
+typedef struct {
+    u16 h0;
+    u16 h2;
+    s16 h4;
+    s16 h6;
+    float f08;
+    float fC;
+    float f10;
+    int w14;
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    float f40;
+} AtelSlotAR;
+
+float func_002D4798(float a, float b, float c, int d);
+
+void func_0013DB38(Actor *a, void *op)
+{
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    AtelSlotAR *s = (AtelSlotAR *)((ObjBindR *)op)->s44;
+    int flags = s->h2;
+    float scale;
+    float d[3];
+    float pos[4];
+    float out[2];
+
+    if ((flags & 0xA000) == 0xA000) {
+        func_0013EB20(a, s->h0);
+    }
+    scale = 1.0f;
+    flags &= ~0xFF80;
+    if (s->h4 > 0 || flags == 9 || flags == 7) {
+        if (s->h6 < 0x7FFE) {
+            s->h6++;
+        }
+        if (s->h4 < s->h6) {
+            scale = (float)s->h6 / (float)s->h4;
+            if (scale > 8.0f) {
+                scale = 8.0f;
+            }
+        }
+    }
+    switch (flags) {
+    case 1:
+        s->f2C = st->y;
+    case 2:
+        if (s->h2 & 0x8000) {
+            float tx = s->f28;
+            float ty = s->f2C;
+            float tz = s->f30;
+            if (tx == st->x && tz == st->z) {
+                if (ty < st->y) {
+                    st->f24 = -3.1415927f;
+                } else {
+                    st->f24 = 3.1415927f;
+                }
+            } else {
+                float r0, r1;
+                func_002D45C0(&out[0], &out[1], st->x, st->y, st->z, tx, ty, tz);
+                r0 = s->f3C;
+                r1 = s->f40;
+                if (s->h2 & 0x200) {
+                    r0 = r1 = 6.2831855f;
+                }
+                r0 *= scale;
+                r1 *= scale;
+                st->f20 = func_002D46B0(st->f20, out[0], r0);
+                st->f24 = func_002D46B0(st->f24, out[1], r1);
+            }
+        }
+        d[0] = s->f28 - st->x;
+        d[1] = s->f2C - st->y;
+        d[2] = s->f30 - st->z;
+        {
+            float spd = s->f10;
+            float len = func_002D4290(func_002D4278(d[0], d[1], d[2]));
+            float div = 10.0f;
+            if (AQ(a)->stateAA == 4 || AQ(a)->stateAA == 5) {
+                div = 1.0f;
+            }
+            if (len <= spd / div) {
+                spd = len * div;
+                s->h2 |= 0x1000;
+            }
+            st->f0C = spd;
+        }
+        break;
+    case 3:
+        s->f2C = st->y;
+    case 4:
+        d[0] = s->f28 - st->x;
+        d[1] = s->f2C - st->y;
+        d[2] = s->f30 - st->z;
+        {
+            float len = func_002D4290(func_002D4278(d[0], d[1], d[2]));
+            float spd = st->f0C;
+            float maxSpd = s->f10;
+            float brake;
+            spd += s->f34;
+            brake = func_002D4290((s->f34 + s->f34) * len);
+            if (brake < maxSpd) {
+                spd = (spd < 0.001f) ? 0.001f : ((spd > brake) ? brake : spd);
+            }
+            spd = (spd < 0.001f) ? 0.001f : ((spd > maxSpd) ? maxSpd : spd);
+            st->f0C = spd;
+            if (len <= spd / 10.0f) {
+                s->h2 |= 0x1000;
+            }
+        }
+        break;
+    case 7:
+        {
+            float t = s->f08 / s->fC;
+            float u;
+            s->f08 += 1.0f;
+            if (t < 0.0f) t = 0.0f;
+            if (t > 1.0f) t = 1.0f;
+            u = 1.0f - t;
+            st->x = s->f1C * u + s->f28 * t;
+            st->y = s->f20 * u + s->f2C * t;
+            st->z = s->f24 * u + s->f30 * t;
+            st->f0C = 0.0f;
+        }
+        break;
+    case 5:
+    case 6:
+        {
+            float t = s->f08 / s->fC;
+            s->f08 += 1.0f;
+            if (t < 0.0f) t = 0.0f;
+            if (t > 1.0f) t = 1.0f;
+            if (s->w14 != 0) {
+                if (flags == 5) {
+                    func_0013D928((int)pos, (int *)s->w14, t);
+                } else {
+                    func_0013D9D0((int)pos, (int *)s->w14, t);
+                }
+                func_002D45C0(&st->f20, &st->f24, st->x, st->y, st->z, pos[0], pos[1], pos[2]);
+                st->f0C = func_002D4290(func_002D4278(pos[0] - st->x, pos[1] - st->y, pos[2] - st->z));
+            } else {
+                s->f08 = s->fC + 1.0f;
+                st->f0C = 0.0f;
+            }
+        }
+        break;
+    case 9:
+        {
+            float t;
+            float u;
+            float nx, ny, nz;
+            if (s->h6 >= *(u16 *)((u8 *)a + 0xB16)) {
+                s->f08 += 1.0f;
+                t = s->f08 / s->fC;
+                if (s->f08 >= s->fC) {
+                    t = 1.0f;
+                    s->h2 |= 0x1000;
+                }
+            } else {
+                t = 0.0f;
+            }
+            u = 1.0f - t;
+            nx = s->f28 * t + s->f1C * u;
+            nz = s->f30 * t + s->f24 * u;
+            ny = (s->f18 + (s->f34 * 0.5f) * t) * t + s->f20;
+            st->f0C = 0.0f;
+            st->x = nx;
+            st->z = nz;
+            st->y = ny;
+        }
+        break;
+    case 0:
+    case 8:
+    case 10:
+    case 11:
+    default:
+        st->f0C = 0.0f;
+        break;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013E150);
 INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A960);
@@ -748,7 +939,95 @@ void func_0013F1D8(Actor *a, void *op) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013F288);
+float func_002D5AE8(float *a, float *b, float *c);
+
+void func_0013F288(Actor *a, void *op, Actor *target) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ActorState *st2 = AtelGetPosWorkAdrs(target);
+    int crossed = 0;
+    float f1C;
+    float t;
+    float cx, cy, cz;
+    float dist2;
+    int prev;
+
+    v0[0] = st->x;
+    v0[1] = st->y;
+    v0[2] = st->z;
+    v1[0] = st->f30;
+    v1[1] = st->f34;
+    v1[2] = st->f38;
+    v2[0] = D_0058E3D8->prev[0];
+    v2[1] = D_0058E3D8->prev[1];
+    v2[2] = D_0058E3D8->prev[2];
+    v3[0] = D_0058E3D8->cur[0];
+    v3[1] = D_0058E3D8->cur[1];
+    v3[2] = D_0058E3D8->cur[2];
+    f1C = st->f1C;
+    if (v2[0] != v3[0] || v2[2] != v3[2] || (a->flags34.w & 0x10000)) {
+        a->flags34.w &= ~0x10000;
+        crossed = func_002D5458(v2, v3, v0, v1);
+        if (crossed != 0) {
+            float d = func_002D5540(v2, v3, v0, v1);
+            if (f1C <= 0.0f || d <= f1C) {
+                if (crossed > 0) {
+                    a->flags34.w = (a->flags34.w & ~0x60000) | 0x20000;
+                } else {
+                    a->flags34.w &= ~0x60000;
+                }
+                crossed = 1;
+                func_0014B720(0xFFFF, a->id, 4);
+            } else {
+                crossed = 0;
+            }
+        }
+    }
+    t = func_002D5AE8(v3, v0, v1);
+    {
+        float p3x = v3[0];
+        float p3y = v3[1];
+        float p3z = v3[2];
+
+        cx = (v1[0] - v0[0]) * t + v0[0];
+        cz = (v1[2] - v0[2]) * t + v0[2];
+        cy = (v1[1] - v0[1]) * t + v0[1];
+        dist2 = func_002D4278(cx - p3x, 0.0f, cz - p3z);
+        prev = ((u32)a->flags34.w >> 6) & 1;
+        t = st->f48 * st->f48;
+        if (dist2 <= t && (f1C <= 0.0f || (p3y <= cy + f1C && cy - f1C <= p3y))) {
+            a->flags34.w |= 0x40;
+            func_0014B720(0xFFFF, a->id, 3);
+            if (!prev) {
+                func_0014B720(0xFFFF, a->id, 5);
+            }
+        } else {
+            a->flags34.w &= ~0x40;
+            if (crossed) {
+                func_0014B720(0xFFFF, a->id, 5);
+            }
+            if (prev == 1 || crossed) {
+                func_0014B720(0xFFFF, a->id, 6);
+            }
+        }
+        if ((a->flagsAB & 1) && D_0058E3D8->b1E4 == 1) {
+            float r = st->f40 + D_0058E3D8->f1F0;
+            t = r * r;
+
+            if (dist2 <= t && (f1C <= 0.0f || (p3y <= cy + f1C && cy - f1C <= p3y))) {
+                if (D_0058E3D8->h1E8 == 0xFFFF || t < D_0058E3D8->f1EC) {
+                    if (func_002D47E8(st2->f34, st->f3C, p3x, p3z, cx, cz)) {
+                        D_0058E3D8->f1EC = t;
+                        D_0058E3D8->h1E8 = a->id;
+                    }
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013F6D8);
 

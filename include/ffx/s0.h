@@ -67,9 +67,9 @@ int func_002EF240(const char *fmt, ...);
 void MsBindOffCamera(Actor *a);
 
 /* c_1402F8 */
-int func_0013F288(Actor *a, void *op, Actor *t);
+void func_0013F288(Actor *a, void *op, Actor *t);
 void func_0013F1D8(Actor *a, void *op);
-int func_0013FB40(Actor *a, void *op, Actor *t);
+void func_0013FB40(Actor *a, void *op, Actor *t);
 int func_0013F6D8(Actor *a, void *op);
 void func_0013DB38(Actor *a, void *op);
 void func_0013E150(Actor *a, void *op);

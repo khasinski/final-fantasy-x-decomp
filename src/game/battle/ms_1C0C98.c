@@ -464,8 +464,184 @@ int MsSetChrImageDamageAttack(BtlChr *c) {
     return c->f3B4 = b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcDamageCommand);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C0C98/rodata", jtbl_0056E5E0);
+int MsCalcDamageCommand(BtlChr *src, BtlChr *dst, int c, int d, int e, int f, int g, int h, int i, int j, int k)
+{
+    u8 *cmd = (u8 *)c;
+    u16 flags = f;
+    int *out_def = (int *)i;
+    int *out_mdef = (int *)j;
+    int cur_val = 0;
+    int max_val = 0;
+    int ret = k;
+    int rnd_id;
+    int def;
+    int mdef;
+    int rnd;
+    int s;
+
+    rnd_id = MsGetRndChr(src->f0C, 0);
+    def = dst->pad269[0];
+    mdef = dst->pad26B[0];
+    switch (g) {
+    case 1:
+        cur_val = *(s32 *)((u8 *)dst + 0x3A4);
+        max_val = dst->f254;
+        break;
+    case 2:
+        cur_val = *(s32 *)((u8 *)dst + 0x3A8);
+        max_val = dst->f258;
+        break;
+    case 4:
+        cur_val = *(s32 *)((u8 *)dst + 0x3AC);
+        max_val = dst->f31D;
+        break;
+    }
+    if (cmd != 0 && (cmd[0x23] & 1)) {
+        if ((flags >> 6) & 1) {
+            def = 0;
+        }
+        if ((flags >> 7) & 1) {
+            mdef = 0;
+        }
+    }
+    if (h != 0) {
+        rnd = (brnd(rnd_id) & 0x1F) + 0xF0;
+    } else {
+        rnd = 0x100;
+    }
+    switch (d) {
+    case 1: {
+        int base;
+        int d_num;
+        int v;
+
+        s = src->f268 + src->pad31E[0];
+        base = (s * s * s) / 32 + 30;
+        d_num = 730 - (def * 51 - (def * def) / 11) / 10;
+        v = base * d_num / 730;
+        v = v * (15 - dst->pad31E[0]) / 15;
+        ret = (v * e / 16) * rnd / 256;
+        break;
+    }
+    case 2:
+        s = src->f268 + src->pad31E[0];
+        ret = ((((s * s * s) / 32 + 30) * e) / 16) * rnd / 256;
+        break;
+    case 3: {
+        int base;
+        int d_num;
+        int v;
+
+        s = src->f26A + src->pad31E[2];
+        base = ((s * s) / 6 + e) * e / 4;
+        d_num = 730 - (mdef * 51 - (mdef * mdef) / 11) / 10;
+        v = base * d_num / 730;
+        v = v * (15 - dst->pad31E[2]) / 15;
+        ret = v * rnd / 256;
+        break;
+    }
+    case 4:
+        s = src->f26A + src->pad31E[2];
+        ret = ((((s * s) / 6 + e) * e) / 4) * rnd / 256;
+        break;
+    case 5:
+        ret = cur_val * e / 16;
+        break;
+    case 6:
+        ret = e * 50;
+        break;
+    case 7:
+        ret = ((src->f26A + src->pad31E[2] + e) / 2) * e * rnd / 256;
+        break;
+    case 8:
+        ret = max_val * e / 16;
+        break;
+    case 9: {
+        int tmp = rnd * 50;
+
+        ret = e * tmp / 256;
+        break;
+    }
+    case 10:
+        ret = (u32)(dst->f258 * e) / 16;
+        break;
+    case 11:
+        ret = dst->f31D * e / 16;
+        break;
+    case 12:
+        ret = *(s32 *)((u8 *)dst + 0x3A8) * e / 16;
+        break;
+    case 13:
+        ret = *(s32 *)((u8 *)dst + 0x3AC) * e / 16;
+        break;
+    case 14:
+        s = src->f268;
+        return (((s * s * s) / 32 + 30) * e) / 16;
+    case 20:
+        s = src->f26A;
+        return (((s * s * s) / 32 + 30) * e) / 16;
+    case 15:
+        s = src->f26A + src->pad31E[2];
+        ret = ((((s * s * s) / 32 + 30) * e) / 16) * rnd / 256;
+        break;
+    case 16:
+        ret = (u32)(src->f254 * e) / 10U;
+        break;
+    case 17: {
+        u32 pct;
+        u32 v;
+
+        s = src->f268 + src->pad31E[0];
+        pct = (u32)(src->f290 * 100) / (u32)src->f254 + 10;
+        v = (u32)(((s * s * s) / 32 + 30) * pct) / 110U;
+        ret = (u32)((u32)(v * e) >> 4) * rnd >> 8;
+        break;
+    }
+    case 18: {
+        u32 pct;
+        u32 v;
+
+        s = src->f268 + src->pad31E[0];
+        pct = (u32)(src->f294 * 100) / (u32)src->f258 + 10;
+        v = (u32)(((s * s * s) / 32 + 30) * pct) / 110U;
+        ret = (u32)((u32)(v * e) >> 4) * rnd >> 8;
+        break;
+    }
+    case 19: {
+        u32 pct;
+        u32 v;
+
+        s = src->f268 + src->pad31E[0];
+        pct = 130 - (u32)(src->f290 * 100) / (u32)src->f254;
+        v = (u32)(((s * s * s) / 32 + 30) * pct) / 60U;
+        ret = (u32)((u32)(v * e) >> 4) * rnd >> 8;
+        break;
+    }
+    case 21:
+        ret = D_003188B0 / 10;
+        break;
+    case 22:
+        if (dst->f0C < 18) {
+            ret = ((struct { u8 pad[0x5620]; struct { s32 v; u8 pad[0x90]; } ent[18]; } *)&D_003194D0)->ent[dst->f0C].v * e;
+        }
+        break;
+    case 23:
+        ret = e * 9999;
+        break;
+    }
+    if (cmd != 0 && ((*(u16 *)(cmd + 0x20) >> 4) & 1)) {
+        if (!((flags >> 1) & 1)) {
+            ret = -ret;
+        }
+    }
+    if (out_def != 0) {
+        *out_def = def;
+    }
+    if (out_mdef != 0) {
+        *out_mdef = mdef;
+    }
+    return ret;
+}
 
 int func_001C3578(int a, int mask, Q4Flags *f) {
     int r = 0;
@@ -984,9 +1160,51 @@ int func_001C55D0(BtlChr *a0, BtlChr *a1, Unk1C55D0_A2 *a2, Unk1C55D0_A3 *a3, in
     return 0;
 }
 
+int func_001C5B10(int a0, int a1, int a2, int a3, int a4, int a5, int *a6, int *a7, int *a8, OfsTbl *a9, int a10, int a11, int a12, int a13, int *a14);
+int func_001C5E60(int a, int *p);
+
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C5798);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcDrainResult);
+void MsCalcDrainResult(int a0, BtlChr *a1, OfsTbl *a2, u8 *a3, int *a4, int a5) {
+    if (a3[1] < 0x10) {
+        int sp40[8];
+        int sp60[2];
+        int i;
+        int orig_kind = a2->pad23;
+        int b2C8 = a1->f2C8;
+        int *p40 = sp40;
+        int *p60 = sp60;
+        int kind;
+        int res;
+        u8 idx;
+        u8 *ent;
+
+        for (i = 7; i >= 0; i--) {
+            p40[i] = 0;
+        }
+        for (i = 1; i >= 0; i--) {
+            p60[i] = 0;
+        }
+        kind = orig_kind;
+        if (a5 != 0) {
+            sp60[1]++;
+            kind = 0;
+        }
+        res = func_001C5B10(a0, a0, 0, 0, 0, 0, a4, p40, p40, a2, 0, b2C8, kind, kind, p60);
+        idx = a3[1];
+        a3[4] |= 4;
+        a3[1] = idx + 1;
+        ent = a3 + (idx * 0x2C + 0x18);
+        *(u16 *)(ent + 0x18) = kind;
+        ent[2] = kind;
+        ent[0] = res;
+        ent[1] = func_001C5E60(kind, p60);
+        for (i = 0; i < 3; i++) {
+            ((int *)(ent + 0x20))[i] = a4[i];
+        }
+        func_001C0D00((Unk1C0D00 *)ent, 0, (Unk1C0D00Chr *)a1);
+    }
+}
 
 int func_001C5A80(int a, int b) {
     int n = 0;

@@ -604,7 +604,106 @@ void Ch_DrawSetSituation(Chr *chr, s8 v)
     chr->b193 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010C798);
+typedef union {
+    struct {
+        u64 q0;
+        u64 q8;
+    } q;
+    struct {
+        u32 w0, w4, w8, wC;
+    } w;
+} DmaQword;
+
+s32 func_0010D648(Chr *chr);
+void *func_0010B230(Chr *chr, void *mat, void *pkt);
+
+void func_0010C798(s32 use_spad)
+{
+    DmaQword *base;
+    DmaQword *pkt;
+    Chr *p;
+    s32 qwc;
+
+    if (use_spad != 0) {
+        base = (DmaQword *)Sg_GetSpadPtr();
+        pkt = base + 5;
+    } else {
+        base = (DmaQword *)Sg_PacketGetPtr();
+        pkt = base + 4;
+    }
+    for (p = D_00300664; p != D_00300664 + D_00300668; p++) {
+        if (!p->active) {
+            continue;
+        }
+        if (!(((u64)p->flags >> 36) & 1)) {
+            continue;
+        }
+        if (func_0010D648(p) != 0) {
+            continue;
+        }
+        {
+            s32 v = ((s8 *)p)[0x192];
+            if (v == 2) {
+                continue;
+            }
+            if (v != 3) {
+                s32 mode;
+
+                if (D_0057EAEA != 0) {
+                    mode = D_0057EAEA - 1;
+                } else {
+                    mode = ((s8 *)p)[0x18F];
+                }
+                if (mode == 3) {
+                    continue;
+                }
+                if (mode == 1) {
+                    pkt = (DmaQword *)func_0010B230(p, (u8 *)p + 0x120, pkt);
+                }
+            }
+        }
+    }
+    qwc = (s32)((u8 *)pkt - (u8 *)base) / 16;
+    if (use_spad != 0) {
+        if (qwc >= 6) {
+            base->q.q8 = 0;
+            base->q.q0 = (qwc - 1) | 0x10000000;
+            base++;
+            base->q.q0 = 0;
+            base->w.w8 = 0x11000000;
+            base->w.wC = (qwc - 2) | 0x50000000;
+            base++;
+            base->q.q0 = 0x2000000000008001ULL;
+            base->q.q8 = 0xEEEE;
+            base++;
+            base->q.q0 = 0x46;
+            base->q.q8 = 0x43;
+            base++;
+            base->q.q0 = 0x51001;
+            base->q.q8 = 0x48;
+            func_0010E028((s32)pkt);
+        }
+    } else {
+        if (qwc >= 5) {
+            base->q.q8 = 0;
+            base->q.q0 = (qwc - 1) | 0x70000000;
+            base++;
+            base->q.q0 = 0x2000000000008001ULL;
+            base->q.q8 = 0xEEEE;
+            base++;
+            base->q.q0 = 0x46;
+            base->q.q8 = 0x43;
+            base++;
+            base->q.q0 = 0x51001;
+            base->q.q8 = 0x48;
+            base++;
+            func_002F8660(0);
+            func_002DBF78(dmaGif, 0, 0);
+            func_002DBA28((void *)dmaGif, (void *)(base - 4));
+            func_002DBF78(dmaGif, 0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010CA88);
 

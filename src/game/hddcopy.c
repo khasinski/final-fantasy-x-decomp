@@ -257,7 +257,47 @@ int func_00166458(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_001664D8);
+int func_001664D8(u32 sector, u8 *buf, int size, int i)
+{
+    int busy;
+    char *path;
+    s64 offset;
+    int fd;
+    s64 r;
+
+    if (D_00597490[i].q08 == 0) {
+        return 0;
+    }
+    path = get_hdd_name(i);
+    offset = ((u64)sector - D_00597490[i].q00) << 11;
+    fd = func_002FC4E0(path, 0x8001);
+    D_0078E498.fd5C = fd;
+    if (fd < 0) {
+        BREAK();
+    }
+    if (offset > 0x7FFFFFFF) {
+        r = func_002FEA60(fd, offset, 0) << 32;
+        __asm__("" : "+r"(r));
+        r >>= 32;
+    } else {
+        r = func_002FC8E8(fd, offset, 0);
+    }
+    if (r < 0) {
+        BREAK();
+    }
+    while (func_002FD050(D_0078E498.fd5C, 1, &busy), busy != 0) {
+        func_0017135C(1);
+    }
+    if (func_002FCB20(D_0078E498.fd5C, (char *)buf, size) < 0) {
+        D_0030DE50 = 1;
+    }
+    while (func_002FD050(D_0078E498.fd5C, 1, &busy), busy != 0) {
+        func_0017135C(1);
+    }
+    func_002FC768(D_0078E498.fd5C);
+    D_0078E498.fd5C = -1;
+    return 0;
+}
 
 int hd_file_read_th(u32 sector, u8 *buf, int size, int i)
 {

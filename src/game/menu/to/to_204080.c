@@ -744,9 +744,271 @@ int TOGetEasyMesWHFontL(u8 *text, int *w, int *h)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TOGetMessageWH);
+void func_002021F8(u8 *s, u8 *buf);
+void func_00207988(int a, int b, int c, int d, int e);
+s32 _TOIntToMes(int a, u8 *b, int c, int d) __asm__("TOIntToMes");
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TOScanSelecterWH);
+typedef struct {
+    s16 flag;
+    s16 w;
+    s16 x;
+    s16 y;
+} SelEnt;
+
+typedef struct {
+    u8 pad00[4];
+    s8 b4;
+    s8 b5;
+    u8 pad06[2];
+    s16 h08;
+    u8 pad0A[2];
+    s32 w0C;
+    u8 pad10[0x28];
+    SelEnt ent[16];
+} SlotZSel;
+
+int _TOGetMessageWH(int id, u8 *s, s16 *outW, s16 *outH, int a4, int a5)
+{
+    u8 buf[0x10];
+    u8 numBuf[0x20];
+    s16 subW;
+    s16 subH;
+    int charW;
+    int maxW = 0;
+    int maxH = 0;
+    int curW = 0;
+    int lineSp;
+    int flagHi = a5 & 0xFF00;
+    int running = 1;
+    int curH;
+    int padFlag;
+
+    a5 &= 0xF;
+    if (a4 == 1 || a4 == 3) {
+        lineSp = 4;
+    } else {
+        lineSp = 2;
+    }
+    curH = lineSp + 18;
+    padFlag = (a4 == 3);
+    do {
+        switch (TOGetGroup(*s)) {
+        case 4:
+            if (id >= 0 && ((RenewMsgCmd *)D_00668740[id])->h10 == 0x4000) {
+                func_002021F8(s, buf);
+                func_00205228(buf, a4, &charW);
+            } else {
+                func_00205228(s, a4, &charW);
+            }
+            curW += charW;
+            break;
+        case 1:
+            if (padFlag == 1 && curW > 0) {
+                curW += 5;
+            }
+            if (curW > maxW) {
+                maxW = curW;
+            }
+            curW = 0;
+            switch (*s) {
+            case 0:
+                if (curH > maxH) {
+                    maxH = curH;
+                }
+                running = 0;
+                break;
+            case 1:
+            case 2:
+                if (curH > maxH) {
+                    maxH = curH;
+                }
+                curH = lineSp + 18;
+                if (a5 != 0) {
+                    running = 0;
+                }
+                break;
+            case 3:
+                curH += 18 + lineSp;
+                if (a5 == 3) {
+                    if (curH > maxH) {
+                        maxH = curH;
+                        running = 0;
+                    }
+                }
+                break;
+            }
+            break;
+        case 2:
+            if (*s == 7) {
+                if (id >= 0 && s[1] == 0x38 && ((RenewMsgCmd *)D_00668740[id])->h24 == 0) {
+                    ((s16 *)D_00668740[id])[7] = 1;
+                }
+                if ((s8)(s[1] - 0x40) >= 0) {
+                    curW = (s[1] - 0x40) * 4;
+                }
+                if ((u8)(s[1] + 0x1F) < 0xF) {
+                    curW += s[1] - 0xE0;
+                }
+            } else {
+                if (*s == 0xE) {
+                    if (s[1] == 0x40 && padFlag == 0) {
+                        padFlag = 1;
+                    }
+                    if (s[1] == 0x41 && padFlag == 1 && curW > 0) {
+                        curW += 5;
+                        padFlag = 0;
+                    }
+                }
+                if (*s == 0xB) {
+                    curW += func_002083E8(s[1]);
+                }
+                if (*s == 0x10 && id >= 0) {
+                    if (s[1] >= 0x50 && s[1] < 0x60) {
+                        _TOIntToMes(((s32 *)D_00669AE0[id])[3], numBuf, s[1] - 0x4F, 1);
+                        _TOGetMessageWH(id, numBuf, &subW, &subH, a4, 0);
+                        D_00668740[id]->w1E = 1;
+                        curW += subW;
+                    }
+                    if (!(flagHi & 0x100) && s[1] != 0xFF) {
+                        D_00668740[id]->w1E = 1;
+                    }
+                }
+            }
+            break;
+        case 3:
+            curW += TOGetChangeMacroWidth(id, s, a4);
+            break;
+        }
+        s = TOSkipCode(s);
+    } while (running != 0);
+    *outW = maxW;
+    *outH = maxH - lineSp;
+    return (int)s;
+}
+
+void _TOScanSelecterWH(int id, u8 *s, int a2, int a3)
+{
+    u8 numBuf[0x20];
+    u8 buf[0x10];
+    s16 subW;
+    s16 subH;
+    int charW;
+    int mode = a3 & 0xF;
+    int maxH = 0;
+    int lineSp;
+    SelEnt *curEnt = 0;
+    int curW = 0;
+    int running = 1;
+    int curH;
+    int i;
+
+    if (a2 == 1 || a2 == 3) {
+        lineSp = 4;
+    } else {
+        lineSp = 2;
+    }
+    ((SlotZSel *)D_00669AE0[id])->b4 = 0;
+    ((SlotZSel *)D_00669AE0[id])->b5 = 0;
+    curH = lineSp + 18;
+    do {
+        switch (TOGetGroup(*s)) {
+        case 4:
+            if (((RenewMsgCmd *)D_00668740[id])->h10 == 0x4000) {
+                func_002021F8(s, buf);
+                func_00205228(buf, a2, &charW);
+            } else {
+                func_00205228(s, a2, &charW);
+            }
+            curW += charW;
+            break;
+        case 1:
+            if (curEnt != 0) {
+                curEnt->w = curW - (u16)curEnt->x;
+                curEnt = 0;
+            }
+            curW = 0;
+            if (((s16 *)D_00668740[id])[7] == 1) {
+                _TOGetMessageWH(id, s + 1, &subW, &subH, a2, 3);
+                curW = (((s16 *)D_00668740[id])[0x22] - ((s16 *)D_00668740[id])[0x20] - subW) / 2;
+            }
+            switch (*s) {
+            case 0:
+                running = 0;
+                break;
+            case 1:
+            case 2:
+                curH = lineSp + 18;
+                if (mode != 0) {
+                    running = 0;
+                }
+                break;
+            case 3:
+                curH += 18 + lineSp;
+                if (mode == 3) {
+                    if (curH > maxH) {
+                        maxH = curH;
+                        running = 0;
+                    }
+                }
+                break;
+            }
+            break;
+        case 2:
+            if (*s == 7) {
+                _TOGetMessageWH(id, s + 2, &subW, &subH, a2, 3);
+                if (s[1] == 0x38) {
+                    curW = (((s16 *)D_00668740[id])[0x22] - ((s16 *)D_00668740[id])[0x20] - subW) / 2;
+                } else {
+                    if (s[1] == 0x31) {
+                        curW = (((s16 *)D_00668740[id])[0x22] - ((s16 *)D_00668740[id])[0x20] - subW) / 2;
+                    }
+                    if ((s8)(s[1] - 0x40) >= 0) {
+                        curW = (s[1] - 0x40) * 4;
+                    }
+                    if ((u8)(s[1] + 0x1F) < 0xF) {
+                        curW += s[1] - 0xE0;
+                    }
+                }
+            } else {
+                if (*s == 0xB) {
+                    curW += func_002083E8(s[1]);
+                }
+                if (*s == 0x10) {
+                    if (s[1] >= 0x50 && s[1] < 0x60) {
+                        _TOIntToMes(((SlotZSel *)D_00669AE0[id])->w0C, numBuf, s[1] - 0x4F, 1);
+                        _TOGetMessageWH(id, numBuf, &subW, &subH, a2, 0);
+                        func_00207988(id, s[1] - 0x4F, curW, curH, subW);
+                        curW += subW;
+                    } else {
+                        if (curEnt != 0) {
+                            curEnt->w = curW - (u16)curEnt->x;
+                            curEnt = 0;
+                        }
+                        if (s[1] != 0xFF) {
+                            ((SlotZSel *)D_00669AE0[id])->b5++;
+                            curEnt = &((SlotZSel *)D_00669AE0[id])->ent[s[1] - 0x30];
+                            curEnt->flag = 1;
+                            curEnt->w = 0;
+                            curEnt->x = curW;
+                            curEnt->y = curH;
+                        }
+                    }
+                }
+            }
+            break;
+        case 3:
+            curW += TOGetChangeMacroWidth(id, s, a2);
+            break;
+        }
+        s = TOSkipCode(s);
+    } while (running != 0);
+    ((SlotZSel *)D_00669AE0[id])->h08 = 0;
+    for (i = 0; i < ((SlotZSel *)D_00669AE0[id])->b5; i++) {
+        if (((SlotZSel *)D_00669AE0[id])->ent[i].w > ((SlotZSel *)D_00669AE0[id])->h08) {
+            ((SlotZSel *)D_00669AE0[id])->h08 = ((SlotZSel *)D_00669AE0[id])->ent[i].w;
+        }
+    }
+}
 
 void func_00206860(int r, int c, int v)
 {

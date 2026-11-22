@@ -357,7 +357,7 @@ typedef union Flg210 {
     } b;
 } Flg210; /* DEBT(NAME): flag word at +0x210 of the block behind D_0058E3D8 */
 typedef struct Ent3D8 { int w0; int w4; int w8; u8 pC[2]; u8 bE; u8 bF; } Ent3D8; /* DEBT(NAME): four 16-byte entries at +0x64 of the block behind D_0058E3D8 */
-typedef struct Sys3D8 { s32 flags; u8 pad4[6]; u16 hA; u16 hC; u8 padE[0x14 - 0xE]; u16 h14; u16 h16; u16 h18; u16 h1A; u8 pad1C[0x2C - 0x1C]; int w2C; int w30; char *p34; char *p38; u8 pad3C[8]; int w44; char *p48; u8 pad4C[0x54 - 0x4C]; int (*f54)(Actor *a, u32 off); u8 pad58[8]; int (*f60)(void); Ent3D8 ent[4]; u8 padA4[0x1E4 - 0xA4]; u8 b1E4; u8 pad1E5; u8 b1E6; u8 pad1E7; u16 h1E8; u8 pad1EA[0x204 - 0x1EA]; int w204; u8 pad208[8]; Flg210 f210; u8 pad214[4]; float cur[4]; float prev[4]; } Sys3D8; /* DEBT(NAME): block at *D_0058E3D8, only the used members */
+typedef struct Sys3D8 { s32 flags; u8 pad4[6]; u16 hA; u16 hC; u8 padE[0x14 - 0xE]; u16 h14; u16 h16; u16 h18; u16 h1A; u8 pad1C[0x2C - 0x1C]; int w2C; int w30; char *p34; char *p38; u8 pad3C[8]; int w44; char *p48; u8 pad4C[0x54 - 0x4C]; int (*f54)(Actor *a, u32 off); u8 pad58[8]; int (*f60)(void); Ent3D8 ent[4]; u8 padA4[0x1E4 - 0xA4]; u8 b1E4; u8 pad1E5; u8 b1E6; u8 pad1E7; u16 h1E8; u8 pad1EA[2]; float f1EC; float f1F0; u8 pad1F4[0x204 - 0x1F4]; int w204; u8 pad208[8]; Flg210 f210; u8 pad214[4]; float cur[4]; float prev[4]; } Sys3D8; /* DEBT(NAME): block at *D_0058E3D8, only the used members */
 extern Sys3D8 *D_0058E3D8;
 void func_00172FC8(int a, int b);
 void func_00172F80(int a, int b);

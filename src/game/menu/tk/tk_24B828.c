@@ -2,6 +2,7 @@
 #define TkMsImportantGet _hdr_TkMsImportantGet
 #define TkMenuGetArmor _hdr_TkMenuGetArmor
 #define TkMenuGetWeapon _hdr_TkMenuGetWeapon
+#define func_002346D8 _hdr_func_002346D8
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -13,9 +14,11 @@
 #include "ffx/w8.h"
 #include "ffx/r6.h"
 #include "ffx/s6.h"
+#undef func_002346D8
 #undef TkMenuGetWeapon
 #undef TkMenuGetArmor
 #undef TkMsImportantGet
+Task *func_002346D8(int a, int b);
 int TkMsImportantGet(int id);
 int TkMenuGetArmor(int idx);
 int TkMenuGetWeapon(int idx);
@@ -766,9 +769,141 @@ int func_0024D598(int a0, int a1, int a2)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D6A0);
+extern u16 D_0069BE6A;
+extern u8 D_0069BE6D;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024D888);
+int func_0024D6A0(int id)
+{
+    s32 buf;
+    OfsTbl *t;
+    int ret;
+    u16 mask = 0;
+    int i;
+    int n;
+
+    D_0069BE6A = id;
+    t = TkMsGetRomItem(id, &buf);
+    ret = 0;
+    switch (t->pad23) {
+    case 1:
+        D_0069BE6D = 0;
+        break;
+    case 2:
+        D_0069BE6D = 1;
+        break;
+    case 3:
+        D_0069BE6D = 2;
+        break;
+    default:
+        D_0069BE6D = 0;
+        break;
+    }
+    if ((t->b22 >> 4) & 1) {
+        D_0069BE6D = 3;
+    }
+    switch ((t->h1A >> 2) & 3) {
+    case 0:
+        D_0069BE6C = 1;
+        break;
+    case 1:
+    case 2:
+        D_0069BE6C = 0;
+        break;
+    case 3:
+        D_0069BE6C = 1;
+        break;
+    default:
+        D_0069BE6C = 1;
+        break;
+    }
+    if ((t->b22 >> 7) & 1) {
+        n = TkMenuGetSummonListMax();
+        for (i = 0; i < n; i++) {
+            int ch = func_00242798(i);
+            if (func_0024D598(D_0069BE6D, D_0069BE6C, ch)) {
+                mask |= 1 << i;
+            }
+        }
+        ret = 1;
+    }
+    if ((t->b22 >> 6) & 1) {
+        n = func_00242818();
+        for (i = 0; i < n; i++) {
+            int ch = TkMenuGetPlayerFromIndex(i);
+            if (func_0024D598(D_0069BE6D, D_0069BE6C, ch)) {
+                mask |= 1 << i;
+            }
+        }
+        ret = 0;
+    }
+    D_0069BE68 = mask;
+    return ret;
+}
+
+int func_0024D888(int id)
+{
+    s32 buf;
+    OfsTbl *t;
+    int ret;
+    int mask = 0;
+    int i;
+    int n;
+
+    D_0069BE6A = id;
+    t = MsGetRomPlyCommand(id, &buf);
+    ret = 0;
+    switch (t->pad23) {
+    case 1:
+        D_0069BE6D = 0;
+        break;
+    case 2:
+        D_0069BE6D = 1;
+        break;
+    case 3:
+        D_0069BE6D = 2;
+        break;
+    default:
+        D_0069BE6D = 0;
+        break;
+    }
+    switch ((t->h1A >> 2) & 3) {
+    case 0:
+        D_0069BE6C = 1;
+        break;
+    case 1:
+    case 2:
+        D_0069BE6C = 0;
+        break;
+    case 3:
+        D_0069BE6C = 1;
+        break;
+    default:
+        D_0069BE6C = 1;
+        break;
+    }
+    if ((t->b22 >> 7) & 1) {
+        n = TkMenuGetSummonListMax();
+        for (i = 0; i < n; i++) {
+            int ch = func_00242798(i);
+            if (func_0024D598(D_0069BE6D, D_0069BE6C, ch)) {
+                mask |= 1 << i;
+            }
+        }
+        ret = 1;
+    }
+    if ((t->b22 >> 6) & 1) {
+        n = func_00242818();
+        for (i = 0; i < n; i++) {
+            int ch = TkMenuGetPlayerFromIndex(i);
+            if (func_0024D598(D_0069BE6D, D_0069BE6C, ch)) {
+                mask |= 1 << i;
+            }
+        }
+        ret = 0;
+    }
+    D_0069BE68 = mask;
+    return ret;
+}
 
 void func_0024DA50(void) {
 }
@@ -992,8 +1127,255 @@ void func_0024E378(Task *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024E540);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_005734B0);
+void func_002429E0(int a);
+
+void func_0024E540(Task *o)
+{
+    u16 pad;
+    u16 rep;
+    u16 trg;
+    s32 *state;
+    int st;
+
+    pad = func_00220318();
+    rep = TOMenuGetControlPadRep();
+    trg = TOMenuGetControlPadTrg();
+    if (o->b45 < 0) {
+        return;
+    }
+    state = &o->state;
+    st = *state;
+loop:
+    switch (st) {
+    case 1:
+        o->b45 = 0;
+        /* fallthrough */
+    case 0:
+        func_0024E378(o);
+        *state = 2;
+        break;
+    case 3:
+        *state = 4;
+        break;
+    case 2: {
+        if (o->ext[15] != 0 && (trg & 0x20)) {
+            if (o->x1C != 0) {
+                if (((int (*)(Task *, int, int))o->x1C)(o, o->x48 * 2 + o->ext[0], o->b45) == 0) {
+                    ((int (*)(int))SndSepPlaySimple)(0x80000003);
+                    break;
+                }
+            }
+            ((int (*)(int))SndSepPlaySimple)(0x80000001);
+            *state = 17;
+            break;
+        }
+        if (trg & 0x40) {
+            ((int (*)(int))SndSepPlaySimple)(0x80000004);
+            *state = 19;
+            break;
+        }
+        if (o->ext[15] == 0) {
+            break;
+        }
+        if (trg & 0x8000) {
+            if (o->ext[o->b45] != 0) {
+                ((int (*)(int))SndSepPlaySimple)(0x80000001);
+                o->ext[o->b45] = !o->ext[o->b45];
+                func_0024E378(o);
+            }
+        } else if (trg & 0x2000) {
+            if (o->ext[o->b45] == 0) {
+                if (o->x48 * 2 < o->ext[15] - 1) {
+                    ((int (*)(int))SndSepPlaySimple)(0x80000001);
+                    o->ext[o->b45] = !o->ext[o->b45];
+                    func_0024E378(o);
+                } else if (o->x48 != 0) {
+                    ((int (*)(int))SndSepPlaySimple)(0x80000001);
+                    o->x48--;
+                    o->ext[o->b45] = !o->ext[o->b45];
+                    func_0024E378(o);
+                }
+            }
+        } else if ((rep & 0x1000) && o->x48 > 0) {
+            ((int (*)(int))SndSepPlaySimple)(0x80000001);
+            o->x48--;
+            func_0024E378(o);
+            if (o->x48 < o->x32) {
+                func_002429E0(0);
+                st = 9;
+                goto loop;
+            }
+        } else if ((rep & 0x4000) && o->x48 < (u16)o->x30 - 1) {
+            ((int (*)(int))SndSepPlaySimple)(0x80000001);
+            o->x48++;
+            if (o->x48 * 2 + o->ext[o->b45] >= o->ext[15]) {
+                o->ext[o->b45] = 0;
+            }
+            func_0024E378(o);
+            if (o->x48 >= o->x32 + (u16)o->x3A) {
+                func_002429E0(0);
+                st = 13;
+                goto loop;
+            }
+        } else if ((rep & 1) && pad == 1 && o->x48 > 0) {
+            int ny = o->x32 - (u16)o->x3A;
+
+            if (ny < 0) {
+                ny = 0;
+            }
+            if (ny != o->x32) {
+                o->x34 = ny;
+                func_002429E0(0);
+                st = 10;
+                goto loop;
+            }
+        } else if ((rep & 2) && pad == 2 && o->x48 < (u16)o->x30 - 1) {
+            int max_top = (u16)o->x30 - (u16)o->x3A;
+            int ny = o->x32 + (u16)o->x3A;
+
+            if (ny >= max_top) {
+                ny = max_top;
+                if (ny < 0) {
+                    ny = 0;
+                }
+            }
+            if (ny != o->x32) {
+                o->x34 = ny;
+                func_002429E0(0);
+                st = 14;
+                goto loop;
+            }
+        }
+        break;
+    }
+    case 9:
+        trg = 0;
+        ((int (*)(int))SndSepPlaySimple)(0x80000001);
+        o->x46 = 0x1000;
+        *state = 11;
+        o->x34 = o->x32 = o->x32 - 1;
+        st = 11;
+        goto loop;
+    case 10:
+        trg = 0;
+        ((int (*)(int))SndSepPlaySimple)(0x80000001);
+        o->x46 = 0x1000;
+        *state = 12;
+        st = 12;
+        goto loop;
+    case 11:
+        o->x46 -= 0x333;
+        if (o->x46 <= 0 || (trg & 0x1000)) {
+            trg = 0;
+            o->x46 = 0;
+            o->x48 -= o->x32 - o->x34;
+            o->x32 = o->x34;
+            func_0024E378(o);
+            ((int (*)(int))func_002429E0)(1);
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 12:
+        o->x46 -= 0x111;
+        if (o->x46 <= 0) {
+            trg = 0;
+            o->x46 = 0;
+            o->x48 -= o->x32 - o->x34;
+            o->x32 = o->x34;
+            func_0024E378(o);
+            ((int (*)(int))func_002429E0)(1);
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 13:
+        trg = 0;
+        ((int (*)(int))SndSepPlaySimple)(0x80000001);
+        o->x46 = -0x1000;
+        *state = 15;
+        o->x34 = o->x32 = o->x32 + 1;
+        st = 15;
+        goto loop;
+    case 14:
+        trg = 0;
+        ((int (*)(int))SndSepPlaySimple)(0x80000001);
+        o->x46 = -0x1000;
+        *state = 16;
+        st = 16;
+        goto loop;
+    case 15:
+        o->x46 += 0x333;
+        if (o->x46 >= 0 || (trg & 0x4000)) {
+            o->x46 = 0;
+            o->x48 += o->x34 - o->x32;
+            o->x32 = o->x34;
+            if (o->x48 * 2 + o->ext[o->b45] >= o->ext[15]) {
+                o->ext[o->b45] = 0;
+            }
+            trg = 0;
+            func_0024E378(o);
+            ((int (*)(int))func_002429E0)(1);
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 16:
+        o->x46 += 0x111;
+        if (o->x46 >= 0) {
+            o->x46 = 0;
+            o->x48 += o->x34 - o->x32;
+            o->x32 = o->x34;
+            if (o->x48 * 2 + o->ext[o->b45] >= o->ext[15]) {
+                o->ext[o->b45] = 0;
+            }
+            trg = 0;
+            func_0024E378(o);
+            ((int (*)(int))func_002429E0)(1);
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 17: {
+        int n;
+
+        ((struct { u8 pad[0x2C]; s16 arr[2]; } *)o)->arr[o->b45] = o->x48;
+        if (++o->b45 >= o->b42) {
+            *state = 18;
+            st = 18;
+            goto loop;
+        }
+        o->ext[o->b45] = o->ext[o->b45 - 1];
+        n = o->b42 - 1;
+        o->ext[o->b45 + n] = o->x32;
+        *state = 2;
+        break;
+    }
+    case 19:
+        o->b45--;
+        if (o->b45 < 0) {
+            *state = 20;
+            st = 20;
+            goto loop;
+        }
+        o->x48 = ((struct { u8 pad[0x2C]; s16 arr[2]; } *)o)->arr[o->b45];
+        o->x34 = o->x32 = o->ext[o->b45 + o->b42];
+        *state = 2;
+        break;
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 18:
+    case 20:
+        break;
+    }
+}
 
 void func_0024EBF8(Task *obj)
 {
@@ -1207,8 +1589,476 @@ void func_0024F400(void)
     TkMenuItemRefresh(4);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", TkMenuCtrlItem);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_00573510);
+extern Task *D_0069BE64;
+int TkMenuMainGetMenuActiveMask(void);
+void func_002376B0(int a, int *b, int *c, int d, int e);
+int func_00237858(int a);
+int func_00237870(int a);
+void func_002377F0(void);
+void func_002377C8(void);
+void func_00237838(void);
+
+void TkMenuCtrlItem(Task *o)
+{
+    s32 *state = &o->x1C;
+    int st;
+
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    st = *state;
+loop:
+    switch (st) {
+    case 0:
+        *state = 1;
+        break;
+    case 1:
+        *state = 2;
+        break;
+    case 2:
+        D_0069BED8 = 0;
+        func_0024ECB8();
+        D_0069BE58->b42 = 1;
+        D_0069BE58->x1C = (s32)func_0024F3E8;
+        TkMenuItemRefresh(0);
+        func_0024ECE0();
+        *state = 3;
+        break;
+    case 3:
+        *state = 4;
+        break;
+    case 5:
+        D_0069BED8 = 0;
+        func_0024ECB8();
+        /* fallthrough */
+    case 4:
+        *state = 6;
+        break;
+    case 6:
+        D_0069BED8 = 0;
+        if (D_0069BE58->b45 < 0) {
+            *state = 19;
+        }
+        if (D_0069BE58->b45 > 0) {
+            *state = 11;
+            st = 11;
+            goto loop;
+        }
+        break;
+    case 7:
+        ((void (*)(int))TkMenuItemRefresh)(0);
+        ((void (*)(int, int))TkMenuMainActiveMenu)(23, 0);
+        *state = 8;
+        /* fallthrough */
+    case 8:
+        if ((TkMenuMainGetMenuActiveMask() & 0x800000) == 0) {
+            *state = 9;
+        }
+        break;
+    case 9:
+        *state = 10;
+        /* fallthrough */
+    case 10:
+        *state = 5;
+        break;
+    case 11: {
+        s32 buf;
+        SysEntry *e = (SysEntry *)0x1D57300;
+
+        e += D_0069BE58->x48 * 2 + D_0069BE58->ext[0];
+        if (((u8 *)MsGetRomItem(e->h0, &buf))[0x22] & 8) {
+            D_0069BED8 = 1;
+            st = 7;
+            goto loop;
+        } else {
+            int side = 2;
+            int kind = func_0024D6A0(e->h0);
+
+            if (D_0069BE58->ext[0] != 0) {
+                side = 1;
+            }
+            D_0069BED8 = 2;
+            TkMenuMainFreeWindowGroup(0);
+            func_0024E1C0(kind, D_0069BE6D, side);
+            *state = 13;
+        }
+        break;
+    }
+    case 12: {
+        s32 buf;
+        SysEntry *e = (SysEntry *)0x1D57300;
+
+        e += D_0069BE58->x48 * 2 + D_0069BE58->ext[0];
+        if (((u8 *)MsGetRomItem(e->h0, &buf))[0x22] & 8) {
+            D_0069BED8 = 1;
+            st = 7;
+            goto loop;
+        }
+        func_0024D6A0(e->h0);
+        *state = 13;
+        break;
+    }
+    case 13:
+        if (D_0069BE60->b45 < 0) {
+            D_0069BED8 = 0;
+            func_0024E358();
+            *state = 5;
+            break;
+        }
+        if (D_0069BE60->b45 > 0) {
+            *state = 14;
+        }
+        break;
+    case 14: {
+        int target;
+
+        if (D_0069BE60->ext[0] == 0) {
+            target = TkMenuGetPlayerFromIndex(D_0069BE60->x48);
+        } else {
+            target = func_00242798(D_0069BE60->x48);
+        }
+        switch (D_0069BE6D) {
+        case 0:
+            SndSepPlaySimple(0x80000062);
+            func_0024D168(target);
+            break;
+        case 1:
+            SndSepPlaySimple(0x80000062);
+            func_0024D450(target);
+            break;
+        case 2:
+            SndSepPlaySimple(0x80000062);
+            func_0024D168(target);
+            func_0024D450(target);
+            break;
+        case 3:
+            ((int (*)(int))SndSepPlaySimple)(0x80000001);
+            *state = 17;
+            st = 17;
+            goto loop;
+        }
+        st = 15;
+        goto loop;
+    }
+    case 15: {
+        SysEntry *e;
+
+        MsSaveItemUse(D_0069BE6A, -1);
+        ((void (*)(int))TkMenuItemRefresh)(0);
+        e = (SysEntry *)0x1D57300;
+        e += D_0069BE58->x48 * 2 + D_0069BE58->ext[0];
+        if (e->b2 != 0) {
+            func_0024EC90();
+            *state = 12;
+            break;
+        }
+        func_0024E358();
+        *state = 5;
+        break;
+    }
+    case 16:
+        *state = 5;
+        break;
+    case 19:
+        *state = 20;
+        break;
+    case 20:
+        ((void (*)(int))TkMenuItemRefresh)(4);
+        *state = 52;
+        st = 52;
+        goto loop;
+    case 17: {
+        Task **p = &D_0069BE64;
+
+        *p = func_002346D8(0, func_00242798(D_0069BE60->x48));
+        *state = 18;
+        break;
+    }
+    case 18:
+        if ((u16)D_0069BE64->x30 != 0) {
+            D_0069BE64->b41 = 1;
+            *state = 15;
+        }
+        break;
+    case 21: {
+        int a[4];
+        int b[4];
+
+        a[1] = func_00249478(3);
+        a[0] = func_00249478(4);
+        b[1] = func_00249700(3);
+        b[0] = func_00249700(4);
+        func_002376B0(0, a, b, 2, 2);
+        func_00237858(-0x199);
+        func_00237870(0x199);
+        *state = 22;
+        break;
+    }
+    case 22:
+        *state = 23;
+        break;
+    case 24:
+        func_002377F0();
+        /* fallthrough */
+    case 23:
+        ((void (*)(int))TkMenuItemRefresh)(4);
+        *state = 25;
+        break;
+    case 25:
+        if (D_00326034->b45 < 0) {
+            *state = 50;
+            break;
+        }
+        if (D_00326034->b45 > 0) {
+            switch (D_00326034->x48) {
+            case 1:
+                st = 28;
+                goto loop;
+            case 0:
+                st = 26;
+                goto loop;
+            }
+        }
+        break;
+    case 26:
+        func_0024ECB8();
+        D_0069BE58->b42 = 2;
+        D_0069BE58->x1C = 0;
+        ((void (*)(int))TkMenuItemRefresh)(4);
+        *state = 27;
+        /* fallthrough */
+    case 27:
+        if (D_0069BE58->b45 < 0) {
+            *state = 24;
+            break;
+        }
+        if (D_0069BE58->b45 >= D_0069BE58->b42) {
+            int size;
+            u16 *types = (u16 *)MsSaveItemTypeBuffer(&size);
+            u8 *nums = MsSaveItemNumBuffer(&size);
+            int i0 = D_0069BE58->x2C * 2 + D_0069BE58->ext[0];
+            int i1 = D_0069BE58->x2E * 2 + D_0069BE58->ext[1];
+            u16 t0 = types[i0];
+            u16 t1 = types[i1];
+            u8 n0 = nums[i0];
+            u8 n1 = nums[i1];
+
+            types[i0] = t1;
+            nums[i0] = n1;
+            types[i1] = t0;
+            nums[i1] = n0;
+            TkMenuItemRefresh(4);
+            D_0069BE58->ext[0] = D_0069BE58->ext[1];
+            st = 26;
+            goto loop;
+        }
+        break;
+    case 28:
+        func_0024F400();
+        *state = 29;
+        /* fallthrough */
+    case 29:
+        *state = 24;
+        st = 24;
+        goto loop;
+    case 52:
+        func_002377C8();
+        func_00237858(0x199);
+        *state = 53;
+        break;
+    case 53:
+        switch (D_00326030->x48) {
+        case 0:
+        case 1:
+            if (D_0069BE58 == 0) {
+                TkMenuItemRefresh(4);
+                D_0069BE58 = func_002500A0(0);
+                D_0069BE58->b45 = -1;
+            }
+            func_0024C8E8();
+            func_0024C898();
+            break;
+        case 2:
+            if (D_0069BE40 == 0) {
+                func_0024C7D8();
+            }
+            func_0024C8C0();
+            func_0024C8E8();
+            break;
+        case 3:
+            if (D_0069BE5C == 0) {
+                D_0069BE5C = func_002500A0(1);
+                D_0069BE5C->b45 = -1;
+            }
+            func_0024C898();
+            func_0024C8C0();
+            break;
+        }
+        if (D_00326030->b45 < 0) {
+            *state = 54;
+        }
+        if (D_00326030->b45 > 0) {
+            switch (D_00326030->x48) {
+            case 0:
+                *state = 2;
+                break;
+            case 1:
+                *state = 21;
+                break;
+            case 2:
+                *state = 30;
+                break;
+            case 3:
+                *state = 44;
+                break;
+            }
+        }
+        break;
+    case 30: {
+        int a[4];
+        int b[4];
+
+        a[1] = func_00249478(12);
+        a[0] = func_00249478(13);
+        b[1] = func_00249700(12);
+        b[0] = func_00249700(13);
+        func_002376B0(0, a, b, 2, 2);
+        func_00237858(-0x199);
+        func_00237870(0x199);
+        *state = 31;
+        break;
+    }
+    case 31:
+        *state = 32;
+        break;
+    case 33:
+        func_002377F0();
+        /* fallthrough */
+    case 32:
+        V5_INT0(func_002394F0)();
+        *state = 34;
+        break;
+    case 34:
+        if (D_00326034->b45 < 0) {
+            *state = 35;
+            break;
+        }
+        if (D_00326034->b45 > 0) {
+            switch (D_00326034->x48) {
+            case 0:
+                st = 38;
+                goto loop;
+            case 1:
+                st = 37;
+                goto loop;
+            }
+        }
+        break;
+    case 35:
+        func_00237870(-0x199);
+        func_00237858(0x199);
+        func_00237838();
+        V5_INT0(func_002394F0)();
+        *state = 36;
+        /* fallthrough */
+    case 36:
+        *state = 52;
+        break;
+    case 37:
+        func_0024BD20();
+        func_0024BDF8();
+        if (func_0024BF18() != 0) {
+            func_0024C088();
+            func_0024BC48();
+        }
+        st = 33;
+        goto loop;
+    case 38:
+        D_0069BE74 = 1;
+        D_0069BE40->b45 = 0;
+        D_0069BE40->state = 0;
+        D_0069BE40->b37 = 0;
+        *state = 39;
+        /* fallthrough */
+    case 39:
+        if (D_0069BE40->b45 < 0) {
+            *state = 40;
+        }
+        if (D_0069BE40->b45 >= 2) {
+            st = 42;
+            goto loop;
+        }
+        break;
+    case 40:
+        D_0069BE40->b45 = -1;
+        D_0069BE40->state = 0;
+        *state = 41;
+        /* fallthrough */
+    case 41:
+        *state = 33;
+        D_0069BE74 = 0;
+        break;
+    case 42: {
+        SysEntry *tbl = (SysEntry *)0x1D57300;
+        u16 b = tbl[D_0069BE40->x48].h0;
+        u16 a = tbl[D_0069BE40->x2C].h0;
+
+        if (b == a) {
+            SndSepPlaySimple(0x80000003);
+        } else {
+            SndSepPlaySimple(0x80000001);
+            func_001C03B0(b, a);
+        }
+        V5_INT0(func_002394F0)();
+        *state = 43;
+        /* fallthrough */
+    }
+    case 43:
+        st = 38;
+        goto loop;
+    case 44:
+        D_0069BE5C->b45 = 0;
+        *state = 45;
+        break;
+    case 45:
+        *state = 46;
+        break;
+    case 46:
+        *state = 47;
+        break;
+    case 47:
+        if (D_0069BE5C->b45 != 0) {
+            *state = 48;
+        }
+        break;
+    case 48:
+        D_0069BE5C->state = 0;
+        D_0069BE5C->b45 = -1;
+        *state = 49;
+        break;
+    case 50:
+        func_00237870(-0x199);
+        func_00237858(0x199);
+        func_00237838();
+        ((void (*)(int))TkMenuItemRefresh)(4);
+        *state = 51;
+        /* fallthrough */
+    case 49:
+    case 51:
+        *state = 52;
+        break;
+    case 54:
+        *state = 55;
+        /* fallthrough */
+    case 55:
+        *state = 56;
+        /* fallthrough */
+    case 56:
+        TkMenuMainSleepMenu(3);
+        TkMenuMainActiveMenu(1, 0);
+        break;
+    }
+}
 
 void func_00250040(void)
 {
@@ -1337,8 +2187,193 @@ void func_00250428(void)
     func_00241F70(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", TkMenuCtrlAbility);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_00573620);
+extern s16 D_0069BE78[];
+extern s16 D_0069BE88[];
+extern s16 D_0069BE98[];
+
+void TkMenuCtrlAbility(Task *o)
+{
+    s32 buf;
+    s32 *state = &o->x1C;
+    u16 pad;
+    u16 rep;
+    int st;
+
+    pad = func_00220318();
+    rep = TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    func_0024B620(0, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4);
+    st = *state;
+loop:
+    switch (st) {
+    case 0:
+        *state = 1;
+        break;
+    case 1:
+        *state = 2;
+        break;
+    case 3:
+        func_0024ECB8();
+        /* fallthrough */
+    case 2:
+        *state = 4;
+        break;
+    case 4:
+        if (D_0069BE58->b45 > 0) {
+            *state = 7;
+            break;
+        }
+        if (D_0069BE58->b45 < 0) {
+            func_0024C8C0();
+            *state = 5;
+            break;
+        }
+        if (func_00242818() < 2) {
+            break;
+        }
+        if (func_002429D0() == 0) {
+            break;
+        }
+        if ((rep & 4) && pad == 4) {
+            int p;
+
+            SndSepPlaySimple(0x80000004);
+            p = TkMenuGetCurrentPlayer();
+            D_0069BE78[p] = D_0069BE58->x48;
+            D_0069BE88[p] = D_0069BE58->ext[0];
+            D_0069BE98[p] = D_0069BE58->x32;
+            func_002429F0();
+            func_0024CD78(TkMenuGetCurrentPlayer());
+            D_0069BE58->x30 = (func_0024CD68() + 1) / 2;
+            D_0069BE58->ext[15] = func_0024CD68();
+            p = TkMenuGetCurrentPlayer();
+            if (D_0069BE78[p] >= 0) {
+                D_0069BE58->x48 = D_0069BE78[p];
+                D_0069BE58->ext[0] = D_0069BE88[p];
+                D_0069BE58->x34 = D_0069BE58->x32 = D_0069BE98[p];
+            } else {
+                func_0024ECE0();
+            }
+            func_0024E378(D_0069BE58);
+        } else if ((rep & 8) && pad == 8) {
+            int p;
+
+            SndSepPlaySimple(0x80000004);
+            p = TkMenuGetCurrentPlayer();
+            D_0069BE78[p] = D_0069BE58->x48;
+            D_0069BE88[p] = D_0069BE58->ext[0];
+            D_0069BE98[p] = D_0069BE58->x32;
+            func_00242980();
+            func_0024CD78(TkMenuGetCurrentPlayer());
+            D_0069BE58->x30 = (func_0024CD68() + 1) / 2;
+            D_0069BE58->ext[15] = func_0024CD68();
+            p = TkMenuGetCurrentPlayer();
+            if (D_0069BE78[p] >= 0) {
+                D_0069BE58->x48 = D_0069BE78[p];
+                D_0069BE58->ext[0] = D_0069BE88[p];
+                D_0069BE58->x34 = D_0069BE58->x32 = D_0069BE98[p];
+            } else {
+                func_0024ECE0();
+            }
+            func_0024E378(D_0069BE58);
+        }
+        break;
+    case 5:
+        *state = 6;
+        /* fallthrough */
+    case 6:
+        *state = 16;
+        st = 16;
+        goto loop;
+    case 7: {
+        SysEntry *tbl = (SysEntry *)0x1D57300;
+        int side = 2;
+        int idx = D_0069BE58->x48 * 2 + D_0069BE58->ext[0];
+        int kind;
+
+        tbl += idx;
+        kind = func_0024D888(tbl->h0);
+
+        if (D_0069BE58->ext[0] != 0) {
+            side = 1;
+        }
+        TkMenuMainFreeWindowGroup(0);
+        func_0024E1C0(kind, D_0069BE6D, side);
+        *state = 8;
+        break;
+    }
+    case 10:
+        func_0024EC90();
+        /* fallthrough */
+    case 8:
+    case 9:
+        *state = 11;
+        break;
+    case 11:
+        if (D_0069BE60->b45 > 0) {
+            *state = 12;
+        }
+        if (D_0069BE60->b45 < 0) {
+            *state = 14;
+        }
+        break;
+    case 12:
+        *state = 13;
+        /* fallthrough */
+    case 13: {
+        int p = TkMenuGetCurrentPlayer();
+        int mp = TkMenuGetMP(p);
+        int cost = MsGetRomPlyCommand(D_0069BE6A, &buf)->b25;
+        int target;
+
+        mp -= cost;
+        TkMenuSetMP(p, mp);
+        if (D_0069BE60->ext[0] == 0) {
+            target = TkMenuGetPlayerFromIndex(D_0069BE60->x48);
+        } else {
+            target = func_00242798(D_0069BE60->x48);
+        }
+        switch (D_0069BE6D) {
+        case 0:
+            SndSepPlaySimple(0x80000062);
+            func_0024D2B0(target, p);
+            break;
+        case 1:
+            break;
+        case 2:
+            SndSepPlaySimple(0x80000062);
+            func_0024D2B0(target, p);
+            break;
+        }
+        func_0024CD78(p);
+        if (mp < cost) {
+            st = 14;
+            goto loop;
+        }
+        func_0024D888(D_0069BE6A);
+        st = 10;
+        goto loop;
+    }
+    case 14:
+        func_0024E358();
+        *state = 15;
+        break;
+    case 15:
+        *state = 3;
+        break;
+    case 16:
+        *state = 17;
+        /* fallthrough */
+    case 17:
+        *state = 18;
+        /* fallthrough */
+    case 18:
+        TkMenuMainSleepMenu(2);
+        TkMenuMainActiveMenu(1, 0);
+        TOSeqStopScene(1, D_00573618);
+        break;
+    }
+}
 
 void func_00250970(void)
 {

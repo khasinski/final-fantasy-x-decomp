@@ -494,6 +494,13 @@ void func_0015DDB8(void)
     TODrawMovieMessage();
 }
 
+void func_0015F198(int addr, int size);
+void func_0015F1F8(int addr, int size);
+void func_0015F258(int a, int b, int c);
+void func_0015F2C8(int a, int b, int c);
+void func_0015F028(int a, int b, int c, int d);
+void func_00170DC4(void *p);
+
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015DE90);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015E1D0);
@@ -528,7 +535,79 @@ void func_0015E8C0(void)
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015E910);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015ED58);
+void func_0015ED58(int mb, int dx, int dy)
+{
+    int w = *(s32 *)(D_0030DDF0 + 0x50514);
+    int mb_y = mb / w;
+    int mb_x = mb % w;
+    int ref_y = mb_y + dy / 16;
+    int ref_x = mb_x + dx / 16;
+    int px;
+    int py;
+    int ref_mb;
+
+    if (dy % 16 < 0) {
+        ref_y--;
+    }
+    if (dx % 16 < 0) {
+        ref_x--;
+    }
+    px = mb_x * 16 + dx;
+    py = mb_y * 16 + dy;
+    ref_mb = ref_y * w + ref_x;
+    func_0015F258(D_0030DDF4 + 0x4F0, *(s32 *)(D_0030DDF0 + 0x503C8) + ref_mb * 0x300, 0x600);
+    while ((*(volatile u32 *)0x1000D000 >> 9) & 1) {
+    }
+    func_0015F258(D_0030DDF4 + 0xAF0, *(s32 *)(D_0030DDF0 + 0x503C8) + (ref_mb + *(s32 *)(D_0030DDF0 + 0x50514)) * 0x300, 0x600);
+    if (px < 0 || px > *(s32 *)(D_0030DDF0 + 0x5051C) - 16 || py < 0 || py > *(s32 *)(D_0030DDF0 + 0x50520) - 16) {
+        int mask[4];
+        int i;
+
+        while ((*(volatile u32 *)0x1000D000 >> 9) & 1) {
+        }
+        mask[0] = 0;
+        mask[1] = 0;
+        mask[2] = 0;
+        mask[3] = 0;
+        if (px < 0) {
+            mask[0] = 1;
+            mask[2] = 1;
+        }
+        if (py < 0) {
+            mask[0] = 1;
+            mask[1] = 1;
+        }
+        if (px < -15) {
+            mask[1] = 1;
+            mask[3] = 1;
+        }
+        if (py < -15) {
+            mask[2] = 1;
+            mask[3] = 1;
+        }
+        if (px > *(s32 *)(D_0030DDF0 + 0x5051C) - 16) {
+            mask[1] = 1;
+            mask[3] = 1;
+        }
+        if (py > *(s32 *)(D_0030DDF0 + 0x50520) - 16) {
+            mask[2] = 1;
+            mask[3] = 1;
+        }
+        if (px >= *(s32 *)(D_0030DDF0 + 0x5051C)) {
+            mask[0] = 1;
+            mask[2] = 1;
+        }
+        if (py >= *(s32 *)(D_0030DDF0 + 0x50520)) {
+            mask[0] = 1;
+            mask[1] = 1;
+        }
+        for (i = 0; i < 4; i++) {
+            if (mask[i] != 0) {
+                func_00170DC4((void *)(D_0030DDF4 + 0x4F0 + i * 0x300));
+            }
+        }
+    }
+}
 
 typedef struct {
     u8 *blk[4];
@@ -754,7 +833,182 @@ void func_0015F508(int a0, int a1)
     _movopen_D_0030DDF0->w50540 = _movopen_D_0030DDF0->w5053C;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015F800);
+typedef struct {
+    u8 pad0[0x50514];
+    s32 w50514;
+    s32 w50518;
+    s32 w5051C;
+    s32 w50520;
+    s32 w50524;
+    s32 w50528;
+    s32 w5052C;
+    s32 w50530;
+    s32 w50534;
+    s32 w50538;
+    s32 w5053C;
+    s32 w50540;
+    s32 w50544;
+    s32 w50548;
+    s32 w5054C[5];
+    u8 *p50560[5];
+    s32 w50574[5];
+    s32 w50588[5];
+    u8 *p5059C;
+    s32 w505A0;
+    s8 b505A4;
+    u8 pad505A5[3];
+    s32 w505A8;
+    s8 b505AC;
+    u8 pad505AD[0x13];
+    s32 w505C0;
+    u8 pad505C4[0x100];
+    s32 w506C4;
+    s32 w506C8;
+    s32 w506CC;
+    s32 w506D0;
+    s32 w506D4;
+    s32 w506D8;
+    s32 w506DC;
+    s32 w506E0;
+    u8 pad506E4[0x10];
+    u8 *p506F4;
+    s32 w506F8;
+    s32 w506FC;
+    u8 pad50700[8];
+    s32 w50708;
+    s32 w5070C;
+    s32 w50710;
+    s32 w50714;
+    u8 pad50718[4];
+    s32 w5071C;
+    s32 w50720;
+    s32 w50724;
+    s32 w50728;
+    u8 pad5072C[4];
+    s32 w50730[8];
+    s32 w50750;
+    s32 w50754;
+    s32 w50758;
+    s8 b5075C;
+    s8 b5075D;
+    s8 b5075E;
+    s8 b5075F;
+    s8 b50760;
+    s8 b50761;
+    s8 b50762;
+    s8 b50763;
+    s8 b50764;
+    s8 b50765;
+    s8 b50766;
+    s8 b50767;
+    s8 b50768;
+    s8 b50769;
+    s8 b5076A;
+    s8 b5076B;
+    s8 b5076C;
+    s8 b5076D;
+    s8 b5076E;
+    s8 b5076F;
+    s8 b50770;
+    s8 b50771;
+    s8 b50772;
+    s8 b50773;
+    u8 pad50774[0xC];
+    u8 buf50780[1];
+} MovieStrInit;
+
+extern MovieStrInit *_movinit_D_0030DDF0 __asm__("D_0030DDF0");
+
+void func_0015F800(int buf, int w, int h, int flag)
+{
+    int i;
+
+    _movinit_D_0030DDF0 = (MovieStrInit *)buf;
+    if (w != 0 || h != 0) {
+        _movinit_D_0030DDF0->w50514 = w / 16;
+        _movinit_D_0030DDF0->w50518 = h / 16;
+        _movinit_D_0030DDF0->w5051C = w;
+        _movinit_D_0030DDF0->w50520 = h;
+    }
+    _movinit_D_0030DDF0->w50708 = 0xFFFF;
+    _movinit_D_0030DDF0->w506D8 = 0x7F;
+    _movinit_D_0030DDF0->w50524 = 0;
+    _movinit_D_0030DDF0->w50534 = 0;
+    _movinit_D_0030DDF0->w50528 = 0;
+    _movinit_D_0030DDF0->w5052C = 0;
+    _movinit_D_0030DDF0->w50530 = 0;
+    _movinit_D_0030DDF0->w50538 = 0;
+    _movinit_D_0030DDF0->w5053C = 0;
+    _movinit_D_0030DDF0->w50540 = 0;
+    _movinit_D_0030DDF0->w506CC = 0;
+    _movinit_D_0030DDF0->w506D0 = 0;
+    _movinit_D_0030DDF0->w506D4 = -1;
+    _movinit_D_0030DDF0->w505A0 = 0;
+    _movinit_D_0030DDF0->b505A4 = 0;
+    _movinit_D_0030DDF0->w505A8 = 0;
+    _movinit_D_0030DDF0->b505AC = 0;
+    _movinit_D_0030DDF0->w505C0 = 2;
+    _movinit_D_0030DDF0->w506C4 = 0;
+    _movinit_D_0030DDF0->w506C8 = 0;
+    _movinit_D_0030DDF0->w506DC = 0;
+    _movinit_D_0030DDF0->w50544 = -1;
+    _movinit_D_0030DDF0->b5075F = 0;
+    _movinit_D_0030DDF0->b50760 = -1;
+    _movinit_D_0030DDF0->b50761 = 0;
+    _movinit_D_0030DDF0->w506E0 = 0;
+    _movinit_D_0030DDF0->b50762 = 0;
+    _movinit_D_0030DDF0->b50763 = 0;
+    _movinit_D_0030DDF0->b50765 = 0;
+    _movinit_D_0030DDF0->w50714 = 0;
+    _movinit_D_0030DDF0->b50767 = 0;
+    _movinit_D_0030DDF0->w5071C = 0;
+    _movinit_D_0030DDF0->w5070C = 0;
+    _movinit_D_0030DDF0->w50710 = 0;
+    _movinit_D_0030DDF0->b5076A = 0;
+    _movinit_D_0030DDF0->b5076B = 0;
+    _movinit_D_0030DDF0->b50768 = 0;
+    _movinit_D_0030DDF0->b50769 = 0;
+    _movinit_D_0030DDF0->b50766 = 0;
+    _movinit_D_0030DDF0->w50720 = 0;
+    _movinit_D_0030DDF0->w50724 = -1;
+    _movinit_D_0030DDF0->w50728 = -1;
+    _movinit_D_0030DDF0->b5076F = 0;
+    _movinit_D_0030DDF0->w50750 = 1;
+    _movinit_D_0030DDF0->b50770 = 0;
+    _movinit_D_0030DDF0->b50771 = 0;
+    _movinit_D_0030DDF0->b50772 = 0;
+    _movinit_D_0030DDF0->b50773 = 0;
+    _movinit_D_0030DDF0->w50548 = 0;
+    _movinit_D_0030DDF0->b5076D = 0;
+    _movinit_D_0030DDF0->b5076E = 0;
+    _movinit_D_0030DDF0->w50754 = 3;
+    for (i = 0; i < 5; i++) {
+        _movinit_D_0030DDF0->w50588[i] = 0;
+        _movinit_D_0030DDF0->w50574[i] = 0;
+        _movinit_D_0030DDF0->w5054C[i] = 0;
+    }
+    if (flag == 0) {
+        _movinit_D_0030DDF0->w506F8 = 0xE3000;
+        _movinit_D_0030DDF0->w506FC = 0xE4000;
+    } else {
+        _movinit_D_0030DDF0->w506F8 = 0xFF000;
+        _movinit_D_0030DDF0->w506FC = 0x100000;
+    }
+    _movinit_D_0030DDF0->p50560[0] = _movinit_D_0030DDF0->buf50780;
+    _movinit_D_0030DDF0->p50560[1] = _movinit_D_0030DDF0->p50560[0] + _movinit_D_0030DDF0->w506FC;
+    _movinit_D_0030DDF0->p50560[2] = _movinit_D_0030DDF0->p50560[1] + _movinit_D_0030DDF0->w506FC;
+    _movinit_D_0030DDF0->p506F4 = _movinit_D_0030DDF0->p50560[2] + _movinit_D_0030DDF0->w506FC;
+    _movinit_D_0030DDF0->p50560[3] = (u8 *)0x800000;
+    _movinit_D_0030DDF0->p50560[4] = (u8 *)0x800000 + _movinit_D_0030DDF0->w506FC;
+    for (i = 7; i >= 0; i--) {
+        _movinit_D_0030DDF0->w50730[i] = 0;
+    }
+    if (func_002D9868() == 0) {
+        _movinit_D_0030DDF0->w50758 = 0x6400;
+    } else {
+        _movinit_D_0030DDF0->w50758 = 0x7800;
+    }
+}
 
 void func_0015FB30(void)
 {
@@ -811,6 +1065,12 @@ void func_0015FCB8(int a)
     *(volatile int *)0x1000B400 = 0x105;
 }
 
+extern u8 D_0030DCF0[];
+extern u8 D_0030DD30[];
+void func_0015C098(void *a, void *b, int c, int d, int e, int f, int g, int h);
+void func_0015C328(void *a, void *b, int c);
+void func_0017135C(int a);
+
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015FCE8);
 
 void func_001600B8(void) {
@@ -819,7 +1079,84 @@ void func_001600B8(void) {
     func_0015FB30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_001600E0);
+void func_001600E0(u8 *arg)
+{
+    u8 *hdr = *(u8 **)(arg + 0x460F4);
+    u32 ipu_ctrl;
+    register u32 frame __asm__("$19");
+    u8 *p;
+    int w;
+    int h;
+    int size;
+
+    hdr += *(s32 *)(hdr + 8);
+    p = hdr + 0x20;
+    w = *(u16 *)(hdr + 0xC);
+    h = *(u16 *)(hdr + 0xE);
+    size = ((w / 16) * (h / 16)) << 10;
+    ipu_ctrl = *(u32 *)hdr;
+    func_002E25F8();
+    func_0015FB30();
+    func_0015C098(arg + 0x40000, arg, 0x400, w, h, 0x3400, 0, 0);
+    func_0015F140(D_00591EC8, D_0030DCF0, 0);
+    func_0015F140(D_00591F08, D_0030DD30, 0);
+    func_002F8660(0);
+    *(s32 *)(arg + 0x460E8) = 0;
+    *(s32 *)(arg + 0x460EC) = 0;
+    while (1) {
+        u8 *data;
+
+        if (*(u32 *)(p + 8) == 0xFFFFFFFFU) {
+            p = hdr + 0x20;
+            *(s32 *)(arg + 0x460E8) = 0;
+            *(u32 *)(arg + 0x460EC) |= 0x2000;
+        }
+        func_002F8660(0);
+        data = p + 0x10;
+        func_0015C328(arg + 0x46060, data, *(s32 *)(p + 4));
+        *(volatile u32 *)0x10002010 = 0x40000000;
+        func_002E2528(0, 0);
+        *(volatile u32 *)0x10002000 = 0;
+        func_002E2528(0, 0);
+        func_0015FCB8((int)(arg + 0x46060));
+        *(volatile u32 *)0x10002010 = ipu_ctrl | 0x1200000;
+        frame = 0;
+        if (*(u32 *)(p + 8) != 0) {
+            do {
+                *(volatile u32 *)0x10002000 = 0x10010000;
+                frame++;
+                func_0015F1F8((int)arg, size);
+                func_0017135C(1);
+                {
+                    register u32 cond2 __asm__("$2") = (frame < *(u32 *)(p + 8));
+                    if (cond2) {
+                        *(volatile u32 *)0x10002000 = 0x40000020;
+                    }
+                }
+                func_002DA610(0, 0);
+                func_0015C068(arg + 0x40000);
+                func_002DA610(0, 0);
+                if (*(s8 *)(arg + 0x460FC) != 0) {
+                    func_002DA610(0, 0);
+                    *(s8 *)(arg + 0x460FC) = 0;
+                    return;
+                }
+                {
+                    register s32 cnt __asm__("$3") = *(s32 *)(arg + 0x460E8);
+                    *(s32 *)(arg + 0x460F0) = 1;
+                    *(s32 *)(arg + 0x460E8) = cnt + 1;
+                }
+                {
+                    register u32 cond __asm__("$2") = (frame < *(u32 *)(p + 8));
+                    if (!cond) {
+                        break;
+                    }
+                }
+            } while (1);
+        }
+        p = data + *(s32 *)(p + 4);
+    }
+}
 
 int texanim_malloc_memory_get(int i) {
     return D_0078D898[i].w04;
@@ -984,7 +1321,6 @@ void chr_texanim_del(int i)
 
 void func_0011C348(s32 a);
 SaTaskGroup *sa_task_init(int n);
-void func_001600E0(void);
 
 void chr_movie_main(int i)
 {
