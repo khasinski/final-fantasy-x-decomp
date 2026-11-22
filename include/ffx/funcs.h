@@ -2728,7 +2728,7 @@ OfsTbl *MsImportantPtr(int id, s32 *pos);
 void func_001F0328(int x, int y, int w, int h, u32 c0, u32 c1);
 void TODrawScissorXYWH(int x, int y, int w, int h);
 void func_001FF1D8(int a, int b, int x, int y, int w, u32 c0, u32 c1);
-int func_002018D8(int a, int b, int c);
+void func_002018D8(int a, int b, int c);
 void func_00201D20(int i, int v);
 int TOMenuSetMacroCommandType(int a, int b, int c);
 int TOMenuSetMacroCommandValue(int a, int b, int c);

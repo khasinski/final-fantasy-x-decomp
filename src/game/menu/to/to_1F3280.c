@@ -261,4 +261,39 @@ void *func_001F46A0(void *list, int a, int b, int c, int d, int e)
     return func_001F46D0(list, a, b, c, d, 0x80, 0x80, 0x80, 0x80, e);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F3280", func_001F46D0);
+extern R4CharInfo D_00323930;
+extern TextItem D_00323918;
+void TOGetFontInfoInterMode(u8 *s, R4CharInfo *glyph, int inter);
+void func_001F11E0(TextItem *it, R4CharInfo *glyph);
+void func_001F0EC0(TextItem *it, R4CharInfo *glyph);
+
+void *func_001F46D0(void *list, int str_addr, int x, int y, int clut, int r, int g, int b, int a, int inter)
+{
+    u8 *str = (u8 *)str_addr; /* DEBT(CAST): r4.h declares arg 2 as int */
+    R4CharInfo *glyph = &D_00323930;
+    TextItem *it = &D_00323918;
+    register int rx __asm__("$21") = x; /* DEBT(FAKE): break s4/s5 regalloc tie */
+    register int ry __asm__("$20") = y; /* DEBT(FAKE): break s4/s5 regalloc tie */
+    register int rg __asm__("$18") = g; /* DEBT(FAKE): break s2/s3 regalloc tie */
+    register int rb __asm__("$19") = b; /* DEBT(FAKE): break s2/s3 regalloc tie */
+
+    func_002EF0D0(glyph, 0, 0x20);
+    func_002EF0D0(it, 0, 0x14);
+    InvokedFromSelectCursor = list;
+    it->x = rx;
+    it->y = ry;
+    it->col[0] = r;
+    it->col[1] = rg;
+    it->col[2] = rb;
+    it->col[3] = a;
+    it->f12 = 0;
+    it->f13 = clut;
+    while (*str != 0) {
+        TOGetFontInfoInterMode(str, glyph, inter);
+        func_001F11E0(it, glyph);
+        func_001F0EC0(it, glyph);
+        it->x += glyph->h10 + 2;
+        str = TOSkipCode(str);
+    }
+    return InvokedFromSelectCursor;
+}

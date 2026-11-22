@@ -278,4 +278,39 @@ int func_00217CD0(s16 x, s16 y, int w4, int w8, u8 c0, u8 c1, u8 c2, u8 c3)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_00217D50);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", TOBtlDrawLimitGauge);
+extern s16 D_00324348;
+extern s16 D_0032434A;
+extern s16 D_00324350;
+extern s16 D_00324352;
+extern s16 D_00324356;
+void func_001F0580(int x, int y, int w, int h, u32 c0, u32 c1, int maxw);
+
+void TOBtlDrawLimitGauge(int id, int x, int y)
+{
+    s16 r0[4];
+    s16 r1[4];
+    double gmax;
+    double gcur;
+
+    r0[0] = x;
+    r0[1] = y;
+    r0[2] = D_00324348;
+    r0[3] = D_0032434A;
+    r1[0] = D_00324350 + x - 1;
+    r1[1] = D_00324352 + y;
+    r1[2] = D_00324354;
+    r1[3] = D_00324356;
+    TOMakePktBoxXYWHRGBA(r0[0], r0[1], r0[2], r0[3], 0, 0, 0, 0x80);
+    gmax = (double)((s32 (*)(int))MsGetChrLimitGaugeMax)(id); /* DEBT(CAST): funcs.h declares u8 return */
+    gcur = (double)((s32 (*)(int))MsGetChrLimitGauge)(id); /* DEBT(CAST): funcs.h declares u8 return */
+    if (gmax != 0.0 && gcur != 0.0) {
+        if (gcur >= gmax) {
+            TOMakePktBoxXYWHRGBA(r1[0], r1[1], r1[2], r1[3], 0xF7, 0x79, 0x2E, 0x80);
+        } else {
+            int w = r1[2];
+            double ratio = gcur * (double)w / gmax;
+
+            func_001F0580(r1[0], r1[1], (int)ratio, r1[3], 0x808AF8FF, 0x801777E3, w);
+        }
+    }
+}

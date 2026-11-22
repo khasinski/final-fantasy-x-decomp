@@ -8,7 +8,27 @@
 #include "ffx/t4.h"
 #include "ffx/v4.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_00201760);
+void *func_00201760(void *list, int idx, int x, int y, u32 col)
+{
+    Qword *p = (Qword *)list;
+    Quad32 *q;
+
+    p[0].ul64[0] = 0x90AB400000008001UL;
+    p[0].ul64[1] = 0x43431EEEEUL;
+    p[1].ul64[0] = 0x8000000044UL;
+    p[1].ul64[1] = 0x42;
+    p[2].ul64[0] = 0x3000F;
+    p[2].ul64[1] = 0x47;
+    p[3].ul64[0] = 0x2005D985E5323F00UL;
+    p[3].ul64[1] = 6;
+    p[4].ul64[0] = 0x0705D985E5423F00UL;
+    p[4].ul64[1] = 6;
+    q = func_001FBB30((Quad32 *)&p[5], 0x80, 0x80, 0x80, col >> 24);
+    q = func_001FBAF0(q, (idx / 9) * 0xAA, (idx % 9) * 0xE);
+    q = func_001FBBB0(q, x, y);
+    q = func_001FBAF0(q, (idx / 9) * 0xAA + 0xAA, (idx % 9) * 0xE + 0xE);
+    return func_001FBBB0(q, x + 0xAA, y + 0xE);
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_002018D8);
 

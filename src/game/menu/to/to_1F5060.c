@@ -500,9 +500,161 @@ void *func_001F6EC8(void *list)
     return InvokedFromSelectCursor;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F6F88);
+void *func_001F6F88(void *list, int x0, int y0, int x1, int y1)
+{
+    int ww;
+    int hh;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7378);
+    InvokedFromSelectCursor = list;
+    GIF_CUR()->ul64[0] = 0x1000000000000006UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    func_001FB290();
+    GIF_AD(0x019F000001FF0000UL, 0x40);
+    GIF_AD(0, 8);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x4005D40621313E00UL, 6);
+    GIF_CUR()->ul64[0] = 0x50AB400000008009UL;
+    GIF_CUR()->ul64[1] = 0x43431;
+    GIF_NEXT();
+    ww = (x1 - x0) - 0x22;
+    hh = (y1 - y0) - 0x14;
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x88, 0);
+    func_001FB678(x0, y0);
+    func_001FB550(0x99, 0xA);
+    func_001FB678(x0 + 0x11, y0 + 0xA);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x99, 0);
+    func_001FB678(x0 + 0x11, y0);
+    func_001FB550(0x9C, 0xA);
+    func_001FB678(x0 + 0x11 + ww, y0 + 0xA);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9D, 0);
+    func_001FB678(x0 + 0x11 + ww, y0);
+    func_001FB550(0xAE, 0xA);
+    func_001FB678(x0 + 0x11 + ww + 0x11, y0 + 0xA);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x88, 0xA);
+    func_001FB678(x0, y0 + 0xA);
+    func_001FB550(0x99, 0xD);
+    func_001FB678(x0 + 0x11, y0 + 0xA + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x99, 0xA);
+    func_001FB678(x0 + 0x11, y0 + 0xA);
+    func_001FB550(0x9C, 0xD);
+    func_001FB678(x0 + 0x11 + ww, y0 + 0xA + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9D, 0xA);
+    func_001FB678(x0 + 0x11 + ww, y0 + 0xA);
+    func_001FB550(0xAE, 0xD);
+    func_001FB678(x0 + 0x11 + ww + 0x11, y0 + 0xA + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x88, 0xE);
+    func_001FB678(x0, y0 + 0xA + hh);
+    func_001FB550(0x99, 0x18);
+    func_001FB678(x0 + 0x11, y0 + 0xA + hh + 0xA);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x99, 0xE);
+    func_001FB678(x0 + 0x11, y0 + 0xA + hh);
+    func_001FB550(0x9C, 0x18);
+    func_001FB678(x0 + 0x11 + ww, y0 + 0xA + hh + 0xA);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9D, 0xE);
+    func_001FB678(x0 + 0x11 + ww, y0 + 0xA + hh);
+    func_001FB550(0xAE, 0x18);
+    func_001FB678(x0 + 0x11 + ww + 0x11, y0 + 0xA + hh + 0xA);
+
+    return InvokedFromSelectCursor;
+}
+
+void *func_001F7378(void *list, int x0, int y0, int x1, int y1)
+{
+    int ww;
+    int hh;
+
+    InvokedFromSelectCursor = list;
+    GIF_CUR()->ul64[0] = 0x1000000000000006UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    func_001FB290();
+    GIF_AD(0x019F000001FF0000UL, 0x40);
+    GIF_AD(0, 8);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x4005D48621313F00UL, 6);
+    GIF_CUR()->ul64[0] = 0x50AB400000008009UL;
+    GIF_CUR()->ul64[1] = 0x43431;
+    GIF_NEXT();
+    ww = (x1 - x0) - 0x11;
+    hh = (y1 - y0) - 0x11;
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x93, 0x98);
+    func_001FB678(x0, y0);
+    func_001FB550(0x9B, 0xA0);
+    func_001FB678(x0 + 8, y0 + 8);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9B, 0x98);
+    func_001FB678(x0 + 8, y0);
+    func_001FB550(0xA0, 0xA0);
+    func_001FB678(x0 + 8 + ww, y0 + 8);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xA0, 0x98);
+    func_001FB678(x0 + 8 + ww, y0);
+    func_001FB550(0xA9, 0xA0);
+    func_001FB678(x0 + 8 + ww + 9, y0 + 8);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x93, 0xA0);
+    func_001FB678(x0, y0 + 8);
+    func_001FB550(0x9B, 0xA3);
+    func_001FB678(x0 + 8, y0 + 8 + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9B, 0xA0);
+    func_001FB678(x0 + 8, y0 + 8);
+    func_001FB550(0xA0, 0xA3);
+    func_001FB678(x0 + 8 + ww, y0 + 8 + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xA0, 0xA0);
+    func_001FB678(x0 + 8 + ww, y0 + 8);
+    func_001FB550(0xA9, 0xA3);
+    func_001FB678(x0 + 8 + ww + 9, y0 + 8 + hh);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x93, 0xA3);
+    func_001FB678(x0, y0 + 8 + hh);
+    func_001FB550(0x9B, 0xAC);
+    func_001FB678(x0 + 8, y0 + 8 + hh + 9);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x9B, 0xA3);
+    func_001FB678(x0 + 8, y0 + 8 + hh);
+    func_001FB550(0xA0, 0xAC);
+    func_001FB678(x0 + 8 + ww, y0 + 8 + hh + 9);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xA0, 0xA3);
+    func_001FB678(x0 + 8 + ww, y0 + 8 + hh);
+    func_001FB550(0xA9, 0xAC);
+    func_001FB678(x0 + 8 + ww + 9, y0 + 8 + hh + 9);
+
+    return InvokedFromSelectCursor;
+}
 
 extern R4CharInfo D_00323930;
 extern TextItem D_00323918;
