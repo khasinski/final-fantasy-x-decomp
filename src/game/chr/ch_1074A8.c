@@ -24,10 +24,6 @@ void func_001074C0(s32 i, s32 v)
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001074D8);
 
-float func_001074D8(float a, float b, float step);
-
-void func_00106E58(Chr *chr, s32 a);
-
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107600);
 
 void func_00107888(float v)
@@ -45,8 +41,6 @@ void func_001078B0(float v)
 {
     D_0057E9D4 = v;
 }
-
-extern double D_005695B8;
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001078C0);
 
@@ -845,22 +839,6 @@ void func_00109BF8(void *arg0) {
     (*(float *)((u8 *)(arg0) + (0x4E4))) = (float) (*(float *)((u8 *)(saved_reg_gp) + (-0x7E90)));
 }
 
-typedef struct {
-    s8 b00;
-    u8 pad01[3];
-    float f04;
-    s16 h08;
-    s16 h0A;
-    u8 pad0C;
-    u8 b0D;
-    u8 pad0E;
-    u8 b0F;
-} ChrMouth;
-
-extern u8 D_00303640[];
-s32 func_002EFD78(void);
-void tex_anim_pos_set(s32 a, s32 b, s32 c);
-
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_Mouth);
 
 void _m2c_Ch_ElemCalcQuaternion_Sg_MatrixToQuaternion(void *, s32 *) __asm__("Sg_MatrixToQuaternion");
@@ -972,11 +950,6 @@ void func_0010A270(Chr *chr, float x, float y)
     chr->f428 = x;
     chr->f42C = y;
 }
-
-void func_002DD128(void *m);
-void func_002DD270(void *dst, void *src, float a);
-void func_002DD318(void *dst, void *src, float a);
-void func_002DD1C8(void *dst, void *src, float a);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_NeckInit);
 

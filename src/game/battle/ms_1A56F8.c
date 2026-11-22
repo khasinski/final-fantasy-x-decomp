@@ -1081,8 +1081,88 @@ int func_001A8F40(Unk317120Rec *rec, R2Area *dst_area, R2Area *area, int flag) {
     return flag;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A9040);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DED0);
+int func_001A9040(Unk317120Rec *rec, R2Area *area) {
+    float pt[4];
+    float diff[4];
+    float scale;
+    float dist;
+    int hit = 0;
+    int i;
+
+    for (i = 0; i < area->nlim; i++) {
+        R2Limit *lim = &area->lim[i];
+        switch (lim->type) {
+        case 0:
+        case 2: {
+            float t = (rec->v50[0] * lim->nx + rec->v50[2] * lim->nz + lim->d) / lim->len;
+            float px = t * lim->nx + lim->x;
+            float pz = t * lim->nz + lim->z;
+            float dx = rec->v50[0] - px;
+            float dz = rec->v50[2] - pz;
+            pt[0] = px;
+            pt[2] = pz;
+            if (lim->type == 0) {
+                dist = sqrtf(dx * dx + dz * dz);
+                scale = func_002E8370(dist * lim->k) / lim->k;
+                if (dist != 0.0) {
+                    pt[0] = (scale * dx) / dist + pt[0];
+                    pt[2] = (scale * dz) / dist + pt[2];
+                }
+            } else {
+                pt[0] = dx * lim->k + px;
+                pt[2] = dz * lim->k + pz;
+            }
+            if (func_001ACD48(lim->nx, lim->nz, dx, dz) != 0) {
+                rec->v50[0] = pt[0];
+                rec->v50[2] = pt[2];
+                hit++;
+            }
+            break;
+        }
+        case 1:
+            dist = lim->x - rec->v50[1];
+            if (dist > 0.0) {
+                hit++;
+                scale = func_002E8370(dist * lim->k) / lim->k;
+                rec->v50[1] = lim->x - scale;
+            }
+            dist = rec->v50[1] - lim->z;
+            if (dist > 0.0) {
+                hit++;
+                scale = func_002E8370(dist * lim->k) / lim->k;
+                rec->v50[1] = lim->z + scale;
+            }
+            break;
+        case 3:
+            dist = rec->v50[1] - lim->x;
+            if (dist > 0.0) {
+                hit++;
+                rec->v50[1] = dist * lim->k + lim->x;
+            }
+            dist = rec->v50[1] - lim->z;
+            if (dist < 0.0) {
+                hit++;
+                rec->v50[1] = dist * lim->k + lim->z;
+            }
+            break;
+        case 4:
+            area->f24 = _m2c_spline_get_near_point(area->obj, rec->v50[0], rec->v50[1], rec->v50[2], &pt[0], &pt[1], &pt[2], 0);
+            func_001AC3E8(diff, rec->v50, pt);
+            func_001ACB10(diff, area->f20);
+            func_001AC3D0(rec->v50, pt, diff);
+            hit++;
+            break;
+        case 5:
+            area->f24 = _m2c_spline_get_near_point(area->obj, rec->v50[0], rec->v50[1], rec->v50[2], &pt[0], &pt[1], &pt[2], 1);
+            func_001AC3E8(diff, rec->v50, pt);
+            func_001ACB10(diff, area->f20);
+            func_001AC3D0(rec->v50, pt, diff);
+            hit++;
+            break;
+        }
+    }
+    return hit;
+}
 
 void MsCameraSetStartPos(Unk314840 *cam, Unk317120Rec *rec, R2Area *area) {
     int chg = 0;
@@ -1781,10 +1861,196 @@ void MsScreenFocusResetAll(void) {
     Sg_EnFocus(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetBtl);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DF10);
+int MsGetChrBit(int a, int b, int c, int d);
+int MsCamSetBtl(u32 h, int mode, void *rec_p, void *area_p, void *other_rec_p, void *other_area_p);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCamSetBtl);
+void MsCameraSetBtl(u32 h, int which, int a2, int mode, int a4, int a5, float f0, float f1, float f2, float f3) {
+    if (MsCameraIDcheck(h) != 0) {
+        int sub = (int)(h & 0xFF00) >> 8;
+        int idx;
+        int ow;
+        Unk317120Rec *rec;
+        Unk317120Rec *other_rec;
+        u8 *area;
+        u8 *other_area;
+
+        which &= 1;
+        ow = (which == 0) ? 1 : 0;
+        idx = h & 0xFF;
+        rec = &D_00314870[idx].rec[which];
+        other_rec = &D_00314870[idx].rec[ow];
+        area = (u8 *)&rec->area[sub];
+        other_area = (u8 *)&other_rec->area[sub];
+
+        area[0] = 0;
+        switch (mode) {
+        case 0:
+            area[2] = 0xB;
+            break;
+        case 1:
+            area[2] = 0xC;
+            break;
+        case 2:
+            area[2] = 0xD;
+            break;
+        case 3:
+            area[2] = 0xF;
+            area[0] = 1;
+            break;
+        case 4:
+            area[2] = 0x10;
+            area[0] = 1;
+            break;
+        }
+        *(u16 *)(area + 0x10) = a4;
+        *(u16 *)(area + 0x12) = a5;
+        if (((h >> 16) & 0xF) == 5) {
+            *(s32 *)(area + 0x14) = MsGetChrBit(a2, a4, 1, 1);
+            *(s32 *)(area + 0x18) = MsGetChrBit(a2, a5, 1, 1);
+        } else {
+            *(s32 *)(area + 0x14) = a4;
+            *(s32 *)(area + 0x18) = a5;
+        }
+        *(float *)(area + 0x5C) = f0;
+        if (mode != 0) {
+            *(float *)(area + 0x40) = f1;
+            *(float *)(area + 0x44) = f2;
+            *(float *)(area + 0x60) = f3;
+        }
+        *(float *)(area + 0x30) = *(float *)((u8 *)other_rec + 0x30);
+        *(float *)(area + 0x34) = *(float *)((u8 *)other_rec + 0x34);
+        *(float *)(area + 0x38) = *(float *)((u8 *)other_rec + 0x38);
+        area[6] = 1;
+        *(float *)(area + 0x64) = 0.0f;
+        if (func_001A6738(h) == h) {
+            MsCamSetBtl(h, mode, rec, area, other_rec, other_area);
+            MsSetCheckChange(h, which, 0, 0);
+        }
+    }
+}
+
+int MsGetChrInfo(int type, int bit, int id, float *out);
+
+int MsCamSetBtl(u32 h, int mode, void *rec_p, void *area_p, void *other_rec_p, void *other_area_p) {
+    u8 *rec = (u8 *)rec_p;
+    u8 *area = (u8 *)area_p;
+    u8 *other_rec = (u8 *)other_rec_p;
+    u8 *other_area = (u8 *)other_area_p;
+    float sum_pos[4];
+    float pos[2][4];
+    float tmp[4];
+    float ang;
+    float sum_h;
+    float sum_w;
+    int cnt;
+    int flag;
+    float *src;
+    float *dst;
+    s16 *p10;
+    s32 *p14;
+    int i;
+
+    if (((s8 *)other_area)[0] == 1) {
+        func_001AC750((float *)(other_rec + 0x50), *(void **)(other_rec + 0x8C), *(float *)(other_rec + 0x60), *(float *)(other_rec + 0x64), *(float *)(other_rec + 0x68));
+    }
+    flag = 0x100;
+    if (((h >> 16) & 0xF) == 5) {
+        flag = 0;
+    }
+    cnt = 0;
+    sum_w = 0.0f;
+    sum_h = 0.0f;
+    ang = 0.0f;
+    dst = (float *)(rec + 0x50);
+    src = (float *)(area + 0x30);
+    p10 = (s16 *)(area + 0x10);
+    p14 = (s32 *)(area + 0x14);
+    for (i = 3; i >= 0; i--) {
+        sum_pos[i] = 0.0f;
+    }
+    for (i = 0; i < 2; i++) {
+        int id = p10[i];
+        int bit = p14[i];
+        if (id != -1) {
+            float *p = pos[i];
+            if (MsGetChrInfo(flag | 9, bit, id, p) > 0) {
+                cnt++;
+                sum_pos[0] += p[0];
+                sum_pos[1] += p[1];
+                sum_pos[2] += p[2];
+                MsGetChrInfo(flag | 0xA, bit, id, tmp);
+                sum_h += tmp[0];
+                MsGetChrInfo(flag | 7, bit, id, tmp);
+                ang += tmp[0];
+                MsGetChrInfo(flag | 0xB, bit, id, tmp);
+                sum_w += tmp[0];
+            }
+        }
+    }
+    if (cnt > 0) {
+        for (i = 0; i < 3; i++) {
+            sum_pos[i] /= (float)cnt;
+        }
+        sum_w /= (float)cnt;
+        sum_h /= (float)cnt;
+        ang /= (float)cnt;
+        for (i = 0; i < 3; i++) {
+            dst[i] = sum_pos[i];
+        }
+        *(float *)(rec + 0x54) -= sum_h * *(float *)(area + 0x5C);
+        if (mode != 0) {
+            int ok = -1;
+            if (cnt >= 2 && *(s32 *)(area + 0x14) != *(s32 *)(area + 0x18)) {
+                MsVectorRect2Polar(pos[0], pos[1], &ang, 0, 0);
+                ok = 0;
+            }
+            if (ok < 0 && other_area[2] == 0xC) {
+                if ((*(u32 *)(area + 0x14) | *(u32 *)(area + 0x18)) == (*(u32 *)(other_area + 0x14) | *(u32 *)(other_area + 0x18))) {
+                    ok = 1;
+                }
+            }
+            if (flag != 0 && ok < 0 && ((s8 *)rec)[0] != 0) {
+                if (*(float *)(rec + 0x50) != *(float *)(other_rec + 0x50) || *(float *)(rec + 0x58) != *(float *)(other_rec + 0x58)) {
+                    MsVectorRect2Polar(dst, (float *)(other_rec + 0x50), &ang, 0, 0);
+                    ok = 0;
+                }
+            }
+            if (ok != 0 && flag != 0) {
+                if (((s8 *)area)[6] != 0) {
+                    area[6] = 0;
+                    *(float *)(area + 0x64) = ang;
+                } else {
+                    ang = *(float *)(area + 0x64);
+                }
+            }
+            if (mode == 2 || mode == 4) {
+                sum_w += *(float *)(area + 0x60) * 10.0f;
+            } else {
+                sum_w *= *(float *)(area + 0x60);
+            }
+            if (((s8 *)area)[0] == 0) {
+                func_001AC750(sum_pos, 0, *(float *)(area + 0x40) + ang, *(float *)(area + 0x44), sum_w);
+                for (i = 0; i < 3; i++) {
+                    dst[i] += sum_pos[i];
+                }
+            } else {
+                *(float *)(rec + 0x60) = *(float *)(area + 0x40) + ang;
+                *(float *)(rec + 0x64) = *(float *)(area + 0x44);
+                *(float *)(rec + 0x68) = sum_w;
+                func_001AC750(dst, *(void **)(rec + 0x8C), *(float *)(rec + 0x60), *(float *)(rec + 0x64), *(float *)(rec + 0x68));
+            }
+        }
+        for (i = 0; i < 3; i++) {
+            src[i] = dst[i];
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            dst[i] = src[i];
+        }
+    }
+    *(s32 *)(rec + 0x6C) = 0;
+    return cnt;
+}
 
 typedef struct {
     u8 pad0[0xA0];

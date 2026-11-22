@@ -487,7 +487,88 @@ int func_001632D8(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", Sa_CdRead_task);
+extern s8 _mscd_D_005661F4 __asm__("D_005661F4");
+extern s8 _mscd_D_0030DDFD __asm__("D_0030DDFD");
+extern s8 _mscd_D_0030DDFE __asm__("D_0030DDFE");
+void hd_file_read_th(int lbn, void *buf, int size, int a3);
+int get_hdd_err(void);
+
+int Sa_CdRead_task(int lbn, int size, void *buf, void *mode, int a4)
+{
+    int sectors;
+    int rmode;
+    int retry;
+    int wait1;
+    int wait2;
+    int i;
+
+    while (func_002D6788() != 0) {
+        func_0017135C(1);
+    }
+    D_00595F54 = lbn;
+    D_00595F58 = size;
+    D_00595F5C = (int)buf;
+    D_00595F60 = *(Mode1631F0 *)mode;
+    sectors = size / 2048;
+    rmode = hdd_rmode_get(a4);
+    if (_mscd_D_005661F4 != 0 && rmode != 0) {
+        func_0015B350();
+        hd_file_read_th(lbn, buf, sectors * 2048, a4);
+        if (get_hdd_err() == 0) {
+            return 1;
+        }
+        _mscd_D_005661F4 = 0;
+        TkRefreshHDDMode();
+    }
+    D_0030DE28 = 0;
+    D_0030DE24 = 0;
+    retry = 0;
+    wait1 = 60;
+    wait2 = 450;
+    for (;;) {
+        for (i = 0; i < wait1; i++) {
+            if (func_002E1700(1) == 2) {
+                func_0015B350();
+                func_002F8660(0);
+                if (func_002E19C0(lbn, sectors, (int)buf, mode) == 1) {
+                    for (i = 0; i < wait2; i++) {
+                        if (func_00163710() == 0) {
+                            return 1;
+                        }
+                        func_0017135C(1);
+                    }
+                    break;
+                }
+            }
+            func_001632D8();
+            D_0030DE24 = 2;
+            D_0030DE28++;
+            func_0017135C(1);
+        }
+        func_002E1FB8();
+        D_0030DE24 = 2;
+        func_0017135C(1);
+        if (retry >= 3) {
+            wait1 = 120;
+            wait2 = 600;
+            for (i = 0; i < 60; i++) {
+                if (func_002E1C70() != 0) {
+                    break;
+                }
+                func_0017135C(1);
+            }
+            for (i = 0; i < 120; i++) {
+                if (func_002E11A0(1) == 0) {
+                    break;
+                }
+                func_0017135C(1);
+            }
+            mode = D_0030DE20;
+        } else {
+            retry++;
+        }
+    }
+}
 
 int func_00163710(void)
 {
@@ -599,9 +680,44 @@ void func_00163958(Q3Obj20 *o) {
     func_00171530(D_00591F50, 0x4000, o->fn, o);
 }
 
+extern char D_00595F70[];
+extern char D_0056BB68[];
+extern char D_0056BBA8[];
+extern char D_0056BBC8[];
+extern char D_0056BBE0[];
+extern char D_0056BC20[];
+extern char D_0056BC38[];
+extern char D_0056BC48[];
+extern char D_0056BC50[];
+extern char D_0056BC78[];
+extern char D_0056BC88[];
+extern char D_0056BCB0[];
+extern char D_0056BCC8[];
+extern char D_0056BCF0[];
+extern char D_0056BD08[];
+extern char D_0056BD30[];
+extern u8 _mscd_D_0030DE34_nv __asm__("D_0030DE34");
+extern s32 _mscd_D_0030DE18_v __asm__("D_0030DE18");
+void func_001667B8(char *path, void *buf, int size, int off);
+void _mscd_yiAssert(int a, char *b, char *c, ...) __asm__("yiAssert");
+int CDfileSize_PC(int a);
+void func_00165EF8(void);
+void func_00165FA8(void);
+void func_00166458(void);
+void func_00166390(void);
+void func_00254A38(void);
+void pc_fat_index_filename_set(void);
+int hdd_install_check(void *p);
+void hdd_install_init(int a);
+void *sa_task_init(int n);
+void func_00165398(int v);
+void func_001655A8(int a);
+u8 *_mscd_func_002558E0(void) __asm__("func_002558E0");
+s32 _mscd_func_00255920(void) __asm__("func_00255920");
+Rec595F6C *func_00165D20(int type, int id);
+
 INCLUDE_ASM("build/ee_asm/game/libmscd", func_00163970);
 
-extern s8 _mscd_D_005661F4 __asm__("D_005661F4");
 extern G1Rec78E530 _mscd_D_0078E530[] __asm__("D_0078E530.NON_MATCHING");
 
 void func_00163D40(SysVt *cd, G1Rec78E530 *rec, int idx)
@@ -723,16 +839,163 @@ s16 func_00163FF0(s32 arg0) {
     return var_2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164060);
-
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00164340);
-
 extern char D_0056BB90[];
 extern char _f4648_D_0056BB20[] __asm__("D_0056BB20.NON_MATCHING");
 extern char _f4648_D_0056BBB8[] __asm__("D_0056BBB8.NON_MATCHING");
 extern s32 _f4648_D_0030DDF8 __asm__("D_0030DDF8.NON_MATCHING");
 extern SysVt _f4648_D_0078E498 __asm__("D_0078E498.NON_MATCHING");
 extern char _f4648_D_0078F330[][0x80] __asm__("D_0078F330");
+
+int func_00164060(int a0, int a1, int a2, Rec78E530View *a3)
+{
+    int i;
+    Rec78E530View *rec;
+    char *name = 0;
+
+    for (i = 0; i < 0x40 && _mscd_D_0078E530[i].used != 0; i++)
+        ;
+    if (i == 0x40) {
+        func_001577A8(D_0056BB90, _f4648_D_0056BB20, 0x550);
+    }
+    rec = (Rec78E530View *)&_mscd_D_0078E530[i];
+    rec->used = 1;
+    rec->w04 = a1;
+    rec->w28 = ((G1Vt78E498 *)&_f4648_D_0078E498)->w24;
+    rec->w08 = a0;
+    if (a3 == 0) {
+        rec->w0C = 0;
+        rec->w10 = 0;
+        rec->w14 = 0;
+        rec->w18 = 0;
+    } else {
+        rec->w0C = a3->w0C;
+        rec->w10 = a3->w10;
+        rec->w14 = a3->w14;
+        rec->w18 = a3->w18;
+    }
+    rec->b30 = 0;
+    rec->w20 = a2;
+    _f4648_D_0030DDF8++;
+    if (_f4648_D_0030DDF8 > 0xFFFF) {
+        _f4648_D_0030DDF8 = 1;
+    }
+    rec->id = _f4648_D_0030DDF8;
+    switch (((Vt78E498View *)&_f4648_D_0078E498)->w18) {
+    case 0:
+        if (_mscd_D_005661F4 == 0) {
+            rec->w2C = rec->w00 = CDfileSize_PC(a0);
+        } else {
+            rec->w00 = func_00162ED8(a0);
+        }
+        rec->w1C = 0;
+        if (_mscd_D_005661F4 == 0) {
+            name = (char *)CDfileName_PC(a0);
+            func_002D3FF0(2);
+        } else {
+            rec->w1C = func_001631B8(a0);
+            rec->w2C = func_001630B0(a0);
+            name = D_0056BBA8;
+        }
+        {
+            int j;
+            for (j = 0; j < 0x80; j++) {
+                _f4648_D_0078F330[i][j] = name[j];
+                if (name[j] == 0) {
+                    break;
+                }
+            }
+        }
+        break;
+    case 1:
+        rec->w00 = func_00162ED8(a0);
+        rec->w1C = func_001631B8(a0);
+        rec->w2C = func_001630B0(a0);
+        name = _f4648_D_0056BBB8;
+        break;
+    }
+    if (func_0015A550() != 0) {
+        _mscd_yiAssert(1, D_0056BBC8, D_0056BBE0, name, ((G1Vt78E498 *)&_f4648_D_0078E498)->w24, a0);
+    }
+    rec->b33 = func_00163110(a0);
+    rec->b34 = 0;
+    return _f4648_D_0030DDF8;
+}
+
+int func_00164340(int a0, int a1, int a2, int a3, int a4, Rec78E530View *a5)
+{
+    int i;
+    Rec78E530View *rec;
+    char *name = 0;
+
+    for (i = 0; i < 0x40 && _mscd_D_0078E530[i].used != 0; i++)
+        ;
+    if (i == 0x40) {
+        func_001577A8(D_0056BB90, _f4648_D_0056BB20, 0x5AA);
+    }
+    rec = (Rec78E530View *)&_mscd_D_0078E530[i];
+    rec->used = 1;
+    rec->w04 = a1;
+    rec->w28 = ((G1Vt78E498 *)&_f4648_D_0078E498)->w24;
+    rec->w08 = a0;
+    if (a5 == 0) {
+        rec->w0C = 0;
+        rec->w10 = 0;
+        rec->w14 = 0;
+        rec->w18 = 0;
+    } else {
+        rec->w0C = a5->w0C;
+        rec->w10 = a5->w10;
+        rec->w14 = a5->w14;
+        rec->w18 = a5->w18;
+    }
+    rec->b30 = 0;
+    rec->w20 = a4;
+    _f4648_D_0030DDF8++;
+    if (_f4648_D_0030DDF8 > 0xFFFF) {
+        _f4648_D_0030DDF8 = 1;
+    }
+    rec->id = _f4648_D_0030DDF8;
+    switch (((Vt78E498View *)&_f4648_D_0078E498)->w18) {
+    case 0:
+        if (_mscd_D_005661F4 == 0) {
+            rec->w00 = a3;
+            rec->w2C = a3;
+        } else {
+            rec->w00 = a3;
+        }
+        if (_mscd_D_005661F4 == 0) {
+            rec->w1C = a2 / 2048;
+            name = (char *)CDfileName_PC(a0);
+            func_002D3FF0(2);
+        } else {
+            rec->w1C = func_001631B8(a0) + a2 / 2048;
+            rec->w2C = a3;
+            name = D_0056BBA8;
+        }
+        {
+            int j;
+            for (j = 0; j < 0x80; j++) {
+                _f4648_D_0078F330[i][j] = name[j];
+                if (name[j] == 0) {
+                    break;
+                }
+            }
+        }
+        break;
+    case 1:
+        rec->w00 = a3;
+        rec->w1C = func_001631B8(a0) + a2 / 2048;
+        rec->w2C = a3;
+        name = _f4648_D_0056BBB8;
+        break;
+    }
+    if (func_0015A550() != 0) {
+        _mscd_yiAssert(1, D_0056BBC8, D_0056BBE0, name, ((G1Vt78E498 *)&_f4648_D_0078E498)->w24, a0);
+    }
+    rec->b33 = func_00163110(a0);
+    rec->b34 = 0;
+    return _f4648_D_0030DDF8;
+}
 
 int func_00164648(int a0, int a1, int a2, int a3, Rec78E530View *a4)
 {
@@ -876,7 +1139,227 @@ void func_00164A80(int v) {
     D_0030DE44 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", CdEnvInit);
+typedef struct {
+    u8 pad00[0x28];
+    void *f28;
+    void *f2C;
+    u8 pad30[4];
+    s32 w34;
+    s32 w38;
+    s32 w3C;
+    s32 w40;
+    s32 w44;
+    s32 w48;
+    s32 w4C;
+    s32 w50;
+} CdEnvVt;
+
+void CdEnvInit(int mode)
+{
+    CdEnvVt *vt;
+
+    D_0030DE34 = 0;
+    if (_mscd_D_0030DDFD != 0) {
+        func_001577A8(D_0056BC20, (char *)D_0056BB20, 0x6B5);
+    }
+    _mscd_D_0030DDFD = 1;
+    D_00595F64 = sa_task_init(1);
+    func_001655A8(mode);
+    vt = (CdEnvVt *)&D_0078E498;
+    vt->w50 = 0;
+    vt->w34 = func_00162798();
+    vt->w38 = dvd_cd_fat_sector();
+    vt->w3C = dvd_cd_fid_sector();
+    vt->w40 = dvd_cd_id_size();
+    vt->w44 = dvd_cd_fat_size();
+    vt->w48 = func_00162B58();
+    vt->w4C = func_00162C18();
+    func_00165398(0);
+    func_0011C348(0x40);
+    D_00595F50 = (s32)user_malloc(0x1800, 10, (char *)D_0056BB20, 0x6C9);
+    func_00165EF8();
+    _mscd_D_0030DDFE = 0;
+    D_0030DE25 = 0;
+    if (mode == 0) {
+        func_00254A38();
+        pc_fat_index_filename_set();
+        _mscd_D_00595F68 = _mscd_func_002558E0();
+        *(s32 *)((u8 *)&D_0057CB80 + 4) = _mscd_func_00255920();
+        func_00165FA8();
+    } else {
+        int fd;
+        u32 sz;
+        int sec;
+
+        if (D_0030DE44 != 0) {
+            while (func_002E11A0(1) != 0) {
+                func_002D3FF0(0);
+            }
+            while (func_002E1C70() == 0) {
+                func_002D3FF0(0);
+            }
+        }
+        while (func_002E11A0(1) != 0) {
+            func_002D3FF0(0);
+        }
+        switch (func_002E1DD0()) {
+        case 0x12:
+        case 0x13:
+            if (func_001663A0() == 0) {
+                _mscd_D_0030DDFE = 1;
+                fd = func_002FC4E0(D_0056BC38, 1);
+                if (fd < 0) {
+                    _mscd_yiAssert(1, D_0056BC48, D_0056BC50);
+                    BREAK();
+                }
+                sz = func_002FC8E8(fd, 0, 2);
+                func_0011C348(0x40);
+                ((CdEnvVt *)&D_0078E498)->f28 = user_malloc(sz, 10, (char *)D_0056BB20, 0x702);
+                func_002FC8E8(fd, 0, 0);
+                if (func_002FCB20(fd, ((CdEnvVt *)&D_0078E498)->f28, sz) != sz) {
+                    BREAK();
+                }
+                func_002FC768(fd);
+
+                fd = func_002FC4E0(D_0056BC78, 1);
+                if (fd < 0) {
+                    _mscd_yiAssert(1, D_0056BC48, D_0056BC88);
+                    BREAK();
+                }
+                sz = func_002FC8E8(fd, 0, 2);
+                func_0011C348(0x40);
+                ((CdEnvVt *)&D_0078E498)->f2C = user_malloc(sz, 10, (char *)D_0056BB20, 0x712);
+                func_002FC8E8(fd, 0, 0);
+                if (func_002FCB20(fd, ((CdEnvVt *)&D_0078E498)->f2C, sz) != sz) {
+                    BREAK();
+                }
+                func_002FC768(fd);
+
+                fd = func_002FC4E0(D_0056BCB0, 1);
+                if (fd < 0) {
+                    _mscd_yiAssert(1, D_0056BC48, D_0056BCC8);
+                    BREAK();
+                }
+                sz = func_002FC8E8(fd, 0, 2);
+                func_0011C348(0x40);
+                _mscd_D_00595F68 = user_malloc(sz, 10, (char *)D_0056BB20, 0x722);
+                func_002FC8E8(fd, 0, 0);
+                if (func_002FCB20(fd, _mscd_D_00595F68, sz) != sz) {
+                    BREAK();
+                }
+                func_002FC768(fd);
+
+                fd = func_002FC4E0(D_0056BCF0, 1);
+                if (fd < 0) {
+                    _mscd_yiAssert(1, D_0056BC48, D_0056BD08);
+                    BREAK();
+                }
+                sz = func_002FC8E8(fd, 0, 2);
+                func_0011C348(0x40);
+                *(void **)((u8 *)&D_0057CB80 + 4) = user_malloc(sz, 10, (char *)D_0056BB20, 0x732);
+                func_002FC8E8(fd, 0, 0);
+                if (func_002FCB20(fd, *(void **)((u8 *)&D_0057CB80 + 4), sz) != sz) {
+                    BREAK();
+                }
+                func_002FC768(fd);
+                func_002F8660(0);
+                func_00166458();
+            } else {
+                _mscd_yiAssert(1, D_0056BC48, D_0056BD30);
+                BREAK();
+            }
+            break;
+        default: {
+            int saved_de2c = D_0030DE2C;
+
+            D_0030DE2C = 0;
+            if (D_0030DE08[0] == 0) {
+                sz = dvd_cd_fat_size();
+                sec = dvd_cd_fat_sector();
+            } else {
+                sz = D_0030DE08[1];
+                sec = D_0030DE08[0];
+            }
+            sz += 0x7FF;
+            func_0011C348(0x40);
+            ((CdEnvVt *)&D_0078E498)->f28 = user_malloc(sz & 0xFFFFF800U, 10, (char *)D_0056BB20, 0x75B);
+            while (func_001631F0(sec, sz, (int)((CdEnvVt *)&D_0078E498)->f28, &_mscd_D_0030DE18_v) == 0) {
+                do {
+                    func_002D3FF0(0);
+                } while (func_002E1700(1) != 2);
+            }
+            while (func_00163710() != 0) {
+                func_002D3FF0(0);
+            }
+
+            if (D_0030DE08[2] == 0) {
+                sz = func_00162B58();
+                sec = dvd_cd_fid_sector();
+            } else {
+                sz = D_0030DE08[3];
+                sec = D_0030DE08[2];
+            }
+            sz += 0x7FF;
+            func_0011C348(0x40);
+            ((CdEnvVt *)&D_0078E498)->f2C = user_malloc(sz & 0xFFFFF800U, 10, (char *)D_0056BB20, 0x772);
+            while (func_001631F0(sec, sz, (int)((CdEnvVt *)&D_0078E498)->f2C, &_mscd_D_0030DE18_v) == 0) {
+                do {
+                    func_002D3FF0(0);
+                } while (func_002E1700(1) != 2);
+            }
+            while (func_00163710() != 0) {
+                func_002D3FF0(0);
+            }
+
+            {
+                int base = func_00163188(1, 0);
+                D_0030DE2C = saved_de2c;
+                if (saved_de2c != 0) {
+                    D_0030DE2C = saved_de2c - base;
+                }
+            }
+            func_00163FF0(1);
+            sz = func_00162ED8(func_001626D8());
+            func_0011C348(0x40);
+            sz += 0x7FF;
+            _mscd_D_00595F68 = user_malloc(sz & 0xFFFFF800U, 10, (char *)D_0056BB20, 0x78D);
+            while (func_001631F0(func_00163158((u8 *)func_001626D8()), sz, (int)_mscd_D_00595F68, &_mscd_D_0030DE18_v) == 0) {
+                do {
+                    func_002D3FF0(0);
+                } while (func_002E1700(1) != 2);
+            }
+            while (func_00163710() != 0) {
+                func_002D3FF0(0);
+            }
+
+            sz = func_00162ED8(func_00162618());
+            func_0011C348(0x40);
+            sz += 0x7FF;
+            *(void **)((u8 *)&D_0057CB80 + 4) = user_malloc(sz & 0xFFFFF800U, 10, (char *)D_0056BB20, 0x79C);
+            while (func_001631F0(func_00163158((u8 *)func_00162618()), sz, *(int *)((u8 *)&D_0057CB80 + 4), &_mscd_D_0030DE18_v) == 0) {
+                do {
+                    func_002D3FF0(0);
+                } while (func_002E1700(1) != 2);
+            }
+            while (func_00163710() != 0) {
+                func_002D3FF0(0);
+            }
+            func_002F8660(0);
+            break;
+        }
+        }
+        func_00165FA8();
+    }
+    func_00162CE8();
+    D_0030DE30 = hdd_install_check(D_00595F6C);
+    hdd_install_init(0);
+    ((Vt78E498View *)&D_0078E498)->w5C = -1;
+    ((Vt78E498View *)&D_0078E498)->w74 = -1;
+    ((Vt78E498View *)&D_0078E498)->w70 = 0;
+    ((void (*)(void))((Vt78E498View *)&D_0078E498)->f64)();
+    ((void (*)(void *, int, int))((void **)D_00595F64)[2])(func_00164A40, 1, 0);
+    func_00166390();
+}
 
 void func_00165320(int id)
 {
@@ -979,8 +1462,6 @@ int func_00165568(int a, int b) {
 }
 
 void PcReadFunc_set(void);
-void func_00164060(void);
-void func_00164340(void);
 
 #define VT78E498 ((Vt78E498View *)&D_0078E498)
 

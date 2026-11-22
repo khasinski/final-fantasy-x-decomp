@@ -1,6 +1,8 @@
 /* tu_248 0x220f30-0x224430: medium; ~Tk (config/tu_map.tsv) */
 #define func_002238D8 _hdr_func_002238D8
 #define func_00223140 _hdr_func_00223140
+#define D_003257A4 _hdr_D_003257A4
+#define D_003257A8 _hdr_D_003257A8
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -12,6 +14,10 @@
 #include "ffx/w7.h"
 #undef func_00223140
 #undef func_002238D8
+#undef D_003257A4
+#undef D_003257A8
+extern u8 *D_003257A4;
+extern u8 *D_003257A8;
 
 int func_00220F30(void)
 {
@@ -32,9 +38,9 @@ int func_00220F30(void)
         func_00206860(7, 0, 0);
         func_00206888(7, 0, text);
         func_002040F8(7);
-        D_003257A8 = TkBtlEndGetText(0x401B);
+        D_003257A8 = (u8 *)TkBtlEndGetText(0x401B);
     } else {
-        D_003257A8 = TkBtlEndGetText(0x401C);
+        D_003257A8 = (u8 *)TkBtlEndGetText(0x401C);
     }
     return n;
 }
@@ -313,8 +319,646 @@ void func_002216F0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", TkBtlEndCtrl);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_220F30/rodata", jtbl_005711D0);
+typedef struct {
+    s32 w0;
+    s32 w4;
+    int (*fn8)(int);
+} CdObj;
+
+extern s16 D_00693300;
+extern s16 D_00693302;
+extern s16 D_00693304;
+extern s16 D_00693306;
+extern s16 D_00693308;
+extern s16 D_0069330A;
+extern s16 D_0069330C;
+extern s16 D_0069330E;
+extern s32 D_00693314;
+extern s32 D_00693318;
+extern s32 D_0069331C;
+extern s32 D_00693320;
+extern s32 D_00693324;
+extern s32 D_0069332C;
+extern s32 D_00693330;
+extern u8 D_006930B1;
+extern u32 D_0031FCC0;
+extern char D_005711B8[];
+extern char D_005711C0[];
+extern char D_005711C8[];
+void func_0020D530(void);
+int func_00147DB8(void);
+int TkSndReportStatus(void);
+int SndSyncMusicStandby(int a);
+int func_0014F158(void);
+int func_00147E38(void);
+void func_00117E38(int a);
+
+void TkBtlEndCtrl(void)
+{
+    s32 buf;
+    int pad_type;
+    int rep;
+    int trg;
+    s32 *state;
+    int st;
+    int i;
+    int ok;
+
+    pad_type = func_00220318();
+    rep = TOMenuGetControlPadRep();
+    trg = TOMenuGetControlPadTrg();
+
+    D_00693300 += D_00693302;
+    if (D_00693300 > 0x1000) {
+        D_00693300 = 0x1000;
+    }
+    if (D_00693300 < 0) {
+        D_00693300 = 0;
+    }
+
+    D_00693304 += D_00693306;
+    if (D_00693304 > 0x1000) {
+        D_00693304 = 0x1000;
+    }
+    if (D_00693304 < 0) {
+        D_00693304 = 0;
+    }
+
+    D_00693308 += D_0069330A;
+    if (D_00693308 > 0x1000) {
+        D_00693308 = 0x1000;
+    }
+    if (D_00693308 < 0) {
+        D_00693308 = 0;
+    }
+
+    D_00693310 += 0x100;
+    if (D_00693310 > 0x1000) {
+        D_00693310 = 0x1000;
+    }
+
+    D_0069330C += D_0069330E;
+    if (D_0069330C > 0x1000) {
+        D_0069330C = 0x1000;
+    }
+    if (D_0069330C < 0) {
+        D_0069330C = 0;
+    }
+
+    if (trg == 0x100) {
+        func_0020D530();
+    }
+
+    st = D_006930A0;
+    state = &D_006930A0;
+again:
+    switch (st) {
+    case 0:
+        *state = 9;
+        st = 9;
+        goto again;
+    case 1:
+        if (func_00147DB8() != 0) {
+            *state = 2;
+        } else {
+            *state = 0;
+        }
+        break;
+    case 2:
+        *state = 3;
+        break;
+    case 3: {
+        CdObj *cd = (CdObj *)GetCD();
+        if (TkSndReportStatus() == 0 && cd->fn8(1) == 0) {
+            *state = 4;
+        }
+        break;
+    }
+    case 4:
+        if (SndGetNowPlayMusic() != 0x8A) {
+            SndMusicRead(0x8A);
+            *state = 5;
+        } else {
+            *state = 0;
+        }
+        break;
+    case 5:
+        if (SndSyncMusicStandby(0) == 0) {
+            SndMusicStart(0x8A);
+            *state = 0;
+        }
+        break;
+    case 9:
+        TOSeqStartScene(1, D_005711B8);
+        if (D_006930B1 == 0) {
+            st = 0x10;
+            goto again;
+        }
+        *state = 0xA;
+    case 10:
+        ok = 1;
+        for (i = 0; i < D_006930B0; i++) {
+            ok &= func_002214D8(i);
+        }
+        if (ok != 0) {
+            *state = 0xB;
+        }
+        break;
+    case 11:
+        *state = 0xC;
+        for (i = 0; i < D_006930B0; i++) {
+            if (func_00221108(D_006930B8[i].h6) < 0x63) {
+                SndSepPlaySimple(0x80000018);
+                break;
+            }
+        }
+    case 12:
+        if (func_00221398() == 0) {
+            *state = 0xD;
+        }
+        if (rep & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            while (func_00221398() != 0) {
+            }
+            *state = 0xD;
+        }
+        break;
+    case 13:
+        SndSepStop(0x80000018);
+        *state = 0xE;
+        break;
+    case 14:
+        if (rep & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            func_00221468(3);
+            *state = 0xF;
+        }
+        break;
+    case 15:
+        ok = 1;
+        for (i = 0; i < D_006930B0; i++) {
+            int r = func_002214D8(i);
+            if (i == D_006930B0 - 1) {
+                if (r != 0) {
+                    D_00693306 = 0x80;
+                }
+            }
+            ok &= r;
+        }
+        if (ok != 0) {
+            *state = 0x14;
+        }
+        break;
+    case 16:
+        *state = 0x11;
+        break;
+    case 17:
+        if (D_00693300 == 0x1000) {
+            D_0069330E = 0x200;
+            *state = 0x12;
+        }
+        break;
+    case 18:
+        if (D_0069330C == 0x1000) {
+            *state = 0x13;
+        }
+        break;
+    case 19:
+        if (rep & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            D_0069330E = -0x200;
+            D_00693306 = 0x80;
+            *state = 0x14;
+        }
+        break;
+    case 20:
+        *state = 0x15;
+        D_00693314 = 0;
+        func_00221040(0, TkBtlEndGetText(0x4006));
+        break;
+    case 21:
+        TOSeqStartScene(1, D_005711C0);
+        if (D_0069330C == 0) {
+            D_00693314++;
+            D_003257A8 = (u8 *)TkBtlEndGetText(0x4014);
+            D_00693318 = 0x105;
+            if (D_00693314 >= 7) {
+                if ((D_0031FCC0 & 0xFF00FF) == 0) {
+                    D_0069330E = 0x200;
+                }
+                *state = 0x16;
+            }
+        }
+        break;
+    case 22:
+        if (D_00693304 == 0x1000) {
+            *state = 0x17;
+        }
+        break;
+    case 23:
+        if (D_006930AC != 0) {
+            SndSepPlaySimple(0x80000018);
+        }
+        *state = 0x18;
+    case 24:
+        if (func_00221418() == 0) {
+            *state = 0x19;
+            st = 0x19;
+            goto again;
+        }
+        if (rep & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            while (func_00221418() != 0) {
+            }
+            *state = 0x19;
+        }
+        break;
+    case 25:
+        SndSepStop(0x80000018);
+        if (D_0069331C == 0) {
+            D_003257A4 = (u8 *)TkBtlEndGetText(0x4005);
+        }
+        *state = 0x1A;
+        break;
+    case 26:
+        if (rep & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            D_0069330E = -0x200;
+            D_00693306 = -0x80;
+            if (D_0069331C == 0) {
+                *state = 0x1B;
+                D_00693302 = -0x80;
+            } else {
+                *state = 0x1C;
+            }
+        }
+        break;
+    case 27:
+        if (D_00693304 == 0) {
+            *state = 6;
+        }
+        break;
+    case 28:
+        TOSeqStartScene(1, D_005711C8);
+        D_0069330A = 0x80;
+        func_00221040(0, TkBtlEndGetText(0x4009));
+        *state = 0x1E;
+        break;
+    case 29: {
+        int t0, t1;
+        TOSeqStartScene(1, D_005711C0);
+        TOSeqStartScene(1, D_005711C8);
+        D_0069330A = 0x80;
+        t0 = TkBtlEndGetText(0x4009);
+        t1 = TkBtlEndGetText(0x4009);
+        func_00221040(t0, t1);
+        *state = 0x1E;
+        break;
+    }
+    case 30:
+        if (D_00693308 == 0x1000) {
+            *state = 0x1F;
+        }
+        break;
+    case 31:
+        D_003257A4 = (u8 *)TkBtlEndGetText(0x400A);
+        *state = 0x20;
+        break;
+    case 32:
+        if (trg & 0x100) {
+            if (func_00220F30() == 0) {
+                SndSepPlaySimple(0x80000001);
+                *state = 0x2A;
+                st = 0x2A;
+                goto again;
+            }
+            SndSepPlaySimple(0x80000003);
+            *state = 0x22;
+            st = 0x22;
+            goto again;
+        }
+        if (trg & 0x20) {
+            if (((u8 *(*)(void))func_00221668)()[6] != 0xFF) {
+                SndSepPlaySimple(0x80000003);
+            } else {
+                SndSepPlaySimple(0x80000001);
+                *state = 0x24;
+            }
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000003);
+        } else if (rep & 0x1000) {
+            if (D_00693334 == 0) {
+                D_00693338[0]--;
+                if (D_00693338[0] >= 0) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[0] = 0;
+                    if (D_00693328 > 0) {
+                        D_00693328--;
+                        D_00693324 = -0x1000;
+                        D_0069332C = D_00693328;
+                        D_00693330 = 0x333;
+                        SndSepPlaySimple(0x80000001);
+                        *state = 0x21;
+                        st = 0x21;
+                        goto again;
+                    }
+                }
+            } else {
+                D_00693338[D_00693334]--;
+                if (D_00693338[D_00693334] >= 0) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[D_00693334] = 0;
+                }
+            }
+        } else if (rep & 0x4000) {
+            if (D_00693334 == 0) {
+                D_00693338[0]++;
+                if (D_00693338[0] < 6) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[0] = 5;
+                    if (D_00693328 <= D_00693320 - 7) {
+                        D_00693328++;
+                        D_00693324 = 0x1000;
+                        D_0069332C = D_00693328;
+                        D_00693330 = 0x333;
+                        SndSepPlaySimple(0x80000001);
+                        *state = 0x21;
+                        st = 0x21;
+                        goto again;
+                    }
+                }
+            } else {
+                D_00693338[D_00693334]++;
+                if (D_00693338[D_00693334] < 8) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[D_00693334] = 7;
+                }
+            }
+        } else if (trg & 0x8000) {
+            if (D_00693334 == 1) {
+                D_00693334 = 0;
+                SndSepPlaySimple(0x80000001);
+            }
+        } else if (trg & 0x2000) {
+            if (D_00693334 == 0) {
+                D_00693334 = 1;
+                SndSepPlaySimple(0x80000001);
+            }
+        } else {
+            if ((rep & 1) && pad_type == 1 && D_00693334 == 0) {
+                D_0069332C = D_00693328 - 6;
+                if (D_0069332C < 0) {
+                    D_0069332C = 0;
+                }
+                if (D_0069332C != D_00693328) {
+                    SndSepPlaySimple(0x80000001);
+                    D_00693324 = -0x1000;
+                    D_00693330 = 0x111;
+                    *state = 0x21;
+                    st = 0x21;
+                    goto again;
+                }
+            }
+            if (rep & 2) {
+                if (pad_type != 2) {
+                    break;
+                }
+                if (D_00693334 != 0) {
+                    break;
+                }
+                D_0069332C = D_00693328 + 6;
+                if (D_0069332C >= D_00693320 - 6) {
+                    D_0069332C = D_00693320 - 6;
+                    if (D_0069332C < 0) {
+                        D_0069332C = 0;
+                    }
+                }
+                if (D_0069332C != D_00693328) {
+                    SndSepPlaySimple(0x80000001);
+                    D_00693330 = 0x111;
+                    D_00693324 = 0x1000;
+                    *state = 0x21;
+                    st = 0x21;
+                    goto again;
+                }
+            }
+        }
+        break;
+    case 33:
+        if (D_00693324 > 0) {
+            D_00693324 -= D_00693330;
+            if (D_00693324 <= 0) {
+                D_00693324 = 0;
+                D_00693328 = D_0069332C;
+                *state = 0x20;
+                st = 0x20;
+                goto again;
+            }
+        } else {
+            D_00693324 += D_00693330;
+            if (D_00693324 >= 0) {
+                D_00693324 = 0;
+                D_00693328 = D_0069332C;
+                *state = 0x20;
+                st = 0x20;
+                goto again;
+            }
+        }
+        break;
+    case 34:
+        D_0069330E = 0x200;
+        *state = 0x23;
+        break;
+    case 35:
+        if (trg != 0 && D_0069330C == 0x1000) {
+            D_0069330E = -0x200;
+            D_00693328 = D_0069332C;
+            *state = 0x20;
+        }
+        break;
+    case 36:
+        D_00693340 = 1;
+        *state = 0x25;
+    case 37:
+        if (trg & 0x100) {
+            if (func_00220F30() == 0) {
+                SndSepPlaySimple(0x80000001);
+                *state = 0x2A;
+                st = 0x2A;
+                goto again;
+            }
+            SndSepPlaySimple(0x80000003);
+            *state = 0x28;
+            st = 0x28;
+            goto again;
+        }
+        if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            st = 0x27;
+            goto again;
+        }
+        if (trg & 0x20) {
+            u8 *w = (u8 *)MsGetSaveWeapon(D_003257B4[D_00693328 + D_00693338[0]], &buf);
+            if (w[6] == 0xFF || w[2] == 0) {
+                SndSepPlaySimple(0x80000001);
+                func_00221620();
+                st = 0x27;
+                goto again;
+            }
+            SndSepPlaySimple(0x80000003);
+        } else if (rep & 0x1000) {
+            if (D_00693334 != 0) {
+                D_00693338[0]--;
+                if (D_00693338[0] >= 0) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[0] = 0;
+                    if (D_00693328 > 0) {
+                        SndSepPlaySimple(0x80000001);
+                        D_00693328--;
+                        D_00693324 = -0x1000;
+                        D_0069332C = D_00693328;
+                        D_00693330 = 0x333;
+                        *state = 0x26;
+                        st = 0x26;
+                        goto again;
+                    }
+                }
+            } else {
+                D_00693338[1]--;
+                if (D_00693338[1] >= 0) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[1] = 0;
+                }
+            }
+        } else if (rep & 0x4000) {
+            if (D_00693334 != 0) {
+                D_00693338[0]++;
+                if (D_00693338[0] < 6) {
+                    SndSepPlaySimple(0x80000001);
+                } else {
+                    D_00693338[0] = 5;
+                    if (D_00693328 <= D_00693320 - 7) {
+                        D_00693328++;
+                        D_00693324 = 0x1000;
+                        D_0069332C = D_00693328;
+                        D_00693330 = 0x333;
+                        SndSepPlaySimple(0x80000001);
+                        *state = 0x26;
+                        st = 0x26;
+                        goto again;
+                    }
+                }
+            } else {
+                D_00693338[1]++;
+                if (D_00693338[1] >= 8) {
+                    D_00693338[1] = 7;
+                } else {
+                    SndSepPlaySimple(0x80000001);
+                }
+            }
+        } else {
+            if ((rep & 1) && D_00693334 != 0) {
+                D_0069332C = D_00693328 - 6;
+                if (D_0069332C < 0) {
+                    D_0069332C = 0;
+                }
+                if (D_0069332C != D_00693328) {
+                    SndSepPlaySimple(0x80000001);
+                    D_00693324 = -0x1000;
+                    D_00693330 = 0x111;
+                    *state = 0x26;
+                    st = 0x26;
+                    goto again;
+                }
+            }
+            if ((rep & 2) && D_00693334 != 0) {
+                D_0069332C = D_00693328 + 6;
+                if (D_0069332C >= D_00693320 - 6) {
+                    D_0069332C = D_00693320 - 6;
+                    if (D_0069332C < 0) {
+                        D_0069332C = 0;
+                    }
+                }
+                if (D_0069332C != D_00693328) {
+                    SndSepPlaySimple(0x80000001);
+                    D_00693330 = 0x111;
+                    D_00693324 = 0x1000;
+                    *state = 0x26;
+                    st = 0x26;
+                    goto again;
+                }
+            }
+        }
+        break;
+    case 38:
+        if (D_00693324 > 0) {
+            D_00693324 -= D_00693330;
+            if (D_00693324 <= 0) {
+                D_00693324 = 0;
+                D_00693328 = D_0069332C;
+                *state = 0x25;
+                st = 0x25;
+                goto again;
+            }
+        } else {
+            D_00693324 += D_00693330;
+            if (D_00693324 >= 0) {
+                D_00693324 = 0;
+                D_00693328 = D_0069332C;
+                *state = 0x25;
+                st = 0x25;
+                goto again;
+            }
+        }
+        break;
+    case 39:
+        *state = 0x20;
+        D_00693340 = 0;
+        break;
+    case 40:
+        D_0069330E = 0x200;
+        *state = 0x29;
+        break;
+    case 41:
+        if (trg != 0 && D_0069330C == 0x1000) {
+            D_0069330E = -0x200;
+            *state = 0x25;
+        }
+        break;
+    case 42:
+        D_00693302 = -0x80;
+        D_0069330A = -0x80;
+        *state = 0x2B;
+        break;
+    case 43:
+        if (D_00693308 == 0) {
+            *state = 6;
+        }
+        break;
+    case 6:
+        *state = 7;
+    case 7:
+        if (func_0014F158() == 0) {
+            func_002216F0();
+            *state = 8;
+        }
+        break;
+    case 8:
+        if (D_00693300 == 0) {
+            D_006930B2 = 1;
+            if (func_00147E38() != 0) {
+                func_00117E38(0xF);
+            }
+        }
+        break;
+    }
+}
 
 void func_00222778(void)
 {
@@ -329,6 +973,21 @@ void func_002227A0(void)
         MsSaveItemUse(btlgetdata.hD4[i], btlgetdata.bE4[i]);
     }
 }
+
+int func_001C0598(void *a);
+void func_002416C0(void *a, int b, int c);
+int MsGetSaveWeaponAmount(s32 *a);
+extern s32 D_00693344;
+extern s32 D_00693348;
+extern s32 D_0069334C;
+extern s32 D_00693350;
+extern s32 D_00693354;
+extern s32 D_00693358;
+extern s32 D_0069335C;
+extern u8 D_00693128[];
+extern u8 D_00693158[];
+extern u8 D_00693250[];
+extern u8 D_006932B0[];
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00222820);
 
@@ -838,7 +1497,87 @@ void func_00224030(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", TkBtlEndInit);
+void TkBtlEndInit(int a0, int a1)
+{
+    s32 buf0;
+    s32 amount;
+    s32 buf1;
+    s32 buf2;
+    int i;
+    int found = 0;
+    int top;
+    int t0;
+    int t1;
+
+    D_003257A4 = (u8 *)TkBtlEndGetText(0x4004);
+    D_003257A8 = (u8 *)TkBtlEndGetText(0x4013);
+    D_00693318 = 0xD0;
+    D_00693334 = 0;
+    D_00693338[1] = 0;
+    D_00693338[0] = 0;
+    D_00693344 = 0;
+    D_00693348 = 0;
+    D_0069334C = 0;
+    D_00693350 = 0;
+    D_00693354 = 0;
+    D_00693358 = 0;
+    D_0069335C = 0;
+    func_00223FB8(a1);
+    func_00224030();
+    D_00693300 = 0;
+    D_00693302 = 0x80;
+    D_00693304 = 0;
+    D_00693306 = 0;
+    D_00693308 = 0;
+    D_0069330A = 0;
+    D_0069330C = 0;
+    D_0069330E = 0;
+    D_00693324 = 0;
+    D_00693340 = 0;
+    D_003257B4 = (u16 *)MsGetSaveWeaponList(-1, -1, 0, &D_00693320);
+    top = 0;
+    for (i = 0; i < D_00693320; i++) {
+        if (MsGetSaveWeapon(D_003257B4[i], &buf0)->b2 == 0) {
+            found = i;
+            top = found - 3;
+            break;
+        }
+    }
+    if (top + 6 >= D_00693320) {
+        top = D_00693320 - 7;
+    }
+    if (top < 0) {
+        top = 0;
+    }
+    D_00693328 = top;
+    D_0069332C = top;
+    D_00693338[0] = found - top;
+    if (D_00693338[0] < 0) {
+        D_00693338[0] = 0;
+    }
+    if (D_00693338[0] >= 6) {
+        D_00693338[0] = 5;
+    }
+    MsGetSaveWeaponAmount(&amount);
+    for (i = (s8)btlgetdata.padC8[10]; i < 8; i++) {
+        MsGetSaveWeapon(btlgetdata.h[i], &buf1)->b2 = 0;
+    }
+    if (amount < (s8)btlgetdata.padC8[10]) {
+        D_0069331C = 1;
+    } else {
+        D_0069331C = 0;
+        for (i = 0; i < (s8)btlgetdata.padC8[10]; i++) {
+            func_001C0598(MsGetSaveWeapon(btlgetdata.h[i], &buf2));
+        }
+    }
+    t0 = TkBtlEndGetText(0x4000);
+    t1 = TkBtlEndGetText(0x4000);
+    func_00221040(t0, t1);
+    func_002416C0(D_00693128, 0x15, 0xC);
+    func_002416C0(D_00693158, 0x79, 0xC);
+    func_002416C0(D_00693250, 0x2C, 0xC);
+    func_002416C0(D_006932B0, 0x22, 0xC);
+}
 
 void func_002243C0(int a0, int a1, int a2) {
     TOMenuOpenPktBuffTmp();

@@ -445,7 +445,91 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BF20);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C1C8);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C470);
+extern char D_0056C450[];
+void *func_0017DBA0(int size);
+void func_0017DC70(void *p);
+int func_0017C1C8(int w, int h, u8 *src, u8 *dst);
+void func_002ED6A0(void *f, const char *fmt);
+
+int func_0017C470(int w, int h, u8 *src, u8 *dst)
+{
+    int i, j, k;
+    int nx, ny;
+    int bw, bw2;
+    int bh, bh2;
+    u8 *buf1;
+    u8 *buf2;
+
+    for (i = 0; i < 11; i++) {
+        if (w == (0x400 >> i)) {
+            break;
+        }
+    }
+    if (i == 11) {
+        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), D_0056C450);
+        return -1;
+    }
+    for (i = 0; i < 11; i++) {
+        if (h == (0x400 >> i)) {
+            break;
+        }
+    }
+    if (i == 11) {
+        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), D_0056C450);
+        return -1;
+    }
+
+    buf1 = (u8 *)func_0017DBA0(0x20000);
+    buf2 = (u8 *)func_0017DBA0(0x10000);
+    func_002EF0D0(buf1, 0, 0x2000);
+    func_002EF0D0(buf2, 0, 0x2000);
+
+    nx = (w - 1) / 128 + 1;
+    ny = (h - 1) / 64 + 1;
+    if (nx == 1) {
+        bw = w;
+        bw2 = bw * 2;
+    } else {
+        bw = 128;
+        bw2 = 256;
+    }
+    if (ny == 1) {
+        bh = h;
+        bh2 = h / 2;
+    } else {
+        bh = 64;
+        bh2 = 32;
+    }
+
+    for (i = 0; i < ny; i++) {
+        for (j = 0; j < nx; j++) {
+            u8 *s = src + (bw * i) * (nx << 6) + (bw * j);
+            u8 *d = buf1;
+            for (k = 0; k < bh; k++) {
+                func_002EEF1C(d, s, bw);
+                d += 0x80;
+                s += bw * nx;
+            }
+            func_0017C1C8(0x80, 0x40, buf1, buf2);
+            {
+                int nxbh2 = nx * bh2;
+                s = dst + (bw2 * i) * nxbh2 + (bw2 * j);
+            }
+            d = buf2;
+            for (k = 0; k < bh2; k++) {
+                func_002EEF1C(s, d, bw2);
+                s += bw2 * nx;
+                d += 0x100;
+            }
+        }
+    }
+
+    func_0017DC70(buf1);
+    func_0017DC70(buf2);
+    return 0;
+}
+
+
 
 typedef struct {
     u64 d[10];

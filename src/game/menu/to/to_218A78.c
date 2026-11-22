@@ -4,6 +4,7 @@
 #define MsMenuBitStatus _hdr_MsMenuBitStatus
 #define MsMenuCountStatus _hdr_MsMenuCountStatus
 #define MsMenuBitStatus2 _hdr_MsMenuBitStatus2
+#define MsMenuCheckChrLive _hdr_MsMenuCheckChrLive
 #define MsGetChrLimitGauge _hdr_MsGetChrLimitGauge
 #define MsGetChrLimitGaugeMax _hdr_MsGetChrLimitGaugeMax
 #define D_00692658 _hdr_D_00692658
@@ -25,6 +26,7 @@
 #undef MsMenuBitStatus
 #undef MsMenuCountStatus
 #undef MsMenuBitStatus2
+#undef MsMenuCheckChrLive
 #undef MsGetChrLimitGauge
 #undef MsGetChrLimitGaugeMax
 #undef D_00692658
@@ -178,7 +180,30 @@ extern s16 D_006925B8;
 extern s16 D_006925BA;
 extern s16 D_006925BC;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitInfoWinMes);
+void TOBtlInitInfoWinMes(int a)
+{
+    int i;
+
+    D_003249AD = 0;
+    D_00692502 = 0xFF;
+    D_006925B2 = D_00692478 + 0x50;
+    D_006925B4 = 0xC;
+    D_006925B6 = D_00692478 + 0x50;
+    D_006925B8 = 0xC;
+    D_006925BA = 0x1AE;
+    D_006925BC = 0x24;
+    D_006925B0 = 0;
+    for (i = 0; i < 4; i++) {
+        D_00692560[i].h0 = 0;
+        D_00692560[i].h2 = D_006925B2;
+        D_00692560[i].h4 = D_006925B4;
+        D_00692560[i].h6 = D_006925BA - D_006925B6;
+        D_00692560[i].hA = D_006925B6;
+        D_00692560[i].hC = D_006925B8;
+        D_00692560[i].hE = 0;
+        D_00692560[i].w10 = 0;
+    }
+}
 
 extern s8 D_00325020;
 void TOBtlSetInfoWinMes(int a);
@@ -1178,7 +1203,195 @@ void TOBtlCtrlStatusWin(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlDrawStatusWin);
+extern s16 D_0032430C;
+extern s16 D_0032430E;
+extern s16 D_00324310;
+extern s16 D_00324312;
+extern s32 D_00324314;
+extern s32 D_00324318;
+extern s32 D_0032431C;
+extern s32 D_00324320;
+extern s16 D_00324324;
+extern s16 D_00324326;
+extern s16 D_00324328;
+extern s16 D_0032432A;
+extern s16 D_0032432C;
+extern u8 D_00324330;
+extern u8 D_00324331;
+extern u8 D_00324332;
+extern u8 D_00324333;
+extern s16 D_00324334;
+extern s16 D_00324336;
+extern s16 D_00324338;
+extern s16 D_0032433A;
+extern s16 D_0032433C;
+extern s16 D_0032433E;
+extern s16 D_00324340;
+extern s16 D_00324342;
+extern s16 D_00324344;
+extern s16 D_00324346;
+extern s16 D_00324348;
+extern s16 D_0032434A;
+extern s16 D_00324350;
+extern s16 D_00324352;
+extern s16 D_00324354;
+extern s16 D_00324356;
+
+void ToMakeBtlEasyEdgeFontChrName(int x0, int y0, int x1, int y1, u32 c0, u32 c1);
+void func_001F3B10(void *s, int x, int y, int c, int a);
+void func_0021D1B0(int val, int x, int y);
+
+void TOBtlDrawStatusWin(void)
+{
+    s16 p00[2];
+    s32 c10[2];
+    s32 c20[2];
+    s16 p30[2];
+    s16 p40[4];
+    u8 col[4];
+    s16 p60[2];
+    s16 p70[2];
+    s16 p80[2];
+    s16 p90[2];
+    s16 pA0[4];
+    s16 pB0[4];
+    s16 w;
+    s16 h;
+    s16 width;
+    int i;
+
+    TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    for (i = 0; i < 3; i++) {
+        if (D_006926E8[i] != 0xFF) {
+            p00[0] = D_0032430C;
+            p00[1] = D_0032430E + i * D_00324312;
+            width = D_00324310;
+            c10[0] = D_00324314;
+            c10[1] = D_00324318;
+            c20[0] = D_0032431C;
+            c20[1] = D_00324320;
+            p30[0] = p00[0] + D_00324324;
+            p30[1] = p00[1] + D_00324326;
+            p40[0] = p00[0] + D_00324328;
+            p40[1] = p00[1] + D_0032432A;
+            p40[2] = D_0032432C;
+            p40[3] = D_0032432A;
+            col[0] = D_00324330;
+            col[1] = D_00324331;
+            col[2] = D_00324332;
+            col[3] = D_00324333;
+            p60[0] = D_00324334 + p40[0];
+            p60[1] = D_00324336 + p40[1];
+            p70[0] = D_00324338 + p40[0];
+            p70[1] = D_0032433A + p40[1];
+            p80[0] = D_0032433C + p40[0];
+            p80[1] = D_0032433E + p40[1];
+            p90[0] = D_00324340 + p40[0];
+            p90[1] = D_00324342 + p40[1];
+            pA0[0] = D_00324344 + p40[0];
+            pA0[1] = D_00324346 + p40[1];
+            pA0[2] = D_00324348;
+            pA0[3] = D_0032434A;
+            pB0[0] = D_00324350 + pA0[0];
+            pB0[1] = D_00324352 + pA0[1];
+            pB0[2] = D_00324354;
+            pB0[3] = D_00324356;
+
+            switch (D_006928A0) {
+            case 3:
+                if (D_003252A4 == D_006926E8[i]) {
+                    func_001FF1D8(0x199, 0x19A, p00[0], p00[1], width, c10[0], c10[1]);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1], p00[0] + 0x32, p00[1], 0x00808080, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1], p00[0] + 0x32 + width, p00[1], 0x80A0A0A0, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1] + 0x13, p00[0] + 0x32, p00[1] + 0x13, 0x00808080, 0x80000000);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1] + 0x13, p00[0] + 0x32 + width, p00[1] + 0x13, 0x80000000, 0x80000000);
+                }
+                if (func_0020B850() == 0 && func_001BD360() == 0) {
+                    w = func_00205E78(MsGetSaveChrName(D_006926E8[i]), 1);
+                    func_001F3B10(MsGetSaveChrName(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0], 1);
+                } else {
+                    _TOGetMessageWH(0, (u8 *)func_001BB190(D_006926E8[i]), &w, &h, 0, 0);
+                    func_001F3808((void *)func_001BB190(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0]);
+                }
+                TOMkpShapeXY(0xE9, p60[0], p60[1]);
+                func_001F5E80(D_006926F0[i].hp_disp, p70[0], p70[1], D_006926F0[i].pad19[0]);
+                TOMkpShapeXY(0xEA, p80[0], p80[1]);
+                func_001F5E80(D_006926F0[i].mp_disp, p90[0], p90[1], D_006926F0[i].pad31[0]);
+                func_0021D1B0(D_006926F0[i].lim_disp, pA0[0], pA0[1]);
+                break;
+            case 0:
+                if ((toTarget.wA8 >> D_006926E8[i]) & 1) {
+                    func_001FF1D8(0x199, 0x19A, p00[0], p00[1], width, c20[0], c20[1]);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1], p00[0] + 0x32, p00[1], 0x00808080, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1], p00[0] + 0x32 + width, p00[1], 0x80A0A0A0, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1] + 0x13, p00[0] + 0x32, p00[1] + 0x13, 0x00808080, 0x80000000);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1] + 0x13, p00[0] + 0x32 + width, p00[1] + 0x13, 0x80000000, 0x80000000);
+                }
+                if (func_0020B850() == 0 && func_001BD360() == 0) {
+                    w = func_00205E78(MsGetSaveChrName(D_006926E8[i]), 1);
+                    func_001F3B10(MsGetSaveChrName(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0], 1);
+                } else {
+                    _TOGetMessageWH(0, (u8 *)func_001BB190(D_006926E8[i]), &w, &h, 0, 0);
+                    func_001F3808((void *)func_001BB190(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0]);
+                }
+                TOMkpShapeXY(0xE9, p60[0], p60[1]);
+                func_001F5E80(D_006926F0[i].hp_disp, p70[0], p70[1], D_006926F0[i].pad19[0]);
+                TOMkpEasyStrFontM(D_00570E30, p70[0] + 8, p70[1]);
+                ((void (*)(int, int, int))func_001F5E80)(MsGetRamChrHPmax(D_006926E8[i]), p90[0], p90[1]);
+                break;
+            case 1:
+                if ((toTarget.wA8 >> D_006926E8[i]) & 1) {
+                    func_001FF1D8(0x199, 0x19A, p00[0], p00[1], width, c20[0], c20[1]);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1], p00[0] + 0x32, p00[1], 0x00808080, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1], p00[0] + 0x32 + width, p00[1], 0x80A0A0A0, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1] + 0x13, p00[0] + 0x32, p00[1] + 0x13, 0x00808080, 0x80000000);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1] + 0x13, p00[0] + 0x32 + width, p00[1] + 0x13, 0x80000000, 0x80000000);
+                }
+                if (func_0020B850() == 0 && func_001BD360() == 0) {
+                    w = func_00205E78(MsGetSaveChrName(D_006926E8[i]), 1);
+                    func_001F3B10(MsGetSaveChrName(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0], 1);
+                } else {
+                    _TOGetMessageWH(0, (u8 *)func_001BB190(D_006926E8[i]), &w, &h, 0, 0);
+                    func_001F3808((void *)func_001BB190(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0]);
+                }
+                TOMkpShapeXY(0xEA, p60[0], p60[1]);
+                func_001F5E80(D_006926F0[i].mp_disp, p70[0], p70[1], D_006926F0[i].pad19[0]);
+                TOMkpEasyStrFontM(D_00570E30, p70[0] + 8, p70[1]);
+                ((void (*)(int, int, int))func_001F5E80)(MsGetRamChrMPmax(D_006926E8[i]), p90[0], p90[1]);
+                break;
+            case 2:
+                if ((toTarget.wA8 >> D_006926E8[i]) & 1) {
+                    func_001FF1D8(0x199, 0x19A, p00[0], p00[1], width, c20[0], c20[1]);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1], p00[0] + 0x32, p00[1], 0x00808080, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1], p00[0] + 0x32 + width, p00[1], 0x80A0A0A0, 0x80A0A0A0);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0], p00[1] + 0x13, p00[0] + 0x32, p00[1] + 0x13, 0x00808080, 0x80000000);
+                    ToMakeBtlEasyEdgeFontChrName(p00[0] + 0x32, p00[1] + 0x13, p00[0] + 0x32 + width, p00[1] + 0x13, 0x80000000, 0x80000000);
+                }
+                if (func_0020B850() == 0 && func_001BD360() == 0) {
+                    w = func_00205E78(MsGetSaveChrName(D_006926E8[i]), 1);
+                    func_001F3B10(MsGetSaveChrName(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0], 1);
+                } else {
+                    _TOGetMessageWH(0, (u8 *)func_001BB190(D_006926E8[i]), &w, &h, 0, 0);
+                    func_001F3808((void *)func_001BB190(D_006926E8[i]), p30[0] - w, p30[1], D_006926F0[i].pad19[0]);
+                }
+                if (D_006926F0[i].st_cnt != 0) {
+                    if (D_006926F0[i].timer-- <= 0) {
+                        D_006926F0[i].timer = 0x14;
+                        if (++D_006926F0[i].pad3E >= D_006926F0[i].st_cnt) {
+                            D_006926F0[i].pad3E = 0;
+                        }
+                    }
+                    if (func_0020B850() == 0 && func_001BD360() == 0) {
+                        func_001F5790(MsMenuGetText(1, D_006926F0[i].st_buf[D_006926F0[i].pad3E], 1), p60[0], p70[1]);
+                    } else {
+                        func_001F37C8(MsMenuGetText(1, D_006926F0[i].st_buf[D_006926F0[i].pad3E], 1), p60[0], p70[1]);
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
 
 void func_0021D038(s8 v)
 {

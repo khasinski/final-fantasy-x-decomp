@@ -1,31 +1,68 @@
 /* tu_203 0x1d8c28-0x1dbb50: low; ~Ms (config/tu_map.tsv) */
+#define MsInsertInputCue _hdr_MsInsertInputCue
+#define MsInsertCommandCue _hdr_MsInsertCommandCue
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/u2.h"
+#undef MsInsertCommandCue
+#undef MsInsertInputCue
 
 extern char D_0056F6B0[];
+extern const double D_0056F6C0;
+extern const double D_0056F6C8;
+extern const double D_0056F6D0;
+extern const double D_0056F6D8;
+extern const double D_0056F6E0;
+extern const double D_0056F6E8;
+extern const double D_0056F6F0;
+extern const double D_0056F6F8;
+extern const double D_0056F700;
+extern s8 D_00317306;
 void yiDisposeAnimDObj(int a, int b);
+void yiSetRotTransDObj(int id, float *rot, float *tr);
+void func_0019D1E8(float x, float z);
+float MsNearRag(float a, float b);
+void func_001AC528(void *dst, void *src, float a);
+void func_001AC5E0(void *dst, void *src, float a);
+void func_001AC698(void *dst, void *src, float a);
+void func_001AC200(void *dst, void *mat, void *src);
+void func_001AC3D0(float *dst, float *a, float *b);
+void Ch_OptposGet(Chr *ch, int idx, float *out);
+int MsGetNextCTB(BtlChr *c, int a, int b, int d);
+void MsUseChrMpLimit(int id);
+void MsCheckLimitUp(int id, BtlChr *c);
+int MsCheckStatusAfterInput(void);
+int MsCheckStatusAfterAction(int id, BtlChr *c);
+void MsDefenseEndProcess(void);
+void func_001DAB90(float *rot, float unused);
 
 typedef struct Blk662D28Full {
-    u8 pad0[0x810];
+    u8 pad0[0x800];
+    float f800;
+    float f804;
+    float f808;
+    float f80C;
     s32 f810;
-    s32 f814[8];
-    s32 f834;
+    float f814[3];
+    float f820;
+    float f824[3];
+    float f830;
+    float f834;
     float f838;
-    s32 f83C;
-    s32 f840;
-    s32 f844;
-    s32 f848;
-    s32 f84C;
+    float f83C;
+    float f840;
+    float f844;
+    float f848;
+    float f84C;
     s32 f850;
     s32 f854;
     s32 f858;
     s32 f85C;
     s32 f860;
-    s32 f864;
+    float f864;
 } Blk662D28Full; /* DEBT(NAME): full layout of Blk662D28 (0x870 bytes) */
 
 int MsCheckCommandCue(int id, int sub)
@@ -95,7 +132,71 @@ int MsRegistCommandCue(int id, u8 *p, int a, int b, int c)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsInsertCommandCue);
+int MsInsertCommandCue(int id, u8 *p, int a, int b, int c, int d, int e)
+{
+    int n = D_003172F0.f1511;
+    if (n < 0x3E) {
+        int found = 1;
+        int pos = 0;
+        int i;
+        BtlChr *ch;
+        GsEnt48 *ent;
+
+        if (MsBtlChrNumCheck(e) != 0) {
+            pos = MsGetChr(e)->fAA5;
+            if (pos != 0xFF) {
+                ent = &D_003172F0.ent48[pos];
+                if (ent->id == e) {
+                    pos++;
+                    found = 0;
+                }
+            }
+        }
+        if (found != 0) {
+            ent = D_00317690;
+            pos = 0;
+            for (i = 0; i < n; i++, ent++) {
+                if (ent->f4 == 0) {
+                    pos = i;
+                    break;
+                }
+            }
+        }
+        if ((b & 0xF0) != 0) {
+            ent = &D_00317690[pos];
+            for (i = pos; i < n; i++, ent++) {
+                if ((ent->f7 & 0xF0) == 0 || ent->f7 > b) {
+                    pos = i;
+                    break;
+                }
+            }
+            if (i == n) {
+                pos = i;
+            }
+        }
+        ent = D_00317690;
+        for (i = n; i > pos; i--) {
+            GsEnt48 *dst = &ent[i];
+            GsEnt48 *src = dst - 1;
+            *dst = *src;
+        }
+        ch = MsGetChr(id);
+        ch->fAA7++;
+        ent = &D_00317690[pos];
+        *ent = *(GsEnt48 *)p;
+        ent->f7 = b;
+        ent->sub = c;
+        ent->f4 = d;
+        ent->f2 = 0;
+        ent->pad5[0] = 0;
+        ent->pad5[1] = a;
+        ent->id = id;
+        MsUseItem(id, (GsEnt48 *)p, -1);
+        D_003172F0.f1511 = n + 1;
+        return -1;
+    }
+    return 0;
+}
 
 GsEnt48 *func_001D92A0(void)
 {
@@ -254,7 +355,68 @@ int MsRegistInputCue(int id, int a, int b, int c) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsInsertInputCue);
+int MsInsertInputCue(int id, int a, int b, int c, int d, int e)
+{
+    int n = D_003172F0.f1510;
+    if (n < 0x3E) {
+        int found = 1;
+        int pos = 0;
+        int i;
+        BtlChr *ch;
+        GsEnt8 *ent;
+
+        if (MsBtlChrNumCheck(d) != 0) {
+            pos = MsGetChr(d)->fAA4;
+            if (pos != 0xFF) {
+                ent = &D_003172F0.ent8[pos];
+                if (ent->id == d) {
+                    pos++;
+                    found = 0;
+                }
+            }
+        }
+        if (found != 0) {
+            ent = (GsEnt8 *)D_003174A0.e;
+            pos = 0;
+            for (i = 0; i < n; i++, ent++) {
+                if (ent->f3 == 0) {
+                    pos = i;
+                    break;
+                }
+            }
+        }
+        if ((a & 0xF0) != 0) {
+            ent = (GsEnt8 *)&D_003174A0.e[pos];
+            for (i = pos; i < n; i++, ent++) {
+                if ((ent->f4 & 0xF0) == 0 || ent->f4 > a) {
+                    pos = i;
+                    break;
+                }
+            }
+            if (i == n) {
+                pos = i;
+            }
+        }
+        ent = (GsEnt8 *)D_003174A0.e;
+        for (i = n; i > pos; i--) {
+            ent[i] = ent[i - 1];
+        }
+        ch = MsGetChr(id);
+        ch->fAA6++;
+        ent = (GsEnt8 *)&D_003174A0.e[pos];
+        ent->f4 = a;
+        ent->id = id;
+        ent->f2 = b;
+        ent->f3 = e;
+        ent->sub = c;
+        if (c == 0) {
+            ch->f31C = 0;
+        }
+        D_003174A0.id = n + 1;
+        return -1;
+    }
+    return 0;
+}
 
 GsEnt8 *MsGetInputCue(void)
 {
@@ -264,7 +426,59 @@ GsEnt8 *MsGetInputCue(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsDeleteInputCue);
+int MsDeleteInputCue(int id, int idx, int a2, int flag)
+{
+    Ent3174A0 *tbl = D_003174A0.e;
+    int n = D_003174A0.id;
+    if (n > 0 && idx != 0xFF) {
+        int act = 0;
+        BtlChr *chr = MsGetChr(id);
+        int i;
+        int dst;
+        int deleted;
+
+        for (i = 0, dst = 0, deleted = 0; i < n; i++) {
+            if (i == idx && tbl[i].b0 == id) {
+                if (i == chr->fAA4) {
+                    if (flag != 0) {
+                        goto keep;
+                    }
+                    chr->fAA4 = 0xFF;
+                }
+                act = 1;
+                D_003172F0.f15C0 = 0;
+                chr->fAA6--;
+                MsDefenseEndProcess();
+                MsCheckStatusAfterInput();
+                MsCheckLimitUp(id, chr);
+                if (tbl[i].b1 == 0) {
+                    chr->f31C += MsGetNextCTB(chr, chr->fAA8, chr->f2D3, chr->f2D4);
+                    MsCheckStatusAfterAction(id, chr);
+                    MsUseChrMpLimit(id);
+                    if (a2 != 0 && ((chr->f2C6 >> 3) & 1) && chr->fA8C == 0 && chr->fA88 != 0 && *(u8 *)&chr->fAB8 == 0) {
+                        D_003172F0.f2114 = id;
+                    }
+                }
+                deleted++;
+            } else {
+            keep:
+                if (i != dst) {
+                    tbl[dst] = tbl[i];
+                }
+                dst++;
+            }
+        }
+        if (deleted > 0) {
+            n -= deleted;
+            D_00318800 = n;
+        }
+        if (act != 0) {
+            MsActionRequest(id, 0xFF, 6, 0, 0, 0);
+        }
+        return deleted;
+    }
+    return 0;
+}
 
 int MsCleanInputCue(int a, int b) {
     int sum = 0;
@@ -432,12 +646,6 @@ void func_001DAB28(Chr *a, int b, BtlChr *c)
 }
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", func_001DAB90);
-
-void func_001AC528(void *dst, void *src, float a);
-void func_001AC698(void *dst, void *src, float a);
-void func_001AC200(void *dst, void *mat, void *src);
-
-extern s8 D_00317306;
 
 typedef struct Blk662D28_Sp {
     u8 pad0[0x7C0];
@@ -718,7 +926,6 @@ void MsPoisonProcess(int id, BtlChr *c) {
 }
 
 void func_001AC258(float *dst, float *a, float *b, float t);
-void func_001AC3D0(float *dst, float *a, float *b);
 
 void MsDefenseStartProcess(void)
 {

@@ -1,10 +1,20 @@
 /* tu_190 0x1bc440-0x1bf978: low; ~Ms (config/tu_map.tsv) */
+#define MsExchangeSaveParty _hdr_MsExchangeSaveParty
+#define func_001BE258 _hdr_func_001BE258
+#define MsGetMon _hdr_MsGetMon
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/g2.h"
+#undef MsGetMon
+#undef func_001BE258
+#undef MsExchangeSaveParty
+
+BtlChr *MsGetMon(int id);
+int func_001BE258(int id);
+u8 *MsGetSaveInParty(int *n);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSaveStartGame);
 
@@ -264,8 +274,232 @@ void func_001BD508(int on) {
     D_0031D1DC = (D_0031D1DC & ~0x40U) | ((on & 1) << 6);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsGetSaveWindow);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1BC440/rodata", jtbl_0056E550);
+void *MsGetSaveWindow(int id, int kind, int *out_cnt) {
+    u16 *res;
+    int cnt = 0x14;
+    int n, k;
+
+    id &= 0xFF;
+    if (!MsBtlChrNumCheck(id)) {
+        id = 0;
+    }
+    MsGetChr(id);
+    res = (u16 *)((u8 *)btl_ply_win + id * 0x478);
+
+    switch (kind) {
+    case 1:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x78);
+        cnt = 0x18;
+        break;
+    case 2:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x48);
+        cnt = 0x18;
+        break;
+    case 3:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0xA8);
+        cnt = 0x20;
+        break;
+    case 14:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0xE8);
+        cnt = 0x20;
+        break;
+    case 4:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x128);
+        cnt = 0x18;
+        break;
+    case 12:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x28);
+        cnt = 8;
+        break;
+    case 13:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x38);
+        cnt = 8;
+        break;
+    case 5:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1998);
+        cnt = 10;
+        k = -1;
+        for (id = 0, n = 0; id < 0x12; id++) {
+            u8 *c = (u8 *)MsGetChr(id);
+            if (((s8 *)c)[0x10] != 0 && MsGetRamChrSummon(id) != 0) {
+                if (MsGetRamChrMegas(id) != 0) {
+                    if (k == 0) {
+                        continue;
+                    }
+                    k = 0;
+                    id = 0x30FF;
+                }
+                res[n++] = id;
+            }
+        }
+        for (; n < 0x1F; n++) {
+            res[n] = 0xFF;
+        }
+        break;
+    case 8:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x19AC);
+        cnt = 0x1F;
+        for (id = 0, n = 0; id < 0x12; id++) {
+            u8 *c = (u8 *)MsGetChr(id);
+            if (((s8 *)c)[0x10] != 0) {
+                res[n++] = id;
+            }
+        }
+        for (; n < 0x1F; n++) {
+            res[n] = 0xFF;
+        }
+        break;
+    case 9:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x19EA);
+        cnt = 0x1F;
+        n = 0;
+        for (id = 0; id < 7; id++) {
+            u8 *c;
+            k = ((u8 *)&D_003172F0 + 0x1FC5)[id];
+            c = (u8 *)MsGetChr(k);
+            if (k != 0xFF && ((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA8D] == 0 && (*(u32 *)(c + 0xA88) & 0xFF00FF) != 0) {
+                res[n++] = k;
+            }
+        }
+        for (id = 0; id < 0x12; id++) {
+            u8 *c = (u8 *)MsGetChr(id);
+            if (((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA8D] == 0 && (*(u32 *)(c + 0xA88) & 0xFF00FF) != 0) {
+                int add = 1;
+                for (k = 0; k < n; k++) {
+                    if (res[k] == id) {
+                        add = 0;
+                        break;
+                    }
+                }
+                if (add != 0) {
+                    res[n++] = id;
+                }
+            }
+        }
+        for (; n < 0x1F; n++) {
+            res[n] = 0xFF;
+        }
+        break;
+    case 18:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1A28);
+        cnt = 0x1F;
+        n = 0;
+        for (id = 0; id < 7; id++) {
+            u8 *c;
+            k = ((u8 *)&D_003172F0 + 0x1FC5)[id];
+            c = (u8 *)MsGetChr(k);
+            if (k != 0xFF && ((s8 *)c)[0xA98] != 0 && ((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA8D] == 0 && (*(u32 *)(c + 0xA88) & 0xFF00FF) != 0) {
+                res[n++] = k;
+            }
+        }
+        for (id = 0; id < 0x12; id++) {
+            u8 *c = (u8 *)MsGetChr(id);
+            if (((s8 *)c)[0xA98] != 0 && ((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA8D] == 0 && (*(u32 *)(c + 0xA88) & 0xFF00FF) != 0) {
+                int add = 1;
+                for (k = 0; k < n; k++) {
+                    if (res[k] == id) {
+                        add = 0;
+                        break;
+                    }
+                }
+                if (add != 0) {
+                    res[n++] = id;
+                }
+            }
+        }
+        for (; n < 0x1F; n++) {
+            res[n] = 0xFF;
+        }
+        break;
+    case 10:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1A66);
+        cnt = 0x1F;
+        n = 0;
+        for (id = 0; id < 0x11; id++) {
+            u8 *c;
+            k = ((u8 *)&D_003172F0 + 0x1FD3)[id];
+            c = (u8 *)MsGetChr(k);
+            if (k != 0xFF && ((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA88] == 0 && ((s8 *)c)[0xA8D] == 0) {
+                res[n++] = k;
+            }
+        }
+        for (id = 0; id < 8; id++) {
+            u8 *c = (u8 *)MsGetChr(id);
+            if (((s8 *)c)[0x10] != 0 && ((s8 *)c)[0xA88] == 0 && ((s8 *)c)[0xA8D] == 0) {
+                int add = 1;
+                for (k = 0; k < n; k++) {
+                    if (res[k] == id) {
+                        add = 0;
+                        break;
+                    }
+                }
+                if (add != 0) {
+                    res[n++] = id;
+                }
+            }
+        }
+        for (; n < 0x1F; n++) {
+            res[n] = 0xFF;
+        }
+        break;
+    case 11: {
+        /* DEBT(FAKE): register pin steers 0xFF00FF mask to $s4 instead of $s0. */
+        register u32 mask __asm__("$20");
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1AA6);
+        cnt = 8;
+        id = 0;
+        n = 0;
+        mask = 0xFF00FF;
+        for (; id < 8; id++) {
+            u8 *c = (u8 *)MsGetMon(id);
+            if (((s8 *)c)[0x10] == 0) continue;
+            if (((s8 *)c)[0xA8D] != 0) continue;
+            if ((*(u32 *)(c + 0xA88) & mask) == 0) continue;
+            res[n++] = id + 0x14;
+        }
+        for (; n < 8; n++) {
+            struct { u8 pad[0x1AA6]; u16 h[8]; } *q = (void *)&D_003172F0;
+            q->h[n] = 0xFF;
+        }
+        break;
+    }
+    case 6:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1DE6);
+        cnt = 0x14;
+        break;
+    case 17:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1EC6);
+        cnt = 0x32;
+        break;
+    case 20:
+        res = D_003194D0.h3ECC;
+        cnt = 0x70;
+        break;
+    case 7:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x158);
+        cnt = 0xC8;
+        break;
+    case 15:
+        res = (u16 *)((u8 *)btl_ply_win + id * 0x478 + 0x2E8);
+        cnt = 0xC8;
+        break;
+    case 21:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1AA4);
+        *res = 0x3121;
+        cnt = 1;
+        break;
+    case 22:
+        res = (u16 *)((u8 *)&D_003172F0 + 0x1AA4);
+        *res = 0x3122;
+        cnt = 1;
+        break;
+    }
+
+    if (out_cnt != 0) {
+        *out_cnt = cnt;
+    }
+    return res;
+}
 
 Rec14 *MsGetSaveChrName(int id) {
     if (MsBtlChrNumCheck(id)) {
@@ -292,7 +526,63 @@ void func_001BDE20(u8 id, int on) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSavePlyJoin);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsExchangeSaveParty);
+int MsExchangeSaveParty(int a, int b) {
+    int idx = -1;
+    u8 *p = MsGetSaveInParty(0);
+    int i;
+
+    if (a < 0) {
+        a = 0xFF;
+    }
+    for (i = 0; i < 17; i++) {
+        if (p[i + 3] != 0xFF && p[i + 3] >= 8) {
+            p[i + 3] = 0xFF;
+        }
+    }
+    for (i = 0; i < 17; i++) {
+        if (p[i + 3] == a) {
+            idx = i + 3;
+            break;
+        }
+    }
+    if (idx < 0) {
+        for (i = 0; i < 3; i++) {
+            if (p[i] == a) {
+                idx = i;
+                break;
+            }
+        }
+    }
+    if (idx < 0 && MsGetSavePlyJoin(a) != 0) {
+        for (i = 0; i < 17; i++) {
+            if (p[i + 3] == 0xFF) {
+                idx = i + 3;
+                break;
+            }
+        }
+        if (idx < 0) {
+            for (i = 0; i < 3; i++) {
+                if (p[i] == 0xFF) {
+                    idx = i;
+                    break;
+                }
+            }
+        }
+    }
+    if (idx >= 0 && b >= 0) {
+        u8 *dst = &p[b];
+        int prev = *dst;
+        if (prev >= 8) {
+            prev = 0xFF;
+        }
+        if ((a == 0xFF || func_001BE258(a) == 0) && (prev == 0xFF || func_001BE258(prev) == 0)) {
+            p[idx] = prev;
+            *dst = a;
+            return -1;
+        }
+    }
+    return 0;
+}
 
 int func_001BE1F8(u8 id) {
     return (D_0031EA9C[id].flags2C >> 1) & 1;
@@ -302,8 +592,8 @@ void func_001BE220(u8 id, int on) {
     D_0031EA9C[id].flags2C = (D_0031EA9C[id].flags2C & ~2) | ((on & 1) << 1);
 }
 
-int func_001BE258(u8 id) {
-    return (D_0031EA9C[id].flags2C >> 2) & 1;
+int func_001BE258(int id) {
+    return (D_0031EA9C[(u8)id].flags2C >> 2) & 1;
 }
 
 void func_001BE280(u8 id, int on) {

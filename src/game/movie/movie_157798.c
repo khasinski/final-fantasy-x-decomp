@@ -4,6 +4,7 @@
 #define func_00158D60 _hdr_func_00158D60
 #define func_0011A5A0 _hdr_func_0011A5A0
 #define func_00158200 _hdr_func_00158200
+#define func_00159CE8 _hdr_func_00159CE8
 #include "common.h"
 #include "ffx/q2.h"
 #include "ffx/w2.h"
@@ -14,6 +15,7 @@
 #include "ffx/u1.h"
 #include "ffx/v1.h"
 #include "ffx/g0.h"
+#undef func_00159CE8
 #undef func_00158200
 #undef func_0011A5A0
 #undef func_00158D60
@@ -111,7 +113,9 @@ typedef struct {
     s32 w5052C;
     s32 w50530;
     s32 w50534;
-    u8 pad50538[0x505C0 - 0x50538];
+    u8 pad50538[0x50544 - 0x50538];
+    s32 w50544;
+    u8 pad50548[0x505C0 - 0x50548];
     u32 w505C0;
     u8 pad505C4[0x506C8 - 0x505C4];
     s32 w506C8;
@@ -121,9 +125,42 @@ typedef struct {
     s32 w50708;
     u8 pad5070C[0x50714 - 0x5070C];
     s32 w50714;
-    u8 pad50718[0x5076D - 0x50718];
+    u8 pad50718[0x5075C - 0x50718];
+    s8 b5075C;
+    s8 b5075D;
+    s8 pad5075E;
+    s8 b5075F;
+    s8 b50760;
+    s8 b50761;
+    s8 pad50762[2];
+    s8 b50764;
+    s8 pad50765[7];
+    s8 b5076C;
     s8 b5076D;
+    s8 b5076E;
+    s8 pad5076F[3];
+    s8 b50772;
+    s8 b50773;
 } MovWork58FE54; /* DEBT(TYPE): extended view of S58FE54 */
+
+typedef struct {
+    u8 pad0[0xF7120];
+    s32 wF7120;
+    s32 wF7124;
+    s32 wF7128;
+    s32 wF712C;
+    s32 wF7130;
+    s32 wF7134;
+    s32 wF7138;
+    s32 wF713C;
+    s32 wF7140;
+    s32 wF7144;
+    u8 padF7148[0xF715C - 0xF7148];
+    s8 bF715C;
+    s8 bF715D;
+    u8 padF715E[2];
+    void *pF7160;
+} MovWork58FE60;
 
 void func_00158D60(void);
 void func_001632B0(void);
@@ -218,7 +255,12 @@ void func_00157968(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157BE8);
+extern s32 D_0030D41C;
+extern s32 D_0030D420;
+extern s32 D_0030D424;
+extern s32 D_0030D428;
+extern s32 D_0030D42C;
+extern s32 D_0058FE64;
 
 typedef union {
     u_long128 q;
@@ -260,6 +302,8 @@ typedef union {
         (q_elem).w.w2 = 0x3F800000; \
         (q_elem).w.w3 = 0; \
     }
+
+INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157BE8);
 
 void func_00158200(MovGifQword *p, u32 tbp0, int x, int y, int w, int h, int psm)
 {
@@ -578,6 +622,11 @@ int func_00159120(void) {
     return func_002D6788() ? 0 : 5;
 }
 
+extern s8 _mov_D_0030D3E8 __asm__("D_0030D3E8");
+extern char D_0056B7B0[];
+void func_0015FCA8(void);
+void func_001596C8(int id, int flags);
+
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159148);
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159368);
@@ -663,7 +712,49 @@ int func_00159CD8(void) {
     return 0xF71C0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159CE8);
+void func_00159CE8(int flags, void *a1, int a2, void *a3, void *a4)
+{
+    void **task;
+    MovWork58FE60 *p;
+
+    if (_mov_D_0030D3E8 != 0) {
+        func_001577A8(D_0056B7B0, D_0056B5C0, 0x6CC);
+    }
+    _mov_D_0030D3E8 = 1;
+    D_0030D418 = (void *)sa_task_init2(1, a4, 0);
+    D_0058FE5C = (s32)a1;
+    D_0058FE58 = (s32)a3;
+    D_0058FE60 = a3;
+    ((MovWork58FE60 *)a3)->bF715D = 0;
+    ((MovWork58FE60 *)a3)->wF7124 = a2;
+    ((MovWork58FE60 *)a3)->pF7160 = a1;
+    ((MovWork58FE60 *)D_0058FE60)->bF715C = 0;
+    task = ((void **(*)(void *, int, int))((void **)D_0030D418)[2])(func_0015FCA8, 0, 0);
+    p = (MovWork58FE60 *)D_0058FE60;
+    *task = p;
+    if (flags & 0x400) {
+        D_0058FE64 = p->wF7128 = 0;
+        D_0058FE64 = p->wF712C = 0xD00;
+    } else {
+        D_0058FE64 = p->wF7128 = 0x2F00;
+        D_0058FE64 = p->wF712C = 0x2F00;
+    }
+    ((MovWork58FE60 *)D_0058FE60)->wF7120 = -1;
+    ((MovWork58FE60 *)D_0058FE60)->wF7140 = flags & 0x480;
+    ((MovWork58FE60 *)D_0058FE60)->wF7144 = 0;
+    ((MovWork58FE60 *)D_0058FE60)->wF713C = 0;
+    ((MovWork58FE60 *)D_0058FE60)->wF7134 = 0;
+    if (flags & 0x800) {
+        ((MovWork58FE60 *)D_0058FE60)->wF7130 = 1;
+        if (flags & 0x1000) {
+            ((MovWork58FE60 *)D_0058FE60)->wF7134 = 1;
+        }
+    } else {
+        ((MovWork58FE60 *)D_0058FE60)->wF7130 = 0;
+    }
+    D_0030D408 = 1;
+    D_0030D410 = 2;
+}
 
 void func_00159E80(int c, int *a, int *b)
 {
