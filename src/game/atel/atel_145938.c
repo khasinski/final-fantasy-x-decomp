@@ -301,7 +301,58 @@ void func_001463B0(void)
     AtelRegistCallbackQue2(0, func_00146180, D_0056ADD8);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_001463F0);
+void func_001463F0(int unused)
+{
+    int saved;
+    int n;
+    int i;
+
+    func_002D67F8(0);
+    if (func_001AF348() == 0) {
+        u32 *p = (u32 *)func_00124828();
+        D_0058E3F8 &= ~0x10000;
+        D_0058E3F8 |= p[0xE4 / 4];
+    }
+    func_001463B0();
+    func_0014CED0(1, 0);
+    func_0014CED0(2, 0);
+    func_0014CED0(3, 0);
+    func_002D6C38();
+    SndClearFootStatus();
+    func_0014AD08(0);
+    func_00174C58();
+    saved = AtelChangeCurrentCtrl(0);
+    n = AtelGetCtrlworkActorTotal((char *)AtelGetCurCtrlWork());
+    for (i = 0; i < n; i++) {
+        Actor *a = AtelGetBasicWork(i);
+        *(s32 *)&AR(a)->w34.w &= -5; /* DEBT(CAST): signed -5 mask emits li -5 */
+        if (a->ptr9C != 0) {
+            ((s8 *)a)[0xAC] = func_00110560(a->ptr9C);
+            ((s8 *)a)[0xB0] = func_00110818(a->ptr9C);
+            a->wA4 = func_00102220(a->ptr9C);
+            if (a->w38 & 8) {
+                a->b33 |= 0x80;
+            }
+        }
+    }
+    for (i = 0; i < n; i++) {
+        Actor *a = AtelGetBasicWork(i);
+        if (a->ptr9C != 0 && a->hA8 == 0x5001) {
+            int j;
+            u8 *ep = (u8 *)a + 0xB18; /* DEBT(CAST): Actor effect table at +0xB18 */
+            for (j = 0; j < 4; j++, ep += 0x10) {
+                u32 id = *(u16 *)ep & 0xFFFF7FFF;
+                if (id != 0) {
+                    pppFpIDdispOff(id);
+                }
+            }
+        }
+    }
+    *(u32 *)D_0058E3D8 |= 0x80000000; /* DEBT(CAST): D_0058E3D8 flag word */
+    AtelSetCurrentCtrl(saved);
+    func_00145470();
+    func_001394E0();
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", AtelEventRemoveForBattle);
 

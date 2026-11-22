@@ -469,7 +469,61 @@ void func_0021A2A0(void)
     D_006925C0.h0 = 6;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", _TOBtlDrawLibraLeft);
+extern s16 D_00692622, D_00692624, D_00692626, D_0069262A, D_0069262C;
+extern s16 D_0069262E, D_00692630, D_00692632, D_00692634, D_00692636, D_00692638;
+extern s16 D_0069263A, D_0069263C, D_0069263E, D_00692640, D_00692642, D_00692644;
+extern s16 D_00692646, D_00692648, D_0069264A;
+extern char D_00570E30[];
+
+extern void _void_func_001F63B8(int, int, int, int) __asm__("func_001F63B8"); /* DEBT(TYPE): funcs.h declares int */
+
+void _TOBtlDrawLibraLeft(s32 x, s32 y)
+{
+    s16 dim[2];
+    int px;
+    int py;
+    int py1;
+    int i;
+
+    _TOGetMessageWH(0, (u8 *)func_001BB190(D_006925C0.h2), &dim[0], &dim[1], 0, 0);
+    func_001F3808((void *)func_001BB190(D_006925C0.h2), x + D_00692622 + (D_00692626 - dim[0]) / 2, y + D_00692624, 0);
+    px = x + D_0069262A;
+    py = y + D_0069262C;
+    func_001F0328(px, py, 0x9D, 0xE, 0x42000000, 0x42000000);
+    TOMkpShapeXY(0xE9, px, py);
+    py1 = py + 1;
+    _void_func_001F63B8(MsGetRamChrHP(D_006925C0.h2), px + 0x50, py1, 0);
+    func_001F64A0((int)D_00570E30, px + 0x55, py1);
+    _void_func_001F63B8(MsGetRamChrHPmax(D_006925C0.h2), px + 0x9B, py1, 0);
+    TOMkpShapeXY(0x1F8, D_0069261A + D_0069262E, D_0069261C + D_00692630);
+    func_001F5E80(MsGetRamChrStr(D_006925C0.h2), x + D_00692632, y + D_00692634, 0);
+    TOMkpShapeXY(0x1F9, D_0069261A + D_00692636, D_0069261C + D_00692638);
+    func_001F5E80(MsGetRamChrMag(D_006925C0.h2), x + D_0069263A, y + D_0069263C, 0);
+    px = x + D_0069263E;
+    py = y + D_00692640;
+    for (i = 0; i < 4; i++) {
+        func_002198D8(px, py, 0xA3, 0x10, i);
+        func_002198D8(px, py, 0xA3, 1, 6);
+        func_00219688(D_006925C0.h2, i, px, py);
+        py += 0x10;
+    }
+    func_002198D8(px, py, 0xA3, 1, 6);
+    TOMkpShapeXY(0x1FA, x + D_00692642, y + D_00692644);
+    if (D_006925C0.h8 > 0) {
+        int text;
+        D_006925C0.h4--;
+        if (D_006925C0.h4 == -1) {
+            D_006925C0.h4 = 20;
+            D_006925C0.h6++;
+            if (D_006925C0.h6 == D_006925C0.h8) {
+                D_006925C0.h6 = 0;
+            }
+        }
+        text = MsMenuGetText(1, ((u16 *)((u8 *)&D_006925C0 + 0xA))[D_006925C0.h6], 1);
+        _TOGetMessageWH(0, (u8 *)text, &dim[0], &dim[1], 0, 0);
+        func_001F3808(text, x + D_00692646 + (D_0069264A - dim[0]) / 2, y + D_00692648, 0);
+    }
+}
 
 void _TOBtlDrawLibraRight(s32 a, s32 b)
 {
