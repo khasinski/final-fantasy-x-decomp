@@ -59,7 +59,35 @@ void func_001F2140(TextItem *it, R4CharInfo *ci)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F1EB8", func_001F22B8);
+void func_001F22B8(TextItem *it, R4CharInfo *ci)
+{
+    TextItem tmp = *it;
+
+    if (ci->h16 & 1) {
+        ci->h6 = 0xC;
+        ci->h8 = 8;
+        ci->hA = 0x18;
+        ci->hC = 0x10;
+        ci->h10 = 0xC;
+        ci->h4 = 0;
+        tmp.y -= 7;
+        tmp.x += 5;
+        func_001F2140(&tmp, ci);
+        func_001F1FD8(&tmp, ci);
+    } else {
+        ci->h6 = 0xC;
+        ci->h8 = 8;
+        ci->hA = 0x18;
+        ci->hC = 0x10;
+        ci->h10 = 0xC;
+        ci->h4 = 1;
+        tmp.y -= 7;
+        tmp.x += 5;
+        func_001F2140(&tmp, ci);
+        func_001F1FD8(&tmp, ci);
+    }
+    it->x += 5;
+}
 
 void func_001F23E8(void)
 {

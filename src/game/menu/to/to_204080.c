@@ -670,7 +670,34 @@ int func_00206958(int r, int c)
     return D_0066AB00[r][c]->w4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_00206980);
+extern void *D_0066AF40;
+
+void func_00206980(void)
+{
+    int i;
+
+    D_0066AF40 = (void *)TODVDFileReadAuto(0x12, 4);
+    D_0066AF00[0] = D_0066AF40;
+    for (i = 0; i < 16; i++) {
+        if (((s32 *)D_0066AF40)[i] > 0) {
+            D_0066AF00[0]->w[i] = (s32)D_0066AF40 + ((s32 *)D_0066AF40)[i];
+        } else {
+            D_0066AF00[0]->w[i] = 0;
+        }
+    }
+    if (TOGetFFXLangSwapFlag() == 1) {
+        s32 *p = (s32 *)TODVDFileReadAuto(4, 4);
+        D_0066AF40 = p;
+        D_0066AF00[1] = (void *)p;
+        for (i = 0; i < 16; i++) {
+            if (((s32 *)D_0066AF40)[i] > 0) {
+                ((s32 *)D_0066AF00[1])[i] = (s32)D_0066AF40 + ((s32 *)D_0066AF40)[i];
+            } else {
+                ((s32 *)D_0066AF00[1])[i] = 0;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOGetChangeMacroAddress);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_2021E8/rodata", jtbl_005702F0);
