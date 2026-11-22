@@ -31,7 +31,51 @@ void func_002B17C8(void) {
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1720", func_002B17D0);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1720", op_effect_run_after);
+extern u8 D_004F3FD0[];
+extern u8 D_004F4010[];
+extern s16 D_00551CA0;
+
+typedef struct {
+    u8 pad0[2];
+    s8 b2;
+    u8 pad3[0x3F];
+    s16 h42;
+} D2008250View;
+
+void op_effect_run_after(void)
+{
+    u16 t0 = *(volatile u32 *)0x10000000; /* DEBT(CAST): EE T0_COUNT hardware register */
+    D2008250View *v;
+    R6Obj *o;
+
+    func_002D0408();
+    func_002D0698(0xFFFFFFFF);
+    op_oef2_sound_cue_loop();
+    v = (D2008250View *)&D_2008250; /* DEBT(CAST): D_2008250 layout */
+    if (D_007649A0 != 0 && v->b2 != 0) {
+        func_002B4280(v->h42 << 8);
+    }
+    o = D_0054D5E8[0];
+    if (o->w58 == 0) {
+        o->w54 = D_003F3944;
+        D_003F3948 = D_003F3940 + 0xF0000;
+    }
+    func_001A9EE0(D_004F3FD0);
+    func_001AACA0(D_004F4010);
+    func_00294CD8(0, 1);
+    func_002AC750(0);
+    o = D_0054D5E8[0];
+    if (o->w58 == 0) {
+        D_003F3944 = o->w54;
+    }
+    {
+        volatile u32 *t0p = (volatile u32 *)0x10000000;
+        __asm__ volatile("" : "+r"(t0p)); /* DEBT(ORDER): keep lui 0x1000 in bnez delay slot */
+        D_003F3948 = 0;
+        __asm__ volatile("" : "+r"(t0p)); /* DEBT(ORDER): keep D_003F3948=0 before T0_COUNT read */
+        D_00551CA0 = *t0p - t0;
+    }
+}
 
 void func_002B19C0(void) {
 }

@@ -186,7 +186,64 @@ s8 func_00122D40(void)
 void func_00122D50(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1229D0", Sg_MapInit);
+extern char D_00308100[];
+extern s32 D_00308910;
+extern char *D_00580DD8;
+extern char *D_00580DDC;
+extern char D_00569FD0[];
+extern char D_00569FF8[];
+extern char D_0056A018[];
+extern char D_0056A040[];
+extern char D_0056A058[];
+extern char D_0056A070[];
+
+void Sg_MapInit(void)
+{
+    char path0[0x40];
+    char path1[0x40];
+    char base[0x50];
+    void *p;
+
+    func_00122D50();
+    yiReset();
+    D_00308100[0] = 0;
+    D_00580DD8 = (char *)D_00580D18[D_00308910].b;
+    D_00580DDC = (char *)D_00580C58[D_00308910].b;
+    switch (func_00122C80()) {
+    case 1:
+        if (D_00580DE0 != 0) {
+            func_002F0008(D_00308100, D_00569FD0, D_00580DD8, D_00580DDC);
+            func_002F072C(path0, D_00580DDC);
+            func_002F072C(path1, D_00580DDC);
+            path0[4] = 0;
+            path1[6] = 0;
+            func_002F0008(base, D_00569FF8, path0, path1);
+        } else {
+            func_002F0008(base, D_00569FD0, D_00580DD8, D_00580DDC);
+        }
+        break;
+    case 0:
+        func_002F0008(base, D_00569FF8, D_00580DD8, D_00580DDC);
+        break;
+    case 2:
+        func_002F0008(base, D_0056A018, D_00580DD8, D_00580DDC);
+        break;
+    }
+    func_002F0008(path0, D_0056A040, base);
+    func_002F0008(path1, D_0056A058, base);
+    yiMapSetup(path0, path1);
+    p = 0;
+    if (D_00308100[0] != 0) {
+        func_002F0008(path0, D_0056A070, D_00308100);
+        p = Sg_PcRead(path0);
+    }
+    if (p == 0) {
+        func_002F0008(path0, D_0056A070, base);
+        p = Sg_PcRead(path0);
+    }
+    func_00122A40(p);
+    func_00122BF0();
+}
 
 void func_002DD900(void *out, void *a, void *b, int c);
 

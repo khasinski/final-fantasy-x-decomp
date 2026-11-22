@@ -184,4 +184,70 @@ void MsPopBtlPos(BtlChr *chr) {
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsGetSummonerPos);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E340);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsSetChrPosAfterSummon);
+typedef struct {
+    u8 pad0[0x1D1];
+    s8 b1D1;
+    u8 pad1D2[2];
+    float f1D4[4];
+} ChrDirView;
+
+extern u8 D_003192B5[];
+void MsSetChrDirF(int id, float dir);
+
+void MsSetChrPosAfterSummon(int summoner)
+{
+    float pos[4];
+    int flag = 1;
+    int i;
+    BtlChr *chr;
+
+    for (i = 0; i < 7; i++) {
+        u8 id = D_003192B5[i];
+        s32 w4;
+
+        if (id == 0xFF) {
+            continue;
+        }
+        chr = MsGetChr(id);
+        msSetEndDir(chr);
+        w4 = *(s32 *)((u8 *)chr + 4); /* DEBT(CAST): chr id field */
+        switch (w4) {
+        case 0x3001:
+        case 0x3002:
+        case 0x3003:
+        case 0x3004:
+        case 0x3006:
+        case 0x3007:
+        case 0x3008:
+        case 0x3009:
+        case 0x300A:
+        case 0x300B:
+            flag = 0;
+            break;
+        }
+        ((u8 *)chr)[0x1C8] = 0;
+        ((u8 *)chr)[0x39F] = 0;
+        ((u8 *)chr)[0xEE] = 0;
+        ((u8 *)chr)[0xD5] = 0;
+        MsGetChrBtlPos(id, pos);
+        MsSetChrPosReset(id, pos);
+        MsSetChrDirF(id, ((ChrDirView *)chr)->f1D4[((ChrDirView *)chr)->b1D1]);
+        func_001B57F0(id, 1);
+        MsStatusEffectCheck(id);
+    }
+    chr = MsGetChr(summoner);
+    msSetChrBodyHit(chr, 3, 0);
+    msSetEndDir(chr);
+    ((u8 *)chr)[0x1BD] = 0xD;
+    MsPushBtlPos(chr);
+    MsRegSEfade(summoner, *(u16 *)((u8 *)chr + 0xC36), 0x14);
+    func_001B7498(summoner, 1);
+    if (flag != 0) {
+        MsSetMotion(summoner, 1, 1, 0, 1, 0, 0);
+    } else {
+        ((u8 *)chr)[0xDC] = 1;
+        MsGetChrBtlPos(summoner, pos);
+        MsSetChrPosReset(summoner, pos);
+        MsSetMotion(summoner, 0, 1, 0, 1, 0, 0);
+    }
+}
