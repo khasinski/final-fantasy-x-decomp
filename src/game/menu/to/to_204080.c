@@ -415,7 +415,121 @@ s32 TOSetMessageAuto(s32 w, s32 a, s32 b) {
     return temp_4->fD4(temp_4);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOSwapRenewMessage);
+typedef struct {
+    s16 h00;
+    s16 h02;
+    s16 h04;
+    s16 h06;
+    s32 w08;
+    u8 pad0C[4];
+    u16 h10;
+    u8 pad12[8];
+    s16 h1A;
+    s16 h1C;
+    s16 h1E;
+    s16 h20;
+    s16 h22;
+    s16 h24;
+    s16 h26;
+    s16 h28;
+    s16 h2A;
+    u8 pad2C[4];
+    u16 h30;
+    u16 h32;
+    u8 pad34[4];
+    s16 h38;
+    s16 h3A;
+    s16 h3C;
+    s16 h3E;
+    u8 x40[0x44];
+    u8 *p84;
+    u8 pad88[8];
+    s32 w90;
+    s32 w94;
+    s32 w98;
+    u8 pad9C[0xD4 - 0x9C];
+    s32 (*fD4)();
+} RenewMsgCmd;
+
+extern u8 D_00323910[];
+int TOGetMessageWindowMode(void);
+void _TOScanSelecterWH(int a, u8 *s, int b, int c);
+int TOGetChangeMacroWidth(int a, u8 *s, int b);
+u8 *TOGetChangeMacroAddress(int a, u8 *s);
+
+int TOSwapRenewMessage(MenuCmd *mc)
+{
+    RenewMsgCmd *m = (RenewMsgCmd *)mc; /* DEBT(CAST): MenuCmd lacks layout fields */
+    s16 w = 0;
+    s16 h = 0;
+    u8 *p;
+
+    m->fD4(m);
+    p = m->p84;
+    if (m->w08 == 0) {
+        int cnt;
+        s16 gx, gy;
+
+        m->h02 = 0;
+        cnt = TOGetWordCount(m->h04, p);
+        m->w98 = cnt;
+        m->w90 = cnt;
+        m->w94 = cnt;
+        _TOGetMessageWH(m->h04, p, &m->h3C, &m->h3E, m->h1A, 1);
+        if (TOGetMessageWindowMode() == 1) {
+            gx = m->h30 + (m->h38 - m->h3C) / 2;
+            gy = 1;
+        } else {
+            gx = m->h30 + (m->h38 - m->h3C) / 2;
+            gy = m->h32 + (m->h3A - m->h3E) / 2;
+        }
+        graphicFontGetScreenWH(m->x40, gx, gy, m->h3C, m->h3E);
+        if (m->h1E == 1) {
+            _TOScanSelecterWH(m->h04, m->p84, m->h1A, 1);
+        }
+    } else {
+        m->h24 = TOGetWordCountLimit(m->h04, p, 3);
+        m->h28 = m->h24;
+        if (m->h24 > 0) {
+            m->h28 += TOGetWordCountLimit(m->h04, D_00323910, 0);
+        }
+        if (m->h22 == 1) {
+            p = (u8 *)_TOGetMessageWH(m->h04, p, &w, &h, m->h1A, m->h10 | 3);
+            if (w > 0) {
+                w += TOGetChangeMacroWidth(m->h04, D_00323910, m->h1A);
+            }
+            m->h2A = w;
+            _TOGetMessageWH(m->h04, p, &m->h3C, &m->h3E, m->h1A, m->h10 | 1);
+            m->h3C += w;
+            m->w90 = m->h28;
+        } else {
+            p = (u8 *)_TOGetMessageWH(m->h04, p, &w, &h, m->h1A, m->h10 | 3);
+            _TOGetMessageWH(m->h04, p, &m->h3C, &m->h3E, m->h1A, m->h10 | 1);
+        }
+        graphicFontGetScreenWH(m->x40, (s16)(m->h30 + (m->h38 - m->h3C) / 2), (s16)(m->h32 + (m->h3A - m->h3E) / 2), m->h3C, m->h3E);
+        m->w98 = TOGetWordCount(m->h04, m->p84);
+        if (m->h22 == 1 && m->h24 > 0) {
+            m->w98 += TOGetWordCount(0, TOGetChangeMacroAddress(0, D_00323910));
+        }
+        if (m->h24 > 0) {
+            if (m->h22 == 1) {
+                if (m->w98 == m->h28) {
+                    m->h02 = 1;
+                }
+            } else {
+                if (m->w98 == m->h24) {
+                    m->h02 = 1;
+                }
+            }
+        }
+        m->w90 = m->w98;
+        m->w94 = m->w98;
+        if (m->h1E == 1) {
+            _TOScanSelecterWH(m->h04, m->p84, m->h1A, 1);
+        }
+    }
+    return 0;
+}
 
 void func_002059C8(int i, u8 *text)
 {
