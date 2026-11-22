@@ -156,15 +156,126 @@ s8 func_0011F2A8(void)
     return D_00307FDF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11EE40", Sg_CaptureToFile);
-
 extern char D_00569E30[];
 extern u8 D_00307FA8[];
+extern u8 D_005809B0[];
 extern u8 D_00580A90[];
 void func_002DAB10(void *, int, int, int, int, int, int, int);
 void func_002F8660(int);
 void func_202CF08(char *, ...);
 void *user_malloc(int, int, const char *, int);
+
+void Sg_CaptureToFile(char *name)
+{
+    char path[0x100];
+    int fd;
+    u8 *buf1;
+    u8 *buf2;
+    u8 *out;
+    u8 *dst;
+    u8 *src;
+    int tbp1;
+    int tbp2;
+    int bytes;
+    int y;
+    int x;
+
+    if (D_00307F2C & 1) {
+        tbp1 = 0;
+        tbp2 = 0xD00;
+    } else {
+        tbp2 = 0;
+        tbp1 = 0xD00;
+    }
+    func_002F0008(path, D_00569DF0, D_00569DF8, name);
+    fd = func_002FC4E0(path, 0x602);
+    buf1 = (u8 *)func_0011D420(0xD0000, 6, D_00569DE8, 0x103);
+    buf2 = (u8 *)func_0011D420(0xD0000, 6, D_00569DE8, 0x104);
+    out = (u8 *)func_0011D420(0x138000, 6, D_00569DE8, 0x105);
+    func_002DAB10(D_005809B0, tbp1, 8, 0, 0, 0, 0x200, 0x1A0);
+    func_002DAB10(D_005809B0 + 0x70, tbp2, 8, 0, 0, 0, 0x200, 0x1A0);
+    func_002F8660(0);
+    func_002DADD0(D_005809B0, buf1);
+    func_002DADD0(D_005809B0 + 0x70, buf2);
+    func_002DA610(0, 0);
+    {
+        s8 *hdr = (s8 *)D_00307FA8;
+
+        hdr[0x16] = -0x60;
+        hdr[0x17] = 1;
+        func_002FCD90(fd, hdr, 0x36);
+    }
+    bytes = 0;
+    dst = out;
+    if (D_00307FDE != 0) {
+        if (D_00307FDF != 0) {
+            for (y = 0x19F; y >= 0; y--) {
+                src = buf1 + (y << 11);
+                if (y != 0) {
+                    for (x = 0x1FF; x >= 0; x--) {
+                        dst[2] = (src[0] + src[0x800]) >> 1;
+                        dst[1] = (src[1] + src[0x801]) >> 1;
+                        dst[0] = (src[2] + src[0x802]) >> 1;
+                        src += 4;
+                        dst += 3;
+                    }
+                    bytes += 0x600;
+                } else {
+                    for (x = 0; x < 0x200; x++) {
+                        dst[2] = src[0];
+                        dst[1] = src[1];
+                        dst[0] = src[2];
+                        src += 4;
+                        dst += 3;
+                    }
+                    bytes += 0x600;
+                }
+            }
+        } else {
+            for (y = 0x19F; y >= 0; y--) {
+                src = buf1 + (y << 11);
+                src++;
+                for (x = 0x1FF; x >= 0; x--) {
+                    dst[2] = src[-1];
+                    dst[1] = src[0];
+                    dst[0] = src[1];
+                    src += 4;
+                    dst += 3;
+                }
+                bytes += 0x600;
+            }
+        }
+    } else {
+        for (y = 0x19E; y >= 0; y -= 2) {
+            src = buf1 + (y << 11);
+            src++;
+            for (x = 0x1FF; x >= 0; x--) {
+                u8 c;
+
+                c = src[-1];
+                dst[2] = c;
+                dst[0x602] = c;
+                c = src[0];
+                dst[1] = c;
+                dst[0x601] = c;
+                c = src[1];
+                dst[0] = c;
+                dst[0x600] = c;
+                src += 4;
+                dst += 3;
+            }
+            dst += 0x600;
+            bytes += 0xC00;
+        }
+    }
+    func_002FCD90(fd, out, bytes);
+    func_002FC768(fd);
+    func_002F0008(path, D_00569E30, name);
+    func_202CF08(path, out);
+    func_0011D590(buf2, 6);
+    func_0011D590(buf1, 6);
+    func_0011D590(out, 6);
+}
 
 void func_0011F658(char *name)
 {
