@@ -256,7 +256,31 @@ void op_chara_hsv(Chr *chr, T6_PackBuf *buf, int a, int b, int c, int d)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A3D88);
+void func_002A3D88(u32 *dst, u32 *src, int count, int a3, int t0, int t1, int t2)
+{
+    u32 *d;
+    u32 *s;
+    void *buf;
+    int n;
+
+    buf = (void *)func_002B3888(0x800); /* DEBT(CAST): int vs void* */
+    d = dst;
+    s = src;
+    n = count / 256;
+    while (n > 0) {
+        func_002A3EC8(buf, s, 0x100);
+        s += 0x100;
+        op_hsv_to_rgba(d, buf, 0x100, a3, t0, t1, t2);
+        d += 0x100;
+        n--;
+    }
+    n = count / 256;
+    if (count == n * 256) {
+        func_002A3EC8(buf, s, 0);
+        op_hsv_to_rgba(d, buf, 0, a3, t0, t1, t2);
+    }
+    func_002B39C0(0x800);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A3EC8);
 

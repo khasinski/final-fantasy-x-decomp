@@ -237,7 +237,34 @@ void func_00217830(int w, int a, int b, int c)
     TOOpenMessageWindow(w);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_002178E0);
+typedef struct {
+    u8 c[5][4][4];
+} BtlBarPal;
+
+extern BtlBarPal D_00570DD8;
+
+void func_002178E0(int x, int y, int w, int h, int col)
+{
+    R4Quad q;
+    BtlBarPal pal = D_00570DD8;
+    s16 mid = w - 0x3C;
+    int x2;
+
+    func_001F25D8(&q, x, y, 0x3C, h);
+    func_001F2630(&q, 0, pal.c[col][0][0], pal.c[col][0][1], pal.c[col][0][2], pal.c[col][0][3]);
+    func_001F2630(&q, 1, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 2, pal.c[col][0][0], pal.c[col][0][1], pal.c[col][0][2], pal.c[col][0][3]);
+    func_001F2630(&q, 3, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F26B0(&q);
+
+    x2 = x + 0x3C;
+    func_001F25D8(&q, x2, y, mid, h);
+    func_001F2630(&q, 0, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 1, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F2630(&q, 2, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 3, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F26B0(&q);
+}
 
 int TOBtlSetDamageValue(s16 x, s16 y, int w8, u8 c0, u8 c1, u8 c2, u8 c3)
 {
