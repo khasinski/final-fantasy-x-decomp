@@ -649,7 +649,101 @@ void func_001FC1F0(int x, int y, int scale, int alpha)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FC3C8);
+void func_001FC3C8(int x, int y)
+{
+    s16 bx;
+    s16 by;
+
+    if (D_003238D0.h12 & 0xF000) {
+        if (D_003238D0.h12 & 0x1000) {
+            TOMkpShapeXY(0x259, x, y);
+        } else {
+            TOMkpShapeXY(0x258, x, y);
+        }
+        if (D_003238D0.h12 & 0x2000) {
+            TOMkpShapeXY(0x25B, x, y);
+        } else {
+            TOMkpShapeXY(0x25A, x, y);
+        }
+        if (D_003238D0.h12 & 0x4000) {
+            TOMkpShapeXY(0x25D, x, y);
+        } else {
+            TOMkpShapeXY(0x25C, x, y);
+        }
+        if (D_003238D0.h12 & 0x8000) {
+            TOMkpShapeXY(0x25F, x, y);
+        } else {
+            TOMkpShapeXY(0x25E, x, y);
+        }
+    } else {
+        if (D_003238D0.b1F < 0x40) {
+            TOMkpShapeXY(0x259, x, y);
+        } else {
+            TOMkpShapeXY(0x258, x, y);
+        }
+        if (D_003238D0.b1E >= 0xC1) {
+            TOMkpShapeXY(0x25B, x, y);
+        } else {
+            TOMkpShapeXY(0x25A, x, y);
+        }
+        if (D_003238D0.b1F >= 0xC1) {
+            TOMkpShapeXY(0x25D, x, y);
+        } else {
+            TOMkpShapeXY(0x25C, x, y);
+        }
+        if (D_003238D0.b1E < 0x40) {
+            TOMkpShapeXY(0x25F, x, y);
+        } else {
+            TOMkpShapeXY(0x25E, x, y);
+        }
+    }
+
+    bx = x + 0x14;
+    by = y;
+    if (D_003238D0.h12 & 0x10) {
+        TOMkpShapeXY(0x260, bx, by);
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 1) {
+        if (D_003238D0.h12 & 0x20) {
+            TOMkpShapeXY(0x262, bx + 0x12, by);
+        }
+        if (D_003238D0.h12 & 0x40) {
+            TOMkpShapeXY(0x261, bx + 0x24, by);
+        }
+    } else {
+        if (D_003238D0.h12 & 0x20) {
+            TOMkpShapeXY(0x261, bx + 0x12, by);
+        }
+        if (D_003238D0.h12 & 0x40) {
+            TOMkpShapeXY(0x262, bx + 0x24, by);
+        }
+    }
+    if (D_003238D0.h12 & 0x80) {
+        TOMkpShapeXY(0x263, bx + 0x36, by);
+    }
+
+    bx = x;
+    by = y + 0x14;
+    if (D_003238D0.h12 & 0x4) {
+        TOMkpShapeXY(0x264, bx, by);
+    }
+    if (D_003238D0.h12 & 0x8) {
+        TOMkpShapeXY(0x265, bx + 0x18, by);
+    }
+    if (D_003238D0.h12 & 0x1) {
+        TOMkpShapeXY(0x266, bx + 0x30, by);
+    }
+    if (D_003238D0.h12 & 0x2) {
+        TOMkpShapeXY(0x267, bx + 0x48, by);
+    }
+    if (D_003238D0.h12 & 0x800) {
+        TOMkpShapeXY(0x268, bx + 0x60, by);
+    }
+    if (D_003238D0.h12 & 0x100) {
+        TOMkpShapeXY(0x269, bx + 0x8E, by);
+    }
+    func_001EFA30();
+}
 
 void func_001FC770(int pad0, int x, int y)
 {

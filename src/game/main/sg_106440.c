@@ -139,6 +139,40 @@ s32 func_001067E0(s32 a, float x, float y, float z)
     return Sg_LightSetDir(a, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_106440", func_00106810);
+typedef struct {
+    u8 pad0[0x194];
+    s8 b194;
+    u8 pad195[0x1EB];
+    V128 v380;
+    V128 v390;
+    V128 v3A0;
+    V128 v3B0;
+    V128 v3C0;
+    V128 v3D0;
+    V128 v3E0;
+} SgLight106810;
+
+void func_00106810(SgLight106810 *p)
+{
+    V128 v0;
+    V128 v1;
+    V128 v2;
+    V128 v3;
+    int f = p->b194;
+
+    func_002DD4E8(
+        &D_0057E970,
+        (v0 = (f & 1) ? p->v3C0 : D_003035C0, &v0),
+        (v1 = (f & 2) ? p->v3D0 : D_003035D0, &v1),
+        (v2 = (f & 4) ? p->v3E0 : D_003035E0, &v2)
+    );
+    func_002DD5A8(
+        &D_00303650,
+        (v0 = (f & 1) ? p->v380 : D_003035F0, &v0),
+        (v1 = (f & 2) ? p->v390 : D_00303600, &v1),
+        (v2 = (f & 4) ? p->v3A0 : D_00303610, &v2),
+        (v3 = (f & 8) ? p->v3B0 : D_00303620, &v3)
+    );
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_106440", func_00106A08);
