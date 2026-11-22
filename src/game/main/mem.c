@@ -727,7 +727,28 @@ void *func_0011D230(s32 size, u32 align, s32 heap, u8 *name, s32 line)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", user_malloc);
+/* DEBT(TYPE): int return alias preserves $v1 allocation for %hi(D_00569D30) */
+extern int _int_func_0011BFE0(s32 a) __asm__("func_0011BFE0");
+
+void *user_malloc(int size, int heap, const char *name, int line)
+{
+    char buf[0x400];
+    s32 ra_save;
+    void *p;
+
+    {
+        register void *rp __asm__("$2") = &ra_save; /* DEBT(REG): preserve addiu v0,sp,0x400 + move t7,v0 */
+        register void *t7 __asm__("$15");
+        __asm__ volatile("" : "+r"(rp));
+        t7 = rp;
+        MIPS_STORE_RA(t7);
+    }
+    _int_func_0011BFE0(ra_save);
+    func_002F0008(buf, D_00569D30, name != 0 ? (char *)name : D_00569D38, line);
+    p = Sg_MemGet(0, 0, heap + 1, size, buf);
+    func_0011BB08(p, (u8 *)name, line);
+    return p;
+}
 
 void *func_0011D420(s32 size, s32 align, u8 *name, s32 line)
 {
@@ -747,7 +768,25 @@ void *func_0011D420(s32 size, s32 align, u8 *name, s32 line)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D4B8);
+void *func_0011D4B8(s32 size, s32 heap, u8 *name, s32 line)
+{
+    char buf[0x400];
+    s32 ra_save;
+    void *p;
+
+    {
+        register void *rp __asm__("$2") = &ra_save; /* DEBT(REG): preserve addiu v0,sp,0x400 + move t7,v0 */
+        register void *t7 __asm__("$15");
+        __asm__ volatile("" : "+r"(rp));
+        t7 = rp;
+        MIPS_STORE_RA(t7);
+    }
+    _int_func_0011BFE0(ra_save);
+    func_002F0008(buf, D_00569D30, name != 0 ? (char *)name : D_00569D38, line);
+    p = Sg_MemGet(1, 0, heap + 1, size, buf);
+    func_0011BB08(p, name, line);
+    return p;
+}
 
 s32 func_0011D568(s32 a, s32 b, s32 c)
 {
