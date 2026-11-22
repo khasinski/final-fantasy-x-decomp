@@ -1058,7 +1058,7 @@ SECTIONS
         . = 0x572b08 - 0x568f00;
         build/asm/data/rodata/piece_00572B08.s.o(.rodata)
         . = 0x572c80 - 0x568f00;
-        build/src/game/menu/tk/tk_23C658.c.o(.rodata.jtbl_00572C80)
+        build/src/game/menu/tk/tk_23C658.c.o(.rodata.cjt0)
         . = 0x572cb0 - 0x568f00;
         build/asm/data/rodata/piece_00572CB0.s.o(.rodata)
         . = 0x572d00 - 0x568f00;

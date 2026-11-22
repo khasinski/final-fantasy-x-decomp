@@ -490,7 +490,43 @@ int func_001B81E8(int id, int mask) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B72F0", MsSetTargetDir);
+float MsGetChrBtlDir(int id);
+int msCheckSameTarget(int id, BtlChr *c, int mask);
+int func_001CEB28(int mask);
+float MsNearRag(float a, float b);
+
+void MsSetTargetDir(int id, int mask)
+{
+    float pos[4];
+    float tgt[4];
+    float dir;
+    BtlChr *chr;
+    int i;
+
+    id &= 0xFF;
+    chr = MsGetChr(id);
+    MsGetChrBtlPos(id, pos);
+    dir = MsGetChrBtlDir(id);
+    if (msCheckSameTarget(id, chr, mask) != 0) {
+        MsGetChrInfo(5, func_001CEB28(mask), 0, tgt);
+        MsVectorRect2Polar(tgt, pos, &dir, 0, 0);
+    }
+    dir = MsNearRag(0.0f, dir + 3.1415927f);
+    chr->f15C = dir;
+    for (i = 0; i < 31; i++) {
+        if (i != id) {
+            chr = MsGetChr(i);
+            if ((mask >> i) & 1) {
+                MsGetChrBtlPos(i, tgt);
+                MsVectorRect2Polar(pos, tgt, &dir, 0, 0);
+            } else {
+                dir = MsGetChrBtlDir(id);
+            }
+            dir = MsNearRag(0.0f, dir + 3.1415927f);
+            chr->f15C = dir;
+        }
+    }
+}
 
 int msCheckSameTarget(int id, BtlChr *c, int mask) {
     int bit = 1 << id;
