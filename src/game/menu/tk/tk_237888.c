@@ -209,7 +209,37 @@ int func_002381F0(w)
     return price;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_002382D0);
+int func_002382D0(int arg0)
+{
+    WeaponRec *w = (WeaponRec *)arg0; /* DEBT(CAST): v5.h declares int */
+    register int sum __asm__("$18") = 0; /* DEBT(REG): ee-gcc permutes s0/s1/s3/s4 (same as func_002381F0) */
+    register int i __asm__("$17") = 0;
+    register int empty __asm__("$16") = w->bB;
+    int slots = empty;
+    int price;
+    int flags;
+
+    if (empty != 0) {
+        do {
+            u16 abil = w->fE[i];
+
+            if (abil != 0xFF && abil != 0) {
+                int *e = (int *)func_00228220(abil & 0xFFF, D_00694088);
+
+                empty--;
+                sum += *e;
+            }
+            i++;
+        } while (i < slots);
+    }
+    price = func_002664D8(sum, slots, empty < 0 ? 0 : empty);
+    price = func_00266DC8(D_00694080, price);
+    flags = w->b3;
+    if ((((u8)flags >> 2) & 1) || (((u8)flags >> 3) & 1) || (flags & 1)) {
+        price = 0;
+    }
+    return price;
+}
 
 /* DEBT(FAKE) */
 s32 func_002383F8(void *weapon) {
