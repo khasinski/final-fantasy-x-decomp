@@ -1,0 +1,22 @@
+[
+  {
+    "src": "ovl_09413_09e0.c",
+    "containers": [
+      9413
+    ],
+    "text_start": "0x01B009E0",
+    "text_end": "0x01B00A60",
+    "functions": 1,
+    "discovered_code_bytes": 128,
+    "syms": {
+      "fn_ovl_0cf8": "0x01B00CF8",
+      "fn_ovl_0e20": "0x01B00E20",
+      "fn_ovl_3740": "0x01B03740",
+      "g_ovl_ctx": "0x01B06760",
+      "g_ovl_mgr": "0x01B068F0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

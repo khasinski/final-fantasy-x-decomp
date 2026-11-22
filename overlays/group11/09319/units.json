@@ -1,0 +1,118 @@
+[
+  {
+    "src": "ovl_09319_0df0.c",
+    "containers": [
+      9319
+    ],
+    "text_start": "0x01B00DF0",
+    "text_end": "0x01B00E80",
+    "functions": 1,
+    "discovered_code_bytes": 144,
+    "syms": {
+      "D_01B00B30": "0x01B00B30",
+      "D_01B056C8": "0x01B056C8",
+      "D_01B056EC": "0x01B056EC",
+      "D_01B056F8": "0x01B056F8",
+      "D_01B05C04": "0x01B05C04",
+      "func_01B03350": "0x01B03350",
+      "func_01B042B0": "0x01B042B0"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9319,
+        "text_start": "0x01B00DF0",
+        "text_end": "0x01B00E80",
+        "syms": {
+          "D_01B00B30": "0x01B00B30",
+          "D_01B056C8": "0x01B056C8",
+          "D_01B056EC": "0x01B056EC",
+          "D_01B056F8": "0x01B056F8",
+          "D_01B05C04": "0x01B05C04",
+          "func_01B03350": "0x01B03350",
+          "func_01B042B0": "0x01B042B0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09319_1200.c",
+    "containers": [
+      9319
+    ],
+    "text_start": "0x01B01200",
+    "text_end": "0x01B014F0",
+    "functions": 3,
+    "discovered_code_bytes": 748,
+    "syms": {
+      "D_01B006D8": "0x01B006D8",
+      "D_01B00758": "0x01B00758",
+      "D_01B056E8": "0x01B056E8",
+      "D_01B056EC": "0x01B056EC",
+      "D_01B056F0": "0x01B056F0",
+      "func_001038F8": "0x001038F8",
+      "func_001051A0": "0x001051A0",
+      "func_0010D4A0": "0x0010D4A0",
+      "func_0010D4D8": "0x0010D4D8",
+      "func_00110648": "0x00110648",
+      "func_00110820": "0x00110820",
+      "func_00110AC0": "0x00110AC0",
+      "func_00110BC8": "0x00110BC8",
+      "func_00117A68": "0x00117A68",
+      "func_002A3BD8": "0x002A3BD8",
+      "func_002A3CA0": "0x002A3CA0",
+      "func_002A7308": "0x002A7308",
+      "func_002B7BE8": "0x002B7BE8",
+      "func_002DCE38": "0x002DCE38",
+      "func_002DD128": "0x002DD128",
+      "func_01B01660": "0x01B01660",
+      "func_01B016F8": "0x01B016F8",
+      "func_01B01D28": "0x01B01D28",
+      "func_01B02948": "0x01B02948",
+      "func_01B02EB8": "0x01B02EB8",
+      "func_01B02F80": "0x01B02F80",
+      "func_01B03240": "0x01B03240"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9319,
+        "text_start": "0x01B01200",
+        "text_end": "0x01B014F0",
+        "syms": {
+          "D_01B006D8": "0x01B006D8",
+          "D_01B00758": "0x01B00758",
+          "D_01B056E8": "0x01B056E8",
+          "D_01B056EC": "0x01B056EC",
+          "D_01B056F0": "0x01B056F0",
+          "func_001038F8": "0x001038F8",
+          "func_001051A0": "0x001051A0",
+          "func_0010D4A0": "0x0010D4A0",
+          "func_0010D4D8": "0x0010D4D8",
+          "func_00110648": "0x00110648",
+          "func_00110820": "0x00110820",
+          "func_00110AC0": "0x00110AC0",
+          "func_00110BC8": "0x00110BC8",
+          "func_00117A68": "0x00117A68",
+          "func_002A3BD8": "0x002A3BD8",
+          "func_002A3CA0": "0x002A3CA0",
+          "func_002A7308": "0x002A7308",
+          "func_002B7BE8": "0x002B7BE8",
+          "func_002DCE38": "0x002DCE38",
+          "func_002DD128": "0x002DD128",
+          "func_01B01660": "0x01B01660",
+          "func_01B016F8": "0x01B016F8",
+          "func_01B01D28": "0x01B01D28",
+          "func_01B02948": "0x01B02948",
+          "func_01B02EB8": "0x01B02EB8",
+          "func_01B02F80": "0x01B02F80",
+          "func_01B03240": "0x01B03240"
+        }
+      }
+    ]
+  }
+]

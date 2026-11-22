@@ -1,0 +1,100 @@
+[
+  {
+    "src": "ovl_09286_0bc8.c",
+    "containers": [
+      9286,
+      9695,
+      9698,
+      9699,
+      9701
+    ],
+    "text_start": "0x01B00BC8",
+    "text_end": "0x01B00BF4",
+    "functions": 1,
+    "discovered_code_bytes": 44,
+    "syms": {
+      "fn_ovl_4f38": "0x01B04F38",
+      "g_ovl_ptr_0744": "0x01B00744",
+      "g_ovl_ptr_5ab0": "0x01B05AB0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09286_0c78.c",
+    "containers": [
+      9286,
+      9695,
+      9698,
+      9699,
+      9701
+    ],
+    "text_start": "0x01B00C78",
+    "text_end": "0x01B00E88",
+    "functions": 1,
+    "discovered_code_bytes": 528,
+    "syms": {
+      "fn_ovl_0ea8": "0x01B00EA8",
+      "fn_ovl_38d0": "0x01B038D0",
+      "fn_ovl_4020": "0x01B04020",
+      "fn_ovl_4140": "0x01B04140",
+      "fn_ovl_4698": "0x01B04698",
+      "fn_ovl_4f78": "0x01B04F78",
+      "fn_ovl_5680": "0x01B05680",
+      "g_ovl_ctx": "0x01B05B00",
+      "g_ovl_mgr": "0x01B05AB8",
+      "g_ovl_state": "0x01B05A80"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09286_51d8.c",
+    "containers": [
+      9286,
+      9695,
+      9698,
+      9699,
+      9701
+    ],
+    "text_start": "0x01B051D8",
+    "text_end": "0x01B055E4",
+    "functions": 1,
+    "discovered_code_bytes": 1036,
+    "syms": {
+      "fn_ovl_2960": "0x01B02960",
+      "g_ovl_draw": "0x01B00730"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09286_55e8.c",
+    "containers": [
+      9286,
+      9695,
+      9698,
+      9699,
+      9701
+    ],
+    "text_start": "0x01B055E8",
+    "text_end": "0x01B05708",
+    "functions": 2,
+    "discovered_code_bytes": 288,
+    "syms": {
+      "fn_ovl_3850": "0x01B03850",
+      "fn_ovl_3a18": "0x01B03A18",
+      "fn_ovl_5718": "0x01B05718",
+      "g_part_buf": "0x01B0AA30",
+      "g_part_cur": "0x01B0AA34",
+      "g_part_max": "0x01B0AA38",
+      "g_part_unk": "0x01B0AA3C"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

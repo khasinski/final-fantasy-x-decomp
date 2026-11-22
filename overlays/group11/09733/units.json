@@ -1,0 +1,54 @@
+[
+  {
+    "src": "ovl_09733_0bb0.c",
+    "containers": [
+      9733
+    ],
+    "text_start": "0x01B00BB0",
+    "text_end": "0x01B00D78",
+    "functions": 4,
+    "discovered_code_bytes": 448,
+    "syms": {
+      "fn_ovl_0d78": "0x01B00D78",
+      "fn_ovl_3828": "0x01B03828",
+      "fn_ovl_38a8": "0x01B038A8",
+      "fn_ovl_39f0": "0x01B039F0",
+      "fn_ovl_3ab0": "0x01B03AB0",
+      "fn_ovl_3c68": "0x01B03C68",
+      "fn_ovl_6a68": "0x01B06A68",
+      "fn_ovl_6a88": "0x01B06A88",
+      "g_ovl_arg0": "0x01B06B90",
+      "g_ovl_buf": "0x01BCF800",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_06c0": "0x01B006C0",
+      "g_ovl_mgr": "0x01B06B98",
+      "g_ovl_ptr_6bd8": "0x01B06BD8",
+      "g_ovl_ptr_6bdc": "0x01B06BDC",
+      "g_ovl_res": "0x01B0C3C0",
+      "g_ovl_script": "0x01B06BE0",
+      "g_ovl_work": "0x01B06C3C"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09733_0d80.c",
+    "containers": [
+      9733
+    ],
+    "text_start": "0x01B00D80",
+    "text_end": "0x01B00EA4",
+    "functions": 4,
+    "discovered_code_bytes": 292,
+    "syms": {
+      "fn_ovl_3b88": "0x01B03B88",
+      "g_ovl_mgr": "0x01B06B98",
+      "g_ovl_tbl": "0x01B00660",
+      "g_ovl_work": "0x01B06C3C"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]
