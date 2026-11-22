@@ -2,6 +2,7 @@
 #define func_001A1A68 _hdr_func_001A1A68
 #define func_001A1BE8 _hdr_func_001A1BE8
 #define Sg_Blur _hdr_Sg_Blur
+#define MsGetEff2Chr _hdr_MsGetEff2Chr
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
@@ -10,13 +11,88 @@
 #include "ffx/w3.h"
 #include "ffx/u2.h"
 #include "vu0.h"
+#undef MsGetEff2Chr
 #undef func_001A1A68
 #undef func_001A1BE8
 #undef Sg_Blur
 
 void Sg_Blur(int);
+void pppInitEnv(void *, int, int, int);
+int MsGetEff2Chr(int);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_0019FC00);
+typedef struct RcefMainCtx {
+    s32 w00;
+    s32 w04;
+    s32 w08;
+    u8 *p0C;
+    HeapMgr *w10;
+    s32 w14;
+    void **w18;
+    W3Sched sched;
+    s32 w198;
+    s32 w19C;
+    s32 w1A0[22];
+    u8 b1F8;
+    u8 pad1F9[7];
+    s32 w200;
+    s32 w204;
+    float f208;
+    s32 w20C;
+    s32 w210;
+    s32 w214;
+    s32 w218;
+    float f21C;
+    s32 w220;
+    s32 w224;
+    s32 w228;
+    s32 w22C;
+    s32 w230;
+    s32 w234;
+    s32 w238;
+} RcefMainCtx;
+
+void func_0019FC00(RcefMainCtx *o, int a1, u8 *a2, int a3, int t0, u8 *t1, int t2, int *t3, HeapMgr *env)
+{
+    int i;
+
+    pppInitEnv(env, 0, a3, t0);
+    D_006A3924 = env;
+    o->w00 = 0;
+    o->w04 = a1;
+    o->w08 = (s32)(a2 + 0x10); /* DEBT(CAST): pointer stored in s32 field */
+    o->p0C = t1;
+    o->w10 = env;
+    o->w14 = t2;
+    o->w18 = (void **)pppMemAlloc(env, env->sub, t2 * 4);
+    func_001A1ED8(&o->sched);
+    if (rcefIsBattle() != 0) {
+        s8 *list;
+
+        o->w198 = MsGetEff2Chr(a1);
+        list = (s8 *)MsGetTargetSortList(a1, &o->w19C, 0);
+        for (i = 0; i < o->w19C; i++) {
+            o->w1A0[i] = list[i];
+        }
+    }
+    o->w238 = 0;
+    o->b1F8 = 0x44;
+    for (i = 0; i < t2; i++) {
+        u32 *d;
+
+        op_oef2_set2(o->w08);
+        d = (u32 *)op_oef2_a_get(o->w08, 8, i);
+        o->w18[i] = d;
+        o->w10->res = (struct T6_LtRes *)d[5]; /* DEBT(CAST): untyped header fields */
+        o->w10->tbl = (DataRef **)d[6];
+        o->w10->grp = (struct T6_LtGrp *)d[7];
+        _pppInitData(d, t3[i]);
+    }
+    if (FFXIsDebug() != 0 && FFXIsPC() != 0) {
+        *(RcefMainCtx **)0x01B0003C = o;
+    }
+    func_002D02E8(o->w08, 0, 1000, 2048);
+    op_oef2_sound_cue_multi(o->w08, 0, 1000, 2048);
+}
 
 void rcefMainProcRunAfter(void *p) {
     S2Obj1C *o = p;
@@ -43,32 +119,7 @@ void func_0019FE48(S2Obj1C *o)
     D_006A3924 = o->w10;
 }
 
-typedef struct RcefMainCtx {
-    s32 w00;
-    s32 w04;
-    s32 w08;
-    u8 *p0C;
-    HeapMgr *w10;
-    s32 w14;
-    void **w18;
-    W3Sched sched;
-    u8 pad198[0x200 - 0x198];
-    s32 w200;
-    s32 w204;
-    float f208;
-    s32 w20C;
-    s32 w210;
-    s32 w214;
-    s32 w218;
-    float f21C;
-    s32 w220;
-    s32 w224;
-    s32 w228;
-    s32 w22C;
-    s32 w230;
-    s32 w234;
-    s32 w238;
-} RcefMainCtx;
+/* RcefMainCtx defined above func_0019FC00 */
 
 extern float D_006A3970[16];
 extern float D_006A3A70[16];
