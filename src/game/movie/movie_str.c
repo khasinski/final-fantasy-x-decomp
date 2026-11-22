@@ -342,7 +342,101 @@ void func_0015D730(void)
     _mov2_D_0030DDF0->w506DC = 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015D940);
+void func_0015F198(int addr, int size);
+void func_0015F1F8(int addr, int size);
+extern void func_0015BBF8(void *, void *, int, int, int, int, int, int, int, int, int);
+extern void func_0015C068(void *);
+
+void func_0015D940(void)
+{
+    int started = 0;
+    int buf_idx = 0;
+    int prev_idx = 1;
+    u8 *base = D_0030DDF0 + 0x50000;
+    int mb_w = *(s32 *)(base + 0x514);
+    int mb_h = *(s32 *)(base + 0x518);
+    int total = mb_w * mb_h * 0x180;
+    int flg61 = *(s8 *)(base + 0x761);
+    int flg6E = *(s8 *)(base + 0x76E);
+    register int flg62 __asm__("$20") = (flg61 != 0) ? *(s8 *)(base + 0x762) : 0; /* DEBT(REG): keeps flg62 in $s4 instead of $s3 */
+    register int y_off __asm__("$18"); /* DEBT(REG): keeps y_off in $s2 instead of $s3 */
+    int row;
+
+    {
+        u8 *b = D_0030DDF0 + 0x50000;
+        y_off = *(s32 *)(b + 0x6E0);
+        if (*(s8 *)(b + 0x75F) == 0) {
+            y_off += 0 / *(s32 *)(b + 0x51C);
+        }
+        if (*(s8 *)(b + 0x763) == 0 && *(s32 *)(b + 0x534) == 0) {
+            y_off += *(s32 *)(b + 0x520);
+        }
+    }
+
+    func_002DA610(0, 0);
+    func_0015F198(*(s32 *)(D_0030DDF0 + 0x503CC), total);
+
+    row = 0;
+    while (row < *(s32 *)(D_0030DDF0 + 0x50518)) {
+        u8 *b = D_0030DDF0 + 0x50000;
+        u32 cmd;
+        func_0015F1F8(*(s32 *)((b + (buf_idx << 2)) + 0x3C0), *(s32 *)(b + 0x514) << 10);
+        cmd = (flg62 << 26) | 0x70000000U;
+        *(volatile u32 *)0x10002000 = ((flg61 << 27) | *(s32 *)(D_0030DDF0 + 0x50514)) | cmd;
+        if (started != 0) {
+            u8 *b2 = D_0030DDF0 + 0x50000;
+            if (*(s32 *)(b2 + 0x524) == 0) {
+                func_0015BBF8(
+                    *(void **)(b2 + 0x3D0),
+                    *(void **)((b2 + (prev_idx << 2)) + 0x3C0),
+                    0,
+                    ((row - 1) << 4) + y_off,
+                    *(s32 *)(b2 + 0x514) << 4,
+                    0x10,
+                    *(s32 *)(b2 + 0x51C),
+                    0,
+                    0,
+                    flg61,
+                    flg6E
+                );
+            }
+            func_002DA610(0, 0);
+            func_0015C068(*(void **)(D_0030DDF0 + 0x503D0));
+        }
+        prev_idx ^= 1;
+        buf_idx ^= 1;
+        started = 1;
+        while (*(volatile s32 *)0x10002010 < 0)
+            ;
+        while ((*(volatile u32 *)0x1000B000 >> 8) & 1)
+            ;
+        row++;
+    }
+
+    {
+        u8 *b2 = D_0030DDF0 + 0x50000;
+        if (*(s32 *)(b2 + 0x524) == 0) {
+            func_0015BBF8(
+                *(void **)(b2 + 0x3D0),
+                *(void **)((b2 + (prev_idx << 2)) + 0x3C0),
+                0,
+                ((row - 1) << 4) + y_off,
+                *(s32 *)(b2 + 0x514) << 4,
+                0x10,
+                *(s32 *)(b2 + 0x51C),
+                0,
+                0,
+                flg61,
+                flg6E
+            );
+        }
+    }
+    func_002DA610(0, 0);
+    func_0015C068(*(void **)(D_0030DDF0 + 0x503D0));
+    while ((*(volatile u32 *)0x1000B400 >> 8) & 1)
+        ;
+    func_002DA610(0, 0);
+}
 
 extern char D_0056B8C0[];
 extern char D_0056B8D0[];
