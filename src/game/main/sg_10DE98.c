@@ -57,7 +57,68 @@ s32 func_0010DFF8(s32 a)
     return (a - (D_0057EB30 ? 0x70002000 : 0x70000000)) >> 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", func_0010E028);
+s32 func_0010E028(s32 addr)
+{
+    s32 qwc;
+    u32 bytes;
+    u32 free_bytes;
+
+    if (D_0057EB30 != 0) {
+        qwc = (addr - 0x70002000) >> 4;
+        if (qwc == 0) {
+            return addr;
+        }
+        while (*(volatile u32 *)0x1000D000 & 0x100) {
+            (*(volatile s32 *)&D_0057EB38)++;
+        }
+        bytes = qwc << 4;
+        *(volatile u32 *)0x1000D080 = 0x2000;
+        *(volatile u32 *)0x1000D020 = qwc;
+        (*(volatile s32 *)&D_0057EB3C)--;
+        do {
+            u32 a = *(volatile u32 *)0x10009030;
+            u32 b = *(volatile u32 *)0x1000D010;
+            if (a != b) {
+                b -= 0x200000;
+                free_bytes = (a - b) & 0x1FFFF0;
+            } else {
+                free_bytes = 0x200000;
+            }
+            (*(volatile s32 *)&D_0057EB3C)++;
+        } while (bytes >= free_bytes);
+        __asm__ volatile("sync.l; sync.p");
+        *(volatile u32 *)0x1000D000 = 0x100;
+        D_0057EB30 = 0;
+        return 0x70000000;
+    } else {
+        qwc = (addr - 0x70000000) >> 4;
+        if (qwc == 0) {
+            return addr;
+        }
+        while (*(volatile u32 *)0x1000D000 & 0x100) {
+            (*(volatile s32 *)&D_0057EB38)++;
+        }
+        bytes = qwc << 4;
+        *(volatile u32 *)0x1000D080 = 0;
+        *(volatile u32 *)0x1000D020 = qwc;
+        (*(volatile s32 *)&D_0057EB3C)--;
+        do {
+            u32 a = *(volatile u32 *)0x10009030;
+            u32 b = *(volatile u32 *)0x1000D010;
+            if (a != b) {
+                b -= 0x200000;
+                free_bytes = (a - b) & 0x1FFFF0;
+            } else {
+                free_bytes = 0x200000;
+            }
+            (*(volatile s32 *)&D_0057EB3C)++;
+        } while (bytes >= free_bytes);
+        __asm__ volatile("sync.l; sync.p");
+        *(volatile u32 *)0x1000D000 = 0x100;
+        D_0057EB30 = 1;
+        return 0x70002000;
+    }
+}
 
 s32 func_0010E260(void)
 {
