@@ -1,5 +1,6 @@
 /* tu_198 0x1d00d8-0x1d2170: low; ~Ms (config/tu_map.tsv) */
 #define D_0031FA50 _hdr_D_0031FA50
+#define MsExchangeChr _hdr_MsExchangeChr
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
@@ -7,6 +8,7 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #undef D_0031FA50
+#undef MsExchangeChr
 
 typedef struct {
     u16 h0;
@@ -60,7 +62,186 @@ int MsCheckMegas(int x) {
     return x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsExchangeChr);
+typedef struct {
+    u8 pad00[4];
+    s32 f04;
+    s32 f08;
+    u8 pad0C[4];
+    s8 f10;
+    u8 pad11[9];
+    s8 f1A;
+    u8 pad1B[3];
+    s8 f1E;
+    u8 pad1F[0x1E];
+    s8 f3D;
+    u8 pad3E[0x7A];
+    u8 fB8;
+    u8 padB9[0x23];
+    s8 fDC;
+    u8 padDD[0x19];
+    s8 fF6;
+    u8 padF7[6];
+    s8 fFD;
+    u8 padFE[0xBE];
+    u8 f1BC;
+    u8 f1BD;
+    u8 f1BE;
+    u8 f1BF;
+    u8 f1C0;
+    u8 f1C1;
+    u8 f1C2;
+    u8 pad1C3[6];
+    u8 f1C9;
+    u8 f1CA;
+    u8 f1CB;
+    u8 pad1CC[5];
+    s8 f1D1;
+    u8 pad1D2[2];
+    float f1D4[2];
+    u8 pad1DC[0x140];
+    s8 f31C;
+    u8 pad31D[0xB9];
+    s8 f3D6;
+    u8 pad3D7[0x6B1];
+    s8 fA88;
+    u8 padA89[2];
+    s8 fA8B;
+    u8 padA8C[1];
+    s8 fA8D;
+    u8 padA8E[0x2A];
+    s8 fAB8;
+} ExChr; /* DEBT(NAME): BtlChr offset view for MsExchangeChr */
+
+typedef struct {
+    u8 pad00[0x1FC5];
+    u8 f1FC5[7];
+    u8 pad1FCC[7];
+    u8 f1FD3[17];
+    u8 pad1FE4[0x134];
+    s8 f2118;
+    s8 f2119;
+} ExGS; /* DEBT(NAME): GameState offset view for MsExchangeChr */
+
+extern void MsProvOff(int);
+extern void MsThreatOff(int, void *);
+extern int MsCleanInputCue(int, int);
+extern void func_001B7498(int, int);
+extern void MsEffectWeaponFree(int);
+extern void MsStatusEffectCheck(int);
+extern void MsBtlReadCueRegist(int, int, int, int, int);
+extern void func_001B1490(int, int);
+extern void MsInsertInputCue(int, int, int, int, int, int);
+
+#define EX_GS ((ExGS *)&D_003172F0) /* DEBT(CAST): GameState offset view */
+
+int MsExchangeChr(int a, int b, int mode, int arg3)
+{
+    ExChr *ca = (ExChr *)MsGetChr(a); /* DEBT(CAST): offset view */
+    ExChr *cb = (ExChr *)MsGetChr(b); /* DEBT(CAST): offset view */
+    int i;
+
+    if (a != 0xFF && ca->f10 != 0) {
+        ca->f1C0 = ca->f1C9;
+        ca->f1C1 = ca->f1CA;
+        ca->f1C2 = ca->f1CB;
+        if (ca->fA8D == 0) {
+            ca->fA88 = 0;
+            ca->fAB8 = 1;
+            ca->fDC = 0;
+            MsProvOff(a);
+            MsThreatOff(a, ca);
+            MsCleanInputCue(a, 1);
+            if (mode > 0) {
+                ca->fA8B = 1;
+                ca->f1A = 1;
+                func_001B7498(a, -1);
+                EX_GS->f2118 = b;
+                EX_GS->f2119 = a;
+                ca->f1BC = cb->f1BC;
+                ca->f1BD = 12;
+                ca->f1BE = b;
+                MsSetDirThetaMode(ca);
+                if (b != 0xFF) {
+                    ca->f1D4[1] = cb->f1D4[cb->f1D1];
+                }
+                MsSetMotion(a, 3, 1, 1, 1, 0, 0);
+            } else {
+                ca->fF6 = 0;
+                ca->f1BD += 3;
+                MsSetMotion(a, 0x12, 1, 1, 1, 0, 0);
+            }
+            MsPushBtlPos(ca);
+        }
+        MsEffectWeaponFree(a);
+        MsSEPchrClear(ca, 1);
+        for (i = 0; i < 7; i++) {
+            if (EX_GS->f1FC5[i] == a) {
+                EX_GS->f1FC5[i] = b;
+                break;
+            }
+        }
+        for (i = 0; i < 17; i++) {
+            if (EX_GS->f1FD3[i] == b) {
+                EX_GS->f1FD3[i] = a;
+                break;
+            }
+        }
+    } else {
+        ca = 0;
+    }
+
+    if (b != 0xFF && cb->f10 != 0) {
+        s32 f04 = cb->f04;
+        s32 f08 = cb->f08;
+        int cue_type;
+        if (cb->fA8D != 0) {
+            cue_type = 10;
+            MsPushBtlPos(cb);
+        } else {
+            if (mode <= 0 && ca != 0) {
+                cb->f1BC = ca->f1C0;
+                cb->f1BD = ca->f1C1;
+                cb->f1BE = ca->f1C2;
+                cb->f1BF = ca->f1BF;
+                cb->f1D4[0] = ca->f1D4[0];
+                cb->f1D4[1] = ca->f1D4[1];
+                cb->fB8 = ca->fB8;
+                cb->f31C = 0;
+            }
+            MsPushBtlPos(cb);
+            cb->fAB8 = 0;
+            cb->fA88 = 1;
+            if (mode > 0) {
+                MsSummonLimitSave(cb);
+                cue_type = 8;
+                cb->f1E = 0;
+                cb->fFD = 4;
+            } else {
+                ((u8 *)&btlgetdata)[b] = 1; /* DEBT(CAST): byte array at btlgetdata */
+                if (mode < 0) {
+                    cb->fA8B = 0;
+                    cb->f1A = 0;
+                    cue_type = 0;
+                    msSetChrBodyHit(cb, 3, 1);
+                    MsSetDirThetaMode(cb);
+                    MsStatusEffectCheck(b);
+                } else {
+                    cb->f3D = 1;
+                    cue_type = 6;
+                }
+            }
+        }
+        MsBtlReadCueRegist(3, b, b, 0, 0);
+        MsBtlReadCueRegist(0, b, b, f04, 0);
+        MsBtlReadCueRegist(2, b, b, f08, cue_type);
+        func_001B1490(b, 3);
+        if (a != 0xFF && mode >= 0) {
+            cb->f3D6 = 1;
+            MsInsertInputCue(b, 0, 1, 0, a, arg3);
+        }
+    }
+    return b;
+}
 
 void MsExchangeSummon(int a, int b) {
     int j;
