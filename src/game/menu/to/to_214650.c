@@ -8,9 +8,84 @@
 #include "ffx/t4.h"
 #include "ffx/v4.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", func_00214650);
+typedef struct {
+    u8 pad00[0xC];
+    s16 hC[4];
+    s16 h14;
+    u8 pad16[6];
+    s32 w1C;
+    u8 pad20[4];
+} BtlHistEnt;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", func_00214790);
+extern u8 D_006906A0[18];
+extern BtlHistEnt D_006906B8[18][10];
+extern char D_00570D20[];
+extern R4Init D_00325170;
+
+void TOBtlInitChrNum(void);
+void TOBtlInitStatusWin(void);
+void TOBtlInitEnemyLimit(void);
+void func_00218928(void);
+void TOBtlInitInfoWinMes(void);
+void func_002180A0(void);
+void func_00216FA0(int a);
+void TOBtlInitLimitTimer(void);
+
+void func_00214650(void)
+{
+    int i;
+    int j;
+    int k;
+
+    for (i = 0; i < 18; i++) {
+        D_006906A0[i] = 0;
+    }
+    for (i = 0; i < 18; i++) {
+        for (j = 0; j < 10; j++) {
+            /* DEBT(CAST): explicit offset order matches (j*0x24 + i*0x168) + base */
+            func_002EF0D0((u8 *)D_006906B8 + (j * sizeof(BtlHistEnt) + i * sizeof(BtlHistEnt) * 10), 0, sizeof(BtlHistEnt));
+            for (k = 0; k < 4; k++) {
+                D_006906B8[i][j].hC[k] = 0xFF;
+            }
+            D_006906B8[i][j].h14 = 0xFF;
+        }
+    }
+}
+
+void func_00214790(void)
+{
+    int i;
+    int j;
+
+    TOInitPadData();
+    D_003249A0 = 1;
+    D_003249A4 = 0;
+    TOBtlInitActiveChrCursor();
+    TOSeqGetNum(2, D_00570D20, &D_00325022);
+    TOSetExeMessageWindowArea(1);
+    func_002EF0D0(D_003249C0, 0, 0x660);
+    func_002EF0D0(&toTarget, 0, sizeof(R4Init));
+    for (i = 0; i < 18; i++) {
+        for (j = 0; j < 10; j++) {
+            D_006906B8[i][j].w1C = 0;
+        }
+    }
+    D_003252A4 = 0xFF;
+    D_003249AA = 1;
+    D_00692038 = 0;
+    D_00692450 = 0;
+    TOBtlInitChrNum();
+    TOBtlInitStatusWin();
+    TOBtlInitEnemyLimit();
+    func_00218928();
+    TOBtlInitInfoWinMes();
+    func_002180A0();
+    func_00216FA0(0);
+    func_00216FA0(1);
+    TOBtlInitLimitTimer();
+    graphicGetTime();
+    func_0020DC78(2);
+}
 
 void TOControlBtlWindow(void)
 {

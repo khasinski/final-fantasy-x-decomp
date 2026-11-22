@@ -7,9 +7,46 @@
 char *func_002F0458(char *s, int c);
 char *func_002F0DD0(char *s, int c);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A1B8", func_0017A1B8);
+extern char D_0056C3F8[];
+extern char D_0056C408[];
+extern char D_0056C410[];
+extern char D_0056C418[];
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A1B8", func_0017A2A8);
+void func_0017A1B8(void)
+{
+    u32 *p = (u32 *)0x1100C000;
+    u32 i;
+
+    func_002DA610(0, 0);
+    func_002DA578(0);
+    for (i = 0; i < 0x400; i++) {
+        func_002EF240(D_0056C3F8, i, i);
+        func_002EF240(D_0056C408, *p++);
+        func_002EF240(D_0056C408, *p++);
+        func_002EF240(D_0056C408, *p++);
+        func_002EF240(D_0056C410, *p++);
+        if ((i & 0xF) == 0) {
+            func_002DA578(0);
+        }
+    }
+}
+
+void func_0017A2A8(void)
+{
+    u32 *p = (u32 *)0x11008000;
+    u32 i;
+
+    func_002DA610(0, 0);
+    func_002DA578(0);
+    for (i = 0; i < 0x800; i++) {
+        func_002EF240(D_0056C3F8, i, i);
+        func_002EF240(D_0056C408, *p++);
+        func_002EF240(D_0056C418, *p++);
+        if ((i & 0xF) == 0) {
+            func_002DA578(0);
+        }
+    }
+}
 
 int func_0017A368(int a) {
     int r = -1;

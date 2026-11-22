@@ -1,6 +1,11 @@
 /* tu_243 0x218a78-0x21d048: low; ~TOBtlDrawInfoWin (config/tu_map.tsv) */
 #define func_0021BAB8 _hdr_func_0021BAB8
 #define func_001FCB88 _hdr_func_001FCB88
+#define MsMenuBitStatus _hdr_MsMenuBitStatus
+#define MsMenuCountStatus _hdr_MsMenuCountStatus
+#define MsMenuBitStatus2 _hdr_MsMenuBitStatus2
+#define MsGetChrLimitGauge _hdr_MsGetChrLimitGauge
+#define MsGetChrLimitGaugeMax _hdr_MsGetChrLimitGaugeMax
 #define D_00692658 _hdr_D_00692658
 #define D_00692560 _hdr_D_00692560
 #define D_00692478 _hdr_D_00692478
@@ -17,12 +22,22 @@
 #include "ffx/t4.h"
 #undef func_0021BAB8
 #undef func_001FCB88
+#undef MsMenuBitStatus
+#undef MsMenuCountStatus
+#undef MsMenuBitStatus2
+#undef MsGetChrLimitGauge
+#undef MsGetChrLimitGaugeMax
 #undef D_00692658
 #undef D_00692560
 #undef D_00692478
 #undef D_006925C0
 
 int func_001FCB88(float f, int x, int y, u32 c);
+int MsMenuBitStatus(int id);
+u8 *MsMenuCountStatus(int id);
+int MsMenuBitStatus2(int id);
+int MsGetChrLimitGauge(int id);
+int MsGetChrLimitGaugeMax(int id);
 
 typedef struct InfoWinParam {
     s16 h0;
@@ -155,6 +170,13 @@ void func_00218A78(int id, int x, int y)
         }
     }
 }
+
+extern s16 D_006925B2;
+extern s16 D_006925B4;
+extern s16 D_006925B6;
+extern s16 D_006925B8;
+extern s16 D_006925BA;
+extern s16 D_006925BC;
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitInfoWinMes);
 
@@ -323,7 +345,63 @@ s16 func_00219F40(void)
     return D_006925C0.h0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitLibraWindow);
+extern char D_00570EB8[];
+extern char D_00570EC0[];
+extern char D_00570EC8[];
+extern char D_00570ED0[];
+extern char D_00570ED8[];
+extern char D_00570EE0[];
+extern char D_00570EE8[];
+extern char D_00570EF0[];
+extern char D_00570EF8[];
+extern char D_00570F00[];
+extern char D_00570F08[];
+extern s16 D_0069261C;
+extern s16 D_0069261E __asm__("D_0069261C+2");
+extern s16 D_00692620;
+extern s16 D_00692622;
+extern s16 D_00692624;
+extern s16 D_00692626;
+extern s16 D_00692628;
+extern s16 D_0069262A;
+extern s16 D_0069262C;
+extern s16 D_0069262E;
+extern s16 D_00692630;
+extern s16 D_00692632;
+extern s16 D_00692634;
+extern s16 D_00692636;
+extern s16 D_00692638;
+extern s16 D_0069263A;
+extern s16 D_0069263C;
+extern s16 D_0069263E;
+extern s16 D_00692640;
+extern s16 D_00692642;
+extern s16 D_00692644;
+extern s16 D_00692646;
+extern s16 D_00692648;
+extern s16 D_0069264A;
+extern s16 D_0069264C;
+extern s16 D_0069264E;
+extern s16 D_00692650;
+extern s16 D_00692652;
+extern s16 D_00692654;
+
+void TOBtlInitLibraWindow(void)
+{
+    TOSeqGetRect(2, D_00570EB8, &D_0069261A, &D_0069261C, &D_0069261E, &D_00692620);
+    TOSeqGetRect(2, D_00570EC0, &D_00692622, &D_00692624, &D_00692626, &D_00692628);
+    TOSeqGetPoint(2, D_00570EC8, &D_0069262A, &D_0069262C);
+    TOSeqGetPoint(2, D_00570ED0, &D_0069262E, &D_00692630);
+    TOSeqGetPoint(2, D_00570ED8, &D_00692632, &D_00692634);
+    TOSeqGetPoint(2, D_00570EE0, &D_00692636, &D_00692638);
+    TOSeqGetPoint(2, D_00570EE8, &D_0069263A, &D_0069263C);
+    TOSeqGetPoint(2, D_00570EF0, &D_0069263E, &D_00692640);
+    TOSeqGetPoint(2, D_00570EF8, &D_00692642, &D_00692644);
+    TOSeqGetRect(2, D_00570F00, &D_00692646, &D_00692648, &D_0069264A, &D_0069264C);
+    TOSeqGetRect(2, D_00570F08, &D_0069264E, &D_00692650, &D_00692652, &D_00692654);
+    func_002EF0D0(&D_006925C0, 0, 0x5A);
+    D_006925C0.h0 = 0;
+}
 
 void func_0021A128(void)
 {
@@ -860,7 +938,63 @@ void TODrawCommandValue(int owner, int id, int kind, int x, int y, int c)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlInitStatusWin);
+typedef struct {
+    u8 pad00[0xC];
+    s32 hp;
+    s32 hp_disp;
+    s32 hp_step;
+    u8 hp_flag;
+    u8 pad19[0xB];
+    s32 mp;
+    s32 mp_disp;
+    s32 mp_step;
+    u8 mp_flag;
+    u8 pad31[3];
+    s32 lim;
+    s32 lim_disp;
+    s16 timer;
+    s16 pad3E;
+    s16 st_cnt;
+    u16 st_buf[0x27];
+} BtlStatusWinEnt;
+
+extern u16 D_006926E8[3];
+extern BtlStatusWinEnt D_006926F0[3];
+int TOBtlMakeStatusBuff(int id, u16 *buf);
+
+void TOBtlInitStatusWin(void)
+{
+    s32 count;
+    u16 *ids;
+    int i;
+
+    func_002EF0D0(D_006926F0, 0, sizeof(D_006926F0));
+    ids = TOGetSaveWindow(0, 0x12, &count);
+    for (i = 0; i < 3; i++) {
+        D_006926E8[i] = ids[i];
+    }
+    for (i = 0; i < 3; i++) {
+        if (D_006926E8[i] != 0xFF) {
+            int v;
+            int g;
+            int gmax;
+
+            D_006926F0[i].hp_disp = D_006926F0[i].hp = MsGetRamChrHP(D_006926E8[i]);
+            D_006926F0[i].hp_step = 0;
+            D_006926F0[i].hp_flag = 0;
+
+            D_006926F0[i].mp_disp = D_006926F0[i].mp = MsGetRamChrMP(D_006926E8[i]);
+            D_006926F0[i].mp_step = 0;
+            D_006926F0[i].mp_flag = 0;
+
+            g = MsGetChrLimitGauge(D_006926E8[i]);
+            gmax = MsGetChrLimitGaugeMax(D_006926E8[i]);
+            D_006926F0[i].lim_disp = D_006926F0[i].lim = (g * D_00324354) / gmax;
+            D_006926F0[i].st_cnt = TOBtlMakeStatusBuff(D_006926E8[i], D_006926F0[i].st_buf);
+            D_006926F0[i].timer = 0x14;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlStatusWin);
 

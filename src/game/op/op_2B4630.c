@@ -55,6 +55,44 @@ int op_oef2_obj_a_get(int a, int b, int c)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", op_oef2_a_set);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", func_002B4BA8);
+void func_002B4BA8(u8 *base, u16 a1, u16 a2, u16 a3, u16 a4)
+{
+    int i;
+    int j;
+    u8 *p;
+    void *q;
+
+    if (base == 0) {
+        return;
+    }
+    /* DEBT(CAST): raw offset access into OEF2 header */
+    for (i = 0; i < *(u16 *)(base + 0x50); i++) {
+        p = op_oef2_a_get((int)base, 8, i);
+        if (p != 0) {
+            for (j = 0; j < *(u16 *)(p + 8); j++) {
+                q = func_002B7388((void *)p, j);
+                if (q != 0) {
+                    func_002B6EC8(q, a1, a2, a3, a4);
+                }
+            }
+            for (j = 0; j < *(u16 *)(p + 0xA); j++) {
+                q = (void *)func_002CEF98(p, j);
+                if (q != 0) {
+                    func_002CEEE0(q, a1, a2, a3, a4);
+                }
+            }
+        }
+    }
+    for (i = 0; i < *(u16 *)(base + 0x48); i++) {
+        u8 *r = op_oef2_a_get((int)base, 4, i);
+        if (r != 0) {
+            if (*(s8 *)r == 0x46) {
+                func_002CEEE0(r, a1, a2, a3, a4);
+            } else {
+                func_002B6EC8(r, a1, a2, a3, a4);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2B4630", func_002B4D78);

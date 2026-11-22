@@ -232,7 +232,35 @@ void func_001A6E90(int h, int which, float x, float y, float z) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A6FA0);
+void func_001A70F0(Unk317120Rec *rec, R2Area *area, R2Area *other);
+
+void func_001A6FA0(int h, int which, float x, float y, float z)
+{
+    Unk317120Rec *rec;
+    R2Area *area;
+    R2Area *other;
+    int ow;
+    int r;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        ow = (which == 0) ? 1 : 0;
+        rec = &D_00314870[h & 0xFF].rec[which];
+        area = &rec->area[(h & 0xFF00) >> 8];
+        other = &D_00314870[h & 0xFF].rec[ow].area[(h & 0xFF00) >> 8];
+        area->b00 = 1;
+        area->b02 = 10;
+        area->v40[0] = x;
+        area->v40[1] = y;
+        area->v40[2] = z;
+        area->b07 = 0;
+        r = func_001A6738(h);
+        if (r == h) {
+            func_001A70F0(rec, area, other);
+            MsSetCheckChange(r, which, 1, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A70F0);
 
@@ -309,7 +337,34 @@ void func_001A7648(int id, int which, Unk317120Rec *rec, R2Area *area, R2Area *a
     *(int *)rec->pad6C = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A76E0);
+void func_001A76E0(int h, int which, float x, float y, float z)
+{
+    Unk317120Rec *rec;
+    R2Area *area;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        rec = &D_00314870[h & 0xFF].rec[which];
+        area = &rec->area[(h & 0xFF00) >> 8];
+        area->b07 = 0;
+        if (area->b00 == 0) {
+            /* DEBT(CAST): raw offset access into Unk317120Rec vector at +0x50 */
+            MsVectorRect2Polar((float *)((u8 *)rec + 0x50), rec->w8C, &area->v40[0], &area->v40[1], &area->v40[2]);
+        }
+        area->b00 = 1;
+        area->b02 = 7;
+        area->v40[0] += x;
+        area->v40[1] += y;
+        area->v40[2] += z;
+        if (func_001A6738(h) == h) {
+            *(float *)rec->pad6C = 0.0f;
+            rec->v60[0] = area->v40[0];
+            rec->v60[1] = area->v40[1];
+            rec->v60[2] = area->v40[2];
+            MsSetCheckChange(h, which, 1, 0);
+        }
+    }
+}
 
 void MsCameraSetRect(int h, int which, void *v) {
     Unk317120Rec *record;
@@ -382,7 +437,34 @@ void func_001A7A58(Unk317120Rec *rec, R2Area *area) {
     *(int *)rec->pad6C = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7BC0);
+void func_001A7D28(Unk317120Rec *rec, R2Area *area);
+
+void func_001A7BC0(int h, int which, float f0, float f1, float f2, float f3, float f4, float f5)
+{
+    Unk317120Rec *rec;
+    R2Area *area;
+    int r;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        rec = &D_00314870[h & 0xFF].rec[which];
+        area = &rec->area[(h & 0xFF00) >> 8];
+        area->b00 = 1;
+        area->b02 = 4;
+        area->v30[0] = f0;
+        area->v30[2] = f1;
+        area->v40[1] = f2;
+        area->v40[2] = f4;
+        area->v50[1] = f3;
+        area->v50[2] = f5;
+        area->b07 = 0;
+        r = func_001A6738(h);
+        if (r == h) {
+            func_001A7D28(rec, area);
+            MsSetCheckChange(r, which, 1, 0);
+        }
+    }
+}
 
 void func_001A7D28(Unk317120Rec *rec, R2Area *area) {
     float dummy;
@@ -400,7 +482,41 @@ void func_001A7D28(Unk317120Rec *rec, R2Area *area) {
     *(int *)rec->pad6C = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7E00);
+void func_001A7F88(Unk317120Rec *rec, R2Area *area);
+void func_001A8058(Unk317120Rec *rec, R2Area *area);
+
+void func_001A7E00(int h, int which, int mode, float f0, float f1, float f2, float f3, float f4, float f5)
+{
+    Unk317120Rec *rec;
+    R2Area *area;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        rec = &D_00314870[h & 0xFF].rec[which];
+        area = &rec->area[(h & 0xFF00) >> 8];
+        area->b00 = 1;
+        area->b07 = 0;
+        if (mode) {
+            area->b02 = 6;
+        } else {
+            area->b02 = 5;
+        }
+        area->v30[0] = f0;
+        area->v30[1] = f1;
+        area->v30[2] = f2;
+        area->v40[2] = f4;
+        area->v50[1] = f3;
+        area->v50[2] = f5;
+        if (func_001A6738(h) == h) {
+            if (mode) {
+                func_001A8058(rec, area);
+            } else {
+                func_001A7F88(rec, area);
+            }
+            MsSetCheckChange(h, which, 1, 0);
+        }
+    }
+}
 
 void func_001A7F88(Unk317120Rec *rec, R2Area *area) {
     float r;
@@ -526,7 +642,29 @@ void func_001A8340(int h, int which, int v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A83F0);
+void func_001A83F0(int id, int which, int flags, R2AreaObj *obj, float r)
+{
+    Unk317120Rec *rec;
+    R2Area *area;
+    int cur;
+
+    if (MsCameraIDcheck(id)) {
+        which &= 1;
+        rec = &D_00314870[id & 0xFF].rec[which];
+        area = &rec->area[(id & 0xFF00) >> 8];
+        area->b00 = 1;
+        area->b02 = 8;
+        area->b07 = 0;
+        area->b03 = obj->flags | flags;
+        area->obj = obj;
+        area->v40[0] = r;
+        cur = func_001A6738(id);
+        if (cur == id) {
+            func_001A8518(rec, area);
+            MsSetCheckChange(cur, which, 1, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8518);
 
@@ -561,7 +699,36 @@ void func_001A89B0(Unk317120Rec *rec, R2Area *area) {
     area->v40[0] += area->v50[0];
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A89F8);
+void func_001A89F8(int a, int b, int hard, float x1, float z1, float x2, float z2, float k)
+{
+    R2Area *area;
+    R2Limit *l;
+    float dx;
+    float dz;
+
+    if (MsCameraIDcheck(a)) {
+        b &= 1;
+        area = &D_00314870[a & 0xFF].rec[b].area[(a & 0xFF00) >> 8];
+        if (area->nlim < 5) {
+            l = &area->lim[area->nlim];
+            if (hard) {
+                l->type = 2;
+            } else {
+                l->type = 0;
+            }
+            l->k = k;
+            l->x = x1;
+            l->z = z1;
+            dx = x2 - x1;
+            dz = z2 - z1;
+            l->nx = dx;
+            l->nz = dz;
+            l->d = -x1 * dx - z1 * dz;
+            l->len = dx * dx + dz * dz;
+            area->nlim++;
+        }
+    }
+}
 
 void func_001A8B38(int a, int b, int ceil, float lo, float hi, float k) {
     R2Area *area;
@@ -898,7 +1065,41 @@ void func_001A9C50(int a) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A9C98);
+int func_001A9C98(int a, int which)
+{
+    Unk314840 *state;
+    Unk317120Rec *rec;
+    R2Area *area;
+    int ret = 0;
+    int i;
+
+    which &= 1;
+    state = &D_00314840[a & 0xFF];
+    rec = &state->rec[which];
+    area = &rec->area[func_001A65E0(a & 0xFF)];
+    /* DEBT(CAST): raw offset access into Unk314840/Unk317120Rec timer arrays */
+    if (which == 1) {
+        for (i = 0; i < 2; i++) {
+            if (*(s16 *)((u8 *)state + (i << 4) + 0xD8C) != 0) {
+                ret = 1;
+                break;
+            }
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        if (*(s16 *)((u8 *)rec + (i << 4) + 0x58C) != 0) {
+            ret = 1;
+            break;
+        }
+    }
+    if (*((u8 *)rec + 2) != 0) {
+        ret |= 2;
+    }
+    if (area->b02 == 0xE) {
+        ret |= 4;
+    }
+    return ret;
+}
 
 int MsCameraResetMove(int id, int which) {
     Unk314840 *cam;
