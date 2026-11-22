@@ -936,7 +936,61 @@ void func_0024E358(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024E378);
+void func_0024E378(Task *o)
+{
+    void *help = 0;
+    SysEntry *e;
+    int cur;
+    int idx;
+
+    cur = o->b45;
+    if (cur < 0) {
+        cur = 0;
+    }
+    if (cur >= o->b42) {
+        cur = o->b42 - 1;
+    }
+    idx = o->x48 * 2 + o->ext[cur];
+    if (o->ext[15] != 0) {
+        switch (o->b43) {
+        case 0:
+            e = SYS_TBL;
+            e += idx;
+            if (e->b2 != 0) {
+                help = TkMenuGetItemHelp(e->h0);
+            }
+            break;
+        case 1:
+            if (idx < TkMenuImportantListMax()) {
+                idx = ((u16 *)0x1D56B00)[idx];
+
+                if (idx != 0 && TkMsImportantGet(idx) != 0) {
+                    help = TOMenuGetGetImportantHelp(idx);
+                } else {
+                    help = 0;
+                }
+            }
+            break;
+        case 2:
+            if (idx < func_0024CD68()) {
+                e = SYS_TBL;
+                e += idx;
+                switch (e->b2) {
+                case 1:
+                    help = TkMenuGetCommandHelp(e->h0);
+                    break;
+                case 2:
+                    help = MsGetMenuChrInfo(e->h0, 0);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    if (o->b45 >= 0) {
+        TkMenuSetHelpMessage(help);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024E540);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_005734B0);

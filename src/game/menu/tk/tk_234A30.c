@@ -325,7 +325,71 @@ INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_234A30/rodata", jtbl_00572340);
 
 void func_00235710(void) { func_002270F8(); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_234A30", func_00235718);
+typedef struct CfgItem235718 {
+    s32 x00;
+    s32 count;
+    s32 sel;
+    s32 enabled;
+    s32 x10;
+    s32 x14;
+    u16 title;
+    u16 pad1A;
+    struct {
+        u16 msg;
+        u16 pad;
+    } opt[1];
+} CfgItem235718;
+
+void func_00235718(int x, int y, int idx)
+{
+    FlagRec box;
+    CfgItem235718 *cfg;
+    int sx;
+    int sy;
+    int dim;
+    int i;
+
+    cfg = (CfgItem235718 *)func_00235320(idx);
+    box = D_00693F78;
+    box.rect[1] += y;
+    box.rect[0] += x;
+    box.rect[1] += idx * (D_00693FBC - 5);
+    func_00226F28(&box);
+    sx = box.rect[0] + D_00693FB0[0];
+    sy = box.rect[1] + D_00693FB0[1];
+    func_00226350(sx, sy, TkMenuConfigMes(cfg->title), 0);
+    if (idx == (s8)D_00693F68) {
+        ((void (*)(int, int, int))func_00235710)(sx, sy, 0); /* DEBT(CAST): func_00235710 takes 0 args in this TU */
+    }
+    box.rect[0] += D_00693F98[0];
+    box.rect[1] += D_00693F98[1];
+    box.rect[2] = D_00693F90[2];
+    box.rect[3] = D_00693F90[3];
+    box.x08 = D_00693FC8;
+    box.x0C = D_00693FCC;
+    box.x10 = 0xD8;
+    box.x14 = 0xD9;
+    func_00226FE0(&box);
+    dim = cfg->enabled == 0;
+    for (i = 0; i < cfg->count; i++) {
+        u16 msg = cfg->opt[i].msg;
+        void *str;
+        int w;
+
+        sx = box.rect[0] + (i + 1) * D_00693F90[2] / (cfg->count + 1);
+        sy = box.rect[1] + D_00693F98[1];
+        str = TkMenuConfigMes(msg);
+        w = func_00226AD0(str);
+        sx -= w / 2;
+        func_00226350(sx, sy, str, dim);
+        if (i == cfg->sel && cfg->enabled != 0) {
+            func_00225BE8(idx, sx, sy, w);
+        }
+        if (idx == (s8)D_00693F68 && i == cfg->sel) {
+            TkMenuSetHelpMessage(TkMenuConfigHelp(msg));
+        }
+    }
+}
 
 int func_002359F8() /* DEBT(TYPE): declared int (), no value returned; a caller passes an argument */
 {
