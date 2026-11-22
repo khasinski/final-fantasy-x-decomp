@@ -118,7 +118,65 @@ void func_0027C618(T6_PObj *o, ScriptCtx *ctx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027C6A8);
+extern s32 D_006A3BC4;
+void func_0027C9C8(T6_PObj *, T6_PKey *, ScriptCtx *);
+void func_0027CAB0(T6_PObj *, T6_PKey *, ScriptCtx *, T6_PSysC *);
+void func_0027D6E0(PtEmitter *, T6_PSysC *);
+
+/* DEBT(CAST): raw byte offsets for emitter/slot color and velocity records */
+void func_0027C6A8(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
+{
+    T6_PSysC *s = SLOT_WORK(T6_PSysC, o, ctx, 0);
+    T6_PLife *life = *o->life;
+    T6_PRec *src;
+    Particle *p;
+    int t;
+    int i;
+    int n;
+
+    if (k->id == 0xFFFF) {
+        return;
+    }
+    if (D_006A3924->tbl[k->id] == 0) {
+        return;
+    }
+    if (s->parts == 0 && !func_0027C478(o, k, ctx)) {
+        return;
+    }
+    t = o->t;
+    n = t / 4096;
+    if (s->done == 0 && (u32)n < s->nrec) {
+        src = SLOT_WORK(T6_PRec, o, ctx, 1);
+        s->vec[n][0] = *(float *)((u8 *)k + 0x40);
+        s->rec[n].h[0] = src->h[0];
+        s->vec[n][1] = *(float *)((u8 *)k + 0x44);
+        s->rec[n].h[1] = src->h[1];
+        s->vec[n][2] = *(float *)((u8 *)k + 0x48);
+        s->rec[n].h[2] = src->h[2];
+        s->vec[n][3] = 0.0f;
+        s->rec[n].h[3] = src->h[3];
+    }
+    if (t >= life->len - 0x1000) {
+        p = (Particle *)s->parts;
+        n = k->count;
+        for (i = 0; i < n; i++, p++) {
+            if (p->flags & 1) {
+                break;
+            }
+        }
+        if (i < n) {
+            o->t = t - 0x1000;
+        }
+        s->done = 1;
+    }
+    if (D_006A3BC4 == 0 && ppvMng->b1D == 0) {
+        func_0027C9C8(o, k, ctx);
+    }
+    func_0027CAB0(o, k, ctx, s);
+    if (D_006A3BC4 == 0) {
+        func_0027D6E0(k, s);
+    }
+}
 
 /* DEBT(TYPE): arguments of the forwarded call unknown */
 void func_0027C8B0(int *a) {

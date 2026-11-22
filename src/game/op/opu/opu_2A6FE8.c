@@ -698,7 +698,117 @@ s16 *opu_file(void *a0, s16 *p)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opu_mimic);
+typedef struct MimicItem60 {
+    void *p0;
+    s16 h4;
+    s16 h6;
+    u8 pad8[8];
+    u_long128 q10;
+    u8 pad20[0x40];
+} MimicItem60; /* DEBT(NAME) */
+
+typedef struct OpuMimicWork {
+    ResEntry *p0;
+    ResEntry *p4;
+    s32 p8;
+    s16 hC;
+    u16 hE;
+    s8 b10;
+    u8 pad11[0xF];
+    s32 a20[32];
+    s32 aA0[32];
+    MimicItem60 items[1];
+} OpuMimicWork; /* DEBT(NAME) */
+
+void *_opu_op_malloc(s32, s32) __asm__("op_malloc");
+s32 _opu_opus_get_chr_status_index_by_chrno(s32) __asm__("opus_get_chr_status_index_by_chrno");
+void _opu_opus_draw_on(void *, s32) __asm__("opus_draw_on");
+void *_opu_opus_no_get(void *, void *, s32) __asm__("opus_no_get");
+void *_opu_opus_get_osu_by_draw(s32, s32, s32, s32) __asm__("opus_get_osu_by_draw");
+void _opu_Ch_TextureSetImageBase(Chr *, s32, s32) __asm__("Ch_TextureSetImageBase");
+void _opu_Ch_TextureSetClutBase(Chr *, s32, s32) __asm__("Ch_TextureSetClutBase");
+void *_opu_func_001E4F20(s32) __asm__("func_001E4F20");
+void _opu_op_mdc_mem_transfer_cue_free(Chr *) __asm__("op_mdc_mem_transfer_cue_free");
+s32 _opu_func_00110C18(Chr *, s32) __asm__("func_00110C18");
+s32 _opu_func_00110C00(Chr *, s32) __asm__("func_00110C00");
+extern s8 D_007649A0;
+extern char D_005759F8[];
+extern char D_00575A28[];
+
+/* DEBT(CAST): raw AnimCtx/AnimTgt offsets and 128-bit vector copy */
+s16 *opu_mimic(void *arg0, s16 *p)
+{
+    void *t = *(void **)((u8 *)arg0 + 0x220);
+    OpuMimicWork *m;
+    s32 i;
+
+    switch (*(s16 *)((u8 *)arg0 + 0x21A) & 0xF000) {
+    case 0: {
+        i = p[1];
+        *(OpuMimicWork **)((u8 *)t + 0xBC) = (OpuMimicWork *)_opu_op_malloc(*(s32 *)((u8 *)arg0 + 0x3A8), i * 0x60 + 0x120);
+        m = *(OpuMimicWork **)((u8 *)t + 0xBC);
+        m->hC = i;
+        m->hE = 0;
+        m->b10 = 0;
+        m->p0 = &owu_chr_status[_opu_opus_get_chr_status_index_by_chrno(p[2])];
+        m->p4 = &owu_chr_status[_opu_opus_get_chr_status_index_by_chrno(p[3])];
+        p += 4;
+        *(s8 *)((u8 *)t + 0xBB) = 0x12;
+        _opu_opus_draw_on((u8 *)arg0 + 0x300, *(s16 *)((u8 *)arg0 + 0x214));
+        break;
+    }
+    case 0x1000: {
+        MimicItem60 *items;
+        s32 idx;
+        u_long128 q;
+
+        m = *(OpuMimicWork **)((u8 *)_opu_opus_no_get((u8 *)arg0 + 0x300, t, p[1]) + 0xBC);
+        items = m->items;
+        idx = m->hE;
+        items[idx].h4 = (s32)*(float *)((u8 *)t + 0x40);
+        items[idx].h6 = (s32)*(float *)((u8 *)t + 0x4C);
+        items[idx].p0 = t;
+        __asm__ volatile("lq %0, 0x30(%1)" : "=r"(q) : "r"(t));
+        __asm__ volatile("sq %0, 0x10(%1)" : : "r"(q), "r"(&items[idx]) : "memory");
+        *(s32 *)((u8 *)&items[idx] + 0x1C) = 0;
+        m->hE++;
+        p += 2;
+        break;
+    }
+    case 0x2000: {
+        s32 buf;
+        s32 nb;
+
+        m = *(OpuMimicWork **)((u8 *)_opu_opus_get_osu_by_draw(0, 0, 0x12, 1) + 0xBC);
+        t = *(void **)m->p4;
+        _opu_Ch_TextureSetImageBase((Chr *)t, -1, 0x3C00);
+        _opu_Ch_TextureSetClutBase((Chr *)t, -1, 0x2EE0);
+        if (op_mdc_size_get_main((int)t, 2, 1, 0) == 0) {
+            return p + 3;
+        }
+        buf = (s32)_opu_func_001E4F20(0);
+        if (buf == 0) {
+            if (D_007649A0 == 0) {
+                func_00120108(D_005759F8);
+                func_002EA328(1);
+            }
+            func_00120108(D_00575A28);
+            buf = 0x01E80000;
+        }
+        m->p8 = buf;
+        func_002A7140(buf, (s32)t, 2, 0, 0, *(s32 *)((u8 *)arg0 + 0x328));
+        _opu_op_mdc_mem_transfer_cue_free((Chr *)t);
+        nb = Ch_GetNbModel((Chr *)t);
+        for (i = 0; i < nb; i++) {
+            m->a20[i] = _opu_func_00110C18((Chr *)t, i);
+            m->aA0[i] = _opu_func_00110C00((Chr *)t, i);
+        }
+        p += 1;
+        break;
+    }
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opp_mimic);
 

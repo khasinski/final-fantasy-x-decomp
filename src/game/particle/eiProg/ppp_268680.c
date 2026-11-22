@@ -86,7 +86,85 @@ void pppSetFpTex2(char *src, int n)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppSetFpPdt);
+extern s32 D_003708B8;
+extern s32 D_003708D8;
+extern s32 D_003708DC;
+extern s32 D_003708E8;
+extern s32 D_003708EC;
+extern s32 D_006EA400;
+extern u8 D_0036F210[];
+extern u8 D_006A3BD0[];
+extern char D_00574000[];
+extern char D_00574008[];
+void _ppp_pppCreateHeap(void *, s32, s32) __asm__("pppCreateHeap");
+void pppInitEnv(void *, void *, void *, s32);
+void func_00268BC8(int);
+void func_002DD128(void *);
+
+/* DEBT(CAST): raw byte/vector offsets on Ent50Tbl, Slot80, Slot50 */
+void pppSetFpPdt(Ent50Tbl *pdt)
+{
+    s32 i;
+
+    D_003708B8 = 1;
+    D_006E7BFC = pdt;
+    _pppInitData(pdt, D_0036F210);
+    pppInitEnv(&D_006E7BD0, D_006E7BFC, D_006A3BD0, 0x40000);
+
+    if (D_003708EC == 0) {
+        if (((u8 *)D_006E7BFC)[1] != 0) {
+            s32 sz = ((u8 *)D_006E7BFC)[1] << 13;
+            D_003708EC = (s32)user_malloc(sz, 8, D_00574000, 0);
+            _ppp_pppCreateHeap((u8 *)&D_006E7BD0 + 0x10, D_003708EC, sz);
+        }
+    }
+
+    D_003708E0 = D_003708E4 = 0;
+    func_00268BC8((int)&D_006E7BD0);
+    D_006EA400 = 0;
+
+    for (i = 0; i < D_006E7BFC->count; i++) {
+        Slot80 *dst = &D_006E3BD0[i];
+        u8 *src = (u8 *)&D_006E7BFC->ents[i];
+        Slot50 *s50 = &D_006E7C00[i];
+
+        dst->objs = 0;
+        dst->buf = 0;
+        *(u_long128 *)((u8 *)dst + 0x40) = *(u_long128 *)(src + 0x00);
+        *(float *)((u8 *)dst + 0x20) = *(float *)(src + 0x38);
+        *(u_long128 *)((u8 *)dst + 0x50) = *(u_long128 *)(src + 0x10);
+        *(float *)((u8 *)dst + 0x24) = *(float *)(src + 0x3C);
+        *(u_long128 *)((u8 *)dst + 0x60) = *(u_long128 *)(src + 0x20);
+        dst->f0 = *(s32 *)(src + 0x30);
+        *(float *)((u8 *)dst + 0x28) = *(float *)(src + 0x40);
+        s50->flags = 0;
+        *(s32 *)((u8 *)s50 + 0x04) = 0;
+        *(s32 *)((u8 *)s50 + 0x08) = 0;
+        func_002DD128((u8 *)s50 + 0x10);
+        if (src[0x4A] == 2) {
+            D_006EA400 = 1;
+        }
+    }
+
+    if (D_003708E8 == 0) {
+        switch (((u8 *)D_006E7BFC)[2]) {
+        case 0:
+            D_003708D4 = 0xC0000;
+            break;
+        case 1:
+            D_003708D4 = 0x100000;
+            break;
+        case 2:
+            D_003708D4 = 0x140000;
+            break;
+        default:
+            D_003708D4 = 0xC0000;
+            break;
+        }
+        D_003708E8 = (s32)user_malloc(D_003708D4, 0xB, D_00574008, 0);
+        D_003708D8 = D_003708DC = 0;
+    }
+}
 
 void func_00268BC8(int a)
 {

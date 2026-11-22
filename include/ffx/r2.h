@@ -121,7 +121,7 @@ void func_001BF4C0(int i, int v);
 void MsGetChrBtlPos(int id, float *v);
 void Ch_SetPos3(Chr *chr, float x, float y, float z);
 int MsCameraIDcheck(u32 a);
-void MsSetCheckChange(int a, int b, int c, int d);
+int MsSetCheckChange(int a, int b, int c, int d);
 
 void *_rcRealloc(void *p, int size, const char *file, int line);
 
