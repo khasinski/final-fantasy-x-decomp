@@ -711,7 +711,87 @@ int func_00139B30(int n) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", AtelEventKickBGSep);
+extern s32 D_0030B8C4;
+typedef struct {
+    s32 id;
+    u32 flags;
+} BgSepEntry;
+extern BgSepEntry D_0058E8F0[];
+
+void AtelEventKickBGSep(char *p, int flag)
+{
+    int n = func_00138E90(p);
+    int i;
+
+    if (flag != 0) {
+        func_00138838();
+    }
+    for (i = 0; i < n; i++) {
+        int id = func_00138ED8(p, i);
+        int bits = func_00138F30(p, i);
+        int ok;
+
+        if (!(bits & 2)) {
+            continue;
+        }
+        if (flag != 0) {
+            if (bits & 0x80) {
+                ok = 0;
+            } else {
+                ok = 1;
+            }
+        } else {
+            if (bits & 4) {
+                ok = 1;
+            } else {
+                ok = 0;
+            }
+        }
+        if (bits & 0x300) {
+            ok = 0;
+        }
+        if (ok != 0) {
+            int vol;
+            int playVol;
+            int j;
+
+            if (bits & 0x30) {
+                vol = 0;
+            } else {
+                vol = func_00139B30(0x7F);
+            }
+            playVol = (bits & 0x1C00) ? 0 : vol;
+            for (j = 0; j < D_0030B8C4; j++) {
+                if (D_0058E8F0[j].flags & 0x8000) {
+                    if (id != D_0058E8F0[j].id) {
+                        ok = 1;
+                    } else {
+                        ok = 0;
+                        break;
+                    }
+                }
+            }
+            if (ok != 0) {
+                int fade;
+
+                SndSepPlay(id, 0x3F, playVol);
+                fade = 0;
+                if (bits & 0x400) {
+                    fade = 0xF0;
+                }
+                if (bits & 0x800) {
+                    fade = 0x78;
+                }
+                if (bits & 0x1000) {
+                    fade = 0x168;
+                }
+                if (fade != 0) {
+                    SndSepVolumeTranslate(id, fade, vol);
+                }
+            }
+        }
+    }
+}
 
 void func_00139D48(int a, int b, int c) {
     Rec124828 *r = func_00124828();

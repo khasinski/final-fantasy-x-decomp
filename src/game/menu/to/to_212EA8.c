@@ -164,7 +164,71 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlCtrlCtbWindow);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlDrawCtbWindow);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TODrawBtlCtbParts);
+void TODrawBtlCtbParts(int id, int val, int x, int y)
+{
+    if (val >= 0x3C) {
+        func_001EFDF8(x, y, x + 0x28, y + 0x14, 0x59, 0xF, 0x7C, 0x80);
+    }
+    if (val >= 0x28 && val < 0x3C) {
+        int x0 = x - 0x28;
+        int y1 = y + 0x14;
+        int x1;
+
+        __asm__("" : "+r"(x0)); /* DEBT(ORDER): prevent CSE with val - 0x28 from branch test */
+        x1 = x0 + val;
+        __asm__ volatile("" : "+r"(x1)); /* DEBT(ORDER): keep x1 add before arg setup */
+        func_001EFDF8(x, y, x1, y1, 0x59, 0xF, 0x7C, 0x80);
+        func_001EFDF8(x1, y, x + 0x28, y1, 0x95, 0x39, 0xC1, 0x80);
+    }
+    if (val >= 0x14 && val < 0x28) {
+        int x0 = x - 0x14;
+        int y1 = y + 0x14;
+        int x1;
+
+        __asm__("" : "+r"(x0)); /* DEBT(ORDER): prevent CSE with val - 0x14 from branch test */
+        x1 = x0 + val;
+        __asm__ volatile("" : "+r"(x1)); /* DEBT(ORDER): keep x1 add before arg setup */
+        func_001EFDF8(x, y, x1, y1, 0x95, 0x39, 0xC1, 0x80);
+        func_001EFDF8(x1, y, x + 0x28, y1, 0xB5, 0x75, 0xD6, 0x80);
+    }
+    if (val < 0x14) {
+        func_001EFDF8(x, y, x + val, y + 0x14, 0xB5, 0x75, 0xD6, 0x80);
+    }
+    if (val >= 0x14) {
+        val = 0x14;
+    }
+    if (id < 8) {
+        if (id == 6 && ((int (*)(void))func_0014AC00)() < 0x434) {
+            TOMkpShapeXY(0x1D4, x + val, y);
+        } else {
+            TOMkpShapeXY(id + 0x1B8, x + val, y);
+        }
+    }
+    if (id >= 8 && id < 0x12) {
+        TOMkpShapeXY(0x1C0, x + val, y);
+    }
+    if (id >= 0x14) {
+        int kind = func_001BC190(id);
+
+        if (kind == 0x14) {
+            TOMkpShapeXY(func_001BC1B0(id) + 0x1CB, x + val, y);
+            return;
+        }
+        if (kind == 0x15) {
+            TOMkpShapeXY(0x1C2, x + val, y);
+            return;
+        }
+        if (kind == 0x16) {
+            TOMkpShapeXY(func_001BC1B0(id) + 0x1C3, x + val, y);
+            return;
+        }
+        if (kind == 0x17) {
+            TOMkpShapeXY(0x1D3, x + val, y);
+            return;
+        }
+        TOMkpShapeXY(0x1C1, x + val, y);
+    }
+}
 
 int func_00213E80(R4Walk *o)
 {
