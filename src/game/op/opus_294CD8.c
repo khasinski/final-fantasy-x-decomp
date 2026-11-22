@@ -301,7 +301,86 @@ found:
     *p = -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opus_no_get);
+typedef struct {
+    u8 pad0[0x10];
+    s16 *list10;
+    s16 *list14;
+    s16 *list18;
+    u8 pad1C[4];
+    u8 *subs;
+} OpusPoolView; /* DEBT(TYPE): list pointers inside OpusPool */
+
+ScriptSub *opus_no_get(void *obj300, ScriptSub *sub, s16 id)
+{
+    OpusPoolView *o = (OpusPoolView *)obj300;
+    ScriptSub *cur;
+    s16 *p;
+    register int idx __asm__("$2"); /* DEBT(REG): matches $v0 for list index */
+
+    if (id >= 0) {
+    search:
+        p = o->list14;
+        while ((idx = *p) >= 0) {
+            register int h1a __asm__("$3"); /* DEBT(REG): matches $v1 for cur->h1A compare */
+            cur = (ScriptSub *)(o->subs + (idx << 8));
+            p++;
+            h1a = cur->h1A;
+            if (h1a == id && cur->b1E == sub->b1E) {
+                return cur;
+            }
+        }
+        p = o->list10;
+        while ((idx = *p) >= 0) {
+            register int h1a __asm__("$3"); /* DEBT(REG): matches $v1 for cur->h1A compare */
+            cur = (ScriptSub *)(o->subs + (idx << 8));
+            p++;
+            h1a = cur->h1A;
+            if (h1a == id && cur->b1E == sub->b1E) {
+                return cur;
+            }
+        }
+        p = o->list18;
+        while ((idx = *p) >= 0) {
+            register int h1a __asm__("$3"); /* DEBT(REG): matches $v1 for cur->h1A compare */
+            cur = (ScriptSub *)(o->subs + (idx << 8));
+            p++;
+            h1a = cur->h1A;
+            if (h1a == id && cur->b1E == sub->b1E) {
+                return cur;
+            }
+        }
+        return (ScriptSub *)o->subs;
+    }
+    if (id == -0x100) {
+        return sub;
+    }
+    if (id == -1) {
+        cur = (ScriptSub *)(o->subs + (*(u16 *)((u8 *)sub + 0x1C) << 8));
+        goto check_live; /* DEBT(GOTO): shares live-check tail with parent-walk loop */
+    }
+    if (id < -0x3000) {
+        if (id >= -0x4FFF) {
+            id += (s16)(sub->h1A + 0x4000);
+            goto search; /* DEBT(GOTO): jumps back to positive-id search */
+        }
+    }
+    if ((id & 0xFF00) == 0xFE00) {
+        register SlotEntry *tbl __asm__("$2") = owu_eff_status; /* DEBT(REG): matches $v0 for owu_eff_status base */
+        cur = tbl[sub->h14].sub;
+        id = (cur->h1A & 0x7FF0) | (id & 0xF);
+        goto search; /* DEBT(GOTO): jumps back to positive-id search */
+    }
+    cur = sub;
+    while (id < 0) {
+        cur = (ScriptSub *)(o->subs + (*(u16 *)((u8 *)cur + 0x1C) << 8));
+        id++;
+    }
+check_live:
+    if (*(s32 *)cur != 0) {
+        return cur;
+    }
+    return (ScriptSub *)o->subs;
+}
 
 ScriptSub *opus_get_osu_by_draw(OpusPool *o, ScriptSub *sub, u8 type, int any)
 {

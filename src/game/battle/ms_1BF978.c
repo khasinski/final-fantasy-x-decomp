@@ -337,7 +337,71 @@ int func_001C0318(int id) {
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", func_001C03B0);
+int func_001C03B0(int id1, int id2)
+{
+    Unk1BFED8 tmp;
+    Unk1BFED8 *w1;
+    Unk1BFED8 *w2;
+    int ok;
+    int i;
+
+    if (id1 != 0xFF && id2 != 0xFF) {
+        w1 = MsGetSaveWeapon(id1, 0);
+        w2 = MsGetSaveWeapon(id2, 0);
+        ok = 1;
+        tmp = *w1;
+        *w1 = *w2;
+        *w2 = tmp;
+        if ((id1 >> 12) != 7) {
+            id1 &= 0xFFF;
+        } else {
+            ok = 0;
+        }
+        if ((id2 >> 12) != 7) {
+            id2 &= 0xFFF;
+        } else {
+            ok = 0;
+        }
+        for (i = 0; i < 18; i++) {
+            if (D_003194D0.slot[i].f2D == id1) {
+                if (ok != 0) {
+                    w2->b6 = i;
+                    D_003194D0.slot[i].f2D = id2;
+                } else {
+                    w2->b6 = 0xFF;
+                    D_003194D0.slot[i].f2D = 0xFF;
+                }
+            } else if (D_003194D0.slot[i].f2D == id2) {
+                if (ok != 0) {
+                    w1->b6 = i;
+                    D_003194D0.slot[i].f2D = id1;
+                } else {
+                    w1->b6 = 0xFF;
+                    D_003194D0.slot[i].f2D = 0xFF;
+                }
+            }
+            if (D_003194D0.slot[i].f2E == id1) {
+                if (ok != 0) {
+                    w2->b6 = i;
+                    D_003194D0.slot[i].f2E = id2;
+                } else {
+                    w2->b6 = 0xFF;
+                    D_003194D0.slot[i].f2E = 0xFF;
+                }
+            } else if (D_003194D0.slot[i].f2E == id2) {
+                if (ok != 0) {
+                    w1->b6 = i;
+                    D_003194D0.slot[i].f2E = id1;
+                } else {
+                    w1->b6 = 0xFF;
+                    D_003194D0.slot[i].f2E = 0xFF;
+                }
+            }
+        }
+        return 0;
+    }
+    return -1;
+}
 
 int func_001C0598(Unk1BFED8 *src) {
     Unk1BFED8 *p = D_0031D96C;
