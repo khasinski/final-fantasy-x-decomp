@@ -3,6 +3,7 @@
  * D_00300664/D_00300668, 64-bit flag word at +0x1A0). Chunks up to c_126830 are mostly
  * its accessors, the resource Handle table (D_0057F2C0) and a small command stream. */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/s0.h"
@@ -610,7 +611,21 @@ int Ch_FunctionHistoryDump(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00103878);
+void func_00103878(s32 *a0)
+{
+    s32 ra_save;
+
+    {
+        register void *t7 __asm__("$15");
+        __asm__ volatile("" ::: "memory"); /* DEBT(ORDER): prevent move t7,sp hoisting into prologue */
+        t7 = &ra_save;
+        MIPS_STORE_RA(t7);
+    }
+    func_002F0C10((u8 *)&D_0057CE90[D_0057CE8C], (void *)a0[1], 7);
+    *(s32 *)((u8 *)&D_0057CE90[D_0057CE8C] + 8) = ra_save; /* DEBT(CAST): Rec16 fields at +8/+C */
+    *(s32 *)((u8 *)&D_0057CE90[D_0057CE8C] + 0xC) = D_00307F2C;
+    D_0057CE8C = (D_0057CE8C + 1) & 0x7F;
+}
 
 s32 Sg_PacketGetPtr(void)
 {

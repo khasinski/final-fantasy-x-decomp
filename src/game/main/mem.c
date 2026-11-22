@@ -685,11 +685,49 @@ s32 Sg_MemGetMaxFree(s32 mode)
 void func_0011D228(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011D230);
+void func_0011BB08(void *h, u8 *s, s32 v);
+extern char D_00569CE8[];
+extern char D_00569D18[];
+extern char D_00569D28[];
+extern char D_00569D30[];
+extern char D_00569D38[];
+
+void *func_0011D230(s32 size, u32 align, s32 heap, u8 *name, s32 line)
+{
+    s32 ra_save;
+    u32 mask = align - 1;
+    s32 heap1;
+    void *p;
+    u32 rem;
+
+    {
+        register void *t7 __asm__("$15");
+        __asm__ volatile("" ::: "memory"); /* DEBT(ORDER): prevent move t7,sp hoisting into prologue */
+        t7 = &ra_save;
+        MIPS_STORE_RA(t7);
+    }
+    func_0011BFE0(ra_save);
+    heap1 = heap + 1;
+    p = Sg_MemGet(0, 0, heap1, size, (char *)name);
+    rem = (u32)p & mask;
+    if (rem != 0) {
+        u32 pad = mask - rem - 0xF;
+        void *tmp;
+
+        func_002EF240(D_00569CE8, size, p, mask, rem, pad);
+        func_0011CA28((s32)p, heap1);
+        tmp = Sg_MemGet(0, 0, heap1, pad, 0);
+        ((void (*)(void))Sg_MemDump)(); /* DEBT(TYPE): Sg_MemDump takes 0 args here */
+        p = Sg_MemGet(0, 0, heap1, size, (char *)name);
+        func_0011CA28((s32)tmp, heap1);
+        func_002EF240(D_00569D18, p);
+        func_002EF240(D_00569D28);
+    }
+    func_0011BB08(p, name, line);
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/mem", user_malloc);
-
-void func_0011BB08(void *h, u8 *s, s32 v);
 
 void *func_0011D420(s32 size, s32 align, u8 *name, s32 line)
 {

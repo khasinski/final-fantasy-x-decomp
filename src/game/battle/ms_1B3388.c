@@ -99,7 +99,45 @@ int MsBtlListFieldNum(int id) {
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsBtlGetPos);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E300);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", func_001B38E8);
+typedef struct Bw1B38E8 {
+    u8 pad00[0xC0];
+    u8 *pC0;
+    u8 padC4[0x1C];
+    void *pE0;
+    u8 padE4[0x143A];
+    u8 b151E;
+} Bw1B38E8;
+
+void func_001B38E8(int arg0)
+{
+    u8 *p = ((Bw1B38E8 *)&D_003172F0)->pC0; /* DEBT(CAST): D_003172F0 fields at +0xC0, +0xE0, +0x151E */
+    register int n __asm__("$5") = *(s8 *)(p + 1); /* DEBT(REG): a1/a2 swap between n and i */
+    int first = -1;
+    int last = -1;
+    int i;
+    int idx;
+
+    for (i = 0; i < n; i++, p += 0x20) {
+        if (*(s8 *)(p + 4) == arg0) {
+            if (first < 0) {
+                first = i;
+            }
+        } else {
+            if (first >= 0) {
+                last = i;
+            }
+        }
+    }
+    if (first < 0) {
+        first = 0;
+    }
+    if (last < 0) {
+        last = i;
+    }
+    idx = first + func_001ACEA0() % (last - first);
+    ((Bw1B38E8 *)&D_003172F0)->b151E = idx + 1;
+    func_001B39A8(((Bw1B38E8 *)&D_003172F0)->pC0, ((Bw1B38E8 *)&D_003172F0)->pE0, idx);
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", func_001B39A8);
 
