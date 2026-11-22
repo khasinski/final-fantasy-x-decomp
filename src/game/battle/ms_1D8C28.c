@@ -542,7 +542,76 @@ void func_001DB008(int a, BtlChr *c)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsCheckStatusBeforeAction);
+int MsCheckStatusBeforeAction(int id, BtlChr *c)
+{
+    int i;
+
+    if (c->fA88 != 0 && c->f3D6 == 0) {
+        u8 *st;
+        Ent4 *e;
+
+        for (i = 0; i < 31; i++) {
+            BtlChr *d = MsGetChr(i);
+            if (d->f2D2 != 0 && d->fA88 != 0 && *(s32 *)((u8 *)d + 0x290) > 0 && (*(u32 *)((u8 *)d + 0xA8C) & 0x00FF00FF) == 0) {
+                int val = ((u32)(d->f254 * d->f392) >> 8) + 100;
+                if (val > 0) {
+                    ((u8 *)d)[0xA90] = 0;
+                    if ((d->f2C6 >> 1) & 1) {
+                        ((u8 *)d)[0xAAD] = i;
+                        ((void (*)(int, BtlChr *, int, int, int, int, int))func_001C7DC0)(i, d, val, val, 0, 1, ((s8 *)d)[0xA9B] != 0 ? 0x81 : 1); /* DEBT(CAST): header prototype has fewer args */
+                        MsSetChrWeak(i, -1);
+                        MsCheckAutoStatus(i, d);
+                        if (MsDamageCheckDeath(i, i, 0, 1) == 0) {
+                            MsDamageSetMotion(i, 8, 1);
+                        }
+                    } else {
+                        val = -val;
+                        ((void (*)(int, BtlChr *, int, int, int, int, int))func_001C7DC0)(i, d, val, val, 0, 1, 3); /* DEBT(CAST): header prototype has fewer args */
+                        MsSetChrWeak(i, -1);
+                        MsCheckAutoStatus(i, d);
+                        if (func_001DAF88(d, 2) != 0) {
+                            MsDamageSetMotion(i, 2, 1);
+                        }
+                    }
+                }
+                d->f392 = 0;
+            }
+        }
+        st = &c->f2C8;
+        e = D_0031FA50;
+        for (i = 0; i < 13; i++, e++) {
+            u8 v = st[i];
+            if ((u32)(v - 1) < 0xFD && (((u8 *)e)[3] & 1)) {
+                st[i] = v - 1;
+                if (((u8 *)e)[3] & 2) {
+                    MsStatusEffect(id, c, e, v - 1, c->fAF0);
+                }
+            }
+        }
+    }
+
+    if (((*(u16 *)((u8 *)c + 0x2D6) >> 11) & 1) && !((*(u16 *)((u8 *)c + 0x2EE) >> 11) & 1)) {
+        *(u16 *)((u8 *)c + 0x2D6) &= ~0x800;
+        func_001DB008(id, c);
+    }
+    if (((*(u16 *)((u8 *)c + 0x2D6) >> 12) & 1) && !((*(u16 *)((u8 *)c + 0x2EE) >> 12) & 1)) {
+        *(u16 *)((u8 *)c + 0x2D6) &= ~0x1000;
+    }
+    if (((*(u16 *)((u8 *)c + 0x2D6) >> 13) & 1) && !((*(u16 *)((u8 *)c + 0x2EE) >> 13) & 1)) {
+        *(u16 *)((u8 *)c + 0x2D6) &= ~0x2000;
+        func_001DB008(id, c);
+    }
+    if (((*(u16 *)((u8 *)c + 0x2D6) >> 6) & 1) && !((*(u16 *)((u8 *)c + 0x2EE) >> 6) & 1)) {
+        *(u16 *)((u8 *)c + 0x2D6) &= ~0x40;
+        func_001DB008(id, c);
+    }
+    if (((*(u16 *)((u8 *)c + 0x2D6) >> 7) & 1) && !((*(u16 *)((u8 *)c + 0x2EE) >> 7) & 1)) {
+        *(u16 *)((u8 *)c + 0x2D6) &= ~0x80;
+    }
+
+    MsThreatOff(id, c);
+    return 0;
+}
 
 int func_001DB3B8(BtlChr *c) {
     int a = 0;
