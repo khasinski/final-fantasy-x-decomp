@@ -11,9 +11,82 @@ int func_002DC7D8(void)
     return func_002DC5F0(0x43A).h[0];
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC800);
+typedef struct Vu0State {
+    u_long128 vf[32];
+    u32 w200;
+    u32 w204;
+    u32 w208;
+    u32 w20C;
+    u32 w210;
+    u32 w214;
+    u32 w218;
+    u16 vi[16];
+} Vu0State;
 
-INCLUDE_ASM("build/ee_asm/game/platform/ffx_2DC580", func_002DC990);
+typedef union VuQ128 {
+    u_long128 q;
+    u64 d[2];
+    u16 h[8];
+} VuQ128;
+
+void func_002DC5B0(u16 addr, void *q);
+
+int func_002DC800(Vu0State *st)
+{
+    u32 i;
+
+    if (func_002DC580() != 0) {
+        return 0;
+    }
+    for (i = 0; i < 32; i++) {
+        st->vf[i] = ((VuQ128 (*)(u16))func_002DC5F0)(i + 0x400).q; /* DEBT(CAST): 128-bit qword return view */
+    }
+    st->w200 = (u32)func_002DC5F0(0x430).d[0];
+    st->w204 = (u32)func_002DC5F0(0x431).d[0];
+    st->w208 = (u32)func_002DC5F0(0x432).d[0];
+    st->w20C = (u32)func_002DC5F0(0x434).d[0];
+    st->w210 = (u32)func_002DC5F0(0x435).d[0];
+    st->w214 = (u32)func_002DC5F0(0x436).d[0];
+    st->w218 = (u32)func_002DC5F0(0x437).d[0];
+    for (i = 0; i < 16; i++) {
+        st->vi[i] = func_002DC5F0(i + 0x420).h[0];
+    }
+    return 1;
+}
+
+int func_002DC990(Vu0State *st)
+{
+    u32 i;
+    Qword q;
+
+    if (func_002DC580() != 0) {
+        return 0;
+    }
+    for (i = 0; i < 32; i++) {
+        q.ul128 = st->vf[i];
+        func_002DC5B0(i + 0x400, &q);
+    }
+    q.ul128 = 0;
+    q.ul64[0] = st->w200;
+    func_002DC5B0(0x430, &q);
+    q.ul64[0] = st->w204;
+    func_002DC5B0(0x431, &q);
+    q.ul64[0] = st->w208;
+    func_002DC5B0(0x432, &q);
+    q.ul64[0] = st->w20C;
+    func_002DC5B0(0x434, &q);
+    q.ul64[0] = st->w210;
+    func_002DC5B0(0x435, &q);
+    q.ul64[0] = st->w214;
+    func_002DC5B0(0x436, &q);
+    q.ul64[0] = st->w218;
+    func_002DC5B0(0x437, &q);
+    for (i = 0; i < 16; i++) {
+        q.ul64[0] = st->vi[i];
+        func_002DC5B0(i + 0x420, &q);
+    }
+    return 1;
+}
 
 void func_002DCAD8(void)
 {

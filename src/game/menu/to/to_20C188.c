@@ -106,7 +106,33 @@ void func_0020C660(int dst, int a, int b, int c, int d, int e, int f)
     func_002DA610(0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", func_0020C700);
+void func_0020C700(int sbp, int spsm, int ssax, int ssay, int unused4, int unused5, int dbp, int dpsm, int dsax, int dsay, int rrw, int rrh)
+{
+    void *dma = func_002DB6D8(2);
+    Qword dmatag;
+    int bw = rrw / 64;
+
+    if (bw == 0) {
+        bw = 1;
+    }
+    dmatag.ul128 = 0;
+    dmatag.ui32[0] = 5;
+    dmatag.ui32[1] = (u32)D_0068F0D0;
+    D_0068F0D0[0] = 0x1000000000008004UL;
+    D_0068F0D0[1] = 0xE;
+    D_0068F0D0[2] = (u64)sbp | ((u64)bw << 16) | ((u64)spsm << 24) | ((u64)dbp << 32) | ((u64)bw << 48) | ((u64)dpsm << 56);
+    D_0068F0D0[3] = 0x50;
+    D_0068F0D0[4] = (u64)ssax | ((u64)ssay << 16) | ((u64)dsax << 32) | ((u64)dsay << 48);
+    D_0068F0D0[5] = 0x51;
+    D_0068F0D0[6] = (u64)rrw | ((u64)rrh << 32);
+    D_0068F0D0[7] = 0x52;
+    D_0068F0D0[8] = 2;
+    D_0068F0D0[9] = 0x53;
+    func_002F8660(0);
+    func_002DA610(0, 0);
+    func_002DBA28(dma, (int)&dmatag);
+    func_002DA610(0, 0);
+}
 
 void TOTransTexture(void)
 {

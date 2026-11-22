@@ -237,7 +237,77 @@ void func_001A02E8(int a)
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0308);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A04D8);
+typedef struct RcefPktCtx {
+    void *head;
+    Qword *cur;
+    u32 w08;
+    u32 w0C;
+} RcefPktCtx;
+
+extern u64 D_006F2CE0[];
+void func_0018FCE0(RcefPktCtx *);
+void func_0018FD88(RcefPktCtx *, s32);
+void func_0018FDD0(RcefPktCtx *);
+void func_0018FE28(RcefPktCtx *);
+void func_001A06A8(s32, s32);
+void func_002B2DF0(void *, int, void *, int);
+
+void *func_001A04D8(int prio, void *buf, u32 rgba, u8 alpha_lo, u8 alpha_hi)
+{
+    RcefPktCtx ctx;
+    u32 xy[4];
+    Qword *p;
+
+    func_0018FCE0(&ctx);
+    func_0018FD88(&ctx, (s32)buf);
+    p = ctx.cur;
+    p->ul64[0] = 0x1000000000000004UL;
+    p->ul64[1] = 0xE;
+    p++;
+    p->ul64[0] = 0;
+    p->ul64[1] = 0x47;
+    p++;
+    p->ul64[0] = 0x0000000131000108UL;
+    p->ul64[1] = 0x4E;
+    p++;
+    p->ui32[0] = alpha_lo;
+    p->ui32[1] = alpha_hi;
+    p->ul64[1] = 0x42;
+    p++;
+    p->ul64[0] = rgba;
+    p->ul64[1] = 1;
+    p++;
+    xy[0] = 0x7000;
+    xy[1] = 0x7300;
+    xy[2] = 0x9000;
+    xy[3] = 0x8D00;
+    p->ul64[0] = 0x2023400000000001UL;
+    p->ul64[1] = 0x55;
+    p++;
+    p->ui32[0] = xy[0];
+    p->ui32[1] = xy[1];
+    p->ui32[2] = 0;
+    p->ui32[3] = 0;
+    p++;
+    p->ui32[0] = xy[2];
+    p->ui32[1] = xy[3];
+    p->ui32[2] = 0;
+    p->ui32[3] = 0;
+    p++;
+    p->ul64[0] = 0x1000000000000002UL;
+    p->ul64[1] = 0xE;
+    p++;
+    p->ul64[0] = D_006F2CE0[6];
+    p->ul64[1] = D_006F2CE0[7];
+    p++;
+    p->ul64[0] = D_006F2CE0[12];
+    p->ul64[1] = D_006F2CE0[13];
+    p++;
+    ctx.cur = p;
+    func_0018FDD0(&ctx);
+    func_002B2DF0(func_001A06A8, prio, ctx.head, 1);
+    return ctx.cur;
+}
 
 void func_001A06A8(s32 arg0, s32 arg1) {
     u32 *temp_16;
@@ -248,7 +318,61 @@ void func_001A06A8(s32 arg0, s32 arg1) {
     func_002DBF78((s32) temp_16, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0700);
+void func_001A0700(int unused, u32 rgba, u8 alpha_lo, u8 alpha_hi)
+{
+    RcefPktCtx ctx;
+    u32 xy[4];
+    Qword *p;
+
+    func_0018FCE0(&ctx);
+    func_0018FD88(&ctx, D_00303550);
+    p = ctx.cur;
+    p->ul64[0] = 0x1000000000000004UL;
+    p->ul64[1] = 0xE;
+    p++;
+    p->ul64[0] = 0;
+    p->ul64[1] = 0x47;
+    p++;
+    p->ul64[0] = 0x0000000131000108UL;
+    p->ul64[1] = 0x4E;
+    p++;
+    p->ui32[0] = alpha_lo;
+    p->ui32[1] = alpha_hi;
+    p->ul64[1] = 0x42;
+    p++;
+    p->ul64[0] = rgba;
+    p->ul64[1] = 1;
+    p++;
+    xy[0] = 0x7000;
+    xy[1] = 0x7300;
+    xy[2] = 0x9000;
+    xy[3] = 0x8D00;
+    p->ul64[0] = 0x2023400000000001UL;
+    p->ul64[1] = 0x55;
+    p++;
+    p->ui32[0] = xy[0];
+    p->ui32[1] = xy[1];
+    p->ui32[2] = 0;
+    p->ui32[3] = 0;
+    p++;
+    p->ui32[0] = xy[2];
+    p->ui32[1] = xy[3];
+    p->ui32[2] = 0;
+    p->ui32[3] = 0;
+    p++;
+    p->ul64[0] = 0x1000000000000002UL;
+    p->ul64[1] = 0xE;
+    p++;
+    p->ul64[0] = D_006F2CE0[6];
+    p->ul64[1] = D_006F2CE0[7];
+    p++;
+    p->ul64[0] = D_006F2CE0[12];
+    p->ul64[1] = D_006F2CE0[13];
+    p++;
+    ctx.cur = p;
+    func_0018FDD0(&ctx);
+    func_0018FE28(&ctx);
+}
 
 typedef struct RcefBlurCtx {
     u8 pad0[0x224];
