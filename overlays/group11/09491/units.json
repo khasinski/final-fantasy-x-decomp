@@ -1,0 +1,150 @@
+[
+  {
+    "src": "ovl_09491_0c48.c",
+    "containers": [
+      9491,
+      9434
+    ],
+    "text_start": "0x01B00C48",
+    "text_end": "0x01B00D34",
+    "functions": 1,
+    "discovered_code_bytes": 236,
+    "syms": {
+      "g_heap_buf": "0x01BC60C0",
+      "g_ptr1": "0x01B0750C",
+      "g_work": "0x01B07590",
+      "g_flag0": "0x01B07508",
+      "g_mgr": "0x01B074C8",
+      "g_res_data": "0x01B0D140",
+      "g_hdr_40": "0x01B00040",
+      "g_seq": "0x01B07510",
+      "g_seq_tbl": "0x01B006C8",
+      "ovl_init_mgr": "0x01B03E90",
+      "ovl_setup": "0x01B00E28",
+      "ovl_init_seq": "0x01B06E48",
+      "ovl_set_mode": "0x01B03478",
+      "ovl_alloc_task": "0x01B03C08",
+      "ovl_add_task": "0x01B03DD0",
+      "ovl_task1": "0x01B00D38",
+      "ovl_task2": "0x01B00DC0"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9491,
+        "text_start": "0x01B00C48",
+        "text_end": "0x01B00D34",
+        "syms": {
+          "g_heap_buf": "0x01BC60C0",
+          "g_ptr1": "0x01B0750C",
+          "g_work": "0x01B07590",
+          "g_flag0": "0x01B07508",
+          "g_mgr": "0x01B074C8",
+          "g_res_data": "0x01B0D140",
+          "g_hdr_40": "0x01B00040",
+          "g_seq": "0x01B07510",
+          "g_seq_tbl": "0x01B006C8",
+          "ovl_init_mgr": "0x01B03E90",
+          "ovl_setup": "0x01B00E28",
+          "ovl_init_seq": "0x01B06E48",
+          "ovl_set_mode": "0x01B03478",
+          "ovl_alloc_task": "0x01B03C08",
+          "ovl_add_task": "0x01B03DD0",
+          "ovl_task1": "0x01B00D38",
+          "ovl_task2": "0x01B00DC0"
+        }
+      },
+      {
+        "cid": 9434,
+        "text_start": "0x01B00C48",
+        "text_end": "0x01B00D34",
+        "syms": {
+          "g_heap_buf": "0x01BC6780",
+          "g_ptr1": "0x01B07784",
+          "g_work": "0x01B07808",
+          "g_flag0": "0x01B07780",
+          "g_mgr": "0x01B07740",
+          "g_res_data": "0x01B0D790",
+          "g_hdr_40": "0x01B00040",
+          "g_seq": "0x01B07788",
+          "g_seq_tbl": "0x01B006D8",
+          "ovl_init_mgr": "0x01B04100",
+          "ovl_setup": "0x01B00E28",
+          "ovl_init_seq": "0x01B070B8",
+          "ovl_set_mode": "0x01B036E8",
+          "ovl_alloc_task": "0x01B03E78",
+          "ovl_add_task": "0x01B04040",
+          "ovl_task1": "0x01B00D38",
+          "ovl_task2": "0x01B00DC0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09491_0d38.c",
+    "containers": [
+      9491
+    ],
+    "text_start": "0x01B00D38",
+    "text_end": "0x01B00ED0",
+    "functions": 3,
+    "discovered_code_bytes": 404,
+    "syms": {
+      "g_work": "0x01B07590",
+      "g_seq": "0x01B07510",
+      "g_7570": "0x01B07570",
+      "g_mgr": "0x01B074C8",
+      "g_ptr1": "0x01B0750C",
+      "g_eff_handle": "0x01B074C0",
+      "g_res_data": "0x01B0D140",
+      "g_680": "0x01B00680",
+      "g_7584": "0x01B07584",
+      "ovl_seq_step": "0x01B06E68",
+      "ovl_check_7570": "0x01B030E8",
+      "ovl_0ed0": "0x01B00ED0",
+      "ovl_kill_task": "0x01B03C88",
+      "ovl_mgr_step": "0x01B04048",
+      "ovl_get_pos": "0x01B01648",
+      "ovl_get_scale": "0x01B01520",
+      "ovl_get_chr": "0x01B013F8",
+      "ovl_init_750": "0x01B07358"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09491_0ed8.c",
+    "containers": [
+      9491
+    ],
+    "text_start": "0x01B00ED8",
+    "text_end": "0x01B01284",
+    "functions": 5,
+    "discovered_code_bytes": 932,
+    "syms": {
+      "g_work": "0x01B07590",
+      "g_mgr": "0x01B074C8",
+      "g_res_data": "0x01B0D140",
+      "g_698": "0x01B00698",
+      "g_6b0": "0x01B006B0",
+      "g_4508": "0x01B04508",
+      "ovl_get_pos": "0x01B01648",
+      "ovl_get_scale": "0x01B01520",
+      "ovl_get_dist": "0x01B019B8",
+      "ovl_cam_set": "0x01B04DA0",
+      "ovl_get_se": "0x01B01490",
+      "ovl_fade": "0x01B07120",
+      "ovl_bezier": "0x01B04AE0",
+      "ovl_set_pos": "0x01B01778",
+      "ovl_spawn": "0x01B03F68",
+      "ovl_init_7b0": "0x01B036F0",
+      "ovl_6f68": "0x01B06F68"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

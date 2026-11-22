@@ -1,0 +1,73 @@
+[
+  {
+    "src": "ovl_09434_0d38.c",
+    "containers": [
+      9434
+    ],
+    "text_start": "0x01B00D38",
+    "text_end": "0x01B00ED0",
+    "functions": 3,
+    "discovered_code_bytes": 404,
+    "syms": {
+      "g_work": "0x01B07808",
+      "g_seq": "0x01B07788",
+      "g_77e8": "0x01B077E8",
+      "g_mgr": "0x01B07740",
+      "g_ptr1": "0x01B07784",
+      "g_eff_handle": "0x01B07738",
+      "g_res_data": "0x01B0D790",
+      "g_680": "0x01B00680",
+      "g_77fc": "0x01B077FC",
+      "ovl_seq_step": "0x01B070D8",
+      "ovl_check_77e8": "0x01B03358",
+      "ovl_0ed0": "0x01B00ED0",
+      "ovl_kill_task": "0x01B03EF8",
+      "ovl_mgr_step": "0x01B042B8",
+      "ovl_get_pos": "0x01B018B8",
+      "ovl_get_scale": "0x01B01790",
+      "ovl_get_chr": "0x01B01668",
+      "ovl_init_bf0": "0x01B075C8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09434_0ed8.c",
+    "containers": [
+      9434
+    ],
+    "text_start": "0x01B00ED8",
+    "text_end": "0x01B014F4",
+    "rodata_start": "0x01B07730",
+    "functions": 6,
+    "discovered_code_bytes": 1560,
+    "syms": {
+      "g_work": "0x01B07808",
+      "g_mgr": "0x01B07740",
+      "g_res_data": "0x01B0D790",
+      "g_6a8": "0x01B006A8",
+      "g_6c0": "0x01B006C0",
+      "g_4778": "0x01B04778",
+      "ovl_get_se": "0x01B01700",
+      "ovl_1d58": "0x01B01D58",
+      "ovl_1e78": "0x01B01E78",
+      "ovl_get_pos": "0x01B018B8",
+      "ovl_get_scale": "0x01B01790",
+      "ovl_get_dist": "0x01B01C28",
+      "ovl_cam_set": "0x01B05010",
+      "ovl_spawn": "0x01B041D8",
+      "ovl_23b0": "0x01B023B0",
+      "ovl_50f0": "0x01B050F0",
+      "ovl_fade": "0x01B07390",
+      "ovl_bezier": "0x01B04D50",
+      "ovl_bezier3": "0x01B04CC0",
+      "ovl_set_pos": "0x01B019E8",
+      "ovl_init_c50": "0x01B03960",
+      "ovl_71d8": "0x01B071D8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "src": "ovl_09732_0a60.c",
+    "containers": [
+      9732
+    ],
+    "text_start": "0x01B00A60",
+    "text_end": "0x01B00C88",
+    "functions": 4,
+    "discovered_code_bytes": 540,
+    "syms": {
+      "g_588": "0x01B00588",
+      "g_7810": "0x01B07810",
+      "g_7818": "0x01B07818",
+      "g_7858": "0x01B07858",
+      "g_785c": "0x01B0785C",
+      "g_7860": "0x01B07860",
+      "g_78bc": "0x01B078BC",
+      "g_78c0": "0x01B078C0",
+      "g_794": "0x01B00794",
+      "g_heap_buf": "0x01B7E480",
+      "g_res_data": "0x01B0D040",
+      "g_hdr_40": "0x01B00040",
+      "g_528": "0x01B00528",
+      "ovl_0f50": "0x01B00F50",
+      "ovl_3ae8": "0x01B03AE8",
+      "ovl_7150": "0x01B07150",
+      "ovl_3860": "0x01B03860",
+      "ovl_3a28": "0x01B03A28",
+      "ovl_7270": "0x01B07270",
+      "ovl_4f48": "0x01B04F48",
+      "ovl_7170": "0x01B07170",
+      "ovl_0c88": "0x01B00C88",
+      "ovl_38e0": "0x01B038E0",
+      "ovl_3ca0": "0x01B03CA0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09732_0c90.c",
+    "containers": [
+      9732
+    ],
+    "text_start": "0x01B00C90",
+    "text_end": "0x01B00EDC",
+    "functions": 3,
+    "discovered_code_bytes": 588,
+    "syms": {
+      "g_78bc": "0x01B078BC",
+      "g_4f0": "0x01B004F0",
+      "g_7818": "0x01B07818",
+      "g_res_data": "0x01B0D040",
+      "g_510": "0x01B00510",
+      "ovl_3bc0": "0x01B03BC0",
+      "ovl_7308": "0x01B07308",
+      "ovl_4f88": "0x01B04F88",
+      "ovl_1740": "0x01B01740"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09732_7270.c",
+    "containers": [
+      9732
+    ],
+    "text_start": "0x01B07270",
+    "text_end": "0x01B07308",
+    "functions": 1,
+    "discovered_code_bytes": 152,
+    "syms": {
+      "g_pool": "0x01B0C9B0",
+      "g_pool_idx": "0x01B0C9B4",
+      "g_pool_max": "0x01B0C9B8",
+      "g_pool_cnt": "0x01B0C9BC",
+      "ovl_3860": "0x01B03860",
+      "ovl_3a28": "0x01B03A28",
+      "ovl_73b8": "0x01B073B8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]
