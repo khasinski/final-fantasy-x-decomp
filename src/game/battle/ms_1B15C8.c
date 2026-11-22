@@ -274,7 +274,79 @@ int func_001B2330(int a, int b, int c, int v) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelChrInit);
+int MsAtelChrInit(int ctrl)
+{
+    int save = AtelChangeCurrentCtrl(ctrl);
+    int total = AtelGetCurrentActorTotal();
+    int i;
+    int j;
+    int off;
+    u8 *p;
+
+    for (i = 0; i < total; i++) {
+        *AtelGetBattleIdAdrs(i) = 0xFF;
+    }
+    switch (ctrl) {
+    case 2:
+        MsSetCameraMatrix(0, 0, 0, 0, 0, 0.0f);
+        func_001B3110(0, 2, 1, 0x3E);
+        func_001B3110(0, 2, 0, 0);
+        for (i = 0x29, j = 0; i < 0x38; i++, j++) {
+            p = func_001B1C70(ctrl, 1, i, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = j;
+            }
+        }
+        for (i = 5, j = 0; i < 0x21; i++, j++) {
+            p = func_001B1C70(ctrl, 0, i, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = j;
+            }
+        }
+        for (i = 0x4F, j = 0; i < 0x6B; i++, j++) {
+            p = func_001B1C70(ctrl, 0, i, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = j;
+            }
+        }
+        for (i = 0x6D, j = 0; i < 0x89; i++, j++) {
+            p = func_001B1C70(ctrl, 0, i, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = j;
+            }
+        }
+        func_001B2330(ctrl, 0, 0x21, 0x1C);
+        func_001B2330(ctrl, 0, 0x22, 0x1D);
+        func_001B2330(ctrl, 0, 0x23, 0x1E);
+        func_001B2330(ctrl, 0, 0x25, 0x0E);
+        func_001B2330(ctrl, 0, 0x26, 0x0F);
+        func_001B2330(ctrl, 0, 0x27, 0x10);
+        func_001B2330(ctrl, 0, 0x28, 0x11);
+        break;
+    case 3:
+        for (i = 0; i < 8; i++) {
+            p = func_001B1C70(ctrl, i + 0x14, 0x3D, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = i + 0x14;
+            }
+        }
+        for (i = 0; i < 8; i++) {
+            p = func_001B1C70(ctrl, i + 0x14, 4, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = i + 0x14;
+            }
+        }
+        for (i = 0; i < 8; i++) {
+            p = func_001B1C70(ctrl, i + 0x14, 0x40, &off);
+            if (p != 0) {
+                *AtelGetBattleIdAdrs(*p + off) = i + 0x14;
+            }
+        }
+        break;
+    }
+    AtelSetCurrentCtrl(save);
+    return total;
+}
 
 void AtelGetEventActorPos(u8 id, int kind, float *out) {
     float v[3];
