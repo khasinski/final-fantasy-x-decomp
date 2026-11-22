@@ -2,6 +2,7 @@
 #define MsCalcMotionSpeed _hdr_MsCalcMotionSpeed
 #define Ch_SetMotionSpeed _hdr_Ch_SetMotionSpeed
 #define MsThreatProcess _hdr_MsThreatProcess
+#define msResetHeadTarget _hdr_msResetHeadTarget
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -11,6 +12,9 @@
 #undef MsCalcMotionSpeed
 #undef Ch_SetMotionSpeed
 #undef MsThreatProcess
+#undef msResetHeadTarget
+
+int msResetHeadTarget(BtlChr *c);
 
 int MsThreatProcess(int id, BtlChr *c);
 int func_001C7D60(int id);
@@ -104,8 +108,123 @@ void func_001C69B8(int id, BtlChr *c) {
     func_001B6790(id, c->f80);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", MsDamageSetMotion);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C5E90/rodata", jtbl_0056E680);
+void func_001C69B8(int id, BtlChr *c);
+
+void MsDamageSetMotion(int a, int kind, int arg)
+{
+    int mot = -1;
+    BtlChr *c = MsGetChr((u8)a);
+    int id = c->fE2;
+    int loop;
+    int reset_pos;
+
+    c = MsGetChr(id);
+    MsEffectResetMotionDisable(c);
+    msResetHeadTarget(c);
+    c->f1CE = c->f1CF;
+    c->f1CF = 0;
+    c->f10E = 0;
+    if (c->fF6 != 0) {
+        return;
+    }
+    if (c->fA8E == 0) {
+        loop = 1;
+        reset_pos = 1;
+        switch (kind) {
+        case 1:
+            if (!(c->flags & 0x4000)) {
+                c->fF3 = 1;
+                c->fAAF = c->fAAD;
+                func_001C69B8(id, c);
+                mot = 0xC;
+            }
+            break;
+        case 2:
+        case 7:
+            if (c->fFE != 0) {
+                reset_pos = 0;
+            }
+            c->fF3 = 1;
+            mot = 0x10;
+            break;
+        case 3:
+            c->fF3 = 1;
+            mot = 0xE;
+            break;
+        case 4:
+            c->fF3 = 1;
+            mot = 0xF;
+            break;
+        case 12:
+            reset_pos = 0;
+            c->fF3 = 1;
+            mot = 0x1B;
+            break;
+        case 5:
+        case 8:
+            c->fF3 = 1;
+            mot = 9;
+            break;
+        case 6:
+            c->fF3 = 1;
+            mot = 0x30;
+            break;
+        case 13:
+            c->fF3 = 1;
+            mot = 9;
+            c->f10E = 1;
+            break;
+        case 14:
+            c->fF3 = 1;
+            mot = 9;
+            c->f10E = -1;
+            break;
+        case 15:
+            c->fF3 = 1;
+            mot = 0x30;
+            c->f10E = 1;
+            break;
+        case 16:
+            c->fF3 = 1;
+            mot = 0x30;
+            c->f10E = -1;
+            break;
+        case 11:
+            mot = 0;
+            loop = 0;
+            break;
+        default:
+            if (c->fDA != 0) {
+                mot = 0;
+                loop = 0;
+            }
+            break;
+        }
+
+        if (c->f39A != 0 && (mot == 9 || mot == 0x30)) {
+            mot = 0x43;
+        }
+        if (mot >= 0) {
+            if (reset_pos != 0) {
+                MsResetChrPos(id, c);
+            }
+            MsSetMotion(id, mot, loop, 0, arg, 0, 0);
+        }
+        c->fDA = 0;
+    } else {
+        c->fDC = 0;
+        c->fDA = 1;
+        MsResetChrPos(id, c);
+        if (c->fAAD == id) {
+            if (id == 5) {
+                MsSetMotion(0x1D, 0, 1, 0, arg, 0, 0);
+            }
+            MsAttachWeapon(id, 0);
+        }
+        MsSetMotion(id, 0x38, 1, 0, arg, 0, 0);
+        c->f1C8 = 0;
+    }
+}
 
 void MsSetDamageMotion(int a, int kind, int arg) {
     u8 id = a;

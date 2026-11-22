@@ -766,7 +766,7 @@ SECTIONS
         . = 0x56e660 - 0x568f00;
         build/src/game/battle/ms_1C0C98.c.o(.rodata.jtbl_0056E660)
         . = 0x56e680 - 0x568f00;
-        build/src/game/battle/ms_1C5E90.c.o(.rodata.jtbl_0056E680)
+        build/src/game/battle/ms_1C5E90.c.o(.rodata.cjt0)
         . = 0x56e6c0 - 0x568f00;
         build/src/game/battle/ms_1C8C80.c.o(.rodata.jtbl_0056E6C0)
         . = 0x56e740 - 0x568f00;
