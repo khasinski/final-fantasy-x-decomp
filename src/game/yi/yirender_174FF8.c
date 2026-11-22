@@ -343,11 +343,49 @@ void func_00176138(float a, float b)
 void func_00176360(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176368);
-
 typedef struct YiQw {
     u32 w[4];
 } YiQw;
+
+void func_00176368(Sys597F00 *s0, u32 addr, void *src0, u32 count)
+{
+    YiRenderBCB *s = (YiRenderBCB *)s0;
+    YiQw *src;
+    YiQw *tag = (YiQw *)s->pBCB34;
+    YiQw *p;
+    u32 i;
+
+    if ((u32)s->pBCB24 & 0x3F) {
+        s->pBCB24 = (u8 *)((YiQw *)s->pBCB24 + ((0x40 - ((u32)s->pBCB24 & 0x3F)) >> 4));
+    }
+    p = (YiQw *)s->pBCB24;
+    s->pBCB24 = (u8 *)p + ((count << 4) + 0x10);
+    if ((u8 *)s->pBCB28 < s->pBCB24) {
+        BREAK();
+    }
+    if (s->wBCB3C >= s->wBCB40) {
+        BREAK();
+    }
+    tag->w[1] = (u32)p;
+    tag->w[2] = 0;
+    tag->w[0] = ((count + 1) & 0xFFFF) | 0x30000000;
+    tag->w[3] = 0;
+    s->pBCB34 = (u_long128 *)(tag + 1);
+    s->wBCB3C++;
+    p->w[0] = 0x11000000;
+    p->w[1] = 0x05000000;
+    p->w[2] = 0x01000404;
+    p->w[3] = addr | (count << 16) | 0x6C000000;
+    p++;
+    src = (YiQw *)src0;
+    for (i = 0; i < count; i++, p++, src++) {
+        u32 *sub = (u32 *)src0 + (i * 4 + 1);
+        p->w[0] = src->w[0];
+        p->w[1] = sub[0];
+        p->w[2] = sub[1];
+        p->w[3] = src->w[3];
+    }
+}
 
 void func_001764A0(Sys597F00 *s0, void *src0, u32 count)
 {

@@ -295,7 +295,39 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002338D0);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_232C88/rodata", jtbl_005721C0);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_232C88/rodata", jtbl_005721F0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00234100);
+extern s32 D_00693EEC;
+extern s32 D_00693EF0;
+extern s16 D_00693EF8[];
+extern s16 D_00693F00[];
+extern s16 D_00693F08[];
+
+void func_00234100(int unused, int a1, int a2)
+{
+    int idx = D_00693E30;
+    int col = idx % 15;
+    int x = a1 + (col % 5) * D_00693EEC;
+    int y = a2 + (idx / 15) * D_00693EF0;
+    int flag;
+
+    switch (col / 5) {
+    case 0:
+        x += D_00693EF8[0];
+        y += D_00693EF8[1];
+        break;
+    case 1:
+        x += D_00693F00[0];
+        y += D_00693F00[1];
+        break;
+    case 2:
+        x += D_00693F08[0];
+        y += D_00693F08[1];
+        break;
+    }
+    flag = (D_00693E38 != 0);
+    if (flag == 0) {
+        func_002270F8(x, y, flag);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002341E8);
 
