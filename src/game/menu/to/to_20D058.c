@@ -56,7 +56,41 @@ int func_0020D540(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_20D058", TOSeqCtrl);
+void TOSeqCtrl(int i)
+{
+    Ent32 tmp[8];
+    int j;
+    Ent32 *dst;
+
+    for (j = 0; j < 8; j++) {
+        switch (D_0068F440[i][j].h0) {
+        case 1:
+            func_0020EDC8(i, D_0068F440[i][j].w1C);
+            D_0068F440[i][j].h0 = 2;
+        case 2:
+            if (D_0068F440[i][j].h4 == 1) {
+                D_0068F440[i][j].h0 = 3;
+            } else if (TkMenuIsTermScene(i, D_0068F440[i][j].w1C) != 0) {
+                D_0068F440[i][j].h0 = 4;
+            }
+            break;
+        case 3:
+            break;
+        case 4:
+            func_0020EE00(i, D_0068F440[i][j].w1C);
+            D_0068F440[i][j].h0 = 0;
+            break;
+        }
+    }
+    func_002EF0D0(tmp, 0, sizeof(tmp));
+    dst = tmp;
+    for (j = 0; j < 8; j++) {
+        if (D_0068F440[i][j].h0 != 0) {
+            *dst++ = D_0068F440[i][j];
+        }
+    }
+    __builtin_memcpy(D_0068F440[i], tmp, sizeof(tmp));
+}
 
 void TOSeqDraw(int i, int b)
 {
