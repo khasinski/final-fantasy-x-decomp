@@ -178,9 +178,117 @@ void *func_00228220(int a0, int a1) {
     return MsGetExcelData(a0, a1, &buf);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_227C88", func_00228240);
+extern FlagRec _tk_D_003261E8 __asm__("D_003261E8"); /* DEBT(TYPE): header declares Pt16s */
+extern void _tk_func_00226890(int, int, int, int) __asm__("func_00226890"); /* DEBT(TYPE): funcs.h declares int */
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_227C88", TkMn2WeaponBuySellWindow);
+void func_00228240(int x, int y, int item, int count, int max_count, int unit_price, int gil)
+{
+    FlagRec plate;
+    s32 pt0;
+    s32 pt1;
+    int px;
+    int py;
+    int rem;
+
+    unit_price *= count;
+
+    plate = _tk_D_003261E8;
+    plate.rect[0] = x;
+    plate.rect[1] = y;
+    func_00226FE0((void *)&plate); /* DEBT(CAST): FlagRec* vs s16* */
+
+    plate = D_00326200;
+    plate.rect[0] = D_00326200.rect[0] + x - _tk_D_003261E8.rect[0];
+    plate.rect[1] = D_00326200.rect[1] + y - _tk_D_003261E8.rect[1];
+    func_00226FE0((void *)&plate);
+
+    plate = D_00326218;
+    plate.rect[0] = D_00326218.rect[0] + x - _tk_D_003261E8.rect[0];
+    plate.rect[1] = D_00326218.rect[1] + y - _tk_D_003261E8.rect[1];
+    func_00226FE0((void *)&plate);
+
+    px = x + D_00326218.rect[0] - _tk_D_003261E8.rect[0] + D_003261C0[0];
+    py = y + D_00326218.rect[1] - _tk_D_003261E8.rect[1] + D_003261C0[1];
+    func_00226D88(px, py, 8);
+    func_00226E10(px + D_00325878[0] + 0x58, py + D_00325878[1], 0xD7);
+    _tk_func_00226890(item, px, py, 0);
+
+    px = x + D_00326218.rect[0] - _tk_D_003261E8.rect[0] + D_00326230[0];
+    py = y + D_00326218.rect[1] - _tk_D_003261E8.rect[1] + D_00326230[1];
+    func_00226E10(px + 0x10, py, 0xFF);
+    func_00226C78(px + D_00326258[0], py + D_00326258[1], count, 0);
+    func_00226C78(px + D_00326260[0], py + D_00326260[1], max_count, 0);
+
+    px = x + D_00326240[0] - _tk_D_003261E8.rect[0];
+    py = y + D_00326240[1] - _tk_D_003261E8.rect[1];
+    func_00226210(px, py, 0x14);
+    TOSeqGetPoint(1, D_005713D0, (s16 *)&pt0, (s16 *)&pt1); /* DEBT(CAST): filled as words here */
+    func_00226E10(px + D_00326248[0] + 0x60, py + D_00326248[1], 0xD5);
+    func_00226E10(px + D_00326248[0] + 0x60 + pt0, py + D_00326248[1], 0xD6);
+    func_00226E10(px + D_00326250[0] + 0x60, py + D_00326250[1], 0xD5);
+    func_00226E10(px + D_00326250[0] + 0x60 + pt0, py + D_00326250[1], 0xD6);
+
+    func_00226D00(
+        x + D_00326240[0] - _tk_D_003261E8.rect[0] + D_00326248[0] + D_00326268[0],
+        y + D_00326240[1] - _tk_D_003261E8.rect[1] + D_00326248[1] + D_00326268[1],
+        unit_price < 0 ? -unit_price : unit_price,
+        0x25);
+
+    rem = gil - unit_price;
+    func_00226D00(
+        x + D_00326240[0] - _tk_D_003261E8.rect[0] + D_00326250[0] + D_00326270[0],
+        y + D_00326240[1] - _tk_D_003261E8.rect[1] + D_00326250[1] + D_00326270[1],
+        rem > 999999999 ? 999999999 : rem,
+        0x25);
+}
+
+void TkMn2WeaponBuySellWindow(int x, int y, int item, int price, int gil)
+{
+    FlagRec plate;
+    s32 pt0;
+    s32 pt1;
+    int px;
+    int py;
+    int rem;
+
+    plate = D_00326118;
+    plate.rect[0] = x;
+    plate.rect[1] = y;
+    func_00226FE0((void *)&plate); /* DEBT(CAST): FlagRec* vs s16* */
+
+    plate = D_00326130;
+    plate.rect[0] = D_00326130.rect[0] + x - D_00326118.rect[0];
+    plate.rect[1] = D_00326130.rect[1] + y - D_00326118.rect[1];
+    func_00226FE0((void *)&plate);
+
+    px = x + D_00326130.rect[0] - D_00326118.rect[0] + D_00326100[0];
+    py = y + D_00326130.rect[1] - D_00326118.rect[1] + D_00326100[1];
+    func_00226D88(px, py, 8);
+    func_00226E10(px + D_00325878[0] + 0x58, py + D_00325878[1], 0xD7);
+    func_00226A40(item, px, py, 0);
+
+    px = x + D_003260E8[0] - D_00326118.rect[0];
+    py = y + D_003260E8[1] - D_00326118.rect[1];
+    func_00226210(px, py, 0x14);
+    TOSeqGetPoint(1, D_005713D0, (s16 *)&pt0, (s16 *)&pt1); /* DEBT(CAST): filled as words here */
+    func_00226E10(px + D_003260D0[0] + 0x60, py + D_003260D0[1], 0xD5);
+    func_00226E10(px + D_003260D0[0] + 0x60 + pt0, py + D_003260D0[1], 0xD6);
+    func_00226E10(px + D_003260D8[0] + 0x60, py + D_003260D8[1], 0xD5);
+    func_00226E10(px + D_003260D8[0] + 0x60 + pt0, py + D_003260D8[1], 0xD6);
+
+    func_00226D00(
+        x + D_003260E8[0] - D_00326118.rect[0] + D_00326248[0] + D_003260F0[0],
+        y + D_003260E8[1] - D_00326118.rect[1] + D_00326248[1] + D_003260F0[1],
+        price < 0 ? -price : price,
+        0x25);
+
+    rem = gil - price;
+    func_00226D00(
+        x + D_003260E8[0] - D_00326118.rect[0] + D_00326250[0] + D_003260F8[0],
+        y + D_003260E8[1] - D_00326118.rect[1] + D_00326250[1] + D_003260F8[1],
+        rem > 999999999 ? 999999999 : rem,
+        0x25);
+}
 
 void TkMn2InitWork(void)
 {

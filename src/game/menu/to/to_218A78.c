@@ -285,7 +285,41 @@ void func_00219798(int a, int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_002198D8);
+typedef struct {
+    u8 c[7][4][4];
+} LibraBarPal;
+
+extern LibraBarPal D_00570E48;
+
+void func_002198D8(int x, int y, int w, int h, int col)
+{
+    R4Quad q;
+    LibraBarPal pal = D_00570E48;
+    s16 mid = w - 0x50;
+    int x2;
+
+    func_001F25D8(&q, x, y, 0x28, h);
+    func_001F2630(&q, 0, pal.c[col][0][0], pal.c[col][0][1], pal.c[col][0][2], pal.c[col][0][3]);
+    func_001F2630(&q, 1, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 2, pal.c[col][0][0], pal.c[col][0][1], pal.c[col][0][2], pal.c[col][0][3]);
+    func_001F2630(&q, 3, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F26B0(&q);
+
+    x2 = x + 0x28;
+    func_001F25D8(&q, x2, y, mid, h);
+    func_001F2630(&q, 0, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 1, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F2630(&q, 2, pal.c[col][1][0], pal.c[col][1][1], pal.c[col][1][2], pal.c[col][1][3]);
+    func_001F2630(&q, 3, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F26B0(&q);
+
+    func_001F25D8(&q, x2 + mid, y, 0x28, h);
+    func_001F2630(&q, 0, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F2630(&q, 1, pal.c[col][3][0], pal.c[col][3][1], pal.c[col][3][2], pal.c[col][3][3]);
+    func_001F2630(&q, 2, pal.c[col][2][0], pal.c[col][2][1], pal.c[col][2][2], pal.c[col][2][3]);
+    func_001F2630(&q, 3, pal.c[col][3][0], pal.c[col][3][1], pal.c[col][3][2], pal.c[col][3][3]);
+    func_001F26B0(&q);
+}
 
 typedef struct LibraState {
     s16 h0;
