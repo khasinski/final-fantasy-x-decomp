@@ -105,7 +105,118 @@ void func_00157948(int a) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157968);
+typedef struct {
+    u8 pad0[0x50528];
+    s32 w50528;
+    s32 w5052C;
+    s32 w50530;
+    s32 w50534;
+    u8 pad50538[0x505C0 - 0x50538];
+    u32 w505C0;
+    u8 pad505C4[0x506C8 - 0x505C4];
+    s32 w506C8;
+    u8 pad506CC[0x506DC - 0x506CC];
+    s32 w506DC;
+    u8 pad506E0[0x50708 - 0x506E0];
+    s32 w50708;
+    u8 pad5070C[0x50714 - 0x5070C];
+    s32 w50714;
+    u8 pad50718[0x5076D - 0x50718];
+    s8 b5076D;
+} MovWork58FE54; /* DEBT(TYPE): extended view of S58FE54 */
+
+void func_00158D60(void);
+void func_001632B0(void);
+void func_20700F8(void);
+void func_00160978(void);
+void func_20728C0(void);
+void func_0015C5A8(void *);
+int Sg_GetCurExecFrames(void);
+void func_002545E0(void);
+
+void func_00157968(void)
+{
+    s32 dc;
+
+    D_0030D406 = 0;
+    func_001632B0();
+    if (D_0030D414 == 3) {
+        func_20700F8();
+    }
+    func_00160978();
+    {
+        s32 state = D_0030D410;
+        if (state == 0) {
+            return;
+        }
+        switch (state) {
+        case 1:
+            if (D_0058FE50 == 0) {
+                return;
+            }
+            Sg_MFIFOSync();
+            func_002DA610(0, 0);
+            if (FFXIsPC() == 1) {
+                func_20728C0();
+            }
+            if (D_0030D3EC == 0) {
+                return;
+            }
+            func_0015C5A8(func_001577D0());
+            Sg_GetDBuffDC(&dc);
+            ((MovWork58FE54 *)D_0058FE54)->w50534 = dc & 1;
+            ((MovWork58FE54 *)D_0058FE54)->w506C8 = D_0030D3F0;
+            ((MovWork58FE54 *)D_0058FE54)->w50714 = D_0030D3F0;
+            if (Sg_GetCurExecFrames() != 0) {
+                ((MovWork58FE54 *)D_0058FE54)->w505C0 &= 0xFFFFBFBFU;
+            } else {
+                ((MovWork58FE54 *)D_0058FE54)->w505C0 |= 0x4040;
+            }
+            D_0030D418->f0();
+            func_001577F0();
+            {
+                register MovWork58FE54 *p __asm__("$4") = (MovWork58FE54 *)D_0058FE54; /* DEBT(REG): matches $a0 for D_0058FE54 reload */
+                register u8 *q __asm__("$2") = (u8 *)p + 0x50000; /* DEBT(REG): matches $v0 for offset base */
+                __asm__("" : "+r"(q)); /* DEBT(ORDER): keeps offset base in $v0 */
+                if (((s8 *)q)[0x76D] != 0) {
+                    func_002545E0();
+                    D_0030D405 = 1;
+                }
+            }
+            func_0011A5A0(D_0030D400, 0);
+            if (D_0030D400 == 0 && ((MovWork58FE54 *)D_0058FE54)->w506DC != 0) {
+                func_00119028(1);
+                func_00119038(1);
+            }
+            D_0030D40C = ((MovWork58FE54 *)D_0058FE54)->w50528 + 1;
+            if (((MovWork58FE54 *)D_0058FE54)->w50528 == ((MovWork58FE54 *)D_0058FE54)->w5052C) {
+                if (((MovWork58FE54 *)D_0058FE54)->w505C0 & 4) {
+                    if (((MovWork58FE54 *)D_0058FE54)->w505C0 & 0x40) {
+                        return;
+                    }
+                    if (((MovWork58FE54 *)D_0058FE54)->w505C0 & 0x1000) {
+                        return;
+                    }
+                    ((MovWork58FE54 *)D_0058FE54)->w50530++;
+                    if (((MovWork58FE54 *)D_0058FE54)->w50530 >= 0x259) {
+                        ((MovWork58FE54 *)D_0058FE54)->w505C0 |= 0x9000;
+                        D_0030D40C = ((MovWork58FE54 *)D_0058FE54)->w50708 + 1;
+                        func_00158D60();
+                    }
+                }
+            } else {
+                ((MovWork58FE54 *)D_0058FE54)->w5052C = ((MovWork58FE54 *)D_0058FE54)->w50528;
+                ((MovWork58FE54 *)D_0058FE54)->w50530 = 0;
+            }
+            break;
+        case 2:
+            if (D_0030D408 != 0) {
+                D_0030D418->f0();
+            }
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00157BE8);
 

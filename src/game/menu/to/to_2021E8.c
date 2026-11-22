@@ -683,7 +683,80 @@ s32 func_002037F0(MenuCmd *m)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TODrawMovieMessageWaitNamesp);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TOSetNewPageMessageNamesp);
+int _TOSetNewPageMessageNamesp(ToWin *win)
+{
+    s16 w = 0;
+    s16 h = 0;
+    u8 *p;
+    s16 x;
+    s16 y;
+
+    if (win->p88 != 0) {
+        win->p84 = win->p88 + 1;
+    }
+    win->p88 = (u8 *)TOGetPageEndAddress(win->p84);
+    p = win->p84;
+    if (win->p54 != 0) {
+        win->p50 = win->p54 + 1;
+    }
+    win->p54 = (u8 *)TOGetPageEndAddress(win->p50);
+    if (win->p6C != 0) {
+        win->p68 = win->p6C + 1;
+    }
+    win->p6C = (u8 *)TOGetPageEndAddress(win->p68);
+    win->h24 = TOGetWordCountLimit(win->font, p, 3);
+    win->h28 = win->h24;
+    if (win->h24 > 0) {
+        win->h28 += TOGetWordCountLimit(win->font, D_00323910, 0);
+    }
+    if (win->h22 == 1) {
+        p = (u8 *)_TOGetMessageWH(win->font, p, &w, &h, win->style, win->h10 | 3);
+        if (w > 0) {
+            w += TOGetChangeMacroWidth(win->font, D_00323910, win->style);
+        }
+        win->h2A = w;
+        _TOGetMessageWH(win->font, p, &win->h3C, &win->h3E, win->style, win->h10 | 1);
+        win->h3C += w;
+        win->w90 = win->h28;
+    } else {
+        p = (u8 *)_TOGetMessageWH(win->font, p, &w, &h, win->style, win->h10 | 3);
+        _TOGetMessageWH(win->font, p, &win->h3C, &win->h3E, win->style, win->h10 | 1);
+        win->w90 = win->h28;
+    }
+    if (win->w9C == 0) {
+        win->w90++;
+    }
+    win->w94 = 0;
+    win->w98 = TOGetWordCount(win->font, (int)win->p84); /* DEBT(CAST): ptr as int */
+    if (win->h22 == 1) {
+        if (win->h24 > 0) {
+            win->w98 += TOGetWordCount(0, (int)TOGetChangeMacroAddress(0, D_00323910)); /* DEBT(CAST): ptr as int */
+        }
+    }
+    if (win->h24 > 0) {
+        s16 cnt = win->h24;
+        if (win->h22 == 1) {
+            cnt = win->h28;
+        }
+        if (win->w98 == cnt) {
+            win->h02 = 1;
+        }
+    }
+    x = win->h30 + (win->h38 - win->h3C) / 2;
+    y = win->h32 + (win->h3A - win->h3E) / 2;
+    graphicFontGetScreenWH(&win->box40, x, y, win->h3C, win->h3E);
+    if (win->h28 > 0) {
+        win->h0E = 0;
+    }
+    if (win->h1E == 1 && win->h1C > 0) {
+        _TOScanSelecterWH(win->font, win->p84, win->style, 1);
+    }
+    win->h2C = 1;
+    win->h2E = 1;
+    win->wF4 = win->wFC;
+    win->itemA8 = win->itemBC;
+    return 0;
+}
 
 void func_00203EE8(TextWin *win, u8 *text, TextItem *out)
 {
