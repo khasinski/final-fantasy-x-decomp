@@ -1054,7 +1054,83 @@ void func_001657C8(char *s, u8 v)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/libmscd", func_00165828);
+extern char D_0056BD50[];
+extern s32 _log_D_0030DE48 __asm__("D_0030DE48");
+extern char _log_D_00596070[0x80][0x28] __asm__("D_00596070");
+int func_002F46B0(char *, char *, va_list);
+void _log_func_002D9190(char *, char *, int) __asm__("func_002D9190"); /* DEBT(TYPE): funcs.h declares fewer args */
+void func_001715C0(char *);
+
+void func_00165828(char *fmt, va_list ap)
+{
+    char buf[0x200];
+    char *slot;
+
+    func_002F46B0(buf, fmt, ap);
+    slot = _log_D_00596070[_log_D_0030DE48];
+    func_002F0C10(slot, buf, 0x27);
+    slot[0x27] = 0;
+    _log_D_0030DE48 = (_log_D_0030DE48 + 1) & 0x7F;
+    if (FFXIsPC() == 1) {
+        if (D_00597470[0] == 0) {
+            func_001715C0(buf);
+        } else {
+            register int matched __asm__("$6") = 0; /* DEBT(REG): matches $a2 for prefix-match flag */
+            int i = 0;
+            while (slot[i] != 0) {
+                if (D_00597470[i] == 0) {
+                    matched = 1;
+                    break;
+                }
+                if (slot[i] != D_00597470[i]) {
+                    break;
+                }
+                i++;
+            }
+            if ((s8)D_0030DE4E == matched) {
+                func_001715C0(buf);
+            }
+        }
+    } else if (((s8 *)TkGetFFXCofingAdrs())[0xB] != 0) {
+        if (D_00597470[0] == 0) {
+            func_001715C0(buf);
+        } else {
+            register int matched __asm__("$6") = 0; /* DEBT(REG): matches $a2 for prefix-match flag */
+            int i = 0;
+            while (slot[i] != 0) {
+                if (D_00597470[i] == 0) {
+                    matched = 1;
+                    break;
+                }
+                if (slot[i] != D_00597470[i]) {
+                    break;
+                }
+                i++;
+            }
+            if ((s8)D_0030DE4E == matched) {
+                func_001715C0(buf);
+            }
+        }
+    }
+    switch (D_0030DE4D) {
+    case 3: {
+        int len = func_002F0840(slot);
+        if (len != 0) {
+            _log_func_002D9190(D_0056BD50, slot, len);
+        }
+        break;
+    }
+    case 4:
+        if (FFXIsPC() == 1) {
+            int len = func_002F0840(slot);
+            if (len != 0) {
+                func_00165700(slot, len);
+            }
+        }
+        break;
+    }
+    D_0030DE4C = 1;
+}
 
 void func_00165A38(char *fmt, ...)
 {
