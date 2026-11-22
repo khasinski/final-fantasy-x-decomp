@@ -1084,7 +1084,99 @@ void TOBtlInitStatusWin(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlStatusWin);
+typedef struct {
+    u8 pad00[0xC];
+    u16 h0C;
+    u8 pad0E[0xCC - 0xE];
+} R4Rec_0C; /* DEBT(NAME): R4Rec offset +0xC view */
+
+void func_0021D038(s8 v);
+extern u8 func_0021F960(int, int);
+
+void TOBtlCtrlStatusWin(void)
+{
+    s32 dummy;
+    s32 count;
+    u16 *ids;
+    int i;
+
+    if (D_003252A4 == 0xFF) {
+        func_0021D038(3);
+    } else {
+        u8 *com = (u8 *)MsGetComData(((R4Rec_0C *)D_003249C0)[D_00325020].h0C, &dummy); /* DEBT(CAST): com data byte view */
+        u8 b = com[0x22];
+        if (b & 1) {
+            int mode = (b >> 1) & 3;
+            if (D_006928A0 != mode) {
+                TOBtlInitStatusWin();
+            }
+            func_0021D038(mode);
+        } else {
+            TOBtlInitStatusWin();
+            func_0021D038(3);
+        }
+    }
+
+    ids = TOGetSaveWindow(0, 0x12, &count);
+    if (func_002EEE88(ids, D_006926E8, 6) != 0) {
+        TOBtlInitStatusWin();
+    }
+
+    for (i = 0; i < 3; i++) {
+        if (D_006926E8[i] != 0xFF) {
+            int hp = MsGetRamChrHP(D_006926E8[i]);
+            int mp = MsGetRamChrMP(D_006926E8[i]);
+            int hp_max = MsGetRamChrHPmax(D_006926E8[i]);
+            MsGetRamChrMPmax(D_006926E8[i]);
+
+            if (hp != D_006926F0[i].hp) {
+                int diff = hp - D_006926F0[i].hp;
+                D_006926F0[i].hp_flag = 10;
+                D_006926F0[i].hp_step = diff / 10;
+                D_006926F0[i].hp = hp;
+            }
+            if ((s8)D_006926F0[i].hp_flag > 0) {
+                D_006926F0[i].hp_disp += D_006926F0[i].hp_step;
+                D_006926F0[i].hp_flag--;
+            } else {
+                D_006926F0[i].hp_disp = hp;
+                D_006926F0[i].hp_step = 0;
+                D_006926F0[i].hp_flag = 0;
+            }
+            D_006926F0[i].pad19[0] = func_0021F960(D_006926F0[i].hp_disp, hp_max);
+
+            if (mp != D_006926F0[i].mp) {
+                int diff = mp - D_006926F0[i].mp;
+                D_006926F0[i].mp_flag = 10;
+                D_006926F0[i].mp_step = diff / 10;
+                D_006926F0[i].mp = mp;
+            }
+            if ((s8)D_006926F0[i].mp_flag > 0) {
+                D_006926F0[i].mp_disp += D_006926F0[i].mp_step;
+                D_006926F0[i].mp_flag--;
+            } else {
+                D_006926F0[i].mp_disp = mp;
+                D_006926F0[i].mp_step = 0;
+                D_006926F0[i].mp_flag = 0;
+            }
+            D_006926F0[i].pad31[0] = 0;
+
+            if (MsGetChrLimitGaugeMax(D_006926E8[i]) > 0) {
+                int g = MsGetChrLimitGauge(D_006926E8[i]);
+                int gmax = MsGetChrLimitGaugeMax(D_006926E8[i]);
+                D_006926F0[i].lim = (g * D_00324354) / gmax;
+            } else {
+                D_006926F0[i].lim = 0;
+            }
+            if (D_006926F0[i].lim_disp < D_006926F0[i].lim) {
+                D_006926F0[i].lim_disp += 6;
+            }
+            if (D_006926F0[i].lim_disp > D_006926F0[i].lim) {
+                D_006926F0[i].lim_disp = D_006926F0[i].lim;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlDrawStatusWin);
 
