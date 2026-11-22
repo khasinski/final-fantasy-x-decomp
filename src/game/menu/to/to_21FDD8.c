@@ -75,7 +75,99 @@ void func_0021FF88(void)
     D_00693030++;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21FDD8", TOMenuGetPadStatus);
+typedef struct {
+    u8 pad00[2];
+    s8 rep[16];
+    u16 h12;
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    u16 h1A;
+    u16 h1C;
+    u8 b1E;
+    u8 b1F;
+    u8 b20;
+    u8 b21;
+    u16 h22;
+    u16 h24;
+    u16 h26;
+    u8 pad28[0x18];
+} PadBlockFull;
+
+extern PadBlockFull _pad_D_003238D0 __asm__("D_003238D0");
+
+void TOMenuGetPadStatus(void)
+{
+    u16 prev = _pad_D_003238D0.h22;
+    int i;
+
+    _pad_D_003238D0.h12 = 0;
+    _pad_D_003238D0.h14 = 0;
+    _pad_D_003238D0.h16 = 0;
+    _pad_D_003238D0.h22 = 0;
+    _pad_D_003238D0.h24 = 0;
+    _pad_D_003238D0.h26 = 0;
+    if (TkMenuGetDummyControlerFlag() == 1) {
+        TkMenuFlushDummyControler();
+    }
+    if (TkMenuGetDummyControlerFlag() == 1) {
+        _pad_D_003238D0.h12 = TkMenuGetDummyControler();
+        _pad_D_003238D0.h18 = TkMenuGetDummyControler();
+        _pad_D_003238D0.h14 = TkMenuGetDummyControlerT();
+        _pad_D_003238D0.h1A = TkMenuGetDummyControlerT();
+        _pad_D_003238D0.h16 = TkMenuGetDummyControlerR();
+        _pad_D_003238D0.h1C = TkMenuGetDummyControlerR();
+        _pad_D_003238D0.b1E = TOMenuGetDummyAnalogControler(2);
+        _pad_D_003238D0.b1F = TOMenuGetDummyAnalogControler(3);
+    } else {
+        _pad_D_003238D0.h12 = TkGetControlerHist(0, 0, 0);
+        _pad_D_003238D0.h14 = TkGetControlerTrigHist(0, 0, 0);
+        _pad_D_003238D0.h16 = TkGetControlerReptHist(0, 0, 0);
+        _pad_D_003238D0.h18 = TkGetControlerHist(0, 0, 0);
+        _pad_D_003238D0.h18 |= TkGetControlerHist(0, 0, -1);
+        _pad_D_003238D0.h1A = TkGetControlerTrigHist(0, 0, 0);
+        _pad_D_003238D0.h1A |= TkGetControlerTrigHist(0, 0, -1);
+        _pad_D_003238D0.h1C = TkGetControlerReptHist(0, 0, 0);
+        _pad_D_003238D0.h1C |= TkGetControlerReptHist(0, 0, -1);
+        _pad_D_003238D0.b1E = TkGetControlerAnalogHist(0, 0, 2, 0);
+        _pad_D_003238D0.b1F = TkGetControlerAnalogHist(0, 0, 3, 0);
+        _pad_D_003238D0.h22 = _pad_D_003238D0.h12 & 0xFFF;
+        if (_pad_D_003238D0.b1F < 0x18) {
+            _pad_D_003238D0.h22 |= 0x1000;
+        }
+        if (_pad_D_003238D0.b1F >= 0xE9) {
+            _pad_D_003238D0.h22 |= 0x4000;
+        }
+        if (_pad_D_003238D0.b1E < 0x18) {
+            _pad_D_003238D0.h22 |= 0x8000;
+        }
+        if (_pad_D_003238D0.b1E >= 0xE9) {
+            _pad_D_003238D0.h22 |= 0x2000;
+        }
+        _pad_D_003238D0.h24 = _pad_D_003238D0.h22 & (prev ^ _pad_D_003238D0.h22);
+        for (i = 0; i < 16; i++) {
+            u16 bit = 1 << i;
+
+            if (bit == 0x800 || bit == 0x100) {
+                continue;
+            }
+            if (_pad_D_003238D0.h24 & bit) {
+                if (_pad_D_003238D0.rep[i] == 0) {
+                    _pad_D_003238D0.h26 |= bit;
+                }
+            } else {
+                _pad_D_003238D0.rep[i]++;
+            }
+            if ((_pad_D_003238D0.h22 & bit) == 0) {
+                _pad_D_003238D0.rep[i] = 0;
+            }
+            if (_pad_D_003238D0.rep[i] == 14) {
+                _pad_D_003238D0.h26 |= bit;
+                _pad_D_003238D0.rep[i] = 9;
+            }
+        }
+    }
+}
 
 void func_002202D0(void)
 {
