@@ -61,7 +61,47 @@ INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcCommand);
 int func_001C1908(int a0, BtlChr *a1, int a2, BtlChr *a3, OfsTbl *a4, int a5, Obj436Ent *a6, void *a7, int *a8, int *a9, u8 *a10);
 int func_001C7D60(int id);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcDamage);
+int MsCalcDamage(int a0, BtlChr *a1, int a2, BtlChr *a3, OfsTbl *a4, int a5, u8 *a6, void *a7, int *a8, int *a9, int count)
+{
+    u8 flag;
+    int total = 0;
+    u8 *prev;
+    int i;
+
+    *(s32 *)((u8 *)a3 + 0x3A4) = *(s32 *)((u8 *)a3 + 0x290);
+    *(s32 *)((u8 *)a3 + 0x3A8) = *(s32 *)((u8 *)a3 + 0x294);
+    *(s32 *)((u8 *)a3 + 0x3AC) = *((u8 *)a3 + 0x31C);
+    *(s32 *)((u8 *)a3 + 0x9F4) = 0;
+    *(s32 *)((u8 *)a3 + 0x9F8) = 0;
+    *(s32 *)((u8 *)a3 + 0x9FC) = 0;
+    if (a6[0] != 0) {
+        prev = a6 + (a6[0] * 0x2C - 0x14);
+    } else {
+        prev = 0;
+    }
+    for (i = a6[0]; i < a6[0] + count; i++) {
+        u8 *old = prev;
+
+        prev = a6 + (i * 0x2C + 0x18);
+        func_001C0D00((Unk1C0D00 *)prev, (Unk1C0D00 *)old, (Unk1C0D00Chr *)a3);
+        total += func_001C1908(a0, a1, a2, a3, a4, a5, (Obj436Ent *)prev, a7, a8, a9, &flag);
+    }
+    if (func_001C7D60(a2) != 0 && *(s32 *)((u8 *)a3 + 0x290) - total <= 0) {
+        *((u8 *)a3 + 0xAAC) = 1;
+    } else {
+        *((u8 *)a3 + 0xAAC) = 0;
+    }
+    if (a0 == 0 && a2 < 8) {
+        if (total < 0) {
+            MsAddLoveParam(a2, 1);
+        } else if (total > 0) {
+            MsAddLoveParam(a2, -1);
+        }
+    }
+    a6[1] = a6[0] + count;
+    a6[0x16] = flag;
+    return total;
+}
 
 int func_001C1368(int id1, int id2) {
     int start;
