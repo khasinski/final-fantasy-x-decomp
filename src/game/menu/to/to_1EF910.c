@@ -282,7 +282,35 @@ void func_001F0870(TextItem *it, R4CharInfo *ci)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0A20);
+typedef struct {
+    s8 xy[10][2];
+} To56FE90;
+extern To56FE90 D_0056FE78;
+extern To56FE90 D_0056FE90;
+void func_001FB550(int a, int b);
+void func_001FB588(int a, int b, int c, int d);
+void func_001FB678(int a, int b);
+
+void func_001F0A20(TextItem *it, R4CharInfo *ci)
+{
+    To56FE90 tbl = D_0056FE78;
+    int i;
+
+    GIF_AD(0x5000400000008001UL, 0x1EEEEUL);
+    GIF_AD(0x2005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EB8, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    func_001FB358(1, 7, 0, 0, 0, 0, 0, 0);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x28);
+    GIF_AD(0x40AF40000000800AUL, 0x4343UL);
+    for (i = 0; i < 10; i++) {
+        func_001FB550(ci->h6, ci->h8);
+        func_001FB678(it->x + tbl.xy[i][0], it->y + ci->hE + tbl.xy[i][1]);
+        func_001FB550(ci->hA, ci->hC);
+        func_001FB678(it->x + ci->h10 + tbl.xy[i][0], it->y + ci->hE + ci->h12 + tbl.xy[i][1]);
+    }
+    func_001EFA30();
+}
 
 void TOMakePktFont1612(TextItem *it, R4CharInfo *ci)
 {
@@ -388,13 +416,6 @@ void func_001F11E0(TextItem *it, R4CharInfo *ci)
     func_001FB678(it->x + ci->h10 + 2, it->y + ci->hE + ci->h12 + 2);
 }
 
-typedef struct {
-    s8 xy[10][2];
-} To56FE90;
-extern To56FE90 D_0056FE90;
-void func_001FB550(int a, int b);
-void func_001FB678(int a, int b);
-
 void func_001F1408(TextItem *it, R4CharInfo *ci)
 {
     To56FE90 tbl = D_0056FE90;
@@ -457,7 +478,28 @@ void func_001F1850(TextItem *it, R4CharInfo *ci)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F1A48);
+void func_001F1A48(TextItem *it, R4CharInfo *ci)
+{
+    To56FE90 tbl = D_0056FE90;
+    int i;
+
+    GIF_AD(0x30AF400000008001UL, 0x01EEUL);
+    GIF_AD(0x2005D7869D308000UL | ci->h0, 6);
+    GIF_AD(SCE_GS_SET_TEX0(ci->h0, 2, ci->h2, 7, 10, 1, 0, 0x2EB8, 0, 0, ((it->f13 >> 4) << 1) + ci->h4, 0), 6);
+    locNameTmpSetLanguage(it->col[0], it->col[1], it->col[2], it->col[3]);
+    GIF_AD(0x80AE40000000800AUL, 0x43434343UL);
+    for (i = 0; i < 10; i++) {
+        func_001FB588(ci->h6, 8, ci->h8, 8);
+        func_001FB678(it->x + tbl.xy[i][0] + 5, it->y + ci->hE + tbl.xy[i][1]);
+        func_001FB588(ci->hA, -4, ci->h8, 8);
+        func_001FB678(it->x + ci->h10 + tbl.xy[i][0] + 5, it->y + ci->hE + tbl.xy[i][1]);
+        func_001FB588(ci->h6, 8, ci->hC, 8);
+        func_001FB678(it->x + tbl.xy[i][0], it->y + ci->hE + ci->h12 + tbl.xy[i][1]);
+        func_001FB588(ci->hA, -4, ci->hC, 8);
+        func_001FB678(it->x + ci->h10 + tbl.xy[i][0], it->y + ci->hE + ci->h12 + tbl.xy[i][1]);
+    }
+    func_001EFA30();
+}
 
 void TOMakePktScissor(int x0, int y0, int x1, int y1)
 {

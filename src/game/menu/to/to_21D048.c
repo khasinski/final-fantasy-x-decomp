@@ -385,7 +385,66 @@ void TOBtlDrawChangeSeqAnm0(int p, int x, int y)
     TOBtlDrawParamPlate(p, x + 2, y + 0x17);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlDrawParamPlate);
+extern s16 D_0032432C;
+extern s16 D_0032432E;
+extern u8 D_00324330;
+extern u8 D_00324331;
+extern u8 D_00324332;
+extern u8 D_00324333;
+extern s16 D_00324334;
+extern s16 D_00324336;
+extern s16 D_00324338;
+extern s16 D_0032433A;
+extern s16 D_0032433C;
+extern s16 D_0032433E;
+extern s16 D_00324340;
+extern s16 D_00324342;
+extern s16 D_00324344;
+extern s16 D_00324346;
+
+void TOBtlDrawParamPlate(int id, int x, int y)
+{
+    s16 r0[4];
+    u8 col[4];
+    s16 p20[2];
+    s16 p30[2];
+    s16 p40[2];
+    s16 p50[2];
+    s16 p60[4];
+    s16 p70[4];
+
+    r0[0] = x;
+    r0[1] = y;
+    r0[2] = D_0032432C;
+    r0[3] = D_0032432E;
+    col[0] = D_00324330;
+    col[1] = D_00324331;
+    col[2] = D_00324332;
+    col[3] = D_00324333;
+    p20[0] = D_00324334 + x;
+    p20[1] = D_00324336 + y;
+    p30[0] = D_00324338 + x;
+    p30[1] = D_0032433A + y;
+    p40[0] = D_0032433C + x;
+    p40[1] = D_0032433E + y;
+    p50[0] = D_00324340 + x;
+    p50[1] = D_00324342 + y;
+    p60[0] = D_00324344 + x;
+    p60[1] = D_00324346 + y;
+    p60[2] = D_00324348;
+    p60[3] = D_0032434A;
+    p70[0] = D_00324350 + p60[0];
+    p70[1] = D_00324352 + p60[1];
+    p70[2] = D_00324354;
+    p70[3] = D_00324356;
+
+    TOMakePktBoxXYWHRGBA(r0[0], r0[1], r0[2], r0[3], col[0], col[1], col[2], col[3]);
+    TOMkpShapeXY(0xE9, p20[0], p20[1]);
+    func_001F5E80(func_0021F8C0(id), p30[0], p30[1], func_0021F960(func_0021F8C0(id), func_0021F900(id)));
+    TOMkpShapeXY(0xEA, p40[0], p40[1]);
+    func_001F5E80(func_0021F8E0(id), p50[0], p50[1], 0);
+    TOBtlDrawLimitGauge(id, p60[0], p60[1]);
+}
 
 s32 func_0021F8C0(int id)
 {

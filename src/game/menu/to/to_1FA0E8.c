@@ -939,9 +939,132 @@ void func_001FE298(int a, int b, int c, int d, int e, int f, int g)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FE2F8);
+typedef struct {
+    u8 u;
+    u8 v;
+    s8 dx;
+    s8 dy;
+    u16 w;
+    u16 h;
+    u32 pad8;
+} ShapePart12;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FE578);
+extern u32 D_003241CC;
+
+Qword *func_001FE2F8(Qword *p, int mode, int x, int y)
+{
+    u32 col = D_003241CC;
+    int r = col & 0xFF;
+    int g = (col >> 8) & 0xFF;
+    int b = (col >> 16) & 0xFF;
+    int a = col >> 24;
+    int id;
+    u32 *hdr;
+    ShapePart12 *part;
+    u32 i;
+
+    if (mode == 0) {
+        id = 8;
+    }
+    if (mode == 1) {
+        id = 9;
+    }
+    hdr = (u32 *)func_001FD6F0(id);
+    p->ul64[0] = 0x3000000000000001UL;
+    p->ul64[1] = 0xEEE;
+    p++;
+    p->ul64[0] = 0x8000000044UL;
+    p->ul64[1] = 0x42;
+    p++;
+    p->ul64[0] = 0xF;
+    p->ul64[1] = 0x47;
+    p++;
+    p->ul64[0] = 0x2005D40621313E00UL;
+    p->ul64[1] = 6;
+    p++;
+    part = (ShapePart12 *)(hdr + 1);
+    for (i = 0; i < *hdr; i++, part++) {
+        Quad32 *q;
+
+        p->ul64[0] = 0x60AB400000008001UL;
+        p->ul64[1] = 0x431431;
+        p++;
+        if (i == 0) {
+            q = func_001FBB30((Quad32 *)p, r, g, b, a);
+            q = func_001FBAF0(q, part->u, part->v);
+            q = func_001FBBE0(q, x + part->dx, y + part->dy, 1);
+            q = func_001FBB30(q, r, g, b, a);
+            q = func_001FBAF0(q, part->u + (part->w - 1), part->v + (part->h - 1));
+            p = (Qword *)func_001FBBE0(q, x + part->dx + part->w, y + part->dy + part->h, 1);
+        } else {
+            q = func_001FBB30((Quad32 *)p, 0x80, 0x80, 0x80, 0x80);
+            q = func_001FBAF0(q, part->u, part->v);
+            q = func_001FBBE0(q, x + part->dx, y + part->dy, 1);
+            q = func_001FBB30(q, 0x80, 0x80, 0x80, 0x80);
+            q = func_001FBAF0(q, part->u + (part->w - 1), part->v + (part->h - 1));
+            p = (Qword *)func_001FBBE0(q, x + part->dx + part->w, y + part->dy + part->h, 1);
+        }
+    }
+    return p;
+}
+
+CmdRec *func_001FE578(CmdRec *p_in, int mode, int x, int y)
+{
+    Qword *p = (Qword *)p_in; /* DEBT(CAST): CmdRec and Qword are both 16-byte GIF packet entries */
+    u32 col = D_003241CC;
+    int r = col & 0xFF;
+    int g = (col >> 8) & 0xFF;
+    int b = (col >> 16) & 0xFF;
+    int a = col >> 24;
+    int id;
+    u32 *hdr;
+    ShapePart12 *part;
+    u32 i;
+
+    if (mode == 0) {
+        id = 0x2D;
+    }
+    if (mode == 1) {
+        id = 9;
+    }
+    hdr = (u32 *)func_001FD6F0(id);
+    p->ul64[0] = 0x3000000000000001UL;
+    p->ul64[1] = 0xEEE;
+    p++;
+    p->ul64[0] = 0x8000000044UL;
+    p->ul64[1] = 0x42;
+    p++;
+    p->ul64[0] = 0xF;
+    p->ul64[1] = 0x47;
+    p++;
+    p->ul64[0] = 0x2005D40621313E00UL;
+    p->ul64[1] = 6;
+    p++;
+    part = (ShapePart12 *)(hdr + 1);
+    for (i = 0; i < *hdr; i++, part++) {
+        Quad32 *q;
+
+        p->ul64[0] = 0x60AB400000008001UL;
+        p->ul64[1] = 0x431431;
+        p++;
+        if (i == 0) {
+            q = func_001FBB30((Quad32 *)p, r, g, b, a);
+            q = func_001FBAF0(q, part->u, part->v);
+            q = func_001FBBE0(q, x + part->dx, y + part->dy, 1);
+            q = func_001FBB30(q, r, g, b, a);
+            q = func_001FBAF0(q, part->u + (part->w - 1), part->v + (part->h - 1));
+            p = (Qword *)func_001FBBE0(q, x + part->dx + part->w, y + part->dy + part->h, 1);
+        } else {
+            q = func_001FBB30((Quad32 *)p, 0x80, 0x80, 0x80, 0x80);
+            q = func_001FBAF0(q, part->u, part->v);
+            q = func_001FBBE0(q, x + part->dx, y + part->dy, 1);
+            q = func_001FBB30(q, 0x80, 0x80, 0x80, 0x80);
+            q = func_001FBAF0(q, part->u + (part->w - 1), part->v + (part->h - 1));
+            p = (Qword *)func_001FBBE0(q, x + part->dx + part->w, y + part->dy + part->h, 1);
+        }
+    }
+    return (CmdRec *)p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FE7F8);
 
@@ -1029,7 +1152,62 @@ void func_001FF398(int x, int y, int w, int h, int c0, int c1)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF500);
+typedef struct TexRect8 {
+    u8 u;
+    u8 v;
+    u16 pad;
+    u16 w;
+    u16 h;
+} TexRect8;
+
+void func_001FF500(int x, int y, int w, int h, u32 c0, u32 c1)
+{
+    void *p[2];
+    TexRect8 *t[2];
+
+    p[0] = (void *)func_001FD6F0(4);
+    t[0] = (TexRect8 *)((u8 *)p[0] + 4);
+    p[1] = (void *)func_001FD6F0(5);
+    t[1] = (TexRect8 *)((u8 *)p[1] + 4);
+    GIF_CUR()->ul64[0] = 0x3000000000000001UL;
+    GIF_CUR()->ul64[1] = 0xEEE;
+    GIF_NEXT();
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x2005D40621313E00UL, 6);
+    GIF_CUR()->ul64[0] = 0xC0AE400000000001UL;
+    GIF_CUR()->ul64[1] = 0x431431431431UL;
+    GIF_NEXT();
+    func_001FB618(c0);
+    func_001FB550(t[0]->u, t[0]->v);
+    func_001FB678(x, y);
+    func_001FB618(c1);
+    func_001FB550(t[0]->u + t[0]->w, t[0]->v);
+    func_001FB678(x + (w - t[1]->w), y);
+    func_001FB618(c0);
+    func_001FB550(t[0]->u, t[0]->v + t[0]->h);
+    func_001FB678(x, y + t[0]->h);
+    func_001FB618(c1);
+    func_001FB550(t[0]->u + t[0]->w, t[0]->v + t[0]->h);
+    func_001FB678(x + (w - t[1]->w), y + t[0]->h);
+    x += w - t[1]->w;
+    GIF_CUR()->ul64[0] = 0xC0AE400000008001UL;
+    GIF_CUR()->ul64[1] = 0x431431431431UL;
+    GIF_NEXT();
+    func_001FB618(c1);
+    func_001FB550(t[1]->u, t[1]->v);
+    func_001FB678(x, y);
+    func_001FB618(c1);
+    func_001FB550(t[1]->u + t[1]->w, t[1]->v);
+    func_001FB678(x + t[1]->w, y);
+    func_001FB618(c1);
+    func_001FB550(t[1]->u, t[1]->v + t[1]->h);
+    func_001FB678(x, y + t[1]->h);
+    func_001FB618(c1);
+    func_001FB550(t[1]->u + t[1]->w, t[1]->v + t[1]->h);
+    func_001FB678(x + t[1]->w, y + t[1]->h);
+    func_001EFA30();
+}
 
 void func_001FF828(int x, int y)
 {

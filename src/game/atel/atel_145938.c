@@ -20,7 +20,95 @@ void func_00145938(void) {
     D_0058E3F8 = 0x10001;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00145950);
+typedef struct Str5 {
+    char b[5];
+} Str5;
+extern s8 D_00576479;
+extern Str5 D_0056AD38;
+extern Str5 D_0056AD40;
+extern char D_0056AD48[];
+extern s32 D_0058E994;
+extern void func_00138260(void);
+extern void func_00138AA8(void);
+extern u8 D_003089C8[];
+extern u8 D_00308BC0[];
+extern u8 D_0030B2D8[];
+extern u8 D_0030CB48[];
+extern u8 D_00321318[];
+extern u8 D_0030C258[];
+extern u8 D_0030BDE8[];
+extern u8 D_0030D4B8[];
+extern u8 D_003200A8[];
+extern u8 D_00312F00[];
+extern u8 D_00327058[];
+
+void func_00145950(void)
+{
+    u8 buf[0x400];
+    int i;
+
+    func_00138260();
+    if (D_00576479 != 0) {
+        Str5 s1 = D_0056AD38;
+        Str5 s2 = D_0056AD40;
+        func_0014D718(s1.b, buf);
+        func_0014D610((int)s2.b, buf);
+    }
+    func_002413A8();
+    AtelSetShopRatio(100);
+    func_0014B150(-1, -1, -1, -1);
+    AtelClearPauseFlag();
+    func_0014D9A0(0xFF);
+    func_00138C78(0);
+    func_00135BD0();
+    ((void (*)(void))func_0013AC00)(); /* DEBT(TYPE): header prototype has extra arg */
+    func_0014CB88();
+    func_0014D8A8();
+    AtelClearMenuOtakaraFlag();
+    AtelRegistAlbhedDic(0, 0);
+    func_0014AF68(-1);
+    func_00138700();
+    func_001387F0();
+    func_0014D7F0(179.0f);
+    func_0014CF38();
+    func_0014D7D0(0);
+    AtelRegistMusicNumber(-1);
+    func_0014DD00();
+    func_00245450();
+    func_0014AD08(0);
+    D_0058E994 = 0;
+    D_0058E93C = 0;
+    func_002D1F48(2, func_00138AA8);
+    {
+        register u32 v __asm__("$3") = 0x10001; /* DEBT(FAKE): match v0/v1 allocation */
+        D_0058E3F8 = v;
+    }
+    func_00138BF8(0);
+    func_00138B40(0, 0);
+    for (i = 0; i < 16; i++) {
+        func_0014B8E8(i, 0);
+    }
+    func_0014B8E8(1, D_003089C8);
+    func_0014B8E8(0, D_00308BC0);
+    func_0014B8E8(12, D_0030B2D8);
+    func_0014B8E8(6, D_0030CB48);
+    func_0014B8E8(9, D_00321318);
+    func_0014B8E8(5, D_0030C258);
+    func_0014B8E8(4, D_0030BDE8);
+    func_0014B8E8(11, D_0030D4B8);
+    func_0014B8E8(7, D_003200A8);
+    func_0014B8E8(8, D_00312F00);
+    func_0014B8E8(13, D_00327058);
+    for (i = 0; i < 7; i++) {
+        ((void (*)(int))func_00144938)(i); /* DEBT(TYPE): header prototype omits arg */
+        AtelChangeCurrentCtrl(i);
+    }
+    AtelChangeCurrentCtrl(0);
+    func_0013D858(1.0f);
+    func_0014F0D0();
+    AtelInitCalcSound();
+    func_0014CD50(D_0056AD48);
+}
 
 void func_00145C10(void)
 {
