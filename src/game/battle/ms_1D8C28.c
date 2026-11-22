@@ -6,6 +6,28 @@
 #include "ffx/v3.h"
 #include "ffx/u2.h"
 
+extern char D_0056F6B0[];
+void yiDisposeAnimDObj(int a, int b);
+
+typedef struct Blk662D28Full {
+    u8 pad0[0x810];
+    s32 f810;
+    s32 f814[8];
+    s32 f834;
+    float f838;
+    s32 f83C;
+    s32 f840;
+    s32 f844;
+    s32 f848;
+    s32 f84C;
+    s32 f850;
+    s32 f854;
+    s32 f858;
+    s32 f85C;
+    s32 f860;
+    s32 f864;
+} Blk662D28Full; /* DEBT(NAME): full layout of Blk662D28 (0x870 bytes) */
+
 int MsCheckCommandCue(int id, int sub)
 {
     int n = D_003172F0.f1511;
@@ -280,7 +302,60 @@ void MsBattleSpecialCameraFree(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", func_001D9F58);
+void func_001D9F58(int mode)
+{
+    Blk662D28Full *p;
+    int i;
+
+    D_00662D28 = 0;
+    switch (mode) {
+    case 1:
+        func_0019D0B0();
+        func_0019D0B8();
+        p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1); /* DEBT(CAST): Blk662D28Full view of Blk662D28 */
+        D_00662D28 = (Blk662D28 *)p;
+        p->f838 = 0.002f;
+        p->f810 = 0;
+        p->f854 = 0;
+        p->f850 = 0;
+        p->f83C = 0;
+        p->f840 = 0;
+        p->f864 = 0;
+        p->f834 = 0;
+        p->f844 = 0;
+        p->f848 = 0;
+        p->f84C = 0;
+        p->f858 = 0;
+        p->f85C = 0;
+        {
+            s32 *q = &p->f814[4];
+            for (i = 0; i < 4; i++, q++) {
+                q[-4] = 0;
+                q[0] = 0;
+            }
+        }
+        for (i = 0; i < 3; i++) {
+            yiDisposeAnimDObj(i + 0x1C, -1);
+        }
+        break;
+    case 2:
+        p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1);
+        D_00662D28 = (Blk662D28 *)p;
+        p->f810 = 0;
+        p->f844 = 0;
+        break;
+    case 3:
+        p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1);
+        D_00662D28 = (Blk662D28 *)p;
+        p->f810 = 0;
+        p->f844 = 0;
+        break;
+    default:
+        mode = 0;
+        break;
+    }
+    D_003172F0.f16 = mode;
+}
 
 void MsBattleSpecialFree(void) {
     switch (D_003172F0.f16) {
@@ -452,7 +527,40 @@ int func_001DB3B8(BtlChr *c) {
     return a != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsCheckStatusAfterAction);
+int MsCheckStatusAfterAction(int id, BtlChr *c)
+{
+    if (c->fA88 != 0) {
+        u8 b0 = c->f2C8;
+        u8 b1 = c->f2C9;
+        u8 b2 = c->f2CA;
+        u8 *p = &c->f2C8;
+        Ent4 *e = D_0031FA50;
+        int i;
+
+        for (i = 0; i < 13; i++, e++) {
+            int v = p[i];
+            if (v > 0 && v < 0xFE) {
+                if ((e->v & 4) != 0) {
+                    p[i] = v - 1;
+                    if ((e->v & 8) != 0 && ((s8 *)c)[0xA8B] == 0) { /* DEBT(TYPE): BtlChr+0xA8B inside padA89 */
+                        MsStatusEffect(id, c, e, v - 1, c->fAF0);
+                    }
+                }
+            }
+        }
+        if (b0 != 0 && c->f2C8 == 0) {
+            c->f1CF = 0;
+            c->f1CE = 1;
+            c->fF3 = 1;
+            MsSetMotion(id, 0x1B, 1, 0, 1, 0, 0);
+        } else if ((b1 != 0 && c->f2C9 == 0) || (b2 != 0 && c->f2CA == 0)) {
+            if (func_001DAF88(c, 0) != 0) {
+                MsDamageSetMotion(id, 2, 1);
+            }
+        }
+    }
+    return 0;
+}
 
 int MsCheckStatusAfterInput(void) {
     int i;

@@ -33,6 +33,87 @@ INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00281010);
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeThBP_Update);
 
+typedef struct KeThBP {
+    struct KeThBP *next;
+    struct KeThBP **pprev;
+    u32 w8;
+    u32 wC;
+    struct KeThBP *p10;
+    u32 w14;
+    u32 w18;
+    u16 h1C;
+    u8 b1E;
+    u8 pad1F;
+    u16 h20;
+    u8 pad22;
+    u8 b23;
+    u32 pad24;
+    u32 w28;
+    u32 pad2C;
+    u32 w30;
+    u16 h34;
+    u8 b36;
+    u8 b37;
+    u16 h38;
+    u16 pad3A;
+    u16 h3C;
+    u16 h3E;
+    u8 pad40[0xC];
+    float f4C;
+    u8 pad50[8];
+    u32 w58;
+    u32 w5C;
+} KeThBP; /* DEBT(NAME): KeThBP node layout (0x40-byte header + N*0x30 entries) */
+
+typedef struct KeThBPInitArg {
+    KeThBP *p;
+    u8 n;
+} KeThBPInitArg; /* DEBT(NAME): argument struct for func_00281ED0 */
+
+typedef struct KeThCp {
+    KeThBP *head;
+    u8 flags;
+} KeThCp; /* DEBT(NAME): KeThCp list header */
+
+typedef struct KeThCpUpdateArg {
+    KeThCp *cp;
+    void *w4;
+    void *w8;
+    Pool *pool;
+    void *p10;
+    void *p14;
+} KeThCpUpdateArg; /* DEBT(NAME): argument struct for KeThCp_Update */
+
+typedef struct KeThBPUpdateArg {
+    u8 mat[0x40];
+    KeThBP *o;
+    void *w44;
+    Pool *w48;
+    void *w4C;
+} KeThBPUpdateArg; /* DEBT(NAME): stack argument struct for KeThBP_Update */
+
+typedef struct KeThDrawArg {
+    void *w0;
+    KeThBP *o;
+    u8 *w8;
+    void *wC;
+    void *w10;
+    u64 *p14;
+    u64 q18;
+    u64 q20;
+    void *w28;
+} KeThDrawArg; /* DEBT(NAME): stack argument struct for func_00281010 */
+
+typedef struct KeTh4138Ev {
+    int id;
+    u32 idx;
+    int ofs;
+    u8 bC;
+} KeTh4138Ev; /* DEBT(NAME): event struct for func_00284138 */
+
+void KeThBP_Update(KeThBPUpdateArg *a);
+int func_00281010(KeThDrawArg *a);
+
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00281ED0);
 
 void KeThBP_Quit(PoolNode *n)
@@ -103,9 +184,85 @@ void func_002820C0(PoolNode **list, Pool *pool)
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282128);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", KeThCp_Update);
+void KeThCp_Update(KeThCpUpdateArg *a)
+{
+    KeThCp *cp = a->cp;
+    KeThBPUpdateArg u;
+    KeThBP *o;
+    int f = 0;
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282358);
+    if (cp->flags & 2) {
+        cp->flags &= ~2;
+        f = 0x20;
+    }
+    func_002DD128(&u);
+    u.w44 = a->w4;
+    u.w48 = a->pool;
+    u.w4C = a->w8;
+    o = cp->head;
+    while (o != 0) {
+        if (o->h3E & 0x200) {
+            func_00282798((u8 *)o + (o->h34 * 0x30 + 0x40), a->p10);
+            func_00282798((u8 *)o + o->h34 * 0x30 + 0x60, a->p14);
+        }
+        if (o->h3E & 0x100) {
+            o->h3E |= f;
+        }
+        u.o = o;
+        KeThBP_Update(&u);
+        if (o->h3E & 0x10) {
+            KeThBP *cur = o;
+            PoolNode *pn = (PoolNode *)cur;
+            o = o->next;
+            if (cur->next != 0) {
+                cur->next->pprev = cur->pprev;
+            }
+            *cur->pprev = cur->next;
+            KeThBP_Quit(pn);
+            pn->next = a->pool->free;
+            ((PoolNode *)&a->pool->free)->next = pn; /* DEBT(CAST): free-list head acts as a node (aliases pn->next) */
+        } else {
+            o = o->next;
+        }
+    }
+}
+
+void func_00282358(KeThCp *cp, void *a1, void *a2, void *a3, u8 **pbuf, u64 a5, u64 a6, void *a7)
+{
+    KeThDrawArg d;
+    u8 *cur = *pbuf;
+    u8 *prev = cur;
+    KeThBP *o = cp->head;
+
+    d.wC = a3;
+    d.w0 = a1;
+    d.w10 = a2;
+    d.q18 = a5;
+    d.q20 = a6;
+    d.w28 = a7;
+    d.w8 = cur + 0x10;
+    while (o != 0) {
+        d.o = o;
+        if (func_00281010(&d) != 0) {
+            prev = cur;
+            cur = d.w8;
+            *(u_long128 *)prev = 0; /* DEBT(TYPE): 128-bit zero store via TI mode */
+            prev[3] = 0x10;
+            *(u16 *)prev = ((u32)(cur - prev) >> 4) - 1;
+            d.w8 += 0x10;
+        }
+        o = o->next;
+    }
+    if (cur != *pbuf) {
+        u32 *ch = func_002DB6D8(2);
+        *d.p14 |= 0x8000;
+        prev[3] = 0x70;
+        func_002DA610(0, 0);
+        func_002F8660(0);
+        func_002DBA28(ch, (int)*pbuf);
+        *pbuf = cur;
+    }
+}
 
 void func_00282478(Pair *p) {
     p->ptr = 0;
@@ -751,7 +908,63 @@ void func_00284118(char *base, ScriptCtx *ctx) {
     func_00282060(SLOT_WORK(Pool, base, ctx, 0), 8, 64);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284138);
+void func_00284138(T6TransformFrame *frame, KeTh4138Ev *ev, ScriptCtx *ctx)
+{
+    u8 *flag = SLOT_WORK(u8, frame, ctx, 1);
+    KeThBP *o;
+
+    if (frame->idC == ev->id) {
+        if (ev->bC != 0) {
+            *flag |= 2;
+        } else {
+            *flag &= ~2;
+        }
+    }
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    if (ev->idx == 0xFFFFFFFFU) {
+        return;
+    }
+    o = *SLOT_WORK(KeThBP *, frame, ctx, 0);
+    if (*flag & 2) {
+        while (o != 0) {
+            if (o->h3E & 0x800) {
+                T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+                T6_Mem *m;
+                if (e != 0) {
+                    m = func_00267320(ppvMng, e);
+                    if (m == 0) {
+                        return;
+                    }
+                    m->user = (ScriptWork *)frame;
+                } else {
+                    m = 0;
+                }
+                func_00282798((u8 *)m + (ev->ofs + 0xA0), (u8 *)o + (o->b36 * 0x30 + 0x40));
+            }
+            o = o->next;
+        }
+    } else {
+        while (o != 0) {
+            if ((*(u64 *)&o->h38 & 0x0840000000000000ULL) == 0x0800000000000000ULL) { /* DEBT(TYPE): 64-bit mask on h38..h3E (bits 0x0840 of h3E) */
+                T6_MemEnt *e = &ppvMng->p3C[ev->idx];
+                T6_Mem *m;
+                if (e != 0) {
+                    m = func_00267320(ppvMng, e);
+                    if (m == 0) {
+                        return;
+                    }
+                    m->user = (ScriptWork *)frame;
+                } else {
+                    m = 0;
+                }
+                func_00282798((u8 *)m + (ev->ofs + 0xA0), (u8 *)o + (o->b36 * 0x30 + 0x40));
+            }
+            o = o->next;
+        }
+    }
+}
 
 void func_00284310(char *base, ScriptCtx *ctx) {
     Wkb0b1b2b3 *w = SLOT_WORK(Wkb0b1b2b3, base, ctx, 1);

@@ -1,5 +1,7 @@
 /* tu_314 0x2931b0-0x294cd8: medium; ~op (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#define func_002B21E0 _hdr_func_002B21E0
+#define TkGetControlerHist _hdr_TkGetControlerHist
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -9,8 +11,22 @@
 #include "ffx/t6.h"
 #include "ffx/g4.h"
 #include "ffx/q7.h"
+#undef func_002B21E0
+#undef TkGetControlerHist
 
 extern int D_003730F8[];
+extern int D_00551BD0;
+extern int D_00551BD4;
+extern int D_003F3944;
+extern int D_003F394C;
+extern int D_003F3950;
+
+void func_002B21E0(void *a, int b);
+int TkGetControlerHist(s32 a, s32 b, s32 c);
+void op_pad_set(int a, int b, int c);
+void func_002B2298(void);
+void opu_debug_check(void);
+void func_2058390(void);
 
 void func_002B3708(void);
 void func_002CEFF0(void);
@@ -80,7 +96,47 @@ void func_00293570(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_loop_ffx_after);
+typedef struct OpDbuffQ16 { u64 q[16]; } OpDbuffQ16;
+
+typedef struct OpDbuffBlk {
+    u8 pad0[0x60];
+    OpDbuffQ16 a;
+    u8 padE0[0x1D0 - 0xE0];
+    OpDbuffQ16 b;
+} OpDbuffBlk; /* DEBT(NAME): Sg_GetDBuffDC return block */
+
+typedef struct OpDbuffLocal {
+    u8 pad0[0x60];
+    OpDbuffQ16 a;
+    u8 padE0[0x150 - 0xE0];
+    OpDbuffQ16 b;
+    u8 pad1D0[0x230 - 0x1D0];
+} OpDbuffLocal; /* DEBT(NAME): local copy of Sg_GetDBuffDC buffers */
+
+void op_loop_ffx_after(void)
+{
+    OpDbuffLocal local;
+    s32 dc;
+    OpDbuffBlk *blk;
+
+    D_00551BD0++;
+    D_00551BD4++;
+    blk = (OpDbuffBlk *)Sg_GetDBuffDC(&dc);
+    local.a = blk->a;
+    local.b = blk->b;
+    func_002B21E0(&local, dc & 1);
+    op_pad_set(0, 0, TkGetControlerHist(0, 0, 0) & 0xFFFF);
+    op_pad_set(1, 0, TkGetControlerHist(1, 0, 0) & 0xFFFF);
+    func_002B2298();
+    D_003F3944 = D_003F3940;
+    D_003F3950 = D_003F394C;
+    if ((s8)(&D_00764990)->pad0[0x10] != 0) {
+        opu_debug_check();
+        if ((s8)(&D_00764990)->pad0[0x10] != 0) {
+            func_2058390();
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", func_00293740);
 

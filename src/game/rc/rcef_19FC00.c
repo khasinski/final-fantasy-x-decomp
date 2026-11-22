@@ -261,7 +261,46 @@ typedef struct RcefBlurCtx {
 
 void func_001AAC18(float a, float b);
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A08A8);
+void func_001A08A8(RcefMainCtx *o)
+{
+    int mode;
+    int odd;
+    int idx;
+    float amp;
+    float s;
+    float x;
+    float y;
+
+    if (o->w220 == 0) {
+        return;
+    }
+    mode = o->w204;
+    if (mode == 0) {
+        return;
+    }
+    odd = mode & 1;
+    idx = (int)(o->f21C * 65536.0f / 6.2831854820251465f);
+    s = eff_sin_t[((u32)(idx + 0x4000) >> 4) & 0xFFF];
+    if (mode >= 3 && o->w20C > 0) {
+        s *= (float)(o->w20C - o->w210) / (float)o->w20C;
+    }
+    amp = (float)(o->w214 + func_002EFD78() % o->w218);
+    if (odd != 0) {
+        x = s * amp;
+        y = 0.0f;
+    } else {
+        x = 0.0f;
+        y = s * amp;
+    }
+    o->f21C += o->f208;
+    o->w210++;
+    if (o->w210 <= o->w20C) {
+        func_001AAC18(x, y);
+        return;
+    }
+    func_001AAC18(0.0f, 0.0f);
+    o->w220 = 0;
+}
 
 void func_001A0A10(void *p)
 {
