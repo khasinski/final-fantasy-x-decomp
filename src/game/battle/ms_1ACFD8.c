@@ -516,7 +516,405 @@ void MsBattleCursorCalc(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBattleExe);
+typedef struct {
+    u8 pad00[0x10];
+    s8 f10;
+    u8 pad11[1];
+    s8 f12;
+    s8 f13;
+    s8 f14;
+    u8 pad15[1];
+    s8 f16;
+    s8 f17;
+    s8 f18;
+    u8 pad19[3];
+    s32 f1C;
+    s32 f20;
+    u8 pad24[0x0A];
+    s8 f2E;
+    u8 pad2F[0x1A];
+    s8 f49;
+    u8 pad4A[0x0A];
+    s8 f54;
+    u8 pad55[3];
+    s8 f58;
+    s8 f59;
+    u8 pad5A[1];
+    s8 f5B;
+    u8 pad5C[0x5C];
+    void *fB8;
+    u8 padBC[0x18];
+    struct {
+        u16 f0;
+        u16 f2;
+        void *f4;
+    } fD4;
+    u8 padDC[0x29];
+    s8 f105;
+    u8 pad106[0x1A];
+    u8 *f120;
+    void *f124;
+    u8 *f128;
+    u8 *f12C;
+    u8 pad130[0x13E0];
+    s8 f1510;
+    s8 f1511;
+    s8 f1512;
+    u8 pad1513[1];
+    float f1514;
+    u8 pad1518[4];
+    s8 f151C;
+    s8 f151D;
+    s8 f151E;
+    u8 pad151F[0xA9];
+    s32 f15C8;
+    s32 f15CC;
+    u8 pad15D0[0x182];
+    s8 f1752;
+    s8 f1753;
+    u8 pad1754[7];
+    s8 f175B;
+    u8 pad175C[0x228];
+    s16 f1984;
+    s16 f1986;
+    u8 f1988;
+    u8 f1989;
+    char f198A[0x10];
+    u8 pad199A[0x65E];
+    s32 f1FF8;
+    s32 f1FFC;
+    s32 f2000;
+    s32 f2004;
+    s32 f2008;
+    s32 f200C;
+    s32 f2010;
+    s32 f2014;
+    s32 f2018;
+    s32 f201C;
+    s32 f2020;
+    s32 f2024;
+    s32 f2028;
+    s32 f202C;
+    s32 f2030;
+    u8 pad2034[0x44];
+    s16 f2078;
+    s16 f207A;
+    u8 pad207C[2];
+    s16 f207E;
+    u8 pad2080[0x7C];
+    s8 f20FC;
+    s8 f20FD;
+    u8 pad20FE[2];
+    s8 f2100;
+    s8 f2101;
+    s8 f2102;
+    s8 f2103;
+    s8 f2104;
+    s8 f2105;
+    s8 f2106;
+    s8 f2107;
+    s8 f2108;
+    s8 f2109;
+    s8 f210A;
+    s8 f210B;
+    s8 f210C;
+    s8 f210D;
+    s8 f210E;
+    u8 f210F;
+    u8 f2110;
+    u8 f2111;
+    s8 f2112;
+    s8 f2113;
+    s8 f2114;
+    s8 f2115;
+    s8 f2116;
+    s8 f2117;
+    s8 f2118;
+    s8 f2119;
+    s8 f211A;
+    s8 f211B;
+    s8 f211C;
+    s8 f211D;
+    u8 pad211E[1];
+    s8 f211F;
+    u8 pad2120[1];
+    s8 f2121;
+    s8 f2122;
+    s8 f2123;
+    s8 f2124;
+    s8 f2125;
+    s8 f2126;
+    s8 f2127;
+    s8 f2128;
+    u8 pad2129[1];
+    s8 f212A;
+    s8 f212B;
+    s8 f212C;
+    s8 f212D;
+    s8 f212E;
+    s8 f212F;
+    s8 f2130;
+    u8 pad2131[1];
+    s8 f2132;
+    s8 f2133;
+    s8 f2134;
+    s8 f2135;
+    s8 f2136;
+    u8 pad2137[1];
+    s8 f2138;
+    s8 f2139;
+    u8 pad213A[5];
+    s8 f213F;
+    s8 f2140;
+    s8 f2141;
+    s8 f2142;
+    s8 f2143;
+    s8 f2144;
+    s8 f2145;
+    s8 f2146;
+} BtlExeGS; /* DEBT(NAME): GameState offset view for MsBattleExe */
+
+extern char D_0065FF48[];
+extern char D_0056E118[];
+extern char D_0056E138[];
+extern char D_0056E140[];
+extern void MsEventEffectFree(void);
+extern int func_001B34B8(int, int *, int *);
+extern int func_001AE4A8(int, int);
+extern void Sg_Blur(int);
+extern void MsScreenFocusResetAll(void);
+extern void func_00117E38(int);
+extern void func_00116030(int);
+extern void Sg_SetPlayer(int);
+extern void MsBattleFree(void);
+extern void MsSEP3Dinit(void);
+extern void func_001AD9C8(int);
+extern void func_001E1528(void);
+extern void func_001CE970(void);
+extern void func_001A6C78(int);
+extern void func_001CC798(void);
+extern void MsComBufInit(void);
+extern void MsStoneInit(void);
+extern int Sg_SetKeepFps(int);
+extern void MsBtlChrGetMem(void);
+extern void MsBtlGetItemMem(void);
+extern void MsNumberGetMem(void);
+extern void func_001DC850(void);
+extern void MsSetItemWindow(void);
+extern void func_00214790(void);
+extern void MsEtEffectSet(void);
+extern int func_001AE530(int, int *);
+extern void MsEtEffectEncount(int, int);
+extern void func_001463F0(int);
+extern void MsBtlReadManage(void);
+
+#define BTL_EXE_GS ((BtlExeGS *)&D_003172F0) /* DEBT(CAST): GameState offset view */
+
+void MsBattleExe(int flag, int field, int enc, int grp)
+{
+    int file;
+    int sz;
+    void *buf;
+    u8 *p;
+    int i;
+    int eff;
+    int eff_arg;
+
+    if (FFXIsDebug() != 0 && flag == 0) {
+        func_002F0008(D_0065FF48, D_0056E118, D_00319438);
+        SsSetProjectBase(D_0065FF48);
+    }
+    MsEventEffectFree();
+    BTL_EXE_GS->f12 = 0;
+    file = func_001B34B8(field, &enc, &grp);
+    sz = func_001AE4A8(flag, file);
+    if (sz == 0) {
+        return;
+    }
+    {
+        u8 *e = func_001B3448(field, enc);
+        BTL_EXE_GS->f1984 = e[1] + (e[2] << 8);
+    }
+    if (flag != 0) {
+        buf = BTL_EXE_GS->fB8;
+        if (buf == 0) {
+            func_0011C348(0x40);
+            buf = user_malloc(sz, 5, D_0056E138, -1);
+            MsMemCheckRegist(buf, sz);
+        }
+    } else {
+        Sg_Blur(0);
+        MsScreenFocusResetAll();
+        func_00117E38(0);
+        func_00116030(1);
+        Sg_SetPlayer(0);
+        MsBattleFree();
+        func_0011C348(0x40);
+        buf = user_malloc(sz, 5, D_0056E138, -1);
+    }
+    {
+        struct { u16 f0; u16 f2; void *f4; } *d4 = (void *)((u8 *)&D_003172F0 + 0xD4); /* DEBT(CAST): sub-struct at 0xD4 */
+        d4->f2 = sz;
+        d4->f4 = buf;
+    }
+    func_001AFA80();
+    func_001DF1C0();
+    MsSEP3Dinit();
+    func_001AD9C8(0);
+    func_001E1528();
+    func_001CE970();
+    func_001A6C78(BTL_EXE_GS->f54);
+    func_001CC798();
+    MsComBufInit();
+    MsStoneInit();
+
+    BTL_EXE_GS->f2112 = -1;
+    BTL_EXE_GS->f2113 = -1;
+    BTL_EXE_GS->f210F = 0xFF;
+    BTL_EXE_GS->f2110 = 0xFF;
+    BTL_EXE_GS->f2111 = 0xFF;
+    BTL_EXE_GS->f2114 = -1;
+    BTL_EXE_GS->f1988 = enc;
+    BTL_EXE_GS->f1989 = grp;
+    BTL_EXE_GS->f1C = file;
+    BTL_EXE_GS->f1752 = 0;
+    BTL_EXE_GS->f2078 = 0;
+    BTL_EXE_GS->f15C8 = 0;
+    BTL_EXE_GS->f15CC = 0;
+    BTL_EXE_GS->f1753 = 0;
+    BTL_EXE_GS->f175B = 0;
+    BTL_EXE_GS->f20FC = 0;
+    BTL_EXE_GS->f2109 = flag;
+    BTL_EXE_GS->f210C = 0;
+    BTL_EXE_GS->f2106 = 0;
+    BTL_EXE_GS->f2108 = 0;
+    BTL_EXE_GS->f1512 = 0;
+    BTL_EXE_GS->f13 = 0;
+    BTL_EXE_GS->f2121 = 0;
+    BTL_EXE_GS->f14 = 0;
+    BTL_EXE_GS->f2115 = 0;
+    BTL_EXE_GS->f212B = 0;
+    BTL_EXE_GS->f210B = 0;
+    BTL_EXE_GS->f1510 = 0;
+    BTL_EXE_GS->f1511 = 0;
+    BTL_EXE_GS->f1986 = field;
+    BTL_EXE_GS->f16 = 0;
+    BTL_EXE_GS->f17 = 0;
+    BTL_EXE_GS->f1514 = 0.5f;
+    BTL_EXE_GS->f200C = 0xFF;
+    BTL_EXE_GS->f2024 = -1;
+    BTL_EXE_GS->f202C = -1;
+    BTL_EXE_GS->f2119 = -1;
+    BTL_EXE_GS->f210D = 1;
+    BTL_EXE_GS->f2130 = 1;
+    BTL_EXE_GS->f18 = 0;
+    BTL_EXE_GS->f151E = 0;
+    BTL_EXE_GS->f151C = 0;
+    BTL_EXE_GS->f151D = 0;
+    BTL_EXE_GS->f1FF8 = 0;
+    BTL_EXE_GS->f1FFC = 0;
+    BTL_EXE_GS->f2000 = 0;
+    BTL_EXE_GS->f2004 = 0;
+    BTL_EXE_GS->f2008 = 0;
+    BTL_EXE_GS->f2020 = 0;
+    BTL_EXE_GS->f2028 = 0;
+    BTL_EXE_GS->f2030 = 0;
+    BTL_EXE_GS->f210E = 0;
+    BTL_EXE_GS->f2E = 0;
+    BTL_EXE_GS->f49 = 0;
+    BTL_EXE_GS->f2132 = 0;
+    BTL_EXE_GS->f210A = 0;
+    BTL_EXE_GS->f2116 = 0;
+    BTL_EXE_GS->f2117 = 0;
+    BTL_EXE_GS->f2118 = 0;
+    BTL_EXE_GS->f2133 = 0;
+    BTL_EXE_GS->f2134 = 0;
+    BTL_EXE_GS->f2135 = 0;
+    BTL_EXE_GS->f2136 = 0;
+    BTL_EXE_GS->f2138 = 0;
+    BTL_EXE_GS->f2139 = 0;
+    BTL_EXE_GS->f213F = 0;
+    BTL_EXE_GS->f2142 = 1;
+    BTL_EXE_GS->f2140 = 0;
+    BTL_EXE_GS->f2141 = 0;
+    BTL_EXE_GS->f2143 = 0;
+    BTL_EXE_GS->f2144 = 0;
+    BTL_EXE_GS->f2145 = 0;
+    BTL_EXE_GS->f2146 = 0;
+    BTL_EXE_GS->f207A = 0;
+    if (FFXGetLang() == 5) {
+        BTL_EXE_GS->f207E = 0x2C8;
+    } else {
+        BTL_EXE_GS->f207E = 0x29E;
+    }
+    BTL_EXE_GS->f201C = -1;
+    BTL_EXE_GS->f212C = 1;
+    BTL_EXE_GS->f2100 = 0;
+    BTL_EXE_GS->f211A = 0;
+    BTL_EXE_GS->f211B = 0;
+    BTL_EXE_GS->f211C = 0;
+    BTL_EXE_GS->f211D = 0;
+    BTL_EXE_GS->f211F = 0;
+    BTL_EXE_GS->f2121 = 0;
+    BTL_EXE_GS->f2125 = 0;
+    BTL_EXE_GS->f2107 = 0;
+    BTL_EXE_GS->f20 = 0;
+    BTL_EXE_GS->f2122 = 0;
+    BTL_EXE_GS->f2010 = 0;
+    BTL_EXE_GS->f2014 = 0;
+    BTL_EXE_GS->f2018 = 0;
+    BTL_EXE_GS->f2123 = 0;
+    BTL_EXE_GS->f2124 = 0;
+    BTL_EXE_GS->f20FD = 0;
+    BTL_EXE_GS->f212D = 0;
+    BTL_EXE_GS->f58 = 0;
+    BTL_EXE_GS->f59 = 0;
+    BTL_EXE_GS->f5B = 0;
+    BTL_EXE_GS->f2126 = 0;
+    BTL_EXE_GS->f2101 = 0;
+    BTL_EXE_GS->f2102 = 0;
+    BTL_EXE_GS->f2103 = 0;
+    BTL_EXE_GS->f2104 = 0;
+    BTL_EXE_GS->f2105 = 0;
+    BTL_EXE_GS->f2127 = 0;
+    BTL_EXE_GS->f212A = 0;
+    BTL_EXE_GS->f212E = 0;
+    BTL_EXE_GS->f212F = 0;
+
+    BTL_EXE_GS->f120 = MsBtlListField(field);
+    BTL_EXE_GS->f124 = MsBtlListEncount(field);
+    p = func_001B3448(field, enc);
+    BTL_EXE_GS->f128 = p;
+    BTL_EXE_GS->f12C = p + 5;
+    BTL_EXE_GS->f12C += grp * 2;
+    if (flag == 0 && FFXIsDebug() != 0) {
+        func_204B058(field, enc, grp, *(s16 *)BTL_EXE_GS->f120, BTL_EXE_GS->f12C[0]);
+    }
+    for (i = 0; i < 8; i++) {
+        BTL_EXE_GS->f198A[i] = *(BTL_EXE_GS->f120 + i + 6);
+    }
+    BTL_EXE_GS->f198A[i] = 0;
+    func_002F0008(BTL_EXE_GS->f198A, D_0056E140, BTL_EXE_GS->f198A, BTL_EXE_GS->f12C[0]);
+    if (flag != 0) {
+        BTL_EXE_GS->f10 = 5;
+    } else {
+        BTL_EXE_GS->f2128 = Sg_SetKeepFps(0);
+        MsBtlChrGetMem();
+        MsBtlGetItemMem();
+        MsNumberGetMem();
+        func_001DC850();
+        MsSetItemWindow();
+        func_00214790();
+        MsEtEffectSet();
+        eff = func_001AE530(BTL_EXE_GS->f105, &eff_arg);
+        if (eff >= 0) {
+            MsEtEffectEncount(eff, eff_arg);
+        }
+        func_001463F0(BTL_EXE_GS->f1984);
+        BTL_EXE_GS->f10 = 4;
+    }
+    MsBtlReadManage();
+}
 
 int func_001AE4A8(int flag, int v) {
     if (flag) {

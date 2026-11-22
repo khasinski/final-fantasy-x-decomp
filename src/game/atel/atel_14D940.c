@@ -350,7 +350,111 @@ void func_0014E1C8(void)
     D_0058F948 = 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14D940", func_0014E1D8);
+extern int func_0013AB18(void);
+extern int func_0013AAD8(void);
+extern int func_0015A550(void);
+extern int AtelGetTotalActorNumber2(void);
+extern int get_hdd_err(void);
+extern int SaveDataIsScreenClosed(u32);
+
+void func_0014E1D8(void)
+{
+    int pad1 = func_0013AB18();
+    int pad2 = func_0013AAD8();
+    int save;
+    EvGameState *gs;
+    int ok;
+    int hdd;
+
+    pad1 &= 0xFFF;
+    pad2 &= 0xFFF;
+    save = AtelChangeCurrentCtrl(0);
+    gs = AtelGetCurCtrlWork();
+
+    gs->w210 &= ~4;
+    if (D_0058F94C != 0) {
+        D_0058F94C--;
+    }
+
+    ok = 1;
+    hdd = 0;
+    if ((gs->flags.u & 1) == 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (pad1 == 0x800 && pad2 == pad1 && D_0058F94C == 0) {
+        func_0014E1C8();
+    }
+    if ((gs->flags.u & 8) == 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (func_0015A550() != 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (MsBattleCheck() != 0 || (gs->flags.u & 0x3000000) != 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (((int (*)(int))func_0014A500)(0) == 0) { /* DEBT(CAST): s1.h declares no parameter, the caller passes 0 */
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if ((gs->flags.u & 0x80000400U) != 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (AtelGetTotalActorNumber2() == 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+    }
+    {
+        int r = func_0014AD18();
+        if (r < 4) {
+            if (r > 0) {
+                AtelClearPauseFlag();
+                ok = 0;
+                D_0058F94C = 12;
+            }
+        }
+    }
+    if ((((u32)gs->w210 >> 4) & 1) == 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if ((((u32)gs->w210 >> 3) & 1) == 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+    }
+    if ((((u32)gs->w210 >> 1) & 1) != 0) {
+        AtelClearPauseFlag();
+        ok = 0;
+        D_0058F94C = 12;
+    }
+    if (ok != 0 && D_0058F948 == 0 && func_00124488() == 0 && get_hdd_err() != 0) {
+        hdd = 1;
+        D_0058F948 = 1;
+        func_00124478(1);
+    }
+    if (TkGetTGS() != 0) {
+        ok = 0;
+    }
+    if (ok != 0 && D_0058F948 != 0) {
+        SaveDataIsScreenClosed(hdd | 0x41000000U);
+        gs->w210 |= 4;
+        AtelClearPauseFlag();
+        D_0058F94C = 12;
+    }
+    AtelSetCurrentCtrl(save);
+}
 
 void AtelExecSoftWareReset(void)
 {
