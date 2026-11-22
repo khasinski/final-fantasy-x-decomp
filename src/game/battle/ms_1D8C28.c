@@ -105,7 +105,46 @@ GsEnt48 *func_001D92A0(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsDeleteCommandCue);
+int MsDeleteCommandCue(int id, int idx, int flag)
+{
+    Ent48Tbl *tbl = (Ent48Tbl *)D_00317690;
+    int n = tbl->n;
+    BtlChr *chr;
+    int i;
+    int dst;
+    int deleted;
+
+    if (n > 0 && idx != 0xFF) {
+        chr = MsGetChr(id);
+        for (i = 0, dst = 0, deleted = 0; i < n; i++) {
+            if (i == idx && tbl->e[i].id == id) {
+                if (i == chr->fAA5) {
+                    if (flag != 0) {
+                        goto keep; /* DEBT(GOTO): fall into keep path when active slot is protected by flag */
+                    }
+                    chr->fAA5 = 0xFF;
+                }
+                ((u8 *)chr)[0x39E] = 0;
+                deleted++;
+                ((u8 *)chr)[0x3D7] = 0;
+                chr->fAA7--;
+                ((u8 *)chr)[0x106] = 0;
+            } else {
+            keep:
+                if (i != dst) {
+                    tbl->e[dst] = tbl->e[i];
+                }
+                dst++;
+            }
+        }
+        if (deleted > 0) {
+            n--;
+            D_00318801 = n;
+        }
+        return deleted;
+    }
+    return 0;
+}
 
 int MsCleanCommandCue(int a, int b) {
     int sum = 0;

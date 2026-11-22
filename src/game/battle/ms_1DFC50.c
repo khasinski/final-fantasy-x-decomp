@@ -47,7 +47,103 @@ void MsMusicVolume(int a, int b)
     func_002D85F0(SndGetNowPlayMusic(), b, a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DFC50", func_001DFD60);
+extern u16 D_0031FF90[];
+extern u16 D_0031FFD8[];
+extern u16 D_00320020[];
+
+typedef struct {
+    u8 pad0[0x14];
+    u8 b14;
+    u8 pad15[0xBA];
+    s8 bCF;
+    s8 bD0;
+    u8 padD1[0x9BB];
+    s8 bA8C;
+    u8 padA8D[0xDF];
+    u32 wB6C[32];
+    u8 bBEC;
+} BtlChr1DFD60;
+
+typedef struct {
+    u8 pad0[0x1759];
+    u8 b1759;
+    u8 pad175A[2];
+    u32 w175C[280];
+} Gs1DFD60;
+
+u32 func_001DFD60(u32 id, int idx)
+{
+    u32 res = 0;
+    u16 *tbl;
+    BtlChr1DFD60 *chr;
+    int ok;
+
+    if ((s32)id < 8) {
+        tbl = D_0031FF90;
+    } else if ((s32)id < 20) {
+        tbl = D_0031FFD8;
+    } else if ((s32)id < 28) {
+        tbl = D_00320020;
+    } else {
+        tbl = D_0031FFD8;
+    }
+
+    chr = (BtlChr1DFD60 *)MsGetChr(id);
+    ok = 1;
+    if (idx == 6) {
+        if (chr->bCF == 0 || chr->bA8C != 0) {
+            ok = 0;
+        }
+    }
+
+    if (ok != 0 && (u32)idx < 0x21) {
+        u16 v = tbl[idx];
+        int add = 0;
+
+        if ((v & 0x100) != 0) {
+            add = (s8)(chr->bD0 % 4);
+            chr->bD0 = (chr->bD0 % 4) + 1;
+        }
+        if ((v & 0x200) != 0) {
+            add = (s8)((s8)(u8)chr->bD0 % 2);
+            chr->bD0 = ((s8)(u8)chr->bD0 % 2) + 1;
+        }
+        if ((v & 0x400) != 0) {
+            add = (u8)D_003193EE & 1;
+        }
+        if ((v & 0x800) != 0) {
+            if (D_003193EE != 0) {
+                add = 8;
+            }
+        }
+        switch (v & 0xF000) {
+        case 0x1000:
+            {
+                Gs1DFD60 *gs = (Gs1DFD60 *)&D_003172F0;
+                v &= 0xFF;
+                v += add;
+                if (gs->b1759 != 0 && v < 10) {
+                    res = gs->w175C[id * 10 + v];
+                }
+            }
+            break;
+        case 0x2000:
+            v &= 0xFF;
+            v += add;
+            res = v | 0x80000000U;
+            break;
+        default:
+            v &= 0xFF;
+            v += add;
+            chr = (BtlChr1DFD60 *)MsGetChr(chr->b14);
+            if (chr->bBEC != 0 && v < 0x20) {
+                res = chr->wB6C[v];
+            }
+            break;
+        }
+    }
+    return res;
+}
 
 void MsChrSEfoot(u8 id, int v)
 {
