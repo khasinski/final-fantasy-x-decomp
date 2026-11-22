@@ -215,4 +215,59 @@ W5Buf *MsFieldItemGetMes(int a)
     return &btlgetdata_mes;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", func_001DD5F8);
+void func_001DD5F8(int idx, W5Buf *buf)
+{
+    u8 *ent;
+    int slot;
+
+    ent = (u8 *)MsGetExcelData(idx, (void *)D_00662E00, 0); /* DEBT(CAST): table ptr as s32 */
+    switch (ent[0]) {
+    case 2:
+        func_001DC968(*(u16 *)(ent + 2), ent[1], buf);
+        break;
+    case 10:
+        ((u8 *)buf)[0xD1] = 1; /* DEBT(CAST): untyped W5Buf fields */
+        *(u16 *)((u8 *)buf + 0xEC) = *(u16 *)(ent + 2);
+        break;
+    case 5:
+        slot = func_001DCA38(buf);
+        if (slot >= 0) {
+            u8 *wrom = (u8 *)MsGetExcelData(*(u16 *)(ent + 2), (void *)D_00662E08, 0);
+            Unk1BFED8 *w = (Unk1BFED8 *)((u8 *)buf + 0xFE + slot * 0x16);
+            int slots;
+            int n;
+            int i;
+
+            w->b2 = 1;
+            w->b3 = wrom[0];
+            w->b4 = wrom[1];
+            w->b5 = wrom[2];
+            w->b6 = 0xFF;
+            w->pad7[1] = wrom[4];
+            w->pad7[2] = wrom[5];
+            w->pad7[3] = wrom[6];
+            slots = wrom[7];
+            n = 0;
+            for (i = 0; i < 4; i++) {
+                int ab = ((u16 *)(wrom + 8))[i];
+                if (ab == 0) {
+                    ab = 0xFF;
+                }
+                w->fE[i] = ab;
+                if (ab != 0xFF) {
+                    n++;
+                }
+            }
+            if (slots < n) {
+                slots = n;
+            }
+            w->pad7[4] = slots;
+            w->h0 = MsWeaponNameNum(w);
+            MsWeaponName(w->h0, w->b4, 0, &w->fC);
+        }
+        break;
+    default:
+        *(s32 *)((u8 *)buf + 0xCC) += ent[1] * 100;
+        break;
+    }
+}

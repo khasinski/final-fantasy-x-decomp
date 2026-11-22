@@ -72,8 +72,59 @@ typedef struct MdcHdr {
     MdcModelEntry entries[1];
 } MdcHdr;
 
-void func_002A7140(s32 a, s32 b, s32 mode, s32 flag, s32 check_mimic, s32 work);
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A7140);
+void *Ch_ModelGetBaseMatrix(Chr *chr, int i, int j);
+void func_002A7420(int id, int val);
+void opus_mdc_make_mimic(MdcHdr *hdr, int mode, int work);
+u8 *op_md_vn_index(u8 *pkt, u8 *end, int work);
+
+void func_002A7140(s32 a, s32 b, s32 mode, s32 flag, s32 check_mimic, s32 work)
+{
+    MdcHdr *hdr = (MdcHdr *)a; /* DEBT(CAST): s32 ptr arg */
+    Chr *chr = (Chr *)b; /* DEBT(CAST): s32 ptr arg */
+    MdcModelEntry *e;
+    u8 *dst;
+    int nb;
+    int count;
+    int i;
+
+    if (check_mimic == 0 || opus_mimic_check(chr) == 0) {
+        e = &hdr->entries[0];
+        nb = Ch_GetNbModel(chr);
+        i = 0;
+        hdr->chr = chr;
+        count = 0;
+        dst = (u8 *)hdr + (nb * 16 + 0x10);
+        hdr->mode = mode;
+        for (; i < nb; i++) {
+            u32 sz;
+            u8 *next;
+
+            if (Ch_ModelGetHide(chr, i) != 0) {
+                if (flag != 0) {
+                    continue;
+                }
+            } else {
+                e->flags |= 1;
+            }
+            e->pkt = dst;
+            e->mat = Ch_ModelGetBaseMatrix(chr, i, 0);
+            e->model_idx = i;
+            sz = Ch_ModelCalcSizeEffectPacket(chr, i);
+            Ch_ModelCreateEffectPacket(chr, i, dst);
+            next = dst + ((sz + 0xF) & 0xFFFFFF0);
+            if (mode == 2) {
+                next = op_md_vn_index(dst, next, work);
+            }
+            dst = next;
+            e++;
+            count++;
+        }
+        hdr->count = count;
+        func_002A7420((int)chr, (int)hdr);
+    } else {
+        opus_mdc_make_mimic(hdr, mode, work);
+    }
+}
 
 void func_002A72F8(s32 a, s32 b, s32 c, s32 d) {
     func_002A7140(a, b, c, 0, 1, d);
