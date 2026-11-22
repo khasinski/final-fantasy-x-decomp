@@ -1,4 +1,5 @@
 /* tu_183 0x1b4100-0x1b5298: low; ~Ms (config/tu_map.tsv) */
+#define MsBtlChrRegist _hdr_MsBtlChrRegist
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -6,6 +7,7 @@
 #include "ffx/u2.h"
 #include "ffx/v2.h"
 #include "ffx/g2.h"
+#undef MsBtlChrRegist
 
 void func_001B4100(void) {
     D_00662570 = 0;
@@ -193,7 +195,123 @@ void MsBtlChrInfoFree(BtlChr *chr) {
     chr->f4C = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B4100", MsBtlChrRegist);
+extern s8 D_003193FA;
+extern void func_001B4D48(Chr *chr, BtlChr *c);
+
+typedef struct {
+    Chr *chr;
+    u8 pad04[0x1A];
+    s8 f1E;
+    u8 f1F;
+    u8 pad20[0x2C];
+    s32 f4C;
+    u8 pad50[0x10];
+    float f60;
+    float f64;
+    float f68;
+    float f6C;
+    u8 pad70[0x50];
+    u16 fC0;
+    u8 padC2[0x21];
+    u8 fE3;
+    u8 padE4[0x19];
+    s8 fFD;
+    u8 padFE[0xE];
+    s8 f10C;
+    s8 f10D;
+    u8 pad10E[0x6D];
+    u8 f17B;
+    u8 pad17C[0x20];
+    float f19C;
+    u8 pad1A0[4];
+    float f1A4;
+    float f1A8;
+    u8 pad1AC[0x1A];
+    s8 f1C6;
+    u8 pad1C7[0xA];
+    s8 f1D1;
+    u8 pad1D2[2];
+    float f1D4[8];
+    u8 pad1F4[0x89A];
+    s8 fA8E;
+    u8 padA8F[0x5D];
+    s32 fAEC;
+} BtlChrReg; /* DEBT(NAME): offset view of BtlChr for MsBtlChrRegist */
+
+Chr *MsBtlChrRegist(int a, s32 model)
+{
+    u8 id = a;
+    float pos[3];
+    int created = 0;
+    BtlChrReg *c = (BtlChrReg *)MsGetChr(id); /* DEBT(CAST): offset view of BtlChr */
+    Chr *chr;
+    float weight;
+    int show;
+
+    func_001B4538((BtlChr *)c);
+    chr = c->chr;
+    if (chr == 0) {
+        created = 1;
+        c->chr = (Chr *)func_00102B98(model);
+        chr = c->chr;
+    }
+    Ch_SetBattleChrNum(chr, id);
+    MsSetChrHeight(id);
+    if (created != 0 || D_003193FA != 0 || c->f1C6 != 0) {
+        MsGetChrBtlPos(id, pos);
+        Ch_SetPos3(chr, pos[0], pos[1], pos[2]);
+        Ch_ClothReset(chr);
+    } else {
+        Ch_GetPos(chr, &pos[0], &pos[1], &pos[2]);
+    }
+    if (c->f10C == 0) {
+        c->f1A4 = func_001109E0(chr);
+    }
+    if (c->f10D == 0) {
+        c->f1A8 = (MsGetChrHeight(id) * 13.0f) / 14.0f;
+    }
+    weight = c->f19C;
+    if (c->fA8E != 0) {
+        weight = -1.0f;
+    }
+    ((void (*)(Chr *, int))Ch_SetMotionSpeed)(chr, c->fC0); /* DEBT(CAST): header takes s16, original passes u16 zero-extended */
+    Ch_SetThickness(chr, c->f1A4);
+    Ch_SetWeight(chr, weight);
+    Ch_SetDirF(chr, c->f1D4[c->f1D1]);
+    Ch_SetScale(chr, 7, c->f60, c->f64, c->f68);
+    Ch_BindSetScale(chr, c->f6C);
+    Ch_SetSp(chr, 0.0f);
+    func_00110540(chr, 0, 1.0f);
+    Ch_EffectSetEffectLevel(chr, c->fAEC);
+    func_001B4900(c);
+    MsSetMotBinAddress((BtlChr *)c, c->f17B);
+    func_001B4D48(chr, (BtlChr *)c);
+    if (c->f4C == 0) {
+        c->f4C = Ch_EffectGetResidentPtr(chr);
+    }
+    func_00298E30();
+    show = 1;
+    {
+        int fd = c->fFD;
+        if (fd & 1) {
+            c->fE3 |= 1;
+            show = 0;
+        }
+        if (fd & 4) {
+            show = 0;
+        }
+        if (created != 0 && (fd & 8)) {
+            c->fE3 |= 1;
+            show = 0;
+        }
+    }
+    if (c->f1E != 0) {
+        c->f1F = 1;
+        op_et_bindeff(chr);
+    }
+    func_001B57F0(id, show);
+    return chr;
+}
 
 int func_001B4900(Obj4900 *p) {
     int r = p->f3C != 0;
