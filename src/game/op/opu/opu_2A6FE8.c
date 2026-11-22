@@ -2,6 +2,7 @@
 /* DEBT(NAME): module and names guessed: script call wrappers (see w10.h). */
 #define func_002A74A8 _hdr_func_002A74A8
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/t6.h"
@@ -317,8 +318,99 @@ INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_break_make_VitaSafe)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A7BA8);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A81D0);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_2A6FE8/rodata", jtbl_00575780);
+void func_002A8460(EntList *l, int n, int c, int d);
+void op_2point_shadow(void *a0, void *a1, void *a2);
+int MsDetachWeapon(int a, int b);
+
+u16 *func_002A81D0(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+
+    switch (((s16)th->flags & 0xF000) >> 12) {
+    case 0: {
+        u16 n = (int)*(float *)((u8 *)sub + 0x40);
+        int sz;
+        void *p;
+
+        sub->bBB = pc[1];
+        *(u16 *)((u8 *)sub + 0xD0) = n;
+        sz = (n << 9) | 0x120;
+        *(u16 *)((u8 *)sub + 0xD2) = pc[2];
+        *(u16 *)((u8 *)sub + 0xD4) = pc[3];
+        pc += 4;
+        __asm__ volatile("" : "+r"(sz) : : "memory");
+        p = op_malloc(*(void **)((u8 *)th + 0x3A8), sz);
+        *(void **)((u8 *)sub + 0xBC) = p;
+        func_002A8460(p, 8, 16, *(u16 *)((u8 *)sub + 0xD0));
+        opus_draw_on((IdList *)((u8 *)th + 0x300), th->h214);
+        break;
+    }
+    case 1: {
+        if (th->h212 == 0) {
+            Chr *c;
+            if (sub->b18 < 0x14) {
+                c = (Chr *)MsGetWeaponHandle(sub->b18, 0);
+            } else {
+                c = owu_chr_hd[sub->b18];
+            }
+            if (c != 0) {
+                u8 *m40 = (u8 *)th + 0x40;
+                u8 *mA0 = (u8 *)th + 0xA0;
+                Ch_GetRootGlobalMatrix(c, th);
+                opus_get_bone_matrix(m40, c, *(u16 *)((u8 *)sub + 0xD2));
+                opus_get_bone_matrix(mA0, c, *(u16 *)((u8 *)sub + 0xD4));
+                func_002B56D8(m40, th, m40);
+                func_002B56D8(mA0, th, mA0);
+                op_2point_shadow(*(void **)((u8 *)sub + 0xBC), (u8 *)th + 0x70, (u8 *)th + 0xD0);
+            }
+        }
+        pc += 1;
+        break;
+    }
+    case 2: {
+        u8 *obj300;
+        int r = op_et_weapon_afterimage(owu_chr_hd[sub->b18], 0, 0, 0, 0, 0, 0);
+        *(int *)((u8 *)sub + 0xA8) = r;
+        obj300 = (u8 *)th + 0x300;
+        if (*(void **)(obj300 + 0x24) == *(void **)D_0054D5E8) {
+            (*(u16 *)(obj300 + 0x38))++;
+            if (*(u16 *)(obj300 + 0x36) < *(u16 *)(obj300 + 0x38)) {
+                *(u16 *)(obj300 + 0x36) = *(u16 *)(obj300 + 0x38);
+            }
+        }
+        pc += 9;
+        break;
+    }
+    case 3:
+        func_00297CE8(*(Chr **)((u8 *)sub + 0xA8));
+        pc += 1;
+        break;
+    case 4:
+        if (sub->b18 < 8) {
+            MsDetachWeapon(sub->b18, 0);
+        }
+        pc += 1;
+        break;
+    case 5:
+        if (sub->b18 < 8) {
+            MsDetachWeapon(sub->b18, 1);
+        }
+        pc += 1;
+        break;
+    case 6: {
+        int flag = 2;
+        goto set_shadow;
+    case 7:
+        flag = 0;
+    set_shadow:
+        func_002967E8(th, pc);
+        pc += 1;
+        MsSetChrShadow(sub->b18, flag);
+        break;
+    }
+    }
+    return pc;
+}
 
 void func_002A8460(EntList *l, int n, int c, int d)
 {
@@ -472,8 +564,144 @@ u16 *opu_et_ovl(ScriptThread *th, u16 *pc)
     return pc + 3;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opu_et_etc);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_2A6FE8/rodata", jtbl_005757A0);
+u16 *opu_et_etc(ScriptThread *th, u16 *pc)
+{
+    u8 *obj300 = (u8 *)th + 0x300;
+    ScriptSub *sub = th->sub;
+    u8 chrid = sub->b18;
+    Chr *chr = owu_chr_hd[chrid];
+    register u16 mask __asm__("$18");
+
+    switch ((s16)(pc[1] - 1)) {
+    case 0:
+        obj300[0x3A]++;
+        if (obj300[0x3A] >= 0xFA) {
+            obj300[0x3A] = 0xFA;
+        }
+        pc += 2;
+        break;
+    case 1:
+        if (obj300[0x3A] != 0) {
+            obj300[0x3A]--;
+        }
+        pc += 2;
+        break;
+    case 2:
+        if (obj300[0x3A] >= 10) {
+            pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+        } else {
+            pc += 3;
+        }
+        break;
+    case 3:
+        MMI_SQ_ZERO(0, th);
+        *(float *)((u8 *)th + 4) = *(float *)((u8 *)sub + 0x34);
+        pc += 2;
+        op_et_weapon_effect_on(sub->b18, (u8 *)sub + 0x90, th);
+        break;
+    case 4:
+        func_002992B8(chr, pc[2]);
+        pc += 3;
+        break;
+    case 5:
+        func_002994B8(chr);
+        pc += 2;
+        break;
+    case 6:
+        func_002994D8(chr);
+        pc += 2;
+        break;
+    case 7:
+        op_et_bindeff_off(chr);
+        pc += 2;
+        break;
+    case 8:
+        op_et_bindeff(chr);
+        pc += 2;
+        break;
+    case 9:
+        func_002985C0(chr);
+        pc += 2;
+        break;
+    case 10:
+        func_002985E0(chr);
+        pc += 2;
+        break;
+    case 11:
+        sub->bB3 = 0x7F;
+        pc += 2;
+        break;
+    case 12: {
+        register int i __asm__("$5") = opus_get_weapon_index_by_chrid(chrid);
+        register HandlePool *hp __asm__("$3");
+        register u8 *ap __asm__("$2");
+        __asm__ volatile("" : "+r"(i));
+        hp = &D_00703E20;
+        __asm__("sll %0, %2, 2\n\taddu %0, %1, %0" : "=&r"(ap) : "r"(hp), "r"(i));
+        chr = *(Chr **)(ap + 0x10);
+        if (chr == 0) {
+            pc += 3;
+        } else {
+            if (hp->b6C[i] >= 0x21) {
+                pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+            } else {
+                pc += 3;
+            }
+        }
+        break;
+    }
+    case 13:
+        mask = 0x100;
+        goto check_status;
+    case 14:
+        mask = 0x200;
+        goto check_status;
+    case 15:
+        mask = 0x2000;
+        goto check_status;
+    case 16:
+        mask = 0x1000;
+        goto check_status;
+    case 17:
+        mask = 0x800;
+check_status:
+        if (func_00110758(chr) != 0) {
+            pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+        } else {
+            register int idx __asm__("$5") = opus_get_chr_status_index(chr, 0, 0);
+            if (idx < 0) {
+                pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+            } else {
+                register int off __asm__("$3") = idx << 5;
+                register u16 gflags __asm__("$5") = D_00704010;
+                register int hit __asm__("$2");
+                mask |= 0x4020;
+                hit = mask & (((ResEntry *)((u8 *)owu_chr_status + off))->flags | gflags);
+                if (hit != 0) {
+                    pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+                } else {
+                    pc += 3;
+                }
+            }
+        }
+        break;
+    case 18:
+        if (D_00703FFE & 1) {
+            pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+        } else {
+            pc += 3;
+        }
+        break;
+    case 19:
+        if (D_00703FFE & 2) {
+            pc = (u16 *)((u8 *)pc + (s16)pc[2]);
+        } else {
+            pc += 3;
+        }
+        break;
+    }
+    return pc;
+}
 
 s16 *opu_bind2(ScriptThread *th, s16 *pc)
 {
@@ -563,7 +791,63 @@ INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002AAF30);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002AB178);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002AB3F8);
+float func_002B3DF8(float a);
+
+void func_002AB3F8(u8 *a0, float *a1)
+{
+    u8 *v1 = a0 + 0x20;
+    u8 *s0 = v1;
+    float f20 = a1[0] + 2048.0f;
+    float f21 = a1[1] + 2048.0f;
+    int i;
+
+    *(int *)(a0 + 0) = 0;
+    for (i = 0; i < 0x200; i++, s0 += 0x58) {
+        *(float *)(s0 + 0x10) = (f20 - 256.0f) + (float)i;
+        *(float *)(s0 + 0x14) = f21 - 208.0f;
+        *(float *)(s0 + 0x18) = 0.0f;
+        *(float *)(s0 + 0x38) = (float)i * 0.001953125f;
+        *(float *)(s0 + 0x3C) = 0.0f;
+    }
+    for (i = 0; i < 0x1A0; i++, s0 += 0x58) {
+        *(float *)(s0 + 0x10) = f20 + 256.0f;
+        *(float *)(s0 + 0x14) = (f21 - 208.0f) + (float)i;
+        *(float *)(s0 + 0x18) = 0.0f;
+        *(float *)(s0 + 0x38) = 1.0f;
+        *(float *)(s0 + 0x3C) = (float)i * 0.001953125f;
+    }
+    for (i = 0x1FF; i >= 0; i--, s0 += 0x58) {
+        *(float *)(s0 + 0x10) = (f20 - 256.0f) + (float)i;
+        *(float *)(s0 + 0x14) = f21 + 208.0f;
+        *(float *)(s0 + 0x18) = 0.0f;
+        *(float *)(s0 + 0x38) = (float)i * 0.001953125f;
+        *(float *)(s0 + 0x3C) = 0.8125f;
+    }
+    for (i = 0x19F; i >= 0; i--) {
+        *(float *)(s0 + 0x10) = f20 - 256.0f;
+        *(float *)(s0 + 0x18) = 0.0f;
+        *(float *)(s0 + 0x14) = (f21 - 208.0f) + (float)i;
+        s0 += 0x58;
+        *(float *)(s0 + 0x3C) = (float)i * 0.001953125f;
+        *(float *)(s0 + 0x38) = 0.0f;
+    }
+    s0 = v1;
+    for (i = 0; i < 0x740; i++, s0 += 0x58) {
+        *(float *)(s0 + 0x0) = f20;
+        *(float *)(s0 + 0x4) = f21;
+        *(float *)(s0 + 0x8) = 0.0f;
+        *(float *)(s0 + 0x30) = (f20 - 1792.0f) * 0.001953125f;
+        *(float *)(s0 + 0x34) = (f21 - 1840.0f) * 0.001953125f;
+        *(u32 *)(s0 + 0x20) = 0x80808080;
+        *(u32 *)(s0 + 0x24) = 0x80808080;
+        *(float *)(s0 + 0x40) = 0.0f;
+        *(float *)(s0 + 0x44) = 0.0f;
+        *(float *)(s0 + 0x48) = 0.0f;
+        *(float *)(s0 + 0x4C) = 0.0f;
+        *(float *)(s0 + 0x50) = 0.0f;
+        *(float *)(s0 + 0x54) = func_002B3DF8(0.001f) + 0.002f;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002AB678);
 
@@ -884,4 +1168,48 @@ int opus_mdc_size_get_mimic(int mode, int flag)
     return total;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_mdc_make_mimic);
+void opus_mdc_make_mimic(MdcHdr *hdr, int mode, int work)
+{
+    u8 *fp = (u8 *)hdr;
+    MimicOsu *osu = opus_get_osu_by_draw(0, 0, 0x12, 1);
+    u8 *s3;
+    MimicWork *s5;
+    MimicEntry *s2;
+    Chr *s4;
+    u8 *s1;
+    int s7;
+    int i;
+
+    if (osu == 0) {
+        return;
+    }
+    s3 = fp + 0x10;
+    s5 = osu->w;
+    s7 = 0;
+    s2 = &s5->entries[0];
+    {
+        Chr *c0 = *s5->pp0;
+        s4 = *s5->pp4;
+        fp[6] = mode;
+        *(Chr **)fp = c0;
+    }
+    s1 = s3 + (s5->hE << 4);
+    for (i = 0; i < s5->hE; i++, s2++, s3 += 0x10, s7++) {
+        u32 sz;
+        u8 *next;
+        if (Ch_ModelGetHide(s4, s2->h4) != 0) {
+            *(u16 *)(s3 + 8) |= 1;
+        }
+        *(u8 **)s3 = s1;
+        *(u8 **)(s3 + 4) = s2->mat20;
+        sz = Ch_ModelCalcSizeEffectPacket(s4, s2->h4);
+        Ch_ModelCreateEffectPacket(s4, s2->h4, s1);
+        next = s1 + ((sz + 0xF) & 0xFFFFFF0);
+        if (mode == 2) {
+            next = op_md_vn_index(s1, next, work);
+        }
+        s1 = next;
+    }
+    *(s16 *)(fp + 4) = s7;
+}
+

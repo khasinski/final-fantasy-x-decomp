@@ -204,7 +204,134 @@ u16 *func_0029B9B0(ScriptThread *th, u16 *pc) {
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_jump_etc);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_jump_etc2);
+int Sg_MemGetMaxFree(int a);
+
+u16 *opu_jump_etc2(ScriptThread *th, u16 *pc)
+{
+    register ScriptSub *sub __asm__("$17") = th->sub;
+    SlotEntry *e = &owu_eff_status[sub->h14];
+    s16 inv = th->flags & 0x800;
+    ResEntry *re;
+    int i;
+    int idx;
+
+    switch (th->flags & 0xF000) {
+    case 0x0000:
+        func_002967E8(th, pc);
+        if (MsGetChrFly(sub->b18) != 0) {
+            if (inv == 0) {
+                pc = SCRIPT_JUMP(pc);
+            } else {
+                pc += 2;
+            }
+        } else {
+            if (inv == 0) {
+                pc += 2;
+            } else {
+                pc = SCRIPT_JUMP(pc);
+            }
+        }
+        break;
+    case 0x1000:
+        func_002967E8(th, pc);
+        if (MsGetDamageResult(e->key, sub->b18, 0, 0, (int *)th) == 1) {
+            pc = SCRIPT_JUMP(pc);
+        } else {
+            pc += 2;
+        }
+        break;
+    case 0x2000:
+        func_002967E8(th, pc);
+        if (sub->b18 < 8) {
+            pc = SCRIPT_JUMP(pc);
+        } else {
+            pc += 2;
+        }
+        break;
+    case 0x3000: {
+        Chr *chr = owu_chr_hd[sub->b18];
+        if (func_00110758(chr) == 0) {
+            register int cur __asm__("$17");
+            cur = ((int (*)(Chr *))opus_get_chr_status_index)(chr);
+            if (cur >= 0) {
+                register int tmp __asm__("$3") = cur << 5;
+                u8 prev;
+                re = (ResEntry *)((u8 *)owu_chr_status + tmp);
+                cur = func_00110560(chr);
+                prev = re->b16;
+                if (cur != prev) {
+                    if (cur == 2) {
+                        if (prev == 0) {
+                            pc = SCRIPT_JUMP(pc);
+                        }
+                        re->b16 = cur;
+                        break;
+                    } else if (cur == 0) {
+                        if (prev == 2) {
+                            pc = SCRIPT_JUMP_AT(pc, 2);
+                        }
+                        re->b16 = 0;
+                        break;
+                    } else {
+                        re->b16 = 0;
+                    }
+                }
+            }
+        }
+        pc += 3;
+        break;
+    }
+    case 0x4000:
+        func_002967E8(th, pc);
+        for (i = 0; i < e->b8; i++) {
+            idx = opus_get_chr_status_index(owu_chr_hd[e->list[i]], 0, 0);
+            if (idx >= 0) {
+                re = &owu_chr_status[idx];
+                if (re->key == 0x10B2) {
+                    goto do_jump;
+                }
+                if (re->key == 0x10B3) {
+                    goto do_jump;
+                }
+                if (re->key == 0x10B4) {
+                    goto do_jump;
+                }
+                if (re->key == 0x1121) {
+                    goto do_jump;
+                }
+                if (re->key == 0x1122) {
+                    goto do_jump;
+                }
+                if (re->key == 0x1123) {
+do_jump:
+                    pc = SCRIPT_JUMP(pc);
+                    goto done;
+                }
+            }
+        }
+        pc += 2;
+        break;
+    case 0x5000:
+        if (Sg_MemGetMaxFree(0) >= 0x1E0000 || Sg_MemGetMaxFree(1) >= 0x1E0000 || Sg_MemGetMaxFree(2) >= 0x1E0000) {
+            pc += 2;
+        } else {
+            pc = SCRIPT_JUMP(pc);
+        }
+        break;
+    case 0x6000:
+        func_002967E8(th, pc);
+        idx = opus_get_chr_status_index(owu_chr_hd[sub->b18], 0, 0);
+        re = &owu_chr_status[idx];
+        if (re->b17 & 1) {
+            pc = SCRIPT_JUMP(pc);
+        } else {
+            pc += 2;
+        }
+        break;
+    }
+done:
+    return pc;
+}
 
 u16 *func_0029C338(ScriptThread *th, u16 *pc) {
     th->sub->stk[th->sp] = pc + 2;
@@ -303,8 +430,109 @@ INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_29A8A8/rodata", jtbl_00575470);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_en_on);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", func_0029CBD0);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_29A8A8/rodata", jtbl_005754A0);
+void opus_camera_limit(void *obj300, int v);
+void func_001AAC18(float a, float b);
+void func_001AA360(float *a, float *b, float c, float d);
+void func_001AA3A8(void);
+int func_001A6828(int cam);
+
+u16 *func_0029CBD0(ScriptThread *arg0, u16 *pc)
+{
+    register ScriptThread *th __asm__("$17") = arg0;
+    ScriptSub *sub = th->sub;
+    int sw = th->flags >> 12;
+    int cam = *(int *)((u8 *)th + 0x35C);
+    s16 s1;
+
+    __asm__ volatile("" : "+r"(pc));
+    s1 = (s16)pc[1];
+    switch (sw) {
+    case 0:
+        func_002B5978((float *)th, (float *)((u8 *)sub + 0x90), 1.0f);
+        if (s1 == 0) {
+            func_002B5978((float *)((u8 *)th + 0x10), (float *)((u8 *)sub + 0x30), 0.0625f);
+        } else {
+            func_002B5978((float *)((u8 *)th + 0x10), (float *)((u8 *)opus_no_get((IdList *)((u8 *)th + 0x300), sub, s1) + 0x90), 1.0f);
+        }
+        MsCameraSetRect(cam, 1, (void *)th);
+        MsCameraSetRect(cam, 0, (void *)((u8 *)th + 0x10));
+        MsCameraSetRoll(cam, *(float *)((u8 *)sub + 0x4C) * 3.141592f * 0.00048828125f);
+        MsCameraSetScrDpt(cam, *(float *)((u8 *)sub + 0x3C) + 1024.0f);
+        break;
+    case 1:
+        func_001CB798(0);
+        MsBattleSpecialCameraPause(1);
+        *(int *)((u8 *)th + 0x35C) = MsEffectCameraGet(3, 0, 7);
+        MsCameraResetMove(*(int *)((u8 *)th + 0x35C), 0);
+        MsCameraResetMove(*(int *)((u8 *)th + 0x35C), 1);
+        break;
+    case 2:
+        if (D_007649A0 != 0) {
+            func_001CB798(1);
+        }
+        if (cam != 0) {
+            MsBattleSpecialCameraPause(0);
+            if (MsBattleGetStatus() == 0) {
+                MsEffectCameraEnd(0);
+            }
+        }
+        *(int *)((u8 *)th + 0x35C) = 0;
+        break;
+    case 3:
+        func_001AAC18(*(float *)((u8 *)sub + 0x90), *(float *)((u8 *)sub + 0x94));
+        break;
+    case 4:
+        MsCameraGetPosNow(1, (float *)((u8 *)sub + 0x90));
+        func_002B5978((float *)((u8 *)sub + 0x40), (float *)((u8 *)sub + 0x90), 16.0f);
+        break;
+    case 5:
+        MsCameraGetPosNow(0, (float *)((u8 *)sub + 0x90));
+        func_002B5978((float *)((u8 *)sub + 0x40), (float *)((u8 *)sub + 0x90), 16.0f);
+        break;
+    case 6: {
+        register float d __asm__("$f1") = (s16)pc[1];
+        register float r __asm__("$f1");
+        register float pi __asm__("$f12");
+        MsCameraSetScrDpt(cam, d + 1024.0f);
+        pi = 3.141592f;
+        r = (s16)pc[2];
+        pc += 1;
+        pi = r * pi;
+        MsCameraSetRoll(cam, pi * 0.00048828125f);
+        break;
+    }
+    case 7:
+        func_002B5978((float *)th, (float *)((u8 *)sub + 0x90), 1.0f);
+        if (s1 == 0) {
+            func_002B5978((float *)((u8 *)th + 0x10), (float *)((u8 *)sub + 0x30), 0.0625f);
+        } else {
+            func_002B5978((float *)((u8 *)th + 0x10), (float *)((u8 *)opus_no_get((IdList *)((u8 *)th + 0x300), sub, s1) + 0x90), 1.0f);
+        }
+        func_001AA360((float *)((u8 *)th + 0x10), (float *)th, *(float *)((u8 *)sub + 0x3C) + 1024.0f, *(float *)((u8 *)sub + 0x4C) * 3.141592f * 0.00048828125f);
+        break;
+    case 8:
+        func_001AA3A8();
+        break;
+    case 9:
+        D_00703FFC = pc[1] + 0x1000;
+        ((void (*)(void *))opus_camera_limit)((u8 *)th + 0x300);
+        break;
+    case 10:
+        D_00703FFC = 0;
+        break;
+    case 11:
+        MsBattleSpecialCameraPause(0);
+        MsEffectCameraEnd(0);
+        *(int *)((u8 *)th + 0x35C) = 0;
+        break;
+    case 12:
+        if (cam != 0 && func_001A6828(cam) != 0) {
+            return SCRIPT_JUMP(pc);
+        }
+        break;
+    }
+    return pc + 2;
+}
 
 /* DEBT(CAST): operand 1 is a byte offset into the entity block starting at ScriptSub.a8 */
 u16 *func_0029CF78(ScriptThread *th, u16 *pc) {

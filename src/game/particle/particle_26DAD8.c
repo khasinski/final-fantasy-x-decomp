@@ -1,11 +1,14 @@
 /* tu_294 0x26dad8-0x26f218: low; unk_26DAD8 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/t6.h"
 #include "ffx/u4.h"
 #include "ffx/q6.h"
+
+extern float eff_sin_t[];
 
 void func_0026DAD8(ScriptWork *base, u32 *k, ScriptCtx *ctx)
 {
@@ -86,64 +89,595 @@ void func_0026DC70(int base, ScriptCtx *ctx)
     w->bA1 = 0;
 }
 
+#define VU0_RAND(out, t) \
+    MIPS_ADDI0(t, -1); \
+    VU0_QMTC2_NI(2, t); \
+    VU0_OP("vrxor R, $vf2x"); \
+    VU0_OP("vitof0.x $vf2, $vf2"); \
+    VU0_OP("vrnext.x $vf1, R"); \
+    VU0_OP("vadd.x $vf1, $vf1, $vf2"); \
+    VU0_QMFC2_NI(out, 1)
+
 INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026DC88);
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026DE80);
+typedef struct FxKey1F { int key; int dst; float d; u8 range; } FxKey1F;
+typedef struct FxKey1B { int key; int dst; u8 d; u8 range; } FxKey1B;
+typedef struct FxKey1H { int key; int dst; u16 d; u8 range; } FxKey1H;
+typedef struct FxKey1W { int key; int dst; u32 d; u8 range; } FxKey1W;
+typedef struct FxKey3I { int key; int dst; u8 pad8[8]; int d[3]; u8 pad1C[4]; u8 range; } FxKey3I;
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026DF60);
+void func_0026DE80(ScriptWork *base, FxKey1F *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E048);
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a += b;
+            } else {
+                a += a;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        *dst += k->d * *v - k->d;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E130);
+void func_0026DF60(ScriptWork *base, FxKey1F *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E220);
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a + b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        *dst += k->d * *v;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E318);
+void func_0026E048(ScriptWork *base, FxKey1F *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E410);
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            a = -a;
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a - b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        *dst += k->d * *v;
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E500);
+void func_0026E130(ScriptWork *base, FxKey1B *k, ScriptCtx *ctx)
+{
+    float *v;
+    u8 *dst;
+    float a, b;
+    register int t __asm__("$8");
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E5F8);
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a += b;
+            } else {
+                a += a;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u8 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u8 *)D_006EA450;
+        }
+        *dst += (u8)(int)(k->d * *v - k->d);
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E6F0);
+void func_0026E220(ScriptWork *base, FxKey1B *k, ScriptCtx *ctx)
+{
+    float *v;
+    u8 *dst;
+    float a, b;
+    register int t __asm__("$8");
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E838);
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a + b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u8 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u8 *)D_006EA450;
+        }
+        *dst += (u8)(int)(k->d * *v);
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026E958);
+void func_0026E318(ScriptWork *base, FxKey1B *k, ScriptCtx *ctx)
+{
+    float *v;
+    u8 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            a = -a;
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a - b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u8 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u8 *)D_006EA450;
+        }
+        *dst += (u8)(int)(k->d * *v);
+    }
+}
+
+void func_0026E410(ScriptWork *base, FxKey1H *k, ScriptCtx *ctx)
+{
+    float *v;
+    u16 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a += b;
+            } else {
+                a += a;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u16 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u16 *)D_006EA450;
+        }
+        *dst += (u16)(int)(k->d * *v - k->d);
+    }
+}
+
+void func_0026E500(ScriptWork *base, FxKey1H *k, ScriptCtx *ctx)
+{
+    float *v;
+    u16 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a + b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u16 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u16 *)D_006EA450;
+        }
+        *dst += (u16)(int)(k->d * *v);
+    }
+}
+
+void func_0026E5F8(ScriptWork *base, FxKey1H *k, ScriptCtx *ctx)
+{
+    float *v;
+    u16 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            a = -a;
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a - b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u16 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u16 *)D_006EA450;
+        }
+        *dst += (u16)(int)(k->d * *v);
+    }
+}
+
+void func_0026E6F0(ScriptWork *base, FxKey1W *k, ScriptCtx *ctx)
+{
+    float *v;
+    u32 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a += b;
+            } else {
+                a += a;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u32 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u32 *)D_006EA450;
+        }
+        *dst += (int)(k->d * *v - k->d);
+    }
+}
+
+void func_0026E838(ScriptWork *base, FxKey1W *k, ScriptCtx *ctx)
+{
+    float *v;
+    u32 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a + b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u32 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u32 *)D_006EA450;
+        }
+        *dst += (int)(k->d * *v);
+    }
+}
+
+void func_0026E958(ScriptWork *base, FxKey1W *k, ScriptCtx *ctx)
+{
+    float *v;
+    u32 *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            a = -a;
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a - b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (u32 *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (u32 *)D_006EA450;
+        }
+        *dst += (int)(k->d * *v);
+    }
+}
 
 float func_0026EA78(float a, float b) {
     return a * b - a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026EA88);
+void func_0026EA88(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a += b;
+            } else {
+                a += a;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        dst[0] += func_0026EA78(k->d[0], *v);
+        dst[1] += func_0026EA78(k->d[1], *v);
+        dst[2] += func_0026EA78(k->d[2], *v);
+    }
+}
 
 float func_0026EBB8(float a, float b) {
     return a * b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026EBC0);
+void func_0026EBC0(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a + b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        dst[0] += func_0026EBB8(k->d[0], *v);
+        dst[1] += func_0026EBB8(k->d[1], *v);
+        dst[2] += func_0026EBB8(k->d[2], *v);
+    }
+}
 
 float func_0026ED00(float a, float b) {
     return a * b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026ED08);
+void func_0026ED08(ScriptWork *base, T6_FxKeyF *k, ScriptCtx *ctx)
+{
+    float *v;
+    float *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0) {
+        if (base->owner == 0) {
+            VU0_RAND(a, t);
+            a = -a;
+            if (k->range != 0) {
+                VU0_RAND(b, t);
+                a = (a - b) * 0.5f;
+            }
+            v = SLOT_WORK(float, base, ctx, 0);
+            *v = a;
+        } else if (k->key == base->owner) {
+            v = SLOT_WORK(float, base, ctx, 0);
+        } else {
+            return;
+        }
+        if (k->dst != -1) {
+            dst = (float *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (float *)D_006EA450;
+        }
+        dst[0] += func_0026ED00(k->d[0], *v);
+        dst[1] += func_0026ED00(k->d[1], *v);
+        dst[2] += func_0026ED00(k->d[2], *v);
+    }
+}
 
 int func_0026EE48(int a, float s) {
     return a * s - a;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026EE68);
+void func_0026EE68(ScriptWork *base, FxKey3I *k, ScriptCtx *ctx)
+{
+    float *v;
+    int *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0 && k->key == base->owner) {
+        VU0_RAND(a, t);
+        if (k->range != 0) {
+            VU0_RAND(b, t);
+            a += b;
+        } else {
+            a += a;
+        }
+        v = SLOT_WORK(float, base, ctx, 0);
+        *v = a;
+        if (k->dst != -1) {
+            dst = (int *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (int *)D_006EA450;
+        }
+        dst[0] += func_0026EE48(k->d[0], *v);
+        dst[1] += func_0026EE48(k->d[1], *v);
+        dst[2] += func_0026EE48(k->d[2], *v);
+    }
+}
 
 int func_0026EF88(int a, float s) {
     return a * s;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026EFA8);
+void func_0026EFA8(ScriptWork *base, FxKey3I *k, ScriptCtx *ctx)
+{
+    float *v;
+    int *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0 && k->key == base->owner) {
+        VU0_RAND(a, t);
+        if (k->range != 0) {
+            VU0_RAND(b, t);
+            a = (a + b) * 0.5f;
+        }
+        v = SLOT_WORK(float, base, ctx, 0);
+        *v = a;
+        if (k->dst != -1) {
+            dst = (int *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (int *)D_006EA450;
+        }
+        dst[0] += func_0026EF88(k->d[0], *v);
+        dst[1] += func_0026EF88(k->d[1], *v);
+        dst[2] += func_0026EF88(k->d[2], *v);
+    }
+}
 
 int func_0026F0D0(int a, float s) {
     return a * s;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_26DAD8", func_0026F0F0);
+void func_0026F0F0(ScriptWork *base, FxKey3I *k, ScriptCtx *ctx)
+{
+    float *v;
+    int *dst;
+    float a, b;
+    register int t __asm__("$8");
+
+    if (D_006A3BC4 == 0 && k->key == base->owner) {
+        VU0_RAND(a, t);
+        a = -a;
+        if (k->range != 0) {
+            VU0_RAND(b, t);
+            a = (a - b) * 0.5f;
+        }
+        v = SLOT_WORK(float, base, ctx, 0);
+        *v = a;
+        if (k->dst != -1) {
+            dst = (int *)((char *)base + (k->dst + 0xA0));
+        } else {
+            dst = (int *)D_006EA450;
+        }
+        dst[0] += func_0026F0D0(k->d[0], *v);
+        dst[1] += func_0026F0D0(k->d[1], *v);
+        dst[2] += func_0026F0D0(k->d[2], *v);
+    }
+}

@@ -25,6 +25,7 @@ void func_001074C0(s32 i, s32 v)
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001074D8);
 
 float func_001074D8(float a, float b, float step);
+
 void func_00106E58(Chr *chr, s32 a);
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107600);
@@ -450,7 +451,87 @@ void func_00108A40(Chr *chr, V128 *dst)
 
 void func_002DCE08(void *dst, void *m, void *v);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_OptposCalc);
+typedef union {
+    u64 d[2];
+    Vec4 v;
+} Vec4D;
+
+void Ch_OptposCalc(Chr *chr)
+{
+    register u8 *saved_reg_gp __asm__("$28");
+    ChrOptView *ov = (ChrOptView *)chr;
+    ChrParam *p = chr->param;
+    ParamTbl *t;
+    ParamEntry *e;
+    s32 i;
+    s32 n;
+    float s;
+    Vec4D v0;
+    Vec4D v1;
+    Vec4D v2;
+    Vec4D v3;
+    float m[4][4];
+    float dy1;
+    float dy2;
+
+    for (i = 21; i >= 0; i--) {
+        ov->opt530[i].v.w = 0.0f;
+    }
+    t = p->tbl6C;
+    if (t == 0) {
+        return;
+    }
+    s = *(float *)(saved_reg_gp - 0x7EA4) / p->f30 / p->f30 * p->f38;
+    n = t->count;
+    e = t->ents;
+    for (i = 0; i < n; i++, e++) {
+        s32 idx = e->key & 0x3FFF;
+
+        func_002DCE38(m, (u8 *)chr + 0x1F0, chr->slots[e->val].u90);
+        switch ((s16)e->key & 0xC000) {
+        case 0:
+        case 0x8000:
+            ov->opt530[idx].v.x = m[3][0];
+            ov->opt530[idx].v.y = m[3][1];
+            ov->opt530[idx].v.z = m[3][2];
+            break;
+        case 0x4000:
+            v1.v.x = *(float *)&e->pad[0] * s;
+            v1.v.y = *(float *)&e->pad[4] * s;
+            v1.v.z = *(float *)&e->pad[8] * s;
+            v1.v.w = 1.0f;
+            func_002DCE08(&ov->opt530[idx], m, &v1);
+            break;
+        }
+        ov->opt530[idx].v.w = 1.0f;
+    }
+    Ch_OptposGet((int)chr, 0, (int)&v2);
+    *(Vec4D *)((u8 *)chr + 0x6C0) = v2;
+    *(float *)((u8 *)chr + 0x6C4) -= *(float *)((u8 *)chr + 0x500);
+    Ch_OptposGet((int)chr, 7, (int)&v2);
+    Ch_OptposGet((int)chr, 8, (int)&v3);
+    v2.v.x = (v2.v.x + v3.v.x) * 0.5f;
+    v2.v.z = (v2.v.z + v3.v.z) * 0.5f;
+    v2.v.y = (v2.v.y > v3.v.y) ? v2.v.y : v3.v.y;
+    Ch_OptposGet((int)chr, 1, (int)&v3);
+    *(Vec4D *)((u8 *)chr + 0x690) = *(Vec4D *)((u8 *)chr + 0x6A0);
+    v2.v.x = v3.v.x = (v3.v.x + v2.v.x) * 0.5f;
+    v2.v.z = v3.v.z = (v3.v.z + v2.v.z) * 0.5f;
+    *(Vec4D *)((u8 *)chr + 0x6A0) = v2;
+    *(Vec4D *)((u8 *)chr + 0x6B0) = v3;
+    dy1 = *(float *)((u8 *)chr + 0x6B4) - *(float *)((u8 *)chr + 0x6A4);
+    if (dy1 < 0.0f) {
+        dy1 = -dy1;
+    }
+    *(float *)((u8 *)chr + 0x51C) = dy1;
+    dy2 = chr->f14 - *(float *)((u8 *)chr + 0x6A4);
+    if (dy2 < 0.0f) {
+        dy2 = -dy2;
+    }
+    v2.v.y -= dy1 * *(float *)(saved_reg_gp - 0x7EA0);
+    *(float *)((u8 *)chr + 0x520) = dy2;
+    *(Vec4D *)((u8 *)chr + 0x6D0) = v2;
+}
 
 void func_00108DA0(Chr *chr, s32 i, s32 v)
 {
@@ -913,4 +994,61 @@ Chr *Ch_TextureAnimGetHandle(s32 v)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_CalcMiddle_Batch);
+void Ch_Mouth(Chr *chr);
+void Ch_Neck(Chr *chr);
+void Ch_CalcElement(Chr *chr);
+void Ch_OptposCalc(Chr *chr);
+void chr_texanim_main(s32 a);
+
+void Ch_CalcMiddle_Batch(void)
+{
+    u32 t0 = *(volatile u32 *)0x10000000;
+    s32 pass;
+    Chr *p;
+
+    for (pass = 0; pass < 2; pass++) {
+        for (p = D_00300664; p != D_00300664 + D_00300668; p++) {
+            if (p->active) {
+                if (p->p1A8 != 0) {
+                    if (pass == 0) {
+                        continue;
+                    }
+                } else {
+                    if (pass != 0) {
+                        continue;
+                    }
+                }
+                if ((s32)((u64)p->flags >> 32) & 1) {
+                    func_002984F8(p);
+                    p->flags &= ~(1LL << 32);
+                }
+                if (p->b18C == 0 || p->b18D != 0) {
+                    if (Sg_GetPause() == 0) {
+                        Ch_Mouth(p);
+                        Ch_Neck(p);
+                        if (p->flags & 0x3000000) {
+                            Ch_CalcElement(p);
+                            Ch_OptposCalc(p);
+                        }
+                        Ch_IdShadeCalc(p);
+                        if (FLAGS_BIT(p, 24)) {
+                            Ch_MotEvent(p);
+                            p->flags &= ~0x1000;
+                        } else {
+                            p->flags |= 0x1000;
+                        }
+                        if (p->w708 != 0 && Sg_GuiGetTextureAnim() != 0) {
+                            chr_texanim_main(p->w70C);
+                        }
+                        {
+                            s32 is_player = ((Chr *)Sg_GetPlayer() == p);
+                            FLAGS_SET(p, 9, is_player);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    func_00107D60();
+    D_0057E9B0[2] = *(volatile u32 *)0x10000000 - t0;
+}

@@ -447,8 +447,93 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C1C8);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C470);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C778);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C470);
+typedef struct {
+    u64 d[10];
+} YiCopy80;
+
+typedef struct {
+    u32 w00;
+    u32 psm;
+    u32 w08;
+    u32 w;
+    u32 h;
+} YiTex17C778;
+
+extern void Sg_MFIFOSync(void);
+
+void func_0017C778(void *a0, YiTex17C778 *a1, YiCopy80 *a2, void *a3)
+{
+    u32 size = a1->w * a1->h;
+    u32 *pkt;
+    u32 *start;
+    u32 *p;
+    int qwc;
+    void *ch;
+
+    switch (a1->psm) {
+    case 0x14:
+    case 0x24:
+    case 0x2C:
+        size >>= 1;
+        break;
+    case 2:
+        size <<= 1;
+        break;
+    case 1:
+        size *= 3;
+        break;
+    case 0:
+        size <<= 2;
+        break;
+    }
+    size >>= 4;
+    pkt = (u32 *)Sg_PacketGetPtr();
+    p = pkt + 4;
+    start = p;
+    *(YiCopy80 *)p = *a2;
+    p += 20;
+    p[0] = size | 0x8000;
+    p[1] = 0x08000000;
+    p[2] = 0;
+    p[3] = 0;
+    p += 4;
+    func_002EEF1C(p, a3, size << 4);
+    p += size << 2;
+    qwc = ((u8 *)p - (u8 *)start) >> 4;
+    pkt[0] = 0x11000000;
+    pkt[1] = 0;
+    pkt[2] = 0x06000001;
+    pkt[3] = qwc | 0x51000000;
+    ch = (void *)_m2c_func_0017B390_func_002DB6D8(2);
+    *(volatile u8 *)ch |= 1;
+    *(volatile u8 *)ch &= 0xBF;
+    *(volatile u8 *)ch &= 0x7F;
+    *(u8 *)ch &= 0xF3;
+    _m2c_func_0017B390_func_002F8660(0);
+    Sg_MFIFOSync();
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    _m2c_func_0017B390_func_002DBB00(ch, (int)start, qwc);
+    Sg_MFIFOSync();
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    p[0] = 0x06000000;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p += 4;
+    ch = (void *)_m2c_func_0017B390_func_002DB6D8(1);
+    *(volatile u8 *)ch |= 1;
+    *(volatile u8 *)ch &= 0xBF;
+    *(volatile u8 *)ch &= 0x7F;
+    *(u8 *)ch &= 0xF3;
+    _m2c_func_0017B390_func_002F8660(0);
+    Sg_MFIFOSync();
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    _m2c_func_0017B390_func_002DBB00(ch, (int)pkt, ((u8 *)p - (u8 *)pkt) >> 4);
+    Sg_MFIFOSync();
+    _m2c_func_0017B390_func_002DA610(0, 0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CA18);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C530);

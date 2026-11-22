@@ -44,7 +44,60 @@ float MsNearRag(float a, float b)
 }
 
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraMoveCalc);
+int MsCameraMoveCalc(int is_ang, float *cur, R2Fade *fade, float start)
+{
+    if (fade->total != 0) {
+        float target = *cur;
+
+        if (is_ang != 0) {
+            target = MsNearRag(start, target);
+        }
+        switch (fade->mode) {
+        case 1:
+            *cur = start + ((target - start) * fade->time) / fade->total;
+            break;
+        case 2:
+            {
+                float d = target - start;
+                float v0 = (fade->h4 != 0) ? (d / fade->h4) : 0.0f;
+                int t0 = fade->t0;
+                int t1 = fade->t1;
+                int t2 = fade->t2;
+                float acc = (d - fade->total * v0) / (t0 * (t0 / 2 + t1) + t2 * (t0 - t2 / 2));
+                float vmax = v0 + acc * t0;
+                float p1 = start + (v0 + (acc * t0) * 0.5f) * t0;
+                int t = fade->time;
+
+                if (t < t0) {
+                    *cur = start + (v0 + (acc * t) * 0.5f) * t;
+                } else if (t < t0 + t1) {
+                    *cur = p1 + vmax * (t - t0);
+                } else if (t < t0 + t1 + t2) {
+                    int dt = t - t0 - t1;
+
+                    *cur = p1 + vmax * t1 + (vmax - (acc * dt) * 0.5f) * dt;
+                } else {
+                    *cur = target;
+                }
+            }
+            break;
+        case 3:
+            {
+                double s = start;
+                double d = target - start;
+
+                *cur = s + d * (-func_002E8648(fade->time * 3.1415927f / fade->total) + 1.0) * 0.5;
+            }
+            break;
+        }
+        fade->time++;
+        if (fade->total < fade->time) {
+            fade->total = 0;
+        }
+        return 1;
+    }
+    return 0;
+}
 
 extern s32 _m2c_func_001A65E0_D_00314840 __asm__("D_00314840");
 /* DEBT(CAST) */
@@ -190,7 +243,51 @@ void func_001A6C78(int v) {
     D_0031712C = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsSetCheckChange);
+int func_001A8F40(Unk317120Rec *rec, R2Area *dst_area, R2Area *area, int flag);
+
+int MsSetCheckChange(int id, int which, int flag, int kind)
+{
+    Unk314840 *cam = &D_00314840[id & 0xFF];
+    Unk317120Rec *rec = &cam->rec[which];
+    struct Unk314840Ent *ent = &cam->eCC0[(id & 0xFF00) >> 8];
+    R2Area *area;
+    int ok;
+    int i;
+
+    if (kind == 1) {
+        if (cam->fadeD80[0].total != 0) {
+            return 0;
+        }
+        ((Unk317120 *)cam)->fC98 = cam->fC9C;
+        *(float *)&ent->pad1C[0] = cam->fC9C;
+        return -1;
+    }
+    if (kind == 2) {
+        if (cam->fadeD80[1].total != 0) {
+            return 0;
+        }
+        ((Unk317120 *)cam)->fCA4 = cam->fCA8;
+        *(float *)&ent->pad1C[4] = cam->fCA8;
+        return -1;
+    }
+    ok = (((s8 *)rec)[3] == 0);
+    for (i = 0; i < 3; i++) {
+        if (rec->fade[i].total != 0 && rec->b1 == 1) {
+            ok = 0;
+        }
+    }
+    func_001A8F40(rec, (R2Area *)&cam->rec[1 - which], area = &rec->area[(id & 0xFF00) >> 8], flag);
+    if (ok != 0) {
+        for (i = 0; i < 3; i++) {
+            if (rec->fade[i].total == 0) {
+                rec->v20[i] = rec->v50[i];
+                ((float *)area->pad_80)[i] = rec->v20[i];
+            }
+        }
+        return -1;
+    }
+    return 0;
+}
 
 void func_001A6E10(int a, int b, int v) {
     if (MsCameraIDcheck(a)) {
@@ -294,7 +391,58 @@ void MsCameraSetSpline(s32 h, s32 which, s32 var, float x, float y, s32 n)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A7308);
+void MsCameraSetRoll(s32 arg0, float fparg0);
+int _m2c_func_002D5448_d() __asm__("func_002D5448");
+int _m2c_func_002D5450_d() __asm__("func_002D5450");
+int _m2c_TkMtCalcSpline_d() __asm__("TkMtCalcSpline");
+int _m2c_func_002D5188_d() __asm__("func_002D5188");
+
+void func_001A7308(int id, int which, Unk314840 *state, Unk317120Rec *rec, R2Area *area)
+{
+    float pos[4];
+    float dir[4];
+    int done = 0;
+    s8 c;
+
+    if (area->f68 < 0.0) {
+        area->f68 = 0.0f;
+        done = 1;
+    }
+    if (area->f68 > 1.0) {
+        area->f68 = 1.0f;
+        done = 1;
+    }
+    c = *(s8 *)&area->b1C;
+    if ((c & 3) == 3) {
+        _m2c_func_002D5448_d(pos, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area->f68);
+        if (c & 4) {
+            _m2c_func_002D5450_d(dir, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area->f68);
+            if (area->f6C >= 0.0f) {
+                func_001AC3D0(pos, pos, dir);
+            } else {
+                func_001AC3E8(pos, pos, dir);
+            }
+        }
+    } else {
+        _m2c_TkMtCalcSpline_d(pos, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area->f68);
+        if (c & 4) {
+            _m2c_func_002D5188_d(dir, ((S2EntObj *)area->obj)->sub, ((S2EntObj *)area->obj)->flags, area->f68);
+            if (area->f6C >= 0.0f) {
+                func_001AC3D0(pos, pos, dir);
+            } else {
+                func_001AC3E8(pos, pos, dir);
+            }
+        }
+    }
+    MMI_COPY_LQ_T0(rec->v50, pos);
+    MMI_COPY_SQ_T0(rec->v50);
+    MsCameraSetRoll(id, pos[3]);
+    *(float *)rec->pad6C = 0.0f;
+    area->f68 += area->f6C;
+    if (done != 0 || area->f6C == 0.0) {
+        MsCameraSetRect(id, which, rec->v50);
+    }
+}
 
 void func_001A7648(int id, int which, Unk317120Rec *rec, R2Area *area, R2Area *area2);
 
@@ -688,7 +836,70 @@ void func_001A83F0(int id, int which, int flags, R2AreaObj *obj, float r)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001A8518);
+typedef struct {
+    float x, y, z, w;
+    float a, b, c, d;
+    float e;
+    u8 pad[0xC];
+} CamPt30;
+
+typedef struct {
+    int count;
+    u8 pad4[0xC];
+    CamPt30 pts[1];
+} CamPtList;
+
+void func_001A8518(Unk317120Rec *rec, R2Area *area)
+{
+    CamPtList *list = (CamPtList *)area->obj;
+    CamPt30 *p = list->pts;
+    int count = list->count;
+    u8 flags = area->b03;
+    float total = 0.0f;
+    float s3, s0, s1, s2, wsum;
+    int i;
+
+    if (flags & 1) {
+        for (i = 0; i < count; i++, p++) {
+            float dx = (flags & 2) ? 0.0f : (*(float *)((u8 *)rec + 0x30) - p->x);
+            float dy = (flags & 4) ? 0.0f : (*(float *)((u8 *)rec + 0x34) - p->y);
+            float dz = (flags & 8) ? 0.0f : (*(float *)((u8 *)rec + 0x38) - p->z);
+            float dist = sqrtf(dx * dx + dy * dy + dz * dz) + 1.0;
+
+            p->d = (dist * dist) / p->w;
+            total += p->d;
+        }
+    } else {
+        for (i = 0; i < count; i++, p++) {
+            float dx = (flags & 2) ? 0.0f : (*(float *)((u8 *)rec + 0x30) - p->x);
+            float dy = (flags & 4) ? 0.0f : (*(float *)((u8 *)rec + 0x34) - p->y);
+            float dz = (flags & 8) ? 0.0f : (*(float *)((u8 *)rec + 0x38) - p->z);
+            float dist = sqrtf(dx * dx + dy * dy + dz * dz) + 1.0;
+
+            p->d = dist / p->w;
+            total += p->d;
+        }
+    }
+    p = ((CamPtList *)area->obj)->pts;
+    wsum = 0.0f;
+    s0 = 0.0f;
+    s1 = 0.0f;
+    s2 = 0.0f;
+    s3 = 0.0f;
+    for (i = 0; i < count; i++, p++) {
+        float w = total / p->d;
+
+        s0 += w * p->a;
+        s1 += w * p->b;
+        s2 += w * p->c;
+        s3 += w * p->e;
+        wsum += w;
+    }
+    rec->v60[0] = s0 / wsum + area->v40[0];
+    rec->v60[1] = s1 / wsum;
+    rec->v60[2] = s2 / wsum;
+    *(float *)rec->pad6C = s3 / wsum;
+}
 
 void func_001A8850(int id, int which, int flags, R2AreaObj *obj, float y, float x, float z) {
     Unk317120Rec *rec;

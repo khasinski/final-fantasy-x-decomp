@@ -2,37 +2,37 @@
   "metric": "C-body byte coverage; full-game completion is not yet measurable",
   "resident_elf": {
     "catalogued_functions": 11612,
-    "c_functions": 10091,
+    "c_functions": 10329,
     "catalogued_function_bytes": 2071120,
-    "c_function_bytes": 1036024,
-    "coverage_percent": 50.02240333732473,
-    "policy_assembly_bytes": 393556,
+    "c_function_bytes": 1163980,
+    "coverage_percent": 56.200509869056354,
+    "policy_assembly_bytes": 379276,
     "inline_asm_wrapper_functions": 219,
     "inline_asm_wrapper_bytes": 7360,
-    "decompilable_coverage_percent": 61.75764382163661
+    "decompilable_coverage_percent": 68.79948742319031
   },
   "ee_overlays": {
     "containers": 584,
     "distinct_payloads": 563,
-    "matched_units": 1103,
+    "matched_units": 1117,
     "containers_with_any_match": 584,
     "containers_fully_matched": 200,
     "containers_partially_matched": 384,
-    "matched_code_bytes": 10701700,
+    "matched_code_bytes": 11442676,
     "code_bytes": 17342672,
-    "coverage_percent": 61.707330911868716,
+    "coverage_percent": 65.97989052667317,
     "distinct_function_bytes": 1576784,
-    "distinct_matched_bytes": 335340,
-    "distinct_coverage_percent": 21.267339090198785,
+    "distinct_matched_bytes": 342908,
+    "distinct_coverage_percent": 21.747303371926655,
     "basis": "function bytes from tools/overlay_map.py (linear sweep of each container's code hull; repeated code counted once per container; distinct_* counts each relocation-normalized body once)",
     "heuristic_detected_instruction_bytes": 15119236,
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 11737724,
+    "c_or_matched_bytes": 12606656,
     "estimated_total_bytes": 19413792,
-    "coverage_percent": 60.46074872956298,
-    "span_scenario_percent": 59.896932804858984,
+    "coverage_percent": 64.93659765181373,
+    "span_scenario_percent": 64.33104299657857,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus overlay function bytes, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [
@@ -53,14 +53,15 @@
     }
   },
   "debt_markers": {
-    "CAST": 793,
-    "FAKE": 152,
-    "GOTO": 25,
-    "NAME": 532,
-    "ORDER": 49,
+    "CAST": 896,
+    "FAKE": 159,
+    "GOTO": 33,
+    "NAME": 571,
+    "ORDER": 69,
     "PAD": 1,
-    "PADDING": 35,
-    "TYPE": 535
+    "PADDING": 37,
+    "REG": 31,
+    "TYPE": 591
   },
   "rom_verified": true
 }

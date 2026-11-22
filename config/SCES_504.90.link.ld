@@ -630,7 +630,7 @@ SECTIONS
         . = 0x56c448 - 0x568f00;
         build/asm/data/rodata/piece_0056C448.s.o(.rodata)
         . = 0x56c470 - 0x568f00;
-        build/src/game/yi/yi_17A9C0.c.o(.rodata.jtbl_0056C470)
+        build/src/game/yi/yi_17A9C0.c.o(.rodata.cjt0)
         . = 0x56c530 - 0x568f00;
         build/src/game/yi/yi_17A9C0.c.o(.rodata.jtbl_0056C530)
         . = 0x56c5f0 - 0x568f00;
@@ -1164,11 +1164,11 @@ SECTIONS
         . = 0x575470 - 0x568f00;
         build/src/game/op/opu/opu_29A8A8.c.o(.rodata.jtbl_00575470)
         . = 0x5754a0 - 0x568f00;
-        build/src/game/op/opu/opu_29A8A8.c.o(.rodata.jtbl_005754A0)
+        build/src/game/op/opu/opu_29A8A8.c.o(.rodata.cjt0)
         . = 0x5754d8 - 0x568f00;
         build/asm/data/rodata/piece_005754D8.s.o(.rodata)
         . = 0x575530 - 0x568f00;
-        build/src/game/op/opu/opu_29A8A8.c.o(.rodata.cjt0)
+        build/src/game/op/opu/opu_29A8A8.c.o(.rodata.cjt1)
         . = 0x575550 - 0x568f00;
         build/src/game/op/opu/opu_29DC40.c.o(.rodata.cjt0)
         . = 0x575570 - 0x568f00;
@@ -1182,19 +1182,19 @@ SECTIONS
         . = 0x5755e8 - 0x568f00;
         build/asm/data/rodata/piece_005755E8.s.o(.rodata)
         . = 0x575670 - 0x568f00;
-        build/src/game/op/opu/opu_2A43D8.c.o(.rodata.jtbl_00575670)
+        build/src/game/op/opu/opu_2A43D8.c.o(.rodata.cjt0)
         . = 0x5756a0 - 0x568f00;
         build/asm/data/rodata/piece_005756A0.s.o(.rodata)
         . = 0x575780 - 0x568f00;
-        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.jtbl_00575780)
+        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.cjt0)
         . = 0x5757a0 - 0x568f00;
-        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.jtbl_005757A0)
+        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.cjt1)
         . = 0x5757f0 - 0x568f00;
         build/asm/data/rodata/piece_005757F0.s.o(.rodata)
         . = 0x575820 - 0x568f00;
         build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.jtbl_00575820)
         . = 0x575860 - 0x568f00;
-        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.cjt0)
+        build/src/game/op/opu/opu_2A6FE8.c.o(.rodata.cjt2)
         . = 0x575878 - 0x568f00;
         build/asm/data/rodata/piece_00575878.s.o(.rodata)
         . = 0x575a70 - 0x568f00;
