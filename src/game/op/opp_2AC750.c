@@ -187,7 +187,29 @@ INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE7B0);
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", func_002AE840);
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AC750", opp_anmm_rgba3);
+u8 *opp_anmm_rgba3(AnimCtx *o, int b, u8 *p, AnimWork *w)
+{
+    s16 off = *(s16 *)(p + 2);
+    u8 target = p[4];
+    s8 step = p[5];
+    u8 *curp;
+    int diff;
+
+    ((s8 *)w)[off + 0x2C] = step;
+    if (step == 0) {
+        step = 1;
+    }
+    curp = (u8 *)w + (off + 0x1C);
+    if (step < 0) {
+        step = -step;
+    }
+    diff = target - *curp;
+    if (diff < 0) {
+        diff = -diff;
+    }
+    *((u8 *)o + 0x210) = diff / (u8)step;
+    return p + 6;
+}
 
 /* DEBT(CAST): bytecode stream read as raw bytes */
 u8 *func_002AE930(AnimCtx *o, AnimRes *r, u8 *p, AnimWork *w)

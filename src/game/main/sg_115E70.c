@@ -122,7 +122,65 @@ s32 func_001160B0(void)
     return D_00303904;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_115E70", Sg_ControlMain);
+extern s32 D_003038F4;
+extern u8 D_003038FC;
+extern u8 D_003038FD;
+extern u8 D_003038FE;
+extern u8 D_003038FF;
+extern s32 D_00303900;
+extern s8 ffx_debugmode;
+
+void Sg_ControlMain(void)
+{
+    s32 cur;
+    s32 prev;
+
+    D_003038F4 = TkGetControlerHist(0, 0, 0);
+    D_003038FC = TkGetControlerAnalogHist(0, 0, 0, 0);
+    D_003038FD = TkGetControlerAnalogHist(0, 0, 1, 0);
+    D_003038FE = TkGetControlerAnalogHist(0, 0, 2, 0);
+    D_003038FF = TkGetControlerAnalogHist(0, 0, 3, 0);
+    cur = D_003038F4;
+    prev = D_00303900;
+    D_00303900 = cur;
+    D_003038F8 = (cur ^ prev) & cur;
+    Sg_ControlCamera();
+    D_0057F683 = 0;
+    D_00303904 = 0;
+    if (ffx_debugmode == 0) {
+        return;
+    }
+    if (Sg_GetLRButtonMode() != 0) {
+        return;
+    }
+    if (D_003038F4 & 1) {
+        D_0057F681 = 1;
+    } else {
+        D_0057F681 = 0;
+    }
+    if ((D_003038F4 & 8) != 0) {
+        if ((D_003038F4 & 4) == 0) {
+            goto check_neg;
+        }
+        if ((D_003038F8 & 4) != 0) {
+            D_003038EC++;
+        }
+    }
+    if ((D_003038F4 & 4) != 0) {
+        if ((D_003038F4 & 8) != 0) {
+            if ((D_003038F8 & 8) != 0) {
+                D_003038EC--;
+            }
+        } else {
+            D_00303904 = 1;
+        }
+    }
+check_neg:
+    if (D_003038EC < 0) {
+        D_003038EC = 0;
+        D_0057F683 = 1;
+    }
+}
 
 void func_00116280(s32 a, float v)
 {
