@@ -518,7 +518,83 @@ s16 *opu_dvd(ScriptThread *th, s16 *pc)
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opu_file);
+extern char D_00575878[];
+extern char D_005758B8[];
+extern char D_005758E0[];
+extern char D_00575900[];
+extern char D_00575930[];
+extern char D_00575960[];
+extern char D_00575988[];
+extern char D_005759A0[];
+extern char D_005759C8[];
+int Ch_TextureGetNbImage(Chr *chr);
+void *Ch_TextureGetImagePtr(Chr *chr, int i, int *w, int *h);
+int func_00117580(Chr *chr);
+void *func_001175D8(Chr *chr, int i, int *nb);
+
+s16 *opu_file(void *a0, s16 *p)
+{
+    char path[0x200];
+    int w;
+    int h;
+    int nb;
+    int chrno;
+    int idx;
+    Chr *chr;
+    int n_img;
+    int n_clut;
+    int cnt;
+    int i;
+    void *ptr;
+    int fd;
+
+    if (p[1] == 0) {
+        chrno = p[2];
+        i = opus_get_chr_status_index_by_chrno(chrno);
+        if (i >= 0) {
+            chr = owu_chr_status[i].chr;
+            if (chr != 0) {
+                n_img = p[3];
+                n_clut = p[4];
+                func_00120108(D_00575878, chrno);
+                cnt = Ch_TextureGetNbImage(chr);
+                if (cnt != n_img) {
+                    func_00120108(D_005758B8, cnt);
+                } else {
+                    func_00120108(D_005758E0, cnt);
+                }
+                for (i = 0; i < cnt; i++) {
+                    ptr = Ch_TextureGetImagePtr(chr, i, &w, &h);
+                    func_00120108(D_00575900, i, w * h);
+                    func_002F0008(path, D_00575930, chrno, i);
+                    fd = func_002FC4E0(path, 0x602);
+                    if (fd >= 0) {
+                        func_002FCD90(fd, ptr, w * h);
+                        func_002FC768(fd);
+                    }
+                }
+                cnt = func_00117580(chr);
+                if (cnt != n_clut) {
+                    func_00120108(D_00575960, cnt);
+                } else {
+                    func_00120108(D_00575988, cnt);
+                }
+                for (i = 0; i < cnt; i++) {
+                    ptr = func_001175D8(chr, i, &nb);
+                    func_00120108(D_005759A0, i, nb);
+                    func_002F0008(path, D_005759C8, chrno, i);
+                    fd = func_002FC4E0(path, 0x602);
+                    if (fd >= 0) {
+                        func_002FCD90(fd, ptr, nb * 4);
+                        func_002FC768(fd);
+                    }
+                }
+            }
+        }
+        p += 5;
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opu_mimic);
 

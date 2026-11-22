@@ -446,7 +446,78 @@ int func_00166FC0(void)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00167020);
+extern char D_0056BD70[];
+extern char D_0056BEE0[];
+extern char D_0056BEF8[];
+extern char D_0030DE60[];
+int func_002FE638(const char *path, int arg);
+
+int func_00167020(void)
+{
+    char path[0x80];
+    int arg = 0x2000;
+    int fd;
+    int retry_busy;
+    int retry_io;
+    int i;
+    int n;
+
+    func_001660C0();
+    func_00166458();
+    func_002F0008(path, D_0056BD70, func_001672C0(), D_0030DE68);
+    fd = func_002FC4E0(path, 2);
+    if (fd >= 0) {
+        func_002FD3A0(fd, 0x6802, 0, 0, 0, 0);
+        func_002FC768(fd);
+        func_002FD720(path);
+    }
+    retry_busy = 0;
+    retry_io = 0;
+retry: /* DEBT(GOTO): original retries partition open/create via backward goto (no loop hoisting) */
+    func_002F0008(path, D_0056BEE0, func_001672C0(), D_0030DE68, D_0030DE78);
+    fd = func_002FC4E0(path, 0x203);
+    if (fd < 0) {
+        switch (fd) {
+        case -0x10:
+            func_00166458();
+            retry_busy++;
+            if (retry_busy < 5) {
+                goto retry;
+            }
+            return 1;
+        case -0x1B:
+            func_00166458();
+            return 2;
+        case -0xD:
+            return 1;
+        default:
+            func_001661A8();
+            return 1;
+        }
+    }
+    n = func_00167920(0) / 128;
+    for (i = 0; i < n; i++) {
+        if (func_002FD3A0(fd, 0x6801, D_0030DE60, func_002F0840(D_0030DE60) + 1, 0, 0) < 0) {
+            func_002FD3A0(fd, 0x6802, 0, 0, 0, 0);
+            retry_io++;
+            func_002FC768(fd);
+            func_002FD720(path);
+            if (retry_io < 2) {
+                goto retry;
+            }
+            return 2;
+        }
+    }
+    func_002FC768(fd);
+    func_002F0008(path, D_0056BD70, func_001672C0(), D_0030DE68);
+    if (func_002FD910(D_0056BEF8, path, &arg, 4) < 0) {
+        func_001661A8();
+        return 1;
+    }
+    func_002FE638(path, 0);
+    func_001661A8();
+    return 0;
+}
 
 char *func_001672C0(void)
 {
