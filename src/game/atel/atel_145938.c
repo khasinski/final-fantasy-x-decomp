@@ -440,7 +440,170 @@ void func_001463F0(int unused)
     func_001394E0();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", AtelEventRemoveForBattle);
+typedef struct {
+    u8 pad00[0x33];
+    u8 b33;
+    union {
+        s32 u;
+        struct {
+            u32 lo : 29;
+            u32 mgrp : 2;
+            u32 hi : 1;
+        } bf;
+    } f34;
+    s32 f38;
+    u8 pad3C[0x60];
+    void *chr;
+    s32 fA0;
+    u8 padA4[4];
+    u16 hA8;
+    u8 bAA;
+    u8 padAB[0xA49];
+    void *elem[2];
+    u8 padAFC[8];
+    u16 elem_id[2];
+    u8 padB08[8];
+    s32 fB10;
+} AtelRemoveWork; /* DEBT(NAME): AtelBasicWork offset view for AtelEventRemoveForBattle */
+
+extern s32 D_0058E418;
+extern s32 D_0058E428;
+extern void SndSepLock(int);
+extern int MsBattleGetChrDisposeFlag(void);
+extern void Yn_BattleBegin(void);
+extern void func_0019CE30(int);
+extern int yiGetDrawMask(void);
+extern void pppFpSaveStat(void *);
+extern void func_001382F0(void);
+extern int Yn_GuideMapGetMapNo(void);
+extern int func_00145188(int);
+extern int AtelChangeCurrentCtrl(int);
+extern void SndStopStream(void);
+extern int ChN_ExistSystemMGRP(int, int);
+extern void ChN_DisposeSystemMGRP(int, int);
+extern void TkCh_Dispose(void *);
+
+void AtelEventRemoveForBattle(int v)
+{
+    int dispose;
+    int save;
+    int total;
+    int i;
+
+    SndSepLock(0);
+    dispose = MsBattleGetChrDisposeFlag();
+    Yn_BattleBegin();
+    func_0019CE30(0);
+    D_0058E428 = yiGetDrawMask();
+    func_002EF0D0(D_0058E490, 0, 0x100);
+    pppFpSaveStat(D_0058E490);
+    func_001382F0();
+    D_0058E418 = Yn_GuideMapGetMapNo();
+    if (func_00145188(0) == 0) {
+        return;
+    }
+    save = AtelChangeCurrentCtrl(0);
+    total = AtelGetCtrlworkActorTotal(AtelGetCurCtrlWork());
+    SndStopStream();
+    for (i = 0; i < total; i++) {
+        AtelRemoveWork *w = (AtelRemoveWork *)AtelGetBasicWork(i); /* DEBT(CAST): AtelBasicWork offset view */
+        w->f34.u &= ~4;
+        if (w->bAA != 1) {
+            continue;
+        }
+        if (w->chr != 0 && !(w->f34.u & 0x400000)) {
+            Ch_SetSp(w->chr, 0.0f);
+        }
+        w->b33 &= ~4;
+        w->f34.bf.mgrp = 0;
+        w->fB10 &= ~1;
+        w->fA0 = 0;
+        if (w->chr == 0) {
+            continue;
+        }
+        if (ChN_ExistSystemMGRP(w->hA8, 0) != 0) {
+            w->f34.bf.mgrp |= 1;
+        }
+        if (ChN_ExistSystemMGRP(w->hA8, 2) != 0) {
+            w->f34.bf.mgrp |= 2;
+        }
+        w->fA0 = Ch_GetHideEvent(w->chr);
+        if (w->f38 & 0x1000) {
+            w->fA0 = 0;
+        }
+        if (!(w->f38 & 0x800)) {
+            func_00110908(w->chr, 0);
+        }
+        w->f38 &= ~0x800;
+        func_00145CA0(w);
+        if (w->chr == 0) {
+            continue;
+        }
+        if (w->b33 & 2) {
+            if (!(w->f34.u & 0x400000)) {
+                if (ChN_ExistSystemMGRP(w->hA8, 0) != 0) {
+                    ChN_DisposeSystemMGRP(w->hA8, 0);
+                }
+                if (ChN_ExistSystemMGRP(w->hA8, 2) != 0) {
+                    ChN_DisposeSystemMGRP(w->hA8, 2);
+                }
+            }
+            w->b33 &= ~2;
+        }
+        if (w->chr == 0) {
+            continue;
+        }
+        if (w->b33 & 0x10) {
+            if (!(w->f34.u & 0x400000)) {
+                if (w->elem[0] != 0) {
+                    TkCh_Dispose(w->elem[0]);
+                    if (dispose != 0) {
+                        ChN_DataDispose(w->elem_id[0], 0);
+                    }
+                    w->elem[0] = 0;
+                }
+            }
+            w->b33 &= ~0x10;
+        }
+        if (w->chr == 0) {
+            continue;
+        }
+        if (w->b33 & 0x20) {
+            if (!(w->f34.u & 0x400000)) {
+                if (w->elem[1] != 0) {
+                    TkCh_Dispose(w->elem[1]);
+                    if (dispose != 0) {
+                        ChN_DataDispose(w->elem_id[1], 0);
+                    }
+                    w->elem[1] = 0;
+                }
+            }
+            w->b33 &= ~0x20;
+        }
+        if (w->chr == 0) {
+            continue;
+        }
+        if ((w->b33 & 1) && !(w->f34.u & 0x400000)) {
+            int j;
+            w->b33 &= ~1;
+            for (j = 0; j < 2; j++) {
+                if (w->elem[j] != 0) {
+                    TkCh_Dispose(w->elem[j]);
+                    if (dispose != 0) {
+                        ChN_DataDispose(w->elem_id[j], 0);
+                    }
+                    w->elem[j] = 0;
+                }
+            }
+            TkCh_Dispose(w->chr);
+            if (dispose != 0) {
+                ChN_DataDispose(w->hA8, 0);
+            }
+            w->chr = 0;
+        }
+    }
+    AtelSetCurrentCtrl(save);
+}
 
 typedef struct Tbl146A68Ent {
     int w0;
