@@ -25,7 +25,213 @@ int MsInsertCommandCue(int id, GsEnt48 *e, int n, int a, int b, int c, int d);
 s8 MsGetChrCursorFlag(int id);
 s8 MsGetChrDist(int id);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C8C80);
+extern const s8 _d_00576479 __asm__("D_00576479");
+extern void MsBtlReadManage(void);
+extern int func_0020D540(void);
+extern int MsSEP3Dprocess(void);
+extern void MsMenuCloseTitleWindow(int);
+extern void MsResetNormalCalc(void);
+extern void MsSEPtransProcess(void);
+extern void func_001E5FF8(void);
+extern int MsCheckChrHitMotionAll(void);
+extern void TOControlBtlWindow(void);
+extern void MsLimitTypeProcess(void);
+extern void MsMessageCueProcess(void);
+extern void MsNumberCalcProcess(void);
+extern void func_001D25E0(void);
+extern void MsMotionPosCheckAll(void);
+extern void MsEffectStart(void);
+extern int TkCheckSoftWareReset(void);
+extern void opd_exit_from_ovl(void);
+extern void MsNowMusicStop(void);
+extern void MsCameraInit(void);
+extern void MsBattleAllFree(void);
+extern void MsEtEffectFree(void);
+extern void MsBattleMemInit(void);
+extern void MsEnvInit(void);
+extern void MsBattleInit(void);
+extern void func_001AD9C0(void);
+extern void MsBattleExe(int, int, int, int);
+extern void func_001540C0(int);
+extern void func_002D8778(int);
+extern void func_0020AE58(void);
+extern void MsBtlGetTerm(void);
+extern void MsSetSaveData(void);
+extern void MsBattleFree(void);
+extern void func_00148390(int, int, int, int);
+extern int func_204B198(void);
+extern void MsBattleLabelExe(int, int, int);
+extern void MsEventEffectProcess(void);
+
+typedef struct {
+    u8 pad0[0x10];
+    s8 f10;
+    s8 f11;
+    s8 f12;
+    s8 f13;
+    s8 f14;
+    s8 f15;
+    u8 pad16[0x2C - 0x16];
+    s8 f2C;
+    u8 pad2D[0x4A - 0x2D];
+    s8 f4A;
+    u8 pad4B[0x104 - 0x4B];
+    u8 f104;
+    u8 pad105[0x120 - 0x105];
+    s16 *p120;
+    u8 pad124[0x12C - 0x124];
+    u8 *p12C;
+    u8 pad130[0x1984 - 0x130];
+    s16 f1984;
+    s16 f1986;
+    s8 f1988;
+    s8 f1989;
+    u8 pad198A[0x2010 - 0x198A];
+    s32 f2010;
+    s32 f2014;
+    u8 pad2018[0x2030 - 0x2018];
+    s32 f2030;
+    s32 f2034;
+    s32 f2038;
+    u8 pad203C[0x2100 - 0x203C];
+    s8 f2100;
+    s8 f2101;
+    u8 pad2102[0x2116 - 0x2102];
+    s8 f2116;
+    u8 pad2117[0x211A - 0x2117];
+    s8 f211A;
+    u8 pad211B;
+    u8 f211C;
+    u8 f211D;
+    u8 pad211E[0x2125 - 0x211E];
+    u8 f2125;
+    s8 f2126;
+    u8 pad2127;
+    s8 f2128;
+    u8 pad2129[0x2131 - 0x2129];
+    s8 f2131;
+} GsMain;
+extern GsMain _gs_main __asm__("D_003172F0");
+
+void func_001C8C80(void)
+{
+    int pad;
+    int dbg;
+
+    MsBtlReadManage();
+    dbg = _d_00576479;
+    if (dbg == 1) {
+        func_001CB8A8(_gs_main.f2C);
+    }
+    if (MsBattleGetStatus() != 0) {
+        if (func_0020D540() != 0) {
+            MsBattleProcess();
+        }
+        pad = TkGetControlerHist(0, 0, 0);
+        _gs_main.f2034 = pad;
+        _gs_main.f2131 = MsSEP3Dprocess();
+        _gs_main.f2030++;
+        _gs_main.f2116 = 0;
+        _gs_main.f2010 = 0;
+        _gs_main.f2014 = 0;
+        if (_gs_main.f2100 != 0) {
+            _gs_main.f2100--;
+        }
+        if (_gs_main.f2101 > 0) {
+            _gs_main.f2101--;
+            if (_gs_main.f2101 <= 0) {
+                MsMenuCloseTitleWindow(0);
+            }
+        }
+        if (_gs_main.f2125 != 0) {
+            _gs_main.f2126 = MsCheckPlyBtlPosAll();
+            if (_gs_main.f2126 == 0) {
+                _gs_main.f2125 = 0;
+                MsResetNormalCalc();
+            }
+        }
+        MsSEPtransProcess();
+        if (func_001C90C0() != 0 && _gs_main.f10 == 1) {
+            func_001CA248();
+        }
+        func_001CA480();
+        func_001CA998();
+        func_001E5FF8();
+        _gs_main.f211A = MsCheckChrHitMotionAll();
+        if (_gs_main.f211C != 0) {
+            _gs_main.f211C--;
+        }
+        if (_gs_main.f211D != 0) {
+            _gs_main.f211D--;
+        }
+        if (func_001C90C0() != 0) {
+            if (_gs_main.f211C == 0) {
+                func_001C9920();
+            }
+            if (_gs_main.f10 == 1) {
+                func_001CA9D8();
+            }
+        }
+        TOControlBtlWindow();
+        func_001CAD60();
+        MsLimitTypeProcess();
+        MsMessageCueProcess();
+        MsNumberCalcProcess();
+        func_001D25E0();
+        MsMotionPosCheckAll();
+        MsEffectStart();
+        if (TkCheckSoftWareReset() != 0 && func_001C9138() != 0) {
+            _gs_main.f13 = 6;
+        }
+        if (_d_00576479 == 1) {
+            if ((pad & 0x800) && func_001C9138() != 0) {
+                volatile GsMain *gm = &_gs_main;
+                register int v5 __asm__("$2") = 5;
+                gm->f13 = v5;
+                gm->f10 = 1;
+            }
+            if (_gs_main.f10 == 1 && (pad & 0x4F) == 0x4F) {
+                opd_exit_from_ovl();
+                MsNowMusicStop();
+                MsCameraInit();
+                if (pad & 0x20) {
+                    MsBattleAllFree();
+                    MsEtEffectFree();
+                    MsBattleMemInit();
+                    MsEnvInit();
+                    MsBattleInit();
+                    func_001AD9C0();
+                }
+                MsBattleExe(0, _gs_main.f1986, _gs_main.f1988, _gs_main.f1989);
+                return;
+            }
+        }
+        if (_gs_main.f10 == 0x21 || _gs_main.f13 == 5 || _gs_main.f13 == 6) {
+            func_001540C0(2);
+            func_002D8778(0);
+            Sg_SetKeepFps(_gs_main.f2128);
+            func_0020AE58();
+            func_0013A278();
+            MsBtlGetTerm();
+            if (_gs_main.f4A == 0) {
+                MsSetSaveData();
+            }
+            MsBattleFree();
+            func_00148390(_gs_main.f104, ((*_gs_main.p120) << 16) | *_gs_main.p12C, _gs_main.f1984, _gs_main.f13);
+            _gs_main.f104 = 0;
+        }
+        _gs_main.f2038 = _gs_main.f2034;
+    } else {
+        if (dbg == 1 && FFXIsDebug() != 0 && (TkGetControlerHist(0, 0, 0) & 0x4F) == 0x4F) {
+            func_0020AE58();
+            MsBattleLabelExe(func_204B198(), 0, 0);
+        }
+        if (_gs_main.f12 != 0) {
+            MsBattleExe(0, _gs_main.f1986, _gs_main.f1988, _gs_main.f1989);
+        }
+    }
+    MsEventEffectProcess();
+}
 
 /* DEBT(CAST) */
 s32 func_001C90C0(void) {
@@ -284,8 +490,213 @@ int func_001CA438(BtlChr *c) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CA480);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E760);
+extern int func_001C5E90(int, int, int);
+extern void MsPoisonProcess(int, BtlChr *);
+extern void MsEffectFree(int);
+extern void MsEffectCameraCall(int, int);
+extern void MsEffectCameraEnd(int);
+extern void MsScreenFocusResetAll(void);
+extern void MsSetChrPosAfterSummon(int, int, int);
+extern void MsReturnSummon(int);
+extern void MsSetEscapeFlag(int, BtlChr *, int);
+extern void MsSetEscapeFlagAll(int);
+extern void MsBtlChrFree(int, int);
+extern void MsMusicVolume(int, int);
+extern void func_001CFBC8(int);
+extern void MsCommandReturnChrStatusAll(int);
+extern void MsBattleSpecialCameraFree(void);
+extern void MsResetAfterImage(BtlChr *);
+extern void func_001B7498(int, int);
+
+typedef struct {
+    u8 pad0[0x57];
+    s8 f57;
+    u8 pad58[0x1510 - 0x58];
+    s8 f1510;
+    s8 f1511;
+    u8 pad1512[0x1753 - 0x1512];
+    u8 f1753;
+    u8 pad1754[0x197C - 0x1754];
+    s32 f197C;
+    s32 f1980;
+    u8 pad1984[0x2004 - 0x1984];
+    s32 f2004;
+    u8 pad2008[0x200C - 0x2008];
+    s32 f200C;
+    u8 pad2010[0x2030 - 0x2010];
+    s32 f2030;
+    u8 pad2034[0x2101 - 0x2034];
+    s8 f2101;
+    s8 f2102;
+    s8 f2103;
+    u8 pad2104[0x210E - 0x2104];
+    s8 f210E;
+    u8 pad210F[0x2114 - 0x210F];
+    s8 f2114;
+    u8 pad2115[0x2118 - 0x2115];
+    s8 f2118;
+    s8 f2119;
+    u8 pad211A[0x2125 - 0x211A];
+    s8 f2125;
+    u8 pad2126[0x212A - 0x2126];
+    s8 f212A;
+    u8 pad212B[0x2134 - 0x212B];
+    s8 f2134;
+    s8 f2135;
+    u8 pad2136[0x213A - 0x2136];
+    s8 f213A;
+    u8 pad213B[0x213F - 0x213B];
+    s8 f213F;
+    s8 f2140;
+    u8 pad2141[0x2143 - 0x2141];
+    s8 f2143;
+    s8 f2144;
+    s8 f2145;
+    s8 f2146;
+} GsActEnd;
+extern GsActEnd _gs_ae __asm__("D_003172F0");
+
+void func_001CA480(void)
+{
+    int i;
+
+    if (MsBtlReadCueLevel() != 0 || MsSEPtransAmount() != 0) {
+        return;
+    }
+    for (i = 0; i < 31; i++) {
+        BtlChr *c = MsGetChr(i);
+        int done;
+        int ret_sum;
+        u8 *cmd;
+
+        if (c->fAB0 == 0 || c->fAB0 == 4) {
+            continue;
+        }
+        if (c->fAB0 == 5) {
+            func_001CA438(c);
+        } else if (((s8 *)c)[0xAB2] == 0) {
+            if (c->fABB == 0 || c->fABB == 6) {
+                if (_gs_ae.f2101 > 0 && _gs_ae.f2102 - 0x14 < _gs_ae.f2101) {
+                    continue;
+                }
+                if (_gs_ae.f2144 != 0) {
+                    if (func_001CB808() != 0) {
+                        continue;
+                    }
+                    _gs_ae.f2144 = 0;
+                }
+                if (i == _gs_ae.f2114 && ((*(s32 *)((u8 *)c + 0xA80) >> i) & 1) && _gs_ae.f2103 != 0) {
+                    continue;
+                }
+                while (func_001C5E90(i, -5, 0x400) != 0) {
+                }
+                cmd = (u8 *)MsGetChrCommand2(i);
+                if (cmd[2] + 1 >= cmd[3]) {
+                    MsPoisonProcess(i, c);
+                }
+                func_001CA438(c);
+            }
+        }
+        if (c->fAB0 != 1) {
+            continue;
+        }
+        done = 1;
+        ret_sum = 0;
+        MsEffectFree(i);
+        MsMenuCloseTitleWindow(0);
+        MsStructClear((s8 *)c + 0x3EC, 0x48);
+        cmd = (u8 *)MsGetChrCommand2(i);
+        if (cmd != 0) {
+            cmd[2]++;
+            if (cmd[2] < cmd[3]) {
+                done = 0;
+                c->fAB0 = 4;
+                cmd[4] = 0;
+            }
+        }
+        MsEffectCameraCall(-1, 0);
+        MsEffectCameraEnd(1);
+        if (_gs_ae.f57 == 0) {
+            MsScreenFocusResetAll();
+        }
+        switch ((s8)(((u8 *)c)[0xAAA] - 1)) {
+        case 0:
+            _gs_ae.f2140 = 0;
+            MsSetChrPosAfterSummon(_gs_ae.f2119, _gs_ae.f2118, 1);
+            MsSetVoiceCheck(_gs_ae.f2118, 0xC, 1, 0, 0);
+            break;
+        case 1:
+            ret_sum = 1;
+            MsReturnSummon(0);
+            break;
+        case 2:
+            MsReturnSummon(1);
+            break;
+        case 3:
+            MsSetEscapeFlag(i, c, 1);
+            break;
+        case 4:
+            MsSetEscapeFlagAll(1);
+            break;
+        case 5:
+            MsBtlChrFree(i, 0xC);
+            break;
+        case 6:
+            _gs_ae.f2125 = 1;
+            break;
+        }
+        if (_gs_ae.f2134 != 0) {
+            _gs_ae.f2134 = 0;
+            MsMusicVolume(0x7F, 0x1E);
+        }
+        _gs_ae.f200C = 0xFF;
+        _gs_ae.f2004 = 0;
+        _gs_ae.f213F = 0;
+        _gs_ae.f212A = 0;
+        _gs_ae.f210E = 0;
+        _gs_ae.f2135 = 0;
+        _gs_ae.f213A = 1;
+        _gs_ae.f197C = 0;
+        _gs_ae.f1980 = 0;
+        func_001CFBC8(i);
+        MsCommandReturnChrStatusAll(-1);
+        MsBattleSpecialCameraFree();
+        MsResetAfterImage(c);
+        ((s8 *)c)[0xACF] = 1;
+        *(s16 *)((u8 *)c + 0xADA) = -1;
+        ((s8 *)c)[0xAAA] = 0;
+        ((s8 *)c)[0xC1E] = 0;
+        ((s8 *)c)[0xAA9] = 0;
+        if (*(s32 *)((u8 *)c + 0x16C) & 0x10000) {
+            func_001B7498(i, 1);
+        }
+        if (done != 0) {
+            c->fAB0 = 0;
+            ((s8 *)c)[0x390] = 0;
+            _gs_ae.f2145 = 0;
+            ((s8 *)c)[0x110] = 0;
+            MsDeleteCommandCue(i, ((u8 *)c)[0xAA5], 0);
+            MsSetChrWeak(i, -1);
+        }
+        if (func_001CA948(i, c) != 0) {
+            MsSetMotion(i, 0, 0, 0, 1, 0, 0);
+        }
+        Sg_Blur(0);
+        {
+            register int f1753 __asm__("$3") = _gs_ae.f1753;
+            if (f1753 != 0 && (MsGetEndBattleStatus(0) == 0 || _gs_ae.f1510 != 0 || ret_sum != 0 || _gs_ae.f2143 != 0)) {
+                _gs_ae.f2030 = 0;
+                _gs_ae.f1753 = 0;
+                if (_gs_ae.f1511 == 0 || _gs_ae.f2143 != 0) {
+                    MsAtelRequestCamera(0, i, 0x1C, 0xFFFF, 1, 1, 0, 0);
+                } else {
+                    _gs_ae.f2146 = 1;
+                }
+            }
+        }
+        _gs_ae.f2143 = 0;
+    }
+}
 
 int func_001CA948(int id, BtlChr *c) {
     if (c->fDC != 0 && c->fAA7 == 0 && c->f1C8 == 0 && c->fF2 == 0 && c->fDD != 0 && D_00319404 != id) {
@@ -301,7 +712,131 @@ void func_001CA998(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CA9D8);
+extern char D_0056E780[];
+extern int func_001DB3B8(BtlChr *);
+extern void MsCheckStatusBeforeAction(int, BtlChr *);
+extern int MsGetRamChrSummon(int);
+extern void TOSetBtlActiveChr(int);
+
+typedef struct {
+    u8 pad0[0x14];
+    s8 f14;
+    u8 pad15[0x2A - 0x15];
+    s8 f2A;
+    u8 pad2B[0x1511 - 0x2B];
+    s8 f1511;
+    u8 pad1512[0x15C0 - 0x1512];
+    s32 f15C0;
+    u8 pad15C4[0x1FFC - 0x15C4];
+    s32 f1FFC;
+    u8 pad2000[0x2020 - 0x2000];
+    s32 f2020;
+    u8 pad2024[0x2078 - 0x2024];
+    s16 f2078;
+    u8 pad207A[0x2103 - 0x207A];
+    s8 f2103;
+    u8 pad2104[0x210F - 0x2104];
+    s8 f210F;
+    u8 pad2110[0x2135 - 0x2110];
+    s8 f2135;
+} GsInpCue;
+extern GsInpCue _gs_ic __asm__("D_003172F0");
+
+void func_001CA9D8(void)
+{
+    GsEnt48 ent;
+
+    if (_gs_ic.f2135 != 0) {
+        return;
+    }
+    while (1) {
+        u8 *cue = (u8 *)MsGetInputCue();
+        int id;
+        BtlChr *c;
+        int st;
+        int need_menu;
+
+        if (cue == 0 || cue[3] != 0) {
+            break;
+        }
+        id = cue[0];
+        if (MsBtlChrNumCheck(id) != 0) {
+            c = MsGetChr(id);
+            st = func_001DB3B8(c);
+            if (st == 2) {
+                if (_gs_ic.f1511 != 0) {
+                    break;
+                }
+            } else if (st == 1) {
+                if (_gs_ic.f2103 != 0) {
+                    break;
+                }
+            }
+            MsCheckStatusBeforeAction(id, c);
+            cue = (u8 *)MsGetInputCue();
+            if (cue == 0 || cue[3] != 0) {
+                break;
+            }
+            if (c->fA8C == 0 && MsGetEndBattleStatus(0) == 0) {
+                _gs_ic.f15C0 = 0;
+                _gs_ic.f2020 = 0;
+                _gs_ic.f1FFC = 0;
+                _gs_ic.f210F = id;
+                _gs_ic.f2078 = 0;
+                if (_gs_ic.f1511 == 0) {
+                    MsAtelRequestCamera(0, id, 0x3E, 0xFFFF, 0, 1, 0, 0);
+                }
+                if (((s8 *)c)[0xAB7] == 0) {
+                    ((s8 *)c)[0xAB7] = 1;
+                    MsActionRequest(id, 0xFF, 1, 0, 2, 0);
+                    if (MsGetRamChrSummon(id) != 0) {
+                        MsActionRequest(id, 0xFF, 0xC, 1, 2, 0);
+                    }
+                }
+                if (_gs_ic.f14 != 0) {
+                    break;
+                }
+                cue[3] = 1;
+                c->fAA4 = 0;
+                ((s8 *)c)[0xAB7] = 0;
+                need_menu = 1;
+                if (MsSetDeathSentence(id, c, &ent, cue[1]) != 0) {
+                    need_menu = 0;
+                } else if (((u8 *)c)[0x2C8] != 0) {
+                    ent.id = id;
+                    ent.f3 = 0;
+                    MsSetBtlCommand((u8 *)&ent, 0, cue[1]);
+                    need_menu = 0;
+                } else if ((c->f2C6 >> 10) & 1) {
+                    if (MsSetProvokingCommand(id, c, &ent, cue[1]) != 0) {
+                        need_menu = 0;
+                    }
+                } else if ((c->f2C6 >> 9) & 1) {
+                    MsSetBerserkCommand(id, c, &ent, cue[1], 0);
+                    need_menu = 0;
+                } else if ((c->f2C6 >> 8) & 1) {
+                    MsSetBerserkCommand(id, c, &ent, cue[1], 1);
+                    need_menu = 0;
+                }
+                if (need_menu != 0) {
+                    if (func_001CACF8(id, c) == 0 || _gs_ic.f2A != 0) {
+                        TOSetBtlActiveChr(id);
+                    } else {
+                        ent.id = id;
+                        ent.f3 = 0;
+                        MsSetBtlCommand((u8 *)&ent, 0, cue[1]);
+                    }
+                }
+                c->f3D6 = 0;
+            } else {
+                MsDeleteInputCue(id, 0, 0, 0);
+            }
+        } else {
+            MsDeleteInputCue(id, 0, 0, 0);
+            MsBattleError(D_0056E780);
+        }
+    }
+}
 
 int func_001CACF8(int kind, BtlChr *c) {
     s8 r = c->fAB3;
@@ -315,8 +850,271 @@ int func_001CACF8(int kind, BtlChr *c) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CAD60);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E7A0);
+extern char D_0056E790[];
+extern int MsSystemMessageCheck(void);
+extern int MsDefenseProcess(void);
+extern int func_001DBB50(BtlChr *);
+extern int MsSetRikkuLimit(int, BtlChr *, GsEnt48 *);
+extern int MsCheckRikkuLimit(int, BtlChr *, GsEnt48 *);
+extern void func_001D9E70(int);
+extern void func_001B8728(void);
+extern int MsCheckSummon(int, BtlChr *, int, GsEnt48 *);
+extern int MsCalcMagic(GsEnt48 *, int);
+extern void MsActionTarget(int, int, GsEnt48 *, int, int, int);
+extern void MsCalcCommand(GsEnt48 *, int);
+extern void MsDefenseStartProcess(void);
+extern void MsMessageCueRegist(int, int, int, int, int);
+extern int func_001D9DF0(int);
+extern void func_001D9D68(int, int);
+extern void func_001DBB30(BtlChr *);
+extern void MsParseCommand(GsEnt48 *);
+extern int func_001CB4E0(int);
+extern int func_001CB560(int, GsEnt48 *, int, int *);
+extern int MsSetChrMimic(int, BtlChr *, GsEnt48 *);
+extern int func_001CB888(int, Q4Obj176 *);
+extern int SndGetStreamState(void);
+extern int MsAutoCommandStatusCheck(BtlChr *, int, int, int);
+extern void msResetHeadTarget(BtlChr *);
+extern int MsUseItem(int, GsEnt48 *, int);
+
+typedef struct {
+    u8 pad0[0x15C0];
+    s32 f15C0;
+    u8 pad15C4[0x1753 - 0x15C4];
+    s8 f1753;
+    u8 pad1754[0x1FF8 - 0x1754];
+    s32 f1FF8;
+    u8 pad1FFC[0x2074 - 0x1FFC];
+    u8 f2074;
+    u8 pad2075[0x2104 - 0x2075];
+    s8 f2104;
+    u8 pad2105[0x210F - 0x2105];
+    s8 f210F;
+    s8 f2110;
+    s8 f2111;
+    s8 f2112;
+    u8 pad2113[0x2125 - 0x2113];
+    u8 f2125;
+    u8 pad2126[0x212B - 0x2126];
+    s8 f212B;
+    u8 pad212C[0x2138 - 0x212C];
+    s64 f2138;
+    u8 pad2140[0x2146 - 0x2140];
+    u8 f2146;
+} GsCmdProc;
+typedef struct {
+    u8 pad0[0x1753];
+    s8 f1753;
+    u8 pad1754[0x210F - 0x1754];
+    s8 f210F;
+    s8 f2110;
+    s8 f2111;
+    s8 f2112;
+    u8 pad2113[0x213A - 0x2113];
+    s8 f213A;
+    u8 pad213B[0x213F - 0x213B];
+    s8 f213F;
+    u8 pad2140[0x2146 - 0x2140];
+    u8 f2146;
+} GsCmdProc2;
+extern GsCmdProc _gs_cp __asm__("D_003172F0");
+extern GsCmdProc2 _gs_cp2 __asm__("D_003172F0");
+
+int func_001CAD60(void)
+{
+    int far_cnt;
+    int ret = 0;
+    int ok;
+
+    if (_gs_cp.f2125 != 0 || _gs_cp.f2104 != 0 || (_gs_cp.f2138 & 0x0000FF00FF000000LL) || _gs_cp.f2074 != 0 || SndGetStreamState() != 0 || MsSystemMessageCheck() != 0) {
+        return 0;
+    }
+    while (1) {
+        GsEnt48 *e = (GsEnt48 *)func_001D92A0();
+        int id;
+        BtlChr *c;
+        int kind;
+
+        if (e == 0 || ((u8 *)e)[4] == 1) {
+            break;
+        }
+        id = e->id;
+        c = MsGetChr(id);
+        if (((s8 *)c)[0xF3] != 0 || ((s8 *)c)[0x1CE] != 0) {
+            break;
+        }
+        kind = ((u8 *)e)[1];
+        if (MsBtlChrNumCheck(id) != 0 && (u32)kind < 2) {
+            ok = 1;
+            switch (((u8 *)e)[4]) {
+            case 2:
+                if (func_001CB4E0(_gs_cp.f1FF8) == 0) {
+                    ((u8 *)e)[4] = 1;
+                    c->fAB0 = 3;
+                }
+                break;
+            case 3:
+                if (MsDefenseProcess() != 0) {
+                    _gs_cp.f212B = 2;
+                    ((u8 *)e)[4] = 1;
+                    *(s32 *)((u8 *)c + 0xA80) = e->f8[((u8 *)e)[2]].targets;
+                    c->fAB0 = 3;
+                }
+                break;
+                case 6:
+                    if (func_001DBB50(c) != 0) {
+                        ((u8 *)e)[4] = 1;
+                        c->fAB0 = 3;
+                        ((s8 *)c)[0x3A0] = 0;
+                    }
+                    break;
+                case 4:
+                    if (c->f1C8 != 0 || c->fF6 != 0) {
+                        break;
+                    }
+                    *(s32 *)((u8 *)c + 0xA80) = 0;
+                    ((s8 *)c)[0xF5] = 1;
+                    MsSetMotion(id, 0x1D, 1, 0, 1, 0, 0);
+                    MsAtelRequestCamera(0, id, 0x46, 0xFFFF, 0, 1, 0, 0);
+                    ((u8 *)e)[4] = 5;
+                    /* fallthrough */
+                case 5:
+                    if (MsSetRikkuLimit(id, c, e) != 0) {
+                        break;
+                    }
+                    /* fallthrough */
+                default:
+                    if (MsCheckRikkuLimit(id, c, e) != 0) {
+                        break;
+                    }
+                    if (id == 5 && ((int (*)(int, BtlChr *, GsEnt48 *))func_001CB888)(5, c, e) != 0) {
+                        break;
+                    }
+                    if (_gs_cp2.f2146 != 0) {
+                        MsAtelRequestCamera(0, id, 0x1C, 0xFFFF, 1, 1, 0, 0);
+                        _gs_cp2.f2146 = 0;
+                    }
+                    ret = 1;
+                    {
+                        int sub = 0;
+                        int targets = 0;
+                        int mimic_fail = MsSetChrMimic(id, c, e);
+
+                        ((u8 *)e)[4] = ret;
+                        ((u8 *)e)[5] = 0;
+                        ((u8 *)c)[0xAA5] = 0;
+                        c->fAB0 = 2;
+                        ((s8 *)c)[0xAA9] = ret;
+                        ((s8 *)c)[0xAB1] = kind;
+                        {
+                            volatile GsCmdProc2 *gp = &_gs_cp2;
+                            gp->f213A = 0;
+                            gp->f213F = ret;
+                            gp->f1753 = ret;
+                            gp->f210F = id;
+                            gp->f2110 = id;
+                            gp->f2112 = id;
+                        }
+                        far_cnt = 0;
+                        msResetHeadTarget(c);
+                        func_001D9E70(id);
+                        func_001B8728();
+                        if (((u8 *)c)[0x2C8] == 0) {
+                            if (MsCheckSummon(id, c, kind, e) != 0) {
+                                if (e->f3 == 0) {
+                                    ((s8 *)c)[0xAB4] = ret;
+                                    if (kind == 0) {
+                                        MsActionRequest(id, 0xFF, 0, 1, 0, (void *)e);
+                                    } else {
+                                        MsActionRequest(id, 0xFF, 3, 1, kind, (void *)e);
+                                    }
+                                } else if (((u8 *)e)[2] == 0) {
+                                    ((s8 *)c)[0xAB4] = 0;
+                                }
+                            }
+                            sub = ((u8 *)e)[2];
+                            targets = e->f8[sub].targets;
+                            _gs_cp.f1FF8 = targets;
+                        }
+                        if (((u8 *)e)[7] == 0x30 && MsAutoCommandStatusCheck(c, 1, 1, 1) == 0) {
+                            targets = 0;
+                            e->f8[sub].targets = 0;
+                        }
+                        ok = 0;
+                        ((u8 *)c)[0xAAA] = ((u8 *)e)[6];
+                        if (mimic_fail == 0 && e->f3 != 0 && MsCalcMagic(e, sub) != 0) {
+                            *(s32 *)((u8 *)c + 0xA80) = targets;
+                            MsActionTarget(targets, id, e, sub, 2, 1);
+                            if (func_001CB560(id, e, sub, &far_cnt) != 0) {
+                                *(s32 *)((u8 *)c + 0xA84) = *(s32 *)((u8 *)c + 0xA80);
+                                MsCalcCommand(e, sub);
+                                {
+                                    register int tgt __asm__("$3") = *(s32 *)((u8 *)c + 0xA80);
+                                    if (tgt == 0 || e->f8[sub].targets != 0) {
+                                        c->fAB0 = 3;
+                                        MsPayGIL(_gs_cp.f15C0);
+                                        if (func_001CB4E0(targets) != 0) {
+                                            c->fAB0 = 4;
+                                            ((u8 *)e)[4] = 2;
+                                        }
+                                        if (_gs_cp.f212B != 0) {
+                                            MsDefenseStartProcess();
+                                            c->fAB0 = 4;
+                                            ((u8 *)e)[4] = 3;
+                                        }
+                                        ok = 1;
+                                    }
+                                }
+                            }
+                        }
+                        if (ok == 0) {
+                            if (mimic_fail != 0) {
+                                MsMessageCueRegist(1, id, 0x3016, 0x1B, 0x23);
+                            } else {
+                                int retry = 0;
+
+                                MsUseItem(id, e, 1);
+                                if (far_cnt != 0 && ((s8 *)c)[0xAB4] == 0) {
+                                    retry = 1;
+                                    MsMessageCueRegist(1, id, 0x300E, 0x1B, 0x23);
+                                } else if (((u8 *)c)[0x3D7] != 0) {
+                                    retry = 0;
+                                    MsMessageCueRegist(1, id, 0x3017, 0x1B, 0x23);
+                                    MsSetMotion(id, 0x22, 1, 1, 1, 0, 0);
+                                }
+                                if (retry != 0 && func_001D9DF0(id) != 0) {
+                                    _gs_cp2.f213F = 0;
+                                    c->fAB0 = 0;
+                                    c->f3D6 = 1;
+                                    func_001D9D68(id, 0);
+                                    MsDeleteCommandCue(id, ((u8 *)c)[0xAA5], 0);
+                                }
+                            }
+                            ((s8 *)c)[0x38C] = 0;
+                            ((s8 *)c)[0x38D] = 0;
+                            ((s8 *)c)[0xAB2] = 0;
+                        }
+                        if (((u8 *)c)[0x3A0] != 0) {
+                            func_001DBB30(c);
+                            c->fAB0 = 4;
+                            ((u8 *)e)[4] = 6;
+                        }
+                    }
+                    break;
+                }
+                if (((u8 *)e)[4] == 1 && ok != 0) {
+                    *(GsEnt48 *)((u8 *)c + 0x3EC) = *e;
+                    MsParseCommand(e);
+                }
+                break;
+            } else {
+                MsDeleteInputCue(id, c->fAA4, 0, 0);
+                MsDeleteCommandCue(id, 0, 0);
+                MsBattleError(D_0056E790);
+            }
+    }
+    return ret;
+}
 
 int func_001CB4E0(int mask) {
     int i;
@@ -334,7 +1132,69 @@ int func_001CB4E0(int mask) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001CB560);
+extern int MsAutoCommandStatusCheck(BtlChr *, int, int, int);
+extern void msResetHeadTarget(BtlChr *);
+
+int func_001CB560(int id, GsEnt48 *e, int idx, int *out_far)
+{
+    int ret = -1;
+    int mask = 0;
+    int far_cnt = 0;
+    int targets;
+    int allow_dead;
+    int bit27;
+    OfsTbl *cmd;
+
+    targets = e->f8[idx].targets;
+    cmd = (OfsTbl *)MsGetCommand(id, 0, -1, (void *)&e->f8[idx], 0);
+
+    if (cmd != 0) {
+        int far;
+        int i;
+
+        bit27 = (*(u32 *)((u8 *)cmd + 0x1C) >> 27) & 1;
+        allow_dead = (cmd->h1A >> 6) & 1;
+        far = MsGetCommandFar(id, (Obj1A *)cmd);
+
+        for (i = 0; i < 31; i++) {
+            BtlChr *c = MsGetChr(i);
+
+            if ((targets >> i) & 1) {
+                int skip = 0;
+
+                if (far < ((s8 *)c)[0x1BF] && id != i) {
+                    skip = 1;
+                    far_cnt++;
+                } else if (!allow_dead && c->fA8C != 0) {
+                    skip = 2;
+                }
+                if (skip == 0) {
+                    ((s8 *)c)[0xAAD] = id;
+                    mask |= 1 << i;
+                    MsSetMotion(((s8 *)c)[0xE2], 0x1C, 0, 0, 1, 0, 0);
+                    if (id != i && c->fA8C == 0 && MsAutoCommandStatusCheck(c, 1, 1, 1) != 0) {
+                        if (bit27 != 0) {
+                            msResetHeadTarget(c);
+                        } else {
+                            MsSetHeadTarget(i, 1 << id);
+                        }
+                    }
+                }
+            }
+        }
+        if (((u8 *)cmd)[0x2B] != 0 || ((*(u32 *)((u8 *)cmd + 0x1C) >> 9) & 1) || ((*(u16 *)((u8 *)cmd + 0x20) >> 8) & 1)) {
+            if (mask == 0) {
+                ret = 0;
+            }
+        }
+    }
+    if (out_far != 0) {
+        *out_far = far_cnt;
+    }
+    e->f8[idx].targets = mask;
+    D_003172F0.f1FF8 = mask;
+    return ret;
+}
 
 void func_001CB798(void) {
 }

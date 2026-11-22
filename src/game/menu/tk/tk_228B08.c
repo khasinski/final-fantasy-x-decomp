@@ -406,6 +406,8 @@ void func_00229CE8(int dx, int dy, U3Box *dst, U3Box *src, int size)
     }
 }
 
+extern u16 D_00693A78[];
+
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229D58);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229F98);
@@ -485,7 +487,53 @@ void func_0022A768(int x, int y, int chr, int mode, int *p4, int *p5, int *p6, i
     func_00225AF8();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_0022A9A0);
+typedef struct { s32 a; s32 b; } StatEntry;
+extern StatEntry D_00325808[];
+extern void func_002271B0(int, int, int, int, int, int, int);
+extern int func_00224950(int, int);
+extern void graphicUiRemapY2(void);
+
+void func_0022A9A0(int unused, int y, int chr, int t52)
+{
+    FlagRec r;
+    int off;
+    int sx;
+    int sy;
+    int i;
+    int lt18;
+
+    i = 0;
+    off = (func_002292B8(t52, 1) * 0xD0) / 4096;
+    sx = D_006938D8[0];
+    sy = D_006938D8[1];
+    while (1) {
+        int a;
+        int b;
+
+        MsGetSavePlayerPtr(chr);
+        a = D_00325808[i].a;
+        b = D_00325808[i].b;
+        if (a < 0) {
+            break;
+        }
+        if (i == 4) {
+            sx = D_006938E0[0];
+            sy = D_006938E0[1];
+        }
+        func_002271B0(sx, y + sy + func_00224950(off, i % 4), D_00325878[0], D_00325878[1], chr, a, b);
+        i++;
+        sy += D_006938E4;
+        graphicUiRemapY2();
+    }
+    if ((lt18 = (chr < 0x12), !lt18) || chr < 0xE) {
+        r = D_00325888;
+        r.rect[1] += y;
+        func_00226FE0((DrawArgs *)&r);
+        func_00226E10(D_00325888.rect[0] + D_003258A0[0], y + D_00325888.rect[1] + D_003258A0[1], 0xF3);
+        func_00226350(D_00325888.rect[0] + D_003258A8[0], y + D_00325888.rect[1] + D_003258A8[1], func_00220A78(0x1A), 0);
+    }
+    func_00225B00();
+}
 
 void func_0022ABC8(void) {
 }
@@ -606,7 +654,69 @@ int TkMenuGetCommandOffset(R5Rec4 *p, int flag, int a2, int a3)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuFlushSummonCommand);
+typedef struct { u8 b0; u8 b1; u16 h2; } TkCmdRec;
+extern int MsGetSaveCommandMenuPanel(int);
+
+void TkMenuFlushSummonCommand(int chr)
+{
+    s32 dummy;
+    TkCmdRec *tbl;
+    int n;
+    int off;
+    u16 cmd;
+    int i;
+
+    tbl = (TkCmdRec *)MsMenuStatusNum(0, &dummy);
+    ((void (*)(void))func_002423F0)();
+
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, 1, chr, 1);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, 1, chr, 1);
+    D_00693A98 = 0;
+    for (i = 0; i < n; i++) {
+        cmd = (tbl + off)[i].h2;
+        if (MsGetSaveCommand(chr, cmd)) {
+            D_00693A78[D_00693A98++] = cmd;
+        }
+    }
+
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, 1, chr, 3);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, 1, chr, 3);
+    for (i = 0; i < n; i++) {
+        cmd = (tbl + off)[i].h2;
+        if (MsGetSaveCommand(chr, cmd)) {
+            D_00693A78[D_00693A98++] = cmd;
+        }
+    }
+
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, 1, chr, 4);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, 1, chr, 4);
+    for (i = 0; i < n; i++) {
+        if (MsGetSaveCommand(chr, (tbl + off)[i].h2)) {
+            D_00693A78[D_00693A98++] = (tbl + off)->h2;
+            break;
+        }
+    }
+
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, 1, chr, 5);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, 1, chr, 5);
+    for (i = 0; i < n; i++) {
+        cmd = (tbl + off)[i].h2;
+        if (MsGetSaveCommand(chr, cmd)) {
+            D_00693A78[D_00693A98++] = cmd;
+        }
+    }
+
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, 1, chr, 2);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, 1, chr, 2);
+    D_00693A9A = 0;
+    for (i = 0; i < n; i++) {
+        cmd = (tbl + off)[i].h2;
+        if (MsGetSaveCommand(chr, cmd)) {
+            D_00693A78[D_00693A98 + D_00693A9A] = cmd;
+            D_00693A9A++;
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuGetDispCommand);
 

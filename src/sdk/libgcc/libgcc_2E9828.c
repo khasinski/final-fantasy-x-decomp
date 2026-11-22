@@ -135,7 +135,28 @@ INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EA5C8);
 
 /* Module: libgcc soft-float (fp-bit.c: double + single precision), newlib libm helpers */
 
-INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EAC30);
+typedef union {
+    struct {
+        s32 low;
+        s32 high;
+    } s;
+    long long ll;
+} DIunion;
+
+#define UMUL_PPMM(w1, w0, u, v) \
+    __asm__("multu %2,%3" : "=l"(w0), "=h"(w1) : "d"(u), "d"(v))
+
+long long func_002EAC30(long long u, long long v)
+{
+    DIunion w;
+    DIunion uu, vv;
+
+    uu.ll = u;
+    vv.ll = v;
+    UMUL_PPMM(w.s.high, w.s.low, (u32)uu.s.low, (u32)vv.s.low);
+    w.s.high += ((unsigned int)uu.s.low * (unsigned int)vv.s.high + (unsigned int)uu.s.high * (unsigned int)vv.s.low);
+    return w.ll;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libgcc/libgcc_2E9828", func_002EAC90);
 

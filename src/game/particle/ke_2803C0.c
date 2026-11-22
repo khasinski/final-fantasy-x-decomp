@@ -701,7 +701,78 @@ void func_00282B40(IdPool *pool, u16 *next, u16 count) {
     *next = 0xFFFF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282B88);
+extern u_long128 D_00373060[2];
+extern s8 D_00373080[32];
+void func_002DCFB8(Vec4 *dst, Vec4 *src, float s);
+
+void func_00282B88(u32 c0, u32 c1, u32 *dst, float f)
+{
+    Vec4 step_col;
+    Vec4 cur_col;
+    u32 col1 = c1;
+    u32 col0 = c0;
+    s8 *step;
+    s32 n;
+    s32 i;
+    u32 *p;
+    float cnt;
+    u8 *p1;
+    u8 *p0;
+
+    n = (s32)f;
+    {
+        register u_long128 *s __asm__("$4");
+        step = (s8 *)func_002B3888(0x20);
+        s = D_00373060;
+        ((u_long128 *)step)[0] = s[0];
+        ((u_long128 *)step)[1] = s[1];
+    }
+    if (n < 0) {
+        if (n < -0x100) {
+            n = -0x100;
+        }
+        n += 0x100;
+        p = dst + (n & 0xE0) + D_00373080[n & 0x1F];
+        for (i = n; i < 0x100; i++) {
+            *p = col0;
+            p += step[i & 0x1F];
+        }
+        cnt = (float)n;
+        p = dst;
+        i = 0;
+    } else {
+        if (n >= 0x100) {
+            n = 0xFF;
+        }
+        p = dst;
+        for (i = 0; i < n; i++) {
+            *p = col1;
+            p += step[i & 0x1F];
+        }
+        cnt = 256.0f - (float)n;
+        n = 0x100;
+    }
+    p1 = (u8 *)&col1;
+    p0 = (u8 *)&col0;
+    cur_col.x = p1[0];
+    cur_col.y = p1[1];
+    cur_col.z = p1[2];
+    cur_col.w = p1[3];
+    step_col.x = p0[0];
+    step_col.y = p0[1];
+    step_col.z = p0[2];
+    step_col.w = p0[3];
+    func_002DD038(&step_col, &step_col, &cur_col);
+    func_002DCFB8(&step_col, &step_col, cnt);
+    for (; i < n; i++) {
+        u32 c = ((u32)cur_col.w << 24) | (u32)cur_col.x;
+        c |= ((u32)cur_col.y << 8) | ((u32)cur_col.z << 16);
+        *p = c;
+        func_002DD020(&cur_col, &cur_col, &step_col);
+        p += step[i & 0x1F];
+    }
+    func_002B39C0(0x20);
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282E68);
 
@@ -709,9 +780,208 @@ INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002830A0);
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002832F0);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", pppKeTh);
+typedef struct KeThEv {
+    s32 w00;
+    u32 w04;
+    s32 w08;
+    s32 pad0C;
+    u16 h10[16];
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    float f40;
+    float f44;
+    float f48;
+    float f4C;
+    float f50;
+    u16 h54;
+    u8 b56;
+    u8 b57;
+    u8 b58;
+    u8 b59;
+    u8 b5A;
+    u8 b5B;
+    u8 b5C;
+} KeThEv;
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_002839F8);
+typedef struct KeThSub {
+    u8 b00[8];
+    u8 pad08[4];
+    float f0C;
+    u8 b10[8];
+    u8 pad18[4];
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    u8 b40;
+    u8 b41;
+    u8 b42;
+    u8 pad43;
+} KeThSub;
+
+typedef struct KeThWork {
+    KeThCp cp;
+    u8 pad08[8];
+    KeThSub sub;
+    u8 pad54[0xC];
+    Pool *p60;
+    void *p64;
+    float f68;
+    float f6C;
+    u16 h70[16];
+} KeThWork;
+
+extern double D_005743E8;
+extern double D_005743F0;
+
+void pppKeTh(u8 *base, KeThEv *ev, ScriptCtx *ctx)
+{
+    u8 mat[0x40];
+    Vec4 dir;
+    Vec4 pos;
+    KeThCpUpdateArg upd;
+    KeThWork *w = SLOT_WORK(KeThWork, base, ctx, 0);
+    KeThSub *sub = &w->sub;
+    Vec4 *v_in = SLOT_WORK(Vec4, base, ctx, 2);
+
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    func_002DD0C0(mat, base + 0x10);
+    *(u_long128 *)(mat + 0x30) = 0;
+    *(float *)(mat + 0x3C) = 1.0f;
+    func_002DCE08(&dir, mat, v_in);
+    func_002DCEC8(&dir, &dir);
+    func_002DD0B0(&pos, (Vec4 *)(base + 0x40));
+    if (*(s32 *)(base + 0xC) == ev->w00) {
+        if (*(s32 *)(base + 0xC) == 0) {
+            Pool *pool = SLOT_WORK(Pool, base, ctx, 1);
+            void *src = (ev->w04 != 0xFFFFFFFFU) ? (void *)(ppvMng->p3C[ev->w04].base + (ev->w08 + 0xA0)) : (void *)D_006EA450;
+            if (w->p64 == D_006EA450) {
+                return;
+            }
+            w->p64 = src;
+            w->p60 = pool;
+            if (ev->b5A == 0) {
+                w->cp.flags |= 8;
+            }
+            if (ev->b59 != 0) {
+                w->cp.flags |= 4;
+            }
+            if (ev->b5C != 0) {
+                w->cp.flags |= 0x10;
+            }
+            if (ev->b5B != 0) {
+                w->cp.flags |= 0x20;
+            }
+            func_00282128(&w->cp, w->p60, &pos, &dir);
+        }
+        w->h70[0] += ev->h10[0];
+        w->h70[1] += ev->h10[1];
+        w->h70[2] += ev->h10[2];
+        w->h70[3] += ev->h10[3];
+        w->h70[4] += ev->h10[4];
+        w->h70[5] += ev->h10[5];
+        w->h70[6] += ev->h10[6];
+        w->h70[7] += ev->h10[7];
+        w->h70[8] += ev->h10[8];
+        w->h70[9] += ev->h10[9];
+        w->h70[10] += ev->h10[10];
+        w->h70[11] += ev->h10[11];
+        w->h70[12] += ev->h10[12];
+        w->h70[13] += ev->h10[13];
+        w->h70[14] += ev->h10[14];
+        w->h70[15] += ev->h10[15];
+        w->f68 = ev->f30;
+        w->f6C += ev->f4C;
+        sub->b42 = w->p60->size - 1;
+        sub->f0C += ev->f34;
+        sub->f30 = ev->f3C;
+        sub->f38 = ev->f40;
+        sub->f3C = ev->f44;
+        sub->f24 += ev->f48;
+        sub->f2C += ev->f50;
+        {
+            register double x __asm__("$2") = (double)(s32)ev->h54;
+            register double d __asm__("$5");
+            __asm__ volatile(".set noat\nlui $1, %hi(D_005743E8)\n.set at");
+            __asm__ volatile(".set noat\nld %0, %%lo(D_005743E8)($1)\n.set at" : "=r"(d));
+            x = func_002EBC70(x, d);
+            __asm__ volatile(".set noat\nlui $1, %hi(D_005743F0)\n.set at");
+            __asm__ volatile(".set noat\nld %0, %%lo(D_005743F0)($1)\n.set at" : "=r"(d));
+            sub->f28 = func_002EC440(func_002EBC70(x, d));
+        }
+        sub->b40 = ev->b56;
+        sub->b41 = ev->b57;
+        sub->f1C = -(sub->f0C - sub->f0C * ev->f38) / (float)sub->b42;
+    }
+    sub->f20 = w->f68 / (float)sub->b42;
+    sub->f34 = w->f6C / sub->f20;
+    sub->b00[0] = w->h70[0] >> 7;
+    sub->b00[1] = w->h70[1] >> 7;
+    sub->b00[2] = w->h70[2] >> 7;
+    sub->b00[3] = w->h70[3] >> 7;
+    sub->b00[4] = w->h70[4] >> 7;
+    sub->b00[5] = w->h70[5] >> 7;
+    sub->b00[6] = w->h70[6] >> 7;
+    sub->b00[7] = w->h70[7] >> 7;
+    sub->b10[0] = w->h70[8] >> 7;
+    sub->b10[1] = w->h70[9] >> 7;
+    sub->b10[2] = w->h70[10] >> 7;
+    sub->b10[3] = w->h70[11] >> 7;
+    sub->b10[4] = w->h70[12] >> 7;
+    sub->b10[5] = w->h70[13] >> 7;
+    sub->b10[6] = w->h70[14] >> 7;
+    sub->b10[7] = w->h70[15] >> 7;
+    upd.w8 = sub;
+    upd.p10 = &pos;
+    upd.p14 = &dir;
+    upd.pool = w->p60;
+    upd.w4 = w->p64;
+    upd.cp = &w->cp;
+    KeThCp_Update(&upd);
+}
+
+extern u8 D_006A3AB0[];
+
+void func_002839F8(char *base, u8 *ev, ScriptCtx *ctx)
+{
+    KeThCp *cp = SLOT_WORK(KeThCp, base, ctx, 0);
+    float col[4];
+    float sc[4];
+    u64 a5;
+    u64 a6;
+    float inv = 1.0f / 4096.0f;
+
+    sc[0] = ((float *)ppvMng->m60)[0];
+    sc[1] = ((float *)ppvMng->m60)[1] * (13.0f / 12.0f);
+    switch (ev[0x58]) {
+    case 0:
+        a5 = 0x48;
+        a6 = 0x51801;
+        break;
+    case 1:
+        a5 = 0x42;
+        a6 = 0x51801;
+        break;
+    default:
+        a5 = (0x80ULL << 32) | 0xA8;
+        a6 = 0x70000;
+        break;
+    }
+    col[0] = ppvMng->scale[0] * inv;
+    col[1] = ppvMng->scale[1] * inv;
+    col[2] = ppvMng->scale[2] * inv;
+    col[3] = ppvMng->scale[3] * inv;
+    func_00282358(cp, D_006A3AB0, sc, (u8 *)cp + 0x10, &D_006A3BCC, a5, a6, col);
+}
 
 void func_00283B00(char *base, ScriptCtx *ctx)
 {
@@ -1086,7 +1356,132 @@ void func_00284600(char *base, ScriptCtx *ctx) {
     w->q18 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284638);
+typedef struct Ke4638Ev {
+    s32 w00;
+    s16 h04;
+    s16 h06;
+    u8 b08;
+    u8 b09;
+    u8 b0A;
+    u8 pad0B;
+    u32 w0C;
+    s32 w10;
+    u32 w14;
+    s32 w18;
+} Ke4638Ev;
+
+typedef struct Ke4638Ent {
+    s16 h00;
+    s16 h02;
+    u16 *p04;
+} Ke4638Ent;
+
+typedef struct Ke4638Tbl20 {
+    u8 pad00[0x14];
+    void *p14;
+    u8 pad18[0x8];
+} Ke4638Tbl20;
+
+typedef struct Ke4638Res {
+    u8 pad00[0x20];
+    Ke4638Tbl20 *tbl20;
+    u8 pad24[0x4];
+    Ke4638Ent *tbl28;
+} Ke4638Res;
+
+void func_00284638(u8 *base, Ke4638Ev *ev, ScriptCtx *ctx)
+{
+    u8 mat[0x40];
+    Vec4 v;
+    u16 *wk;
+    u8 *ptrA;
+    u32 mode;
+    void *base10;
+    Ke4638Res *res;
+    Ke4638Ent *entA;
+    Ke4638Ent *entB;
+    u8 *ptrB;
+    s32 r;
+    s32 idx;
+    s32 cnt;
+
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    r = func_00282628();
+    if (ev->b09 == 0xFF) {
+        return;
+    }
+    if ((r >> 8) & ev->b09) {
+        return;
+    }
+    if (ev->w0C == 0xFFFFFFFFU || ev->w14 == 0xFFFFFFFFU) {
+        return;
+    }
+    res = (Ke4638Res *)D_006A3924;
+    entA = (Ke4638Ent *)((s32)(ev->h06 << 3) + (s32)res->tbl28);
+    wk = SLOT_WORK(u16, base, ctx, 0);
+    ptrA = (u8 *)res->tbl20[entA->h00].p14;
+    entB = &res->tbl28[ev->h04];
+    ptrB = *(u8 **)(base + 0x90);
+    if (entB->h02 != entA->h02) {
+        return;
+    }
+    if (ptrB == 0) {
+        ptrB = (u8 *)res->tbl20[entB->h00].p14;
+    }
+    base10 = base + 0x10;
+    mode = ev->b0A;
+    v.w = 1.0f;
+    func_002DD0C0(mat, base10);
+    if (mode != 0) {
+        idx = r % entB->h02;
+    } else {
+        idx = *wk;
+    }
+    cnt = ev->b08;
+    for (; cnt > 0; cnt--) {
+        T6_MemEnt *e = &ppvMng->p3C[ev->w0C];
+        u16 vi = entB->p04[idx];
+        T6_Mem *m;
+        void *dst1;
+
+        if (e == 0) {
+            m = 0;
+        } else {
+            m = func_00267320(ppvMng, e);
+            if (m == 0) {
+                return;
+            }
+            m->user = (ScriptWork *)base;
+        }
+        {
+            s32 off = vi * 6;
+            void *dst0 = (u8 *)m + (ev->w10 + 0xA0);
+            s16 *vp = (s16 *)(ptrB + off);
+            dst1 = (u8 *)m + (ev->w18 + 0xA0);
+            v.x = vp[0];
+            v.y = vp[1];
+            v.z = vp[2];
+            func_002DCE08(dst0, base10, &v);
+            vp = (s16 *)(ptrA + off);
+            v.x = vp[0];
+            v.y = vp[1];
+            v.z = vp[2];
+        }
+        func_002DCE08(&v, mat, &v);
+        func_00282810((s32)dst1, (s32)&v, (s32)(base + 0x40));
+        if (mode != 0) {
+            idx = func_00282628() % entB->h02;
+        } else {
+            idx++;
+            if (idx >= entB->h02) {
+                idx = 0;
+            }
+        }
+    }
+    *wk = idx;
+}
 
 void func_00284920(char *base, ScriptCtx *ctx) {
     Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
@@ -1257,7 +1652,119 @@ void func_00284D28(char *base, void *p, void *entry, int *out)
     func_00282798(dir, &v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00284E70);
+typedef struct Ke4E70Ev {
+    s32 w00;
+    s16 h04;
+    s16 pad06;
+    float f08;
+    u8 b0C;
+    u8 b0D;
+    u8 b0E;
+    u8 pad0F;
+    u32 w10;
+    s32 w14;
+    u32 w18;
+    s32 w1C;
+    u32 w20;
+    s32 w24;
+} Ke4E70Ev;
+
+void func_00284E70(u8 *base, Ke4E70Ev *ev, ScriptCtx *ctx)
+{
+    Vec4 v;
+    u16 *wk;
+    u32 mode;
+    Ke4638Res *res;
+    Ke4638Ent *ent;
+    void *ptr;
+    s32 r;
+    s32 idx;
+    s32 cnt;
+
+    if (D_006A3BC4 == 0) {
+        if (ev->b0D != 0xFF) {
+            if (!((func_00282628() >> 8) & ev->b0D)) {
+                if (ev->w10 == 0xFFFFFFFFU || ev->w18 == 0xFFFFFFFFU || ev->w20 == 0xFFFFFFFFU) {
+                    return;
+                }
+                if (func_0027F180((char *)base, ev, func_00284D28, &SLOT_WORK(Wkh0h2, base, ctx, 0)->h0, ev->h04, ev->b0E, ev->b0C) == 0) {
+                    return;
+                }
+            }
+        }
+        if (D_006A3BC4 != 0) {
+            return;
+        }
+        r = func_00282628();
+        if (ev->b0D == 0xFF) {
+            return;
+        }
+        if ((r >> 8) & ev->b0D) {
+            return;
+        }
+        if (ev->w10 == 0xFFFFFFFFU || ev->w18 == 0xFFFFFFFFU || ev->w20 == 0xFFFFFFFFU) {
+            return;
+        }
+        res = (Ke4638Res *)D_006A3924;
+        wk = SLOT_WORK(u16, base, ctx, 0);
+        ent = &res->tbl28[ev->h04];
+        ptr = *(void **)(base + 0x90);
+        if (ptr == 0) {
+            ptr = res->tbl20[ent->h00].p14;
+        }
+        mode = ev->b0E;
+        if (mode != 0) {
+            idx = r % ent->h02;
+        } else {
+            idx = *wk;
+        }
+        cnt = ev->b0C;
+        for (; cnt > 0; cnt--) {
+            T6_MemEnt *e = &ppvMng->p3C[ev->w10];
+            T6_Mem *m;
+            u16 vi;
+            s16 *vp;
+            void *at;
+            void *dir;
+            void *norm;
+
+            if (e == 0) {
+                m = 0;
+            } else {
+                m = func_00267320(ppvMng, e);
+                if (m == 0) {
+                    return;
+                }
+                m->user = (ScriptWork *)base;
+            }
+            vi = ent->p04[idx];
+            at = (u8 *)m + (ev->w14 + 0xA0);
+            dir = (u8 *)m + (ev->w1C + 0xA0);
+            norm = (u8 *)m + (ev->w24 + 0xA0);
+            vp = (s16 *)((u8 *)ptr + vi * 6);
+            v.x = vp[0];
+            v.y = vp[1];
+            v.z = vp[2];
+            v.w = 1.0f;
+            func_002DCE08(&v, base + 0x10, &v);
+            func_00282798(at, &v);
+            func_002DD038(&v, &v, (Vec4 *)(base + 0x40));
+            func_002DCEC8(&v, &v);
+            func_00282798(norm, &v);
+            func_002DD068(&v, &v, ev->f08);
+            func_00282798(dir, &v);
+            if (mode != 0) {
+                idx = func_00282628() % ent->h02;
+            } else {
+                idx++;
+                if (idx >= ent->h02) {
+                    idx = 0;
+                }
+            }
+        }
+        *wk = idx;
+    }
+}
 
 void func_002851C0(char *base, ScriptCtx *ctx) {
     Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);

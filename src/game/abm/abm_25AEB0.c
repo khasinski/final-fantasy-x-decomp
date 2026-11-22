@@ -273,6 +273,7 @@ void func_0025B558(s16 x, s16 y, s16 h, int pos, int count, int view)
 }
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025B6E8);
+
 INCLUDE_RODATA("build/ee_asm/game/abm/abm_25AEB0/rodata", jtbl_00573A10);
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025BE90);

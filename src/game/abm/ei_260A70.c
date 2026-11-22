@@ -6,6 +6,8 @@
 #define func_00258618 _hdr_func_00258618
 #define func_00258410 _hdr_func_00258410
 #define SndSepPlaySimple _hdr_SndSepPlaySimple
+#define func_00262C90 _hdr_func_00262C90
+#define func_0025A158 _hdr_func_0025A158
 #include "common.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -14,6 +16,8 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/r6.h"
+#undef func_0025A158
+#undef func_00262C90
 #undef SndSepPlaySimple
 #undef func_00258410
 #undef func_00258618
@@ -29,6 +33,8 @@ void func_002DD968(float *dst, float *src1, float *src2, float t);
 int func_001BE7B8(int id);
 void func_00258618(u16 id, u16 n, int bit);
 void func_00258410(u16 n, int mode);
+void func_00262C90(ChrWork *w);
+void func_0025A158(int id, void *buf);
 
 
 
@@ -66,7 +72,8 @@ typedef struct LpaView {
     u8 pad11570[0x11575 - 0x11570];
     u8 f11575;
     u8 f11576;
-    u8 pad11577[3];
+    u8 f11577;
+    u8 pad11578[2];
     u8 f1157A;
     u8 pad1157B[3];
     s16 f1157E;
@@ -150,7 +157,39 @@ float func_00260B68(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260C08);
+void func_00260C08(void)
+{
+    LpaView *w;
+
+    if (D_006A391C[12].a.req.id < 0) {
+        if (lpamng->f11622 & 0x100) {
+            lpamng->f1157C++;
+            if (lpamng->f1157C >= 3) {
+                lpamng->f1157C = 0;
+            }
+            LPV->f11580 = 30;
+            LPV->f1158C = LPV->f11340;
+            LPV->f11590 = func_00260B68();
+        }
+    }
+    w = LPV;
+    if (w->f11580 > 0) {
+        if (--w->f11580 == 0) {
+            float v = w->f11590;
+            w->f11577 = 1;
+            w->f11348 = v;
+            w->f11344 = v;
+            w->f11340 = v;
+        } else {
+            int idx = ((30 - w->f11580) * 0x4000) / 30;
+            register float s __asm__("$f2") = eff_sin_t[((u32)idx >> 4) & 0xFFF];
+            register float v __asm__("$f2") = (w->f11590 - w->f1158C) * s + w->f1158C;
+            w->f11348 = v;
+            w->f11344 = v;
+            w->f11340 = v;
+        }
+    }
+}
 
 float func_00260D50(void)
 {
@@ -166,7 +205,39 @@ float func_00260D50(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260DD8);
+void func_00260DD8(void)
+{
+    LpaView *w;
+
+    if (D_006A391C[12].a.req.id < 0) {
+        if (lpamng->f11622 & 2) {
+            if (++lpamng->f1157B >= 3) {
+                lpamng->f1157B = 0;
+            }
+            goto set_rot;
+        } else if (lpamng->f11622 & 1) {
+            if (--lpamng->f1157B >= 3) {
+                lpamng->f1157B = 2;
+            }
+        set_rot:
+            LPV->f1157E = 30;
+            LPV->f11584 = (float)LPV->w11330;
+            LPV->f11588 = func_00260D50();
+        }
+    }
+    w = LPV;
+    if (w->f1157E > 0) {
+        if (--w->f1157E == 0) {
+            w->f11577 = 1;
+            w->w11330 = (int)w->f11588;
+        } else {
+            int idx = ((30 - w->f1157E) * 0x4000) / 30;
+            register float s __asm__("$f2") = eff_sin_t[((u32)idx >> 4) & 0xFFF];
+            register float v __asm__("$f2") = (w->f11588 - w->f11584) * s + w->f11584;
+            w->w11330 = (int)v;
+        }
+    }
+}
 
 void func_00260F60(void)
 {
@@ -1355,7 +1426,88 @@ int func_002659F8(void) /* DEBT(TYPE): funcs.h says int; nothing is returned */
 void func_00265B50(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00265B58);
+extern u16 D_0036E728[];
+extern u16 D_0036E738[];
+extern u16 D_0036E748[];
+extern u16 *D_0036E798[];
+extern u16 *D_0036E7F8[];
+extern u16 *D_0036E858[];
+
+typedef struct {
+    u8 a;
+    u8 b;
+} EiAbmCell;
+
+typedef struct {
+    EiAbmCell cells[0x780];
+    u16 out[7];
+} EiAbmSave;
+
+void func_00265B58(EiAbmSave *dst)
+{
+    u8 buf[0x500];
+    u16 *hdr = (u16 *)buf;
+    s32 *save = (s32 *)MsGetSaveMenu();
+    int i;
+    int mode = (*save >> 14) & 3;
+
+    D_00327910 = 0;
+    switch (mode) {
+    case 0:
+        func_0025A158(9, buf);
+        break;
+    case 1:
+        func_0025A158(10, buf);
+        break;
+    default:
+        func_0025A158(11, buf);
+        break;
+    }
+    func_002EF0D0(dst, 0, 0x1320);
+    if (*hdr++ == 0x31) {
+        int n = *hdr;
+        u8 *src = (u8 *)hdr + 6;
+        int j;
+        for (j = 0; j < n; j++) {
+            dst->cells[j].a = *src++;
+        }
+    }
+    for (i = 0; i < 7; i++) {
+        u16 *p;
+        switch ((*save >> 14) & 3) {
+        case 0:
+            p = D_0036E798[i];
+            break;
+        case 1:
+            p = D_0036E7F8[i];
+            break;
+        default:
+            p = D_0036E858[i];
+            break;
+        }
+        while (*p != 0xFFFF) {
+            dst->cells[*p].b |= 1 << i;
+            p++;
+        }
+    }
+    {
+        u16 *out = (u16 *)((u8 *)dst + 0xF00);
+        for (i = 0; i < 7; i++) {
+            switch ((*save >> 14) & 3) {
+            case 0:
+                out[i] = D_0036E728[i];
+                break;
+            case 1:
+                out[i] = D_0036E738[i];
+                break;
+            default:
+                out[i] = D_0036E748[i];
+                break;
+            }
+        }
+    }
+    func_00258B48();
+}
 
 void eiAbmSetLang(void)
 {

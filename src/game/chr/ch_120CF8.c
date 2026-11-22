@@ -102,7 +102,66 @@ float func_00120F28(float *a, int i)
     return ((v[0] * n[0] + v[1] * n[1] + v[2] * n[2]) - (a[0] * n[0] + a[2] * n[2])) / n[1];
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00121038);
+typedef struct {
+    s16 v[6];
+    s32 w0C;
+} MapPoly16;
+
+s32 func_00121038(float *pos)
+{
+    MapPoly16 *poly;
+    u8 *verts;
+    s32 best;
+    s32 last;
+    s32 best_y;
+    s32 i;
+    s16 *v[3];
+
+    if (D_00308900 == 0) {
+        return -1;
+    }
+    verts = D_00580B2C;
+    poly = (MapPoly16 *)D_00308900;
+    best = -1;
+    last = -1;
+    best_y = 0;
+    for (i = 0; i < D_00580B28; i++, poly++) {
+        v[0] = (s16 *)(verts + poly->v[0] * 8);
+        v[1] = (s16 *)(verts + poly->v[1] * 8);
+        v[2] = (s16 *)(verts + poly->v[2] * 8);
+        if ((float)(v[0][2] - v[1][2]) * pos[0] + (float)(v[1][0] - v[0][0]) * pos[2] + (float)(v[0][0] * v[1][2]) - (float)(v[1][0] * v[0][2]) > 0.0f) {
+            continue;
+        }
+        if ((float)(v[1][2] - v[2][2]) * pos[0] + (float)(v[2][0] - v[1][0]) * pos[2] + (float)(v[1][0] * v[2][2]) - (float)(v[2][0] * v[1][2]) > 0.0f) {
+            continue;
+        }
+        if ((float)(v[2][2] - v[0][2]) * pos[0] + (float)(v[0][0] - v[2][0]) * pos[2] + (float)(v[2][0] * v[0][2]) - (float)(v[0][0] * v[2][2]) > 0.0f) {
+            continue;
+        }
+        last = i;
+        {
+            s32 y = (s32)func_00120F28(pos, last);
+            if ((float)y < pos[1]) {
+                continue;
+            }
+            if (best == -1 || y < best_y) {
+                best_y = y;
+                best = last;
+            }
+        }
+    }
+    if (best == -1) {
+        if (last == -1) {
+            return -1;
+        }
+        best = last;
+    }
+    poly = &((MapPoly16 *)D_00308900)[best];
+    v[0] = (s16 *)(verts + poly->v[0] * 8);
+    v[1] = (s16 *)(verts + poly->v[1] * 8);
+    v[2] = (s16 *)(verts + poly->v[2] * 8);
+    return best;
+}
 
 float func_001212E0(float x, float y, float z)
 {
@@ -113,11 +172,6 @@ float func_001212E0(float x, float y, float z)
     v[2] = z;
     return func_00121038(v) / D_00580B30;
 }
-
-typedef struct {
-    s16 v[6];
-    s32 w0C;
-} MapPoly16;
 
 int func_00121328(Chr *chr, int i)
 {
@@ -151,6 +205,72 @@ void func_00121418(float v)
 {
     D_00308904 = v;
 }
+
+typedef struct ChrColView {
+    u8 pad00[0x10];
+    float f10;
+    float f14;
+    float f18;
+    u8 pad1C[0x4];
+    float f20;
+    float f24;
+    float f28;
+    u8 pad2C[0x14];
+    float f40;
+    float f44;
+    float f48;
+    u8 pad4C[0x4];
+    float f50;
+    float f54;
+    float f58;
+    u8 pad5C[0x4];
+    float f60;
+    float f64;
+    float f68;
+    u8 pad6C[0x14];
+    float f80;
+    float f84;
+    float f88;
+    u8 pad8C[0x4];
+    float f90;
+    float f94;
+    float f98;
+    u8 pad9C[0x4];
+    float fA0;
+    float fA4;
+    float fA8;
+    u8 padAC[0x4];
+    float fB0;
+    float fB4;
+    float fB8;
+    u8 padBC[0xA4];
+    float f160;
+    u8 pad164[0x14];
+    float f178;
+    u8 pad17C[0x24];
+    union {
+        s64 raw;
+        struct {
+            u32 pad0 : 5;
+            u32 b5 : 1;
+        } bf;
+    } flg;
+    u8 pad1A8[0x348];
+    float f4F0;
+    float f4F4;
+    u8 pad4F8[0x14];
+    float f50C;
+    u8 pad510[0x18];
+    float f528;
+    float f52C;
+    u8 pad530[0x174];
+    float f6A4;
+    u8 pad6A8[0xC];
+    float f6B4;
+    u8 pad6B8[0x176];
+    s16 h82E;
+    s32 w830;
+} ChrColView;
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00121428);
 
@@ -304,7 +424,85 @@ float func_00121FE8(float *a, float *b)
     return sqrtf(d[0] * d[0] + d[2] * d[2]);
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00122050);
+s32 func_00122050(Chr *chrA, Chr *chrB, float r, float d)
+{
+    ChrColView *a = (ChrColView *)chrA;
+    ChrColView *b = (ChrColView *)chrB;
+    s32 mode = 0;
+    float w1 = 1.0f;
+    float w0 = 1.0f;
+    float pad00[4]; /* DEBT(PADDING): unused 16-byte frame slot in the original */
+    float diff[4];
+    register float p1 __asm__("$f12");
+
+    if (b->f50C < 0.0f) {
+        w0 = 0.0f;
+        if (a->f50C < 0.0f) {
+            w0 = func_00121FE8(&a->f20, &a->f10);
+            mode = 1;
+            w1 = func_00121FE8(&b->f20, &b->f10);
+            if (w0 == w1) {
+                return 0;
+            }
+            p1 = (w0 < w1) ? w1 : w0;
+            w0 /= p1;
+            w1 /= p1;
+        }
+    } else {
+        if (a->f50C < 0.0f) {
+            w1 = 0.0f;
+        } else {
+            w0 = a->f50C;
+            w1 = b->f50C;
+            if (w0 == 0.0f && w1 == 0.0f) {
+                w1 = 1.0f;
+                w0 = 1.0f;
+            }
+        }
+    }
+    r -= d;
+    diff[0] = a->f10 - b->f10;
+    diff[1] = 0.0f;
+    diff[2] = a->f18 - b->f18;
+    func_002DCEC8(diff, diff);
+    d = (w0 * r) / (w0 + w1);
+    if (d < 0.0f) {
+        return 0;
+    }
+    p1 = r - d;
+    if (mode != 0) {
+        if (d != 0.0f) {
+            a->f50 += diff[0] * d;
+            a->f58 += diff[2] * d;
+            if (a->f50 != 0.0f || a->f58 != 0.0f) {
+                a->flg.raw |= 0x20;
+            }
+        }
+        if (p1 != 0.0f) {
+            b->f50 -= diff[0] * p1;
+            b->f58 -= diff[2] * p1;
+            if (b->f50 != 0.0f || b->f58 != 0.0f) {
+                b->flg.raw |= 0x20;
+            }
+        }
+    } else {
+        if (p1 != 0.0f) {
+            a->f50 += diff[0] * p1;
+            a->f58 += diff[2] * p1;
+            if (a->f50 != 0.0f || a->f58 != 0.0f) {
+                a->flg.raw |= 0x20;
+            }
+        }
+        if (d != 0.0f) {
+            b->f50 -= diff[0] * d;
+            b->f58 -= diff[2] * d;
+            if (b->f50 != 0.0f || b->f58 != 0.0f) {
+                b->flg.raw |= 0x20;
+            }
+        }
+    }
+    return a->flg.bf.b5 | b->flg.bf.b5;
+}
 
 typedef struct SortEnt22380 {
     s32 pad00[6];

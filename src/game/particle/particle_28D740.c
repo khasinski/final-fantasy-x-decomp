@@ -1,6 +1,7 @@
 /* tu_311 0x28d740-0x28fdd8: low; unk_28D740 (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
 #include "ffx/t6.h"
@@ -163,7 +164,72 @@ void func_0028F0D8(char *base, ScriptCtx *ctx) {
     w->w8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_28D740", func_0028F0F8);
+void func_0028F0F8(u8 *base, u8 *ev, ScriptCtx *ctx)
+{
+    Wkf0f4f8f10f14f18f1Cf20f24 *w = SLOT_WORK(Wkf0f4f8f10f14f18f1Cf20f24, base, ctx, 2);
+    s32 id;
+
+    if (D_006A3BC4 == 0) {
+        float f8 = w->f8;
+        float f18 = w->f18;
+        float f24 = w->f24;
+        float f4 = w->f4 + f8;
+        float f14 = w->f14 + f18;
+        float f20 = w->f20 + f24;
+        float f0 = w->f0 + f4;
+        float f10 = w->f10 + f14;
+        float f1C = w->f1C + f20;
+        w->f4 = f4;
+        w->f0 = f0;
+        w->f14 = f14;
+        w->f10 = f10;
+        w->f20 = f20;
+        w->f1C = f1C;
+        if (*(s32 *)(base + 0xC) == *(s32 *)ev) {
+            w->f0 = f0 + *(float *)(ev + 8);
+            w->f4 = f4 + *(float *)(ev + 0xC);
+            w->f8 = f8 + *(float *)(ev + 0x10);
+            w->f10 = f10 + *(float *)(ev + 0x20);
+            w->f14 = f14 + *(float *)(ev + 0x24);
+            w->f18 = f18 + *(float *)(ev + 0x28);
+            w->f1C = f1C + *(float *)(ev + 0x2C);
+            w->f20 = f20 + *(float *)(ev + 0x30);
+            w->f24 = f24 + *(float *)(ev + 0x34);
+        }
+    }
+    id = *(s32 *)(ev + 4);
+    if (id != 0xFFFF) {
+        s32 off = ev[0x1C] * 4;
+        u32 tex = *(u32 *)((*(s32 *)((u8 *)D_006A3924 + 0x20) + (id << 5)) + 0x10);
+        u8 *p = D_006A3BCC + 0x10;
+        u8 *cur;
+        u8 *dst;
+        func_002DA928(p, ((tex >> 5) & 0x3FFF) + off, 4, (tex >> 19) & 0xF, 0, 0, 0x10, 0x10);
+        *(u64 *)(p + 0x50) = (0x08000000ULL << 32) | 0x8100;
+        cur = D_006A3BCC;
+        dst = cur + 0x70;
+        _m2c_func_0028EEC8_func_00282B88(*(s32 *)(ev + 0x14), *(s32 *)(ev + 0x18), dst, w->f0);
+        if (ev[0x38] & 2) {
+            func_002F8660(0);
+            _m2c_func_0028EEC8_func_002DAC50(p, dst);
+        } else {
+            *(u64 *)(p + 0x50) = (0x08000000ULL << 32) | 0x8100;
+            _m2c_func_0028EEC8_func_002B2A28(D_006A3BCC, 0x107, 0, 0);
+            D_006A3BCC = cur + 0x1070;
+        }
+        _m2c_func_0028EEC8_func_00282E68(
+            base,
+            *(s32 *)(ev + 4),
+            SLOT_WORK(void, base, ctx, 0),
+            off,
+            (s32)w->f10,
+            (s32)w->f1C,
+            ((ev[0x38] | ev[0x3B]) | (ev[0x3A] | ev[0x39])) | ev[0x3C],
+            SLOT_WORK(void, base, ctx, 3),
+            ppvMng->scale,
+            ppvMng->w78);
+    }
+}
 
 void func_0028F3A8(char *base, ScriptCtx *ctx)
 {

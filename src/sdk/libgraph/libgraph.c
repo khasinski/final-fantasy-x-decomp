@@ -178,7 +178,89 @@ int func_002DA198(void *packet) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA280);
+typedef struct {
+    unsigned long NLOOP : 15;
+    unsigned long EOP : 1;
+    unsigned long pad16 : 16;
+    unsigned long id : 14;
+    unsigned long PRE : 1;
+    unsigned long PRIM : 11;
+    unsigned long FLG : 2;
+    unsigned long NREG : 4;
+    unsigned long REGS0 : 4;
+    unsigned long REGS1 : 4;
+    unsigned long REGS2 : 4;
+    unsigned long REGS3 : 4;
+    unsigned long REGS4 : 4;
+    unsigned long REGS5 : 4;
+    unsigned long REGS6 : 4;
+    unsigned long REGS7 : 4;
+    unsigned long REGS8 : 4;
+    unsigned long REGS9 : 4;
+    unsigned long REGS10 : 4;
+    unsigned long REGS11 : 4;
+    unsigned long REGS12 : 4;
+    unsigned long REGS13 : 4;
+    unsigned long REGS14 : 4;
+    unsigned long REGS15 : 4;
+} GsGifTag;
+
+typedef struct {
+    unsigned long FBP : 9;
+    unsigned long pad : 55;
+} GsFbpReg;
+
+typedef struct {
+    unsigned long pmode;
+    unsigned long smode2;
+    GsFbpReg dispfb;
+    unsigned long display;
+    unsigned long bgcolor;
+} GsDispEnv;
+
+typedef struct {
+    GsDispEnv disp[2];
+    GsGifTag gif0;
+    GsFbpReg frame1_0;
+    unsigned long draw0[15];
+    unsigned long clear0[12];
+    GsGifTag gif1;
+    unsigned long draw1[16];
+    unsigned long clear1[12];
+} GsDBuff;
+
+void func_002DA280(GsDBuff *db, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm, s16 clear)
+{
+    u8 *gp = func_002D9A38();
+    s16 fbp;
+
+    func_002D9AB0((unsigned long *)&db->disp[0], psm, w, h, 0, 0);
+    func_002D9AB0((unsigned long *)&db->disp[1], psm, w, h, 0, 0);
+    func_002D9EA8((unsigned long *)&db->frame1_0, psm, w, h, ztest, zpsm);
+    func_002D9EA8(db->draw1, psm, w, h, ztest, zpsm);
+    if (clear) {
+        s16 x = 0x800 - (w >> 1);
+        s16 y = 0x800 - (h >> 1);
+        func_002DA090(db->clear0, ztest, x, y, w, h, 0, 0, 0, 0, 0);
+        func_002DA090(db->clear1, ztest, x, y, w, h, 0, 0, 0, 0, 0);
+    }
+    *(u_long128 *)&db->gif0 = 0;
+    *(u_long128 *)&db->gif1 = 0;
+    db->gif0.NLOOP = clear ? 14 : 8;
+    db->gif0.EOP = 1;
+    db->gif0.NREG = 1;
+    db->gif0.REGS0 = 0xE;
+    db->gif1.NLOOP = clear ? 14 : 8;
+    db->gif1.EOP = 1;
+    db->gif1.NREG = 1;
+    db->gif1.REGS0 = 0xE;
+    fbp = func_002D9DE0(psm, w, h);
+    if ((*(unsigned long *)gp & 0x0000ffff0000ffffUL) == 0x0000000100000001UL || *(s16 *)gp == 0) {
+        s16 half = fbp >> 1;
+        db->disp[1].dispfb.FBP = half;
+        db->frame1_0.FBP = fbp >> 1;
+    }
+}
 
 /* Module: sound/vu glue */
 
@@ -220,9 +302,48 @@ int func_002DA578(void)
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA610);
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA928);
+
 INCLUDE_RODATA("build/ee_asm/sdk/libgraph/libgraph/rodata", jtbl_005766B0);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DAB10);
+typedef struct {
+    u32 vifcode[4];
+    GsGifTag giftag;
+    unsigned long bitbltbuf;
+    unsigned long bitbltbufaddr;
+    unsigned long trxpos;
+    unsigned long trxposaddr;
+    unsigned long trxreg;
+    unsigned long trxregaddr;
+    unsigned long finish;
+    unsigned long finishaddr;
+    unsigned long trxdir;
+    unsigned long trxdiraddr;
+} GsStoreImage;
+
+int func_002DAB10(GsStoreImage *p, s16 sbp, s16 sbw, s16 spsm, s16 x, s16 y, s16 w, s16 h)
+{
+    *(u_long128 *)&p->giftag = 0;
+    p->vifcode[0] = 0;
+    p->vifcode[1] = 0x06008000;
+    p->vifcode[2] = 0x13000000;
+    p->vifcode[3] = 0x50000006;
+    p->giftag.NLOOP = 5;
+    p->giftag.EOP = 1;
+    p->giftag.NREG = 1;
+    p->giftag.REGS0 = 0xE;
+    p->bitbltbuf = ((unsigned long)sbp) | ((unsigned long)sbw << 16) | ((unsigned long)spsm << 24);
+    p->bitbltbufaddr = 0x50;
+    p->trxpos = ((unsigned long)x) | ((unsigned long)y << 16);
+    p->trxposaddr = 0x51;
+    p->trxreg = ((unsigned long)w) | ((unsigned long)h << 32);
+    p->trxregaddr = 0x52;
+    p->finish = 0;
+    p->finishaddr = 0x61;
+    p->trxdir = 1;
+    p->trxdiraddr = 0x53;
+    SYNC();
+    return 7;
+}
 
 extern char D_005767A0[];
 

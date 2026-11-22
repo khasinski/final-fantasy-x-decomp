@@ -507,8 +507,47 @@ void func_0023EA48(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023EA68);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D50);
+extern s32 D_0069A670;
+
+void func_0023EA68(int a0, int a1)
+{
+    int i;
+    u8 *p;
+
+    D_0069A670 = 0;
+    p = D_0069A690;
+    for (i = 0; i < 99; i++, p++) {
+        switch (*p) {
+        case 0:
+        case 3:
+            *p = 0;
+            break;
+        case 1:
+        case 2:
+        case 4:
+            break;
+        }
+    }
+    p = D_0069A690;
+    for (i = 0; i < 99; i++, p++) {
+        switch (*p) {
+        case 0:
+            if (a0 >= a1) {
+                a0 -= a1;
+            } else {
+                *p = 3;
+            }
+            break;
+        case 1:
+            D_0069A670 = 1;
+            break;
+        case 2:
+        case 3:
+        case 4:
+            break;
+        }
+    }
+}
 
 extern s32 D_0069A664;
 

@@ -27,6 +27,10 @@ typedef struct ChrUpdateLinkView {
     s16 previous18;
     s16 saved1A;
     s16 h1C;
+    s16 h1E;
+    u8 pad20[4];
+    s8 b24;
+    u8 pad25[3];
 } ChrUpdateLinkView;
 
 void func_00112100(Chr *chr, int mode)
@@ -109,7 +113,155 @@ void Ch_MotionRemappingFcurve(Chr *chr, int d)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_MotionSetupFcurve);
+typedef struct MotionFcurveHdr {
+    s16 h00;
+    s16 h02;
+    s16 h04;
+    s16 h06;
+    s32 w08;
+    s32 w0C;
+    s32 w10;
+} MotionFcurveHdr;
+
+typedef struct ChrMotionExt {
+    u16 h00;
+    u8 pad002[0x19E];
+    s64 flags;
+    struct ChrMotionExt *p1A8;
+    u8 pad1AC[0x20];
+    ChrHdr *hdr;
+    struct {
+        u8 pad00[0x38];
+        float f38;
+    } *p1D0;
+    u8 pad1D4[0x14C];
+    struct {
+        u8 pad00[0xF0];
+        float fF0;
+        float fF4;
+        float fF8;
+        float fFC;
+        float f100;
+        float f104;
+        float f108;
+        float f10C;
+        float f110;
+        float f114;
+        float f118;
+        u8 pad11C[0x24];
+    } *p320;
+    u8 pad324[0x3FC];
+    s32 w720;
+    s32 w724;
+    s32 w728;
+    s32 w72C;
+    s16 h730;
+    s16 h732;
+    s16 h734;
+    u8 pad736[0x16];
+    s32 w74C;
+    s32 w750;
+    ChrUpdateLinkView *p754;
+    ChrUpdateLinkView *p758;
+    s16 h75C;
+    s16 h75E;
+    s16 h760;
+    s16 h762;
+    u16 *p764;
+    u8 pad768[0x80];
+    s32 w7E8;
+    s32 w7EC;
+    u8 pad7F0[0xC];
+    u16 h7FC;
+    u16 pad7FE;
+    void *p800;
+    u8 pad804[8];
+    struct {
+        s16 h00;
+        s16 pad02;
+        void *p04;
+    } *p80C;
+} ChrMotionExt;
+
+void Ch_MotionSetupFcurve(Chr *chr, void *arg)
+{
+    ChrMotionExt *ce = (ChrMotionExt *)chr;
+    MotionFcurveHdr *hdr = (MotionFcurveHdr *)arg;
+    u64 *bits;
+    register u16 *data __asm__("$7");
+    u64 cur_bits;
+    s32 bits_left;
+    ChrUpdateLinkView *head;
+    ChrUpdateLinkView *p;
+    s32 bones;
+    s32 i;
+
+    if (hdr == 0) {
+        return;
+    }
+    {
+        register s32 fps __asm__("$4") = hdr->h04;
+        register s32 data_off __asm__("$3");
+        bits = (u64 *)((u8 *)hdr + hdr->w08);
+        data_off = hdr->w0C;
+        bones = hdr->h02;
+        ce->w7EC = fps;
+        data = (u16 *)((u8 *)hdr + data_off);
+    }
+    bits_left = 0;
+    cur_bits = 0;
+    head = 0;
+    p = ce->p754;
+    if (hdr->h06 != 0) {
+        ce->h7FC = hdr->h06;
+        ce->p800 = (u8 *)hdr + hdr->w10;
+    } else {
+        ce->p800 = 0;
+    }
+    if (ce->hdr->h0A < bones) {
+        bones = ce->hdr->h0A;
+    }
+    for (i = 0; i < bones * 9; i++, p++) {
+        if (bits_left == 0) {
+            cur_bits = *bits++;
+            bits_left = 32;
+        }
+        p->b04 = cur_bits & 3;
+        switch (p->b04) {
+        case 0:
+            p->h1C = 0;
+            break;
+        case 1:
+            p->h1C = 0x1000;
+            break;
+        case 2:
+            p->h1C = *data++;
+            break;
+        case 3:
+            p->b05 = (i % 9) < 3;
+            p->h06 = 0;
+            p->flags16 = 0;
+            p->h14 = 0;
+            p->value08 = (s8 *)(data + 1);
+            p->previous0C = (s8 *)(data + 1);
+            p->next = head;
+            head = p;
+            data += (s16)*data / 2;
+            break;
+        }
+        p->b24 = 1;
+        cur_bits >>= 2;
+        bits_left--;
+    }
+    ce->p758 = head;
+    func_00112100(chr, 1);
+    p = ce->p758;
+    while (p != 0) {
+        p->previous18 = p->flags16;
+        p = p->next;
+    }
+    ce->w7E8 = 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_111B50", Ch_MotionCalcHokan);
 

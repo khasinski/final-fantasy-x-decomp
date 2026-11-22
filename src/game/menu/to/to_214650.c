@@ -1,4 +1,6 @@
 /* tu_240 0x214650-0x216fa0: low; ~TOBtlInit (config/tu_map.tsv) */
+#define _TOBtlGetStdPad _hdr_TOBtlGetStdPad
+#define _TOGetPadStatusPrepare _hdr_TOGetPadStatusPrepare
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -7,6 +9,8 @@
 #include "ffx/u3.h"
 #include "ffx/t4.h"
 #include "ffx/v4.h"
+#undef _TOBtlGetStdPad
+#undef _TOGetPadStatusPrepare
 
 typedef struct {
     u8 pad00[0xC];
@@ -223,7 +227,7 @@ void TOBtlInitStatusWin(void);
 void func_002180A0(void);
 void func_00218928(void);
 void TOBtlInitLimitTimer(void);
-void TOBtlSetNextAction(int,int);
+int TOBtlSetNextAction(int, int);
 
 void TOSetBtlActiveChr(int id)
 {
@@ -252,7 +256,159 @@ void TOSetBtlActiveChr(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetNextAction);
+typedef struct {
+    u8 b0;
+    s8 state;
+    s8 b2;
+    u8 pad3[5];
+    s16 h8;
+    s8 bA;
+    s8 bB;
+    u16 hC;
+    u16 hE[4];
+    u16 h16[4];
+    u16 h1E;
+    s16 *list;
+    u8 pad24[0x14];
+    s16 h38;
+    s16 h3A;
+    u8 pad3C[4];
+    s16 h40;
+    s16 h42;
+    s16 h44;
+    u8 pad46[0x32];
+    void (*f78)(void);
+    u8 pad7C[0x18];
+    s16 h94;
+    s16 h96;
+    u8 pad98[0x34];
+} R4RecFull;
+
+extern u16 D_00692046;
+void func_002159A8(int idx, int a1, int cmd);
+void TOBtlSetTarget(int i, int a, int b);
+void TOBtlSetDefaultCursorPos(void);
+void TOBtlFinishCommand(void);
+int TOCheckBtlCommandUse(int owner, int item);
+extern void _int_func_001BFEA8(int) __asm__("func_001BFEA8");
+
+extern R4RecFull _r4_D_003249C0[] __asm__("D_003249C0");
+#define R4REC(i) (_r4_D_003249C0[i])
+
+int TOBtlSetNextAction(int id, int cmd_arg)
+{
+    int i;
+    register int cmd __asm__("$18") = cmd_arg;
+
+    if (R4REC(D_00325020).b2 == 1) {
+        if (R4REC(D_00325020).h96 >= R4REC(D_00325020).h94) {
+            TOBtlFinishCommand();
+            return 1;
+        }
+        {
+            extern u64 _a_toTarget[] __asm__("toTarget");
+            extern u64 _a_D_00325170[] __asm__("D_00325170");
+            cmd = 0x3115;
+            __builtin_memcpy(_a_D_00325170, _a_toTarget, 0x134);
+        }
+        if (D_003249A4 == 0x10000) {
+            int buf;
+            OfsTbl *com = MsGetComData(R4REC(D_00325020).hC, &buf);
+            D_00692040[3] = MsGetCommandMP(R4REC(D_00325020).h8, com);
+        }
+    }
+
+    {
+        register int res __asm__("$19");
+        switch (cmd) {
+        case 0xFFFE:
+            res = 0xD;
+            break;
+        case 0xFFFF:
+            res = 0xC;
+            break;
+        default:
+            res = TOCheckBtlCommandUse(id, cmd);
+            if (res < 0) {
+                return 0;
+            }
+            break;
+        }
+
+        if (res == 0xFF) {
+            TOBtlFinishCommand();
+            return 1;
+        }
+
+        if (D_00325020 >= 0) {
+            R4REC(D_00325020).state = 6;
+            R4REC(D_00325020).h16[R4REC(D_00325020).bB] = cmd;
+        }
+        D_00325020++;
+        func_002EF0D0(&R4REC(D_00325020), 0, sizeof(R4RecFull));
+        R4REC(D_00325020).h16[0] = 0xFF;
+        R4REC(D_00325020).h8 = id;
+        R4REC(D_00325020).hC = cmd;
+        if (D_00325020 == 0) {
+            R4REC(D_00325020).h96 = 0;
+            R4REC(D_00325020).h94 = 1;
+        } else {
+            int prev = D_00325020 - 1;
+            __asm__ volatile("" : "+r"(prev));
+            R4REC(D_00325020).h94 = R4REC(prev).h94;
+            R4REC(D_00325020).h96 = R4REC(prev).h96;
+        }
+        R4REC(D_00325020).state = 1;
+        if (res < 0x81) {
+            func_002159A8(D_00325020, id, cmd);
+        }
+        if (res == 0xFE) {
+            TOBtlSetTarget(D_00325020, id, cmd);
+        }
+    }
+    if (MsGetSaveConfigCursorSave() == 1
+        && ((s8 *)D_006906A0)[D_003252A4] == 1
+        && (u16)(R4REC(1).hC + 2) >= 2) {
+        register int idx __asm__("$3") = D_00325020;
+        __asm__ volatile("" : "+r"(idx));
+        {
+            register R4RecFull *r __asm__("$4") = &R4REC(idx);
+            __asm__ volatile("" : "+r"(r));
+            if (r->h8 < 0x12) {
+                TOBtlSetDefaultCursorPos();
+            }
+        }
+    }
+    if (R4REC(D_00325020).b2 == 1) {
+        typedef struct {
+            u8 pad00[0x10];
+            s32 w10;
+            u8 pad14[0x84];
+            u32 w98;
+            u8 pad9C[0xC];
+            s32 wA8;
+            s16 hAC;
+            u8 padAE[2];
+            s32 wB0[1];
+        } ToTarget98;
+        ToTarget98 *tt = (ToTarget98 *)&toTarget;
+        if (tt->w98 == 0xFFFFFFFFU && tt->w10 == 0) {
+            for (i = 0; i < D_00692008; i++) {
+                if (MsGetChrStatDeath(D_00692010[i]) == 1) {
+                    toTarget.h126 = toTarget.hAC;
+                    toTarget.wA8 = (&toTarget.wB0)[i];
+                    toTarget.h124 = D_00692010[i];
+                    toTarget.p128 = &toTarget.wB0;
+                    toTarget.h130 = 0;
+                    __asm__ volatile("" : "+r"(i) : : "memory");
+                    toTarget.h12C = i;
+                    break;
+                }
+            }
+        }
+    }
+    return 1;
+}
 
 extern R4Init D_00325170;
 extern s16 D_00692040[];
@@ -605,11 +761,453 @@ void func_00215B78(R4Wk *o, int b)
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlScanCommandWH);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_214650/rodata", jtbl_00570D90);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", _TOBtlGetMainPad);
+void func_0021BE28(void);
+void func_0021BDC8(void);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", _TOBtlGetStdPad);
+void _TOBtlGetMainPad(void *o)
+{
+    R4RecFull *wk = (R4RecFull *)o;
+    s32 winCnt;
+    s16 oldCur;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", _TOGetPadStatusPrepare);
+    if (D_00692038 == 0) {
+        return;
+    }
+    if (wk->f78 != func_0021BDC0) {
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x10) {
+        int skip = MsMenuGetChrSkipCommand(wk->h8);
+        if (skip != 0) {
+            ((ToBtlCmdBuf *)D_003252A8)->b0 = wk->h8;
+            ((ToBtlCmdBuf *)D_003252A8)->b3 = 1;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[0] = skip;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[1] = 0xFF;
+            D_003250D8 = 1 << wk->h8;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].w8 = 1 << wk->h8;
+            MsSetBtlCommand(D_003252A8, 0, 0);
+            func_00215360(D_003252A4);
+            func_002184B8();
+            func_0020DC78(2);
+            D_003252A4 = 0xFF;
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+    }
+
+    if (D_003238D0.h14 & 4) {
+        if (MsGetSaveChrSummon(wk->h8) != 0) {
+            func_002D70D8(3);
+            return;
+        }
+        if (TOBtlSetNextAction(wk->h8, 0x3002) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x8000) {
+        if (MsCheckLeftWindow(wk->h8) > 0) {
+            TOBtlSetNextAction(wk->h8, 0xFFFF);
+            func_002D70D8(1);
+            return;
+        }
+    }
+
+    if (D_003238D0.h14 & 0x2000) {
+        TOGetSaveWindow(wk->h8, 0xD, &winCnt);
+        if (winCnt == 0) {
+            func_002D70D8(3);
+            return;
+        }
+        TOBtlSetNextAction(wk->h8, 0xFFFE);
+        func_002D70D8(1);
+        return;
+    }
+
+    oldCur = wk->h42;
+    if (D_003238D0.h16 & 0x1000) {
+        wk->h42 -= wk->h38;
+    }
+    if (D_003238D0.h16 & 0x4000) {
+        wk->h42 += wk->h38;
+    }
+    if (wk->h42 < 0) {
+        wk->h42 += wk->h38;
+    }
+    if (wk->h42 >= wk->h44) {
+        if (wk->h42 / wk->h38 > (wk->h44 - 1) / wk->h38) {
+            wk->h42 -= wk->h38;
+        } else {
+            wk->h42 = wk->h44 - 1;
+        }
+    }
+
+    wk->h16[wk->bB] = wk->list[wk->h42];
+    wk->hE[wk->bB] = wk->h42;
+
+    if (D_003238D0.h14 & 0x40) {
+        if (wk->bB > 0) {
+            wk->h16[wk->bB] = 0xFF;
+            wk->hE[wk->bB] = 0xFF;
+            wk->bB--;
+            wk->h42 = wk->hE[wk->bB];
+            wk->h1E = wk->h16[wk->bB];
+            func_001BFEA8(0);
+            func_002D70D8(4);
+            return;
+        }
+        if (D_00325020 > 0) {
+            TOBtlSetPrevAction();
+            wk->state++;
+            func_002D70D8(4);
+            return;
+        }
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(wk->h8, wk->h16[wk->bB]) < 0) {
+            func_002D70D8(3);
+            return;
+        }
+        wk->h16[wk->bB] = wk->list[wk->h42];
+        wk->hE[wk->bB] = wk->h42;
+        wk->bB++;
+        if (wk->bB < wk->bA) {
+            _int_func_001BFEA8(wk->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        if (TOBtlSetNextAction(wk->h8, wk->list[wk->h42]) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+
+    if (wk->h42 < wk->h40) {
+        wk->h40 -= wk->h38;
+        wk->f78 = func_0021BE28;
+    }
+    if (wk->h42 >= wk->h40 + wk->h3A * wk->h38) {
+        wk->h40 += wk->h38;
+        wk->f78 = func_0021BDC8;
+    }
+    if (wk->h3A * wk->h38 < wk->h44) {
+        winCnt = ((wk->h44 + wk->h38 - 1) / wk->h38 - wk->h3A) * wk->h38;
+        wk->h40 = (wk->h40 > winCnt) ? winCnt : (wk->h40 < 0 ? 0 : wk->h40);
+    } else {
+        wk->h40 = 0;
+    }
+
+    if (wk->h42 != oldCur) {
+        wk->h1E = wk->list[wk->h42];
+        wk->hE[wk->bB] = wk->h42;
+        wk->h16[wk->bB] = wk->list[wk->h42];
+        func_002D70D8(1);
+    }
+}
+
+void _TOBtlGetStdPad(R4RecFull *wk)
+{
+    s32 winCnt;
+    s16 oldCur;
+
+    if (D_00692038 == 0) {
+        return;
+    }
+    if (wk->f78 != func_0021BDC0) {
+        return;
+    }
+
+    if (D_00325020 == 0 && (D_003238D0.h14 & 0x10)) {
+        int skip = MsMenuGetChrSkipCommand(wk->h8);
+        if (skip != 0) {
+            func_002D70D8(1);
+            ((ToBtlCmdBuf *)D_003252A8)->b0 = wk->h8;
+            ((ToBtlCmdBuf *)D_003252A8)->b3 = 1;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[0] = skip;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[1] = 0xFF;
+            D_003250D8 = 1 << wk->h8;
+            ((ToBtlCmdBuf *)D_003252A8)->item[0].w8 = 1 << wk->h8;
+            MsSetBtlCommand(D_003252A8, 0, 0);
+            func_00215360(D_003252A4);
+            func_002184B8();
+            func_0020DC78(2);
+            D_003252A4 = 0xFF;
+            return;
+        }
+        func_002D70D8(3);
+    }
+
+    if (D_003238D0.h14 & 4) {
+        if (D_00325020 != 0) {
+            func_002D70D8(3);
+            return;
+        }
+        if (MsGetSaveChrSummon(wk->h8) != 0) {
+            func_002D70D8(3);
+            return;
+        }
+        if (TOBtlSetNextAction(wk->h8, 0x3002) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+
+    if (D_00325020 == 0) {
+        if (D_003238D0.h14 & 0x8000) {
+            if (MsCheckLeftWindow(wk->h8) > 0) {
+                TOBtlSetNextAction(wk->h8, 0xFFFF);
+                func_002D70D8(1);
+                return;
+            }
+        }
+        if (D_003238D0.h14 & 0x2000) {
+            TOGetSaveWindow(wk->h8, 0xD, &winCnt);
+            if (winCnt == 0) {
+                func_002D70D8(3);
+                return;
+            }
+            TOBtlSetNextAction(wk->h8, 0xFFFE);
+            func_002D70D8(1);
+            return;
+        }
+    }
+
+    oldCur = wk->h42;
+    if ((D_003238D0.h12 & 0x9000) != 0x9000
+        && (D_003238D0.h12 & 0x3000) != 0x3000
+        && (D_003238D0.h12 & 0xC000) != 0xC000
+        && (D_003238D0.h12 & 0x6000) != 0x6000) {
+        if (D_003238D0.h16 == 0x1000) {
+            wk->h42 -= wk->h38;
+        }
+        if (D_003238D0.h16 == 0x4000) {
+            wk->h42 += wk->h38;
+        }
+        if (D_003238D0.h16 == 0x8000) {
+            wk->h42--;
+        }
+        if (D_003238D0.h16 == 0x2000) {
+            wk->h42++;
+        }
+        if (D_003238D0.h16 == 0x1000 || D_003238D0.h16 == 0x4000) {
+            if (wk->h42 < 0) {
+                wk->h42 += wk->h38;
+            }
+            if (wk->h42 >= wk->h44) {
+                if (wk->h42 / wk->h38 > (wk->h44 - 1) / wk->h38) {
+                    wk->h42 -= wk->h38;
+                } else {
+                    wk->h42 = wk->h44 - 1;
+                }
+            }
+        }
+        if (D_003238D0.h16 == 0x8000 || D_003238D0.h16 == 0x2000) {
+            if (wk->h42 < 0) {
+                wk->h42 = 0;
+            }
+            if (wk->h42 >= wk->h44) {
+                wk->h42 = wk->h44 - 1;
+            }
+        }
+    }
+
+    wk->h16[wk->bB] = wk->list[wk->h42];
+    wk->hE[wk->bB] = wk->h42;
+
+    if (D_003238D0.h14 & 0x40) {
+        if (wk->bB > 0) {
+            wk->h16[wk->bB] = 0xFF;
+            wk->hE[wk->bB] = 0xFF;
+            wk->bB--;
+            wk->h42 = wk->hE[wk->bB];
+            wk->h1E = wk->h16[wk->bB];
+            func_001BFEA8(0);
+            func_002D70D8(4);
+            return;
+        }
+        if (D_00325020 > 0) {
+            TOBtlSetPrevAction();
+            wk->state++;
+            func_002D70D8(4);
+            return;
+        }
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(wk->h8, wk->h16[wk->bB]) < 0) {
+            func_002D70D8(3);
+            return;
+        }
+        wk->h16[wk->bB] = wk->list[wk->h42];
+        wk->hE[wk->bB] = wk->h42;
+        wk->bB++;
+        if (wk->bB < wk->bA) {
+            _int_func_001BFEA8(wk->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        if (TOBtlSetNextAction(wk->h8, wk->list[wk->h42]) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+
+    if (wk->h42 < wk->h40) {
+        wk->h40 -= wk->h38;
+        wk->f78 = func_0021BE28;
+    }
+    if (wk->h42 >= wk->h40 + wk->h3A * wk->h38) {
+        wk->h40 += wk->h38;
+        wk->f78 = func_0021BDC8;
+    }
+    if (wk->h3A * wk->h38 < wk->h44) {
+        winCnt = ((wk->h44 + wk->h38 - 1) / wk->h38 - wk->h3A) * wk->h38;
+        wk->h40 = (wk->h40 > winCnt) ? winCnt : (wk->h40 < 0 ? 0 : wk->h40);
+    } else {
+        wk->h40 = 0;
+    }
+
+    if (wk->h42 != oldCur) {
+        wk->h1E = wk->list[wk->h42];
+        wk->hE[wk->bB] = wk->h42;
+        wk->h16[wk->bB] = wk->list[wk->h42];
+        func_002D70D8(1);
+    }
+}
+
+void _TOGetPadStatusPrepare(R4RecFull *wk)
+{
+    s16 oldCur;
+
+    if (D_00692038 == 0) {
+        return;
+    }
+    if (wk->f78 != func_0021BDC0) {
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x40) {
+        if (wk->bB > 0) {
+            wk->h16[wk->bB] = 0xFF;
+            wk->hE[wk->bB] = 0xFF;
+            wk->bB--;
+            wk->h42 = wk->hE[wk->bB];
+            wk->h1E = wk->h16[wk->bB];
+            func_001BFEA8(0);
+            func_002D70D8(4);
+            return;
+        }
+        if (D_00325020 > 0) {
+            TOBtlSetPrevAction();
+            wk->state++;
+            func_002D70D8(4);
+            return;
+        }
+        return;
+    }
+
+    if (D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(wk->h8, wk->list[wk->h42]) < 0) {
+            func_002D70D8(3);
+            return;
+        }
+        wk->h16[wk->bB] = wk->list[wk->h42];
+        wk->hE[wk->bB] = wk->h42;
+        wk->bB++;
+        if (wk->bB < wk->bA) {
+            _int_func_001BFEA8(wk->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        if (TOBtlSetNextAction(wk->h8, wk->list[wk->h42]) == 1) {
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+        return;
+    }
+
+    if (D_003238D0.h14 & 4) {
+        func_002D70D8(3);
+        return;
+    }
+
+    oldCur = wk->h42;
+    if ((D_003238D0.h12 & 0x9000) != 0x9000
+        && (D_003238D0.h12 & 0x3000) != 0x3000
+        && (D_003238D0.h12 & 0xC000) != 0xC000
+        && (D_003238D0.h12 & 0x6000) != 0x6000) {
+        if (D_003238D0.h16 == 0x1000) {
+            wk->h42 -= wk->h38;
+        }
+        if (D_003238D0.h16 == 0x4000) {
+            wk->h42 += wk->h38;
+        }
+        if (D_003238D0.h16 == 0x8000) {
+            wk->h42--;
+        }
+        if (D_003238D0.h16 == 0x2000) {
+            wk->h42++;
+        }
+        if (D_003238D0.h16 == 0x1000 || D_003238D0.h16 == 0x4000) {
+            if (wk->h42 < 0) {
+                wk->h42 += wk->h38;
+            }
+            if (wk->h42 >= wk->h44) {
+                if (wk->h42 / wk->h38 > (wk->h44 - 1) / wk->h38) {
+                    wk->h42 -= wk->h38;
+                } else {
+                    wk->h42 = wk->h44 - 1;
+                }
+            }
+        }
+        if (D_003238D0.h16 == 0x8000 || D_003238D0.h16 == 0x2000) {
+            if (wk->h42 < 0) {
+                wk->h42 = 0;
+            }
+            if (wk->h42 >= wk->h44) {
+                wk->h42 = wk->h44 - 1;
+            }
+        }
+    }
+
+    wk->h16[wk->bB] = wk->list[wk->h42];
+    wk->hE[wk->bB] = wk->h42;
+
+    if (wk->h42 < wk->h40) {
+        wk->h40 -= wk->h38;
+        wk->f78 = func_0021BE28;
+    }
+    if (wk->h42 >= wk->h40 + wk->h3A * wk->h38) {
+        wk->h40 += wk->h38;
+        wk->f78 = func_0021BDC8;
+    }
+    if (wk->h3A * wk->h38 < wk->h44) {
+        int maxTop = ((wk->h44 + wk->h38 - 1) / wk->h38 - wk->h3A) * wk->h38;
+        wk->h40 = (wk->h40 > maxTop) ? maxTop : (wk->h40 < 0 ? 0 : wk->h40);
+    } else {
+        wk->h40 = 0;
+    }
+
+    if (wk->h42 != oldCur) {
+        wk->h1E = wk->list[wk->h42];
+        func_002D70D8(1);
+    }
+}
 
 void func_00216EE8(void) {
 }
