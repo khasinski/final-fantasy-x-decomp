@@ -123,9 +123,70 @@ void func_002B06B0(void *arg0) {
     (*(s32 *)((u8 *)(temp_19) + (0x54))) = _m2c_func_002B06B0_op1_mdc_draw(temp_2, temp_18, temp_21, arg0 + 0x280, temp_22);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", opp_mdc_parallel4);
+void _opp_func_002B0BF0(void *, void *, void *, void *, void *) __asm__("func_002B0BF0");
+void _opp_func_002B0DC8(void *, void *, void *, void *, void *) __asm__("func_002B0DC8");
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", opp_mdc_point4);
+typedef struct OppCtx {
+    union {
+        u_long128 q;
+        s32 w[4];
+    } u0;
+    u8 pad10[0x20E];
+    s8 b21E;
+    u8 pad21F;
+    void *p220;
+} OppCtx; /* DEBT(NAME) */
+
+/* DEBT(CAST): OppCtx overlays AnimCtx for non-aliasing b21E and 128-bit copy */
+/* DEBT(ORDER): barriers keep lw/lq/sq/sw before opus_rt_m_chara */
+/* DEBT(REG): pin s2/s3/s4/s6 to match callee-saved register allocation */
+void opp_mdc_parallel4(void *arg0, void *arg1)
+{
+    OppCtx *o = (OppCtx *)arg0;
+    register void *p80 __asm__("$20") = (u8 *)arg0 + 0x80;
+    register void *pC0 __asm__("$18") = (u8 *)arg0 + 0xC0;
+    register void *p100 __asm__("$19") = (u8 *)arg0 + 0x100;
+    void *t = o->p220;
+    register s16 *pA8 __asm__("$22") = *(s16 **)((u8 *)t + 0xA8);
+    s32 ret;
+
+    __asm__ volatile("" : "+r"(pA8), "+r"(pC0), "+r"(p100));
+    o->u0.q = *(u_long128 *)((u8 *)t + 0x30);
+    __asm__ volatile("" ::: "memory");
+    o->u0.w[0] = 0;
+    _m2c_func_002B06B0_opus_rt_m_chara(p80, *(u8 *)((u8 *)t + 0x18), arg0, (u8 *)t + 0x90, o->b21E, *(float *)((u8 *)t + 0x3C));
+    _m2c_func_002B06B0_func_002B56D8(pC0, _m2c_func_002B06B0_opus_local_get(arg0, t), p80);
+    _m2c_func_002B06B0_func_002B56D8(pC0, (u8 *)arg0 + 0x2C0, pC0);
+    ret = _m2c_func_002B06B0_rcefChrDraw(p100, arg0, arg1, t, *pA8);
+    _opp_func_002B0BF0(p100, arg0, arg1, t, pA8);
+    *(s32 *)((u8 *)arg1 + 0x54) = _m2c_func_002B06B0_op1_mdc_draw(ret, p100, p80, (u8 *)arg0 + 0x280, (u8 *)arg0 + 0x2C0);
+}
+
+/* DEBT(CAST): OppCtx overlays AnimCtx for non-aliasing b21E and 128-bit copy */
+/* DEBT(ORDER): barriers keep lw/lq/sq/sw before opus_rt_m_chara */
+/* DEBT(REG): pin s2/s3/s4/s6 to match callee-saved register allocation */
+void opp_mdc_point4(void *arg0, void *arg1)
+{
+    OppCtx *o = (OppCtx *)arg0;
+    register void *p80 __asm__("$20") = (u8 *)arg0 + 0x80;
+    register void *pC0 __asm__("$18") = (u8 *)arg0 + 0xC0;
+    register void *p100 __asm__("$19") = (u8 *)arg0 + 0x100;
+    void *t = o->p220;
+    register s16 *pA8 __asm__("$22") = *(s16 **)((u8 *)t + 0xA8);
+    s32 ret;
+
+    __asm__ volatile("" : "+r"(pA8), "+r"(pC0), "+r"(p100));
+    o->u0.q = *(u_long128 *)((u8 *)t + 0x30);
+    __asm__ volatile("" ::: "memory");
+    o->u0.w[0] = 0;
+    _m2c_func_002B06B0_opus_rt_m_chara(p80, *(u8 *)((u8 *)t + 0x18), arg0, (u8 *)t + 0x90, o->b21E, *(float *)((u8 *)t + 0x3C));
+    _m2c_func_002B06B0_func_002B56D8(pC0, _m2c_func_002B06B0_opus_local_get(arg0, t), p80);
+    _m2c_func_002B06B0_func_002B56D8(pC0, (u8 *)arg0 + 0x2C0, pC0);
+    ret = _m2c_func_002B06B0_rcefChrDraw(p100, arg0, arg1, t, *pA8);
+    *(u32 *)((u8 *)arg0 + 0x100) |= 0x40;
+    _opp_func_002B0DC8(p100, arg0, arg1, t, pA8);
+    *(s32 *)((u8 *)arg1 + 0x54) = _m2c_func_002B06B0_op1_mdc_draw(ret, p100, p80, (u8 *)arg0 + 0x280, (u8 *)arg0 + 0x2C0);
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", rcefChrDraw);
 

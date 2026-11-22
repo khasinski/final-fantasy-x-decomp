@@ -192,7 +192,85 @@ void func_00114600(ClothSpring *c, int n, ClothVec4 *verts)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_113FF8", Ch_ClothReset2);
+typedef struct ClothVec4A8 {
+    float x;
+    float y;
+    float z;
+    float w;
+} __attribute__((aligned(8))) ClothVec4A8; /* DEBT(NAME) */
+
+typedef struct ClothSub24 {
+    s8 pad0[8];
+    u16 *p8;
+    s8 padC[7];
+    s8 b13;
+    s8 pad14[8];
+    s16 h1C;
+    s8 pad1E[6];
+} ClothSub24; /* DEBT(NAME) */
+
+typedef struct ClothInfo {
+    s8 pad0[0x18];
+    u16 h18;
+    s8 pad1A[2];
+    ClothSub24 *p1C;
+} ClothInfo; /* DEBT(NAME) */
+
+typedef struct ClothSlot30 {
+    ClothInfo *p0;
+    s8 pad4[4];
+    ClothVec4A8 *p8;
+    ClothVec4A8 *pC;
+    s8 pad10[0x20];
+} ClothSlot30; /* DEBT(NAME) */
+
+s32 Ch_ClothResetRelation(Chr *); /* DEBT(TYPE): non-void prevents sibling tail-call */
+
+/* DEBT(CAST): raw Chr cloth pointers at +0x1C8/+0x1CC */
+/* DEBT(PADDING): stack local padding to match original -0x40 frame */
+void Ch_ClothReset2(void *a)
+{
+    Chr *chr = (Chr *)a;
+    s32 pad;
+    s32 i;
+
+    if (!((s32)(((s64)chr->flags << 11) >> 32) & 1)) {
+        return;
+    }
+
+    for (i = 0; i < *(u16 *)(*(u8 **)((u8 *)chr + 0x1CC) + 6); i++) {
+        ClothSlot30 *slot = &(*(ClothSlot30 **)((u8 *)chr + 0x1C8))[i];
+        ClothInfo *info = slot->p0;
+        ClothVec4A8 *dst;
+        s32 j;
+
+        if (info->h18 == 0) {
+            continue;
+        }
+        dst = slot->pC;
+        if (dst == 0) {
+            return;
+        }
+        for (j = 0; j < info->h18; j++) {
+            ClothSub24 *sub = &info->p1C[j];
+            u16 *idx = sub->p8;
+            s32 total = sub->h1C + sub->b13;
+            s32 k;
+
+            for (k = 0; k < sub->h1C; k++) {
+                ClothVec4A8 *v = &dst[k + total];
+                dst[k] = slot->p8[*idx++];
+                v->x = v->y = v->z = 0.0f;
+                *(ClothVec4A8 *)((u8 *)v + (total << 4)) = dst[k];
+            }
+            dst += total * 3;
+        }
+    }
+
+    chr->flags |= 0x800000;
+    Ch_ClothResetRelation(chr);
+    __asm__ volatile("" : : "m"(pad)); /* DEBT(ORDER): prevent sibling tail-call and keep stack padding */
+}
 
 s32 Ch_ClothReset(void *a) /* DEBT(TYPE): declared in funcs.h as returning s32, no value is produced */
 {
