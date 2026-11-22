@@ -395,7 +395,28 @@ int func_0022DF88(u8 *base, FieldDesc *d, int sel)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022DFD0);
+extern s16 D_00325878[2];
+extern s32 D_00693BF0;
+
+void func_0022DFD0(int a, int x, int y, int idx, int flg)
+{
+    Task *t = (Task *)a; /* DEBT(CAST): u3.h declares arg0 as int */
+    int dis;
+    int val;
+
+    if (flg == 0) {
+        y -= t->x46 / 0x80;
+    }
+    if (idx < 0 || idx >= (u16)t->x30) {
+        return;
+    }
+    func_00226D88(x, y, 0x10);
+    func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+    dis = ((D_00693BF0 >> idx) & 1) ^ 1;
+    func_00226350(x + 0x1D, y + 1, TOMenuGetSummonMes(D_00325900[idx].w4), dis);
+    val = func_0022DF88((u8 *)MsGetSavePlayerPtr(func_00242940()), (FieldDesc *)&D_00325900[idx], 1); /* DEBT(CAST): R5Rec1C is FieldDesc */
+    func_00226C78(x + D_00693BE8[0], y + D_00693BE8[1], val, dis);
+}
 
 void func_0022E158(int a, int b, int c, int x, int y)
 {

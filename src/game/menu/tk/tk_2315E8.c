@@ -331,7 +331,50 @@ void func_00232688(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     } while ((_cond = (var_16 < 0xA)) != 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00232728);
+void func_002274A0(int, int, int, int);
+void func_00225E88(int, int, int, int, int, int, int);
+
+void func_00232728(Task *t)
+{
+    u8 *base = (u8 *)0x01D57300; /* DEBT(CAST): hardcoded table address 0x01D57300 */
+    u8 *slot;
+    int item, cost;
+    int y;
+
+    func_00225A38();
+    V5_func_00225920_void();
+    slot = base + t->x48 * 4;
+    if (slot[3] != 0xFF) {
+        u8 *tbl = (u8 *)func_00227ED0() + slot[3] * 8;
+        item = *(u16 *)(tbl + 4);
+        cost = tbl[6];
+    } else {
+        item = -1;
+        cost = 100;
+    }
+    if (item >= 0) {
+        func_002277F8(D_00325AD0.rect[0], D_00325AD0.rect[1], item, cost, 0);
+        func_00226210(D_00325B00[0], D_00325B00[1], 0x10);
+    }
+    TkMenuGetCurrentPlayer();
+    func_00226210(D_00693D70[0], D_00693D70[1], 7);
+    y = D_00693D88.y;
+    if (t->x32 == t->x34) {
+        func_002274A0(y, 0x120, 0, t->x46);
+        func_00232688(t, 0, t->x32, 0, -0x20);
+    } else {
+        func_002274A0(y, 0x120, 1, t->x46);
+        func_00232688(t, 1, t->x32, 0, -0x20);
+        func_002274A0(y, 0x120, 2, t->x46);
+        func_00232688(t, 2, t->x34, 0, -(t->x46 * 0x120) / 0x1000 - 0x20);
+    }
+    func_00225908();
+    y = D_00693D88.y;
+    func_00232660(t, D_00693D88.x + 0xC, y + 1);
+    func_00225E88(D_00693D90[0], D_00693D90[1], D_00693D90[2], D_00693D90[3], t->x32, (u16)t->x3A, (u16)t->x30);
+    func_002324D0(D_00693D98[0], D_00693D98[1], D_00693D58->x48);
+    func_00225B00();
+}
 
 int func_00232930(void) { return 1; }
 

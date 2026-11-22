@@ -336,7 +336,59 @@ u16 *TOGetSaveWindow(int id, int mode, s32 *out)
     return buf;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", func_002159A8);
+extern s8 D_00325020;
+extern s32 D_003249A4;
+
+void func_002159A8(int idx, int a1, int cmd)
+{
+    R4Rec *r = &D_003249C0[idx];
+
+    r->b2 = 0;
+    switch (cmd) {
+    case 0xFE:
+        ((u8 *)r)[0xB] = 0; /* DEBT(CAST): R4Rec fields at +6, +A, +B, +C, +94 */
+        ((u8 *)r)[0xA] = 1;
+        __asm__ volatile("" ::: "memory"); /* DEBT(ORDER): keep sb +0xB before sh +0x6 */
+        *(s16 *)((u8 *)r + 6) = 0;
+        break;
+    case 0xFFFE:
+        *(s16 *)((u8 *)r + 6) = 0xD;
+        ((u8 *)r)[0xA] = 1;
+        ((u8 *)r)[0xB] = 0;
+        break;
+    case 0xFFFF:
+        *(s16 *)((u8 *)r + 6) = 0xC;
+        ((u8 *)r)[0xA] = 1;
+        ((u8 *)r)[0xB] = 0;
+        break;
+    default:
+        {
+            int buf;
+            u8 *com = (u8 *)MsGetComData(cmd, &buf);
+            R4Rec *r2 = &D_003249C0[idx];
+            R4Rec *cur = &D_003249C0[D_00325020];
+
+            *(s16 *)((u8 *)r2 + 6) = com[0x17];
+            ((u8 *)r2)[0xB] = 0;
+            ((u8 *)r2)[0xA] = 1;
+            if (*(volatile u16 *)((u8 *)cur + 0xC) == 0x311E) { /* DEBT(ORDER): reload +0xC after +0xA store */
+                D_003249A4 = 0x100;
+                ((u8 *)cur)[0xA] = 2;
+            }
+            if (*(u16 *)((u8 *)cur + 0xC) == 0x3029) {
+                D_003249A4 = 0x10000;
+                *(s16 *)((u8 *)cur + 0x94) = 2;
+            }
+        }
+        break;
+    }
+    {
+        R4Rec *r3 = &D_003249C0[idx];
+        func_00215B78((R4Wk *)r3, *(s16 *)((u8 *)r3 + 6));
+        func_002105D0((R4Task *)r3);
+        TOBtlSetCallback((R4Task *)r3);
+    }
+}
 
 void TOBtlSetTarget(int i, int a, int b)
 {

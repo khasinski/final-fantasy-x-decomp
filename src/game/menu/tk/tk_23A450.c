@@ -481,7 +481,55 @@ void func_0023B488(Task *t, int x, int y) {
     func_002270F8(x + D_003261D8.x, y + D_003261D8.y + ((t->x48 - t->x32) << 5), 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023B4C8);
+extern s32 D_00694110;
+extern s32 D_0069411C;
+extern s16 D_00694148[];
+extern Task *D_00326030;
+void func_002274A0(int, int, int, int);
+void func_00225E88(int, int, int, int, int, int, int);
+
+typedef struct TkShopList {
+    u16 h0;
+    u16 items[1];
+} TkShopList;
+
+void func_0023B4C8(Task *t)
+{
+    TkShopList *list;
+    int px, py;
+    int y;
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    V5_func_00225920_void();
+    list = (TkShopList *)func_00228220(D_00694110, D_0069411C);
+    func_00226FE0(&D_00326188);
+    func_00226290(D_00326170[0], D_00326170[1], 9);
+    px = D_00326188.rect[0] + D_00326178[0];
+    py = D_00326188.rect[1] + D_00326178[1];
+    func_00226E10(px, py, 0xFD);
+    if (t->b45 >= 0) {
+        int cnt = func_001BFE30(list->items[t->x48]);
+        func_00226C78(px + D_006940C8[0], py + D_006940C8[1], cnt, 0);
+    }
+    y = D_003261D8.y;
+    if (t->x32 == t->x34) {
+        func_002274A0(y, 0x140, 0, t->x46);
+        func_0023B3E0(t, 0, t->x32, 0, -0x20, list);
+    } else {
+        func_002274A0(y, 0x140, 1, t->x46);
+        func_0023B3E0(t, 1, t->x32, 0, -0x20, list);
+        func_002274A0(y, 0x140, 2, t->x46);
+        func_0023B3E0(t, 2, t->x34, 0, -(t->x46 * 0x140) / 0x1000 - 0x20, list);
+    }
+    func_00225908();
+    if (D_00326030->b45 > 0 && D_00326030->x48 != 2) {
+        func_0023B488(t, 0, 0);
+    }
+    func_00225E88(D_00326180[0], D_00326180[1], D_00326180[2], D_00326180[3], t->x32, (u16)t->x3A, (u16)t->x30);
+    func_00225B00();
+}
 
 int func_0023B700(void) { return 1; }
 
@@ -588,7 +636,33 @@ void func_0023BA20(Task *t, int x, int y)
     func_002270F8(x, y + ((t->x48 / 2 - t->x32) << 5), 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", func_0023BAA0);
+void func_0023BAA0(Task *t)
+{
+    register int y __asm__("$16"); /* DEBT(REG): s0/s1 swap between y and t */
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    V5_func_00225920_void();
+    func_00228220(D_00694110, D_0069411C);
+    y = D_00694138[1];
+    if (t->x32 == t->x34) {
+        func_002274A0(y - 4, 0x144, 0, t->x46);
+        func_0023B940(t, 0, t->x32, 0, -0x20);
+    } else {
+        y -= 4;
+        func_002274A0(y, 0x144, 1, t->x46);
+        func_0023B940(t, 1, t->x32, 0, -0x20);
+        func_002274A0(y, 0x144, 2, t->x46);
+        func_0023B940(t, 2, t->x34, 0, -(t->x46 * 0x140) / 0x1000 - 0x20);
+    }
+    func_00225908();
+    func_00225E88(D_00694148[0], D_00694148[1], D_00694148[2], D_00694148[3], t->x32, (u16)t->x3A, ((u16)t->x30 + 1) >> 1);
+    if (D_00326030->b45 > 0 && D_00326030->x48 != 2) {
+        func_0023BA20(t, 0, 0);
+    }
+    func_00225B00();
+}
 
 int func_0023BC28(void) { return 1; }
 
