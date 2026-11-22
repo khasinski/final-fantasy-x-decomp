@@ -439,7 +439,52 @@ int _pppRunPart(void *a, int flags)
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", func_00268080);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppRunPartFp);
+extern s32 D_0036F204;
+void func_00268080(void *m);
+
+int _pppRunPartFp(void *a, int flags)
+{
+    PppRunMgr *m = (PppRunMgr *)a;
+
+    ppvMng = (T6_ColMgr *)m;
+    if (flags & 0x10) {
+        func_002670E0((ObjGroup *)m);
+    }
+    D_0036F204 = 0;
+    func_00267F10((T6_ColMgr *)m);
+    if (D_0036F204 != 0) {
+        if (flags & 0x20) {
+            func_00267150((ObjGroup *)m);
+        }
+        return 1;
+    }
+    func_00268080(m);
+    if (D_0036F204 != 0) {
+        if (flags & 0x20) {
+            func_00267150((ObjGroup *)m);
+        }
+        return 1;
+    }
+    if (flags & 0x20) {
+        func_00267150((ObjGroup *)m);
+    }
+    if (D_006A3BC4 != 0) {
+        return 0;
+    }
+    m->wC = m->w8;
+    m->w8 += m->w10;
+    if (m->b1C != 0) {
+        if (m->b1D != 0) {
+            return m->p30 == 0;
+        }
+        if (m->w8 > 0x6FFFFFFF) {
+            m->w8 = 0x70000000;
+            m->wC = 0x70000000 - m->w10;
+        }
+        return 0;
+    }
+    return m->w8 >= m->w4;
+}
 
 void func_00268610(NodeOwner *owner, void (**tbl)(), int c)
 {

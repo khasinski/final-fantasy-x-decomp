@@ -666,7 +666,28 @@ INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168090);
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168328);
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", hdd_inst_start_sub);
+extern char D_0056BE08[];
+extern int D_0030DE88;
+extern void func_00167358(void);
+extern void func_00168328(void);
+
+void hdd_inst_start_sub(void)
+{
+    if (D_0030DE51 != 0) {
+        return;
+    }
+    D_0030DE50 = 0;
+    D_00597980 = 0;
+    D_00597978 = 0;
+    D_005979D8 = 0;
+    func_0011C348(0x40);
+    D_0030DE84 = (int)user_malloc(0x100800, 10, D_0056BE08, 0x9B2);
+    func_0011C348(0x40);
+    D_0030DE88 = (int)user_malloc(0x100800, 10, D_0056BE08, 0x9B4);
+    func_0016BC80(func_00167358);
+    TkRegistBGThreadFunc(func_00168328);
+    TkSignalSemaBGThread();
+}
 
 int func_001685C8(void) {
     int v = D_0030DE51;

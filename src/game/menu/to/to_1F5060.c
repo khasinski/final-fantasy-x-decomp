@@ -565,7 +565,45 @@ void *func_001F7B98(void *list, int a, int b, int c, int d, int e, int f)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7BC8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", TOAddPktChangeMacro);
+u8 *func_00204CA8(u8 *s, R4CharInfo *glyph);
+void func_001F1630(TextItem *it, R4CharInfo *glyph);
+void func_001F0EC0(TextItem *it, R4CharInfo *glyph);
+void func_001F11E0(TextItem *it, R4CharInfo *glyph);
+
+void *TOAddPktChangeMacro(int a0, u8 *s, TextItem *it)
+{
+    R4CharInfo *glyph = &D_00323930;
+    u8 c;
+
+    func_002EF0D0(glyph, 0, 0x20);
+    s = TOGetChangeMacroAddress(a0, s);
+    if (s == 0) {
+        return InvokedFromSelectCursor;
+    }
+    while ((c = *s) != 0) {
+        if (c == 7) {
+            if ((u8)(s[1] + 0x20) < 0x10) {
+                it->x += (s[1] + 0xFF20);
+            }
+            s = TOSkipCode(s);
+        } else if ((u32)(c - 0x12) < 0x11) {
+            TOAddPktChangeMacro(a0, s, it);
+            s = TOSkipCode(s);
+        } else {
+            s = func_00204CA8(s, glyph);
+            if (it->f12 == 1) {
+                func_001F1630(it, glyph);
+                func_001F0EC0(it, glyph);
+                it->x += glyph->h10 + 4;
+            } else {
+                func_001F11E0(it, glyph);
+                func_001F0EC0(it, glyph);
+                it->x += glyph->h10 + 2;
+            }
+        }
+    }
+    return InvokedFromSelectCursor;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7FC0);
 

@@ -1058,7 +1058,32 @@ void func_001FF828(int x, int y)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FF9F0);
+void func_001FF9F0(int x, int y, int a)
+{
+    GIF_CUR()->ul64[0] = 0x1000000000000004UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(GS_SET_SCISSOR(0, 0x1FF, 0, 0x19F), 0x40);
+    GIF_AD(0x4005D48621313F00UL, 6);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_CUR()->ul64[0] = 0x30AE400000008004UL;
+    GIF_CUR()->ul64[1] = 0x431;
+    GIF_NEXT();
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, a);
+    func_001FB550(0, 0);
+    func_001FB678(x, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, a);
+    func_001FB550(0xB2, 0);
+    func_001FB678(x + 0xB2, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, a);
+    func_001FB550(0, 0x41);
+    func_001FB678(x, y + 0x41);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, a);
+    func_001FB550(0xB2, 0x41);
+    func_001FB678(x + 0xB2, y + 0x41);
+    func_001EFA30();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FFBC8);
 

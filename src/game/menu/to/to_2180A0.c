@@ -1,5 +1,6 @@
 /* tu_242 0x2180a0-0x218a78: low; ~TOBtlCtrlHelpWin (config/tu_map.tsv) */
 #define func_00218330 _hdr_func_00218330
+#define MsMenuCheckChrLive _hdr_MsMenuCheckChrLive
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -8,6 +9,11 @@
 #include "ffx/g3.h"
 #include "ffx/v4.h"
 #undef func_00218330
+#undef MsMenuCheckChrLive
+
+int MsMenuCheckLook(void);
+int MsMenuCheckChrLive(int id);
+void TOBtlSetInfoWinParam(u16 id);
 
 void func_002180A0(void)
 {
@@ -111,4 +117,31 @@ void func_00218928(void)
     D_00692500 = 0xFF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlCtrlInfoWin);
+void TOBtlCtrlInfoWin(void)
+{
+    if (D_003249C0[D_00325020].b2 != 1) {
+        D_003249AC = 0;
+        return;
+    }
+    if (MsMenuCheckLook() == -1) {
+        if ((u16)toTarget.h124 >= 0x14 && (u16)toTarget.h124 < 0x1C && MsMenuCheckChrLook((u16)toTarget.h124) == 1) {
+            if ((u16)D_00692500 != (u16)toTarget.h124) {
+                TOBtlSetInfoWinParam((u16)toTarget.h124);
+                D_00692500 = toTarget.h124;
+            }
+            D_003249AC = 1;
+            goto check_live; /* DEBT(GOTO): matches single D_003249AC = 0 fallthrough */
+        }
+    }
+    D_003249AC = 0;
+check_live:
+    if (MsMenuCheckChrLive((u16)toTarget.h124) == 1) {
+        if ((u16)toTarget.h124 >= 0x14 && (u16)toTarget.h124 < 0x1C) {
+            if ((u16)D_00692500 != (u16)toTarget.h124) {
+                TOBtlSetInfoWinParam((u16)toTarget.h124);
+                D_00692500 = toTarget.h124;
+            }
+            D_003249AC = 1;
+        }
+    }
+}

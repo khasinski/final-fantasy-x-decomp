@@ -10,7 +10,32 @@ void func_002004D0(int a, int b, int c, int d, int e)
     InvokedFromSelectCursor = func_00200520(InvokedFromSelectCursor, a, b, c, d, e);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_2004D0", func_00200520);
+void *func_00200520(void *list, int tex, int x, int y, int w, int h)
+{
+    u64 *p = (u64 *)list;
+    void *cur;
+
+    p[0] = 0xF08E400000008001UL;
+    p[1] = 0x0431431431431EEEUL;
+    p[2] = 0x8000000044UL;
+    p[3] = 0x42;
+    p[4] = 0xF;
+    p[5] = 0x47;
+    cur = func_001FB9D0(p + 6, tex, 8, 0, 9, 7, 1, 0, 0, 0, 0, 0, 2);
+    cur = func_001FBB30(cur, 0x80, 0x80, 0x80, 0x80);
+    cur = func_001FBAF0(cur, 0, 0);
+    cur = func_001FBBB0(cur, x, y);
+    cur = func_001FBB30(cur, 0x80, 0x80, 0x80, 0x80);
+    cur = func_001FBAF0(cur, 0x200, 0);
+    cur = func_001FBBB0(cur, x + w, y);
+    cur = func_001FBB30(cur, 0x80, 0x80, 0x80, 0x80);
+    cur = func_001FBAF0(cur, 0, 0x80);
+    cur = func_001FBBB0(cur, x, y + h);
+    cur = func_001FBB30(cur, 0x80, 0x80, 0x80, 0x80);
+    cur = func_001FBAF0(cur, 0x200, 0x80);
+    cur = func_001FBBB0(cur, x + w, y + h);
+    return cur;
+}
 
 void func_002006E0(int id, int x, int y, int z)
 {
