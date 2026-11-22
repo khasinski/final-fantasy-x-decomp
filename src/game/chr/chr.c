@@ -524,7 +524,95 @@ void func_00103358(Chr *chr, int d)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_MemMove);
+extern s8 D_0057CE88;
+extern char D_00569390[];
+extern s32 D_00300668;
+extern Chr *D_00300664;
+extern void Ch_Check(char *, int);
+extern int func_0011CDE8(void *, int *);
+extern void Ch_MotionRemappingFcurve(Chr *, int);
+extern void Ch_TextureReMapping(Chr *);
+extern void *texanim_malloc_memory_get(void *);
+extern void texanim_malloc_memory_set(void *, int);
+extern void Ch_ClutMapping(Chr *, int);
+extern void Ch_ClutEnable(Chr *, int);
+extern int Ch_MemMoveEventMgrp(void);
+extern void func_002A74A8(void);
+
+s32 Ch_MemMove(void)
+{
+    int moved = 0;
+    Chr *c;
+
+    if (D_0057CE88 == 0) {
+        return 0;
+    }
+    Ch_Check(D_00569390, 0x4ED);
+    moved = 0;
+    for (c = D_00300664; c != D_00300664 + D_00300668; c++) {
+        if (((s8 *)c)[2] == 0) {
+            continue;
+        }
+        {
+            u64 f = *(u64 *)((u8 *)c + 0x1A0);
+            if (((u32)(f >> 42) & 1) || ((u32)(f >> 43) & 1)) {
+                continue;
+            }
+        }
+        {
+            int d = func_0011CDE8((u8 *)c + 0x320, &moved);
+            if (d != 0) {
+                func_00103358(c, d);
+            }
+        }
+        {
+            int d = func_0011CDE8((u8 *)c + 0x754, &moved);
+            if (d != 0) {
+                Ch_MotionRemappingFcurve(c, d);
+            }
+        }
+        func_0011CDE8((u8 *)c + 0x1C8, &moved);
+        func_0011CDE8((u8 *)c + 0x324, &moved);
+        if (*(void **)((u8 *)c + 0x1C8) != 0) {
+            int i;
+            for (i = 0; i < *(u16 *)(*(u8 **)((u8 *)c + 0x1CC) + 6); i++) {
+                u8 *e = *(u8 **)((u8 *)c + 0x1C8) + i * 0x30;
+                func_0011CDE8(e + 8, &moved);
+                func_0011CDE8(e + 4, &moved);
+                func_0011CDE8(e + 0xC, &moved);
+            }
+        }
+        if (func_0011CDE8((u8 *)c + 0x6E8, &moved) != 0) {
+            Ch_TextureReMapping(c);
+        }
+        if (*(void **)((u8 *)c + 0x708) != 0) {
+            void *p = texanim_malloc_memory_get(*(void **)((u8 *)c + 0x70C));
+            int d = func_0011CDE8(&p, &moved);
+            if (d != 0) {
+                texanim_malloc_memory_set(*(void **)((u8 *)c + 0x70C), d);
+            }
+        }
+        if (*(void **)((u8 *)c + 0x710) != 0) {
+            func_0011CDE8((u8 *)c + 0x710, &moved);
+            Ch_ClutMapping(c, 0);
+            Ch_ClutEnable(c, ((s8 *)c)[0x714]);
+        }
+        if (moved != 0) {
+            func_002A74A8();
+            moved = 0;
+            return 1;
+        }
+    }
+    Ch_Check(D_00569390, 0x520);
+    if (Ch_MemMoveEventMgrp() != 0) {
+        return 1;
+    }
+    if (func_0011CDE8(Sg_PLightGetPtr(), &moved) != 0) {
+        return 1;
+    }
+    D_0057CE88 = 0;
+    return 0;
+}
 
 s32 Ch_MemMove_Over(void)
 {
