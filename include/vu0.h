@@ -56,6 +56,8 @@
  * Each macro emits one instruction; t0 carries the quad between them. */
 #define MMI_COPY_LQ_T0(dst, src) __asm__ volatile("lq $8, 0(%1)" : : "r"(dst), "r"(src) : "$8", "memory")
 #define MMI_COPY_SQ_T0(dst) __asm__ volatile("sq $8, 0(%0)" : : "r"(dst) : "memory")
+#define MMI_COPY_LQ_A3(dst, src) __asm__ volatile("lq $7, 0(%1)" : : "r"(dst), "r"(src) : "$7", "memory")
+#define MMI_COPY_SQ_A3(dst) __asm__ volatile("sq $7, 0(%0)" : : "r"(dst) : "memory")
 
 /* DEBT(ORDER): prepare the other addresses of an inline VU operation together. */
 #define VU0_LQC2_INPUTS(vf, p, p1, p2) __asm__ volatile("lqc2 $vf" #vf ", 0(%0)" : : "r"(p), "r"(p1), "r"(p2) : "memory")

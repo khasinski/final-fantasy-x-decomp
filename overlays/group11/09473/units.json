@@ -2627,5 +2627,39 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09473_0c50_b.c",
+    "containers": [
+      9473
+    ],
+    "text_start": "0x01B00C50",
+    "text_end": "0x01B00C58",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {},
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  },
+  {
+    "src": "ovl_09473_0dd8.c",
+    "containers": [
+      9473
+    ],
+    "text_start": "0x01B00DD8",
+    "text_end": "0x01B00DE8",
+    "functions": 2,
+    "discovered_code_bytes": 16,
+    "syms": {},
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]

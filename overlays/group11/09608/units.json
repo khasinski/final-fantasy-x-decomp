@@ -1,0 +1,26 @@
+[
+  {
+    "src": "ovl_09608_0c60.c",
+    "containers": [
+      9608
+    ],
+    "text_start": "0x01B00C60",
+    "text_end": "0x01B00D8C",
+    "functions": 1,
+    "discovered_code_bytes": 300,
+    "syms": {
+      "D_01B00040": "0x01B00040",
+      "D_01B008B8": "0x01B008B8",
+      "D_01B04568": "0x01B04568",
+      "D_01B045C8": "0x01B045C8",
+      "D_01B045D8": "0x01B045D8",
+      "D_01B04AE4": "0x01B04AE4",
+      "func_01B01E18": "0x01B01E18",
+      "func_01B02BF0": "0x01B02BF0",
+      "func_01B03B50": "0x01B03B50"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

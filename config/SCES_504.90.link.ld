@@ -438,7 +438,7 @@ SECTIONS
         . = 0x569200 - 0x568f00;
         build/asm/data/rodata/piece_00569200.s.o(.rodata)
         . = 0x569350 - 0x568f00;
-        build/src/game/chr/chr.c.o(.rodata.jtbl_00569350)
+        build/src/game/chr/chr.c.o(.rodata.cjt3)
         . = 0x569390 - 0x568f00;
         build/asm/data/rodata/piece_00569390.s.o(.rodata)
         . = 0x5694d0 - 0x568f00;
@@ -502,7 +502,7 @@ SECTIONS
         . = 0x56a910 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt4)
         . = 0x56a930 - 0x568f00;
-        build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056A930)
+        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt5)
         . = 0x56a960 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056A960)
         . = 0x56a980 - 0x568f00;
@@ -510,13 +510,13 @@ SECTIONS
         . = 0x56a9a0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056A9A0)
         . = 0x56a9d0 - 0x568f00;
-        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt5)
-        . = 0x56a9f0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt6)
-        . = 0x56aa50 - 0x568f00;
+        . = 0x56a9f0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt7)
-        . = 0x56aac0 - 0x568f00;
+        . = 0x56aa50 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt8)
+        . = 0x56aac0 - 0x568f00;
+        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt9)
         . = 0x56ab10 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056AB10)
         . = 0x56ad00 - 0x568f00;
@@ -760,7 +760,7 @@ SECTIONS
         . = 0x56e5b0 - 0x568f00;
         build/src/game/battle/ms_1C0C98.c.o(.rodata.cjt0)
         . = 0x56e5e0 - 0x568f00;
-        build/src/game/battle/ms_1C0C98.c.o(.rodata.jtbl_0056E5E0)
+        build/src/game/battle/ms_1C0C98.c.o(.rodata.cjt1)
         . = 0x56e640 - 0x568f00;
         build/src/game/battle/ms_1C0C98.c.o(.rodata.jtbl_0056E640)
         . = 0x56e660 - 0x568f00;
@@ -904,11 +904,11 @@ SECTIONS
         . = 0x570ad0 - 0x568f00;
         build/src/game/menu/to/to_210340.c.o(.rodata.cjt0)
         . = 0x570b30 - 0x568f00;
-        build/src/game/menu/to/to_210340.c.o(.rodata.jtbl_00570B30)
+        build/src/game/menu/to/to_210340.c.o(.rodata.cjt1)
         . = 0x570b90 - 0x568f00;
         build/asm/data/rodata/piece_00570B90.s.o(.rodata)
         . = 0x570c50 - 0x568f00;
-        build/src/game/menu/to/to_210340.c.o(.rodata.jtbl_00570C50)
+        build/src/game/menu/to/to_210340.c.o(.rodata.cjt2)
         . = 0x570c90 - 0x568f00;
         build/asm/data/rodata/piece_00570C90.s.o(.rodata)
         . = 0x570d30 - 0x568f00;
@@ -1100,13 +1100,13 @@ SECTIONS
         . = 0x573428 - 0x568f00;
         build/asm/data/rodata/piece_00573428.s.o(.rodata)
         . = 0x5734b0 - 0x568f00;
-        build/src/game/menu/tk/tk_24B828.c.o(.rodata.jtbl_005734B0)
+        build/src/game/menu/tk/tk_24B828.c.o(.rodata.cjt2)
         . = 0x573510 - 0x568f00;
-        build/src/game/menu/tk/tk_24B828.c.o(.rodata.jtbl_00573510)
+        build/src/game/menu/tk/tk_24B828.c.o(.rodata.cjt3)
         . = 0x5735f8 - 0x568f00;
         build/asm/data/rodata/piece_005735F8.s.o(.rodata)
         . = 0x573620 - 0x568f00;
-        build/src/game/menu/tk/tk_24B828.c.o(.rodata.jtbl_00573620)
+        build/src/game/menu/tk/tk_24B828.c.o(.rodata.cjt4)
         . = 0x573670 - 0x568f00;
         build/asm/data/rodata/piece_00573670.s.o(.rodata)
         . = 0x573a10 - 0x568f00;
