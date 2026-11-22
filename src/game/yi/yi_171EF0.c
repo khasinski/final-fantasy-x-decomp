@@ -323,7 +323,97 @@ int yiMapReadMaster(int a, int b, int c, int d, int e) { /* DEBT(TYPE): the succ
     yiAnimAttachDefault(&D_00597F00);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_171EF0", yiObjReadCallback);
+typedef struct ObjLoadReq {
+    u8 pad0[0xC];
+    int wC;
+    void *buf;
+    int w14;
+    int n;
+    u8 pad1C[4];
+} ObjLoadReq;
+
+extern int _int_func_002D41E8(int) __asm__("func_002D41E8"); /* DEBT(TYPE): funcs.h declares void; caller reserves $v0 */
+extern int _int_yiAnimAttachDefault(void *) __asm__("yiAnimAttachDefault"); /* DEBT(TYPE): funcs.h declares void; caller reserves $v0 */
+
+void yiObjReadCallback(ObjLoadReq *req)
+{
+    int sync[16]; /* DEBT(PADDING): only 7 elements written, frame size 0xB0 */
+    struct Q3Ent *p;
+    int e;
+    int h;
+    int i;
+    int n = 0;
+
+    func_002D41F0(5);
+    p = req->buf;
+    e = req->w14;
+    D_00597F00.p9F1EC = p;
+    func_002D41F0(5);
+    _int_func_002D41E8(5);
+    h = func_001723D8(p, 0);
+    if (h != 0) {
+        D_00597F00.w9F1E0 = h;
+        Yn_PreBgSetData(h);
+        D_00597F00.w67F20 |= 0x4000;
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    h = func_001723D8(p, 1);
+    if (h != 0) {
+        func_0017B360(&D_00597F00, h);
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    if (!(e < 8)) {
+        BREAK();
+    }
+    h = func_001723D8(p, e + 2);
+    if (h != 0) {
+        Sg_MapSetPtr(h);
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    h = func_001723D8(p, 10);
+    if (h != 0) {
+        D_00597F00.w9F1E4 = h;
+        pppSetFpPdt(h);
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    h = func_001723D8(p, 12);
+    if (h != 0) {
+        func_0019CFD8(h);
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    h = func_001723D8(p, 11);
+    if (h != 0) {
+        func_0019CD68(h);
+    }
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    D_00597F00.w67F20 |= 0x11;
+    if (MsBattleGetMapCircleOn()) {
+        D_00597F00.w67F24 = 0xFFFFFFFF;
+    } else {
+        D_00597F00.w67F24 = 0xFFFFFFF7;
+    }
+    _int_yiAnimAttachDefault(&D_00597F00);
+    D_00597F00.w67F48 = req->n;
+    D_00597F00.w67F20 &= 0xFFFFFFDF;
+    D_00597F00.w67F20 &= 0xFFFFFF7F;
+    func_002D41F0(5);
+    sync[n++] = TkGetSyncH(5);
+    _int_func_002D41E8(5);
+    for (i = 0; i < n; i++) {
+    }
+}
 
 void yiTexReadCallback(LoadReq *req)
 {
@@ -346,17 +436,6 @@ void yiTexReadCallback(LoadReq *req)
     D_00597F00.w67F20 &= 0xFFFFFF7F;
     D_00597F00.w67F4C = req->n;
 }
-
-typedef struct ObjLoadReq {
-    u8 pad0[0xC];
-    int wC;
-    void *buf;
-    int w14;
-    int n;
-    u8 pad1C[4];
-} ObjLoadReq;
-
-void yiObjReadCallback(void);
 
 int yiObjReadNB(int id, int n, int c)
 {

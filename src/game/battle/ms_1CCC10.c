@@ -102,7 +102,57 @@ typedef struct {
 } GameStateEffRead;
 extern GameStateEffRead _gs_eff_read __asm__("D_003172F0");
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectRead);
+int MsEffectRead(int chr_id, int eff_id)
+{
+    BtlChr *chr;
+    int err;
+    int idx;
+    int sz;
+    u32 req[8]; /* DEBT(TYPE): 0x20-byte CD callback arg struct (Q4ObjC has fC at +0xC) */
+
+    chr_id = (u8)chr_id;
+    err = 0;
+    chr = MsGetChr(chr_id);
+    if (D_00662618 == 0 && chr->fABB == 0) {
+        _gs_eff_read.f201C = eff_id;
+        _gs_eff_read.f2018 = eff_id;
+        if (MsStoneEffectCheck() != 0) {
+            chr->fABB = 0xE;
+        } else {
+            if (_gs_eff_read.f32 != 0) {
+                eff_id = 0;
+            }
+            MsAtelCamInit();
+            chr->fABE = 0;
+            chr->fACD = 0;
+            D_0066261C = 0;
+            if (_gs_eff_read.f55 != 0 && D_00576479 == 1 && FFXIsDebug() != 0) {
+                D_0066261C = func_204E8D0(eff_id);
+            }
+            GetCD()->f10(0x11);
+            chr->fABB = 1;
+            idx = func_001CCD38(eff_id, -1);
+            sz = GetCD()->f14(idx);
+            if (_gs_eff_read.f30 != 0 || sz <= 0) {
+                chr->fABD = 0;
+                chr->fC4C = 0;
+            } else {
+                _gs_eff_read.f2108 = 1;
+                *(volatile s32 *)&chr->fC4C = 0x01B00000; /* DEBT(ORDER): keep sw before sb */
+                *(volatile s8 *)&chr->fABD = 1;
+                req[3] = chr_id;
+                op_ovl_effect_init();
+                GetCD()->f0(idx, (void *)0x01B00000, func_001CCD10, req);
+            }
+        }
+    } else {
+        err = -1;
+    }
+    if (err != 0) {
+        MsBattleError(D_0056E8A0);
+    }
+    return err;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectStart);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1CCC10/rodata", jtbl_0056E8B0);
