@@ -573,7 +573,92 @@ void func_0015F3B8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015F508);
+typedef struct {
+    u8 pad0[0x10080];
+    u8 b10080[0x40];
+    u8 b100C0[0x40];
+    u8 pad10100[0x5053C - 0x10100];
+    s32 w5053C;
+    s32 w50540;
+    s32 w50544;
+    s32 w50548;
+    s32 w5054C[5];
+    u8 *p50560[5];
+    s32 w50574[5];
+    s32 w50588[5];
+    u8 *p5059C;
+    u8 pad505A0[0x506EC - 0x505A0];
+    s32 w506EC;
+    s32 w506F0;
+    u8 pad506F4[0x50754 - 0x506F4];
+    s32 w50754;
+    s32 w50758;
+    s8 b5075C;
+    s8 b5075D;
+    u8 pad5075E[6];
+    s8 b50764;
+} MovieStrOpen;
+
+extern MovieStrOpen *_movopen_D_0030DDF0 __asm__("D_0030DDF0");
+extern char D_0056B908[];
+int func_0015B798(int a, int b, u8 *c, MovieStrOpen *s);
+int func_206C550(int a, u8 *b, MovieStrOpen *s);
+int movieOpenCd(MovieStrOpen *s);
+int func_206C610(int a);
+
+void func_0015F508(int a0, int a1)
+{
+    int i;
+    int v;
+
+    if (_movopen_D_0030DDF0->b5075C != 0) {
+        if (_movopen_D_0030DDF0->b5075D == 0) {
+            func_0015B798(_movopen_D_0030DDF0->w506EC, _movopen_D_0030DDF0->w506F0, _movopen_D_0030DDF0->b10080, _movopen_D_0030DDF0);
+        } else {
+            _movopen_D_0030DDF0->w50544 = movie_hdd_file_open(_movopen_D_0030DDF0->b50764, _movopen_D_0030DDF0->w506EC);
+            if (_movopen_D_0030DDF0->w50544 < 0) {
+                func_001577A8(D_0056B908, D_0056B848, 0x86D);
+            }
+            func_0015B798(_movopen_D_0030DDF0->w506EC, _movopen_D_0030DDF0->w506F0, _movopen_D_0030DDF0->b10080, _movopen_D_0030DDF0);
+            ((int (*)(int))func_002FC768)(_movopen_D_0030DDF0->w50544); /* DEBT(TYPE): header declares void, compiled as returning int */
+            _movopen_D_0030DDF0->w50544 = -1;
+        }
+    } else {
+        func_206C550(a1, _movopen_D_0030DDF0->b10080, _movopen_D_0030DDF0);
+    }
+    func_002F8660(0);
+    for (i = 0; i < 0x40; i++) {
+        D_00591EC8[i] = _movopen_D_0030DDF0->b10080[i];
+        D_00591F08[i] = _movopen_D_0030DDF0->b100C0[i];
+    }
+    func_002F8660(0);
+    {
+        register MovieStrOpen *p __asm__("$5") = _movopen_D_0030DDF0; /* DEBT(REG): pin to $a1 to match lw $a1 / move $a0,$a1 */
+        if (p->b5075C != 0) {
+            _movopen_D_0030DDF0->w50544 = movieOpenCd(p);
+        } else {
+            _movopen_D_0030DDF0->w50544 = func_206C610(a0);
+        }
+    }
+    if (_movopen_D_0030DDF0->w50544 < 0) {
+        while (1) {
+            func_0015C808();
+        }
+    }
+    v = func_0015FBA8(_movopen_D_0030DDF0->w5053C);
+    func_0015C888(_movopen_D_0030DDF0->w50544, v, _movopen_D_0030DDF0->p50560[_movopen_D_0030DDF0->w5053C], &_movopen_D_0030DDF0->w50574[_movopen_D_0030DDF0->w5053C], (S58FE54 *)_movopen_D_0030DDF0);
+    func_0015C928(_movopen_D_0030DDF0->w50544, 0, (S58FE54 *)_movopen_D_0030DDF0);
+    _movopen_D_0030DDF0->w50588[_movopen_D_0030DDF0->w5053C] = 2;
+    _movopen_D_0030DDF0->p5059C = _movopen_D_0030DDF0->p50560[_movopen_D_0030DDF0->w5053C];
+    _movopen_D_0030DDF0->w5053C = (_movopen_D_0030DDF0->w5053C + 1) % _movopen_D_0030DDF0->w50754;
+    _movopen_D_0030DDF0->w50588[_movopen_D_0030DDF0->w5053C] = 1;
+    func_002F8660(0);
+    v = func_0015FBA8(_movopen_D_0030DDF0->w5053C);
+    if (_movopen_D_0030DDF0->w5054C[_movopen_D_0030DDF0->w5053C] != _movopen_D_0030DDF0->w50548) {
+        func_0015C888(_movopen_D_0030DDF0->w50544, v, _movopen_D_0030DDF0->p50560[_movopen_D_0030DDF0->w5053C], &_movopen_D_0030DDF0->w50574[_movopen_D_0030DDF0->w5053C], (S58FE54 *)_movopen_D_0030DDF0);
+    }
+    _movopen_D_0030DDF0->w50540 = _movopen_D_0030DDF0->w5053C;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015F800);
 

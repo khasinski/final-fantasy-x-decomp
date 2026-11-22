@@ -286,7 +286,45 @@ void func_0022A728(int a, int b, int c, int mode)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_0022A768);
+void func_00229F98(int, int);
+
+void func_0022A768(int x, int y, int chr, int mode, int *p4, int *p5, int *p6, int *p7, int t52)
+{
+    int s2 = (func_002292B8(t52, 1) * 0x155) / 0x1000;
+
+    func_00242C58(chr);
+    switch (mode) {
+    case 0:
+        chr = TkMenuGetCurrentPlayer();
+        ((int (*)(int))func_00225E70)(0); /* DEBT(TYPE): header declares void, compiled as returning int */
+        func_002299A8(x + D_00693A68[0], y + D_00693A68[1], *p4, *p5, *p6);
+        break;
+    case 3:
+        chr = func_00242940();
+        break;
+    case 1:
+        chr = func_00242940();
+        ((int (*)(int))func_00225E70)(1);
+        func_00229AC8(x + D_003258B0[0], y + D_003258B0[1], *p4, *p5, *p6);
+        break;
+    }
+    switch (mode) {
+    case 0:
+        func_00229F98(chr, s2);
+        func_00229D58(s2 + D_006938E8.rect[0], D_006938E8.rect[1], chr);
+    case 2:
+        func_00225F30(D_00693880[0], D_00693880[1], chr);
+        break;
+    case 3:
+        func_00229D58(s2 + D_00693900.x, D_00693900.y, chr);
+        break;
+    case 1:
+        func_00229D58(s2 + D_00693900.x, D_00693900.y, chr);
+        func_0022A688(chr, s2);
+        break;
+    }
+    func_00225AF8();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_0022A9A0);
 

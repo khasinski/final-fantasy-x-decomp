@@ -553,7 +553,52 @@ void func_00223140(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223228);
+extern s32 D_00693320;
+extern s32 D_00693324;
+extern s32 D_0069332C;
+
+void func_00223228(int y)
+{
+    int x = y + 0x1E;
+    int i;
+    int py;
+
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOMenuDrawKickTmp();
+    func_002243C0(0xD, x, 0x2D);
+    TOMenuOpenPktBuffTmp();
+    if (D_00693334 == 0) {
+        if (D_00693340 == 0 || ((func_00242040() / 2) & 1) != 0) {
+            func_001FE7F8(0, x, D_00693338[0] * 32 + 0x46);
+        }
+    } else {
+        if (D_00693340 != 0) {
+            func_001FE7F8(0, x, D_00693338[0] * 32 + 0x46);
+        }
+    }
+    TODrawScissorXYWH(0x1E, 0x46, 0xDB, 0xC0);
+    py = 0x26;
+    if (D_00693328 == D_0069332C) {
+        for (i = -1; i < 7; i++, py += 0x20) {
+            func_00223140(D_00693328 + i, x, py, 0);
+        }
+    } else {
+        py = 0x46;
+        for (i = 0; i < 6; i++, py += 0x20) {
+            func_00223140(D_00693328 + i, x, py, 2);
+        }
+        py = (D_00693324 * 0xC0) / 0x1000 + 0x46;
+        for (i = 0; i < 6; i++, py += 0x20) {
+            func_00223140(D_0069332C + i, x, py, 1);
+        }
+    }
+    if (y == 0) {
+        TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+        func_00200A58(0x100, 0x36, 0xA, 0xD0, D_00693328, 6, D_00693320);
+    }
+    TOMenuDrawKickTmp();
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223468);
 
