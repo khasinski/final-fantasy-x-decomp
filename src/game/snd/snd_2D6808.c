@@ -165,7 +165,117 @@ s32 func_002D6E10(u32 idx) {
     return tbl[idx + 1];
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D6808", func_002D6E48);
-INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_005760E0);
-INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_00576100);
-INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_00576140);
+extern int func_00135F50(void);
+extern void func_00135F60(void *p, s32 a, s32 b);
+extern void SndSepPlaySimple(s32 sep);
+
+typedef struct {
+    u16 flags;
+    u8 pad2[0x16];
+    s32 sep;
+    void *self;
+    s16 h20;
+} SndFootWork; /* DEBT(NAME): guessed struct at D_0078BA4C */
+
+void func_002D6E48(s32 kind, s32 ch, s32 pan, s32 var)
+{
+    s32 mask;
+    s32 sep;
+    s32 v;
+    s32 slot;
+    SndFootWork *wk;
+
+    if (kind == 0xFF) {
+        func_00135F50();
+        mask = D_0078BA40.cur;
+        sep = func_002D6E10(var);
+    } else {
+        if (ch >= 16) {
+            return;
+        }
+        if (ch < 0) {
+            return;
+        }
+        func_00135F50();
+        switch (kind) {
+        case 4:
+            mask = D_0078BA38.cur;
+            break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+        case 6:
+        case 7:
+        default:
+            mask = D_0078BA30.cur;
+            break;
+        }
+        if (var >= 0) {
+            s32 maxv;
+            switch (kind) {
+            case 4: case 12:
+                maxv = 1;
+                break;
+            case 0: case 1: case 2: case 3: case 5:
+            case 8: case 9: case 10: case 11: case 13:
+                maxv = 3;
+                break;
+            case 6: case 7: case 14: case 15:
+            default:
+                maxv = 0;
+                break;
+            }
+            if (var > maxv) {
+                switch (kind) {
+                case 4: case 12:
+                    maxv = 1;
+                    break;
+                case 0: case 1: case 2: case 3: case 5:
+                case 8: case 9: case 10: case 11: case 13:
+                    maxv = 3;
+                    break;
+                case 6: case 7: case 14: case 15:
+                default:
+                    maxv = 0;
+                    break;
+                }
+                v = maxv;
+            } else {
+                v = var;
+            }
+        } else {
+            v = 0;
+        }
+        var = v;
+        if (D_0078BA48) {
+            kind += 8;
+        }
+        sep = *func_002D6818(kind, ch, pan);
+    }
+
+    if (sep == 0) {
+        return;
+    }
+    if (kind != 0xFF) {
+        sep += var;
+    }
+    slot = (ch < 16) ? D_0078BA98[ch] : 0;
+    if (!((mask >> ch) & 1)) {
+        return;
+    }
+    if (!(((s32)D_0078BA28.cur >> ch) & 1) || (wk = (SndFootWork *)D_0078BA4C) == 0 || slot < 0) {
+        D_0078BBA0 = 1;
+        D_0078BBA1 = pan;
+        SndSepPlaySimple(sep);
+    } else {
+        wk->sep = sep;
+        wk->h20 = slot;
+        wk->self = wk;
+        wk->flags = (wk->flags | 2) & ~1;
+        D_0078BBA0 = 1;
+        D_0078BBA1 = pan;
+        func_00135F60(&wk->sep, 1, 0x100);
+    }
+}

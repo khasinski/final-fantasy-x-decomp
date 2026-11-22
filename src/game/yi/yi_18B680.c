@@ -96,6 +96,82 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C9D0);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018CB90);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018CEC8);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_18B680/rodata", jtbl_0056D2A0);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_18B680/rodata", jtbl_0056D310);
+typedef struct {
+    u8 pad0[0x10C];
+    u16 type;
+    u8 pad10E[0x124 - 0x10E];
+    u32 idx;
+    u8 pad128[0x134 - 0x128];
+    u16 h134;
+    u8 pad136[2];
+    u16 h138;
+    u8 pad13A[0x148 - 0x13A];
+    void *p148;
+    u8 pad14C[0x178 - 0x14C];
+} Yi18Ent; /* DEBT(NAME): guessed 0x178-byte entry in yi_18B680 */
+
+typedef struct {
+    u8 pad0[0x68870];
+    float f68870;
+} Yi18MatView; /* DEBT(NAME): guessed view at +0x68870 */
+
+typedef struct {
+    u8 pad0[0x9E7D0];
+    u32 count;
+    Yi18Ent *ents;
+} Yi18ListView; /* DEBT(NAME): guessed view at +0x9E7D0 */
+
+int func_0018C9D0(void *dst, void *src, int n, float scale);
+
+int func_0018CEC8(S2Ctx *ctx) /* DEBT(TYPE): declared int with no return so $v0 is live across loop exit (emits bnezl) */
+{
+    u8 buf[0x400];
+    float a[4];
+    int b[4];
+    int i;
+    int cnt;
+    Yi18ListView *lv = (Yi18ListView *)ctx; /* DEBT(CAST): offset view into S2Ctx */
+
+    for (i = 0; i < 4; i++) {
+        a[i] = 1.0f;
+        b[i] = 0;
+    }
+
+    for (i = 0; (u32)i < lv->count; i++) {
+        if (lv->ents[i].idx == 0xFFFFFFFFu) {
+            continue;
+        }
+        if (((Yi18MatView *)((u8 *)ctx + lv->ents[i].idx * 0xC0))->f68870 == 1.0f) {
+            continue;
+        }
+        switch (lv->ents[i].type) {
+        case 0x14:
+        case 0x24:
+        case 0x2C:
+            cnt = 0x10;
+            break;
+        case 0x13:
+        case 0x1B:
+            cnt = 0x100;
+            break;
+        default:
+            cnt = 0;
+            break;
+        }
+        if (cnt > 0) {
+            a[0] = ((Yi18MatView *)((u8 *)ctx + lv->ents[i].idx * 0xC0))->f68870;
+            func_0018C9D0(buf, lv->ents[i].p148, cnt, a[0]);
+            switch (lv->ents[i].type) {
+            case 0x14:
+            case 0x24:
+            case 0x2C:
+                func_0018B5A8(ctx, (int)buf, lv->ents[i].h138, lv->ents[i].h134);
+                break;
+            case 0x13:
+            case 0x1B:
+                func_0018B558(ctx, (int)buf, lv->ents[i].h138);
+                break;
+            }
+        }
+    }
+}

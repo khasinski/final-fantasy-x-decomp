@@ -833,8 +833,59 @@ void func_0020AEB8(int i, int mode, int v)
     TOSetMessageType(i, v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOSetMessageWindowPosition);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_209460/rodata", jtbl_00570840);
+void TOSetMessageWindowPosition(int i, int align, int x, int y)
+{
+    int k;
+    s16 w;
+    s16 h;
+    int maxy;
+    int tw;
+    int th;
+
+    R4PT(i)->hC = align;
+    R4PT(i)->h8 = x;
+    R4PT(i)->hA = y;
+    R4PT(i)->p14->h18 = align;
+    R4PT(i)->p14->h14 = x;
+    R4PT(i)->p14->h16 = y;
+
+    k = R4PT(i)->p10->w04;
+    tw = R4PT(i)->p14->w;
+    th = R4PT(i)->p14->h;
+    w = D_00323848[k].x + D_00323848[k].w;
+    h = D_00323848[k].y + D_00323848[k].h;
+    w += tw;
+    h += th;
+
+    switch (align) {
+    case 0:
+        break;
+    case 4:
+        x -= (s16)(w / 2);
+        y -= (s16)(h / 2);
+        break;
+    case 2:
+        x -= w;
+        break;
+    case 3:
+        x -= w;
+        /* fallthrough */
+    case 1:
+        y -= h;
+        break;
+    }
+
+    w = R4_CLAMP(w, 0, 0x1FF);
+    x = R4_CLAMP(x, 0, 0x1FF - w);
+    if (TOGetMessageWindowMode() == 1) {
+        h = R4_CLAMP(h, 4, 0x7F);
+        y = R4_CLAMP(y, 4, 0x7B - h);
+    } else {
+        h = R4_CLAMP(h, 4, 0x19F);
+        y = R4_CLAMP(y, 4, 0x19B - h);
+    }
+    func_0020B308(i, x, y, w, h);
+}
 
 void TOSetMessageWindowPositionRect(int i, int align, int x, int y, int w, int h)
 {
