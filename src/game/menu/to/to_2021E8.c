@@ -462,7 +462,93 @@ int func_00202E98(TextWin *win)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TOSetNewPageMessageNormal);
+typedef struct TextWinCopy20 {
+    u8 b[0x14];
+} TextWinCopy20;
+
+typedef struct TextWinEx {
+    /* 0x00 */ s16 f00;
+    /* 0x02 */ u8 pad02[2];
+    /* 0x04 */ s16 font;
+    /* 0x06 */ u8 pad06[0x14];
+    /* 0x1A */ s16 style;
+    /* 0x1C */ s16 f1C;
+    /* 0x1E */ s16 f1E;
+    /* 0x20 */ u8 pad20[0xC];
+    /* 0x2C */ s16 f2C;
+    /* 0x2E */ s16 f2E;
+    /* 0x30 */ s16 f30;
+    /* 0x32 */ s16 f32;
+    /* 0x34 */ u8 pad34[4];
+    /* 0x38 */ s16 textW;
+    /* 0x3A */ s16 textH;
+    /* 0x3C */ s16 f3C;
+    /* 0x3E */ s16 f3E;
+    /* 0x40 */ s16 scr[4];
+    /* 0x48 */ u8 pad48[8];
+    /* 0x50 */ u8 *p50;
+    /* 0x54 */ u8 *p54;
+    /* 0x58 */ u8 pad58[0x10];
+    /* 0x68 */ u8 *p68;
+    /* 0x6C */ u8 *p6C;
+    /* 0x70 */ u8 pad70[0x14];
+    /* 0x84 */ u8 *p84;
+    /* 0x88 */ u8 *p88;
+    /* 0x8C */ s32 f8C;
+    /* 0x90 */ s32 f90;
+    /* 0x94 */ s32 f94;
+    /* 0x98 */ s32 f98;
+    /* 0x9C */ s32 f9C;
+    /* 0xA0 */ u8 padA0[8];
+    /* 0xA8 */ TextWinCopy20 dstA8;
+    /* 0xBC */ TextWinCopy20 srcBC;
+    /* 0xD0 */ u8 padD0[0x24];
+    /* 0xF4 */ s32 fF4;
+    /* 0xF8 */ s32 fF8;
+    /* 0xFC */ s32 fFC;
+} TextWinEx;
+
+int _TOSetNewPageMessageNormal(TextWinEx *win)
+{
+    s16 x;
+    s16 y;
+
+    if (win->p88 != 0) {
+        win->p84 = win->p88 + 1;
+    }
+    win->p88 = (u8 *)TOGetPageEndAddress(win->p84);
+    if (win->p54 != 0) {
+        win->p50 = win->p54 + 1;
+    }
+    win->p54 = (u8 *)TOGetPageEndAddress(win->p50);
+    if (win->p6C != 0) {
+        win->p68 = win->p6C + 1;
+    }
+    win->p6C = (u8 *)TOGetPageEndAddress(win->p68);
+    win->f90 = 0;
+    win->f94 = 0;
+    win->f98 = TOGetWordCount(win->font, (int)win->p84); /* DEBT(CAST): ptr as int */
+    if (win->f9C == 0) {
+        win->f90++;
+    }
+    _TOGetMessageWH(win->font, win->p84, &win->f3C, &win->f3E, win->style, 1);
+    if (TOGetMessageWindowMode() == 1) {
+        x = win->f30 + (win->textW - win->f3C) / 2;
+        y = 1;
+    } else {
+        x = win->f30 + (win->textW - win->f3C) / 2;
+        y = win->f32 + (win->textH - win->f3E) / 2;
+    }
+    graphicFontGetScreenWH(win->scr, x, y, win->f3C, win->f3E);
+    if (win->f1E == 1) {
+        _TOScanSelecterWH(win->font, win->p84, win->style, 1);
+    }
+    win->f2C = 1;
+    win->f2E = 1;
+    win->fF4 = win->fFC;
+    win->dstA8 = win->srcBC;
+    return 0;
+}
 
 s32 _TOInitMessageNoWaitNormal(MenuCmd *m)
 {

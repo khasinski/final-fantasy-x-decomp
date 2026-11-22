@@ -100,7 +100,46 @@ void func_00230300(Task *o) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22FB30", func_00230320);
+extern s16 D_00325878[2];
+
+typedef struct LearnEntry {
+    u16 id;
+    u8 kind;
+    u8 active;
+} LearnEntry;
+
+void func_00230320(int t_, int x, int y, int idx, int mode)
+{
+    Task *t = (Task *)t_; /* DEBT(CAST): v5.h declares int */
+    LearnEntry *table = (LearnEntry *)0x1D57300;
+    LearnEntry *e;
+
+    if (mode == 0) {
+        y -= t->x46 / 128;
+    }
+    if (idx < 0 || idx >= (u16)t->x30) {
+        return;
+    }
+    func_00226D88(x, y, 0x10);
+    func_00226E10(x + D_00325878[0] + 0x58, y + D_00325878[1], 0xD7);
+    e = &table[idx];
+    if (e->active != 0) {
+        int mes;
+        switch (e->kind) {
+        case 1:
+            func_00226770(e->id, x, y, 0);
+            break;
+        case 2:
+            mes = func_0014F1C0(e->id);
+            func_00226350(x + 0xC, y + 1, mes, 0);
+            break;
+        case 3:
+            mes = TkMenuMenu1Mes(e->id + 0x1033);
+            func_00226350(x + 0x1D, y + 1, mes, 0);
+            break;
+        }
+    }
+}
 
 void func_00230480(int a, int b, int page, int x, int y)
 {

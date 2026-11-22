@@ -143,9 +143,76 @@ int func_0024BEE8(u8 *buf, int ch, int start, int end) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024BF18);
+int func_0024BF18(void)
+{
+    u8 owner[0x400];
+    s32 buf;
+    SysEntry *table = (SysEntry *)0x1D57300;
+    int count = func_002249A8();
+    int i;
+    int j;
+    int pos = 0;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C088);
+    for (i = 0; i < count; i++) {
+        Unk1BFED8 *w = MsGetSaveWeapon(table[i].h0, &buf);
+        owner[i] = w->b4;
+    }
+    for (i = 0; i < 7; i++) {
+        int n = D_0069BEA8[i][0] + D_0069BEA8[i][1];
+        int next = pos + n - 1;
+        for (j = 0; j < n; j++) {
+            if (owner[pos + j] != i) {
+                u8 tmp;
+                next = func_0024BEE8(owner, i, next + 1, count);
+                if (next < 0) {
+                    return 0;
+                }
+                func_001C03B0(table[pos + j].h0, table[next].h0);
+                tmp = owner[pos + j];
+                owner[pos + j] = owner[next];
+                owner[next] = tmp;
+            }
+        }
+        pos += n;
+    }
+    return 1;
+}
+
+int func_0024C088(void)
+{
+    u8 kind[0x400];
+    s32 buf;
+    SysEntry *table = (SysEntry *)0x1D57300;
+    int count = func_002249A8();
+    int i;
+    int j;
+    int pos;
+
+    for (i = 0; i < count; i++) {
+        Unk1BFED8 *w = MsGetSaveWeapon(table[i].h0, &buf);
+        kind[i] = w->b5 != 0;
+    }
+    pos = 0;
+    for (i = 0; i < 7; i++) {
+        int n = D_0069BEA8[i][0];
+        int next = pos + n - 1;
+        for (j = 0; j < n; j++) {
+            if (kind[pos + j] != 0) {
+                u8 tmp;
+                next = func_0024BEE8(kind, 0, next + 1, count);
+                if (next < 0) {
+                    return 0;
+                }
+                func_001C03B0(table[pos + j].h0, table[next].h0);
+                tmp = kind[pos + j];
+                kind[pos + j] = kind[next];
+                kind[next] = tmp;
+            }
+        }
+        pos += n + D_0069BEA8[i][1];
+    }
+    return 1;
+}
 
 void func_0024C1F8(Task *t, int x, int y) {
     x += 0xC;
