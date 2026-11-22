@@ -905,7 +905,54 @@ int op_point_get_line_circle(float *out0, float *out1, float cx, float cy, float
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B4FF8", func_002B6768);
+extern double D_00575CB8;
+extern double D_00575CC0;
+double func_002E76D0(double);
+double func_002EBC70(double, double);
+
+float func_002B6768(float x0, float y0, float x1, float y1)
+{
+    float dx = x1 - x0;
+    float dy = y1 - y0;
+    int quad;
+    float a;
+    double da;
+    double dq;
+    double d;
+
+    if (func_002EC198(func_002ED038(dx), 0.0) >= 0) {
+        quad = 0;
+        if (func_002EC198(func_002ED038(dy), 0.0) < 0) {
+            float tmp = dx;
+            quad = 3;
+            dx = -dy;
+            dy = tmp;
+        }
+    } else if (func_002EC198(func_002ED038(dy), 0.0) >= 0) {
+        float tmp = dx;
+        quad = 1;
+        dx = dy;
+        dy = -tmp;
+    } else {
+        dx = -dx;
+        quad = 2;
+        dy = -dy;
+    }
+    __asm__(".set mips4");
+    if (dx < dy) {
+        double r;
+        __asm__(".set mips3");
+        r = func_002E76D0(func_002ED038(dx / dy));
+        __asm__ volatile(".set noat; lui $1, %%hi(D_00575CB8); ld %0, %%lo(D_00575CB8)($1); .set at" : "=r"(d));
+        a = func_002EC440(func_002EBC08(d, r));
+    } else {
+        a = func_002EC440(func_002E76D0(func_002ED038(dy / dx)));
+    }
+    da = func_002ED038(a);
+    dq = func_002EC1E8(quad);
+    __asm__ volatile(".set noat; lui $1, %%hi(D_00575CC0); ld %0, %%lo(D_00575CC0)($1); .set at" : "=r"(d));
+    return func_002EC440(func_002EBBB0(da, func_002EBC70(dq, d)));
+}
 
 double func_002E7B28(double);
 double func_002E8278(double);

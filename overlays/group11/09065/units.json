@@ -10425,5 +10425,925 @@
         "syms": {}
       }
     ]
+  },
+  {
+    "src": "ovl_09065_shard_init.c",
+    "containers": [
+      9065,
+      9066,
+      9067,
+      9068,
+      9069,
+      9070,
+      9071,
+      9072,
+      9073,
+      9074,
+      9075,
+      9078,
+      9079,
+      9080,
+      9081,
+      9082,
+      9083,
+      9113,
+      9117,
+      9162,
+      9163,
+      9166,
+      9167,
+      9168,
+      9169,
+      9174,
+      9175,
+      9180,
+      9181,
+      9182,
+      9183,
+      9184,
+      9185,
+      9186,
+      9187,
+      9192,
+      9195,
+      9198,
+      9201,
+      9202,
+      9204,
+      9205,
+      9211,
+      9213,
+      9214,
+      9219,
+      9234,
+      9252,
+      9279,
+      9280,
+      9281,
+      9282,
+      9300,
+      9303,
+      9305,
+      9308,
+      9309,
+      9321,
+      9322,
+      9323,
+      9324,
+      9325,
+      9326,
+      9327,
+      9333,
+      9334,
+      9338,
+      9340,
+      9346,
+      9350,
+      9353,
+      9359,
+      9363,
+      9364,
+      9365,
+      9367,
+      9368,
+      9370,
+      9371,
+      9372,
+      9373,
+      9384,
+      9388,
+      9389,
+      9390,
+      9399,
+      9402,
+      9430,
+      9462,
+      9466,
+      9480,
+      9481,
+      9482,
+      9529,
+      9560,
+      9597,
+      9613,
+      9625,
+      9626,
+      9636,
+      9637,
+      9639,
+      9648,
+      9651,
+      9652,
+      9659,
+      9666,
+      9667,
+      9668,
+      9669,
+      9670,
+      9671,
+      9672,
+      9673,
+      9674,
+      9675,
+      9676,
+      9677,
+      9678,
+      9679,
+      9680,
+      9681,
+      9684,
+      9714,
+      9743,
+      9750,
+      9753,
+      9754,
+      9756
+    ],
+    "text_start": "0x01B01EB8",
+    "text_end": "0x01B02388",
+    "discovered_code_bytes": 1232,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9065,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9066,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9067,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9068,
+        "text_start": "0x01B01D28",
+        "text_end": "0x01B021F8",
+        "syms": {}
+      },
+      {
+        "cid": 9069,
+        "text_start": "0x01B01E18",
+        "text_end": "0x01B022E8",
+        "syms": {}
+      },
+      {
+        "cid": 9070,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9071,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9072,
+        "text_start": "0x01B01D98",
+        "text_end": "0x01B02268",
+        "syms": {}
+      },
+      {
+        "cid": 9073,
+        "text_start": "0x01B01D98",
+        "text_end": "0x01B02268",
+        "syms": {}
+      },
+      {
+        "cid": 9074,
+        "text_start": "0x01B01DC8",
+        "text_end": "0x01B02298",
+        "syms": {}
+      },
+      {
+        "cid": 9075,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9078,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9079,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9080,
+        "text_start": "0x01B01CF8",
+        "text_end": "0x01B021C8",
+        "syms": {}
+      },
+      {
+        "cid": 9081,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9082,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9083,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9113,
+        "text_start": "0x01B02188",
+        "text_end": "0x01B02658",
+        "syms": {}
+      },
+      {
+        "cid": 9117,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9162,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9163,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9166,
+        "text_start": "0x01B02108",
+        "text_end": "0x01B025D8",
+        "syms": {}
+      },
+      {
+        "cid": 9167,
+        "text_start": "0x01B01CA8",
+        "text_end": "0x01B02178",
+        "syms": {}
+      },
+      {
+        "cid": 9168,
+        "text_start": "0x01B01DE0",
+        "text_end": "0x01B022B0",
+        "syms": {}
+      },
+      {
+        "cid": 9169,
+        "text_start": "0x01B01DE0",
+        "text_end": "0x01B022B0",
+        "syms": {}
+      },
+      {
+        "cid": 9174,
+        "text_start": "0x01B01CF8",
+        "text_end": "0x01B021C8",
+        "syms": {}
+      },
+      {
+        "cid": 9175,
+        "text_start": "0x01B01CF8",
+        "text_end": "0x01B021C8",
+        "syms": {}
+      },
+      {
+        "cid": 9180,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9181,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9182,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9183,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9184,
+        "text_start": "0x01B01DC8",
+        "text_end": "0x01B02298",
+        "syms": {}
+      },
+      {
+        "cid": 9185,
+        "text_start": "0x01B01DC8",
+        "text_end": "0x01B02298",
+        "syms": {}
+      },
+      {
+        "cid": 9186,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9187,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9192,
+        "text_start": "0x01B01F88",
+        "text_end": "0x01B02458",
+        "syms": {}
+      },
+      {
+        "cid": 9195,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9198,
+        "text_start": "0x01B020A8",
+        "text_end": "0x01B02578",
+        "syms": {}
+      },
+      {
+        "cid": 9201,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9202,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9204,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9205,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9211,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9213,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9214,
+        "text_start": "0x01B02198",
+        "text_end": "0x01B02668",
+        "syms": {}
+      },
+      {
+        "cid": 9219,
+        "text_start": "0x01B01CF8",
+        "text_end": "0x01B021C8",
+        "syms": {}
+      },
+      {
+        "cid": 9234,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9252,
+        "text_start": "0x01B02338",
+        "text_end": "0x01B02808",
+        "syms": {}
+      },
+      {
+        "cid": 9279,
+        "text_start": "0x01B01C08",
+        "text_end": "0x01B020D8",
+        "syms": {}
+      },
+      {
+        "cid": 9280,
+        "text_start": "0x01B01C08",
+        "text_end": "0x01B020D8",
+        "syms": {}
+      },
+      {
+        "cid": 9281,
+        "text_start": "0x01B01D98",
+        "text_end": "0x01B02268",
+        "syms": {}
+      },
+      {
+        "cid": 9282,
+        "text_start": "0x01B01D98",
+        "text_end": "0x01B02268",
+        "syms": {}
+      },
+      {
+        "cid": 9300,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9303,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9305,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9308,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9309,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9321,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9322,
+        "text_start": "0x01B01E18",
+        "text_end": "0x01B022E8",
+        "syms": {}
+      },
+      {
+        "cid": 9323,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9324,
+        "text_start": "0x01B01E18",
+        "text_end": "0x01B022E8",
+        "syms": {}
+      },
+      {
+        "cid": 9325,
+        "text_start": "0x01B02098",
+        "text_end": "0x01B02568",
+        "syms": {}
+      },
+      {
+        "cid": 9326,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9327,
+        "text_start": "0x01B02008",
+        "text_end": "0x01B024D8",
+        "syms": {}
+      },
+      {
+        "cid": 9333,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9334,
+        "text_start": "0x01B01E88",
+        "text_end": "0x01B02358",
+        "syms": {}
+      },
+      {
+        "cid": 9338,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9340,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9346,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9350,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9353,
+        "text_start": "0x01B01CD8",
+        "text_end": "0x01B021A8",
+        "syms": {}
+      },
+      {
+        "cid": 9359,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9363,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9364,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9365,
+        "text_start": "0x01B01F28",
+        "text_end": "0x01B023F8",
+        "syms": {}
+      },
+      {
+        "cid": 9367,
+        "text_start": "0x01B01CD8",
+        "text_end": "0x01B021A8",
+        "syms": {}
+      },
+      {
+        "cid": 9368,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9370,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9371,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9372,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9373,
+        "text_start": "0x01B01F28",
+        "text_end": "0x01B023F8",
+        "syms": {}
+      },
+      {
+        "cid": 9384,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9388,
+        "text_start": "0x01B01FC8",
+        "text_end": "0x01B02498",
+        "syms": {}
+      },
+      {
+        "cid": 9389,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9390,
+        "text_start": "0x01B01DE8",
+        "text_end": "0x01B022B8",
+        "syms": {}
+      },
+      {
+        "cid": 9399,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9402,
+        "text_start": "0x01B01E38",
+        "text_end": "0x01B02308",
+        "syms": {}
+      },
+      {
+        "cid": 9430,
+        "text_start": "0x01B02018",
+        "text_end": "0x01B024E8",
+        "syms": {}
+      },
+      {
+        "cid": 9462,
+        "text_start": "0x01B01CF8",
+        "text_end": "0x01B021C8",
+        "syms": {}
+      },
+      {
+        "cid": 9466,
+        "text_start": "0x01B02008",
+        "text_end": "0x01B024D8",
+        "syms": {}
+      },
+      {
+        "cid": 9480,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9481,
+        "text_start": "0x01B01F28",
+        "text_end": "0x01B023F8",
+        "syms": {}
+      },
+      {
+        "cid": 9482,
+        "text_start": "0x01B01F28",
+        "text_end": "0x01B023F8",
+        "syms": {}
+      },
+      {
+        "cid": 9529,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9560,
+        "text_start": "0x01B01D48",
+        "text_end": "0x01B02218",
+        "syms": {}
+      },
+      {
+        "cid": 9597,
+        "text_start": "0x01B01E68",
+        "text_end": "0x01B02338",
+        "syms": {}
+      },
+      {
+        "cid": 9613,
+        "text_start": "0x01B01F88",
+        "text_end": "0x01B02458",
+        "syms": {}
+      },
+      {
+        "cid": 9625,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9626,
+        "text_start": "0x01B01FA8",
+        "text_end": "0x01B02478",
+        "syms": {}
+      },
+      {
+        "cid": 9636,
+        "text_start": "0x01B01D78",
+        "text_end": "0x01B02248",
+        "syms": {}
+      },
+      {
+        "cid": 9637,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9639,
+        "text_start": "0x01B01F58",
+        "text_end": "0x01B02428",
+        "syms": {}
+      },
+      {
+        "cid": 9648,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9651,
+        "text_start": "0x01B02198",
+        "text_end": "0x01B02668",
+        "syms": {}
+      },
+      {
+        "cid": 9652,
+        "text_start": "0x01B020B0",
+        "text_end": "0x01B02580",
+        "syms": {}
+      },
+      {
+        "cid": 9659,
+        "text_start": "0x01B01ED8",
+        "text_end": "0x01B023A8",
+        "syms": {}
+      },
+      {
+        "cid": 9666,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9667,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9668,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9669,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9670,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9671,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9672,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9673,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9674,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9675,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9676,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9677,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9678,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9679,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9680,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9681,
+        "text_start": "0x01B01F78",
+        "text_end": "0x01B02448",
+        "syms": {}
+      },
+      {
+        "cid": 9684,
+        "text_start": "0x01B02608",
+        "text_end": "0x01B02AD8",
+        "syms": {}
+      },
+      {
+        "cid": 9714,
+        "text_start": "0x01B01BB8",
+        "text_end": "0x01B02088",
+        "syms": {}
+      },
+      {
+        "cid": 9743,
+        "text_start": "0x01B01EB8",
+        "text_end": "0x01B02388",
+        "syms": {}
+      },
+      {
+        "cid": 9750,
+        "text_start": "0x01B01E78",
+        "text_end": "0x01B02348",
+        "syms": {}
+      },
+      {
+        "cid": 9753,
+        "text_start": "0x01B018E8",
+        "text_end": "0x01B01DB8",
+        "syms": {}
+      },
+      {
+        "cid": 9754,
+        "text_start": "0x01B01E78",
+        "text_end": "0x01B02348",
+        "syms": {}
+      },
+      {
+        "cid": 9756,
+        "text_start": "0x01B01BB8",
+        "text_end": "0x01B02088",
+        "syms": {}
+      }
+    ],
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/",
+      "-Wa,-mips4"
+    ]
   }
 ]

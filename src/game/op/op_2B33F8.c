@@ -407,7 +407,30 @@ void func_002B41A8(s32 a, s32 b) {
     func_002B40E8(a, b, 0x20);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B33F8", func_002B41B0);
+void func_002B41B0(const char *fmt, ...)
+{
+    __asm__ volatile(
+        ".set noreorder\n\t"
+        "lb $2, 0x14(%0)\n\t"
+        "bne $0, $2, 1f\n\t"
+        " nop\n\t"
+        "nop\n\t"
+        "lb $2, 0x10(%0)\n\t"
+        "beq $0, $2, 2f\n\t"
+        " nop\n\t"
+        "nop\n"
+        "1:\n\t"
+        "addiu $29, $29, -0x10\n\t"
+        "sd $31, 0x0($29)\n\t"
+        "jal func_20673A0\n\t"
+        " nop\n\t"
+        "nop\n\t"
+        "ld $31, 0x0($29)\n\t"
+        "addiu $29, $29, 0x10\n"
+        "2:\n\t"
+        ".set reorder"
+        : : "r"(&D_00764990) : "$2", "memory");
+}
 
 void func_002B4220(s32 a) {
     if (D_00764990.primary) {

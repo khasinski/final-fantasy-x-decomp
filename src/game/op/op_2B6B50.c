@@ -103,7 +103,23 @@ void func_002B6E40(s32 a0, u16 a1, u16 a2, u16 a3, u16 a4) {
     op_md_tex0_change_limit(a0, res, a3, a4);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", op_md_tex0_reset);
+/* DEBT(CAST): raw MD primitive packet offsets */
+void op_md_tex0_reset(void *p, u64 v)
+{
+    u8 *q = (u8 *)p + 0x20;
+
+    while (1) {
+        register u8 flags __asm__("$4");
+        register u32 hi __asm__("$2");
+        if (*(s8 *)(q + 1) == -1) {
+            return;
+        }
+        flags = q[1];
+        __asm__ volatile("dsrl32 %0, %1, 0\n\tsw %1, 0x8(%2)\n\tsw %0, 0xC(%2)"
+                         : "=&r"(hi) : "r"(v), "r"(q) : "memory");
+        q = D_004F4140[flags & 7] * *(s16 *)(q + 2) + q + 0x10;
+    }
+}
 
 /* DEBT(CAST) */
 void func_002B6EC8(void *arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -227,7 +243,60 @@ next2:
 next3:;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B6B50", func_002B7208);
+void func_002B7208(u8 *a0, u8 *a1, u32 *a2)
+{
+    float col[4] __attribute__((aligned(16)));
+    register u32 one;
+    u32 t;
+    u32 k;
+    u32 res;
+
+    Sg_LightGetDir(0, a1);
+    Sg_LightGetDir(1, a1 + 0x10);
+    Sg_LightGetDir(2, a1 + 0x20);
+    MMI_SQ_ZERO(0x30, a1);
+    one = 0x3F800000;
+    __asm__ volatile("" : "+r"(one));
+    VU0_LQC2(28, 0x0, a1);
+    VU0_LQC2(29, 0x10, a1);
+    VU0_LQC2(30, 0x20, a1);
+    VU0_OP("vsub.xyzw $vf28, $vf0, $vf28");
+    VU0_OP("vsub.xyzw $vf29, $vf0, $vf29");
+    VU0_OP("vsub.xyzw $vf30, $vf0, $vf30");
+    VU0_OP("vmove.w $vf28, $vf0");
+    VU0_OP("vmove.w $vf29, $vf0");
+    VU0_OP("vmove.w $vf30, $vf0");
+    VU0_SQC2(28, 0x0, a1);
+    VU0_SQC2(29, 0x10, a1);
+    VU0_SQC2(30, 0x20, a1);
+    *(u32 *)(a1 + 0x0C) = one;
+    __asm__ volatile("" : : : "memory");
+    *(u32 *)(a1 + 0x1C) = one;
+    __asm__ volatile("" : : : "memory");
+    *(u32 *)(a1 + 0x2C) = one;
+    __asm__ volatile("" : : : "memory");
+    Sg_LightGetColor(0, a0);
+    Sg_LightGetColor(1, a0 + 0x10);
+    Sg_LightGetColor(2, a0 + 0x20);
+    MMI_SQ_ZERO(0x30, a0);
+    Sg_LightGetColor(3, col);
+    __asm__ volatile("" : : "r"(0x70003F00));
+    t = 0xFFFFFFFF;
+    MMI_OP2Z("pextlb", t, t);
+    MMI_OP2Z("pextlh", t, t);
+    VU0_QMTC2_NI(30, t);
+    VU0_OP("vitof0.xyzw $vf30, $vf30");
+    k = 0x43800000;
+    VU0_QMTC2_NI(29, k);
+    VU0_LQC2(31, 0, col);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf29x");
+    VU0_OP("vmini.xyzw $vf31, $vf31, $vf30");
+    VU0_OP("vftoi0.xyzw $vf31, $vf31");
+    VU0_QMFC2_NI(t, 31);
+    MMI_OP2Z("ppach", t, t);
+    MMI_OP2Z("ppacb", res, t);
+    *a2 = res;
+}
 
 /* ambient light colour packed to RGBA8 */
 u32 func_002B7320(void)

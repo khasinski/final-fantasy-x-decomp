@@ -510,9 +510,95 @@ void func_002B2F28(u32 id) {
     func_002B2E70(id, 0x60);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2F30);
+#define MAKE_XYZ2_7000(dst) do { \
+    register u_long128 _q; \
+    __asm__ volatile("ori %0, $0, 0xFFFF\n\t" \
+                     "dsll %0, %0, 16\n\t" \
+                     "ori %0, %0, 0xFFFE\n\t" \
+                     "pcpyld %0, %0, $0\n\t" \
+                     "addiu %0, $0, 0x7000\n\t" \
+                     "dsll32 %0, %0, 0\n\t" \
+                     "ori %0, %0, 0x7000" : "=r"(_q)); \
+    (dst) = _q; \
+} while (0)
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B2FF0);
+#define MAKE_XYZ2_9000(dst) do { \
+    register u_long128 _q; \
+    __asm__ volatile("ori %0, $0, 0xFFFF\n\t" \
+                     "dsll %0, %0, 16\n\t" \
+                     "ori %0, %0, 0xFFFE\n\t" \
+                     "pcpyld %0, %0, $0\n\t" \
+                     "ori %0, $0, 0x9000\n\t" \
+                     "dsll32 %0, %0, 0\n\t" \
+                     "ori %0, %0, 0x9000" : "=r"(_q)); \
+    (dst) = _q; \
+} while (0)
+
+void *func_002B2F30(u8 *p, u32 col, u8 a2, u8 a3)
+{
+    register u_long128 qcol __asm__("$5");
+    register u64 t10 __asm__("$3") = 0x40A3400000008001ULL;
+    register u64 t18 __asm__("$2") = 0x441EULL;
+    u_long128 v0, v1;
+
+    __asm__("" : "+r"(t10), "+r"(t18));
+    *(u64 *)(p + 0x10) = t10;
+    *(u64 *)(p + 0x18) = t18;
+    MMI_SQ_ZERO(0x20, p);
+    p[0x20] = a2;
+    p[0x24] = a3;
+    *(u64 *)(p + 0x28) = 0x42ULL;
+    MMI_OP2Z("pextlb", qcol, col);
+    MMI_OP2Z("pextlh", qcol, qcol);
+    *(u_long128 *)(p + 0x30) = qcol;
+    MAKE_XYZ2_7000(v0);
+    MAKE_XYZ2_9000(v1);
+    *(u_long128 *)(p + 0x40) = v0;
+    {
+        register u8 *arg0 __asm__("$4") = p;
+        __asm__ volatile("" : "+r"(arg0));
+        *(u_long128 *)(p + 0x50) = v1;
+        ((void (*)(void *, s32, s32, s32))func_002B2A80)(arg0, 6, 0x17, 0);
+    }
+    return p + 0x60;
+}
+
+void func_002B2FF0(s32 col, s32 a1, s32 a2)
+{
+    register u32 b2 __asm__("$18") = a2 & 0xFF;
+    register u32 b1 __asm__("$17") = a1 & 0xFF;
+    u8 *p;
+    u_long128 v0, v1;
+    u_long128 *gs;
+
+    p = (u8 *)func_002B3888(0x100);
+    gs = D_006F2CE0;
+    *(u64 *)(p + 0x00) = 0x70000007ULL;
+    *(u64 *)(p + 0x10) = 0x60A3400000008001ULL;
+    *(u64 *)(p + 0x18) = 0xE441EEULL;
+    MMI_SQ_ZERO(0x20, p);
+    *(u64 *)(p + 0x28) = 0x42ULL;
+    *(u64 *)(p + 0x30) = 0x3000DULL;
+    *(u64 *)(p + 0x38) = 0x47ULL;
+    p[0x20] = b1;
+    p[0x24] = b2;
+    MMI_OP2Z("pextlb", col, col);
+    MMI_OP2Z("pextlh", col, col);
+    __asm__ volatile("sq %0, 0x40(%1)" : : "r"(col), "r"(p) : "memory");
+    MAKE_XYZ2_7000(v0);
+    MAKE_XYZ2_9000(v1);
+    *(u_long128 *)(p + 0x50) = v0;
+    {
+        register s32 z0 __asm__("$4") = 0;
+        __asm__ volatile("" : "+r"(z0));
+        *(u_long128 *)(p + 0x60) = v1;
+        *(u_long128 *)(p + 0x70) = gs[6];
+        func_002DA610(z0, 0);
+    }
+    func_002DBA28(D_003F395C, (s32)p | 0x80000000);
+    func_002DA610(0, 0);
+    func_002B39C0(0x100);
+}
 
 void func_002B3120(int a, u8 b, u8 c)
 {

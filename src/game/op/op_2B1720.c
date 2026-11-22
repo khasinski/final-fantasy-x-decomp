@@ -139,7 +139,56 @@ void func_002B1A48(V6HeapOwner *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1720", func_002B1AB8);
+extern char D_00575AF0[];
+void _pppStartPart(Slot80 *s, int a1, int a2, int a3);
+
+typedef struct OpPartOwner {
+    u8 pad0[0x1A];
+    u16 h1A;
+    u8 pad1C[2];
+    u8 b1E;
+    u8 pad1F[0xBC - 0x1F];
+    Slot80 *slot;
+    u8 padC0[0x10];
+    union {
+        HeapCfg *p;
+        u8 b[4];
+    } uD0;
+    u8 bD4;
+} OpPartOwner; /* DEBT(NAME) */
+
+void func_002B1AB8(OpPartOwner *o)
+{
+    HeapCfg *c = o->uD0.p;
+    HeapMgrV *m = &D_006F2CB0;
+    s16 i;
+    int key;
+
+    m->w20 = c->w14;
+    m->tbl = c->tbl;
+    m->p28 = c->p1C;
+    D_006A3924 = (HeapMgr *)m; /* DEBT(CAST): HeapMgrV is the full view of HeapMgr */
+    key = (o->b1E << 16) + o->h1A;
+    for (i = 0; i < 0x100; i++) {
+        if ((int)D_006EA8B0[i] == key) {
+            D_006A3924 = (HeapMgr *)&D_006F2CB0;
+            _pppAllFreePObject(&D_006EACB0[i]);
+            goto found;
+        }
+    }
+    for (i = 0; i < 0x100; i++) {
+        if (D_006EA8B0[i] == 0) {
+            goto found;
+        }
+    }
+    func_00120108(D_00575AF0);
+    func_002EA328(1);
+found:
+    D_006A3924 = (HeapMgr *)&D_006F2CB0;
+    D_006EA8B0[i] = (void *)key;
+    o->slot = &D_006EACB0[i];
+    _pppStartPart(&D_006EACB0[i], 0x1000, (*(int **)((u8 *)o->uD0.p + 0x10))[o->bD4], 1);
+}
 
 int op_part_run(V6HeapOwner *o)
 {
