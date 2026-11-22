@@ -271,7 +271,76 @@ void mpegstrendsub(S58FE54 *s, int a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015D730);
+typedef struct MovieStrView { /* DEBT(NAME): overlay of D_0030DDF0 for func_0015D730 */
+    u8 pad0[0x50514];
+    s32 w50514;
+    s32 w50518;
+    s32 w5051C;
+    s32 w50520;
+    u8 pad50524[0x5059C - 0x50524];
+    u8 *p5059C;
+    u8 pad505A0[0x505C0 - 0x505A0];
+    s32 w505C0;
+    u8 pad505C4[0x506DC - 0x505C4];
+    s32 w506DC;
+    u8 pad506E0[0x5075F - 0x506E0];
+    s8 b5075F;
+    s8 b50760;
+} MovieStrView;
+
+extern MovieStrView *_mov2_D_0030DDF0 __asm__("D_0030DDF0"); /* DEBT(TYPE): local view of D_0030DDF0 */
+void func_0015DE90(void);
+void func_0015E1D0(void);
+
+void func_0015D730(void)
+{
+    MovieStrView *m = _mov2_D_0030DDF0;
+    u8 *hdr = m->p5059C;
+
+    m->w50514 = hdr[0xB];
+    m->w50518 = hdr[0xC];
+    m->w5051C = m->w50514 << 4;
+    m->w50520 = m->w50518 << 4;
+    if (m->w5051C == 0x200 && m->w50520 == 0x1A0) {
+        if ((m->w505C0 & 0x10000) != 0) {
+            m->b5075F = 0;
+        } else {
+            m->b5075F = 6;
+        }
+    }
+    if (_mov2_D_0030DDF0->w5051C == 0x140) {
+        _mov2_D_0030DDF0->b5075F = 2;
+        if (_mov2_D_0030DDF0->w50520 == 0x1A0) {
+            _mov2_D_0030DDF0->b5075F = 5;
+        }
+    }
+    if (_mov2_D_0030DDF0->w5051C == 0x280) {
+        _mov2_D_0030DDF0->b5075F = 1;
+        if (_mov2_D_0030DDF0->w50520 == 0x1A0) {
+            _mov2_D_0030DDF0->b5075F = 4;
+        }
+    }
+    if (_mov2_D_0030DDF0->b5075F != _mov2_D_0030DDF0->b50760) {
+        _mov2_D_0030DDF0->b50760 = _mov2_D_0030DDF0->b5075F;
+        ((void (*)(int, int))func_0011A5A0)(_mov2_D_0030DDF0->b5075F, 0); /* DEBT(TYPE): header prototype has 1 arg */
+        func_00159640(_mov2_D_0030DDF0->b5075F);
+        func_0020D468();
+        {
+            register MovieStrView *mv __asm__("$3") = _mov2_D_0030DDF0; /* DEBT(REG): ee-gcc picks $v0 instead of $v1 */
+
+            TOInitMovieMessage(mv->w5051C, mv->w50520);
+        }
+        func_0015C9F0();
+    }
+    func_0015F338();
+    *(volatile u32 *)0x10002010 = 0x40000000;
+    if (_mov2_D_0030DDF0->p5059C[8] == 0) {
+        func_00171530((void *)(D_0030DDF4 + 0x10F0), 0x1800, func_0015DE90, 0);
+    } else {
+        func_00171530((void *)(D_0030DDF4 + 0x10F0), 0x1800, func_0015E1D0, 0);
+    }
+    _mov2_D_0030DDF0->w506DC = 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015D940);
 
