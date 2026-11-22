@@ -318,7 +318,92 @@ void func_00215360() /* DEBT(TYPE): old-style definition; TOBtlFinishCommand pas
     D_00690698 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOControlMsSetMenuCommand);
+typedef struct {
+    u8 b0;
+    u8 pad1[2];
+    u8 b3;
+    u8 pad4[4];
+    struct {
+        u16 h0[2];
+        u16 pad4[2];
+        u32 w8;
+        u32 padC;
+    } item[3];
+} ToBtlCmdBuf;
+
+typedef struct {
+    u8 pad0[2];
+    s8 b2;
+    u8 pad3[5];
+    s16 h8;
+    u8 padA[0xC];
+    u16 h16;
+    u16 h18;
+    u8 pad1A[0xAE];
+    u32 wC8;
+} R4RecCmd;
+
+extern u32 D_003250D8;
+
+void TOControlMsSetMenuCommand(void)
+{
+    int i;
+    int cnt;
+    int sub;
+    u32 mask;
+
+    for (i = 0; i < 3; i++) {
+        ((ToBtlCmdBuf *)D_003252A8)->item[i].h0[0] = 0xFF;
+        ((ToBtlCmdBuf *)D_003252A8)->item[i].h0[1] = 0xFF;
+        ((ToBtlCmdBuf *)D_003252A8)->item[i].w8 = 0;
+    }
+    cnt = 0;
+    sub = 0;
+    for (i = 0; i <= D_00325020; i++) {
+        int h = ((R4RecCmd *)D_003249C0)[i].h16;
+        if ((u16)h == 0xFFFF) {
+            continue;
+        }
+        if ((u16)h == 0xFFFE) {
+            continue;
+        }
+        if (((R4RecCmd *)D_003249C0)[i].b2 == 0) {
+            if (sub >= 2) {
+                ((ToBtlCmdBuf *)D_003252A8)->item[cnt].h0[0] = ((ToBtlCmdBuf *)D_003252A8)->item[cnt].h0[1];
+                sub--;
+            }
+            ((ToBtlCmdBuf *)D_003252A8)->item[cnt].h0[sub] = h;
+            sub++;
+        } else {
+            ((ToBtlCmdBuf *)D_003252A8)->item[cnt].w8 = ((R4RecCmd *)D_003249C0)[i].wC8;
+            cnt++;
+            sub = 0;
+        }
+    }
+    if (D_003249A4 == 0x100) {
+        R4RecCmd *rec = (R4RecCmd *)D_003249C0;
+        ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[0] = 0x311E;
+        ((ToBtlCmdBuf *)D_003252A8)->item[0].h0[1] = rec[2].h16;
+        ((ToBtlCmdBuf *)D_003252A8)->item[1].h0[0] = rec[2].h18;
+        cnt = 2;
+    }
+    if (cnt == 0) {
+        cnt = 1;
+    }
+    ((ToBtlCmdBuf *)D_003252A8)->b0 = (u8)((R4RecCmd *)D_003249C0)[0].h8;
+    ((ToBtlCmdBuf *)D_003252A8)->b3 = (u8)cnt;
+    func_001C94C0(D_003252A8);
+    if (((R4RecCmd *)D_003249C0)[D_00325020].b2 == 0) {
+        mask = 1 << ((R4RecCmd *)D_003249C0)[D_00325020].h8;
+    } else {
+        mask = D_003250D8;
+    }
+    if (((ToBtlCmdBuf *)D_003252A8)->item[0].h0[1] == 0xFF) {
+        TOBtlCtrlCtbWindow((s16)((ToBtlCmdBuf *)D_003252A8)->item[0].h0[0], mask);
+    } else {
+        TOBtlCtrlCtbWindow((s16)((ToBtlCmdBuf *)D_003252A8)->item[0].h0[1], mask);
+    }
+}
 
 void TOBtlFinishCommand(void)
 {
