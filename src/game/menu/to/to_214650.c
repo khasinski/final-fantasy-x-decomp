@@ -148,7 +148,64 @@ void TOControlBtlWindow(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TODrawBtlWindow);
+extern s8 D_003249AA;
+extern s16 D_003252A4;
+extern s16 D_0032436E;
+extern s16 D_00324370;
+
+extern void _void_func_0021A8F0(void) __asm__("func_0021A8F0"); /* DEBT(TYPE): funcs.h declares as int */
+extern void _void_TOBtlDrawActiveChrCursor(int) __asm__("TOBtlDrawActiveChrCursor"); /* DEBT(TYPE): funcs.h declares as int */
+extern void _void_TOBtlDrawCtbWindow(int, int) __asm__("TOBtlDrawCtbWindow"); /* DEBT(TYPE): funcs.h declares as int */
+extern void _void_QuickConfigMenuDraw(void) __asm__("QuickConfigMenuDraw"); /* DEBT(TYPE): funcs.h declares as int */
+
+void TODrawBtlWindow(void)
+{
+    int i;
+
+    if (D_003249A0 == 0) {
+        return;
+    }
+    MsBattleCursorCalc();
+    func_001FAB08();
+    TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+    TOSeqDraw(2, 0);
+    TOBtlDrawDamageValue2();
+    func_00216FE0(0);
+    func_00216FE0(1);
+    if (MsBattleGetStatus() != 2 && MsBattleGetStatus() != 1) {
+        return;
+    }
+    if (D_003249AA == 1) {
+        TOBtlDrawStatusWin();
+    }
+    TOBtlDrawEnemyLimit();
+    func_0021A200();
+    func_0021AD80();
+    func_0021B358();
+    func_0021B9C8();
+    _void_func_0021A8F0();
+    if (D_00692038 != 0) {
+        _void_TOBtlDrawActiveChrCursor(D_003252A4);
+        _void_TOBtlDrawCtbWindow(D_0032436E, D_00324370);
+        for (i = 0; i < 8; i++) {
+            if (D_003249C0[i].state >= 3) {
+                void (*fn)(R4Rec *) = *(void (**)(R4Rec *))((u8 *)&D_003249C0[i] + 0x80); /* DEBT(CAST): draw cb at R4Rec+0x80 */
+                if (fn != 0) {
+                    fn(&D_003249C0[i]);
+                }
+            }
+        }
+        func_00218330();
+        {
+            u8 *t = (u8 *)&toTarget; /* DEBT(CAST): toTarget+0x124 */
+            func_00218A78(*(u16 *)(t + 0x124), 0x14, 0x46);
+            TOBtlDrawInfoWinMes(*(u16 *)(t + 0x124));
+        }
+    }
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOSeqDraw(2, 1);
+    _void_QuickConfigMenuDraw();
+}
 
 void TOClearBtlWindow(void)
 {

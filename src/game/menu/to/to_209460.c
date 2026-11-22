@@ -141,7 +141,83 @@ void func_00209760(s32 i, u8 a, u8 b, u8 c, u8 d)
     D_0066B508[i]->b39 = d;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOInit);
+extern u8 D_00324140[];
+extern u8 D_00323960[];
+extern u8 D_00670DA0[];
+extern u8 D_0066B5A0[];
+extern u8 D_0066BDA0[];
+extern u8 D_00323910[];
+extern s8 D_00323958;
+extern void _void_func_00214650(void) __asm__("func_00214650"); /* DEBT(TYPE): funcs.h declares as int */
+void func_0020B710(void);
+
+void TOInit(void)
+{
+    void *p;
+    int lang;
+    int i;
+
+    func_0020B710();
+    TOMenuMakeSaveFileName();
+    TOInitPadData();
+    func_001EF910();
+    D_0068EEDC = 0;
+    D_0068EEE0 = 0;
+    p = (void *)TODVDFileReadAuto(0x12, 0);
+    TOFTCTransfer(p);
+    func_0011D590((int)p, 2);
+    if (TOGetFFXLangSwapFlag() == 1) {
+        p = (void *)TODVDFileReadAuto(4, 0);
+        TOFTCTransfer(p);
+        func_0011D590((int)p, 2);
+    }
+    if (func_0020B850() == 0x11 || func_0020B850() == 0x12) {
+        lang = 4;
+    } else {
+        lang = 0x12;
+    }
+    D_0066B590 = TODVDFileReadAuto(lang, 0xB);
+    D_0066B594 = TODVDFileReadAuto(lang, 0xA);
+    D_0066B58C = TODVDFileReadAuto(lang, 0xF);
+    D_0066B588 = TODVDFileReadAuto(lang, 0xE);
+    D_0066B598 = TODVDFileReadAuto(lang, 8);
+    func_0020CC20(lang, 6, D_00324140);
+    D_003241C0 = (int)D_00324140;
+    func_0020CC20(lang, 5, (void *)TOGetFFXToAlbhedTblAdrs());
+    func_0020CC20(lang, 7, D_00323960);
+    func_0020CC20(lang, 0x16, D_00670DA0);
+    D_0066B584 = (void *)TODVDFileReadAuto(0x12, 0x13);
+    func_0020CC20(0x12, 0x14, D_0066B5A0);
+    func_0020CC20(0x12, 0x15, D_0066BDA0);
+    func_0020DD38();
+    TkMenuInitSeq();
+    TkMenuSetSceneDataAdrs(0, D_0066B5A0);
+    TkMenuSetSceneDataAdrs(1, D_0066BDA0);
+    TkMenuSetSceneDataAdrs(2, D_00670DA0);
+    TOSeqInitParam();
+    func_00206980();
+    D_00323910[0] = 0x12;
+    D_00323910[1] = 0x50;
+    D_00323910[2] = 0;
+    TOSetExeMessageWindowArea(1);
+    for (i = 0; i < 8; i++) {
+        TOInitMessageWindow(i);
+    }
+    for (i = 0; i < 8; i++) {
+        TOInitMacroCmd(i);
+    }
+    TOSetExeMessageWindowArea(0);
+    for (i = 0; i < 8; i++) {
+        TOInitMessageWindow(i);
+    }
+    for (i = 0; i < 8; i++) {
+        TOInitMacroCmd(i);
+    }
+    TODapsInit();
+    TOMenuInit();
+    _void_func_00214650();
+    D_00323958 = 0;
+}
 
 void TOReset1(void)
 {

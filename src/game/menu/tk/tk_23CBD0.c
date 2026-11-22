@@ -103,7 +103,50 @@ void func_0023CE38(char *dst, int number, int digits, int pad)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023CF70);
+extern char D_00326F00[];
+extern char D_00326F10[];
+extern char D_00326F28[];
+extern char D_00326F48[];
+extern char D_00326F50[];
+
+void func_0023CF70(char *dst, int slot, int secs, int area)
+{
+    char buf[0x40];
+    int m = (secs / 60) % 60;
+    int h = secs / 3600;
+
+    if (h >= 1000) {
+        h = 999;
+    }
+    func_002F072C(dst, D_00326F00);
+    if (func_0020B850() == 0) {
+        func_002F032C(dst, D_00326F38);
+        func_002F032C(dst, D_00326F10);
+    }
+    func_002F032C(dst, D_00326F38);
+    func_002F032C(dst, D_00326F48);
+    func_0023CE38(buf, slot + 1, 2, 0);
+    func_002F032C(dst, buf);
+    func_002F032C(dst, D_00326F50);
+    func_002F032C(dst, D_00326F38);
+    if (func_0020B850() == 0) {
+        func_002F032C(dst, D_00326F38);
+    } else {
+        func_0023CE38(buf, h, 3, 1);
+        func_002F032C(dst, buf);
+        func_002F032C(dst, D_00326F28);
+        func_0023CE38(buf, m, 2, 0);
+        func_002F032C(dst, buf);
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 0) {
+        func_00208458((void *)AtelGetSaveDicName(area, func_001BD360()), buf);
+        func_002F032C(dst, buf);
+    } else {
+        u8 *tbl = (u8 *)func_00206ED8(func_001BD360());
+        func_00208458(tbl + *(u16 *)(tbl + area * 4 + 2), buf);
+        func_002F032C(dst, buf);
+    }
+}
 
 typedef struct SaveDataBody {
     u8 d[0x64B8];
