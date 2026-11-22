@@ -664,7 +664,73 @@ int hdd_install_check(int a)
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168090);
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168328);
+extern s8 D_0030DE51;
+extern s32 D_0030DE58;
+extern int D_0030DE88;
+extern s8 D_0030DE94;
+extern char D_0056BEE0[];
+
+typedef struct {
+    u8 pad0[0xC];
+    void (*fnC)(int);
+    u8 pad10[8];
+    s32 w18;
+} HddCbStruct;
+
+void func_00168328(void)
+{
+    char path[0x40];
+    int ret;
+
+    D_0030DE51 = 1;
+    D_0030DE58 = 1;
+    ret = func_00167020();
+    if (ret == 0) {
+        int saved = ((HddCbStruct *)&D_0078E498)->w18; /* DEBT(CAST): D_0078E498 callback struct */
+
+        ((HddCbStruct *)&D_0078E498)->fnC(1);
+        func_001663A0();
+        ret = func_00167488();
+        if (ret == 0) {
+            int fd;
+
+            func_00166458();
+            func_001660C0();
+            func_002F0008(path, D_0056BEE0, func_001672C0(), D_0030DE68, D_0030DE78);
+            func_001661A8();
+            fd = func_002FC4E0(path, 3);
+            if (fd >= 0) {
+                func_00168090(fd);
+                func_002FC768(fd);
+            }
+            func_001663A0();
+        }
+        ((HddCbStruct *)&D_0078E498)->fnC(saved);
+    }
+    if (D_0030DE84 != 0) {
+        func_0011D590(D_0030DE84, 10);
+        D_0030DE84 = 0;
+    }
+    if (D_0030DE88 != 0) {
+        func_0011D590(D_0030DE88, 10);
+        D_0030DE88 = 0;
+    }
+    switch (ret) {
+    case 0:
+        D_0030DE94 = 1;
+        D_0030DE51 = 2;
+        break;
+    case 1:
+        func_00166458();
+        D_0030DE51 = -1;
+        break;
+    case 2:
+        D_0030DE51 = -2;
+        break;
+    }
+    func_00162CD8(0);
+    D_0030DE58 = 0;
+}
 
 extern char D_0056BE08[];
 extern int D_0030DE88;

@@ -77,7 +77,51 @@ void func_00218500(u16 id)
     _TOGetMessageWH(0, (u8 *)D_00692480, D_00692478, &D_0069247A, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlSetTargetHelpMes);
+void TOBtlSetTargetHelpMes(int id)
+{
+    char b0[0x10];
+    char b1[0x10];
+    char b2[0x10];
+    char *name;
+
+    if (id == 0xFF) {
+        return;
+    }
+    func_002F072C(b0, (char *)MsMenuGetText(1, 0x1047, 0));
+    func_002F072C(b1, (char *)MsMenuGetText(1, 0x1048, 0));
+    func_002F072C(b2, (char *)MsMenuGetText(1, 0x1049, 0));
+    func_002EF0D0(D_00692480, 0, 0x80);
+    name = (char *)func_001BB190(id);
+    if (id >= 0x14) {
+        int kind = func_001BC190(id);
+
+        if (kind == 0x14) {
+            int sub = func_001BC1B0(id);
+
+            if (func_0020B850() == 0 && func_001BD360() == 0) {
+                D_00692480[0] = 0x2C;
+                D_00692480[1] = sub + 0x30;
+                D_00692480[2] = 0;
+            } else {
+                D_00692480[0] = sub + 0x50;
+                D_00692480[1] = 0;
+            }
+            func_002F032C(D_00692480, b2);
+        }
+        if (kind == 0x15) {
+            func_002F072C(D_00692480, b0);
+            func_002F032C(D_00692480, b2);
+        }
+        if (kind == 0x16) {
+            b1[1] += func_001BC1B0(id);
+            func_002F072C(D_00692480, b0);
+            func_002F032C(D_00692480, b1);
+            func_002F032C(D_00692480, b2);
+        }
+    }
+    func_002F032C(D_00692480, name);
+    _TOGetMessageWH(0, (u8 *)D_00692480, D_00692478, &D_0069247A, 0, 0);
+}
 
 void TOBtlSetChangeHelpMes(unsigned int id)
 {
