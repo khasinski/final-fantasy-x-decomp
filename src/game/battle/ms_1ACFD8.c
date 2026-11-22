@@ -123,7 +123,220 @@ void MsEnvInit(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBattleInit);
+typedef struct {
+    u8 pad0[0x12];
+    s8 f12;
+    u8 pad13[0x12];
+    u8 f25;
+    u8 pad26[0xF];
+    s8 f35;
+    u8 pad36[0x1D];
+    u8 f53;
+    u8 pad54[0x24];
+    void *f78;
+    void *f7C;
+    void *f80;
+    void *f84;
+    void *f88;
+    u8 pad8C[4];
+    void *f90;
+    void *f94;
+    u8 pad98[0xA];
+    u16 fA2;
+    u16 fA4;
+    u16 fA6;
+    u16 fA8;
+    u16 fAA;
+    u8 padAC[2];
+    u16 fAE;
+    u16 fB0;
+    u8 padB2[0x42];
+    void *fF4;
+    u8 padF8[0xA];
+    s16 f102;
+    u8 pad104[0x140F];
+    u8 f1513;
+    u8 pad1514[4];
+    float f1518;
+    u8 pad151C[0x46A];
+    s16 f1986;
+    s8 f1988;
+    s8 f1989;
+} BtlInitGS; /* DEBT(NAME): offset view of GameState for MsBattleInit */
+
+extern char D_0056E0B0[], D_0056E0C0[], D_0056E0D0[], D_0056E0D8[], D_0056E0E8[], D_0056E0F8[], D_0056E100[], D_0056E108[];
+extern int func_001BD360(void);
+extern void MsInitParamData(void);
+extern void func_001AFA80(void);
+extern void func_001B8B20(void);
+extern void func_001DF1C0(void);
+extern void func_001DBB90(void);
+extern void MsNumberInit(void);
+extern void func_001CEC58(void);
+extern void func_001D9F58(int);
+extern void func_001E1AC0(void);
+extern void MsEventEffectInit(void);
+extern void MsImportantInit(void);
+extern void func_001DDA30(void);
+extern void func_001CCC30(void);
+extern void MsBtlGetInit(void);
+extern void MsMemCheckInit(void);
+extern void func_0011C348(int);
+extern int MsGetCheckEnglish(void);
+extern int func_001AF948(int);
+extern void MsFieldItemRead(void);
+extern void MsSetSaveStartGame(void);
+extern void func_001BE348(void);
+extern void func_20512F0(void);
+extern void MsBattleInitAtEvent(int);
+extern void func_204B058(int, int, int, int, int);
+extern void MsMemCheckSum(int);
+extern void func_001BCE30(void);
+extern void MsDebugFullCommand(void);
+extern void func_001BCBA8(void);
+extern void MsDebugFullGill(void);
+
+#define BTL_INIT_GS ((BtlInitGS *)&D_003172F0) /* DEBT(CAST): GameState offset view */
+
+void MsBattleInit(void)
+{
+    int i = 0;
+
+    D_0065FF44 = func_001BD360();
+    MsInitParamData();
+    func_001AFA80();
+    func_001B8B20();
+    func_001DF1C0();
+    func_001E0328();
+    func_001DBB90();
+    MsAtelRegistInit();
+    MsNumberInit();
+    func_001CEC58();
+    func_001D9F58(0);
+    func_001E1AC0();
+    MsEventEffectInit();
+    MsImportantInit();
+    func_001DDA30();
+    func_001CCC30();
+    MsBtlGetInit();
+    MsMemCheckInit();
+
+    GetCD()->f10(0xD);
+    BTL_INIT_GS->f102 = GetCD()->f14(0);
+    func_0011C348(0x40);
+    BTL_INIT_GS->fF4 = user_malloc(BTL_INIT_GS->f102, 5, D_0056E0B0, -1);
+    MsMemCheckRegist(BTL_INIT_GS->fF4, BTL_INIT_GS->f102);
+    GetCD()->f0(0, BTL_INIT_GS->fF4, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fA4 = GetCD()->f14(0xB);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f7C = user_malloc(BTL_INIT_GS->fA4, 5, D_0056E0C0, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f7C, BTL_INIT_GS->fA4);
+    GetCD()->f0(0xB, BTL_INIT_GS->f7C, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fA2 = GetCD()->f14(0xE);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f78 = user_malloc(BTL_INIT_GS->fA2, 5, D_0056E0D0, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f78, BTL_INIT_GS->fA2);
+    GetCD()->f0(0xE, BTL_INIT_GS->f78, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fA6 = GetCD()->f14(0x1C);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f80 = user_malloc(BTL_INIT_GS->fA6, 5, D_0056E0D8, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f80, BTL_INIT_GS->fA6);
+    GetCD()->f0(0x1C, BTL_INIT_GS->f80, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fA8 = GetCD()->f14(0x1D);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f88 = user_malloc(BTL_INIT_GS->fA8, 5, D_0056E0E8, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f88, BTL_INIT_GS->fA8);
+    GetCD()->f0(0x1D, BTL_INIT_GS->f88, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fAA = GetCD()->f14(0x1E);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f84 = user_malloc(BTL_INIT_GS->fAA, 5, D_0056E0F8, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f84, BTL_INIT_GS->fAA);
+    GetCD()->f0(0x1E, BTL_INIT_GS->f84, 0, 0);
+    GetCD()->f8(0);
+
+    GetCD()->f10(0x2F);
+    BTL_INIT_GS->fB0 = GetCD()->f14(5);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f94 = user_malloc(BTL_INIT_GS->fB0, 5, D_0056E100, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f94, BTL_INIT_GS->fB0);
+    GetCD()->f0(5, BTL_INIT_GS->f94, 0, 0);
+    GetCD()->f8(0);
+
+    BTL_INIT_GS->fAE = GetCD()->f14(6);
+    func_0011C348(0x40);
+    BTL_INIT_GS->f90 = user_malloc(BTL_INIT_GS->fAE, 5, D_0056E108, -1);
+    MsMemCheckRegist(BTL_INIT_GS->f90, BTL_INIT_GS->fAE);
+    GetCD()->f0(6, BTL_INIT_GS->f90, 0, 0);
+    GetCD()->f8(0);
+
+    while (func_001AF648(i) != 0) {
+        i++;
+        GetCD()->f8(0);
+    }
+
+    func_001DBBE0(7, 0);
+    func_001DBBE0(9, 0);
+    func_001DBBE0(3, 0);
+    if (MsGetCheckEnglish() != 0) {
+        func_001DBBE0(0xE, 0);
+        func_001DBBE0(0xF, 0);
+        func_001DBBE0(0x10, 0);
+    }
+
+    i = 0;
+    while (func_001AF948(i) != 0) {
+        i++;
+        GetCD()->f8(0);
+    }
+
+    MsImportantRead();
+    GetCD()->f8(0);
+    MsFieldItemRead();
+    GetCD()->f8(0);
+    MsWeaponNameRead();
+    GetCD()->f8(0);
+    MsSetSaveStartGame();
+    BTL_INIT_GS->f1513 = 1;
+    BTL_INIT_GS->f1518 = -14.0f;
+    BTL_INIT_GS->f53 = 0xFF;
+    func_001B3388();
+    if (FFXIsDebug() != 0) {
+        func_001BE348();
+        func_20512F0();
+    }
+    MsBattleExe(-1, 0, 0, 1);
+    GetCD()->f8(0);
+    MsBtlReadSetScene();
+    func_001AF990();
+    MsBattleInitAtEvent(0);
+    func_0011AB80(1);
+    if (D_0065FF40 != 0) {
+        MsBattleLabelExe(D_0065FF40, 0, 0);
+        if (FFXIsDebug() != 0) {
+            func_204B058(BTL_INIT_GS->f1986, BTL_INIT_GS->f1988, BTL_INIT_GS->f1989, (u32)D_0065FF40 >> 16, D_0065FF40 & 0xFFFF);
+        }
+        BTL_INIT_GS->f12 = BTL_INIT_GS->f25;
+    } else {
+        BTL_INIT_GS->f12 = 0;
+    }
+    MsMemCheckSum(0x70000);
+    if (BTL_INIT_GS->f35 != 0) {
+        func_001BCE30();
+        MsDebugFullCommand();
+        func_001BCBA8();
+        MsDebugFullGill();
+    }
+}
 
 void func_001AD9C0(void) {
     MsEtEffectRead();
