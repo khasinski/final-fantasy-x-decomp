@@ -390,7 +390,29 @@ void MsCameraSetRect(int h, int which, void *v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraSetAct);
+void MsCameraSetAct(int h, int which, int a2, int a3, void *v) {
+    Unk317120Rec *record;
+    R2Area *area;
+    int current;
+
+    if (MsCameraIDcheck(h)) {
+        which &= 1;
+        record = &D_00314870[h & 0xFF].rec[which];
+        area = &record->area[(h & 0xFF00) >> 8];
+        area->b02 = 3;
+        ((s16 *)area->pad_0C)[0] = a2;
+        ((s16 *)area->pad_0C)[1] = a3;
+        area->b07 = 0;
+        area->b00 = 0;
+        MMI_COPY_LQ_T0(area->v30, v);
+        MMI_COPY_SQ_T0(area->v30);
+        current = func_001A6738(h);
+        if (current == h) {
+            func_001A7A58(record, area);
+            MsSetCheckChange(current, which, 0, 0);
+        }
+    }
+}
 
 void func_001A7A58(Unk317120Rec *rec, R2Area *area) {
     float sum[4];

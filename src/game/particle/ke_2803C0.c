@@ -182,7 +182,44 @@ void func_002820C0(PoolNode **list, Pool *pool)
     *list = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00282128);
+void func_00282128(KeThCp *cp, Pool *pool, void *a2, void *a3)
+{
+    KeThBPInitArg init;
+    KeThBP *o = (KeThBP *)func_00282040(pool);
+    int flg;
+
+    if (o == 0) {
+        return;
+    }
+    init.p = o;
+    init.n = pool->size;
+    flg = 0x100;
+    func_00281ED0(&init);
+    o->w5C = 0;
+    o->w30 = 0;
+    if (cp->flags & 4) {
+        flg = 0x180;
+    }
+    if (cp->flags & 0x10) {
+        flg |= 0x200;
+    }
+    if (cp->flags & 8) {
+        flg |= 0x400;
+    }
+    if (cp->flags & 0x20) {
+        flg |= 0x1000;
+    }
+    o->h3E |= flg;
+    func_00282798((u8 *)o + 0x40, a2);
+    func_00282798((u8 *)o + 0x60, a3);
+    if (cp->head != 0) {
+        cp->head->pprev = &o->next;
+    }
+    o->next = cp->head;
+    cp->head = o;
+    __asm__ volatile("" ::: "memory"); /* DEBT(ORDER): keep pprev store after head store */
+    o->pprev = &cp->head;
+}
 
 void KeThCp_Update(KeThCpUpdateArg *a)
 {

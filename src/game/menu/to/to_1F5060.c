@@ -757,7 +757,30 @@ void *TOAddPktChangeMacro(int a0, u8 *s, TextItem *it)
     return InvokedFromSelectCursor;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7FC0);
+void *func_001F7FC0(void *list, void *p, int x, int y, int style)
+{
+    register int rx __asm__("$17") = x; /* DEBT(REG): break s1/s2 tie between x and y across memset calls */
+    u8 *s = (u8 *)p;
+    TextItem *it = &D_00323918;
+    R4CharInfo *glyph = &D_00323930;
+
+    func_002EF0D0(glyph, 0, 32);
+    func_002EF0D0(it, 0, 20);
+    InvokedFromSelectCursor = list;
+    it->x = rx;
+    it->y = y;
+    it->col[0] = 0x80;
+    it->col[1] = 0x80;
+    it->col[2] = 0x80;
+    it->col[3] = 0x80;
+    it->f12 = 0;
+    it->f13 = style;
+    for (; *s; s = TOSkipCode(s)) {
+        func_0020E468(s, glyph);
+        func_001F1F60(it, glyph);
+    }
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F80D0(void *list, int id, int x, int y, int d)
 {

@@ -53,7 +53,45 @@ void MsSEPtransRegist(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     temp_3_2->pad9[1] = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DF1C0", MsSEPtransProcess);
+int MsSEPtransProcess(void)
+{
+    if (D_00662EE4 > 0) {
+        Q4Ent12 *e = &D_00662E20[D_00662EE0];
+        if (e->pad9[1] == 0) {
+            e->pad9[1] = 1;
+            if (e->f8 == 0) {
+                SndSepTransSepOnly(*(s32 *)e, *(s32 *)((u8 *)e + 4)); /* DEBT(CAST): Q4Ent12 words 0, 4 */
+            } else {
+                SndStandbyBattleWave(*(s32 *)e, *(s32 *)((u8 *)e + 4));
+            }
+            return -1;
+        }
+        if (SndSyncWaveTrans(0) != 0) {
+            return -1;
+        }
+        if ((*(u32 *)&e->f8 & 0xFF00FF) == 0x10001) { /* DEBT(CAST): matches combined byte test for f8==1 && pad9[1]==1 */
+            e->pad9[1] = 2;
+            SndStandbySepWave();
+            return -1;
+        }
+        D_00662EE4--;
+        if (e->pad9[0] != 0xFF) {
+            BtlChr *c = MsGetChr(e->pad9[0]);
+            if (--((u8 *)c)[0xBED] == 0) { /* DEBT(CAST): BtlChr fields at 0xBEC/0xBED */
+                ((u8 *)c)[0xBEC] = 1;
+            }
+        } else {
+            if (--D_003172F0.f175A == 0) {
+                D_003172F0.f1759 = 1;
+                MsBtlReadSceneFree();
+            }
+        }
+        D_00662EE0 = (D_00662EE0 + 1) % 16;
+        __asm__ volatile("" ::: "memory"); /* DEBT(ORDER): keep return -1 after D_00662EE0 store */
+        return -1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DF1C0", MsRegistSEdata);
 

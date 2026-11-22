@@ -139,7 +139,16 @@ int func_002517A8(int a, int wait)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00251828);
+void func_00251828(void)
+{
+    volatile s32 *cnt = T6_REQ_CNT;
+
+    cnt[1] = *(s32 *)D_00327024; /* DEBT(CAST): D_00327024 is a pointer to s32 */
+    if (D_0069C8F4 != 0) {
+        D_0069C8F4(D_0069C8F8);
+    }
+    D_0069BF74 &= ~1;
+}
 
 int SqsDataSendingCompleted(int a)
 {

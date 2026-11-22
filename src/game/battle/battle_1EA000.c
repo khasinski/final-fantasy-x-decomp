@@ -546,7 +546,53 @@ int func_001EB7E8(Actor *a, void *unused, ScriptCtx *ctx)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001EB898);
+extern char D_0056FCB0[];
+extern char D_0056FCC8[];
+void Ch_SetShadeCol(void *, float, float, float, int);
+void _call_110540(void *, float, int) __asm__("func_00110540");
+
+int func_001EB898(Actor *a0, int mask, int a2)
+{
+    int ret = 0;
+    int i;
+
+    for (i = 0; i < 31; i++) {
+        if ((mask >> i) & 1) {
+            BtlChr *c = MsGetChr(i);
+            u8 b282 = ((u8 *)c)[0x282]; /* DEBT(CAST): BtlChr fields */
+            u8 b283 = ((u8 *)c)[0x283];
+            int ctb;
+            void *chr;
+            int out;
+
+            MsSetRamChr(0, i);
+            ((u8 *)c)[0x282] = b282;
+            ((u8 *)c)[0x283] = b283;
+            MsRelife(i, c, 1);
+            ((u8 *)c)[0xFE] = 0;
+            ctb = MsGetRomCTBcount(((u8 *)c)[0x26C]) * 3;
+            ((u8 *)c)[0x31D] = ctb;
+            ((u8 *)c)[0x31C] = ctb;
+            chr = *(void **)c;
+            if (chr != 0) {
+                Ch_SetShadeCol(chr, 1.0f, 1.0f, 1.0f, 0);
+                _call_110540(chr, 1.0f, 0);
+                func_00110718(chr, 0);
+                if (a2 != 0) {
+                    func_002EF240(D_0056FCB0, chr);
+                    func_00298EE0(chr);
+                    func_002EF240(D_0056FCC8, i);
+                }
+            }
+            MsStatusEffectCheck(i);
+            MsSetMotion(i, 0x27, 0, 0, 1, a0, &out);
+            if (out != 0) {
+                ret = 1;
+            }
+        }
+    }
+    return ret;
+}
 
 int func_001EBA30(Actor *a, int *out, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);
