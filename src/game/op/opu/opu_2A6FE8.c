@@ -335,7 +335,109 @@ INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", op_2point_shadow);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A88F8);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A8D08);
+extern void op_oef2_se_on(void *, int, int);
+extern void op_oef2_sound_cue_multi(int, int, int, int);
+extern void op_oef2_sep_free_all(int);
+extern int op_oef2_sound_cue_check(int);
+extern void op_oef2_se_3d_on(void *, void *, int);
+extern void op_oef2_se_3d_move(void *, void *, int);
+extern void op_oef2_stream_cue(void *, int, int);
+extern void op_oef2_se_fade_out(void *, int);
+extern void _2A8D08_MsChrSEfoot(int, int) __asm__("MsChrSEfoot"); /* DEBT(TYPE): int arg 1 */
+extern int SndGetNowPlayMusic(void);
+
+s16 *func_002A8D08(ScriptThread *th, s16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    u8 b1e = sub->b1E;
+    u16 pc1 = (u16)pc[1];
+    int res = th->res[b1e];
+    int mask = 8;
+    int i;
+
+    if (!(th->flags & 0x800)) {
+        mask = 0x10000;
+        if (b1e != 0) {
+            i = b1e;
+            do {
+                mask <<= 1;
+                i--;
+            } while (i != 0);
+        }
+    }
+
+    switch (th->flags & 0xF000) {
+        case 0x0000:
+            pc += 2;
+            op_oef2_se_on(op_oef2_a_get(res, 6, pc1), 0x40, 0x100);
+            break;
+        case 0x1000:
+            op_oef2_sound_cue_multi(res, 0, 0x3E8, mask);
+            pc += 1;
+            break;
+        case 0x2000:
+            op_oef2_sep_free_all(mask);
+            pc += 1;
+            break;
+        case 0x3000:
+            if (op_oef2_sound_cue_check(mask) == 0) {
+                pc += 1;
+            } else {
+                *((u8 *)th + 0x210) = 1; /* DEBT(CAST): ScriptThread +0x210 byte */
+            }
+            break;
+        case 0x4000:
+            pc += 3;
+            op_oef2_se_3d_on(op_oef2_a_get(res, 6, pc1), (u8 *)sub + 0x90, 0x100); /* DEBT(CAST): ScriptSub +0x90 */
+            break;
+        case 0x5000:
+            pc += 3;
+            op_oef2_se_3d_move(op_oef2_a_get(res, 6, pc1), (u8 *)sub + 0x90, 0x100); /* DEBT(CAST): ScriptSub +0x90 */
+            break;
+        case 0x6000:
+            op_oef2_stream_cue(op_oef2_a_get(res, 6, pc1), pc[2], mask);
+            pc += 3;
+            break;
+        case 0x7000:
+            MsChrSEfoot(*((u8 *)sub + 0x18), 1); /* DEBT(CAST): ScriptSub +0x18 */
+            pc += 1;
+            break;
+        case 0x8000:
+            MsChrSEfoot(*((u8 *)sub + 0x18), 0); /* DEBT(CAST): ScriptSub +0x18 */
+            pc += 1;
+            break;
+        case 0x9000:
+            for (i = 0; i < 0x20; i++) {
+                if (owu_chr_hd[i] != 0) {
+                    _2A8D08_MsChrSEfoot(i, 1);
+                }
+            }
+            pc += 1;
+            break;
+        case 0xA000:
+            for (i = 0; i < 0x20; i++) {
+                if (owu_chr_hd[i] != 0) {
+                    _2A8D08_MsChrSEfoot(i, 0);
+                }
+            }
+            pc += 1;
+            break;
+        case 0xB000:
+            op_oef2_se_fade_out(op_oef2_a_get(res, 6, pc1), pc[2]);
+            pc += 3;
+            break;
+        case 0xC000:
+            {
+                register int mus __asm__("$16") = SndGetNowPlayMusic(); /* DEBT(REG): pin mus to $s0 */
+                if (mus >= 0) {
+                    func_002D85F0(mus, pc[1], 0);
+                }
+                pc += 2;
+            }
+            break;
+    }
+    return pc;
+}
 
 s16 *opu_vibration(ScriptThread *th, s16 *pc)
 {
