@@ -127,8 +127,167 @@ int func_002292B8(int x, int dir) {
     return x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuCtrlStatus);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_228B08/rodata", jtbl_005717E0);
+extern s32 D_003258C8, D_003258CC, D_003258D0, D_003258D4;
+extern char D_005717D0[];
+extern int TOMenuGetFirstReadEndFlag(void);
+extern void TkMenuMainFreeWindowGroup(int);
+extern int func_00242818(void);
+extern int func_002429D0(void);
+extern void func_002429F0(void);
+extern void func_00242980(void);
+extern void TkMenuCloseStatusPageWindow(int);
+extern void TkMenuMainSleepMenu(int);
+
+void TkMenuCtrlStatus(Task *t)
+{
+    s32 *st = &t->x1C;
+    int pad = func_00220318();
+    int rep = TOMenuGetControlPadRep();
+    int trg = TOMenuGetControlPadTrg();
+
+    func_00225500(0, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4);
+    TkMn2CalcStatusBGRatio();
+
+    switch (*st) {
+    case 0:
+        if (TOMenuGetFirstReadEndFlag() != 0) {
+            *st = 1;
+        }
+        break;
+    case 1:
+        *st = 2;
+        break;
+    case 3:
+        TMn2SetStatusBGDiff(-0x155);
+        func_00227490(D_005717D0);
+        /* fallthrough */
+    case 2:
+        *st = 4;
+        break;
+    case 4:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuMainFreeWindowGroup(0);
+            *st = 5;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            *st = 0x11;
+        } else if (func_00242818() >= 2 && func_002429D0() != 0) {
+            if ((rep & 4) && pad == 4) {
+                SndSepPlaySimple(0x80000004);
+                func_002429F0();
+            } else if ((rep & 8) && pad == 8) {
+                SndSepPlaySimple(0x80000004);
+                func_00242980();
+            }
+        }
+        break;
+    case 5:
+        TMn2SetStatusBGDiff(0x155);
+        func_00227480(D_005717D0);
+        TkMenuOpenStatusPageWindow(0, 0, 0, 0);
+        *st = 6;
+        break;
+    case 6:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(0);
+            *st = 7;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(0);
+            *st = 3;
+        }
+        break;
+    case 7:
+        TkMenuOpenStatusPageWindow(0, 1, 0x40, 0);
+        *st = 8;
+        break;
+    case 8:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(1);
+            *st = 9;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(1);
+            *st = 3;
+        }
+        break;
+    case 9:
+        TkMenuOpenStatusPageWindow(0, 2, 0x41, 0);
+        *st = 10;
+        break;
+    case 10:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(2);
+            *st = 11;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(2);
+            *st = 3;
+        }
+        break;
+    case 11:
+        TkMenuOpenStatusPageWindow(0, 3, 0x45, 0);
+        *st = 12;
+        break;
+    case 12:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(3);
+            *st = 13;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(3);
+            *st = 3;
+        }
+        break;
+    case 13:
+        TkMenuOpenStatusPageWindow(0, 4, 0x44, 0);
+        *st = 14;
+        break;
+    case 14:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(4);
+            *st = 15;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(4);
+            *st = 3;
+        }
+        break;
+    case 16:
+        if (trg & 0x20) {
+            SndSepPlaySimple(0x80000001);
+            TkMenuCloseStatusPageWindow(5);
+            *st = 3;
+        } else if (trg & 0x40) {
+            SndSepPlaySimple(0x80000004);
+            TkMenuCloseStatusPageWindow(5);
+            *st = 3;
+        }
+        break;
+    case 15:
+        *st = 3;
+        break;
+    case 17:
+        *st = 18;
+        break;
+    case 18:
+        *st = 19;
+        break;
+    case 19:
+        TkMenuMainSleepMenu(6);
+        ((u8 *)D_00693878)[0x41] = 1;
+        if (t->x20 == 0) {
+            TkMenuMainActiveMenu(1, 0);
+        }
+        break;
+    }
+}
 
 extern s16 D_003258B2;
 extern s16 D_00693A6A;

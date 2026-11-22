@@ -968,11 +968,11 @@ SECTIONS
         . = 0x571470 - 0x568f00;
         build/asm/data/rodata/piece_00571470.s.o(.rodata)
         . = 0x5717e0 - 0x568f00;
-        build/src/game/menu/tk/tk_228B08.c.o(.rodata.jtbl_005717E0)
+        build/src/game/menu/tk/tk_228B08.c.o(.rodata.cjt0)
         . = 0x571830 - 0x568f00;
         build/asm/data/rodata/piece_00571830.s.o(.rodata)
         . = 0x571840 - 0x568f00;
-        build/src/game/menu/tk/tk_228B08.c.o(.rodata.cjt0)
+        build/src/game/menu/tk/tk_228B08.c.o(.rodata.cjt1)
         . = 0x571860 - 0x568f00;
         build/asm/data/rodata/piece_00571860.s.o(.rodata)
         . = 0x5718b0 - 0x568f00;

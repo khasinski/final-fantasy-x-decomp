@@ -964,7 +964,7 @@ void func_00244150(void) {
 
 void _m2c_func_00244188_func_002429E0(s32) __asm__("func_002429E0");
 void _m2c_func_00244188_func_002436D0() __asm__("func_002436D0");
-void func_00244188(void) {
+void func_00244188(int a0, int a1) {
     s32 i;
     for (i = 0; i < 25; i++) {
         D_0069A808[i] = 0;
@@ -1245,7 +1245,129 @@ extern void func_0020EC88(void);
 extern void TOMenuAtelFree(void);
 extern void func_001486D0(void);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244A90);
+extern s32 D_00326494, D_00326498, D_0032649C;
+
+void func_00244A90(int mode)
+{
+    int hi;
+    int lo;
+    s32 dc[4];
+
+    D_0069A87C = mode;
+    D_00326494 = 0;
+    hi = mode & 0xFFFF0000;
+    D_00326498 = 0;
+    D_0032649C = 0;
+    lo = mode & 0xFFFF;
+    if (hi != 0x10000) {
+        func_00244608();
+        func_002446E8();
+    }
+    D_0069BCD4 = 0x80;
+    TkMn2SetMainFrameRatioDiff(0);
+    func_0021FF58();
+    func_0020DC20(1);
+    AtelEnterMenuCallback(mode);
+    func_00244188(hi, lo);
+    func_00244278(hi, lo);
+    func_00201CD0();
+
+    while (func_002441E8() != 0) {
+        D_0069A870 = 0;
+        D_0069A804++;
+        D_0069BBF8++;
+        if (D_00326438 == 0) {
+            func_002D3FF0(0);
+            func_0014E5E0(D_0069A804);
+        } else {
+            func_002D3FF0(2);
+            func_0014E5E0(D_0069A804);
+            func_0014E5E0(1);
+            func_00265B50();
+        }
+        func_002449E0(Sg_GetDBuffDC(dc), D_0069A804);
+        TOMenuGetPadStatus();
+        func_001656D8();
+        AtelExecMenuCtrl();
+        func_00243EA8();
+        D_0069A7FC += D_0069A800;
+        if (D_0069A7FC < 0) {
+            D_0069A7FC = 0;
+        }
+        if (D_0069A7FC > 0x80) {
+            D_0069A7FC = 0x80;
+        }
+        if (D_00326438 == 0) {
+            if (D_0069A804 & 1) {
+                func_0020AC10();
+            }
+        } else {
+            func_0020AC10();
+        }
+        func_00241630();
+        func_0020CA38();
+        func_00243F90();
+        func_00241698();
+        if (D_0069A86C & 2) {
+            func_00124F08();
+            TOMenuOpenPktBuffTmp();
+            TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+            if (TkMenuGetDrawShadeRatio() != 0) {
+                u32 col = (u32)D_0069A7FC << 24;
+                func_001F0328(0, 0, 0x200, 0x1A0, col, col);
+            }
+            TOMenuDrawKickTmp();
+            func_00124F08();
+        }
+        TODrawMessageWindowForMenu();
+        func_0020EC88();
+        func_002492F0();
+        func_002492F0();
+        if (D_0069BCD4 != 0 && hi != 0x10000) {
+            func_002DA610(0, 0);
+            func_00244780(D_0069BCD4, 0x80, 0, 0);
+            func_002DA610(0, 0);
+        }
+        D_0069BCD4 += D_0069BCD0;
+        if (D_0069BCD4 < 0) {
+            D_0069BCD4 = 0;
+        }
+        if (D_0069BCD4 > 0x80) {
+            D_0069BCD4 = 0x80;
+        }
+    }
+
+    func_002492F0();
+    func_00244150();
+    TOMenuAtelFree();
+    func_001486D0();
+    func_002492F0();
+    func_002DA610(0, 0);
+    if (hi != 0x10000) {
+        void *db;
+        func_002DA610(0, 0);
+        func_002448C8();
+        func_00244780(0x80, 0x80, 0, 0);
+        db = Sg_GetDBuffDC(dc);
+        func_002D3FF0(0);
+        func_002449E0(db, D_0069A804 + 1);
+        func_00245548();
+        func_002455C0();
+        func_002492F0();
+        func_00124F08();
+        func_00244780(0x80, 0x80, 0, 0);
+        func_002D3FF0(0);
+        func_002449E0(db, D_0069A804);
+        func_00245548();
+        func_002455C0();
+        func_002492F0();
+        func_00124F08();
+        func_00244780(0x80, 0x80, 0, 0);
+    }
+    func_002492F0();
+    func_002DA610(0, 0);
+    func_002D3FF0(0);
+}
 
 void TkMenuRefreshPartyList(void) {
     func_00242D00(0);
