@@ -358,7 +358,108 @@ void func_001CB8A8(int v) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsBattleProcess);
+extern char D_0056E7B8[];
+extern char D_0056E7D8[];
+extern char D_0056E7F0[];
+extern char D_0056E800[];
+extern char D_0056E818[];
+extern char D_0056E830[];
+extern char D_0056E848[];
+extern char D_0056E858[];
+extern char D_0056E870[];
+extern char D_0056E890[];
+int MsGetYoujinbouCom(void);
+int MsGetSummonEnergy(int id);
+int MsCheckStartEffect(int a, int b);
+int func_002D6730(void);
+int SndGetStreamState(void);
+int func_002D87A0(void);
+int func_002D87D8(void);
+
+typedef struct {
+    u8 pad0[0x10];
+    s8 f10;
+    u8 pad11[3];
+    s8 f14;
+    s8 f15;
+    u8 pad16[0x197C - 0x16];
+    s32 f197C;
+    s32 f1980;
+    u8 pad1984[6];
+    char f198A[0x200C - 0x198A];
+    s32 f200C;
+    u8 pad2010[0x201C - 0x2010];
+    s32 f201C;
+    u8 pad2020[0x202C - 0x2020];
+    s32 f202C;
+    u8 pad2030[0x2106 - 0x2030];
+    s8 f2106;
+    u8 pad2107[0x2110 - 0x2107];
+    u8 f2110;
+    u8 pad2111[0x2117 - 0x2111];
+    s8 f2117;
+    u8 pad2118[0x2131 - 0x2118];
+    s8 f2131;
+    u8 pad2132[0x2138 - 0x2132];
+    s8 f2138;
+    u8 f2139;
+} GsBtlProc;
+extern GsBtlProc _gs_bp __asm__("D_003172F0"); /* DEBT(TYPE): local view of D_003172F0 */
+
+extern void _void_TODapsString(char *) __asm__("TODapsString"); /* DEBT(TYPE): funcs.h declares int */
+
+void MsBattleProcess(void)
+{
+    char buf[0x40];
+    int line = 0;
+
+    func_002F0008(buf, D_0056E7B8, _gs_bp.f10, MsBtlReadCueLevel(), GetCD()->f8(1), MsSEPtransCheckWave(), TkSndReportStatus(), MsGetEndBattleStatus(0));
+    TODapsSetPos(0xBC, line * 13 + 8);
+    _void_TODapsString(buf);
+    TODapsSetPos(0x188, line++ * 13 + 8);
+    _void_TODapsString(_gs_bp.f198A);
+    func_002F0008(buf, D_0056E7D8, func_002D87A0(), func_002D87D8(), _gs_bp.f2131);
+    TODapsSetPos(0xEC, line++ * 13 + 8);
+    _void_TODapsString(buf);
+    func_002F0008(buf, D_0056E7F0, _gs_bp.f197C, _gs_bp.f1980);
+    TODapsSetPos(0x140, line++ * 13 + 8);
+    _void_TODapsString(buf);
+    if (_gs_bp.f2117 != 0) {
+        func_002F0008(buf, D_0056E800, MsGetYoujinbouCom(), MsGetSummonEnergy(0xF), MsGetSummonEnergy(0x10), MsGetSummonEnergy(0x11));
+        TODapsSetPos(0x110, line++ * 13 + 8);
+        _void_TODapsString(buf);
+    }
+    if (_gs_bp.f200C != 0xFF) {
+        u8 c = _gs_bp.f2110;
+        func_002F0008(buf, D_0056E818, c, _gs_bp.f200C, MsGetMotionNum(c));
+        TODapsSetPos(0xC8, line * 13 + 8);
+        _void_TODapsString(buf);
+    }
+    func_002F0008(buf, D_0056E830, _gs_bp.f14, _gs_bp.f15, _gs_bp.f2138, _gs_bp.f2139);
+    TODapsSetPos(0x164, line++ * 13 + 8);
+    _void_TODapsString(buf);
+    if (_gs_bp.f201C >= 0) {
+        BtlChr *c = MsGetChr(_gs_bp.f2110);
+        int y;
+
+        func_002F0008(buf, D_0056E848, c->fABB, _gs_bp.f201C);
+        y = line++ * 13 + 8;
+        TODapsSetPos(0x104, y);
+        _void_TODapsString(buf);
+        func_002F0008(buf, D_0056E858, MsCheckChrMotionAll(0), c->f1C8, c->fF6, c->fF2, ((u8 *)c)[0xD2]);
+        TODapsSetPos(0x158, y);
+        _void_TODapsString(buf);
+        func_002F0008(buf, D_0056E870, c->fABD, MsCheckStartEffect(((u8 *)c)[0xC], *(s32 *)((u8 *)c + 0xA80)), _gs_bp.f2106, func_002D6730(), SndGetStreamState());
+        TODapsSetPos(0x110, line++ * 13 + 8);
+        _void_TODapsString(buf);
+    }
+    if (_gs_bp.f202C >= 0) {
+        _gs_bp.f202C++;
+        func_002F0008(buf, D_0056E890, _gs_bp.f202C);
+        TODapsSetPos(0x1C4, line * 13 + 8);
+        _void_TODapsString(buf);
+    }
+}
 
 int MsSetBerserkCommand(int id, BtlChr *c, GsEnt48 *e, int arg, int mode) {
     int r = 0;
