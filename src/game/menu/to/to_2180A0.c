@@ -21,7 +21,87 @@ void func_002180A0(void)
     func_002EF0D0(D_00692480, 0, 0x80);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2180A0", TOBtlCtrlHelpWin);
+typedef struct {
+    u8 pad00[0xC];
+    u16 hC;
+    u8 pad0E[0x12];
+    s16 *p20;
+    u8 pad24[0x1E];
+    s16 h42;
+    u8 pad44[0xCC - 0x44];
+} HelpWinRec; /* DEBT(TYPE): partial view of R4Rec (0xCC bytes) */
+
+void func_00218470(void);
+void func_002184B8(void);
+void func_00218500(u16 id);
+void TOBtlSetTargetHelpMes(int id);
+void TOBtlSetChangeHelpMes(unsigned int id);
+void func_002188A0(char *s);
+
+void TOBtlCtrlHelpWin(void)
+{
+    if (D_003252A4 == 0xFF) {
+        func_002184B8();
+        return;
+    }
+    if (D_003238E4 & 0x100) {
+        /* DEBT(CAST): flag word behind MsGetSaveMenu() is untyped */
+        if (((*(s32 *)MsGetSaveMenu() >> 10) & 1) == 0) {
+            *(u32 *)MsGetSaveMenu() = *(u32 *)MsGetSaveMenu() | 0x400U;
+        } else {
+            *(u32 *)MsGetSaveMenu() = *(u32 *)MsGetSaveMenu() & 0xFFFFFBFFU;
+        }
+    }
+    if (D_003249C0[D_00325020].b2 == 0) {
+        switch (((HelpWinRec *)D_003249C0)[D_00325020].hC) {
+        case 0x3002:
+        case 0x3117:
+        case 0x3118: {
+            s16 id = ((HelpWinRec *)D_003249C0)[D_00325020].p20[((HelpWinRec *)D_003249C0)[D_00325020].h42];
+            if (id == 0xFF) {
+                func_002184B8();
+                return;
+            }
+            TOBtlSetChangeHelpMes(id);
+            break;
+        }
+        case 0x3024:
+        case 0x302A:
+        case 0x3123:
+            func_002188A0((void *)MsGetRomBtlText(0x3014, 0));
+            break;
+        default: {
+            if (((HelpWinRec *)D_003249C0)[D_00325020].p20[((HelpWinRec *)D_003249C0)[D_00325020].h42] == 0xFF) {
+                func_002184B8();
+                return;
+            }
+            func_00218500((u16)((HelpWinRec *)D_003249C0)[D_00325020].p20[((HelpWinRec *)D_003249C0)[D_00325020].h42]);
+            break;
+        }
+        }
+        func_00218470();
+        return;
+    }
+    if (D_003249C0[D_00325020].b2 == 1) {
+        if (((HelpWinRec *)D_003249C0)[D_00325020].hC == 0x3056) {
+            if (toTarget.wA8 & 0x38000) {
+                int base;
+                u16 *com = (u16 *)MsGetComData(0x30FF, &base);
+                func_002188A0((void *)(base + *com));
+            } else {
+                TOBtlSetTargetHelpMes((u16)toTarget.h124);
+            }
+            func_00218470();
+            return;
+        }
+        if (toTarget.w10 == 0 || toTarget.w10 == 3) {
+            TOBtlSetTargetHelpMes((u16)toTarget.h124);
+            func_00218470();
+            return;
+        }
+    }
+    func_002184B8();
+}
 
 s32 *_m2c_func_00218330_MsGetSaveMenu() __asm__("MsGetSaveMenu");
 s32 _m2c_func_00218330_TODrawMenuPlateXYWC2_Rfix(s32, s32, s16, s16, s16, s32, s32) __asm__("TODrawMenuPlateXYWC2_Rfix");

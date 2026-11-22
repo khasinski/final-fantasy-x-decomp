@@ -381,7 +381,74 @@ void func_00111798(int n, int desc)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/cache", Cache_SweepBG);
+extern char D_00569708[];
+void *Sg_MemCache_SerchFree(void *mem);
+
+s32 Cache_SweepBG(s32 flag)
+{
+    s32 count = 0;
+    s32 i;
+    Handle *h;
+    s32 old;
+    void *free_ptr;
+
+    for (i = 0; i < 100; i++) {
+        h = D_0057F2C0[i];
+        if (h->wC == 0) {
+            continue;
+        }
+        if (h->b7 != 0) {
+            continue;
+        }
+        if (h->b6 != 0) {
+            continue;
+        }
+        if (flag != 0 && (h->u8.w & 0xF8) != 0) {
+            /* DEBT(TYPE): 5-bit counter at bits 3..7 of u8.w accessed as 32-bit word */
+            h->u8.w = (h->u8.w & ~0xF8) | ((((((u32)h->u8.w >> 3) & 0x1F) - 1) & 0x1F) << 3);
+        } else {
+            D_0057F450[count++] = h;
+        }
+    }
+    if (count == 0) {
+        return 0;
+    }
+    Ch_Check(D_00569708, 0x1F9);
+    func_0011BFD0();
+    func_00111798(count, 1);
+    for (i = 0; i < count; i++) {
+        h = D_0057F450[i];
+        old = h->wC;
+        h->wC = (s32)func_0011CC78((void *)old); /* DEBT(TYPE): Handle.wC holds pointer */
+        if (old != h->wC) {
+            func_00110CD8(h);
+            if (h->b4 == 1) {
+                Ch_MoveChrBlk((void *)h->wC, (void *)old);
+            } else if (h->b4 == 2) {
+                func_00106198((void *)h->wC, (void *)old);
+            }
+            return 1;
+        }
+    }
+    Ch_Check(D_00569708, 0x20B);
+    for (i = count - 1; i != 0; i--) {
+        h = D_0057F450[i];
+        free_ptr = Sg_MemCache_SerchFree((void *)h->wC);
+        if (free_ptr != 0) {
+            old = h->wC;
+            func_00110CD8(h);
+            h->wC = (s32)func_0011CD30(free_ptr, (void *)h->wC); /* DEBT(TYPE): Handle.wC holds pointer */
+            if (h->b4 == 1) {
+                Ch_MoveChrBlk((void *)h->wC, (void *)old);
+            } else if (h->b4 == 2) {
+                func_00106198((void *)h->wC, (void *)old);
+            }
+            return 1;
+        }
+    }
+    Ch_Check(D_00569708, 0x21B);
+    return 0;
+}
 
 void func_00111AA0(void)
 {

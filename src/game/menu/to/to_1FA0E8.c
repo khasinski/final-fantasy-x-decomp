@@ -651,7 +651,72 @@ void func_001FC1F0(int x, int y, int scale, int alpha)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FC3C8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FC770);
+void func_001FC770(int pad0, int x, int y)
+{
+    u16 pad = pad0;
+    if (pad & 0xF000) {
+        if (pad & 0x1000) {
+            TOMkpShapeXY(0x259, x, y);
+        } else {
+            TOMkpShapeXY(0x258, x, y);
+        }
+        if (pad & 0x2000) {
+            TOMkpShapeXY(0x25B, x, y);
+        } else {
+            TOMkpShapeXY(0x25A, x, y);
+        }
+        if (pad & 0x4000) {
+            TOMkpShapeXY(0x25D, x, y);
+        } else {
+            TOMkpShapeXY(0x25C, x, y);
+        }
+        if (pad & 0x8000) {
+            TOMkpShapeXY(0x25F, x, y);
+        } else {
+            TOMkpShapeXY(0x25E, x, y);
+        }
+    }
+    if (pad & 0x10) {
+        TOMkpShapeXY(0x260, x, y);
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 1) {
+        if (pad & 0x20) {
+            TOMkpShapeXY(0x262, x, y);
+        }
+        if (pad & 0x40) {
+            TOMkpShapeXY(0x261, x, y);
+        }
+    } else {
+        if (pad & 0x20) {
+            TOMkpShapeXY(0x261, x, y);
+        }
+        if (pad & 0x40) {
+            TOMkpShapeXY(0x262, x, y);
+        }
+    }
+    if (pad & 0x80) {
+        TOMkpShapeXY(0x263, x, y);
+    }
+    if (pad & 0x4) {
+        TOMkpShapeXY(0x264, x, y);
+    }
+    if (pad & 0x8) {
+        TOMkpShapeXY(0x265, x, y);
+    }
+    if (pad & 0x1) {
+        TOMkpShapeXY(0x266, x, y);
+    }
+    if (pad & 0x2) {
+        TOMkpShapeXY(0x267, x, y);
+    }
+    if (pad & 0x800) {
+        TOMkpShapeXY(0x268, x, y);
+    }
+    if (pad & 0x100) {
+        TOMkpShapeXY(0x269, x, y);
+    }
+    func_001EFA30();
+}
 
 int func_001FC9B0(int n, int x, int y)
 {

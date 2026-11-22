@@ -216,7 +216,83 @@ int MsCheckLeftWindow(int id)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DBB50", MsGetMenuChrInfo);
+typedef struct {
+    u8 pad00[8];
+    s32 ofs[2];
+} MenuComInfo; /* DEBT(TYPE): offset table inside ComData */
+
+MenuComInfo *_MenuInfo_MsGetComData(int, void *) __asm__("MsGetComData");
+
+typedef struct {
+    u8 pad00[0xC40];
+    u8 *pC40[2];
+} ChrMenuInfoPtr; /* DEBT(TYPE): array view of BtlChr::pC40 */
+
+typedef struct {
+    u32 pad0;
+    struct { u16 x, y; } a[2];
+    struct { u16 x, y; } b[2];
+} MonInfoTbl; /* DEBT(TYPE): monster text offset table */
+
+void *MsGetMenuChrInfo(int id, int kind)
+{
+    void *res = 0;
+    int hira = MsGetSaveConfigHiragana();
+
+    if ((id >> 12) != 0) {
+        MenuComInfo *com = _MenuInfo_MsGetComData(id, &res);
+        return res = (u8 *)res + com->ofs[hira];
+    } else {
+        BtlChr *chr = 0;
+        if (MsGetChrTop() != 0) {
+            u8 *tbl;
+            int idx;
+
+            chr = MsGetChr(id);
+            tbl = D_003173D8;
+            idx = 0xFF;
+            switch (kind) {
+            case 1:
+                idx = chr->padC28[0xC];
+                break;
+            case 2:
+                idx = chr->padC28[0xD];
+                break;
+            }
+            if (idx != 0xFF && tbl != 0) {
+                res = tbl + *(u16 *)(((idx * 2 + hira) << 2) + (u32)tbl);
+            }
+        }
+        if (res != 0) {
+            return res;
+        }
+        if (MsGetRamChrMonster(id) == 0) {
+            u8 *base;
+            OfsTbl *p = MsGetExcelData(id, D_00317358, (s32 *)&base);
+
+            switch (kind) {
+            case 0:
+                return res = base + p->a[hira].x;
+            case 1:
+                return res = base + p->b[hira].x;
+            case 2:
+                return res = base + p->b[hira].x;
+            }
+        } else if (chr != 0) {
+            u8 *tbl = ((ChrMenuInfoPtr *)chr)->pC40[func_001BD360()];
+
+            switch (kind) {
+            case 0:
+                break;
+            case 1:
+                return res = tbl + (((MonInfoTbl *)tbl)->a[hira].x + 0x80);
+            case 2:
+                return res = tbl + (((MonInfoTbl *)tbl)->b[hira].x + 0x80);
+            }
+        }
+    }
+    return res;
+}
 
 int MsMenuGetChrSkipCommand(int id)
 {
