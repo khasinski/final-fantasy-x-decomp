@@ -257,7 +257,59 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetNextAction);
 extern R4Init D_00325170;
 extern s16 D_00692040[];
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlSetPrevAction);
+typedef struct {
+    u8 b0;
+    s8 state;
+    s8 b2;
+    u8 pad3[5];
+    u16 h8;
+    s8 bA;
+    s8 bB;
+    u16 hC;
+    u8 padE[8];
+    u16 h16;
+    u8 pad18[0x96 - 0x18];
+    u16 h96;
+    u8 pad98[0xCC - 0x98];
+} R4RecPrev;
+
+int TOBtlSetPrevAction(void)
+{
+    R4RecPrev *rec;
+    R4RecPrev *prev;
+
+    if (D_00325020 <= 0) {
+        return 0;
+    }
+    rec = (R4RecPrev *)&D_003249C0[D_00325020];
+    rec->state = 5;
+    rec->h8 = D_003252A4;
+    rec->h16 = 0xFF;
+    if (rec->hC == 0x311E) {
+        D_003249A4 = 0;
+    }
+    if (rec->hC == 0x3029) {
+        D_003249A4 = 0;
+    }
+    if (rec->b2 == 1) {
+        int idx = D_00325020 - 1;
+        __asm__ volatile("" : "+r"(idx)); /* DEBT(ORDER): prevent GCC from folding (D_00325020 - 1) * 0xCC into rec - 0xCC */
+        rec->h96 = D_003249C0[idx].h96;
+    }
+    D_00325020--;
+    prev = (R4RecPrev *)&D_003249C0[D_00325020];
+    prev->state = 2;
+    if (prev->bB >= prev->bA && prev->bB > 0) {
+        prev->bB--;
+    }
+    if (D_003249C0[D_00325020].b2 == 1) {
+        extern u64 _a_toTarget[] __asm__("toTarget"); /* DEBT(CAST): 8-byte aligned view for __builtin_memcpy 0x134 bytes */
+        extern u64 _a_D_00325170[] __asm__("D_00325170");
+        __builtin_memcpy(_a_toTarget, _a_D_00325170, 0x134);
+        D_00692040[3] = 0;
+    }
+    return 1;
+}
 
 void func_00215360() /* DEBT(TYPE): old-style definition; TOBtlFinishCommand passes an argument */
 {

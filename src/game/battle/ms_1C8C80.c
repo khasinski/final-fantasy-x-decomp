@@ -156,7 +156,48 @@ int MsInsertBtlCommand(GsEnt48 *e, int a, int b, int c) {
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsGetEndBattleStatus);
+BtlChr *_ms_MsGetMon(int id) __asm__("MsGetMon"); /* DEBT(TYPE): u2.h declares u8 parameter; orig passes int without 0xff mask */
+
+/* DEBT(CAST): 0xA8C/0xA8E paired status bytes tested via 32-bit mask 0x00FF00FF */
+int MsGetEndBattleStatus(int unused) {
+    int status = 0;
+    int alive = 0;
+    int active = 0;
+    int i;
+
+    for (i = 0; i < 7; i++) {
+        u8 id = D_003192B5[i];
+        if (id != 0xFF) {
+            BtlChr *c = MsGetChr(id);
+            if ((s8)c->padA92[0] != 0 && (s8)c->padA92[1] != 0 && c->f290 > 0 && (*(u32 *)&c->fA8C & 0x00FF00FF) == 0) {
+                alive++;
+                if (c->fA88 != 0) {
+                    active++;
+                }
+            }
+        }
+    }
+    if (alive == 0) {
+        status = 1;
+    } else if (active == 0) {
+        status = 3;
+    } else {
+        int allDead = 1;
+        for (i = 0; i < 8; i++) {
+            BtlChr *m = _ms_MsGetMon(i);
+            if (m->fA88 != 0 && (s8)m->padA92[0] != 0 && (*(u32 *)&m->fA8C & 0x00FF00FF) == 0) {
+                allDead = 0;
+            }
+        }
+        if (allDead != 0) {
+            status = (D_003172F0.pad211B[0] != 0) ? 2 : 4;
+        }
+    }
+    if ((u8)D_003172F0.f2121 != 0) {
+        status = (u8)D_003172F0.f2121;
+    }
+    return status;
+}
 
 void func_001C98B8(void) {
     int i;

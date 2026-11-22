@@ -1,4 +1,5 @@
 /* tu_239 0x212ea8-0x214650: low; ~TOBtlInitCtbWindow (config/tu_map.tsv) */
+#define _TOBtlGetChangePad _hdr__TOBtlGetChangePad
 #include "common.h"
 #include "ffx/g3.h"
 #include "ffx/q5.h"
@@ -8,6 +9,9 @@
 #include "ffx/v4.h"
 #include "ffx/s4.h"
 #include "ffx/u3.h"
+#undef _TOBtlGetChangePad
+
+void _TOBtlGetChangePad();
 
 int func_00212EA8(void)
 {
@@ -404,4 +408,69 @@ int func_00214428(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", _TOBtlGetChangePad);
+typedef struct {
+    u8 b00;
+    u8 b01;
+    u8 pad02[6];
+    s16 h8;
+    u8 b0A;
+    s8 b0B;
+    u16 hC;
+    s16 h0E[4];
+    s16 h16[4];
+    u8 pad1E[2];
+    s16 *w20;
+    u8 pad24[0x42 - 0x24];
+    s16 h42;
+} ChangeTask;
+
+void TOBtlSetChangeHelpMes(int id);
+void TOBtlSetPrevAction(void);
+void TOBtlSetNextAction(int a, int b);
+
+void _TOBtlGetChangePad(ChangeTask *o)
+{
+    int prev = o->h42;
+
+    if (!((D_003238D0.h12 & 0x4004) && (D_003238D0.h12 & 0x1001))) {
+        if ((D_003238D0.h12 & 0x4004) != 0x4004 && (D_003238D0.h16 & 0x4004)) {
+            o->h42++;
+        }
+        if (!((D_003238D0.h12 & 0x1000) && (D_003238D0.h12 & 1))) {
+            if ((D_003238D0.h16 & 0x1000) || (D_003238D0.h16 & 1)) {
+                o->h42--;
+            }
+        }
+    }
+    if (o->h42 >= D_00690640.wC) {
+        o->h42 = 0;
+    }
+    if (o->h42 < 0) {
+        o->h42 = D_00690640.wC - 1;
+    }
+    o->h16[o->b0B] = o->w20[o->h42];
+    o->h0E[o->b0B] = o->h42;
+    TOBtlSetChangeHelpMes(o->w20[o->h42]);
+    if (o->h42 != prev) {
+        func_002D70D8(1);
+        return;
+    }
+    if (D_003238D0.h14 & 0x40) {
+        if (D_00325020 > 0) {
+            register u32 next __asm__("$3"); /* DEBT(REG): GCC 2.9 allocates v0 instead of v1 after TOBtlSetPrevAction */
+            TOBtlSetPrevAction();
+            next = o->b01 + 1;
+            o->b01 = next;
+            func_002D70D8(4);
+            return;
+        }
+    } else if (D_003238D0.h14 & 0x20) {
+        if (TOCheckBtlCommandUse(o->h8, (u16)o->h16[0]) >= 0) {
+            o->b01++;
+            TOBtlSetNextAction(o->h8, (u16)o->h16[0]);
+            func_002D70D8(1);
+            return;
+        }
+        func_002D70D8(3);
+    }
+}
