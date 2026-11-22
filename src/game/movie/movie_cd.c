@@ -131,7 +131,66 @@ int func_0015B918(int n, u8 *buf, int *out, S58FE54 *s)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_cd", func_0015B9E8);
+extern u8 D_0030DCE8[];
+extern s32 D_00591EA0;
+extern s32 D_00591EA8;
+extern s32 D_00591EB4;
+
+int func_0015B9E8(int a0, S58FE54 *s)
+{
+    int st;
+    int stopped;
+    int cnt;
+
+    if (s->b5075D != 0) {
+        stopped = 0;
+        for (;;) {
+            func_002FD050(*(s32 *)((u8 *)s + 0x50544), 1, &st); /* DEBT(CAST): S58FE54 field at 0x50544 */
+            if (st == 0) {
+                D_00591EB0 = 0;
+                return 1;
+            }
+            func_0015C808();
+            if (a0 != 0) {
+                if (stopped == 0) {
+                    stopped = 1;
+                    audioStop(s);
+                }
+                func_0015DDB8();
+            }
+        }
+    } else {
+        stopped = 0;
+        for (;;) {
+            cnt = 0;
+            while (cnt < 0x96) {
+                int r = func_0015B850();
+                if (r == 0) {
+                    D_00591EB0 = 0;
+                    return 1;
+                }
+                if (r != -1) {
+                    cnt = 0;
+                    func_0015B350();
+                    D_00591EB0 = 1;
+                    func_0015B368(s);
+                    func_0015B4B0(D_00591EA0, D_00591EA8, D_00591EB4, D_0030DCE8, s);
+                }
+                func_0015C808();
+                if (a0 != 0) {
+                    if (stopped == 0) {
+                        stopped = 1;
+                        audioStop(s);
+                    }
+                    func_0015DDB8();
+                    func_00160BA8();
+                }
+                cnt++;
+            }
+            func_0015B4B0(D_00591EA0, D_00591EA8, D_00591EB4, D_0030DCE8, s);
+        }
+    }
+}
 
 int func_0015BBA8(S58FE54 *s)
 {
