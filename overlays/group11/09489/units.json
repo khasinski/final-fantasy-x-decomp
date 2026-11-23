@@ -1,0 +1,91 @@
+[
+  {
+    "src": "ovl_09489_2f78.c",
+    "containers": [
+      9489
+    ],
+    "text_start": "0x01B02F78",
+    "text_end": "0x01B030F0",
+    "functions": 1,
+    "discovered_code_bytes": 376,
+    "syms": {
+      "D_01B00724": "0x01B00724",
+      "func_01B09428": "0x01B09428",
+      "func_01B09520": "0x01B09520",
+      "func_01B0A5B0": "0x01B0A5B0",
+      "func_01B0A658": "0x01B0A658",
+      "func_01B0BEA0": "0x01B0BEA0",
+      "func_01B0BFA8": "0x01B0BFA8",
+      "func_01B0D718": "0x01B0D718"
+    }
+  },
+  {
+    "src": "ovl_09489_3d48.c",
+    "containers": [
+      9489
+    ],
+    "text_start": "0x01B03D48",
+    "text_end": "0x01B03E9C",
+    "functions": 1,
+    "discovered_code_bytes": 340,
+    "syms": {
+      "D_01B0004C": "0x01B0004C",
+      "D_01B00050": "0x01B00050",
+      "D_01B00708": "0x01B00708",
+      "D_01B00724": "0x01B00724",
+      "D_01B00730": "0x01B00730",
+      "D_01B00AE0": "0x01B00AE0",
+      "D_01B00AF8": "0x01B00AF8",
+      "D_01B00B18": "0x01B00B18",
+      "D_01B015C0": "0x01B015C0",
+      "D_01B0EA60": "0x01B0EA60",
+      "D_01B0EA8C": "0x01B0EA8C",
+      "D_01BCBF80": "0x01BBBF80",
+      "D_01CCBF80": "0x01CBBF80",
+      "func_01B02DF0": "0x01B02DF0",
+      "func_01B03CF0": "0x01B03CF0",
+      "func_01B04B50": "0x01B04B50",
+      "func_01B0D9C0": "0x01B0D9C0"
+    }
+  },
+  {
+    "src": "ovl_09489_3ea0.c",
+    "containers": [
+      9489,
+      9190
+    ],
+    "text_start": "0x01B03EA0",
+    "text_end": "0x01B03EC0",
+    "functions": 1,
+    "discovered_code_bytes": 32,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9489,
+        "text_start": "0x01B03EA0",
+        "text_end": "0x01B03EC0",
+        "syms": {}
+      },
+      {
+        "cid": 9190,
+        "text_start": "0x01B02C90",
+        "text_end": "0x01B02CB0",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09489_4120.c",
+    "containers": [
+      9489
+    ],
+    "text_start": "0x01B04120",
+    "text_end": "0x01B042F8",
+    "functions": 2,
+    "discovered_code_bytes": 468,
+    "syms": {
+      "D_01B00048": "0x01B00048",
+      "func_01B04368": "0x01B04368"
+    }
+  }
+]

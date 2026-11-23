@@ -11,5 +11,31 @@
     "syms": {
       "D_01D01BC0": "0x01D01BC0"
     }
+  },
+  {
+    "src": "ovl_09228_18e0.c",
+    "containers": [
+      9228,
+      9229
+    ],
+    "text_start": "0x01B018E0",
+    "text_end": "0x01B018E8",
+    "functions": 1,
+    "discovered_code_bytes": 8,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9228,
+        "text_start": "0x01B018E0",
+        "text_end": "0x01B018E8",
+        "syms": {}
+      },
+      {
+        "cid": 9229,
+        "text_start": "0x01B01848",
+        "text_end": "0x01B01850",
+        "syms": {}
+      }
+    ]
   }
 ]

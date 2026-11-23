@@ -1,0 +1,218 @@
+[
+  {
+    "src": "ovl_09391_0960.c",
+    "containers": [
+      9391,
+      9535
+    ],
+    "text_start": "0x01B00960",
+    "text_end": "0x01B00B94",
+    "functions": 1,
+    "discovered_code_bytes": 564,
+    "syms": {
+      "func_002B49A0": "0x002B49A0",
+      "func_001E58F8": "0x001E58F8",
+      "g_ovl_buf": "0x01B92300",
+      "g_ovl_res": "0x01B0BB40",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_04e0": "0x01B004E0",
+      "g_ovl_6430": "0x01B06430",
+      "g_ovl_6438": "0x01B06438",
+      "g_ovl_6460": "0x01B06460",
+      "g_ovl_ptr_64e0": "0x01B064E0",
+      "g_ovl_mgr": "0x01B064E8",
+      "g_ovl_ptr_6528": "0x01B06528",
+      "g_ovl_ptr_652c": "0x01B0652C",
+      "fn_ovl_0b98": "0x01B00B98",
+      "fn_ovl_0bc8": "0x01B00BC8",
+      "fn_ovl_0c60": "0x01B00C60",
+      "fn_ovl_1290": "0x01B01290",
+      "fn_ovl_3298": "0x01B03298",
+      "fn_ovl_36e0": "0x01B036E0",
+      "fn_ovl_3e70": "0x01B03E70",
+      "fn_ovl_4038": "0x01B04038",
+      "fn_ovl_40f8": "0x01B040F8",
+      "fn_ovl_5c50": "0x01B05C50",
+      "fn_ovl_5e88": "0x01B05E88"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9391,
+        "text_start": "0x01B00960",
+        "text_end": "0x01B00B94",
+        "syms": {
+          "func_002B49A0": "0x002B49A0",
+          "func_001E58F8": "0x001E58F8",
+          "g_ovl_buf": "0x01B92300",
+          "g_ovl_res": "0x01B0BB40",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_04e0": "0x01B004E0",
+          "g_ovl_6430": "0x01B06430",
+          "g_ovl_6438": "0x01B06438",
+          "g_ovl_6460": "0x01B06460",
+          "g_ovl_ptr_64e0": "0x01B064E0",
+          "g_ovl_mgr": "0x01B064E8",
+          "g_ovl_ptr_6528": "0x01B06528",
+          "g_ovl_ptr_652c": "0x01B0652C",
+          "fn_ovl_0b98": "0x01B00B98",
+          "fn_ovl_0bc8": "0x01B00BC8",
+          "fn_ovl_0c60": "0x01B00C60",
+          "fn_ovl_1290": "0x01B01290",
+          "fn_ovl_3298": "0x01B03298",
+          "fn_ovl_36e0": "0x01B036E0",
+          "fn_ovl_3e70": "0x01B03E70",
+          "fn_ovl_4038": "0x01B04038",
+          "fn_ovl_40f8": "0x01B040F8",
+          "fn_ovl_5c50": "0x01B05C50",
+          "fn_ovl_5e88": "0x01B05E88"
+        }
+      },
+      {
+        "cid": 9535,
+        "text_start": "0x01B009D0",
+        "text_end": "0x01B00C04",
+        "syms": {
+          "func_002B49A0": "0x002B49A0",
+          "func_001E58F8": "0x001E58F8",
+          "g_ovl_buf": "0x01BA5AC0",
+          "g_ovl_res": "0x01B0BBC0",
+          "g_ovl_dat_0040": "0x01B00040",
+          "g_ovl_dat_04e0": "0x01B00558",
+          "g_ovl_6430": "0x01B064A0",
+          "g_ovl_6438": "0x01B064A8",
+          "g_ovl_6460": "0x01B064D0",
+          "g_ovl_ptr_64e0": "0x01B06550",
+          "g_ovl_mgr": "0x01B06558",
+          "g_ovl_ptr_6528": "0x01B06598",
+          "g_ovl_ptr_652c": "0x01B0659C",
+          "fn_ovl_0b98": "0x01B00C08",
+          "fn_ovl_0bc8": "0x01B00C38",
+          "fn_ovl_0c60": "0x01B00CD0",
+          "fn_ovl_1290": "0x01B01300",
+          "fn_ovl_3298": "0x01B03308",
+          "fn_ovl_36e0": "0x01B03750",
+          "fn_ovl_3e70": "0x01B03EE0",
+          "fn_ovl_4038": "0x01B040A8",
+          "fn_ovl_40f8": "0x01B04168",
+          "fn_ovl_5c50": "0x01B05CC0",
+          "fn_ovl_5e88": "0x01B05EF8"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09391_0bc8.c",
+    "containers": [
+      9391,
+      9535
+    ],
+    "text_start": "0x01B00BC8",
+    "text_end": "0x01B00C60",
+    "functions": 1,
+    "discovered_code_bytes": 152,
+    "syms": {
+      "g_ovl_6438": "0x01B06438",
+      "g_ovl_64cc": "0x01B064CC",
+      "g_ovl_mgr": "0x01B064E8",
+      "g_ovl_ptr_652c": "0x01B0652C",
+      "fn_ovl_0940": "0x01B00940",
+      "fn_ovl_3350": "0x01B03350",
+      "fn_ovl_42b0": "0x01B042B0",
+      "fn_ovl_5fc0": "0x01B05FC0"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9391,
+        "text_start": "0x01B00BC8",
+        "text_end": "0x01B00C60",
+        "syms": {
+          "g_ovl_6438": "0x01B06438",
+          "g_ovl_64cc": "0x01B064CC",
+          "g_ovl_mgr": "0x01B064E8",
+          "g_ovl_ptr_652c": "0x01B0652C",
+          "fn_ovl_0940": "0x01B00940",
+          "fn_ovl_3350": "0x01B03350",
+          "fn_ovl_42b0": "0x01B042B0",
+          "fn_ovl_5fc0": "0x01B05FC0"
+        }
+      },
+      {
+        "cid": 9535,
+        "text_start": "0x01B00C38",
+        "text_end": "0x01B00CD0",
+        "syms": {
+          "g_ovl_6438": "0x01B064A8",
+          "g_ovl_64cc": "0x01B0653C",
+          "g_ovl_mgr": "0x01B06558",
+          "g_ovl_ptr_652c": "0x01B0659C",
+          "fn_ovl_0940": "0x01B009B0",
+          "fn_ovl_3350": "0x01B033C0",
+          "fn_ovl_42b0": "0x01B04320",
+          "fn_ovl_5fc0": "0x01B06030"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09391_0cd0.c",
+    "containers": [
+      9391
+    ],
+    "text_start": "0x01B00CD0",
+    "text_end": "0x01B00D40",
+    "functions": 1,
+    "discovered_code_bytes": 112,
+    "syms": {
+      "g_ovl_6430": "0x01B06430",
+      "func_001BB7F8": "0x001BB7F8",
+      "fn_ovl_1660": "0x01B01660"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09391_1688.c",
+    "containers": [
+      9391,
+      9535
+    ],
+    "text_start": "0x01B01688",
+    "text_end": "0x01B016F8",
+    "functions": 1,
+    "discovered_code_bytes": 112,
+    "syms": {
+      "g_ovl_count": "0x01B00534",
+      "fn_ovl_1660": "0x01B01660"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9391,
+        "text_start": "0x01B01688",
+        "text_end": "0x01B016F8",
+        "syms": {
+          "g_ovl_count": "0x01B00534",
+          "fn_ovl_1660": "0x01B01660"
+        }
+      },
+      {
+        "cid": 9535,
+        "text_start": "0x01B016F8",
+        "text_end": "0x01B01768",
+        "syms": {
+          "g_ovl_count": "0x01B005AC",
+          "fn_ovl_1660": "0x01B016D0"
+        }
+      }
+    ]
+  }
+]

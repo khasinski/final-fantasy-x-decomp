@@ -1,0 +1,89 @@
+[
+  {
+    "src": "ovl_09320_0b70.c",
+    "containers": [
+      9320,
+      9224
+    ],
+    "text_start": "0x01B00B70",
+    "text_end": "0x01B00BFC",
+    "functions": 1,
+    "discovered_code_bytes": 140,
+    "syms": {
+      "D_01B00A30": "0x01B00910",
+      "D_01B050E8": "0x01B056B8",
+      "D_01B05F9C": "0x01B0606C",
+      "D_01B05FA0": "0x01B06070",
+      "D_01B064A4": "0x01B06314",
+      "func_01B02EC8": "0x01B034A0",
+      "func_01B03E28": "0x01B04400"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9320,
+        "text_start": "0x01B00B70",
+        "text_end": "0x01B00BFC",
+        "syms": {
+          "D_01B00A30": "0x01B00910",
+          "D_01B050E8": "0x01B056B8",
+          "D_01B05F9C": "0x01B0606C",
+          "D_01B05FA0": "0x01B06070",
+          "D_01B064A4": "0x01B06314",
+          "func_01B02EC8": "0x01B034A0",
+          "func_01B03E28": "0x01B04400"
+        }
+      },
+      {
+        "cid": 9224,
+        "text_start": "0x01B00BB8",
+        "text_end": "0x01B00C44",
+        "syms": {
+          "D_01B00A30": "0x01B00890",
+          "D_01B050E8": "0x01B05D28",
+          "D_01B05F9C": "0x01B06074",
+          "D_01B05FA0": "0x01B06078",
+          "D_01B064A4": "0x01B06324",
+          "func_01B02EC8": "0x01B02D00",
+          "func_01B03E28": "0x01B03C60"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09320_0c00.c",
+    "containers": [
+      9320
+    ],
+    "text_start": "0x01B00C00",
+    "text_end": "0x01B00C14",
+    "functions": 1,
+    "discovered_code_bytes": 20,
+    "syms": {
+      "func_01B01EA0": "0x01B01EA0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09320_0c18.c",
+    "containers": [
+      9320
+    ],
+    "text_start": "0x01B00C18",
+    "text_end": "0x01B00E54",
+    "functions": 1,
+    "discovered_code_bytes": 572,
+    "syms": {
+      "func_01B00E58": "0x01B00E58",
+      "g_fade_6060": "0x01B06060",
+      "g_fade_done_606c": "0x01B0606C"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

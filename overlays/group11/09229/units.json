@@ -11,5 +11,18 @@
     "syms": {
       "D_01D01EE0": "0x01D01EE0"
     }
+  },
+  {
+    "src": "ovl_09229_04f8.c",
+    "containers": [
+      9229
+    ],
+    "text_start": "0x01B004F8",
+    "text_end": "0x01B00564",
+    "functions": 1,
+    "discovered_code_bytes": 108,
+    "syms": {
+      "D_01B01880": "0x01B01880"
+    }
   }
 ]

@@ -1,0 +1,1450 @@
+[
+  {
+    "src": "ovl_09609_2248_p1.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B02248",
+    "text_end": "0x01B02B30",
+    "rodata_start": "0x01B0DE70",
+    "functions": 9,
+    "syms": {
+      "D_01B00AF0": "0x01B00AF0",
+      "D_01B0DEA8": "0x01B0DEA8",
+      "D_01B0DF88": "0x01B0DF88",
+      "D_01B0E194": "0x01B0E194",
+      "D_01C03DD0": "0x01C03DD0",
+      "func_01B02168": "0x01B02168",
+      "func_01B095C0": "0x01B095C0",
+      "func_01B0AB60": "0x01B0AB60",
+      "func_01B0AC08": "0x01B0AC08"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B02248",
+        "text_end": "0x01B02B30",
+        "syms": {
+          "D_01B00AF0": "0x01B00AF0",
+          "D_01B0DEA8": "0x01B0DEA8",
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01B0E194": "0x01B0E194",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B02168": "0x01B02168",
+          "func_01B095C0": "0x01B095C0",
+          "func_01B0AB60": "0x01B0AB60",
+          "func_01B0AC08": "0x01B0AC08"
+        },
+        "rodata_start": "0x01B0DE70"
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B02208",
+        "text_end": "0x01B02AF0",
+        "rodata_start": "0x01B0DBA0",
+        "syms": {
+          "D_01B00AF0": "0x01B00AC8",
+          "D_01B0DEA8": "0x01B0DBD8",
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B02168": "0x01B02128",
+          "func_01B095C0": "0x01B092F0",
+          "func_01B0AB60": "0x01B0A890",
+          "func_01B0AC08": "0x01B0A938"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B02248",
+        "text_end": "0x01B02B30",
+        "syms": {
+          "D_01B00AF0": "0x01B00AF0",
+          "D_01B0DEA8": "0x01B0DEA8",
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01B0E194": "0x01B0E194",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B02168": "0x01B02168",
+          "func_01B095C0": "0x01B095C0",
+          "func_01B0AB60": "0x01B0AB60",
+          "func_01B0AC08": "0x01B0AC08"
+        },
+        "rodata_start": "0x01B0DE70"
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B02208",
+        "text_end": "0x01B02AF0",
+        "rodata_start": "0x01B0DBA0",
+        "syms": {
+          "D_01B00AF0": "0x01B00AC8",
+          "D_01B0DEA8": "0x01B0DBD8",
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B02168": "0x01B02128",
+          "func_01B095C0": "0x01B092F0",
+          "func_01B0AB60": "0x01B0A890",
+          "func_01B0AC08": "0x01B0A938"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B02248",
+        "text_end": "0x01B02B30",
+        "syms": {
+          "D_01B00AF0": "0x01B00AF0",
+          "D_01B0DEA8": "0x01B0DEA8",
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01B0E194": "0x01B0E194",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B02168": "0x01B02168",
+          "func_01B095C0": "0x01B095C0",
+          "func_01B0AB60": "0x01B0AB60",
+          "func_01B0AC08": "0x01B0AC08"
+        },
+        "rodata_start": "0x01B0DE70"
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B02208",
+        "text_end": "0x01B02AF0",
+        "rodata_start": "0x01B0DBA0",
+        "syms": {
+          "D_01B00AF0": "0x01B00AC8",
+          "D_01B0DEA8": "0x01B0DBD8",
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B02168": "0x01B02128",
+          "func_01B095C0": "0x01B092F0",
+          "func_01B0AB60": "0x01B0A890",
+          "func_01B0AC08": "0x01B0A938"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B02248",
+        "text_end": "0x01B02B30",
+        "syms": {
+          "D_01B00AF0": "0x01B00AF0",
+          "D_01B0DEA8": "0x01B0DEA8",
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01B0E194": "0x01B0E194",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B02168": "0x01B02168",
+          "func_01B095C0": "0x01B095C0",
+          "func_01B0AB60": "0x01B0AB60",
+          "func_01B0AC08": "0x01B0AC08"
+        },
+        "rodata_start": "0x01B0DE70"
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B02208",
+        "text_end": "0x01B02AF0",
+        "rodata_start": "0x01B0DBA0",
+        "syms": {
+          "D_01B00AF0": "0x01B00AC8",
+          "D_01B0DEA8": "0x01B0DBD8",
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B02168": "0x01B02128",
+          "func_01B095C0": "0x01B092F0",
+          "func_01B0AB60": "0x01B0A890",
+          "func_01B0AC08": "0x01B0A938"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B02248",
+        "text_end": "0x01B02B30",
+        "syms": {
+          "D_01B00AF0": "0x01B00AF0",
+          "D_01B0DEA8": "0x01B0DEA8",
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01B0E194": "0x01B0E194",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B02168": "0x01B02168",
+          "func_01B095C0": "0x01B095C0",
+          "func_01B0AB60": "0x01B0AB60",
+          "func_01B0AC08": "0x01B0AC08"
+        },
+        "rodata_start": "0x01B0DE70"
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B02208",
+        "text_end": "0x01B02AF0",
+        "rodata_start": "0x01B0DBA0",
+        "syms": {
+          "D_01B00AF0": "0x01B00AC8",
+          "D_01B0DEA8": "0x01B0DBD8",
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B02168": "0x01B02128",
+          "func_01B095C0": "0x01B092F0",
+          "func_01B0AB60": "0x01B0A890",
+          "func_01B0AC08": "0x01B0A938"
+        }
+      }
+    ],
+    "discovered_code_bytes": 2280
+  },
+  {
+    "src": "ovl_09609_35f0.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B035F0",
+    "text_end": "0x01B0385C",
+    "functions": 2,
+    "syms": {
+      "D_01B0DF88": "0x01B0DF88",
+      "D_01C03DD0": "0x01C03DD0",
+      "func_01B024A8": "0x01B024A8",
+      "func_01B02A10": "0x01B02A10",
+      "func_01B02AA0": "0x01B02AA0",
+      "func_01B02B30": "0x01B02B30",
+      "func_01B02E18": "0x01B02E18",
+      "func_01B03318": "0x01B03318"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B035F0",
+        "text_end": "0x01B0385C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B024A8": "0x01B024A8",
+          "func_01B02A10": "0x01B02A10",
+          "func_01B02AA0": "0x01B02AA0",
+          "func_01B02B30": "0x01B02B30",
+          "func_01B02E18": "0x01B02E18",
+          "func_01B03318": "0x01B03318"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B035B0",
+        "text_end": "0x01B0381C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B024A8": "0x01B02468",
+          "func_01B02A10": "0x01B029D0",
+          "func_01B02AA0": "0x01B02A60",
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B02E18": "0x01B02DD8",
+          "func_01B03318": "0x01B032D8"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B035F0",
+        "text_end": "0x01B0385C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B024A8": "0x01B024A8",
+          "func_01B02A10": "0x01B02A10",
+          "func_01B02AA0": "0x01B02AA0",
+          "func_01B02B30": "0x01B02B30",
+          "func_01B02E18": "0x01B02E18",
+          "func_01B03318": "0x01B03318"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B035B0",
+        "text_end": "0x01B0381C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B024A8": "0x01B02468",
+          "func_01B02A10": "0x01B029D0",
+          "func_01B02AA0": "0x01B02A60",
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B02E18": "0x01B02DD8",
+          "func_01B03318": "0x01B032D8"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B035F0",
+        "text_end": "0x01B0385C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B024A8": "0x01B024A8",
+          "func_01B02A10": "0x01B02A10",
+          "func_01B02AA0": "0x01B02AA0",
+          "func_01B02B30": "0x01B02B30",
+          "func_01B02E18": "0x01B02E18",
+          "func_01B03318": "0x01B03318"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B035B0",
+        "text_end": "0x01B0381C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B024A8": "0x01B02468",
+          "func_01B02A10": "0x01B029D0",
+          "func_01B02AA0": "0x01B02A60",
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B02E18": "0x01B02DD8",
+          "func_01B03318": "0x01B032D8"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B035F0",
+        "text_end": "0x01B0385C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B024A8": "0x01B024A8",
+          "func_01B02A10": "0x01B02A10",
+          "func_01B02AA0": "0x01B02AA0",
+          "func_01B02B30": "0x01B02B30",
+          "func_01B02E18": "0x01B02E18",
+          "func_01B03318": "0x01B03318"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B035B0",
+        "text_end": "0x01B0381C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B024A8": "0x01B02468",
+          "func_01B02A10": "0x01B029D0",
+          "func_01B02AA0": "0x01B02A60",
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B02E18": "0x01B02DD8",
+          "func_01B03318": "0x01B032D8"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B035F0",
+        "text_end": "0x01B0385C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DF88",
+          "D_01C03DD0": "0x01C03DD0",
+          "func_01B024A8": "0x01B024A8",
+          "func_01B02A10": "0x01B02A10",
+          "func_01B02AA0": "0x01B02AA0",
+          "func_01B02B30": "0x01B02B30",
+          "func_01B02E18": "0x01B02E18",
+          "func_01B03318": "0x01B03318"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B035B0",
+        "text_end": "0x01B0381C",
+        "syms": {
+          "D_01B0DF88": "0x01B0DCB8",
+          "D_01C03DD0": "0x01BFC030",
+          "func_01B024A8": "0x01B02468",
+          "func_01B02A10": "0x01B029D0",
+          "func_01B02AA0": "0x01B02A60",
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B02E18": "0x01B02DD8",
+          "func_01B03318": "0x01B032D8"
+        }
+      }
+    ],
+    "discovered_code_bytes": 620
+  },
+  {
+    "src": "ovl_09609_1ee8.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B01EE8",
+    "text_end": "0x01B020C0",
+    "discovered_code_bytes": 472,
+    "functions": 4,
+    "syms": {
+      "D_01B0E194": "0x01B0E194",
+      "D_01B0E198": "0x01B0E198",
+      "D_01B0E19C": "0x01B0E19C",
+      "D_01B0E1A0": "0x01B0E1A0",
+      "D_01B0E1A4": "0x01B0E1A4",
+      "D_01B0E1A8": "0x01B0E1A8",
+      "func_01B01550": "0x01B01550",
+      "func_01B01A40": "0x01B01A40",
+      "func_01B020C0": "0x01B020C0",
+      "func_01B02818": "0x01B02818",
+      "func_01B073A8": "0x01B073A8"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B01EE8",
+        "text_end": "0x01B020C0",
+        "syms": {
+          "D_01B0E194": "0x01B0E194",
+          "D_01B0E198": "0x01B0E198",
+          "D_01B0E19C": "0x01B0E19C",
+          "D_01B0E1A0": "0x01B0E1A0",
+          "D_01B0E1A4": "0x01B0E1A4",
+          "D_01B0E1A8": "0x01B0E1A8",
+          "func_01B01550": "0x01B01550",
+          "func_01B01A40": "0x01B01A40",
+          "func_01B020C0": "0x01B020C0",
+          "func_01B02818": "0x01B02818",
+          "func_01B073A8": "0x01B073A8"
+        },
+        "rodata_start": "0x01B0DE50"
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B01EA8",
+        "text_end": "0x01B02080",
+        "syms": {
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01B0E198": "0x01B0DEC8",
+          "D_01B0E19C": "0x01B0DECC",
+          "D_01B0E1A0": "0x01B0DED0",
+          "D_01B0E1A4": "0x01B0DED4",
+          "D_01B0E1A8": "0x01B0DED8",
+          "func_01B01550": "0x01B01510",
+          "func_01B01A40": "0x01B01A00",
+          "func_01B020C0": "0x01B02080",
+          "func_01B02818": "0x01B027D8",
+          "func_01B073A8": "0x01B070D8"
+        },
+        "rodata_start": "0x01B0DB80"
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B01EE8",
+        "text_end": "0x01B020C0",
+        "syms": {
+          "D_01B0E194": "0x01B0E194",
+          "D_01B0E198": "0x01B0E198",
+          "D_01B0E19C": "0x01B0E19C",
+          "D_01B0E1A0": "0x01B0E1A0",
+          "D_01B0E1A4": "0x01B0E1A4",
+          "D_01B0E1A8": "0x01B0E1A8",
+          "func_01B01550": "0x01B01550",
+          "func_01B01A40": "0x01B01A40",
+          "func_01B020C0": "0x01B020C0",
+          "func_01B02818": "0x01B02818",
+          "func_01B073A8": "0x01B073A8"
+        },
+        "rodata_start": "0x01B0DE50"
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B01EA8",
+        "text_end": "0x01B02080",
+        "syms": {
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01B0E198": "0x01B0DEC8",
+          "D_01B0E19C": "0x01B0DECC",
+          "D_01B0E1A0": "0x01B0DED0",
+          "D_01B0E1A4": "0x01B0DED4",
+          "D_01B0E1A8": "0x01B0DED8",
+          "func_01B01550": "0x01B01510",
+          "func_01B01A40": "0x01B01A00",
+          "func_01B020C0": "0x01B02080",
+          "func_01B02818": "0x01B027D8",
+          "func_01B073A8": "0x01B070D8"
+        },
+        "rodata_start": "0x01B0DB80"
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B01EE8",
+        "text_end": "0x01B020C0",
+        "syms": {
+          "D_01B0E194": "0x01B0E194",
+          "D_01B0E198": "0x01B0E198",
+          "D_01B0E19C": "0x01B0E19C",
+          "D_01B0E1A0": "0x01B0E1A0",
+          "D_01B0E1A4": "0x01B0E1A4",
+          "D_01B0E1A8": "0x01B0E1A8",
+          "func_01B01550": "0x01B01550",
+          "func_01B01A40": "0x01B01A40",
+          "func_01B020C0": "0x01B020C0",
+          "func_01B02818": "0x01B02818",
+          "func_01B073A8": "0x01B073A8"
+        },
+        "rodata_start": "0x01B0DE50"
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B01EA8",
+        "text_end": "0x01B02080",
+        "syms": {
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01B0E198": "0x01B0DEC8",
+          "D_01B0E19C": "0x01B0DECC",
+          "D_01B0E1A0": "0x01B0DED0",
+          "D_01B0E1A4": "0x01B0DED4",
+          "D_01B0E1A8": "0x01B0DED8",
+          "func_01B01550": "0x01B01510",
+          "func_01B01A40": "0x01B01A00",
+          "func_01B020C0": "0x01B02080",
+          "func_01B02818": "0x01B027D8",
+          "func_01B073A8": "0x01B070D8"
+        },
+        "rodata_start": "0x01B0DB80"
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B01EE8",
+        "text_end": "0x01B020C0",
+        "syms": {
+          "D_01B0E194": "0x01B0E194",
+          "D_01B0E198": "0x01B0E198",
+          "D_01B0E19C": "0x01B0E19C",
+          "D_01B0E1A0": "0x01B0E1A0",
+          "D_01B0E1A4": "0x01B0E1A4",
+          "D_01B0E1A8": "0x01B0E1A8",
+          "func_01B01550": "0x01B01550",
+          "func_01B01A40": "0x01B01A40",
+          "func_01B020C0": "0x01B020C0",
+          "func_01B02818": "0x01B02818",
+          "func_01B073A8": "0x01B073A8"
+        },
+        "rodata_start": "0x01B0DE50"
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B01EA8",
+        "text_end": "0x01B02080",
+        "syms": {
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01B0E198": "0x01B0DEC8",
+          "D_01B0E19C": "0x01B0DECC",
+          "D_01B0E1A0": "0x01B0DED0",
+          "D_01B0E1A4": "0x01B0DED4",
+          "D_01B0E1A8": "0x01B0DED8",
+          "func_01B01550": "0x01B01510",
+          "func_01B01A40": "0x01B01A00",
+          "func_01B020C0": "0x01B02080",
+          "func_01B02818": "0x01B027D8",
+          "func_01B073A8": "0x01B070D8"
+        },
+        "rodata_start": "0x01B0DB80"
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B01EE8",
+        "text_end": "0x01B020C0",
+        "syms": {
+          "D_01B0E194": "0x01B0E194",
+          "D_01B0E198": "0x01B0E198",
+          "D_01B0E19C": "0x01B0E19C",
+          "D_01B0E1A0": "0x01B0E1A0",
+          "D_01B0E1A4": "0x01B0E1A4",
+          "D_01B0E1A8": "0x01B0E1A8",
+          "func_01B01550": "0x01B01550",
+          "func_01B01A40": "0x01B01A40",
+          "func_01B020C0": "0x01B020C0",
+          "func_01B02818": "0x01B02818",
+          "func_01B073A8": "0x01B073A8"
+        },
+        "rodata_start": "0x01B0DE50"
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B01EA8",
+        "text_end": "0x01B02080",
+        "syms": {
+          "D_01B0E194": "0x01B0DEC4",
+          "D_01B0E198": "0x01B0DEC8",
+          "D_01B0E19C": "0x01B0DECC",
+          "D_01B0E1A0": "0x01B0DED0",
+          "D_01B0E1A4": "0x01B0DED4",
+          "D_01B0E1A8": "0x01B0DED8",
+          "func_01B01550": "0x01B01510",
+          "func_01B01A40": "0x01B01A00",
+          "func_01B020C0": "0x01B02080",
+          "func_01B02818": "0x01B027D8",
+          "func_01B073A8": "0x01B070D8"
+        },
+        "rodata_start": "0x01B0DB80"
+      }
+    ],
+    "rodata_start": "0x01B0DE50"
+  },
+  {
+    "src": "ovl_09609_2b30.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B02B30",
+    "text_end": "0x01B02E18",
+    "discovered_code_bytes": 744,
+    "functions": 1,
+    "syms": {
+      "D_01B00A58": "0x01B00A58",
+      "D_01C03DD0": "0x01C03DD0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B02B30",
+        "text_end": "0x01B02E18",
+        "syms": {
+          "D_01B00A58": "0x01B00A58",
+          "D_01C03DD0": "0x01C03DD0"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B02AF0",
+        "text_end": "0x01B02DD8",
+        "syms": {
+          "D_01B00A58": "0x01B00A30",
+          "D_01C03DD0": "0x01BFC030"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B02B30",
+        "text_end": "0x01B02E18",
+        "syms": {
+          "D_01B00A58": "0x01B00A58",
+          "D_01C03DD0": "0x01C03DD0"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B02AF0",
+        "text_end": "0x01B02DD8",
+        "syms": {
+          "D_01B00A58": "0x01B00A30",
+          "D_01C03DD0": "0x01BFC030"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B02B30",
+        "text_end": "0x01B02E18",
+        "syms": {
+          "D_01B00A58": "0x01B00A58",
+          "D_01C03DD0": "0x01C03DD0"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B02AF0",
+        "text_end": "0x01B02DD8",
+        "syms": {
+          "D_01B00A58": "0x01B00A30",
+          "D_01C03DD0": "0x01BFC030"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B02B30",
+        "text_end": "0x01B02E18",
+        "syms": {
+          "D_01B00A58": "0x01B00A58",
+          "D_01C03DD0": "0x01C03DD0"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B02AF0",
+        "text_end": "0x01B02DD8",
+        "syms": {
+          "D_01B00A58": "0x01B00A30",
+          "D_01C03DD0": "0x01BFC030"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B02B30",
+        "text_end": "0x01B02E18",
+        "syms": {
+          "D_01B00A58": "0x01B00A58",
+          "D_01C03DD0": "0x01C03DD0"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B02AF0",
+        "text_end": "0x01B02DD8",
+        "syms": {
+          "D_01B00A58": "0x01B00A30",
+          "D_01C03DD0": "0x01BFC030"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09609_3318.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B03318",
+    "text_end": "0x01B035F0",
+    "discovered_code_bytes": 728,
+    "functions": 1,
+    "syms": {
+      "func_01B02B30": "0x01B02B30",
+      "func_01B03068": "0x01B03068"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B03318",
+        "text_end": "0x01B035F0",
+        "syms": {
+          "func_01B02B30": "0x01B02B30",
+          "func_01B03068": "0x01B03068"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B032D8",
+        "text_end": "0x01B035B0",
+        "syms": {
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B03068": "0x01B03028"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B03318",
+        "text_end": "0x01B035F0",
+        "syms": {
+          "func_01B02B30": "0x01B02B30",
+          "func_01B03068": "0x01B03068"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B032D8",
+        "text_end": "0x01B035B0",
+        "syms": {
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B03068": "0x01B03028"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B03318",
+        "text_end": "0x01B035F0",
+        "syms": {
+          "func_01B02B30": "0x01B02B30",
+          "func_01B03068": "0x01B03068"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B032D8",
+        "text_end": "0x01B035B0",
+        "syms": {
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B03068": "0x01B03028"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B03318",
+        "text_end": "0x01B035F0",
+        "syms": {
+          "func_01B02B30": "0x01B02B30",
+          "func_01B03068": "0x01B03068"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B032D8",
+        "text_end": "0x01B035B0",
+        "syms": {
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B03068": "0x01B03028"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B03318",
+        "text_end": "0x01B035F0",
+        "syms": {
+          "func_01B02B30": "0x01B02B30",
+          "func_01B03068": "0x01B03068"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B032D8",
+        "text_end": "0x01B035B0",
+        "syms": {
+          "func_01B02B30": "0x01B02AF0",
+          "func_01B03068": "0x01B03028"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09609_58a0.c",
+    "containers": [
+      9609,
+      9735,
+      9737,
+      9739,
+      9741
+    ],
+    "text_start": "0x01B058A0",
+    "text_end": "0x01B0590C",
+    "discovered_code_bytes": 108,
+    "functions": 1,
+    "syms": {
+      "D_01B0DF78": "0x01B0DF78",
+      "func_01B069F0": "0x01B069F0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B058A0",
+        "text_end": "0x01B0590C",
+        "syms": {
+          "D_01B0DF78": "0x01B0DF78",
+          "func_01B069F0": "0x01B069F0"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B058A0",
+        "text_end": "0x01B0590C",
+        "syms": {
+          "D_01B0DF78": "0x01B0DF78",
+          "func_01B069F0": "0x01B069F0"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B058A0",
+        "text_end": "0x01B0590C",
+        "syms": {
+          "D_01B0DF78": "0x01B0DF78",
+          "func_01B069F0": "0x01B069F0"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B058A0",
+        "text_end": "0x01B0590C",
+        "syms": {
+          "D_01B0DF78": "0x01B0DF78",
+          "func_01B069F0": "0x01B069F0"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B058A0",
+        "text_end": "0x01B0590C",
+        "syms": {
+          "D_01B0DF78": "0x01B0DF78",
+          "func_01B069F0": "0x01B069F0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09609_3860.c",
+    "containers": [
+      9490,
+      9587,
+      9588,
+      9589,
+      9590,
+      9599,
+      9600,
+      9601,
+      9602,
+      9603,
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B03860",
+    "text_end": "0x01B03904",
+    "discovered_code_bytes": 164,
+    "functions": 1,
+    "syms": {
+      "func_01B06880": "0x01B06880",
+      "func_01B069A8": "0x01B069A8"
+    },
+    "container_layouts": [
+      {
+        "cid": 9490,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9587,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9588,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9589,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9590,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9599,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9600,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9601,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9602,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9603,
+        "text_start": "0x01B01230",
+        "text_end": "0x01B012D4",
+        "syms": {
+          "func_01B06880": "0x01B03CD8",
+          "func_01B069A8": "0x01B03E00"
+        }
+      },
+      {
+        "cid": 9609,
+        "text_start": "0x01B03860",
+        "text_end": "0x01B03904",
+        "syms": {
+          "func_01B06880": "0x01B06880",
+          "func_01B069A8": "0x01B069A8"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B03820",
+        "text_end": "0x01B038C4",
+        "syms": {
+          "func_01B06880": "0x01B06578",
+          "func_01B069A8": "0x01B066A0"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B03860",
+        "text_end": "0x01B03904",
+        "syms": {
+          "func_01B06880": "0x01B06880",
+          "func_01B069A8": "0x01B069A8"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B03820",
+        "text_end": "0x01B038C4",
+        "syms": {
+          "func_01B06880": "0x01B06578",
+          "func_01B069A8": "0x01B066A0"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B03860",
+        "text_end": "0x01B03904",
+        "syms": {
+          "func_01B06880": "0x01B06880",
+          "func_01B069A8": "0x01B069A8"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B03820",
+        "text_end": "0x01B038C4",
+        "syms": {
+          "func_01B06880": "0x01B06578",
+          "func_01B069A8": "0x01B066A0"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B03860",
+        "text_end": "0x01B03904",
+        "syms": {
+          "func_01B06880": "0x01B06880",
+          "func_01B069A8": "0x01B069A8"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B03820",
+        "text_end": "0x01B038C4",
+        "syms": {
+          "func_01B06880": "0x01B06578",
+          "func_01B069A8": "0x01B066A0"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B03860",
+        "text_end": "0x01B03904",
+        "syms": {
+          "func_01B06880": "0x01B06880",
+          "func_01B069A8": "0x01B069A8"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B03820",
+        "text_end": "0x01B038C4",
+        "syms": {
+          "func_01B06880": "0x01B06578",
+          "func_01B069A8": "0x01B066A0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09609_aa00.c",
+    "containers": [
+      9559,
+      9563,
+      9609,
+      9655,
+      9688,
+      9711,
+      9712,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B0AA00",
+    "text_end": "0x01B0AB2C",
+    "discovered_code_bytes": 300,
+    "functions": 1,
+    "syms": {
+      "D_01B12E90": "0x01B12E90",
+      "D_01B12E98": "0x01B12E98",
+      "D_01B12EA0": "0x01B12EA0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9559,
+        "text_start": "0x01B022A8",
+        "text_end": "0x01B023D4",
+        "syms": {
+          "D_01B12E90": "0x01B0BAE8",
+          "D_01B12E98": "0x01B0BAF0",
+          "D_01B12EA0": "0x01B0BAF8"
+        }
+      },
+      {
+        "cid": 9563,
+        "text_start": "0x01B01838",
+        "text_end": "0x01B01964",
+        "syms": {
+          "D_01B12E90": "0x01B07000",
+          "D_01B12E98": "0x01B07008",
+          "D_01B12EA0": "0x01B07010"
+        }
+      },
+      {
+        "cid": 9609,
+        "text_start": "0x01B0AA00",
+        "text_end": "0x01B0AB2C",
+        "syms": {
+          "D_01B12E90": "0x01B12E90",
+          "D_01B12E98": "0x01B12E98",
+          "D_01B12EA0": "0x01B12EA0"
+        }
+      },
+      {
+        "cid": 9655,
+        "text_start": "0x01B022A8",
+        "text_end": "0x01B023D4",
+        "syms": {
+          "D_01B12E90": "0x01B0B9C8",
+          "D_01B12E98": "0x01B0B9D0",
+          "D_01B12EA0": "0x01B0B9D8"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B0A730",
+        "text_end": "0x01B0A85C",
+        "syms": {
+          "D_01B12E90": "0x01B12BC0",
+          "D_01B12E98": "0x01B12BC8",
+          "D_01B12EA0": "0x01B12BD0"
+        }
+      },
+      {
+        "cid": 9711,
+        "text_start": "0x01B02050",
+        "text_end": "0x01B0217C",
+        "syms": {
+          "D_01B12E90": "0x01B0B408",
+          "D_01B12E98": "0x01B0B410",
+          "D_01B12EA0": "0x01B0B418"
+        }
+      },
+      {
+        "cid": 9712,
+        "text_start": "0x01B02050",
+        "text_end": "0x01B0217C",
+        "syms": {
+          "D_01B12E90": "0x01B0B2D8",
+          "D_01B12E98": "0x01B0B2E0",
+          "D_01B12EA0": "0x01B0B2E8"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B0AA00",
+        "text_end": "0x01B0AB2C",
+        "syms": {
+          "D_01B12E90": "0x01B12E90",
+          "D_01B12E98": "0x01B12E98",
+          "D_01B12EA0": "0x01B12EA0"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B0A730",
+        "text_end": "0x01B0A85C",
+        "syms": {
+          "D_01B12E90": "0x01B12BC0",
+          "D_01B12E98": "0x01B12BC8",
+          "D_01B12EA0": "0x01B12BD0"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B0AA00",
+        "text_end": "0x01B0AB2C",
+        "syms": {
+          "D_01B12E90": "0x01B12E90",
+          "D_01B12E98": "0x01B12E98",
+          "D_01B12EA0": "0x01B12EA0"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B0A730",
+        "text_end": "0x01B0A85C",
+        "syms": {
+          "D_01B12E90": "0x01B12BC0",
+          "D_01B12E98": "0x01B12BC8",
+          "D_01B12EA0": "0x01B12BD0"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B0AA00",
+        "text_end": "0x01B0AB2C",
+        "syms": {
+          "D_01B12E90": "0x01B12E90",
+          "D_01B12E98": "0x01B12E98",
+          "D_01B12EA0": "0x01B12EA0"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B0A730",
+        "text_end": "0x01B0A85C",
+        "syms": {
+          "D_01B12E90": "0x01B12BC0",
+          "D_01B12E98": "0x01B12BC8",
+          "D_01B12EA0": "0x01B12BD0"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B0AA00",
+        "text_end": "0x01B0AB2C",
+        "syms": {
+          "D_01B12E90": "0x01B12E90",
+          "D_01B12E98": "0x01B12E98",
+          "D_01B12EA0": "0x01B12EA0"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B0A730",
+        "text_end": "0x01B0A85C",
+        "syms": {
+          "D_01B12E90": "0x01B12BC0",
+          "D_01B12E98": "0x01B12BC8",
+          "D_01B12EA0": "0x01B12BD0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09609_3a10.c",
+    "containers": [
+      9609,
+      9688,
+      9735,
+      9736,
+      9737,
+      9738,
+      9739,
+      9740,
+      9741,
+      9742
+    ],
+    "text_start": "0x01B03A10",
+    "text_end": "0x01B03C64",
+    "discovered_code_bytes": 596,
+    "functions": 1,
+    "syms": {
+      "D_01B0DEB0": "0x01B0DEB0",
+      "D_01B17DF0": "0x01B17DF0",
+      "func_01B0A4A8": "0x01B0A4A8",
+      "func_01B0B458": "0x01B0B458",
+      "func_01B0D948": "0x01B0D948"
+    },
+    "container_layouts": [
+      {
+        "cid": 9609,
+        "text_start": "0x01B03A10",
+        "text_end": "0x01B03C64",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DEB0",
+          "D_01B17DF0": "0x01B17DF0",
+          "func_01B0A4A8": "0x01B0A4A8",
+          "func_01B0B458": "0x01B0B458",
+          "func_01B0D948": "0x01B0D948"
+        }
+      },
+      {
+        "cid": 9688,
+        "text_start": "0x01B039D0",
+        "text_end": "0x01B03C24",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DBE0",
+          "D_01B17DF0": "0x01B17B30",
+          "func_01B0A4A8": "0x01B0A1D8",
+          "func_01B0B458": "0x01B0B188",
+          "func_01B0D948": "0x01B0D678"
+        }
+      },
+      {
+        "cid": 9735,
+        "text_start": "0x01B03A10",
+        "text_end": "0x01B03C64",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DEB0",
+          "D_01B17DF0": "0x01B17DF0",
+          "func_01B0A4A8": "0x01B0A4A8",
+          "func_01B0B458": "0x01B0B458",
+          "func_01B0D948": "0x01B0D948"
+        }
+      },
+      {
+        "cid": 9736,
+        "text_start": "0x01B039D0",
+        "text_end": "0x01B03C24",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DBE0",
+          "D_01B17DF0": "0x01B17B30",
+          "func_01B0A4A8": "0x01B0A1D8",
+          "func_01B0B458": "0x01B0B188",
+          "func_01B0D948": "0x01B0D678"
+        }
+      },
+      {
+        "cid": 9737,
+        "text_start": "0x01B03A10",
+        "text_end": "0x01B03C64",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DEB0",
+          "D_01B17DF0": "0x01B17DF0",
+          "func_01B0A4A8": "0x01B0A4A8",
+          "func_01B0B458": "0x01B0B458",
+          "func_01B0D948": "0x01B0D948"
+        }
+      },
+      {
+        "cid": 9738,
+        "text_start": "0x01B039D0",
+        "text_end": "0x01B03C24",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DBE0",
+          "D_01B17DF0": "0x01B17B30",
+          "func_01B0A4A8": "0x01B0A1D8",
+          "func_01B0B458": "0x01B0B188",
+          "func_01B0D948": "0x01B0D678"
+        }
+      },
+      {
+        "cid": 9739,
+        "text_start": "0x01B03A10",
+        "text_end": "0x01B03C64",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DEB0",
+          "D_01B17DF0": "0x01B17DF0",
+          "func_01B0A4A8": "0x01B0A4A8",
+          "func_01B0B458": "0x01B0B458",
+          "func_01B0D948": "0x01B0D948"
+        }
+      },
+      {
+        "cid": 9740,
+        "text_start": "0x01B039D0",
+        "text_end": "0x01B03C24",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DBE0",
+          "D_01B17DF0": "0x01B17B30",
+          "func_01B0A4A8": "0x01B0A1D8",
+          "func_01B0B458": "0x01B0B188",
+          "func_01B0D948": "0x01B0D678"
+        }
+      },
+      {
+        "cid": 9741,
+        "text_start": "0x01B03A10",
+        "text_end": "0x01B03C64",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DEB0",
+          "D_01B17DF0": "0x01B17DF0",
+          "func_01B0A4A8": "0x01B0A4A8",
+          "func_01B0B458": "0x01B0B458",
+          "func_01B0D948": "0x01B0D948"
+        }
+      },
+      {
+        "cid": 9742,
+        "text_start": "0x01B039D0",
+        "text_end": "0x01B03C24",
+        "syms": {
+          "D_01B0DEB0": "0x01B0DBE0",
+          "D_01B17DF0": "0x01B17B30",
+          "func_01B0A4A8": "0x01B0A1D8",
+          "func_01B0B458": "0x01B0B188",
+          "func_01B0D948": "0x01B0D678"
+        }
+      }
+    ]
+  }
+]

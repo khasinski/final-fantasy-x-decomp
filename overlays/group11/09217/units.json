@@ -1,0 +1,31 @@
+[
+  {
+    "src": "ovl_09217_a3a8.c",
+    "containers": [
+      9217,
+      9190
+    ],
+    "text_start": "0x01B0A3A8",
+    "text_end": "0x01B0A4B0",
+    "functions": 1,
+    "discovered_code_bytes": 264,
+    "syms": {},
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9217,
+        "text_start": "0x01B0A3A8",
+        "text_end": "0x01B0A4B0",
+        "syms": {}
+      },
+      {
+        "cid": 9190,
+        "text_start": "0x01B035A8",
+        "text_end": "0x01B036B0",
+        "syms": {}
+      }
+    ]
+  }
+]

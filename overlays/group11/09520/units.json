@@ -50,5 +50,26 @@
     "cflags": [
       "-O2"
     ]
+  },
+  {
+    "src": "ovl_09520_0f68.c",
+    "containers": [
+      9520
+    ],
+    "text_start": "0x01B00F68",
+    "text_end": "0x01B01050",
+    "functions": 1,
+    "discovered_code_bytes": 232,
+    "syms": {
+      "D_01B04B50": "0x01B04B50",
+      "D_01B04B54": "0x01B04B54",
+      "func_002A3CA0": "0x002A3CA0",
+      "func_01B01258": "0x01B01258",
+      "func_01B03A50": "0x01B03A50"
+    },
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]

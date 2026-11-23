@@ -1,0 +1,28 @@
+[
+  {
+    "src": "ovl_09398_0e28.c",
+    "containers": [
+      9398
+    ],
+    "text_start": "0x01B00E28",
+    "text_end": "0x01B00F04",
+    "functions": 1,
+    "discovered_code_bytes": 220,
+    "syms": {
+      "func_01B028B8": "0x01B028B8",
+      "func_01B02F90": "0x01B02F90",
+      "func_01B03048": "0x01B03048",
+      "func_01B03FA8": "0x01B03FA8",
+      "g_data_0618": "0x01B00618",
+      "g_data_6338": "0x01B06338",
+      "g_data_6490": "0x01B06490",
+      "g_flag_6484": "0x01B06484",
+      "g_fn_0a70": "0x01B00A70",
+      "g_ptr_6864": "0x01B06864",
+      "g_timer_6480": "0x01B06480"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

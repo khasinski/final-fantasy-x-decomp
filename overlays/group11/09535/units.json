@@ -1,0 +1,20 @@
+[
+  {
+    "src": "ovl_09535_0d40.c",
+    "containers": [
+      9535
+    ],
+    "text_start": "0x01B00D40",
+    "text_end": "0x01B00DB0",
+    "functions": 1,
+    "discovered_code_bytes": 112,
+    "syms": {
+      "g_ovl_64a0": "0x01B064A0",
+      "func_001BB7F8": "0x001BB7F8",
+      "fn_ovl_16d0": "0x01B016D0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

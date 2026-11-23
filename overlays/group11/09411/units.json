@@ -1,0 +1,315 @@
+[
+  {
+    "src": "ovl_09411_75b8.c",
+    "containers": [
+      9411,
+      9215,
+      9224,
+      9287,
+      9293,
+      9294,
+      9295,
+      9310,
+      9314,
+      9347,
+      9606
+    ],
+    "text_start": "0x01B075B8",
+    "text_end": "0x01B076D8",
+    "functions": 2,
+    "discovered_code_bytes": 288,
+    "syms": {
+      "fn_ovl_3850": "0x01B03BA8",
+      "fn_ovl_3a18": "0x01B03D70",
+      "fn_ovl_5718": "0x01B076E8",
+      "g_part_buf": "0x01B0D080",
+      "g_part_cur": "0x01B0D084",
+      "g_part_max": "0x01B0D088",
+      "g_part_unk": "0x01B0D08C"
+    },
+    "cflags": [
+      "-O2"
+    ],
+    "container_layouts": [
+      {
+        "cid": 9411,
+        "text_start": "0x01B075B8",
+        "text_end": "0x01B076D8",
+        "syms": {
+          "fn_ovl_3850": "0x01B03BA8",
+          "fn_ovl_3a18": "0x01B03D70",
+          "fn_ovl_5718": "0x01B076E8",
+          "g_part_buf": "0x01B0D080",
+          "g_part_cur": "0x01B0D084",
+          "g_part_max": "0x01B0D088",
+          "g_part_unk": "0x01B0D08C"
+        }
+      },
+      {
+        "cid": 9215,
+        "text_start": "0x01B05C98",
+        "text_end": "0x01B05DB8",
+        "syms": {
+          "fn_ovl_3850": "0x01B03BE8",
+          "fn_ovl_3a18": "0x01B03DB0",
+          "fn_ovl_5718": "0x01B05DC8",
+          "g_part_buf": "0x01B0E050",
+          "g_part_cur": "0x01B0E054",
+          "g_part_max": "0x01B0E058",
+          "g_part_unk": "0x01B0E05C"
+        }
+      },
+      {
+        "cid": 9224,
+        "text_start": "0x01B055B8",
+        "text_end": "0x01B056D8",
+        "syms": {
+          "fn_ovl_3850": "0x01B03820",
+          "fn_ovl_3a18": "0x01B039E8",
+          "fn_ovl_5718": "0x01B056E8",
+          "g_part_buf": "0x01B0AFF0",
+          "g_part_cur": "0x01B0AFF4",
+          "g_part_max": "0x01B0AFF8",
+          "g_part_unk": "0x01B0AFFC"
+        }
+      },
+      {
+        "cid": 9287,
+        "text_start": "0x01B05A18",
+        "text_end": "0x01B05B38",
+        "syms": {
+          "fn_ovl_3850": "0x01B03C80",
+          "fn_ovl_3a18": "0x01B03E48",
+          "fn_ovl_5718": "0x01B05B48",
+          "g_part_buf": "0x01B0BAA0",
+          "g_part_cur": "0x01B0BAA4",
+          "g_part_max": "0x01B0BAA8",
+          "g_part_unk": "0x01B0BAAC"
+        }
+      },
+      {
+        "cid": 9293,
+        "text_start": "0x01B06B18",
+        "text_end": "0x01B06C38",
+        "syms": {
+          "fn_ovl_3850": "0x01B04D80",
+          "fn_ovl_3a18": "0x01B04F48",
+          "fn_ovl_5718": "0x01B06C48",
+          "g_part_buf": "0x01B0CEA0",
+          "g_part_cur": "0x01B0CEA4",
+          "g_part_max": "0x01B0CEA8",
+          "g_part_unk": "0x01B0CEAC"
+        }
+      },
+      {
+        "cid": 9294,
+        "text_start": "0x01B05B30",
+        "text_end": "0x01B05C50",
+        "syms": {
+          "fn_ovl_3850": "0x01B03D98",
+          "fn_ovl_3a18": "0x01B03F60",
+          "fn_ovl_5718": "0x01B05C60",
+          "g_part_buf": "0x01B0CC50",
+          "g_part_cur": "0x01B0CC54",
+          "g_part_max": "0x01B0CC58",
+          "g_part_unk": "0x01B0CC5C"
+        }
+      },
+      {
+        "cid": 9295,
+        "text_start": "0x01B05D18",
+        "text_end": "0x01B05E38",
+        "syms": {
+          "fn_ovl_3850": "0x01B03F80",
+          "fn_ovl_3a18": "0x01B04148",
+          "fn_ovl_5718": "0x01B05E48",
+          "g_part_buf": "0x01B0D580",
+          "g_part_cur": "0x01B0D584",
+          "g_part_max": "0x01B0D588",
+          "g_part_unk": "0x01B0D58C"
+        }
+      },
+      {
+        "cid": 9310,
+        "text_start": "0x01B066D0",
+        "text_end": "0x01B067F0",
+        "syms": {
+          "fn_ovl_3850": "0x01B04938",
+          "fn_ovl_3a18": "0x01B04B00",
+          "fn_ovl_5718": "0x01B06800",
+          "g_part_buf": "0x01B0BFB0",
+          "g_part_cur": "0x01B0BFB4",
+          "g_part_max": "0x01B0BFB8",
+          "g_part_unk": "0x01B0BFBC"
+        }
+      },
+      {
+        "cid": 9314,
+        "text_start": "0x01B07BA8",
+        "text_end": "0x01B07CC8",
+        "syms": {
+          "fn_ovl_3850": "0x01B04198",
+          "fn_ovl_3a18": "0x01B04360",
+          "fn_ovl_5718": "0x01B07CD8",
+          "g_part_buf": "0x01B0DAC0",
+          "g_part_cur": "0x01B0DAC4",
+          "g_part_max": "0x01B0DAC8",
+          "g_part_unk": "0x01B0DACC"
+        }
+      },
+      {
+        "cid": 9347,
+        "text_start": "0x01B07640",
+        "text_end": "0x01B07760",
+        "syms": {
+          "fn_ovl_3850": "0x01B03C30",
+          "fn_ovl_3a18": "0x01B03DF8",
+          "fn_ovl_5718": "0x01B07770",
+          "g_part_buf": "0x01B0D220",
+          "g_part_cur": "0x01B0D224",
+          "g_part_max": "0x01B0D228",
+          "g_part_unk": "0x01B0D22C"
+        }
+      },
+      {
+        "cid": 9606,
+        "text_start": "0x01B06B00",
+        "text_end": "0x01B06C20",
+        "syms": {
+          "fn_ovl_3850": "0x01B04D68",
+          "fn_ovl_3a18": "0x01B04F30",
+          "fn_ovl_5718": "0x01B06C30",
+          "g_part_buf": "0x01B0CE80",
+          "g_part_cur": "0x01B0CE84",
+          "g_part_max": "0x01B0CE88",
+          "g_part_unk": "0x01B0CE8C"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09411_0cc8.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00CC8",
+    "text_end": "0x01B00D1C",
+    "functions": 1,
+    "discovered_code_bytes": 84,
+    "syms": {
+      "func_01B01430": "0x01B01430"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09411_0d20.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00D20",
+    "text_end": "0x01B00E18",
+    "functions": 1,
+    "discovered_code_bytes": 248,
+    "syms": {
+      "func_01B03F08": "0x01B03F08",
+      "g_mgr_7f50": "0x01B07F50",
+      "g_slots_7c90": "0x01B07C90",
+      "ovl_09411_0cc8": "0x01B00CC8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09411_0e18.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00E18",
+    "text_end": "0x01B00E80",
+    "functions": 1,
+    "discovered_code_bytes": 104,
+    "syms": {
+      "func_01B03F08": "0x01B03F08",
+      "g_mgr_7f50": "0x01B07F50",
+      "g_slot_7b60": "0x01B07B60"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09411_0e80.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00E80",
+    "text_end": "0x01B00F10",
+    "functions": 1,
+    "discovered_code_bytes": 144,
+    "syms": {
+      "func_01B014C0": "0x01B014C0",
+      "func_01B015E8": "0x01B015E8",
+      "func_01B03F08": "0x01B03F08",
+      "g_mgr_7f50": "0x01B07F50",
+      "g_slot_7a30": "0x01B07A30"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09411_1168.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B01168",
+    "text_end": "0x01B01224",
+    "functions": 1,
+    "discovered_code_bytes": 188,
+    "syms": {
+      "func_01B00F10": "0x01B00F10",
+      "func_01B01430": "0x01B01430",
+      "func_01B01AE8": "0x01B01AE8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09411_0b00.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00B00",
+    "text_end": "0x01B00C14",
+    "functions": 1,
+    "discovered_code_bytes": 276,
+    "syms": {
+      "func_01B01298": "0x01B01298",
+      "func_01B03BA8": "0x01B03BA8",
+      "func_01B03D70": "0x01B03D70",
+      "func_01B03E30": "0x01B03E30",
+      "func_01B07498": "0x01B07498",
+      "func_01B075B8": "0x01B075B8",
+      "g_arg_7a20": "0x01B07A20",
+      "g_buf_bac0": "0x01B8BAC0",
+      "g_buf_d740": "0x01B0D740",
+      "g_data_0040": "0x01B00040",
+      "g_data_0590": "0x01B00590",
+      "g_data_7ef0": "0x01B07EF0",
+      "g_fn_0c18": "0x01B00C18",
+      "g_fn_0c48": "0x01B00C48",
+      "g_mgr_7f50": "0x01B07F50",
+      "g_ptr_7f4c": "0x01B07F4C",
+      "g_ptr_7f90": "0x01B07F90",
+      "g_ptr_7f94": "0x01B07F94",
+      "g_state_0608": "0x01B00608"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]
