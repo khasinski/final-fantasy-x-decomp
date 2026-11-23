@@ -1,12 +1,14 @@
 /* tu_198 0x1d00d8-0x1d2170: low; ~Ms (config/tu_map.tsv) */
 #define D_0031FA50 _hdr_D_0031FA50
 #define MsExchangeChr _hdr_MsExchangeChr
+#define func_001D1DF8 _hdr_func_001D1DF8
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef func_001D1DF8
 #undef D_0031FA50
 #undef MsExchangeChr
 
@@ -26,10 +28,588 @@ typedef struct {
 } CmdUseEnt16;
 
 extern CmdUseEnt16 D_0031FA50[];
-void MsInsertChrCommand(int a, int b, int c);
+int MsInsertChrCommand(int id, int target, int mode);
+void MsExchangeParty(void);
+void MsGetMoveTargetPos(int id, BtlChr *c, int a2, float *out, int a4);
+float func_001AC348(float *a, float *b);
+extern u64 _u64_D_00317320 __asm__("D_00317320");
+extern s64 _d_D_0056EA98 __asm__("D_0056EA98");
+s32 _D1DF8_cmpdf2(s64, s64) __asm__("func_002EC198");
+s64 _D1DF8_extendsfdf2(float) __asm__("func_002ED038");
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsParseCommand);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D00D8/rodata", jtbl_0056EA20);
+extern void *MsGetCommand(int, int, int, void *, int *);
+extern int MsCheckRange(int, int, int);
+extern int func_001D0D48(u16 *);
+extern void func_001B7498(int, int);
+extern int MsGetRamChrMonster(int);
+extern int MsGetRamChrSummon(int);
+extern BtlChr *MsGetWeaponSpecial(int, int);
+extern void MsMusicVolume(int, int);
+extern void MsSetTargetDir(int, int);
+extern int _m_MsGetMagicEffNum(int, int, void *) __asm__("MsGetMagicEffNum");
+extern void MsSetSaveCommandUse(int, int, int);
+extern int MsLimitCommandProcess(int, BtlChr *, GsEnt48 *, int);
+extern void func_001D0D98(int, BtlChr *);
+extern void MsSetMotionAttackWait(int);
+extern void MsEffectRead(int, int);
+extern void MsSetMotionReturn(int);
+extern void func_001E0A18(BtlChr *, int, int);
+extern int MsCalcEscape(int, BtlChr *);
+extern float MsGetEscapeDir(int);
+extern void MsEscapeAll(void);
+extern int MsExchangeChr(int, int, int, int);
+extern void MsExchangeSummon(int, int);
+extern void msSetEndDir(BtlChr *);
+extern int MsCheckMegas(int);
+extern s32 func_001D1458(int, int, int);
+extern int MsActionRequest(int, int, int, int, int, void *);
+extern void MsPopBtlPos(BtlChr *);
+extern void MsUseChrMpLimit(int);
+
+extern void _m_MsMenuOpenTitleWindow(int, int) __asm__("MsMenuOpenTitleWindow");
+
+typedef struct {
+    u8 pad0[0x1753];
+    u8 f1753;
+    u8 pad1754[0x2004 - 0x1754];
+    s32 f2004;
+    s32 f2008;
+    s32 f200C;
+    u8 pad2010[0x2125 - 0x2010];
+    u8 f2125;
+    u8 pad2126[0x2134 - 0x2126];
+    s8 f2134;
+    u8 f2135;
+    u8 pad2136[0x2145 - 0x2136];
+    u8 f2145;
+} ParseGS;
+
+typedef struct {
+    u8 pad0[0x24];
+    u8 b24[8];
+} ParseBtlGetData;
+
+extern ParseGS _pgs_D_003172F0 __asm__("D_003172F0");
+extern ParseBtlGetData _pbg_btlgetdata __asm__("btlgetdata");
+
+int MsParseCommand(GsEnt48 *ent)
+{
+    int cmd_id;
+    int show_title;
+    int use_mp;
+    int f106;
+    int idx;
+    int mot;
+    int req_mcam;
+    int mcam_a3;
+    int mcam_t0;
+    int m34;
+    int m38;
+    int m3C;
+    int m40;
+    int flag44;
+    int flag48;
+    int mot_atk;
+    int fBA;
+    int do_act = -1;
+    int id = ent->id;
+    u8 *cmd;
+    BtlChr *c;
+    u8 *cp;
+    BtlChr *wsp;
+    int mS6;
+    int mFP;
+    int target_dir;
+    int i;
+    int eff_num;
+    u16 cmd_u16;
+
+    idx = ent->f2;
+    flag48 = 1;
+    flag44 = -1;
+    cmd = (u8 *)MsGetCommand(id, 1, -1, &ent->f8[idx], &cmd_id);
+    c = MsGetChr(id);
+    cp = (u8 *)c;
+
+    show_title = -1;
+    {
+        u16 c16 = cmd_id;
+        _pgs_D_003172F0.f2008 = cmd_id;
+        _pgs_D_003172F0.f200C = cmd_id;
+        use_mp = -1;
+        mot = -1;
+        f106 = 0;
+        mot_atk = 2;
+        req_mcam = 0;
+        fBA = 0;
+        mcam_a3 = 0xFFFF;
+        mcam_t0 = 0xFFFF;
+
+        _pgs_D_003172F0.f2135 = (*(u32 *)(cmd + 0x1C) >> 29) & 1;
+        _pgs_D_003172F0.f2134 = (*(u32 *)(cmd + 0x1C) >> 30) & 1;
+        cp[0xAD6] = flag48;
+        cp[0xAD9] = flag48;
+        *(u16 *)(cp + 0xC1C) = c16;
+        *(s16 *)(cp + 0xADA) = flag44;
+    }
+    cp[0x39F] = MsCheckRange(cp[0x39F] + 1, 1, 0xFF);
+    cp[0x10A] = 0;
+    cp[0xAD4] = (*(u16 *)(cmd + 0x1A) >> 14) & 1;
+    cp[0x111] = func_001D1BF0(id, (Sub1C *)cmd);
+
+    if (idx == 0) {
+        cp[0x390] = func_001D0D48((u16 *)&ent->f8[0]);
+    }
+    if (cp[0x390] != 0) {
+        _pgs_D_003172F0.f2145++;
+    }
+    if (*(u32 *)(cp + 0x16C) & 0x10000) {
+        func_001B7498(id, -1);
+    }
+
+    if (MsGetRamChrMonster(id) != 0) {
+        m34 = 0x2E;
+        mS6 = 0x2C;
+        mFP = 0x2D;
+        m38 = 0x2F;
+        m3C = 0x85;
+        m40 = 0x86;
+    } else {
+        if (MsGetRamChrSummon(id) != 0) {
+            mS6 = 0x78;
+            mFP = 0x79;
+            m3C = 0x7A;
+            m40 = 0x7B;
+        } else {
+            m3C = 0x3B;
+            mS6 = 0x1B;
+            m40 = 0x3C;
+            mFP = 0x34;
+        }
+        m34 = 0x32;
+        m38 = 0x33;
+    }
+
+    wsp = MsGetWeaponSpecial(id, 0);
+    if (wsp != 0) {
+        *(s32 *)((u8 *)wsp + 0xA80) = *(s32 *)(cp + 0xA80);
+    }
+    if (*(s8 *)(cp + 0xAAA) == 1) {
+        target_dir = 0;
+        mS6 = 0xFFFF;
+        mFP = 0x89;
+    } else {
+        target_dir = *(s32 *)(cp + 0xA80);
+    }
+    _pgs_D_003172F0.f2004 = *(s32 *)(cp + 0xA80);
+    if (_pgs_D_003172F0.f2134 != 0) {
+        MsMusicVolume(0x65, 0x1E);
+    }
+    MsSetTargetDir(id, target_dir);
+    if ((*(u32 *)(cmd + 0x1C) >> 22) & 1) {
+        cp[0x38A] = 1;
+    }
+    if (!((*(u32 *)(cmd + 0x1C) >> 26) & 1)) {
+        cp[0xACF] = 0;
+    }
+    for (i = 0; i < 4; i++) {
+        ((struct { u8 pad[0xAC0]; u8 b[4]; u16 h[4]; } *)c)->b[i] = 0xFF;
+        ((struct { u8 pad[0xAC0]; u8 b[4]; u16 h[4]; } *)c)->h[i] = 0xFFFF;
+    }
+    eff_num = _m_MsGetMagicEffNum(id, cmd_id, cmd);
+    MsSetSaveCommandUse(id, cmd_id, 1);
+    cmd_u16 = cmd_id;
+    switch (cmd_u16) {
+    case 0x3026:
+        MsSetVoiceCheck(id, 0xD, 1, 0, 0);
+        break;
+    case 0x3025:
+        MsSetVoiceCheck(id, 0xE, 1, 0, 0);
+        break;
+    }
+    MsLimitCommandProcess(id, c, ent, idx);
+
+    switch (cmd[0x15]) {
+    case 30:
+        fBA = 1;
+        mot_atk = 0x50;
+        /* fallthrough */
+    case 1:
+        func_001D0D98(id, c);
+        f106 = 1;
+        if (MsGetRamChrMonster(id) == 0) {
+            mcam_a3 = id + 0x7B;
+            if (id <= 0xE) {
+                mcam_a3 = id + 0x1D;
+            }
+            mcam_t0 = 0x1A;
+        } else {
+            mcam_a3 = 0x31;
+            mcam_t0 = 0x1A;
+        }
+        if (*(u32 *)(cp + 0x16C) & 0x10) {
+            do_act = 0;
+            cp[0xAC0] = mot_atk;
+            *(u16 *)(cp + 0xAC4) = mcam_a3;
+            show_title = 0;
+            *(u16 *)(cp + 0xAC8) = mcam_t0;
+            MsSetMotionAttackWait(id);
+        } else {
+            req_mcam = 1;
+            mot = mot_atk;
+        }
+        break;
+    case 23:
+        func_001D0D98(id, c);
+        do_act = 0;
+        *(u16 *)(cp + 0xAC4) = m3C;
+        cp[0xAC0] = 0xA;
+        *(u16 *)(cp + 0xAC6) = m40;
+        cp[0xAC1] = 2;
+        f106 = 3;
+        show_title = 0;
+        use_mp = 0;
+        flag48 = 0;
+        MsEffectRead(id, eff_num);
+        break;
+    case 24:
+        func_001D0D98(id, c);
+        do_act = 0;
+        *(u16 *)(cp + 0xAC4) = m3C;
+        cp[0xAC0] = 0xA;
+        *(u16 *)(cp + 0xAC6) = m40;
+        cp[0xAC1] = 0x42;
+        f106 = 3;
+        show_title = 0;
+        use_mp = 0;
+        flag48 = 0;
+        MsEffectRead(id, eff_num);
+        break;
+    case 5:
+        cp[0xAC0] = 0x13;
+        *(u16 *)(cp + 0xAC4) = 0x37;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 6:
+        cp[0xAC0] = 0x14;
+        *(u16 *)(cp + 0xAC4) = 0x38;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 7:
+        cp[0xAC0] = 0x15;
+        *(u16 *)(cp + 0xAC4) = 0x39;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 8:
+        cp[0xAC0] = 0x16;
+        *(u16 *)(cp + 0xAC4) = 0x3A;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 18:
+        cp[0xAC0] = 0x17;
+        *(u16 *)(cp + 0xAC4) = 0x7E;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 19:
+        cp[0xAC0] = 0x18;
+        *(u16 *)(cp + 0xAC4) = 0x7F;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 20:
+        cp[0xAC0] = 0x19;
+        *(u16 *)(cp + 0xAC4) = 0x80;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 21:
+        cp[0xAC0] = 0x1A;
+        *(u16 *)(cp + 0xAC4) = 0x81;
+        do_act = 0;
+        show_title = 0;
+        MsSetMotionReturn(id);
+        break;
+    case 14:
+        req_mcam = 1;
+        f106 = 1;
+        mot = 0x28;
+        mcam_a3 = 0x40;
+        break;
+    case 15:
+        req_mcam = 1;
+        f106 = 1;
+        mot = 0x29;
+        mcam_a3 = 0x41;
+        break;
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+        cp[0xAC0] = cmd[0x15] + 0x14;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        show_title = 0;
+        do_act = 0;
+        f106 = 2;
+        use_mp = 0;
+        cp[0xAC1] = cmd[0x15] + 0x19;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        MsEffectRead(id, eff_num);
+        break;
+    case 25:
+    case 26:
+    case 27:
+        cp[0xAC0] = cmd[0x15] + 0x2B;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        f106 = 2;
+        cp[0xAC1] = cmd[0x15] + 0x2E;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        MsEffectRead(id, eff_num);
+        break;
+    case 28:
+        *(u16 *)(cp + 0xAC4) = m34;
+        do_act = 0;
+        cp[0xAC0] = 0xFF;
+        *(u16 *)(cp + 0xAC6) = m38;
+        cp[0xAC1] = 0x22;
+        show_title = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    case 2:
+        *(u16 *)(cp + 0xAC4) = m34;
+        do_act = 0;
+        cp[0xAC0] = 6;
+        *(u16 *)(cp + 0xAC6) = m38;
+        cp[0xAC1] = 7;
+        show_title = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    case 3:
+        cp[0xAC0] = 4;
+        cp[0xAC1] = 5;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    case 17:
+        *(u16 *)(cp + 0xAC4) = mS6;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        f106 = 2;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        MsEffectRead(id, eff_num);
+        break;
+    case 16:
+        cp[0xAC0] = 0x2A;
+        cp[0xAC1] = 0x2B;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    case 29:
+        cp[0xAC0] = 0x4C;
+        cp[0xAC1] = 0x4D;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    case 4:
+        *(u16 *)(cp + 0xAC4) = m3C;
+        do_act = 0;
+        cp[0xAC0] = 0xA;
+        *(u16 *)(cp + 0xAC6) = m40;
+        cp[0xAC1] = 0xB;
+        f106 = 2;
+        show_title = 0;
+        use_mp = 0;
+        MsEffectRead(id, eff_num);
+        break;
+    case 22:
+        cp[0xABC] = 1;
+        cp[0xAC0] = 0x4B;
+        cp[0xAC1] = 0x2B;
+        *(u16 *)(cp + 0xAC4) = mS6;
+        *(u16 *)(cp + 0xAC6) = mFP;
+        do_act = 0;
+        show_title = 0;
+        use_mp = 0;
+        f106 = 2;
+        MsEffectRead(id, eff_num);
+        break;
+    default:
+        switch (cmd_u16) {
+        case 0x3055:
+            cp[0xAC0] = 0x4A;
+            *(u16 *)(cp + 0xAC4) = 0x47;
+            do_act = 0;
+            show_title = 0;
+            MsSetMotionReturn(id);
+            break;
+        case 0x3021:
+        case 0x3023:
+        case 0x3054:
+            cp[0xAC0] = 0x35;
+            *(u16 *)(cp + 0xAC4) = 0x77;
+            do_act = 0;
+            show_title = 0;
+            MsSetMotionReturn(id);
+            break;
+        case 0x3022:
+            cp[0xAC0] = 0x3E;
+            *(u16 *)(cp + 0xAC4) = 0x7D;
+            do_act = 0;
+            show_title = 0;
+            MsSetMotionReturn(id);
+            break;
+        case 0x3004:
+            cp[0xAC0] = 0x2E;
+            *(u16 *)(cp + 0xAC4) = 0x82;
+            cp[0xAC1] = 0x2F;
+            do_act = 0;
+            show_title = 0;
+            func_001E0A18(c, 0, ent->f8[idx].h2);
+            break;
+        case 0x3005:
+            cp[0xAC0] = 0x2E;
+            *(u16 *)(cp + 0xAC4) = 0x82;
+            cp[0xAC1] = 0x2F;
+            do_act = 0;
+            show_title = 0;
+            func_001E0A18(c, 1, ent->f8[idx].h2);
+            break;
+        case 0x3003:
+            if (MsCalcEscape(id, c) != 0) {
+                MsLimitTypeEscapeCheck(id, c);
+                mot = 0x11;
+                cp[0xDC] = 0;
+                req_mcam = 1;
+                mcam_a3 = 0x35;
+                *(float *)(cp + 0x15C) = MsGetEscapeDir(id);
+                *(u16 *)(cp + 0x2C6) &= ~8;
+                cp[0xAAA] = 4;
+            } else {
+                mot = 0x37;
+                req_mcam = 1;
+                mcam_a3 = 0x35;
+            }
+            break;
+        case 0x3018:
+            req_mcam = 1;
+            _pgs_D_003172F0.f2125 = 1;
+            do_act = 0;
+            cp[0xAAA] = 5;
+            mcam_a3 = 0x35;
+            *(u16 *)(cp + 0x2C6) &= ~8;
+            MsEscapeAll();
+            MsSetVoiceCheck(id, 0xF, 1, 0, 0);
+            break;
+        case 0x3002:
+            {
+                int t;
+                flag44 = 0;
+                t = ent->f8[idx].h2;
+                do_act = 0;
+                req_mcam = 1;
+                _pgs_D_003172F0.f2125 = 1;
+                cp[0xAAA] = 6;
+                MsExchangeChr(id, t, 0, 0);
+                mcam_a3 = 0x36;
+                MsSetVoiceCheck(t, 0xB, 1, 0, 0);
+            }
+            break;
+        case 0x30FF:
+            do_act = 0;
+            _pgs_D_003172F0.f1753 = 0;
+            MsExchangeSummon(id, 0xF);
+            use_mp = 0;
+            req_mcam = 1;
+            msSetEndDir(c);
+            break;
+        case 0x3117:
+        case 0x3118:
+            cmd_u16 = ent->f8[idx].h2;
+            do_act = 0;
+            _pgs_D_003172F0.f1753 = 0;
+            use_mp = 0;
+            MsExchangeSummon(id, cmd_u16);
+            req_mcam = 1;
+            msSetEndDir(c);
+            break;
+        case 0x3056:
+        case 0x3057:
+            do_act = 0;
+            req_mcam = 1;
+            MsInsertChrCommand(MsCheckMegas(id), id, 1);
+            break;
+        case 0x3129:
+            func_001D1458(0xF, id, 0x30EA);
+            break;
+        }
+        break;
+    }
+
+    cp[0xD3] = flag48;
+    cp[0x106] = f106;
+    if (f106 == 2 && (*(s8 *)(cp + 0x15) == 0 || *(s8 *)(cp + 0xA8E) != 0)) {
+        cp[0xAC0] = 0xFF;
+        cp[0xAC1] = 0xFF;
+    }
+    if (do_act != 0) {
+        MsActionRequest(id, 0xFF, 7, 0, 2, 0);
+        MsPopBtlPos(c);
+    }
+    if (use_mp != 0) {
+        MsUseChrMpLimit(id);
+    }
+    if (show_title != 0) {
+        _m_MsMenuOpenTitleWindow(cmd_id, 0x3C);
+    }
+    cp[0xBA] = fBA;
+    if (mot >= 0) {
+        cp[0xC8] = 0;
+        MsResetChrPos(id, c);
+        MsSetMotion(id, mot, 1, 1, 1, 0, 0);
+    }
+    cp[0xBA] = 0;
+    MsAtelRequestCamera(0, id, 0x3D, 0xFFFF, 0, 1, 0, 0);
+    if (req_mcam != 0) {
+        MsAtelRequestMagicCamera(0, id, *(u16 *)(cp + 0xC1C), mcam_a3, mcam_t0, 0, 1, 0, 0);
+    }
+    if (flag44 != 0 && id < 8) {
+        _pbg_btlgetdata.b24[id] = 1;
+    }
+    return *(s8 *)(cp + 0xAB2);
+}
 
 int func_001D0D48(u16 *p) {
     int r = 0;

@@ -130,6 +130,257 @@ int MsWeaponName(int a, int b, int alt, u16 *len) {
     return pos + t->a[lang].ofs;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DD7B8", func_001DDC18);
+int func_001DDC18(W5Rec *r)
+{
+    int atk;
+    int mag;
+    int elem;
+    int stat;
+
+    atk = func_001DDB18(r, 0x8062);
+    atk += func_001DDB18(r, 0x8063);
+    atk += func_001DDB18(r, 0x8064);
+    atk += func_001DDB18(r, 0x8065);
+    mag = func_001DDB18(r, 0x8066);
+    mag += func_001DDB18(r, 0x8067);
+    mag += func_001DDB18(r, 0x8068);
+    mag += func_001DDB18(r, 0x8069);
+    elem = func_001DDB18(r, 0x801E);
+    elem += func_001DDB18(r, 0x8022);
+    elem += func_001DDB18(r, 0x8026);
+    elem += func_001DDB18(r, 0x802A);
+    stat = func_001DDB18(r, 0x802E);
+    stat += func_001DDB18(r, 0x8036);
+    stat += func_001DDB18(r, 0x803A);
+    stat += func_001DDB18(r, 0x803E);
+    stat += func_001DDB18(r, 0x8042);
+    stat += func_001DDB18(r, 0x8046);
+    stat += func_001DDB18(r, 0x804A);
+
+    if ((((u8 *)r)[3] >> 2) & 1) {
+        return 0x5000;
+    }
+    if ((((u8 *)r)[3] >> 3) & 1) {
+        return 0x5001;
+    }
+    if (func_001DDB18(r, 0x807A)) {
+        return 0x5002;
+    }
+    if (elem >= 4) {
+        return 0x5003;
+    }
+    if (func_001DDB18(r, 0x8019)) {
+        return 0x5004;
+    }
+    if (func_001DDB18(r, 0x800F) && func_001DDB18(r, 0x8013) && func_001DDB18(r, 0x8011)) {
+        return 0x5005;
+    }
+    if (func_001DDB18(r, 0x800F) && func_001DDB18(r, 0x8011)) {
+        return 0x5006;
+    }
+    if (func_001DDB18(r, 0x800E) && func_001DDB18(r, 0x8012)) {
+        return 0x5007;
+    }
+    if (func_001DDB18(r, 0x800F)) {
+        return 0x5008;
+    }
+    if (func_001DDB18(r, 0x800E)) {
+        return 0x5009;
+    }
+    if (func_001DDB18(r, 0x8013)) {
+        return 0x500A;
+    }
+    if (func_001DDB18(r, 0x8012)) {
+        return 0x500B;
+    }
+    if (func_001DDB18(r, 0x8011)) {
+        return 0x500C;
+    }
+    if (func_001DDB18(r, 0x8010)) {
+        return 0x500D;
+    }
+    if (func_001DDB18(r, 0x800D)) {
+        return 0x500F;
+    }
+    if (stat >= 4) {
+        return 0x5010;
+    }
+    if (atk >= 4) {
+        return 0x5013;
+    }
+    if (mag >= 4) {
+        return 0x5014;
+    }
+    if (mag >= 3 && func_001DDB18(r, 0x8006)) {
+        return 0x5015;
+    }
+    if (func_001DDB18(r, 0x800C)) {
+        return 0x5016;
+    }
+    if (func_001DDB18(r, 0x801A)) {
+        return 0x5017;
+    }
+    if (elem >= 3) {
+        return 0x5018;
+    }
+    if (stat >= 3) {
+        return 0x5019;
+    }
+    if ((func_001DDB18(r, 0x8003) || func_001DDB18(r, 0x8004)) && func_001DDB18(r, 0x8005)) {
+        return 0x501A;
+    }
+    if (func_001DDB18(r, 0x8003) || func_001DDB18(r, 0x8004)) {
+        return 0x501B;
+    }
+    if (func_001DDB18(r, 0x8005)) {
+        return 0x5020;
+    }
+    if (func_001DDB18(r, 0x8006)) {
+        return 0x5021;
+    }
+    if (func_001DDB18(r, 0x8007)) {
+        return 0x5022;
+    }
+    if (func_001DDB18(r, 0x8001)) {
+        return 0x5023;
+    }
+    if (func_001DDB18(r, 0x8002)) {
+        return 0x5024;
+    }
+    if (func_001DDB18(r, 0x802E)) {
+        return 0x5025;
+    }
+    if (func_001DDB18(r, 0x804A)) {
+        return 0x5026;
+    }
+    if (func_001DDB18(r, 0x8036)) {
+        return 0x5027;
+    }
+    if (func_001DDB18(r, 0x803A)) {
+        return 0x5028;
+    }
+    if (func_001DDB18(r, 0x803E)) {
+        return 0x5029;
+    }
+    if (func_001DDB18(r, 0x8042)) {
+        return 0x502A;
+    }
+    if (func_001DDB18(r, 0x8046)) {
+        return 0x502B;
+    }
+    if (atk >= 3) {
+        return 0x502C;
+    }
+    if (mag >= 3) {
+        return 0x502D;
+    }
+    if (elem >= 2) {
+        return 0x502E;
+    }
+    stat = 0;
+    if (func_001DDB18(r, 0x802E) || func_001DDB18(r, 0x802F)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x8036) || func_001DDB18(r, 0x8037)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x803A) || func_001DDB18(r, 0x803B)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x803E) || func_001DDB18(r, 0x803F)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x8042) || func_001DDB18(r, 0x8043)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x8046) || func_001DDB18(r, 0x8047)) {
+        stat++;
+    }
+    if (func_001DDB18(r, 0x804A) || func_001DDB18(r, 0x804B)) {
+        stat++;
+    }
+    if (stat >= 2) {
+        return 0x502F;
+    }
+    if (func_001DDB18(r, 0x802F)) {
+        return 0x5030;
+    }
+    if (func_001DDB18(r, 0x804B)) {
+        return 0x5031;
+    }
+    if (func_001DDB18(r, 0x8037)) {
+        return 0x5032;
+    }
+    if (func_001DDB18(r, 0x803B)) {
+        return 0x5033;
+    }
+    if (func_001DDB18(r, 0x803F)) {
+        return 0x5034;
+    }
+    if (func_001DDB18(r, 0x8043)) {
+        return 0x5035;
+    }
+    if (func_001DDB18(r, 0x8047)) {
+        return 0x5036;
+    }
+    if (func_001DDB18(r, 0x8000)) {
+        return 0x5037;
+    }
+    if (func_001DDB18(r, 0x801E)) {
+        return 0x5038;
+    }
+    if (func_001DDB18(r, 0x8022)) {
+        return 0x5039;
+    }
+    if (func_001DDB18(r, 0x8026)) {
+        return 0x503A;
+    }
+    if (func_001DDB18(r, 0x802A)) {
+        return 0x503B;
+    }
+    if (func_001DDB18(r, 0x807C)) {
+        return 0x501C;
+    }
+    if (func_001DDB18(r, 0x807D)) {
+        return 0x501D;
+    }
+    if (func_001DDB18(r, 0x807E)) {
+        return 0x501E;
+    }
+    if (func_001DDB18(r, 0x807F)) {
+        return 0x501F;
+    }
+    if (((u8 *)r)[0xB] >= 4) {
+        return 0x503C;
+    }
+    if (mag > 0 && atk > 0) {
+        return 0x503D;
+    }
+    if (((u8 *)r)[0xB] >= 2) {
+        return 0x503E;
+    }
+    if (func_001DDB18(r, 0x8068) || func_001DDB18(r, 0x8069)) {
+        return 0x503F;
+    }
+    if (func_001DDB18(r, 0x8064) || func_001DDB18(r, 0x8065)) {
+        return 0x5040;
+    }
+    if (func_001DDB18(r, 0x8067)) {
+        return 0x5041;
+    }
+    if (func_001DDB18(r, 0x8066)) {
+        return 0x5042;
+    }
+    if (func_001DDB18(r, 0x8063)) {
+        return 0x5043;
+    }
+    if (func_001DDB18(r, 0x8062)) {
+        return 0x5044;
+    }
+    if (func_001DDB18(r, 0x800B)) {
+        return 0x5045;
+    }
+    return 0x5046;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1DD7B8", func_001DE468);

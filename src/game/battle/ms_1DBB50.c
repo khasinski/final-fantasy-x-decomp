@@ -70,11 +70,153 @@ int func_001DBD20(u32 i) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DBB50", MsMenuGetText);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1DBB50/rodata", jtbl_0056F720);
+int MsMenuGetText(int kind, int id, int hira)
+{
+    s32 pos;
+    Q4Rec12 *r = &D_00662D30[kind];
+    int res;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DBB50", MsMenuGetHelp);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1DBB50/rodata", jtbl_0056F770);
+    id &= 0xFFF;
+    res = 0;
+    if (r->f8 != 0 && r->f0 == 0) {
+        switch (kind) {
+        case 3:
+        case 16:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[16];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 7:
+        case 14:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[14];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 9:
+        case 15:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[15];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 0:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 1:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 8:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        default:
+            res = 0;
+            break;
+        }
+    }
+    return res;
+}
+
+int MsMenuGetHelp(int kind, int id, int hira)
+{
+    s32 pos;
+    Q4Rec12 *r = &D_00662D30[kind];
+    int res;
+
+    id &= 0xFFF;
+    res = 0;
+    if (r->f8 != 0 && r->f0 == 0) {
+        switch (kind) {
+        case 0:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->a[hira & 1].x;
+            }
+            break;
+        case 3:
+        case 16:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[16];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->b[hira & 1].x;
+            }
+            break;
+        case 7:
+        case 14:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[14];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->b[hira & 1].x;
+            }
+            break;
+        case 9:
+        case 15:
+            if (func_001BD360() == 1) {
+                r = &D_00662D30[15];
+            }
+            if (r->f8 != 0 && r->f0 == 0) {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->b[hira & 1].x;
+            }
+            break;
+        case 1:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->b[hira & 1].x;
+            }
+            break;
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 8:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            {
+                OfsTbl *p = MsGetExcelData(id, (void *)r->f8, &pos);
+                res = pos + p->b[hira & 1].x;
+            }
+            break;
+        default:
+            res = 0;
+            break;
+        }
+    }
+    return res;
+}
 
 int MsMenuGetBtlEndText(int a, int b)
 {

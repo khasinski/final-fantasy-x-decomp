@@ -54,8 +54,252 @@ void func_001AFA80(void) {
     D_0065FF74 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", MsBtlReadManage);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1AF9E8/rodata", jtbl_0056E1E0);
+void MsBtlReadCueManage(void);
+void func_001B0100(void);
+int AtelIsCallbackQue(void);
+void func_001AE4A8(int, int);
+void func_002F8660(int);
+void func_00173068(int, int);
+void func_00173010(int, int);
+int yiGetRenderStatus(void);
+void MsCalcChrDirAll(void);
+int MsGetFirstAttack(int);
+void func_002D8778(int);
+int MsAtelRequestCamera(int, int, int, int, int, int, int, int);
+int MsSetChrVisibleEvent(int, int);
+void func_001B1490(int id, int mask);
+int func_001B1058(void);
+u8 MsBtlReadCueLevel(void);
+void func_001B0AB0(int arg);
+void MsMessageCueRegist(int, int, int, int, int);
+int MsSEPtransCheck(void);
+int func_001B0FE8(void);
+int _m_func_0010AE48(void) __asm__("func_0010AE48");
+void MsAtelRequestSystemCheckExe(int, int, int, int);
+
+typedef struct {
+    u8 pad00[0x10];
+    s8 f10;
+    u8 pad11[0x1C - 0x11];
+    s32 f1C;
+    u8 pad20[0x48 - 0x20];
+    s8 f48;
+    u8 f49;
+    u8 pad4A[0x53 - 0x4A];
+    u8 f53;
+    u8 pad54[0xBC - 0x54];
+    void *pBC;
+    u8 padC0[0xD4 - 0xC0];
+    u8 scene[0x1C];
+    void *pF0;
+    u8 padF4[0x1752 - 0xF4];
+    s8 f1752;
+    u8 pad1753[0x1984 - 0x1753];
+    u16 f1984;
+    u8 pad1986[4];
+    u8 f198A[0x2040 - 0x198A];
+    s32 w2040;
+    u8 pad2044[0x20FC - 0x2044];
+    s8 f20FC;
+    u8 pad20FD[0x2109 - 0x20FD];
+    s8 f2109;
+    s8 f210A;
+    u8 pad210B;
+    s8 f210C;
+    u8 pad210D[0x2115 - 0x210D];
+    u8 f2115;
+} GsReadView;
+
+typedef struct {
+    u8 pad0[0x3D14];
+    u32 w3D14;
+} Save3D14;
+
+extern GsReadView _gs_read __asm__("D_003172F0");
+extern Save3D14 _save_3d14 __asm__("D_003194D0");
+extern int D_0065FF78;
+extern int D_0065FF7C;
+extern int D_0065FF80;
+void MsBtlReadCueRegist(int a, int b, int c, int d, int e);
+
+void MsBtlReadManage(void)
+{
+    u8 *s;
+    int i;
+    BtlChr *c;
+    int id;
+
+    if (_gs_read.f48 != 0 && (s8)_gs_read.f49 != 0) {
+        _gs_read.f49--;
+        return;
+    }
+    s = _gs_read.scene;
+    switch (_gs_read.f10) {
+    case 4:
+        if (AtelIsCallbackQue() != 0) {
+            break;
+        }
+        _gs_read.f10 = 5;
+    case 5:
+        {
+            void *p = *(void **)(s + 4);
+            _gs_read.f10 = 6;
+            func_001AE4A8(_gs_read.f2109, _gs_read.f1C);
+            GetCD()->f0(_gs_read.f1C, p, func_001B0100, 0);
+        }
+        break;
+    case 7:
+        func_002F8660(0);
+        if (MsBtlReadSetScene() == 10) {
+            goto state_10;
+        }
+    case 8:
+        _gs_read.f10 = 9;
+        _gs_read.f210A = 1;
+        {
+            int fld = _gs_read.f1984 & 0x3FF;
+            if (_gs_read.f1984 & 0x400) {
+                func_00173068(fld, 0);
+            } else {
+                func_00173010(fld, 0);
+            }
+        }
+        break;
+    case 9:
+        if ((yiGetRenderStatus() & 0x20) != 0) {
+            break;
+        }
+        if ((yiGetRenderStatus() & 0x40) != 0) {
+            break;
+        }
+        _gs_read.f10 = 10;
+    case 10:
+    state_10:
+        _gs_read.f20FC = 1;
+        MsCalcChrDirAll();
+        _gs_read.f210C = MsGetFirstAttack(0x20);
+        MsAtelRegist(0, _gs_read.f198A, _gs_read.pBC);
+        MsAtelRegist(0, _gs_read.f198A, *(void **)(s + 8));
+        func_001B1700(0);
+        if (_gs_read.f53 != 0xFF) {
+            _gs_read.f210C = _gs_read.f53;
+        }
+        func_002D8778(((s8 *)_gs_read.pF0)[1] == 1);
+        if (_save_3d14.w3D14 < 0xFFFFFFF && _gs_read.f2115 != 2) {
+            _save_3d14.w3D14++;
+        }
+        MsAtelRequestCamera(0, 0xFF, 0x18, 0xFFFF, 0, 1, 0, 0);
+        _gs_read.f49 = 0x3C;
+        for (i = 0; i < 18; i++) {
+            c = MsGetChr(i);
+            MsSetChrVisibleEvent(i, 0);
+            if (c->fA88 == 0) {
+                func_001B57F0(i, 0);
+            } else {
+                MsSetMotion(i, 0x3F, 0, 0, 1, 0, 0);
+            }
+        }
+        if (_gs_read.f210A != 0) {
+            func_001B1058();
+        }
+        _gs_read.f10 = 11;
+    case 11:
+        for (i = 0; i < 18; i++) {
+            c = MsGetChr(i);
+            id = c->f0C;
+            if (c->fA88 != 0) {
+                ((u8 *)&btlgetdata)[id] = 1;
+                MsBtlReadCueRegist(0, id, id, c->f04, 1);
+            }
+        }
+        for (i = 0; i < 18; i++) {
+            c = MsGetChr(i);
+            id = c->f0C;
+            if (c->fA88 != 0) {
+                func_001B1490(id, 3);
+            }
+        }
+        _gs_read.f10 = 12;
+    case 12:
+        if (MsBtlReadCueLevel() != 0) {
+            break;
+        }
+        MsAtelRequestCamera(0, 0xFF, 0x75, 0xFFFF, 0, 1, 0, 0);
+        _gs_read.f49 = 0x3C;
+        func_001B0290();
+        break;
+    case 14:
+        D_0065FF78 = 0;
+        D_0065FF7C = 0;
+        D_0065FF80 = 0;
+        for (i = 0; i < 8; i++) {
+            id = i + 20;
+            c = MsGetChr(id);
+            if (c->fE != 0xFFFF && ((s8 *)c)[0x24] != 0) {
+                s32 f04 = c->f04;
+                s32 f08 = c->f08;
+                MsBtlReadCueRegist(0, id, id, f04, 0);
+                MsBtlReadCueRegist(2, id, id, f08, 3);
+            }
+        }
+        _gs_read.f10 = 15;
+        break;
+    case 15:
+        if (MsBtlReadCueLevel() != 0) {
+            break;
+        }
+        MsAtelRequestCamera(0, 0xFF, 0x76, 0xFFFF, 0, 1, 0, 0);
+        _gs_read.f49 = 0x3C;
+        _gs_read.f10 = 16;
+    case 16:
+        _gs_read.f10 = 17;
+        func_001B0AB0(((s8 *)(*(void **)(s + 0x1C)))[2]);
+        break;
+    case 19:
+        for (i = 0; i < 18; i++) {
+            c = MsGetChr(i);
+            id = c->f0C;
+            if (c->fA88 != 0) {
+                MsBtlReadCueRegist(2, id, id, c->f08, 2);
+            }
+        }
+        _gs_read.f10 = 20;
+    case 20:
+        if (MsBtlReadCueLevel() != 0) {
+            break;
+        }
+        _gs_read.f10 = 21;
+    case 21:
+        switch (_gs_read.f210C) {
+        case 0:
+            break;
+        case 1:
+            MsMessageCueRegist(2, 0, 0, 0x11, 0x19);
+            break;
+        case 2:
+            MsMessageCueRegist(3, 0, 0, 0x11, 0x19);
+            break;
+        }
+        _gs_read.f10 = 22;
+    case 22:
+        if (_gs_read.w2040 != 0) {
+            break;
+        }
+        if (MsSEPtransCheck() != 0) {
+            break;
+        }
+        if (func_001B0FE8() != 0) {
+            break;
+        }
+        _m_func_0010AE48();
+        _gs_read.f10 = 1;
+        _gs_read.f1752 = 1;
+        MsAtelRequestSystemCheckExe(5, 1, 0, 0);
+        MsAtelRequestCamera(0, 0xFF, 0x7C, 0xFFFF, 0, 1, 0, 0);
+        break;
+    }
+    MsBtlReadCueManage();
+}
 
 void func_001B0100(void) {
     D_00317300 = 7;
@@ -594,8 +838,131 @@ u8 MsBtlReadCueLevel(void) {
     return D_00318A41;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", MsBtlReadCueManage);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1AF9E8/rodata", jtbl_0056E270);
+void Ch_DataRead(int id);
+int Ch_DataReadSync(int id);
+void ChN_ReadSystemMGRPstart(int id, int a1);
+int ChN_ReadSystemMGRPsync(int id, int a1);
+void ChN_ReadSystemMGRP(int id, int a1);
+void MsBtlWeaponRegist(int a, int b, int c);
+int MsGetSaveWeaponModel(int id);
+BtlChr *MsGetWeapon(int id, int slot);
+int MsBtlReadCueRegistWeapon(int id);
+void MsBtlReadCueRegist(int a, int b, int c, int d, int e);
+
+void MsBtlReadCueManage(void)
+{
+    int cont;
+
+    if (D_003172F0.f1751 == 0) {
+        return;
+    }
+    cont = 1;
+    do {
+        int idx = D_003172F0.f1750;
+        S2Cmd *q = &S2_CMDQ[idx];
+        int id = q->b1;
+        BtlChr *c = MsGetChr(id);
+
+        switch (q->b2) {
+        case 0:
+            switch (q->b0) {
+            case 0:
+                if (c->chr != 0) {
+                    q->b2 = 2;
+                } else {
+                    Ch_DataRead(q->h6);
+                    q->b2 = 1;
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                if (c->f11 != 0 && q->h6 != 0) {
+                    ChN_ReadSystemMGRPstart(q->h6, c->f20);
+                    q->b2 = 1;
+                } else {
+                    q->b2 = 2;
+                }
+                break;
+            case 3:
+                if (MsCDreadWeapon(id, c, 2) == 0) {
+                    q->b2 = 1;
+                    cont = 0;
+                } else {
+                    q->b2 = 2;
+                }
+                break;
+            }
+            break;
+        case 1:
+            switch (q->b0) {
+            case 0:
+                if (Ch_DataReadSync(q->h6) != 0) {
+                    cont = 0;
+                } else {
+                    q->b2 = 2;
+                }
+                break;
+            case 1:
+                cont = 0;
+                break;
+            case 2:
+                if (ChN_ReadSystemMGRPsync(q->h6, c->f20) != 0) {
+                    cont = 0;
+                } else {
+                    q->b2 = 2;
+                }
+                break;
+            case 3:
+                cont = 0;
+                break;
+            }
+            break;
+        case 2:
+            {
+                BtlChr *c2;
+                int mode;
+                if (q->b0 == 2 && q->h6 != 0) {
+                    ChN_ReadSystemMGRP(q->h6, c->f20);
+                }
+                mode = q->b3;
+                c2 = MsGetChr(q->b4);
+                switch (mode) {
+                case 1:
+                    MsBtlReadPlayerModelProcess(id);
+                    break;
+                case 2:
+                case 6:
+                case 8:
+                case 10:
+                    MsBtlReadPlayerProcess(id, mode);
+                    break;
+                case 3:
+                case 7:
+                    ((void (*)(int, int))MsBtlReadMonsterProcess)(id, mode);
+                    break;
+                case 4:
+                    MsBtlWeaponRegist(q->b4, ((s8 *)c2)[0xABD], 0);
+                    ((s8 *)c2)[0xABD] = 0;
+                    break;
+                case 5:
+                    MsBtlWeaponRegist(q->b4, ((s8 *)c2)[0xABD], 1);
+                    ((s8 *)c2)[0xABD] = 0;
+                    break;
+                case 0:
+                case 9:
+                    break;
+                }
+                D_003172F0.f1750 = (idx + 1) % 32;
+                D_003172F0.f1751--;
+                if (D_003172F0.f1751 == 0) {
+                    cont = 0;
+                }
+            }
+            break;
+        }
+    } while (cont != 0);
+}
 
 void MsBtlReadCueRegist(int a, int b, int c, int d, int e) {
     if (D_003172F0.f1751 < 0x20) {

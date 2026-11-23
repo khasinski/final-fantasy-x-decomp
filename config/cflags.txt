@@ -26,6 +26,7 @@ game/movie/movie_15BBF8 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/movie/movie_str -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/menu/tk/tk_228B08 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/menu/tk/tk_242040 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/menu/tk/tk_232C88 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/main/sg_11A538 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/op/opus_294CD8 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/yi/yi_171EF0 -Btools/cc/ee-as-delay/ -Wa,-mips4
@@ -53,3 +54,5 @@ game/chr/tex_anim -fno-strict-aliasing
 game/menu/to/to_203FC0 -Btools/cc/ee-as-delay/ -Wa,-mips4
 
 game/menu/to/to_20C040 -fno-strict-aliasing
+# Assemble compiler-emitted float conversions in branch delay slots (func_0017DF98, func_0017F790).
+game/yi/yiimage_17DC98 -Btools/cc/ee-as-delay/ -Wa,-mips4

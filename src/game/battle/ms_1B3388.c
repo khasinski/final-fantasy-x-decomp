@@ -1,12 +1,22 @@
 /* tu_182 0x1b3388-0x1b4100: medium; ~Ms (config/tu_map.tsv) */
 #define func_001B34B8 _hdr_func_001B34B8
+#define MsBtlGetPos _hdr_MsBtlGetPos
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
 #include "ffx/s2.h"
 #include "ffx/u2.h"
 #include "ffx/v2.h"
+#undef MsBtlGetPos
 #undef func_001B34B8
+
+void func_001B39A8(u8 *src_base, u8 *dst_base, int idx);
+void MsGetSummonerPos(BtlChr *chr, int id, int mode, float *out);
+void func_001AC3D0(float *dst, float *a, float *b);
+void func_001ACB28(float *v, float s);
+float func_002E8648(float x);
+float func_002E89C0(float x);
 
 void func_001B3388(void) {
     GsTbl *t = D_003172F0.pF4;
@@ -96,6 +106,13 @@ int MsBtlListFieldNum(int id) {
     return r;
 }
 
+typedef struct {
+    u8 pad0[0x1D1];
+    s8 b1D1;
+    u8 pad1D2[2];
+    float f1D4[4];
+} ChrDirView;
+
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsBtlGetPos);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E300);
 
@@ -181,15 +198,111 @@ void MsPopBtlPos(BtlChr *chr) {
     chr->f1BC.c = chr->f1C9.c;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsGetSummonerPos);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E340);
+void MsGetSummonerPos(BtlChr *chr, int id, int mode, float *out)
+{
+    float dist;
+    BtlChr *c;
+    float dir;
 
-typedef struct {
-    u8 pad0[0x1D1];
-    s8 b1D1;
-    u8 pad1D2[2];
-    float f1D4[4];
-} ChrDirView;
+    MMI_SQ_ZERO(0, out);
+    dist = 0.0f;
+    c = MsGetChr(id);
+    MsBtlGetPos(0, c, (s8)c->f1BC.a, (s8)c->f1BC.b, (s8)c->f1BC.c, out);
+    dir = ((ChrDirView *)c)->f1D4[((ChrDirView *)c)->b1D1] - 0.7853981852531433f;
+    switch (c->f04) {
+    case 0x3001:
+        if (mode != 0) {
+            dir += 2.4434611797332764f;
+            dist = 10.0f;
+        }
+        break;
+    case 0x3002:
+        if (mode != 0) {
+            dir -= 2.268928050994873f;
+            dist = 16.0f;
+        }
+        break;
+    case 0x3003:
+        if (mode != 0) {
+            dir += 2.1293017864227295f;
+            dist = 13.0f;
+        }
+        break;
+    case 0x3004:
+        if (mode != 0) {
+            dir += 2.3038346767425537f;
+            dist = 14.0f;
+        }
+        break;
+    case 0x3006:
+        if (mode != 0) {
+            dir -= 2.286381244659424f;
+            dist = 17.0f;
+        }
+        break;
+    case 0x3007:
+        if (mode != 0) {
+            dir += 2.356194496154785f;
+            dist = 24.0f;
+        }
+        break;
+    case 0x3008:
+        switch (mode) {
+        case 1:
+            dir -= 2.094395160675049f;
+            dist = 18.6f;
+            break;
+        case 2:
+            dir += 1.3962634801864624f;
+            dist = 14.2f;
+            break;
+        case 3:
+            dir += 2.4434611797332764f;
+            dist = 9.8f;
+            break;
+        }
+        break;
+    case 0x3009:
+    case 0x300A:
+    case 0x300B:
+        {
+            int first;
+            int i;
+            float base_dir;
+            float pos[4];
+            MMI_SQ_ZERO(0, out);
+            dir = 0.0f;
+            first = 1;
+            base_dir = dir;
+            for (i = 0; i < 3; i++) {
+                float d;
+                c = MsGetChr(i + 15);
+                MsBtlGetPos(0, c, (s8)c->f1BC.a, (s8)c->f1BC.b, (s8)c->f1BC.c, pos);
+                func_001AC3D0(out, out, pos);
+                d = ((ChrDirView *)c)->f1D4[((ChrDirView *)c)->b1D1];
+                if (first != 0) {
+                    first = 0;
+                    dir = MsNearRag(0.0f, d);
+                    base_dir = dir;
+                } else {
+                    dir += MsNearRag(base_dir, d);
+                }
+            }
+            dir /= 3.0f;
+            func_001ACB28(out, 3.0f);
+            *(float *)((u8 *)chr + 0x1D8) = dir;
+            dir -= 3.9269909858703613f;
+            if (mode != 0) {
+                dist = 10.0f;
+            }
+        }
+        break;
+    }
+    if (dist != 0.0f) {
+        out[0] += (func_002E8648(dir) - func_002E89C0(dir)) * dist;
+        out[2] += (func_002E89C0(dir) + func_002E8648(dir)) * dist;
+    }
+}
 
 extern u8 D_003192B5[];
 void MsSetChrDirF(int id, float dir);

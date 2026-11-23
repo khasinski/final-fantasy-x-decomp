@@ -76,9 +76,209 @@ int func_002317C0(int id, int b)
     return func_002249B8(p);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2315E8", func_00231840);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_2315E8/rodata", jtbl_00571FF0);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_2315E8/rodata", jtbl_00572030);
+extern char D_00571FA8[];
+extern char D_00571FB8[];
+extern char D_00571FC8[];
+extern char D_00571FD8[];
+extern char D_00693DA0[];
+extern char D_00693DE0[];
+void func_00232940(int a0);
+void func_00232A18(void);
+void func_00232A38(void);
+
+void func_00231840(Task *t)
+{
+    s32 buf;
+    s32 name;
+    s32 *state;
+    int st;
+
+    ((int (*)(void))TkMn2CalcStatusBGRatio)();
+    state = &D_00693D9C;
+    st = *state;
+loop:
+    switch (st) {
+    case 0:
+        *state = 2;
+        st = 2;
+        goto loop;
+    case 1:
+        TkMenuSetHelpMessage(TkMenuMainHelp(7));
+        TkMenuRestartSelFileWindow(t);
+        SET_ANGLE_I(-0x155);
+        *state = 2;
+        st = 2;
+        goto loop;
+    case 2:
+        TkMenuCtrlSelFileWindow(t);
+        if (t->b45 > 0) {
+            if (func_002317C0(D_00693D60[t->x48], 0) != 0) {
+                PLAY_SE(0x80000001);
+                st = 5;
+                goto loop;
+            } else {
+                Unk1BFED8 *p;
+
+                PLAY_SE(0x80000003);
+                p = MsGetSaveWeapon(D_00693D60[t->x48], &buf);
+                if (((p->b3 >> 2) & 1) || ((p->b3 >> 3) & 1)) {
+                    buf = TOMenuGetSummonMes(0x1A);
+                } else {
+                    buf = TOMenuGetSummonMes(0x1B);
+                }
+                func_00236940(buf, 0, 0);
+                TOMenuGetYesNoWindow()->b3E = 4;
+                st = 3;
+                goto loop;
+            }
+        }
+        break;
+    case 3:
+        *state = 4;
+        break;
+    case 4: {
+        Task *yn = TOMenuGetYesNoWindow();
+
+        if (yn != 0 && yn->b45 != 0) {
+            ((int (*)(void))TOMenuCloseYesNoWindow)();
+            *state = 1;
+        }
+        break;
+    }
+    case 5:
+        SET_ANGLE_I(0x155);
+        func_00232940(t->x48);
+        *state = 7;
+        break;
+    case 6:
+        func_00232A18();
+        func_00231780(t->x48);
+        *state = 7;
+        break;
+    case 7:
+        if (D_00693D5C->b45 < 0) {
+            *state = 8;
+            break;
+        }
+        if (D_00693D5C->b45 != 0) {
+            SysEntry *slot = SYS_TBL;
+            int mes;
+
+            slot += D_00693D5C->x48;
+            ((int (*)(int, int, int))TkMn2SetMacroParam)(1, 0x35, slot->h0);
+            switch (slot->b2) {
+            case 0xB:
+                PLAY_SE(0x80000001);
+                st = 0xB;
+                goto loop;
+            case 0xE:
+                mes = TOMenuGetSummonMes(6);
+                break;
+            case 0xF:
+                mes = TOMenuGetSummonMes(0x1D);
+                break;
+            case 0x10:
+                mes = TOMenuGetSummonMes(0x1B);
+                break;
+            case 0xC:
+            case 0xD:
+            default:
+                mes = TOMenuGetSummonMes(0x1C);
+                break;
+            }
+            PLAY_SE(0x80000003);
+            func_00236940(mes, 0, 0);
+            TOMenuGetYesNoWindow()->b3E = 4;
+            st = 9;
+            goto loop;
+        }
+        break;
+    case 8:
+        func_00227490(D_00571FA0);
+        func_00232A38();
+        TkMn2InitStatusBG();
+        *state = 1;
+        break;
+    case 9:
+        *state = 0xA;
+        break;
+    case 0xA: {
+        Task *yn = TOMenuGetYesNoWindow();
+
+        if (yn != 0 && yn->b45 != 0) {
+            ((int (*)(void))TOMenuCloseYesNoWindow)();
+            *state = 6;
+        }
+        break;
+    }
+    case 0xB: {
+        int m0 = TOMenuGetSummonMes(0x21);
+        int m1 = TOMenuGetSummonMes(0xB);
+        int m2 = TOMenuGetSummonMes(0xC);
+        Task *yn;
+
+        func_00236940(m0, m1, m2);
+        yn = TOMenuGetYesNoWindow();
+        yn->b3E = 4;
+        yn->b37 = 0;
+        *state = 0xC;
+        break;
+    }
+    case 0xC: {
+        Task *yn = TOMenuGetYesNoWindow();
+
+        if (yn->b45 < 0) {
+            func_002EF240(D_00571FA8);
+            func_002EF240(D_00571FB8, yn->b45);
+            ((int (*)(void))TOMenuCloseYesNoWindow)();
+            *state = 6;
+        } else if (yn->b45 != 0) {
+            int sel;
+
+            func_002EF240(D_00571FB8, yn->b45);
+            sel = yn->x48;
+            ((int (*)(void))TOMenuCloseYesNoWindow)();
+            if (sel == 0) {
+                st = 0xD;
+                goto loop;
+            }
+            PLAY_SE(0x80000001);
+            func_002EF240(D_00571FC8);
+            *state = 6;
+        }
+        break;
+    }
+    case 0xD: {
+        SysEntry *slot = SYS_TBL;
+        u8 *tbl;
+        Unk1BFED8 *w;
+        int mes;
+
+        slot += D_00693D5C->x48;
+        tbl = (u8 *)func_00227ED0() + slot->b3 * 8;
+        w = MsGetSaveWeapon(D_00693D60[D_00693D58->x48], &name);
+        func_002F072C(D_00693DA0, (char *)name);
+        func_00231740((SlotRec *)w, slot->h0);
+        MsSetWeaponName(w);
+        MsSaveItemUse(*(u16 *)(tbl + 4), -tbl[6]);
+        func_002EF240(D_00571FD8);
+        SndSepPlaySimple(0x80000063);
+        MsGetSaveWeapon(D_00693D60[D_00693D58->x48], &name);
+        func_002F072C(D_00693DE0, (char *)name);
+        if (func_002F05E8(D_00693DE0, D_00693DA0) == 0) {
+            mes = TOMenuGetSummonMes(0x1E);
+        } else {
+            mes = TOMenuGetSummonMes(0x1F);
+        }
+        TkMn2SetMacroParam(0, 0, D_00693DA0);
+        TkMn2SetMacroParam(2, 0, D_00693DE0);
+        func_00236940(mes, 0, 0);
+        TOMenuGetYesNoWindow()->b3E = 4;
+        *state = 0xA;
+        break;
+    }
+    }
+}
 
 int func_00231DC8(Task *t)
 {

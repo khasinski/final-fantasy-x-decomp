@@ -1,4 +1,6 @@
 /* tu_130 0x17dc98-0x180618: low; ~yiImage (config/tu_map.tsv) */
+#define func_0017E5A8 _hdr_func_0017E5A8
+#define func_0017F790 _hdr_func_0017F790
 #define func_00180370 _hdr_func_00180370
 #define func_00180520 _hdr_func_00180520
 #include "common.h"
@@ -7,6 +9,8 @@
 #include "ffx/s2.h"
 #include "ffx/v2.h"
 #include "ffx/t2.h"
+#undef func_0017E5A8
+#undef func_0017F790
 #undef func_00180370
 #undef func_00180520
 
@@ -60,8 +64,75 @@ void func_0017DF80(s32 arg0) {
     D_0030ECE0 = 0xE0000 - (arg0 << 0xE);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017DF98);
-INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C840);
+extern u32 D_0030ECA0;
+extern char D_0056C6C0[];
+extern char D_0056C700[];
+extern char D_0056C740[];
+extern char D_0056C780[];
+extern char D_0056C7C0[];
+extern char D_0056C800[];
+
+void func_0017DF98(S2Ctx *ctx) {
+    float total;
+    float used;
+    float ratio;
+
+    total = (float)(u32)(D_0030ECE0 - D_0030ECC0);
+    used = (float)(u32)(D_0030ECD0 - D_0030ECC0);
+    func_002EF240(D_0056C6C0, (double)((used / total) * 100.0f), (double)(used / 16384.0f), (double)(total / 16384.0f));
+
+    total = (float)(u32)(D_0030ECE4 - D_0030ECC4);
+    used = (float)(u32)(D_0030ECD4 - D_0030ECC4);
+    func_002EF240(D_0056C700, (double)((used / total) * 100.0f), (double)(used / 16384.0f), (double)(total / 16384.0f));
+
+    if (D_0030ECDC != D_0030ECBC) {
+        total = (float)(u32)(D_0030ECDC - D_0030ECBC);
+        used = (float)(u32)(D_0030ECCC - D_0030ECBC);
+        total *= 0.25f;
+        used *= 0.25f;
+        func_002EF240(D_0056C740, (double)((used / total) * 100.0f), (double)(used / 16384.0f), (double)(total / 16384.0f));
+    }
+
+    total = (float)(u32)(D_0030ECD8 - D_0030ECB8);
+    used = (float)(u32)(D_0030ECC8 - D_0030ECB8);
+    total *= 0.25f;
+    used *= 0.25f;
+    ratio = used / total;
+    func_002EF240(D_0056C780, (double)(ratio * 100.0f), (double)(used / 16384.0f), (double)(total / 16384.0f));
+
+    if (D_0030ECF4 != D_0030ECEC) {
+        total = (float)(u32)(D_0030ECF4 - D_0030ECEC);
+        used = (float)(u32)(D_0030ECF0 - D_0030ECEC);
+        total *= 0.25f;
+        used *= 0.25f;
+        ratio = used / total;
+        func_002EF240(D_0056C7C0, (double)(ratio * 100.0f), (double)(used / 16384.0f), (double)(total / 16384.0f));
+    }
+
+    switch (ctx->mode) {
+    case 0:
+        goto mode01;
+    case 1:
+    mode01:
+        total = (float)(u32)(D_0030ECA8 - D_0030ECA0);
+        used = (float)(u32)(D_0030ECA4 - D_0030ECA0);
+        total *= 0.25f;
+        used *= 0.25f;
+        ratio = used / total;
+        break;
+    case 2:
+        goto mode234;
+    case 3:
+        goto mode234;
+    case 4:
+    mode234:
+        used = (float)func_0018AAB8();
+        total = 72.0f;
+        ratio = used / total;
+        break;
+    }
+    func_002EF240(D_0056C800, (double)(ratio * 100.0f), (double)used, (double)total);
+}
 
 s32 func_0017E558(s32 arg0) {
     u32 temp_2 = D_0030ECD0;
@@ -73,8 +144,36 @@ s32 func_0017E558(s32 arg0) {
     return -1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017E5A8);
-INCLUDE_RODATA("build/ee_asm/game/yi/yiimage_17DC98/rodata", jtbl_0056C860);
+int func_0017E5A8(Q3Res *r) {
+    switch (r->psm) {
+    case 0x14:
+        if (D_0030ECE8 != 0xFFFFFFFFU) {
+            r->bp = D_0030ECE8;
+            r->psm = 0x24;
+            D_0030ECE8 = 0xFFFFFFFFU;
+        } else {
+            r->bp = yiImage_printusemem(0x2000, 0x14);
+            if ((u32)r->bp < 0x2E00) {
+                r->psm = 0x2C;
+                D_0030ECE8 = r->bp;
+            }
+        }
+        break;
+    case 0x13:
+        r->bp = yiImage_printusemem(0x4000, 0x13);
+        if ((u32)r->bp < 0x2E00) {
+            r->psm = 0x1B;
+        }
+        break;
+    case 2:
+        r->bp = yiImage_printusemem(0x8000, 2);
+        break;
+    case 0:
+    case 1:
+        r->bp = yiImage_printusemem(0x10000, 0);
+        break;
+    }
+}
 
 extern u8 D_0065FC10;
 
@@ -463,7 +562,34 @@ int func_0017F630(Sys597F00 *s, Q3Res *r, YiImage *img) {
     return func_0017F448(r, r->list, img) != 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017F790);
+int func_0017F790(Sys597F00 *s) {
+    u32 i;
+    int k;
+    YiImage *img;
+    u32 used;
+    u32 total;
+
+    for (i = 0; i < s->w9E7D8; i++) {
+        for (k = 0; D_0030EC28[k].name != 0; k++) {
+            if (s->res[i].psm == D_0030EC28[k].psm) {
+                break;
+            }
+        }
+        func_002EF240(D_0056CB48, D_0030EC28[k].name, s->res[i].bp << 6);
+        used = 0;
+        for (img = s->res[i].list; img != 0; img = img->next) {
+            func_002EF240(D_0056CB60, img->name);
+            func_002EF240(D_0056CB78, img->x, img->y, img->w, img->h);
+            func_002EF240(D_0056CBA8, img->cbp << 6, img->csa);
+            used += img->w * img->h;
+        }
+        total = s->res[i].w * s->res[i].h;
+        {
+            float pct = (float)used / (float)total;
+            func_002EF240(D_0056CBD0, (double)(pct * 100.0f));
+        }
+    }
+}
 
 extern char D_0056CBE8[];
 extern char D_0056CBF8[];

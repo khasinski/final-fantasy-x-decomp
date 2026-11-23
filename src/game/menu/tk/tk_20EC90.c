@@ -186,8 +186,109 @@ u16 *func_0020FA18(u16 *pc, R4Anim *a, u8 *root, int pos, s32 *ofs, int flag)
     return (u16 *)(root + ofs[a->w0]) + pos;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", func_0020FA50);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_20EC90/rodata", jtbl_00570AA0);
+int func_0020FA50(u8 *root, R4AnimGrp *grp, R4Anim *an, s32 *ofs)
+{
+    int ret = 1;
+    int loop = 1;
+    u16 *code = (u16 *)(root + ofs[an->w0]);
+    u16 *pc = code + an->h8;
+
+    if (an->h4 != 0) {
+        an->h4--;
+        func_0020F850(code, an, an->h4, an->h6);
+    } else {
+        do {
+            u16 op = *pc;
+            int kind = op & 0x7FF;
+
+            switch (kind) {
+            case 2:
+                an->h6 = -1;
+                an->h4 = 0;
+                if (an->hC < 0) {
+                    u32 n = grp->count;
+                    R4Anim *e = grp->ent;
+                    u16 id = pc[1];
+                    u32 i;
+
+                    for (i = 0; i < n; i++, e++) {
+                        if (id == (e->w0 & 0x3FFFFFFF)) {
+                            an->hC = i;
+                            break;
+                        }
+                    }
+                }
+                if (an->hC >= 0 && *(s32 *)((u8 *)grp + an->hC * (int)sizeof(R4Anim) + 4) < 0) {
+                    loop = 0;
+                } else {
+                    an->h6 = 0;
+                    an->hC = -1;
+                    pc = func_0020F9D8(pc, an, kind, 0);
+                }
+                break;
+            case 3: {
+                u16 dur = pc[1];
+
+                an->h6 = -1;
+                an->h4 = dur;
+                if (dur != 0) {
+                    an->h4 = dur - 1;
+                    loop = 0;
+                }
+                pc = func_0020F9D8(pc, an, kind, 1);
+                break;
+            }
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 10: {
+                u16 dur = pc[1];
+
+                pc = func_0020F9D8(pc, an, kind, 1);
+                an->h4 = dur;
+                an->h6 = dur;
+                if (dur != 0) {
+                    an->h4 = dur - 1;
+                    loop = 0;
+                }
+                break;
+            }
+            case 8:
+                if (op & 0x800) {
+                    an->h10 = 1;
+                } else if (an->h10 <= 0) {
+                    an->h10 = pc[1];
+                } else {
+                    an->h10--;
+                }
+                if (an->h10 > 0) {
+                    pc = func_0020FA18(pc, an, root, an->hE, ofs, 0);
+                } else {
+                    pc = func_0020F9D8(pc, an, kind, 0);
+                    an->h10 = 0;
+                }
+                break;
+            case 9:
+                pc = func_0020F9D8(pc, an, kind, 0);
+                an->hE = an->h8;
+                break;
+            case 1:
+                pc = func_0020F9D8(pc, an, kind, 1);
+                break;
+            case 0:
+                an->w0 &= 0x3FFFFFFF;
+                an->h6 = -1;
+                an->h4 = 0;
+                ret = 0;
+                loop = 0;
+                break;
+            }
+        } while (loop != 0);
+        func_0020F850(code, an, an->h4, an->h6);
+    }
+    return ret;
+}
 
 int TkMenuExecScene(int a, int idx)
 {

@@ -493,7 +493,231 @@ void func_00144D48(int v) {
     D_0058E3D8->w44 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_143BD0", AtelRequireCtrlWork);
+typedef struct {
+    union {
+        u32 w;
+        struct {
+            unsigned b0 : 1;
+            unsigned b1 : 1;
+            unsigned b2 : 1;
+            unsigned b3 : 1;
+            unsigned b4 : 1;
+            unsigned b5 : 1;
+            unsigned b6 : 1;
+            unsigned b7 : 1;
+            unsigned b8 : 1;
+            unsigned b9 : 1;
+            unsigned b10 : 1;
+            unsigned b11 : 1;
+            unsigned b12 : 1;
+            unsigned b13 : 1;
+            unsigned b14 : 1;
+            unsigned b15 : 1;
+            unsigned b16 : 1;
+            unsigned b17 : 1;
+            unsigned b18 : 1;
+            unsigned b19 : 1;
+            unsigned b20 : 1;
+            unsigned b21 : 1;
+            unsigned b22 : 1;
+            unsigned b23 : 1;
+            unsigned b24_25 : 2;
+            unsigned b26 : 1;
+            unsigned b27 : 1;
+            unsigned b28 : 1;
+            unsigned b29 : 1;
+            unsigned b30 : 1;
+            unsigned b31 : 1;
+        } b;
+    } f00;
+    s16 h04;
+    s16 h06;
+    u8 b08;
+    u8 pad09;
+    u16 h0A;
+    u16 h0C;
+    u16 pad0E;
+    u16 h10;
+    u16 h12;
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    s16 h1A;
+    s32 w1C;
+    s32 w20;
+    s32 w24;
+    s32 w28;
+    s32 w2C;
+    s32 w30;
+    s32 w34;
+    u8 pad38[0xC];
+    s32 w44;
+    s32 w48;
+    s32 w4C;
+    void *p50;
+    s32 w54;
+    s32 w58;
+    s32 w5C;
+    s32 w60;
+    u8 pad64[0x40];
+    struct {
+        unsigned b0 : 8;
+        unsigned b1 : 8;
+        u8 pad[6];
+    } subA4[32];
+    struct {
+        s32 w0;
+        s32 w4;
+    } sub1A4[8];
+    u8 b1E4;
+    u8 pad1E5[2];
+    u8 b1E7;
+    u16 h1E8;
+    u8 b1EA;
+    u8 pad1EB;
+    s32 w1EC;
+    s32 w1F0;
+    s32 w1F4;
+    s32 w1F8;
+    s32 w1FC;
+    s32 w200;
+    s32 w204;
+    s32 w208;
+    s32 w20C;
+    union {
+        u32 w;
+        struct {
+            unsigned b0 : 1;
+            unsigned b1 : 1;
+            unsigned b2 : 1;
+            unsigned b3 : 1;
+            unsigned b4 : 1;
+            unsigned b5 : 1;
+            unsigned b6 : 1;
+            unsigned pad : 25;
+        } b;
+    } f210;
+    s32 w214;
+    s32 w218;
+    s32 w21C;
+    s32 w220;
+    float f224;
+    s32 w228;
+    s32 w22C;
+    s32 w230;
+    float f234;
+} AtelCtrlWorkView;
+
+AtelCtrlWorkView *AtelRequireCtrlWork(int a0, Actor *a1, s32 a2, s32 a3)
+{
+    AtelCtrlWorkView *r = (AtelCtrlWorkView *)AtelGetCtrlWork(a0);
+    int i;
+
+    r->f00.b.b0 = 0;
+    r->f00.b.b2 = 0;
+    r->f00.b.b3 = 0;
+    r->f00.b.b7 = 1;
+    r->f00.b.b21 = 0;
+    r->f00.b.b4 = 0;
+    r->f00.b.b8 = 0;
+    r->f00.b.b9 = 0;
+    r->f00.b.b14 = 0;
+    r->f00.b.b15 = 1;
+    r->f00.b.b10 = 0;
+    r->f00.b.b26 = 0;
+    r->f00.b.b31 = 0;
+    r->f00.b.b11 = 1;
+    r->f00.b.b24_25 = 0;
+    r->f00.b.b22 = 1;
+    r->f00.b.b1 = 0;
+    r->f00.b.b5 = 0;
+    r->f00.b.b6 = 0;
+    r->f00.b.b12 = 1;
+    r->f00.b.b13 = 0;
+    r->f00.b.b16 = 0;
+    r->f00.b.b17 = 0;
+    r->f00.b.b18 = 0;
+    r->f00.b.b19 = 1;
+    r->f00.b.b23 = 1;
+    r->f00.b.b27 = 0;
+    r->f210.b.b0 = 1;
+    r->f210.b.b1 = 0;
+    r->f210.b.b2 = 0;
+    r->f210.b.b3 = 1;
+    r->f210.b.b4 = 0;
+    r->f210.b.b5 = 0;
+    r->w1C = a2;
+    r->w24 = a3;
+    r->p50 = (void *)AtelExecInitFunc;
+    r->h04 = 4;
+    r->h06 = 2;
+    r->b1E7 = 0xFF;
+    r->w20C = 0;
+    r->w20 = 0;
+    r->w28 = 0;
+    r->w2C = 0;
+    r->w30 = 0;
+    r->w4C = 0;
+    r->w58 = 0;
+    r->w5C = 0;
+    r->w60 = 0;
+    r->w34 = 0;
+    r->h1A = a0;
+    r->w44 = 0;
+    r->b1EA = 0;
+    r->w200 = 0;
+    r->w204 = 0;
+    r->w1F8 = 0;
+    r->w1FC = 0;
+    r->w1F4 = 0;
+    r->w54 = 0;
+    r->b08 = 0;
+    r->h0A = 0xFFFF;
+    r->w48 = (s32)a1;
+    r->w228 = 0;
+    r->w22C = 0;
+    r->w230 = 0;
+    r->f234 = 1.0f;
+    r->f224 = 1.0f;
+    r->h1E8 = 0xFFFF;
+    r->f00.b.b28 = 1;
+    r->f00.b.b29 = 1;
+    r->f00.b.b30 = 0;
+    r->f210.b.b6 = 1;
+    r->w214 = -1;
+    r->w218 = 0;
+    r->w21C = 0;
+    r->w220 = 0;
+    r->b1E4 = 0;
+    r->w1EC = 0;
+    r->w1F0 = 0;
+    r->w208 = 0;
+    if (a1 != 0) {
+        r->h0C = AtelGetActorNumber(a1);
+        r->h10 = AtelGetNamespaceNumber(a1);
+        r->h12 = r->h0C;
+        r->h14 = AtelGetLineNumber(a1);
+        r->h18 = AtelGetELineNumber(a1);
+        r->h16 = AtelGetBgNumber(a1);
+    } else {
+        r->h0C = 0;
+        r->h10 = 0;
+        r->h12 = 0;
+        r->h14 = 0;
+        r->h18 = 0;
+        r->h16 = 0;
+    }
+    ((void (*)(int))func_00143BD0)(a0);
+    for (i = 0; i < 32; i++) {
+        r->subA4[i].b0 = 0;
+        r->subA4[i].b1 = 0;
+    }
+    for (i = 7; i >= 0; i--) {
+        r->sub1A4[i].w0 = 0;
+    }
+    ((void (*)(void))func_0013AC00)();
+    return r;
+}
 
 EvGameState *_m2c_AtelSetUpCtrlWork_AtelGetCtrlWork() __asm__("AtelGetCtrlWork");
 s32 _m2c_AtelSetUpCtrlWork_func_00124828() __asm__("func_00124828");

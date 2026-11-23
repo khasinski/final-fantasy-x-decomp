@@ -1,4 +1,5 @@
 /* tu_266 0x23cbd0-0x2414f0: medium; ~Tk (config/tu_map.tsv) */
+#define TkMenuCtrlSelFileWindow _hdr_TkMenuCtrlSelFileWindow
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -6,6 +7,8 @@
 #include "ffx/s5.h"
 #include "ffx/u4.h"
 #include "ffx/v5.h"
+#undef TkMenuCtrlSelFileWindow
+void TkMenuCtrlSelFileWindow(Task *t);
 
 void func_0023CBD0(char *dst, int n)
 {
@@ -369,8 +372,205 @@ void TkMenuRestartSelFileWindow(Task *o) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", TkMenuCtrlSelFileWindow);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572D00);
+void TkMenuCtrlSelFileWindow(Task *t)
+{
+    s32 *state = &t->state;
+    u32 pad = func_00220318();
+    u32 rep = TOMenuGetControlPadRep();
+    u32 trg = TOMenuGetControlPadTrg();
+    int st = *state;
+
+loop:
+    switch (st) {
+    case 0:
+        *state = 2;
+        break;
+    case 1:
+        t->b45 = 0;
+        *state = 2;
+        break;
+    case 2:
+        if (trg & 0x20) {
+            if (t->x1C != 0) {
+                if (((int (*)(Task *, int, int))t->x1C)(t, t->x48, t->b45) != 0) {
+                    if (t->b45 == t->b42 - 1) {
+                        if (t->b37 != 0) {
+                            SndSepPlaySimple(0x80000001);
+                        }
+                    } else {
+                        SndSepPlaySimple(0x80000001);
+                    }
+                    *state = 0xF;
+                } else {
+                    SndSepPlaySimple(0x80000003);
+                    return;
+                }
+            } else {
+                if (t->b45 == t->b42 - 1) {
+                    if (t->b37 != 0) {
+                        SndSepPlaySimple(0x80000001);
+                    }
+                } else {
+                    SndSepPlaySimple(0x80000001);
+                }
+                *state = 0xF;
+            }
+        } else if (trg & 0x40) {
+            PLAY_SE(0x80000004);
+            *state = 0x11;
+        } else if ((rep & 0x1000) && t->x48 > 0) {
+            PLAY_SE(0x80000001);
+            t->x48--;
+            if (t->x48 < t->x32) {
+                st = 7;
+                goto loop;
+            }
+        } else if ((rep & 0x4000) && t->x48 < (u16)t->x30 - 1) {
+            PLAY_SE(0x80000001);
+            t->x48++;
+            if (t->x48 >= t->x32 + (u16)t->x3A) {
+                st = 0xB;
+                goto loop;
+            }
+        } else {
+            int next;
+
+            if ((rep & 1) && pad == 1 && t->x48 > 0) {
+                next = t->x32 - (u16)t->x3A;
+
+                if (next < 0) {
+                    next = 0;
+                }
+                if (next != t->x32) {
+                    t->x34 = next;
+                    st = 8;
+                    goto loop;
+                }
+            }
+            if ((rep & 2) && pad == 2 && t->x48 < (u16)t->x30 - 1) {
+                int maxTop = (u16)t->x30 - (u16)t->x3A;
+
+                next = t->x32 + (u16)t->x3A;
+                if (next >= maxTop) {
+                    next = maxTop;
+                    if (next < 0) {
+                        next = 0;
+                    }
+                }
+                if (next != t->x32) {
+                    t->x34 = next;
+                    st = 0xC;
+                    goto loop;
+                }
+            }
+        }
+        break;
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 0x10:
+    case 0x12:
+        break;
+    case 7:
+        trg = 0;
+        PLAY_SE(0x80000001);
+        t->x46 = 0x1000;
+        t->x32--;
+        t->x34 = t->x32;
+        *state = 9;
+        st = 9;
+        goto loop;
+    case 8:
+        trg = 0;
+        PLAY_SE(0x80000001);
+        t->x46 = 0x1000;
+        *state = 0xA;
+        st = 0xA;
+        goto loop;
+    case 9:
+        t->x46 -= 0x199;
+        if (t->x46 <= 0 || (trg & 0x1000)) {
+            trg = 0;
+            t->x48 -= t->x32 - t->x34;
+            t->x32 = t->x34;
+            t->x46 = 0;
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 0xA:
+        t->x46 -= 0x111;
+        if (t->x46 <= 0) {
+            t->x48 -= t->x32 - t->x34;
+            t->x32 = t->x34;
+            t->x46 = 0;
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 0xB:
+        trg = 0;
+        PLAY_SE(0x80000001);
+        t->x46 = -0x1000;
+        t->x32++;
+        t->x34 = t->x32;
+        *state = 0xD;
+        st = 0xD;
+        goto loop;
+    case 0xC:
+        trg = 0;
+        PLAY_SE(0x80000001);
+        t->x46 = -0x1000;
+        *state = 0xE;
+        st = 0xE;
+        goto loop;
+    case 0xD:
+        t->x46 += 0x199;
+        if (t->x46 >= 0 || (trg & 0x4000)) {
+            trg = 0;
+            t->x48 += t->x34 - t->x32;
+            t->x32 = t->x34;
+            t->x46 = 0;
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 0xE:
+        t->x46 += 0x111;
+        if (t->x46 >= 0) {
+            t->x48 += t->x34 - t->x32;
+            t->x32 = t->x34;
+            t->x46 = 0;
+            *state = 2;
+            st = 2;
+            goto loop;
+        }
+        break;
+    case 0xF:
+        *(s16 *)((u8 *)t + (t->b45 << 1) + 0x2C) = t->x48;
+        t->b45++;
+        if (t->b45 < t->b42) {
+            *state = 2;
+            break;
+        }
+        *state = 0x10;
+        st = 0x10;
+        goto loop;
+    case 0x11:
+        t->b45--;
+        if (t->b45 >= 0) {
+            *state = 2;
+            break;
+        }
+        *state = 0x12;
+        st = 0x12;
+        goto loop;
+    }
+}
 
 int func_0023E310(int sel, int a) {
     switch (sel) {

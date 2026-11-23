@@ -43,10 +43,152 @@ void func_00180BE8(void *unused) {
     }
 }
 
+typedef union {
+    u32 w;
+    struct {
+        u16 imm;
+        u8 num;
+        u8 cmd;
+    } s;
+    struct {
+        u8 cl;
+        u8 wl;
+        u8 num;
+        u8 cmd;
+    } c;
+    struct {
+        u16 imm;
+        u8 num;
+        struct {
+            u8 vl : 2;
+            u8 vn : 2;
+            u8 pad : 4;
+        } b;
+    } b;
+} YiVifCode;
+
+typedef struct {
+    u32 w[4];
+} YiVuQ;
+
+typedef struct {
+    YiVuQ vu[0x400];
+    union {
+        struct {
+            u32 b0 : 7;
+            u32 dbf : 1;
+        } f;
+        u64 q;
+    } stat;
+    u8 pad4008[0x48];
+    u32 row[4];
+    u32 col[4];
+    u32 mask;
+    u32 top;
+    u32 tops;
+    u32 base;
+    u32 offset;
+    u32 mode;
+    u32 mark;
+    u8 wl;
+    u8 cl;
+} YiVifCtx;
+
+s32 func_00180C58(YiVifCtx *ctx, u32 *packet, YiVifCode *code);
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00180C58);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", yiExecVIFpacket);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_180B70/rodata", jtbl_0056CDE0);
+s32 yiExecVIFpacket(YiVifCtx *ctx, u32 *packet, u32 len)
+{
+    u32 *p = packet;
+    YiVifCode code;
+    u32 cmd;
+    int i;
+
+    while ((u32)(p - packet) < len) {
+        code.w = *p++;
+        cmd = code.s.cmd;
+        cmd &= 0x7F;
+        if ((cmd & 0x60) == 0x60) {
+            cmd = 0x60;
+        }
+        switch (cmd) {
+        case 0x00:
+        case 0x06:
+        case 0x10:
+        case 0x11:
+        case 0x13:
+            break;
+        case 0x01:
+            ctx->wl = code.s.imm >> 8;
+            ctx->cl = code.c.cl;
+            break;
+        case 0x02:
+            ctx->offset = code.s.imm & 0x3FF;
+            ctx->stat.f.dbf = 0;
+            ctx->tops = ctx->base;
+            break;
+        case 0x03:
+            {
+                u32 v = code.s.imm & 0x3FF;
+                ctx->base = v;
+                ctx->stat.f.dbf = 0;
+                ctx->tops = v;
+            }
+            break;
+        case 0x04:
+            ctx->tops = code.s.imm & 0x3FF;
+            break;
+        case 0x05:
+            ctx->mode = code.s.imm & 3;
+            break;
+        case 0x07:
+            ctx->mark = code.s.imm;
+            break;
+        case 0x14:
+        case 0x15:
+        case 0x17:
+            ctx->top = ctx->tops;
+            if (ctx->stat.f.dbf != 0) {
+                ctx->tops = ctx->base;
+                ctx->stat.f.dbf = 0;
+            } else {
+                ctx->tops = ctx->base + ctx->offset;
+                ctx->stat.f.dbf = 1;
+            }
+            goto end;
+        case 0x20:
+            ctx->mask = *p++;
+            break;
+        case 0x30:
+            for (i = 0; i < 4; i++) {
+                ctx->row[i] = *p++;
+            }
+            break;
+        case 0x31:
+            for (i = 0; i < 4; i++) {
+                ctx->col[i] = *p++;
+            }
+            break;
+        case 0x4A:
+            for (i = 0; i < code.s.num; i++) {
+                p += 2;
+            }
+            break;
+        case 0x50:
+        case 0x51:
+            p += code.s.imm * 4;
+            break;
+        case 0x60:
+            p += func_00180C58(ctx, p, &code);
+            break;
+        default:
+            BREAK();
+            break;
+        }
+    }
+end:
+    return p - packet;
+}
 
 void func_001812C0(void)
 {
