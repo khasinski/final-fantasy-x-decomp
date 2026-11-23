@@ -1,5 +1,6 @@
 /* tu_305 0x27f2e8-0x2803c0: low; ~KeLnsLp (config/tu_map.tsv) */
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
+#define func_0027FC48 _hdr_func_0027FC48
 #include "common.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
@@ -7,6 +8,7 @@
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 #include "ffx/g4.h"
+#undef func_0027FC48
 
 void func_0027F2E8(R6Hb *dst, DataRef **p) {
     dst->h0 = (*p)->keys[0].dur;
@@ -62,7 +64,40 @@ void func_0027F928(void *p)
 
 INCLUDE_ASM("build/ee_asm/game/particle/ke_27F2E8", func_0027F960);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_27F2E8", func_0027FC48);
+typedef struct {
+    R6Hb hb;
+    float f4;
+} KeLnsItem;
+
+typedef struct {
+    void *w;
+    DataRef **anim;
+    u8 cnt;
+    u8 flags;
+    s16 hA;
+    s16 hC;
+    u8 bE;
+    u8 padF;
+    KeLnsItem items[1];
+} KeLnsSlot;
+
+void func_0027FC48(KeLnsSlot *s, DataRef **anim, int seed)
+{
+    int i;
+
+    s->anim = anim;
+    for (i = 0; i < s->cnt; i++) {
+        func_0027F2E8(&s->items[i].hb, anim);
+    }
+    if ((s->flags & 1) == 0) {
+        int r = seed;
+        for (i = 0; i < s->cnt; i++) {
+            r = (r * 0x80D + 7) & 0xFFFF;
+            s->items[i].f4 = (float)r / 65535.0f;
+        }
+        s->flags |= 1;
+    }
+}
 
 void func_0027FD48(R6VObj *o) {
     o->w4 = 0;

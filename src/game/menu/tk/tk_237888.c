@@ -156,6 +156,8 @@ int func_0014B0A0(void);
 int func_002664D8(int a, int b, int c);
 int func_00266DC8(int a, int b);
 void func_00226800(int a, int x, int y, int d);
+void func_00226E90(FlagRec *rect);
+void func_00226A40(void *weapon, int x, int y, int disabled);
 
 void func_00237E28(int x, int y, WeaponRec *w)
 {

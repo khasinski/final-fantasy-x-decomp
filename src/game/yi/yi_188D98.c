@@ -102,6 +102,57 @@ float func_00188F48(Sys597F00 *s) {
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_00189040);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_0018A4E8);
+void func_0018A4E8(void)
+{
+    u32 pkt[64];
+    u32 *p1, *p2, *p3, *p4, *p5, *p6, *p7;
+
+    pkt[0] = 0x8008;
+    pkt[1] = 0x10000000;
+    pkt[2] = 0xE;
+    pkt[3] = 0;
+
+    p1 = &pkt[4];
+    p1[0] = 0x010800D0;
+    p1[1] = 0;
+    p1[2] = 0x4C;
+    p1[3] = 0;
+
+    p2 = &pkt[8];
+    p2[0] = 0x20000;
+    p2[1] = 0;
+    p2[2] = 0x47;
+    p2[3] = 0;
+
+    p3 = &pkt[12];
+    p3[0] = 6;
+    p3[1] = 0;
+    p3[2] = 0;
+    p3[3] = 0;
+
+    p4 = &pkt[16];
+    p4[0] = 0x80000000;
+    p4[3] = 0;
+    p4[2] = 1;
+    p4[1] = 0x3F800000;
+
+    p5 = &pkt[20];
+    p5[0] = 0x73007000;
+    p5[1] = 0;
+    p5[2] = 0xD;
+    p5[3] = 0;
+
+    p6 = &pkt[24];
+    p6[0] = 0x8D009000;
+    p6[1] = 0;
+    p6[2] = 5;
+    p6[3] = 0;
+
+    p7 = &pkt[28];
+    p7[0] = 0;
+    p7[1] = 0;
+    p7[2] = 0x3F;
+    p7[3] = 0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_188D98", func_0018A5E0);

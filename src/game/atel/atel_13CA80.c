@@ -196,7 +196,34 @@ int func_0013CF40(Actor *a, ScriptCtx *ctx) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", AtelPopStackFloat);
+float AtelPopStackFloat(Actor *a, ScriptCtx *ctx) {
+    register ScriptCtx *c __asm__("$6") = ctx;
+    int n = c->argc;
+    float r;
+
+    if (n <= 0) {
+        ActorBind *b;
+        char *fmt;
+        int id;
+        register int pos __asm__("$6");
+        func_002EF240(D_0056A860);
+        b = func_0013C9C8(a, a->slotIdx);
+        fmt = D_0056A878;
+        id = a->id;
+        pos = func_0013CB48(a, b);
+        func_002EF240(fmt, id, pos);
+        func_0013AB38((int)a, 2);
+        return 0.0f;
+    }
+    n--;
+    if (c->tag[n] == 2) {
+        r = *(float *)&c->v[n];
+    } else {
+        r = (float)*(int *)&c->v[n];
+    }
+    c->argc = n;
+    return r;
+}
 
 int func_0013D068(Actor *a, int i) {
     return AtelGetRealVarAdrs(a, func_0013CC80(a, i));
@@ -819,7 +846,36 @@ void func_0013E968(Actor *a, void *op) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013E9B8);
+void func_0013E9B8(Actor *a, void *op) {
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ObjSlotBR *s = ((ObjBindR *)op)->s48;
+    float f = st->f34;
+    u16 h2 = s->h2;
+
+    if (AQ(a)->stateAA == 1 && AQ(a)->ptr9C != 0) {
+        func_00110300(AQ(a)->ptr9C, f);
+    }
+    switch (h2 & 0x1F) {
+    case 5:
+        goto done;
+    case 3:
+    case 4:
+        if (s->f08 > s->fC && !(s->h2 & 0x4000)) {
+            s->h2 &= 0x5000;
+            func_0013BE58(a, -1);
+        }
+        break;
+    }
+    if (st->f34 == s->f20) {
+        if ((!(s->h2 & 0x80) || st->f30 == s->f24) && (!(s->h2 & 0x40) || st->f38 == s->f28)) {
+            if (!(s->h2 & 0x4000)) {
+                s->h2 &= 0x5000;
+                func_0013BE58(a, -1);
+            }
+        }
+    }
+done:;
+}
 
 int func_0013EB20(Actor *a, int v) {
     ObjBindR *b = OBJBIND(a, a->slotIdx);

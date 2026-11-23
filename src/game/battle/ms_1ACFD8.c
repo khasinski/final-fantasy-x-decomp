@@ -990,7 +990,102 @@ s8 MsBattleGetMapCircleOn(void) {
     return D_0031733B;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBattleEncountExe);
+typedef struct {
+    u8 pad00[0x12];
+    s8 f12;
+    u8 pad13[0x14];
+    s8 f27;
+    u8 pad28[0xDE];
+    u8 f106;
+    u8 f107;
+    float f108;
+    float f10C;
+    float f110;
+    float f114;
+    u8 pad118[0x186E];
+    s16 f1986;
+    u8 f1988;
+    u8 f1989;
+} BtlEncGS;
+
+typedef struct {
+    u8 pad0[0x3D14];
+    s32 f3D14;
+} SaveData3D14;
+
+extern int brnd(int);
+extern int func_00117E28(int);
+
+#define BTL_ENC_GS ((BtlEncGS *)&D_003172F0)
+
+int MsBattleEncountExe(int field_id, int enc, float dt)
+{
+    int fld = MsBtlListFieldNum(field_id);
+    u8 *enc_tbl;
+    u8 *p;
+    int step;
+
+    if (BTL_ENC_GS->f12 == 2) {
+        return 0;
+    }
+    if (fld < 0) {
+        return 0;
+    }
+    if ((double)dt == 0.0) {
+        return 0;
+    }
+    if (BTL_ENC_GS->f107 == 0) {
+        return 0;
+    }
+    enc_tbl = MsBtlListEncount(fld);
+    if (enc < 0 || enc >= enc_tbl[1]) {
+        return 0;
+    }
+    p = func_001B3448(fld, enc);
+    if (p[3] == 0) {
+        return 0;
+    }
+    if (p[4] == 0) {
+        return 0;
+    }
+    BTL_ENC_GS->f108 += dt;
+    BTL_ENC_GS->f10C += dt;
+    BTL_ENC_GS->f106 = p[3];
+    step = (int)((double)BTL_ENC_GS->f10C / 10.0);
+    while ((double)BTL_ENC_GS->f108 > 10.0) {
+        u8 rate = p[3];
+        if (step > (rate >> 1)) {
+            step -= (rate >> 1);
+            step = (step << 8) / (rate * 4);
+            BTL_ENC_GS->f110 *= (float)(256 - step);
+            BTL_ENC_GS->f114 *= 256.0f;
+            if ((brnd(0) & 0xFF) < step) {
+                int r = brnd(1) % p[4];
+                int sum = 0;
+                u8 *q = p + 5;
+                int i;
+                for (i = 0; i < p[0]; i++, q += 2) {
+                    sum += q[1] >> 4;
+                    if (r < sum) {
+                        if (BTL_ENC_GS->f27 != 0) {
+                            func_00117E28(3);
+                            ((SaveData3D14 *)&D_003194D0)->f3D14++;
+                        } else {
+                            BTL_ENC_GS->f12 = 1;
+                        }
+                        BTL_ENC_GS->f1986 = fld;
+                        BTL_ENC_GS->f1988 = enc;
+                        BTL_ENC_GS->f1989 = i;
+                        func_001AD9C8(1);
+                        return -1;
+                    }
+                }
+            }
+        }
+        BTL_ENC_GS->f108 -= 10.0;
+    }
+    return 0;
+}
 
 void MsWalkAbilityProcess(float dt) {
     int i;

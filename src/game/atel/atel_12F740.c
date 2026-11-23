@@ -1,5 +1,6 @@
 /* tu_060 0x12f740-0x135510: low; unk_12F740 (config/tu_map.tsv) */
 #define func_00133BB8 _hdr_func_00133BB8
+#define func_002D4410 _hdr_func_002D4410
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -8,6 +9,9 @@
 #include "ffx/q1.h"
 #include "ffx/s0.h"
 #undef func_00133BB8
+#undef func_002D4410
+
+float func_002D4410(float y, float x);
 
 int func_0012F740(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
@@ -1228,8 +1232,357 @@ void func_001324E0(Actor *a, OpBlk *op, ScriptCtx *ctx) {
     func_002D9030(y);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_00132588);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_12F740/rodata", jtbl_0056A4A0);
+extern s32 D_0058CF00;
+extern s32 D_0058CF04;
+extern s32 D_0058CF08;
+extern s32 D_0058CF0C;
+extern s32 D_0058CF40;
+typedef struct {
+    u8 pad00[0x10];
+    s32 size;
+    u8 pad14[0x0C];
+    u8 name[0x20];
+} McDirEnt;
+
+extern s32 D_0030B170[4];
+extern u8 D_0030B180[];
+extern McDirEnt D_0030B280;
+extern u8 D_00326F58[];
+
+int func_00132588(Actor *a, OpBlk *op)
+{
+    s32 res4;
+    s32 res6;
+    s32 res9;
+    s32 res13;
+    s32 res15;
+    s32 res17;
+    int ret = 0;
+    int state = op->w0;
+
+again:
+    switch (state) {
+    case 0:
+        op->w0 = 1;
+        /* fallthrough */
+    case 1:
+        if (func_002D8AC8(1, 0, 0) != 0) {
+            op->w0 = 3;
+            state = 3;
+            goto again;
+        }
+        break;
+    case 2:
+        op->bE = 4;
+        op->w0 = 3;
+        /* fallthrough */
+    case 3:
+        D_0058CF00 = 0;
+        D_0058CF04 = 0;
+        D_0058CF08 = 0;
+        if (func_002D9050(func_002D9040(), &D_0058CF00, &D_0058CF04, &D_0058CF08) != 0) {
+            op->w0 = 1;
+            break;
+        }
+        op->w0 = 4;
+        /* fallthrough */
+    case 4: {
+        int st = func_002D8AC8(1, 0, &res4);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            if ((s8)(--op->bE) < 0) {
+                if (op->h8 != 0) {
+                    op->bC = 5;
+                } else {
+                    op->bC = 0;
+                }
+                state = 0x12;
+                goto again;
+            }
+            op->w0 = 2;
+        }
+        switch (res4) {
+        case -2:
+            if (op->bB == 1) {
+                op->bC = 4;
+            } else {
+                op->bC = 2;
+            }
+            if (D_0058CF00 != 2) {
+                op->bC = 0;
+            }
+            state = 0x12;
+            goto again;
+        case -1:
+            if (op->bD == 0) {
+                op->bC = 5;
+                if (D_0058CF00 != 2) {
+                    op->bC = 0;
+                }
+                state = 0x12;
+                goto again;
+            }
+            /* fallthrough */
+        case 0:
+            op->bD = 0;
+            if (D_0058CF08 == 0) {
+                if (op->bB == 1) {
+                    if (D_0058CF00 != 2) {
+                        op->bC = 0;
+                    } else {
+                        op->bC = 4;
+                    }
+                } else {
+                    if (D_0058CF00 != 2) {
+                        op->bC = 0;
+                    } else {
+                        op->bC = 2;
+                    }
+                }
+                state = 0x12;
+                goto again;
+            }
+            if (D_0058CF00 != 2) {
+                op->bC = 0;
+                state = 0x12;
+                goto again;
+            }
+            if (op->bB == 1 && D_0058CF04 >= func_0014F168()) {
+                op->bC = 4;
+                state = 0x12;
+                goto again;
+            }
+            op->h8 = 0;
+            op->w0 = 5;
+            state = 5;
+            goto again;
+        default:
+            if (op->h8 != 0) {
+                op->bC = 5;
+            } else {
+                op->bC = 0;
+            }
+            state = 0x12;
+            goto again;
+        }
+    }
+    case 5: {
+        int i;
+        for (i = 0; i < 4; i++) {
+            D_0030B170[i] = 0;
+        }
+        func_002D9208(D_0030B180, D_00326F58);
+        if (func_002D8E40(D_0030B180, 0, 1, &D_0030B280) == 0) {
+            op->w0 = 6;
+            state = 6;
+            goto again;
+        }
+        op->w0 = 2;
+        break;
+    }
+    case 7:
+        if (func_002D8E40(D_0030B180, 1, 1, &D_0030B280) == 0) {
+            op->w0 = 6;
+            state = 6;
+            goto again;
+        }
+        op->w0 = 2;
+        break;
+    case 6: {
+        int st = func_002D8AC8(1, 0, &res6);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+            break;
+        }
+        if (res6 == 1) {
+            int idx = func_002D9270(D_0030B280.name);
+            D_0030B170[idx / 32] |= 1 << idx;
+            op->w0 = 7;
+            state = 7;
+            goto again;
+        }
+        if (res6 != 0) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 8;
+        state = 8;
+        goto again;
+    }
+    case 8: {
+        int idx;
+        if (op->h8 >= 0x63) {
+            op->bC = 6;
+            state = 0x12;
+            goto again;
+        }
+        idx = op->h8;
+        if (!((D_0030B170[idx / 32] >> idx) & 1)) {
+            op->h8 = idx + 1;
+            state = 8;
+            goto again;
+        }
+        func_002D9198(D_0030B180, D_00326F58, idx);
+        if (func_002D8E40(D_0030B180, 0, 1, &D_0030B280) == 0) {
+            op->w0 = 9;
+            state = 9;
+            goto again;
+        }
+        op->w0 = 2;
+        break;
+    }
+    case 9: {
+        int st = func_002D8AC8(1, 0, &res9);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+        }
+        if (res9 == 0) {
+            op->w0 = 8;
+            op->h8++;
+            break;
+        }
+        if (res9 == 1) {
+            if (D_0030B280.size == 0x64F8) {
+                if (op->bB == 1) {
+                    op->bC = 4;
+                    state = 0x12;
+                    goto again;
+                }
+                op->w0 = 0xA;
+                state = 0xA;
+                goto again;
+            }
+            if (op->bB == 1 && D_0058CF04 + (int)((u32)(D_0030B280.size + 0x3FF) >> 10) >= 0x1A) {
+                op->bC = 4;
+                state = 0x12;
+                goto again;
+            }
+            op->w0 = 8;
+            op->h8++;
+            break;
+        }
+        if (res9 != -4) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 8;
+        op->h8++;
+        break;
+    }
+    case 0xA:
+        if (func_002D8D28(D_0030B180, 1) != 0) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0xB;
+        state = 0xB;
+        goto again;
+    case 0xB: {
+        int st = func_002D8AC8(1, 0, &D_0058CF0C);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+        }
+        if (D_0058CF0C < 0) {
+            op->w0 = 8;
+            op->h8++;
+        }
+        op->w0 = 0xC;
+        state = 0xC;
+        goto again;
+    }
+    case 0xC:
+        if (func_002D8BB8(D_0058CF0C, 0x3D50, 0) != 0) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0xD;
+        state = 0xD;
+        goto again;
+    case 0xD: {
+        int st = func_002D8AC8(1, 0, &res13);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+        }
+        if (res13 != 0x3D50) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0xE;
+        state = 0xE;
+        goto again;
+    }
+    case 0xE:
+        if (func_002D8CD0(D_0058CF0C, &D_0058CF40, 4) != 0) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0xF;
+        state = 0xF;
+        goto again;
+    case 0xF: {
+        int st = func_002D8AC8(1, 0, &res15);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+            break;
+        }
+        if (res15 != 4) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0x10;
+        state = 0x10;
+        goto again;
+    }
+    case 0x10:
+        if (func_002D8FA0(D_0058CF0C) != 0) {
+            op->w0 = 2;
+            break;
+        }
+        op->w0 = 0x11;
+        state = 0x11;
+        goto again;
+    case 0x11: {
+        int st = func_002D8AC8(1, 0, &res17);
+        if (st == 0) {
+            break;
+        }
+        if (st < 0) {
+            op->w0 = 2;
+        }
+        if (res17 == 0) {
+            op->h8++;
+            op->w4 |= D_0058CF40;
+            op->bF = 1;
+            op->w0 = 8;
+            break;
+        }
+        op->w0 = 2;
+        break;
+    }
+    case 0x12:
+        ret = 5;
+        break;
+    }
+done:
+    return ret;
+}
 
 int func_00132CB8(Actor *a, OpMove *op)
 {

@@ -43,7 +43,52 @@ void Sg_VectorToMatrix2(float (*m)[4], float *v)
     m[2][2] = v1[2];
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", Sg_MatrixToQuaternion);
+typedef struct {
+    int a[3];
+} Next3;
+extern const Next3 D_00569FB8;
+
+void Sg_MatrixToQuaternion(float (*m)[4], float *q)
+{
+    float tmp[4];
+    Next3 nxt = D_00569FB8;
+    float tr = m[0][0] + m[1][1] + m[2][2];
+    float s;
+
+    if ((double)tr > 0.0) {
+        s = sqrtf(tr + 1.0);
+        q[3] = s * 0.5;
+        s = 0.5 / s;
+        q[0] = (m[1][2] - m[2][1]) * s;
+        q[1] = (m[2][0] - m[0][2]) * s;
+        q[2] = (m[0][1] - m[1][0]) * s;
+    } else {
+        int i = 0;
+        int j;
+        int k;
+
+        if (m[1][1] > m[0][0]) {
+            i = 1;
+        }
+        if (m[2][2] > m[i][i]) {
+            i = 2;
+        }
+        j = nxt.a[i];
+        k = nxt.a[j];
+        s = sqrtf((m[i][i] - (m[j][j] + m[k][k])) + 1.0);
+        tmp[i] = s * 0.5;
+        if ((double)s != 0.0) {
+            s = 0.5 / s;
+        }
+        tmp[3] = (m[j][k] - m[k][j]) * s;
+        tmp[j] = (m[i][j] + m[j][i]) * s;
+        tmp[k] = (m[i][k] + m[k][i]) * s;
+        q[0] = tmp[0];
+        q[1] = tmp[1];
+        q[2] = tmp[2];
+        q[3] = tmp[3];
+    }
+}
 
 /* DEBT(CAST) */
 void func_00120958(void *arg0, void *arg1) {
@@ -101,4 +146,5 @@ void func_00120958(void *arg0, void *arg1) {
     (*(s32 *)((u8 *)(arg1) + (0x38))) = 0;
 }
 
+extern double func_002E8B38(double);
 INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", Sg_QuaternionSlerp);

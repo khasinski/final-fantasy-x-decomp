@@ -1,4 +1,5 @@
 /* tu_227 0x2021e8-0x207648: medium; ~TOGetFFXToAlbhedTblAdrs (config/tu_map.tsv) */
+#define _TODrawMovieMessageWaitNamesp _hdr__TODrawMovieMessageWaitNamesp
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -7,6 +8,7 @@
 #include "ffx/t4.h"
 #include "ffx/v4.h"
 #include "ffx/u3.h"
+#undef _TODrawMovieMessageWaitNamesp
 
 typedef struct ToItem {
     /* 0x00 */ V4Rgba4 col;
@@ -73,18 +75,12 @@ typedef struct ToWin {
 
 extern u8 D_00323910[];
 int TOGetChangeMacroWidth(int a, u8 *b, int c);
+int _TODrawMovieMessageWaitNamesp(ToWin *win);
 
 void *TOGetFFXToAlbhedTblAdrs(void)
 {
     return &D_006673D8;
 }
-
-typedef struct AlbhedEnt {
-    u8 b0;
-    u8 b1;
-    u8 b2;
-    u8 b3;
-} AlbhedEnt;
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_002021F8);
 
@@ -454,7 +450,85 @@ int func_00202B38(TextWin *win)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TODrawMessageWaitNormal);
+int _TODrawMessageWaitNormal(ToWin *win)
+{
+    u8 font_buf[0x20];
+    ToItem item;
+    u8 albhed_buf[0x10];
+
+    win->cur = win->p84;
+    item = win->itemA8;
+    item.box = win->box40;
+    item.col = win->col48;
+    item.f12 = win->style;
+    win->w8C = 0;
+    while (win->w8C < win->w90) {
+        switch (TOGetGroup(*win->cur)) {
+        case 4:
+            win->w8C++;
+            if (win->wA4 == 0 && win->w9C == 0 && win->w90 < win->w98) {
+                win->w90++;
+            }
+            if (win->h10 == 0x4000) {
+                switch (func_002021F8(win->cur, albhed_buf)) {
+                case 0:
+                    item.f13 = 0x60;
+                    break;
+                case 1:
+                    item.f13 = 0x60;
+                    break;
+                case 2:
+                    item.f13 = 0x56;
+                    break;
+                }
+                func_00204CA8(albhed_buf, font_buf);
+            } else {
+                func_00204CA8(win->cur, font_buf);
+            }
+            TOMakePktFont1612(&item, font_buf);
+            break;
+        case 1:
+            item.box.x0 = win->box40.x0;
+            if (win->style == 1 || win->style == 3) {
+                item.box.y0 += 0x16;
+            } else {
+                item.box.y0 += 0x14;
+            }
+            if (win->h0E == 1) {
+                func_00203EE8(win, win->cur + 1, &item);
+            }
+            break;
+        case 2:
+            if (win->cur[0] == 0x10 && (u8)(win->cur[1] - 0x50) < 8) {
+                TODrawChangeMacro2(win, win->cur, &item);
+            } else if (win->cur[0] == 9) {
+                if (win->cur[1] >= 0xC0) {
+                    if (win->w90 != win->w94) {
+                        if (win->w8C + 1 == win->w90) {
+                            func_002025A8(win->cur, win, &item);
+                        }
+                    }
+                    win->w8C++;
+                } else if (win->w8C >= win->w94) {
+                    func_002025A8(win->cur, win, &item);
+                }
+            } else {
+                func_002025A8(win->cur, win, &item);
+            }
+            break;
+        case 3:
+            if (win->h10 == 0x4000) {
+                item.f13 = 0x56;
+            }
+            TODrawChangeMacro2(win, win->cur, &item);
+            break;
+        }
+        win->cur = (u8 *)TOSkipCode(win->cur);
+    }
+    win->w94 = win->w90;
+    win->itemBC = item;
+    return 0;
+}
 
 int func_00202E98(TextWin *win)
 {
@@ -681,7 +755,109 @@ s32 func_002037F0(MenuCmd *m)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", _TODrawMovieMessageWaitNamesp);
+int _TODrawMovieMessageWaitNamesp(ToWin *win)
+{
+    u8 font_buf[0x20];
+    ToItem item;
+    u8 pad[0x40];
+    u8 albhed_buf[0x10];
+    int line = 0;
+    s16 start_x;
+    ToItem *p = &item;
+    u8 *buf = font_buf;
+
+    win->cur = win->p84;
+    item = win->itemA8;
+    item.box = win->box40;
+    item.col = win->col48;
+    p->f12 = win->style;
+    win->w8C = 0;
+    start_x = win->box40.x0;
+    while (win->w8C < win->w90) {
+        switch (TOGetGroup(*win->cur)) {
+        case 4:
+            win->w8C++;
+            if (win->wA4 == 0 && win->w9C == 0 && win->w90 < win->w98) {
+                win->w90++;
+            }
+            if (line == 0) {
+                if (win->h22 != 1) {
+                    break;
+                }
+                if (win->h10 == 0x4000) {
+                    p->f13 = 0;
+                }
+                func_00204CA8(win->cur, buf);
+            } else if (win->h10 == 0x4000) {
+                switch (func_002021F8(win->cur, albhed_buf)) {
+                case 0:
+                    p->f13 = 0x60;
+                    break;
+                case 1:
+                    p->f13 = 0x60;
+                    break;
+                case 2:
+                    p->f13 = 0x56;
+                    break;
+                }
+                func_00204CA8(albhed_buf, buf);
+            } else {
+                func_00204CA8(win->cur, buf);
+            }
+            TOMakePktMovieFont1612(p, buf);
+            break;
+        case 1:
+            if (line == 0) {
+                if (win->h22 == 1 && win->h24 > 0) {
+                    TODrawChangeMacro2(win, D_00323910, p);
+                }
+                start_x = p->box.x0;
+            } else {
+                p->box.x0 = start_x;
+                if (win->style == 1 || win->style == 3) {
+                    p->box.y0 += 0x16;
+                } else {
+                    p->box.y0 += 0x16;
+                }
+            }
+            line++;
+            if (win->h0E == 1) {
+                func_00203EE8(win, win->cur + 1, p);
+            }
+            break;
+        case 2:
+            if (win->cur[0] == 9) {
+                if (win->cur[1] >= 0xC0) {
+                    if (win->w8C >= win->w94) {
+                        func_002025A8(win->cur, win, p);
+                        win->w90 = ++win->w8C;
+                    } else {
+                        win->w8C++;
+                    }
+                } else if (win->w8C >= win->w94) {
+                    func_002025A8(win->cur, win, p);
+                }
+            } else {
+                func_002025A8(win->cur, win, p);
+            }
+            break;
+        case 3:
+            if (line == 0 && win->h22 == 0) {
+                win->w8C += TOGetChangeMacroWordCount(win->font, win->cur);
+            } else {
+                if (win->h10 == 0x4000 && line > 0) {
+                    p->f13 = 0x56;
+                }
+                TODrawMovieChangeMacro2(win, win->cur, p);
+            }
+            break;
+        }
+        win->cur = (u8 *)TOSkipCode(win->cur);
+    }
+    win->w94 = win->w90;
+    win->itemBC = *p;
+    return 0;
+}
 
 int _TOSetNewPageMessageNamesp(ToWin *win)
 {

@@ -2,6 +2,9 @@
 #define func_002455C0 _hdr_func_002455C0
 #define func_00245978 _hdr_func_00245978
 #define func_002471B8 _hdr_func_002471B8
+#define func_00247F70 _hdr_func_00247F70
+#define func_00248168 _hdr_func_00248168
+#define func_00248350 _hdr_func_00248350
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -11,10 +14,22 @@
 #undef func_002455C0
 #undef func_00245978
 #undef func_002471B8
+#undef func_00247F70
+#undef func_00248168
+#undef func_00248350
 
+u64 func_001F6EA0(void);
 void func_00245978(int x, int y, int w, int h);
 void func_002471B8(Task *o, int mode, int v);
+GsAdPacket *func_00247F70(GsAdPacket *q, int unused, int x, int y, int id, int offx, int offy, int alpha);
+GsAdPacket *func_00248168(GsAdPacket *q, int unused, int x, int y, int id, int offx, int offy, int alpha);
+GsAdPacket *func_00248350(GsAdPacket *q, int unused, int x, int y, int id, int offx, int offy, int alpha);
+GsAdPacket *func_00248910(GsAdPacket *q, int x, int y, int id, int w, int flag);
+GsAdPacket *func_00248B30(GsAdPacket *q, int x, int y, int id, int w, int flag);
+GsAdPacket *func_00248D50(GsAdPacket *q, int n, u8 *src, int x, int y);
+GsAdPacket *func_00248E18(GsAdPacket *q, int n, u8 *src, int x, int y);
 GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y);
+GsAdPacket *func_00248F98(GsAdPacket *q, int x, int y, int w1, int w2);
 
 typedef struct TkSprPart {
     u8 u;
@@ -1330,7 +1345,34 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248910);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248B30);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248D50);
+GsAdPacket *func_00248D50(GsAdPacket *q, int n, u8 *src, int x, int y)
+{
+    if (n > 0) {
+        u8 *p = src + 4;
+        int y0 = y + 0x730;
+        int y1 = y0 + *(u16 *)(p + 10);
+        int x0 = x + 0x700;
+        int x1 = x0 + n;
+        int u1 = (src[4] + *(u16 *)(p + 8) - 1) << 4;
+        int v0 = (p[1] << 4) + 8;
+        int h1 = *(u16 *)(p + 6) << 4;
+        u1 += 8;
+        y0 <<= 4;
+        y1 <<= 4;
+        x0 <<= 4;
+        x1 <<= 4;
+
+        q[0].data = 0x6400000000008001UL;
+        q[0].reg = 0xF53530UL;
+        q[1].data = 0x156;
+        q[1].reg = u1 | ((u64)v0 << 16);
+        q[2].data = x0 | ((u64)y0 << 16);
+        q[2].reg = u1 | ((u64)(v0 + h1) << 16);
+        q[3].data = x1 | ((u64)y1 << 16);
+        q += 4;
+    }
+    return q;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248E18);
 

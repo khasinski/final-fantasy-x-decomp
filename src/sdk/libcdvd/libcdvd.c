@@ -34,7 +34,29 @@ int func_002E0738(int cb)
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0790);
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0830);
+void func_002E0830(void *arg)
+{
+    while (1) {
+        func_002F8420(D_005663E0);
+        if (D_00566414 == -1) {
+            D_005663F0 = 0;
+            D_00566414 = 0;
+            D_005663D4 = 0;
+            D_0078D60C = 0;
+            func_002F8220();
+        }
+        if (D_005663D0 > 0) {
+            func_002FA4E0(D_00576BC8, D_0078D600, *(int *)&D_00566418);
+        }
+        if (D_0078D600 != 0) {
+            if (D_00566418 != 0) {
+                ((void (*)(int))D_0078D600)(*(int *)&D_00566418);
+            }
+        }
+        __asm__ volatile("" : : : "memory");
+        D_005663F0 = 0;
+    }
+}
 
 int func_002E08F0(int prio, void *stack, int size)
 {
@@ -332,7 +354,26 @@ int func_002E1F00(void)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1FB8);
+int func_002E1FB8(void)
+{
+    int *recv;
+    int r;
+
+    if (func_002E12B0(0x1E) == 0) {
+        return 0;
+    }
+    D_00566414 = 8;
+    recv = D_005675C0;
+    if (func_002FB4C8(D_00567E08, 0x16, 0, 0, 0, recv, 4, 0, 0) < 0) {
+        func_002F8400(*(volatile int *)&D_005663EC);
+        D_00566414 = 0;
+        return 0;
+    }
+    D_00566414 = 0;
+    r = *(int *)UNCACHED(recv);
+    func_002F8400(*(volatile int *)&D_005663EC);
+    return r;
+}
 
 int func_002E2070(int *out)
 {

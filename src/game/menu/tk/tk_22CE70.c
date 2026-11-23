@@ -189,6 +189,7 @@ void func_0022D3D8(void)
 
 int func_0022D4C0(void) { return 1; }
 
+void func_0022D4C8(void);
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", func_0022D4C8);
 
 void func_0022D588(void)
@@ -733,8 +734,363 @@ void func_0022E8D8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22CE70", TkMenuCtrlSummon);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_22CE70/rodata", jtbl_00571C20);
+typedef struct {
+    int w0;
+    int w4;
+    int w8;
+    u8 padC[0x10];
+} SummonStatRec;
+
+extern SummonStatRec _tbl_D_00325900[] __asm__("D_00325900");
+extern char D_00571BB8[];
+extern char D_00571BF8[];
+extern char D_00571C08[];
+extern s32 D_00693BF4;
+int MsSetSaveCommand(int, int, int);
+void func_002377C8(void);
+void func_0022FA48(void);
+void func_0022FAD0(void);
+int func_00220A78(int);
+int func_00249520(int);
+void func_002EF240(const char *, ...);
+int _ret_SndSepPlaySimple(int) __asm__("SndSepPlaySimple");
+int _ret_TOMenuCloseYesNoWindow(void) __asm__("TOMenuCloseYesNoWindow");
+
+void TkMenuCtrlSummon(Task *t)
+{
+    s32 *st = &t->x1C;
+    s32 s;
+
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    s = t->x1C;
+again:
+    switch (s) {
+    case 0:
+        *st = 1;
+        break;
+    case 1:
+        *st = 9;
+        break;
+    case 2:
+    case 3:
+        func_002377C8();
+        *st = 4;
+        break;
+    case 4:
+        *st = 5;
+        break;
+    case 5:
+        *st = 6;
+        break;
+    case 6:
+        if (D_00326030->b45 < 0) {
+            *st = 0x22;
+        }
+        if (D_00326030->b45 > 0) {
+            *st = 0xA;
+        }
+        break;
+    case 7:
+        *st = 8;
+        break;
+    case 9:
+        func_0022FA48();
+        *st = 0xB;
+        break;
+    case 10:
+        func_0022FAD0();
+        *st = 0xB;
+        break;
+    case 11:
+        *st = 0xC;
+        break;
+    case 12:
+        *st = 0xD;
+        break;
+    case 13:
+        if (D_00693B78->b45 < 0) {
+            SndSepPlaySimple(0x80000004);
+            if (D_00693BEC >= 2) {
+                *st = 3;
+            } else {
+                *st = 0x22;
+            }
+        } else if (D_00693B78->b45 > 0) {
+            int chr = func_00242940();
+            int sel = 0;
+            if (D_00326030 != 0) {
+                sel = D_00693B88[D_00326030->x48];
+            }
+            switch (sel) {
+            case 0:
+                SndSepPlaySimple(0x80000001);
+                func_0022FB10();
+                s = 0xE;
+                goto again;
+            case 1:
+                if (chr < 0xE) {
+                    SndSepPlaySimple(0x80000001);
+                    func_0022FB10();
+                    s = 0x10;
+                    goto again;
+                }
+                SndSepPlaySimple(0x80000003);
+                break;
+            case 2:
+                SndSepPlaySimple(0x80000001);
+                func_0022FB10();
+                s = 0x18;
+                goto again;
+            }
+        }
+        break;
+    case 14:
+        func_0022D4C8();
+        *st = 0xF;
+        break;
+    case 15:
+        if (D_00693B7C->b45 < 0) {
+            func_0022D588();
+            *st = 9;
+            s = 9;
+            goto again;
+        }
+        break;
+    case 16:
+        TkMn2OpenSummonGrowWindow();
+        *st = 0x12;
+        break;
+    case 17:
+        func_0022DEC8();
+        *st = 0x12;
+        break;
+    case 18:
+        if (D_00693B80 != 0) {
+            if (D_00693B80->b45 < 0) {
+                func_0022DEE8();
+                *st = 9;
+                s = 9;
+                goto again;
+            }
+            if (D_00693B80->b45 != 0) {
+                TkMn2InitStatusBG();
+                s = 0x13;
+                goto again;
+            }
+        }
+        break;
+    case 19:
+        {
+            SysEntry *e = SYS_TBL;
+            int m0;
+            int m1;
+            int m2;
+            Task *yn;
+            e += D_00693B80->x48;
+            TkMn2SetMacroParam(0, 0x13, func_00242940());
+            TkMn2SetMacroParam(1, 0x35, e->h0);
+            switch (e->b2) {
+            case 4:
+                m0 = func_00249520(0xA);
+                m1 = func_00249520(0xB);
+                m2 = func_00249520(0xC);
+                func_00236940(m0, m1, m2);
+                    yn = TOMenuGetYesNoWindow();
+                    yn->b3E = 3;
+                    yn->b37 = 0;
+                    _ret_SndSepPlaySimple(0x80000001);
+                    *st = 0x15;
+                    break;
+            case 5:
+                m0 = func_00249520(8);
+                goto show_err;
+            case 7:
+                m0 = func_00249520(6);
+                goto show_err;
+            case 6:
+            default:
+                m0 = func_00249520(7);
+            show_err:
+                func_00236940(m0, 0, 0);
+                yn = TOMenuGetYesNoWindow();
+                yn->b3E = 3;
+                _ret_SndSepPlaySimple(0x80000003);
+                *st = 0x14;
+                break;
+            }
+        }
+        break;
+    case 21:
+        {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn->b45 < 0) {
+                _ret_TOMenuCloseYesNoWindow();
+                *st = 0x11;
+            } else if (yn->b45 != 0) {
+                s16 sel = yn->x48;
+                _ret_TOMenuCloseYesNoWindow();
+                switch (sel) {
+                case 0:
+                    {
+                        SysEntry *e = SYS_TBL;
+                        int chr;
+                        u8 *g;
+                        int r;
+                        e += D_00693B80->x48;
+                        chr = func_00242940();
+                        g = (u8 *)TkMn2GetSummonGrow() + e->b3 * 8;
+                        r = ((int (*)(int, int, int))MsSetSaveCommand)(chr, e->h0, 1);
+                        MsSaveItemUse(*(u16 *)(g + 4), -g[6]);
+                        func_002EF240(D_00571BB8, chr, e->h0, e->h0, r);
+                        func_002EF240(D_00571BF8);
+                        _ret_SndSepPlaySimple(0x80000066);
+                        func_002253E8(3);
+                        s = 0x16;
+                        goto again;
+                    }
+                case 1:
+                    _ret_SndSepPlaySimple(0x80000001);
+                    *st = 0x11;
+                    break;
+                }
+            }
+        }
+        break;
+    case 22:
+        func_00236940(func_00249520(0xD), 0, 0);
+        *st = 0x17;
+        break;
+    case 20:
+    case 23:
+        {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn != 0 && yn->b45 != 0) {
+                _ret_TOMenuCloseYesNoWindow();
+                *st = 0x11;
+            }
+        }
+        break;
+    case 24:
+        func_0022E7B8();
+        *st = 0x1A;
+        break;
+    case 25:
+        func_0022E8D8();
+        *st = 0x1A;
+        break;
+    case 26:
+        if (D_00693B84->b45 < 0) {
+            func_0022E8A8();
+            *st = 9;
+            s = 9;
+            goto again;
+        }
+        if (D_00693B84->b45 != 0) {
+            *st = 0x1B;
+        }
+        break;
+    case 27:
+        {
+            int idx = D_00693B84->x48;
+            u8 *p = (u8 *)func_0022E240(idx);
+            int m0;
+            int m1;
+            int m2;
+            Task *yn;
+            TkMn2SetMacroParam(0, 0x13, func_00242940());
+            TkMn2SetMacroParam(1, 0, func_00220A78(_tbl_D_00325900[idx].w8));
+            TkMn2SetMacroParam(2, 1, p[6]);
+            if ((D_00693BF0 >> idx) & 1) {
+                m0 = func_00249520(0xE);
+                m1 = func_00249520(0xB);
+                m2 = func_00249520(0xC);
+                func_00236940(m0, m1, m2);
+                yn = TOMenuGetYesNoWindow();
+                yn->b3E = 3;
+                yn->b37 = 0;
+                _ret_SndSepPlaySimple(0x80000001);
+                *st = 0x1D;
+            } else {
+                if ((D_00693BF4 >> idx) & 1) {
+                    m0 = func_00249520(9);
+                } else {
+                    m0 = func_00249520(6);
+                }
+                func_00236940(m0, 0, 0);
+                yn = TOMenuGetYesNoWindow();
+                yn->b3E = 3;
+                _ret_SndSepPlaySimple(0x80000003);
+                *st = 0x1C;
+            }
+        }
+        break;
+    case 29:
+        {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn->b45 < 0) {
+                _ret_TOMenuCloseYesNoWindow();
+                *st = 0x19;
+            } else if (yn->b45 != 0) {
+                s16 sel = yn->x48;
+                _ret_TOMenuCloseYesNoWindow();
+                if (sel == 0) {
+                    int idx = D_00693B84->x48;
+                    func_0022E2A0(idx, func_00242940());
+                    func_002EF240(D_00571C08);
+                    _ret_SndSepPlaySimple(0x80000067);
+                    func_0022E468(func_00242940());
+                    *st = 0x1E;
+                } else {
+                    _ret_SndSepPlaySimple(0x80000001);
+                    *st = 0x19;
+                }
+            }
+        }
+        break;
+    case 30:
+        {
+            int idx = D_00693B84->x48;
+            u8 *p = (u8 *)func_0022E240(idx);
+            Task *yn;
+            TkMn2SetMacroParam(0, 0x13, func_00242940());
+            TkMn2SetMacroParam(1, 0, func_00220A78(_tbl_D_00325900[idx].w8));
+            TkMn2SetMacroParam(2, 1, p[6]);
+            func_00236940(func_00249520(0xF), 0, 0);
+            yn = TOMenuGetYesNoWindow();
+            yn->b3E = 4;
+            *st = 0x1F;
+        }
+        break;
+    case 28:
+    case 31:
+        {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn != 0 && yn->b45 != 0) {
+                _ret_TOMenuCloseYesNoWindow();
+                *st = 0x19;
+            }
+        }
+        break;
+    case 32:
+        *st = 0x21;
+        break;
+    case 34:
+        *st = 0x23;
+        break;
+    case 35:
+        *st = 0x24;
+        break;
+    case 36:
+        TkMenuMainSleepMenu(7);
+        TkMenuMainActiveMenu(1, 0);
+        break;
+    case 8:
+    case 33:
+        break;
+    }
+}
 
 void func_0022F1E0(void) {
 }

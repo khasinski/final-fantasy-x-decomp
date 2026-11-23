@@ -166,7 +166,57 @@ void TOBtlInitCtbWindow(void)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlCtrlCtbWindow);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlDrawCtbWindow);
+extern s32 D_003241D0;
+extern s32 D_003241D4;
+void TODrawBtlCtbParts(int id, int val, int x, int y);
+
+void TOBtlDrawCtbWindow(int x, int y)
+{
+    int i;
+    s16 px;
+    s16 py;
+
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    func_001FA7D0(x, y, 0x3A, 0xAE);
+    if ((s8)D_00324990 > 0) {
+        TOMkpShapeXY(0x1B6, x + 0x3A, y);
+    }
+    if ((s8)D_00324990 < 8) {
+        TOMkpShapeXY(0x1B7, x + 0x3A, y + 0xAE);
+    }
+    func_001FBFB8(x + 2, y, 4, 0xAE, 0x10, 8, (s8)D_00324990);
+    TOMakePktScissor(x, y, x + 0x3A, y + 0xAE);
+    for (i = 0; i < 32; i++) {
+        CtbWindowEntry *e = D_006902C0[i];
+        if (e != 0) {
+            px = x + e->x + 8;
+            py = y + e->y + D_0032498A;
+            if ((void *)e->state != (void *)func_00213EF8) {
+                if (i == 0) {
+                    TOMkpShapeXY(0x1D8, px, py);
+                }
+                TODrawBtlCtbParts((s8)D_006902C0[i]->id, D_006902C0[i]->value4, px, py);
+            }
+        }
+    }
+    if (D_003249C0[(s8)D_00325020].b2 == 1) {
+        TODrawScissorXYWH(x - 0x1E, y, 0x58, 0xAE);
+        px = x;
+        for (i = 0; i < 16; i++) {
+            py = y + D_006902C0[i]->y + D_0032498A;
+            if ((D_006902BC >> (s8)D_006902C0[i]->id) & 1) {
+                TOMkpShapeXY(0x1D6, x + px + 8, y);
+                if ((s8)D_006902C0[i]->id >= 0x14) {
+                    func_001FE240(0x1AD, px, py, D_003241D4, D_003241D4);
+                } else {
+                    func_001FE240(0x1AD, px, py, D_003241D0, D_003241D0);
+                }
+                TOMkpShapeXY(0x1AE, px, py);
+            }
+        }
+    }
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+}
 
 void TODrawBtlCtbParts(int id, int val, int x, int y)
 {

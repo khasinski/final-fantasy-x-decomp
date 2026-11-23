@@ -33,6 +33,8 @@ typedef struct {
     u8 f2115;
     u8 pad2116[0x2133 - 0x2116];
     s8 f2133;
+    u8 pad2134[0x213E - 0x2134];
+    u8 f213E;
 } GameStateLocal;
 
 extern GameStateLocal D_003172F0;
@@ -619,7 +621,115 @@ void MsSetLimitParty(int id, BtlChr *c) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsSetReelResult);
+typedef struct {
+    u8 pad0[0x9E6];
+    u8 f9E6;
+    u8 pad9E7[5];
+    float f9EC;
+    float f9F0;
+    u8 pad9F4[0x4C];
+    u8 fA40[0x40];
+} ReelChr;
+
+extern u16 D_00320080[];
+int func_001E47B8(u8 *symbols, s32 *out_value);
+void *func_001E4A30(u32 i);
+
+void MsSetReelResult(u8 id, u8 *reels, float f0, float f1)
+{
+    u8 ids[0x20];
+    u8 *ptrs[0x20];
+    s32 cnt;
+    s32 cmd_id;
+    s32 out1;
+    s32 out2;
+    int n = 0;
+    int i;
+    int j;
+    int res;
+    int hit_idx;
+    ReelChr *chr = (ReelChr *)MsGetChr(id);
+    u8 cmd_idx;
+    u8 *slot;
+    u8 *cmd;
+    u8 *rec;
+    u8 *hit_list;
+
+    if (id == 4) {
+        chr->f9EC = f0;
+        chr->f9E6 = 1;
+        chr->f9F0 = f1;
+    }
+    cmd_idx = ((u8 *)MsGetChrCommand(id))[2];
+    for (i = 0; i < 0x1F; i++) {
+        u8 *c = (u8 *)MsGetChr(i);
+        for (j = 0; j < 2; j++) {
+            slot = c + 0x434 + j * 0x2D8;
+            if (slot[2] == id && slot[3] == cmd_idx) {
+                ids[n] = i;
+                ptrs[n] = slot;
+                n++;
+                slot[0] = 0;
+                slot[1] = 0;
+                break;
+            }
+        }
+    }
+    hit_list = chr->fA40;
+    hit_idx = 0;
+    for (i = 0; i < 4; i++) {
+        rec = (u8 *)func_001E4A30(i);
+        res = func_001E47B8(reels + i * 3, &cnt);
+
+        cmd_id = 0;
+        if (res != 0 && n != 0) {
+            cmd_id = D_00320080[res - 1];
+            cmd = (u8 *)MsGetCommand(id, 0, -1, 0, &cmd_id);
+            switch ((*(u16 *)(cmd + 0x1A) >> 2) & 3) {
+            case 0:
+                for (j = 0; j < cnt; j++) {
+                    int k = brnd(0x13) % n;
+                    u8 tid = ids[k];
+                    BtlChr *tc;
+
+                    slot = ptrs[k];
+                    tc = MsGetChr(tid);
+                    hit_list[hit_idx] = tid;
+                    MsCalcDamage(id, (BtlChr *)chr, tid, tc, cmd, cmd_id, slot, 0, &out1, &out2, 1);
+                    hit_idx++;
+                    slot[0]++;
+                }
+                break;
+            case 1:
+            case 2:
+                cnt = n;
+                for (j = 0; j < cnt; j++) {
+                    u8 tid = ids[j];
+                    BtlChr *tc;
+
+                    slot = ptrs[j];
+                    tc = MsGetChr(tid);
+                    hit_list[hit_idx] = tid;
+                    MsCalcDamage(id, (BtlChr *)chr, tid, tc, cmd, cmd_id, slot, 0, &out1, &out2, 1);
+                    hit_idx++;
+                    slot[0]++;
+                }
+                break;
+            }
+        } else {
+            res = 0;
+            cnt = 0;
+        }
+        rec[0] = res;
+        rec[1] = cnt;
+        *(u16 *)(rec + 2) = cmd_id;
+    }
+    for (j = 0; j < n; j++) {
+        slot = ptrs[j];
+        slot[0] = 0;
+    }
+    chr->f9E6 = 0;
+}
 
 int func_001E4640(u8 id)
 {

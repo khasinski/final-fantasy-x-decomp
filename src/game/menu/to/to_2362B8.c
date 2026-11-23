@@ -318,7 +318,58 @@ again:
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_2362B8", func_00236E60);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2362B8", func_00237180);
+void func_00237180(Task *o)
+{
+    Task *p;
+    int cnt;
+    int spc;
+    int curx;
+    int ty;
+    int i;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    p = D_00326030;
+    cnt = (u16)o->x30 - 1;
+    spc = *(u16 *)o->pad3C;
+    ty = p->x4C + 2;
+    curx = p->x4A + (p->x4E * p->x46 + (p->ext[p->x48 * 3 + 2] + 0x18) * (0x1000 - p->x46)) / 0x1000 + 0x30;
+    for (i = 0; i <= cnt; i++) {
+        int w;
+        int txt;
+        int ok;
+
+        TODrawScissorXYWH(o->x4A, 0, o->x4E, 0x19F);
+        w = o->ext[i * 3 + 2];
+        txt = o->ext[i * 3];
+        if (o->x1C != 0) {
+            ok = ((int (*)(Task *, int, int))o->x1C)(o, i, 0);
+        } else {
+            ok = 1;
+        }
+        func_001F3808(txt, curx, ty, ok == 0);
+        TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+        {
+            register int sel __asm__("$3") = o->x48;
+            if (i == sel) {
+                if (o->b45 <= 0) {
+                    if (o->x46 == 0x1000) {
+                        func_001FE7F8(0, curx, ty);
+                        func_00201F20(o->ext[14] + 0xF);
+                    }
+                } else {
+                    int tw = func_00226AD0((u8 *)txt);
+                    func_00201D48(o->ext[14] + 0xF, curx, ty, tw);
+                    func_00201D20(o->ext[14] + 0xF, 1);
+                    func_002020A0(o->ext[14] + 0xF);
+                }
+            }
+        }
+        curx += w + spc;
+    }
+    TOMenuDrawKickTmp();
+    func_00124F08();
+}
 
 void func_00237398(void) {
 }

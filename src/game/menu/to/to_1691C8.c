@@ -205,7 +205,81 @@ INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_001694E8);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_00169B10);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016A048);
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u16 h2;
+    u16 h4;
+    u8 b6;
+    u8 b7;
+} To16A048Cmd;
+
+extern s32 D_005979F8;
+extern s32 D_005979FC;
+
+void func_0016A048(u8 **a0, u8 **a1, int a2)
+{
+    register u8 *dst __asm__("$16") = *a0;
+    u8 *src = *a1;
+    To16A048Cmd cmd;
+    int val = 0;
+    int i;
+
+    memcpy(&cmd, src, 8);
+    src += 8;
+    switch (cmd.b1) {
+    case 0:
+        switch (cmd.b0) {
+        case 0:
+            val = D_0030E098[cmd.h2](cmd.h4);
+            break;
+        case 1:
+            val = _to_D_00597E30[cmd.h4].w;
+            break;
+        }
+        if (cmd.b6 == 0) {
+            u16 digits[32];
+            u16 *q;
+            int nz;
+
+            for (i = 0; i < 6; i++) {
+                digits[i] = val % 10;
+                val /= 10;
+            }
+            nz = 0;
+            for (i = 5; i > 0; i--) {
+                if (digits[i] == 0) {
+                    if (nz != 0) {
+                        digits[i] += 0x30;
+                    } else {
+                        digits[i] = 0x3A;
+                    }
+                } else {
+                    nz = 1;
+                    digits[i] += 0x30;
+                }
+            }
+            digits[i] += 0x30;
+            for (i = 5; i >= 0; i--) {
+                *dst++ = digits[i];
+            }
+        } else {
+            D_005979F8 = cmd.b6;
+            D_005979FC = val;
+        }
+        break;
+    case 1: {
+        u8 *s = (u8 *)D_0030E098[cmd.h2](cmd.h4 + a2);
+
+        for (i = 0; s[i] != 0; i++) {
+            *dst++ = s[i];
+        }
+        break;
+    }
+    }
+    *a0 = dst;
+    *a1 = src;
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016A268);
 INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C040);
@@ -480,8 +554,6 @@ int func_0016C318(void) {
     return D_0030E060;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C328);
-
 typedef union {
     u_long128 q;
     struct {
@@ -511,6 +583,8 @@ typedef union {
         _q->w.w2 = (c); \
         _q->w.w3 = (d); \
     }
+
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C328);
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016C688);
 

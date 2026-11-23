@@ -1,6 +1,7 @@
 /* tu_200 0x1d27c0-0x1d48d0: low; ~Ms (config/tu_map.tsv) */
 #define MsGetMoveTargetPos _hdr_MsGetMoveTargetPos
 #define MsNearRag _hdr_MsNearRag
+#define func_001AC310 _hdr_func_001AC310
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
@@ -10,8 +11,12 @@
 #include "ffx/s2.h"
 #undef MsGetMoveTargetPos
 #undef MsNearRag
-float MsGetMoveTargetPos(int, BtlChr *, int, float *, int);
+#undef func_001AC310
 float MsNearRag(float, float);
+float func_001AC310(float *);
+void func_001AC258(float *dst, float *a, float *b, float t);
+void func_001AC750(float *pos, int w, float x, float y, float z);
+void func_001D48F8(int id, void *c, float *pos, float ang);
 
 int MsCheckStartEffect(int id, int mask) {
     int n = 0;
@@ -347,8 +352,161 @@ float func_001D3B10(int id, int v)
     return result;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetMoveTargetPos);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1D27C0/rodata", jtbl_0056EB20);
+typedef struct {
+    u8 pad00[0x14];
+    u8 f14;
+    u8 pad15[0x3B];
+    float f50[4];
+    u8 pad60[0x30];
+    float f90[4];
+    u8 padA0[0x2C];
+    u8 fCC;
+    u8 padCD[4];
+    u8 fD1;
+    u8 padD2[3];
+    u8 fD5;
+    u8 fD6;
+    u8 fD7;
+    s8 fD8;
+    u8 padD9[0x39];
+    u16 f112;
+    u8 pad114[0x34];
+    float f148;
+    u8 pad14C[0xC];
+    float f158;
+    u8 pad15C[0x60];
+    s8 f1BC[3];
+    u8 pad1BF[0x8C1];
+    s32 fA80;
+    u8 padA84[0x29];
+    s8 fAAD;
+} TargetChr;
+
+float MsGetMoveTargetPos(int arg_id, TargetChr *c, int mode, float *arg_pos, int *out_flag)
+{
+    register int id __asm__("$17") = arg_id;
+    register float *pos __asm__("$18") = arg_pos;
+    float tmp[4];
+    float w;
+    float h;
+    float ret = 0.0f;
+    int flag = 0;
+
+    switch (mode & 0x7F) {
+    case 3:
+        MsGetChrEscapePos(id, (int)pos);
+        break;
+    case 4:
+        c = (TargetChr *)MsGetChr(D_00319408);
+        MsBtlGetPos(0, (BtlChr *)c, c->f1BC[0], c->f1BC[1], c->f1BC[2], (int)pos);
+        break;
+    case 18:
+        MsGetSummonerPos(MsGetChr(D_003172F0.f2118), D_003172F0.f2118, 3, pos);
+        break;
+    case 5:
+        c = (TargetChr *)MsGetChr(D_00319408);
+        MsBtlGetPos(0, (BtlChr *)c, c->f1BC[0], c->f1BC[1] + 3, c->f1BC[2], (int)pos);
+        break;
+    case 1:
+        MsGetChrBtlPos(id, pos);
+        break;
+    case 6:
+        func_001B6790(id, pos);
+        break;
+    case 15:
+        Ch_OptposGet(MsGetChrHandle(c->f14), 0xE, (int)pos);
+        break;
+    case 8:
+        func_001B6790(c->fAAD, pos);
+        break;
+    case 9:
+        if (c->fD7 == 0) {
+            c->fD7 = 1;
+            func_001B6790(c->fAAD, c->f90);
+        }
+        if (c->fD5 == 0) {
+            func_001B6790(id, tmp);
+            func_001AC258(pos, tmp, c->f90, 10.0f);
+            if (c->fD1 != 0) {
+                func_001D48F8(id, c, pos, 0.7853981852531433f);
+            }
+            func_001AC3D0(pos, tmp, pos);
+        } else {
+            func_001AC258(pos, c->f50, c->f90, 10.0f);
+            if (c->fD1 != 0) {
+                func_001D48F8(id, c, pos, 0.7853981852531433f);
+            }
+            func_001AC3D0(pos, c->f50, pos);
+        }
+        break;
+    case 2:
+        func_001D2878(id, 1, pos, &w, &h);
+        if ((1 << id) != c->fA80) {
+            float cw = MsGetChrWidth(id);
+            float py = pos[1] - h * c->f158;
+            ret = w + cw + c->f148;
+            pos[1] = py;
+        } else {
+            ret = 0.0f;
+        }
+        break;
+    case 11:
+        func_001D2878(id, 1, pos, &w, &h);
+        if ((1 << id) != c->fA80) {
+            ret = c->f148;
+            pos[1] -= h * c->f158;
+        } else {
+            ret = 0.0f;
+        }
+        break;
+    case 10:
+        func_001B6790(c->fD6, pos);
+        ret = MsGetChrWidth(c->fD6) + MsGetChrWidth(id) + c->f148;
+        break;
+    case 12:
+        if ((1 << id) != c->fA80) {
+            D_00662CB0 = c->fCC + 1;
+            if (c->fD8 != 0) {
+                D_00662CB0 -= c->f112;
+            }
+            func_001D2878(id, 12, pos, &w, &h);
+            {
+                float cw = MsGetChrWidth(id);
+                float py = pos[1] - h * c->f158;
+                ret = w + cw + c->f148;
+                pos[1] = py;
+            }
+        } else {
+            ret = 0.0f;
+            func_001D2878(id, 1, pos, &w, &h);
+            flag = -1;
+        }
+        break;
+    case 13:
+        MsGetChrBtlPos(id, pos);
+        pos[1] = MsGetChrGround(id) - MsGetChrHeight(id) * 0.25f;
+        break;
+    case 14:
+        func_001B6790(id, pos);
+        pos[1] = MsGetChrGround(id);
+        break;
+    case 17: {
+        register int tid __asm__("$17") = c->f14;
+        func_001B6790(tid, tmp);
+        func_001B6E48(tid, &w);
+        func_001AC750(pos, 0, w, 0.0f, 10.0f);
+        func_001AC3D0(pos, tmp, pos);
+        break;
+    }
+    case 7:
+    case 16:
+        break;
+    }
+    if (out_flag != 0) {
+        *out_flag = flag;
+    }
+    return ret;
+}
 
 float MsGetMoveTargetDist(int id, int v, int flag) {
     float pos1[4];

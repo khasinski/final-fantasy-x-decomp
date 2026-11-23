@@ -180,7 +180,42 @@ INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9750);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F98E8);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9A38);
+typedef struct TtyState {
+    volatile int sid;
+    int tx_rem;
+    int rx_pos;
+    int busy;
+    u8 *tx_ptr;
+    u8 *rx_buf;
+    W11Ring *ring;
+} TtyState;
+
+extern TtyState D_00791F90;
+
+int func_002F9A38(void *buf, int n)
+{
+    char *dst = buf;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        while (1) {
+            int cnt = *(volatile int *)&D_00791F90.ring->count;
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+            if (cnt != 0) {
+                break;
+            }
+        }
+        dst[i] = *D_00791F90.ring->rd;
+        func_002F9710(D_00791F90.ring);
+        if (dst[i] == '\n' || dst[i] == '\r') {
+            return i + 1;
+        }
+    }
+    return i;
+}
 
 extern int D_00568DE4;
 extern char D_00792240[];
