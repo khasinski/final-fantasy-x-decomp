@@ -1,7 +1,8 @@
 # Battle-effect overlays
 
 584 overlays from disc group `0x11`, loaded at `0x01B00000`.
-241 are complete and 343 have some matching C code. None are untouched.
+283 are complete and 301 have some matching C code. None are untouched.
+Overall overlay coverage is 79.01% of code bytes (93.66% of decompilable code, excluding handwritten VU0/MMI policy assembly).
 
 ## Files
 

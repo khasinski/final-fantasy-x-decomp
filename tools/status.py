@@ -123,6 +123,8 @@ if estimate_path.exists() and audit_path.exists():
         overlay_done = progress.get("matched_code_bytes", 0)
     assert 0 <= overlay_done <= overlay_bytes
     numerator = dbytes + overlay_done
+    overlay_policy = fmap.get("policy_assembly_bytes", 0) if fmap else 0
+    overlay_decomp_pct = fmap.get("decompilable_matched_percent") if fmap else None
     report["ee_overlays"] = {
         "containers": inventory["battle_containers"],
         "distinct_payloads": inventory["unique_battle_payload_sha256"],
@@ -133,19 +135,25 @@ if estimate_path.exists() and audit_path.exists():
         "matched_code_bytes": overlay_done,
         "code_bytes": overlay_bytes,
         "coverage_percent": 100*overlay_done/overlay_bytes,
+        "policy_assembly_bytes": overlay_policy if fmap else None,
+        "decompilable_coverage_percent": overlay_decomp_pct,
         "distinct_function_bytes": fmap["distinct_function_bytes"] if fmap else None,
         "distinct_matched_bytes": fmap["distinct_matched_bytes"] if fmap else None,
         "distinct_coverage_percent": fmap["distinct_matched_percent"] if fmap else None,
+        "distinct_policy_assembly_bytes": fmap.get("distinct_policy_assembly_bytes") if fmap else None,
+        "distinct_decompilable_coverage_percent": fmap.get("distinct_decompilable_matched_percent") if fmap else None,
         "basis": ("function bytes from tools/overlay_map.py (linear sweep of each container's code hull; repeated code "
                   "counted once per container; distinct_* counts each relocation-normalized body once)") if fmap
                  else "detected instruction estimate from tools/audit_overlays.py",
         "heuristic_detected_instruction_bytes": estimate["detected_instruction_bytes"],
         "inventory_is_heuristic": True,
     }
+    known_decomp_total = max((total - hbytes) + (overlay_bytes - overlay_policy), 1)
     report["known_ee_estimate"] = {
         "c_or_matched_bytes": numerator,
         "estimated_total_bytes": total+overlay_bytes,
         "coverage_percent": 100*numerator/(total+overlay_bytes),
+        "decompilable_coverage_percent": 100*numerator/known_decomp_total if fmap else None,
         "span_scenario_percent": 100*numerator/(total+max(overlay_bytes, estimate["code_region_span_bytes"])),
         "span_scenario_is_confidence_interval": False,
         "basis": "Resident catalogued function bytes plus overlay function bytes, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
@@ -171,9 +179,14 @@ else:
                   f"none {overlays['containers'] - overlays['containers_with_any_match']} of {overlays['containers']}")
             print(f"    distinct bodies: {overlays['distinct_matched_bytes']}/{overlays['distinct_function_bytes']} bytes = "
                   f"{overlays['distinct_coverage_percent']:.2f}% (tools/overlay_map.py)")
+            if overlays.get("decompilable_coverage_percent") is not None:
+                print(f"    policy-asm (VU0/MMI/etc): {overlays['policy_assembly_bytes']} bytes -> "
+                      f"overlay decompilable C coverage: {overlays['decompilable_coverage_percent']:.2f}%")
         else:
             print(f"  EE effect overlays: {overlays['containers_with_any_match']}/{overlays['containers']} containers with a matched unit; ~{overlay_bytes/1048576:.2f} MiB detected instructions (heuristic)")
         print(f"known EE C coverage estimate: ~{overall['coverage_percent']:.2f}% (ELF + overlays; repeated code counted)")
+        if overall.get("decompilable_coverage_percent") is not None:
+            print(f"  known EE decompilable C coverage: ~{overall['decompilable_coverage_percent']:.2f}% (excl. policy-asm)")
         print(f"  code-span scenario: ~{overall['span_scenario_percent']:.2f}% (includes gaps/data; not a confidence interval)")
     else:
         print("known EE estimate: unavailable (overlay audit missing)")

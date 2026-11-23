@@ -395,6 +395,29 @@ def sha(words):
     return hashlib.sha1(struct.pack("<%dI" % len(words), *words)).hexdigest()[:16]
 
 
+def classify_policy_asm(words):
+    """Identify R5900 instructions ee-gcc 2.9 does not emit from C (docs/ASM_POLICY.md).
+    Only called for OPEN functions; COVERED functions matched via Tier-1 macros count as C."""
+    cats = set()
+    for x in words:
+        op = x >> 26
+        rt = (x >> 16) & 31
+        fn = x & 63
+        if op == 0 and fn == 12:
+            cats.add("syscall")
+        elif op in (16, 47):
+            cats.add("cop0")
+        elif op == 18 or op == 54 or (op == 62 and rt != 0):
+            cats.add("cop2")
+        elif op == 28 and fn not in (0x00, 0x01, 0x18, 0x19, 0x20, 0x21):
+            cats.add("mmi")
+        elif op == 31 and rt == 0:
+            cats.add("sq-zero")
+        elif op == 8:
+            cats.add("addi")
+    return sorted(cats)
+
+
 def analyze(arg):
     cid, end, ranges = arg
     b = (AUDIT / f"overlay-group11-file{cid:05d}.bin").read_bytes()
@@ -423,8 +446,10 @@ def analyze(arg):
             if start < z and a < stop:
                 cov = "PARTIAL"; unit = stem
         reached = sum(1 for p in range(start, stop, 4) if p in seen)
+        words_slice = w[start // 4:stop // 4]
+        policy = classify_policy_asm(words_slice) if cov == "OPEN" else []
         out.append(dict(off=start, size=stop - start, hash=sha(loose), hash_res=sha(strict),
-                        raw=sha(list(w[start // 4:stop // 4])), covered=cov, unit=unit,
+                        raw=sha(list(words_slice)), covered=cov, unit=unit, policy_asm=policy,
                         callees=callees, internal_refs=internal, entry=start in entries,
                         reached=reached * 4))
     return cid, out
@@ -479,8 +504,8 @@ def main():
         for f in results[cid]:
             flat.append(dict(container=cid, offset=f["off"], addr=f"0x{BASE + f['off']:08X}", size=f["size"],
                              hash=f["hash"], hash_res=f["hash_res"], raw=f["raw"], covered=f["covered"], unit=f["unit"],
-                             entry=f["entry"], reached_bytes=f["reached"], internal_refs=f["internal_refs"],
-                             callees=sorted({f"{k}:{nm(a)}" for k, a in f["callees"]})))
+                             policy_asm=f["policy_asm"], entry=f["entry"], reached_bytes=f["reached"],
+                             internal_refs=f["internal_refs"], callees=sorted({f"{k}:{nm(a)}" for k, a in f["callees"]})))
     (OUT / "functions.json").write_text(json.dumps(dict(
         note="See tools/overlay_map.py docstring for method and limits. offset is container-relative; "
              "hash masks all absolute addresses, hash_res keeps resident ones.", functions=flat)) + "\n")
@@ -488,34 +513,58 @@ def main():
     # --- progress
     per = []
     tot = collections.Counter()
+    policy_bytes_total = 0
+    policy_funcs_total = 0
+    policy_cats = collections.Counter()
     for cid in cids:
         fs = results[cid]
         c = collections.Counter()
+        p_bytes = 0
         for f in fs:
             c[f["covered"]] += f["size"]
+            if f["covered"] == "OPEN" and f["policy_asm"]:
+                p_bytes += f["size"]
+                policy_funcs_total += 1
+                policy_cats[",".join(f["policy_asm"])] += f["size"]
+        policy_bytes_total += p_bytes
         total = sum(c.values())
         state = "full" if total and c["COVERED"] == total else ("partial" if c["COVERED"] or c["PARTIAL"] else "none")
         per.append(dict(container=cid, functions=len(fs), code_bytes=total, matched_bytes=c["COVERED"],
-                        partial_bytes=c["PARTIAL"], open_bytes=c["OPEN"], state=state))
+                        partial_bytes=c["PARTIAL"], open_bytes=c["OPEN"], policy_asm_bytes=p_bytes, state=state))
         tot.update(c); tot[state] += 1
     code_total = sum(p["code_bytes"] for p in per)
+    decomp_total = max(code_total - policy_bytes_total, 1)
     groups = collections.defaultdict(list)
     for cid in cids:
         for f in results[cid]:
             groups[f["hash_res"]].append((cid, f))
     distinct_bytes = sum(v[0][1]["size"] for v in groups.values())
     distinct_matched = sum(v[0][1]["size"] for v in groups.values() if any(f["covered"] == "COVERED" for _, f in v))
+    distinct_policy = sum(
+        v[0][1]["size"] for v in groups.values()
+        if not any(f["covered"] == "COVERED" for _, f in v) and any(f["policy_asm"] for _, f in v)
+    )
+    distinct_decomp = max(distinct_bytes - distinct_policy, 1)
     progress = dict(
         metric="Function bytes from tools/overlay_map.py (heuristic split). matched = function inside a "
-               "byte-identical verify_overlays.py unit range for that container.",
+               "byte-identical verify_overlays.py unit range for that container. policy_asm = OPEN functions "
+               "containing R5900 instructions ee-gcc 2.9 cannot emit from C (docs/ASM_POLICY.md).",
         containers=len(cids), functions=len(flat), code_bytes=code_total,
         matched_units=len({unit["src"] for unit in vo.OVERLAY_UNITS}),
         matched_bytes=tot["COVERED"], partial_bytes=tot["PARTIAL"], open_bytes=tot["OPEN"],
         matched_percent=100 * tot["COVERED"] / code_total,
+        policy_assembly_functions=policy_funcs_total,
+        policy_assembly_bytes=policy_bytes_total,
+        policy_assembly_percent=100 * policy_bytes_total / code_total,
+        decompilable_bytes=code_total - policy_bytes_total,
+        decompilable_matched_percent=100 * tot["COVERED"] / decomp_total,
+        policy_assembly_categories=dict(policy_cats.most_common()),
         containers_fully_matched=tot["full"], containers_partially_matched=tot["partial"],
         containers_unmatched=tot["none"],
         distinct_function_bodies=len(groups), distinct_function_bytes=distinct_bytes,
         distinct_matched_bytes=distinct_matched, distinct_matched_percent=100 * distinct_matched / distinct_bytes,
+        distinct_policy_assembly_bytes=distinct_policy,
+        distinct_decompilable_matched_percent=100 * distinct_matched / distinct_decomp,
         per_container=per)
     head = json.dumps({k: v for k, v in progress.items() if k != "per_container"}, indent=1)[:-2]
     body = ",\n".join("  " + json.dumps(row) for row in per)
@@ -687,7 +736,10 @@ def main():
           f"({len(groups)} distinct bodies, {distinct_bytes} distinct bytes)")
     print(f"matched {tot['COVERED']} B ({progress['matched_percent']:.2f}%), partial {tot['PARTIAL']} B, open {tot['OPEN']} B; "
           f"containers full {tot['full']} / partial {tot['partial']} / none {tot['none']}")
-    print(f"distinct-body coverage: {distinct_matched}/{distinct_bytes} B ({progress['distinct_matched_percent']:.2f}%)")
+    print(f"policy-asm {policy_bytes_total} B ({progress['policy_assembly_percent']:.2f}%, {policy_funcs_total} funcs) -> "
+          f"decompilable overlay coverage: {tot['COVERED']}/{code_total - policy_bytes_total} B ({progress['decompilable_matched_percent']:.2f}%)")
+    print(f"distinct-body coverage: {distinct_matched}/{distinct_bytes} B ({progress['distinct_matched_percent']:.2f}%)"
+          f" | decompilable distinct: {progress['distinct_decompilable_matched_percent']:.2f}%")
     print(f"{len(rank)} OPEN groups, {len(tu_rows)} candidate TUs -> docs/overlay-ranking.tsv, docs/overlay-tus.tsv")
     return 0
 
