@@ -311,5 +311,23 @@
     "cflags": [
       "-O2"
     ]
+  },
+  {
+    "src": "ovl_09411_0f10.c",
+    "containers": [
+      9411
+    ],
+    "text_start": "0x01B00F10",
+    "text_end": "0x01B01164",
+    "functions": 1,
+    "discovered_code_bytes": 596,
+    "cflags": [
+      "-O2"
+    ],
+    "syms": {
+      "g_ovl_res": "0x01B0D740",
+      "fn_ovl_52d0": "0x01B052D0",
+      "fn_ovl_7650": "0x01B07650"
+    }
   }
 ]

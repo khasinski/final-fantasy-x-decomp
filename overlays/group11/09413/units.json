@@ -18,5 +18,37 @@
     "cflags": [
       "-O2"
     ]
+  },
+  {
+    "src": "ovl_09413_0898.c",
+    "containers": [
+      9413
+    ],
+    "text_start": "0x01B00898",
+    "text_end": "0x01B00960",
+    "functions": 1,
+    "discovered_code_bytes": 200,
+    "syms": {
+      "fn_ovl_0960": "0x01B00960",
+      "fn_ovl_0ad0": "0x01B00AD0",
+      "fn_ovl_33e0": "0x01B033E0",
+      "fn_ovl_35a8": "0x01B035A8",
+      "fn_ovl_3668": "0x01B03668",
+      "fn_ovl_6620": "0x01B06620",
+      "func_002B49A0": "0x002B49A0",
+      "g_ovl_3d0": "0x01B003D0",
+      "g_ovl_6750": "0x01B06750",
+      "g_ovl_6890": "0x01B06890",
+      "g_ovl_buf": "0x01B3A2C0",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0388": "0x01B00388",
+      "g_ovl_mgr": "0x01B068F0",
+      "g_ovl_ptr_6930": "0x01B06930",
+      "g_ovl_ptr_6934": "0x01B06934",
+      "g_ovl_res": "0x01B0C0C0"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

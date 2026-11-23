@@ -177,7 +177,9 @@
           "func_01B017E0": "0x01B01840"
         }
       }
-    ]
+    ],
+    "text_start": "0x01B00850",
+    "text_end": "0x01B0096C"
   },
   {
     "containers": [
@@ -235,7 +237,9 @@
           "func_01B014E0": "0x01B01510"
         }
       }
-    ]
+    ],
+    "text_start": "0x01B01070",
+    "text_end": "0x01B011F8"
   },
   {
     "containers": [
@@ -289,7 +293,9 @@
           "func_01B01630": "0x01B01660"
         }
       }
-    ]
+    ],
+    "text_start": "0x01B011F8",
+    "text_end": "0x01B01400"
   },
   {
     "containers": [
@@ -322,7 +328,9 @@
           "func_01B01300": "0x01B01330"
         }
       }
-    ]
+    ],
+    "text_start": "0x01B01400",
+    "text_end": "0x01B014D8"
   },
   {
     "containers": [
@@ -367,6 +375,8 @@
           "func_01B015B0": "0x01B015E0"
         }
       }
-    ]
+    ],
+    "text_start": "0x01B014E0",
+    "text_end": "0x01B017E0"
   }
 ]

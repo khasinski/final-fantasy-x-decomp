@@ -220,5 +220,57 @@
       "-O2",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09142_01b04480.c",
+    "containers": [
+      9142,
+      9232,
+      9395,
+      9487,
+      9730
+    ],
+    "text_start": "0x01B04480",
+    "text_end": "0x01B04664",
+    "discovered_code_bytes": 480,
+    "functions": 2,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9142,
+        "text_start": "0x01B04480",
+        "text_end": "0x01B04664",
+        "syms": {}
+      },
+      {
+        "cid": 9232,
+        "text_start": "0x01B039E8",
+        "text_end": "0x01B03BCC",
+        "syms": {}
+      },
+      {
+        "cid": 9395,
+        "text_start": "0x01B05788",
+        "text_end": "0x01B0596C",
+        "syms": {}
+      },
+      {
+        "cid": 9487,
+        "text_start": "0x01B05A90",
+        "text_end": "0x01B05C74",
+        "syms": {}
+      },
+      {
+        "cid": 9730,
+        "text_start": "0x01B05428",
+        "text_end": "0x01B0560C",
+        "syms": {}
+      }
+    ],
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]

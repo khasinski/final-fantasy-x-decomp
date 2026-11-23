@@ -101,5 +101,101 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09294_01b060a0.c",
+    "containers": [
+      9294,
+      9295,
+      9328,
+      9329,
+      9330,
+      9331
+    ],
+    "text_start": "0x01B060A0",
+    "text_end": "0x01B06580",
+    "discovered_code_bytes": 1248,
+    "functions": 1,
+    "syms": {
+      "D_01B006D0": "0x01B006D0",
+      "D_01B0CC60": "0x01B0CC60",
+      "D_01B0CC68": "0x01B0CC68",
+      "dpcmp": "0x002EC198",
+      "func_01B02EA8": "0x01B02EA8"
+    },
+    "container_layouts": [
+      {
+        "cid": 9294,
+        "text_start": "0x01B060A0",
+        "text_end": "0x01B06580",
+        "syms": {
+          "D_01B006D0": "0x01B006D0",
+          "D_01B0CC60": "0x01B0CC60",
+          "D_01B0CC68": "0x01B0CC68",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B02EA8"
+        }
+      },
+      {
+        "cid": 9295,
+        "text_start": "0x01B06288",
+        "text_end": "0x01B06768",
+        "syms": {
+          "D_01B006D0": "0x01B00710",
+          "D_01B0CC60": "0x01B0D590",
+          "D_01B0CC68": "0x01B0D598",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B03090"
+        }
+      },
+      {
+        "cid": 9328,
+        "text_start": "0x01B05BE0",
+        "text_end": "0x01B060C0",
+        "syms": {
+          "D_01B006D0": "0x01B00670",
+          "D_01B0CC60": "0x01B0B230",
+          "D_01B0CC68": "0x01B0B238",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B02E40"
+        }
+      },
+      {
+        "cid": 9329,
+        "text_start": "0x01B05AD8",
+        "text_end": "0x01B05FB8",
+        "syms": {
+          "D_01B006D0": "0x01B00740",
+          "D_01B0CC60": "0x01B0C060",
+          "D_01B0CC68": "0x01B0C068",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B02D38"
+        }
+      },
+      {
+        "cid": 9330,
+        "text_start": "0x01B05A58",
+        "text_end": "0x01B05F38",
+        "syms": {
+          "D_01B006D0": "0x01B006C0",
+          "D_01B0CC60": "0x01B0BFE0",
+          "D_01B0CC68": "0x01B0BFE8",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B02CB8"
+        }
+      },
+      {
+        "cid": 9331,
+        "text_start": "0x01B05A88",
+        "text_end": "0x01B05F68",
+        "syms": {
+          "D_01B006D0": "0x01B006F0",
+          "D_01B0CC60": "0x01B0C010",
+          "D_01B0CC68": "0x01B0C018",
+          "dpcmp": "0x002EC198",
+          "func_01B02EA8": "0x01B02CE8"
+        }
+      }
+    ]
   }
 ]

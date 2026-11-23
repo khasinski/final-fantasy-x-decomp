@@ -1,5 +1,45 @@
 [
   {
+    "src": "ovl_09290_0a50.c",
+    "containers": [
+      9290
+    ],
+    "text_start": "0x01B00A50",
+    "text_end": "0x01B00CB8",
+    "functions": 1,
+    "discovered_code_bytes": 616,
+    "syms": {
+      "fn_ovl_0cb8": "0x01B00CB8",
+      "fn_ovl_0d48": "0x01B00D48",
+      "fn_ovl_1300": "0x01B01300",
+      "fn_ovl_1428": "0x01B01428",
+      "fn_ovl_2e10": "0x01B02E10",
+      "fn_ovl_34d0": "0x01B034D0",
+      "fn_ovl_39e8": "0x01B039E8",
+      "fn_ovl_3bb0": "0x01B03BB0",
+      "fn_ovl_3c70": "0x01B03C70",
+      "fn_ovl_3d48": "0x01B03D48",
+      "fn_ovl_4b80": "0x01B04B80",
+      "g_ovl_50e8": "0x01B050E8",
+      "g_ovl_5110": "0x01B05110",
+      "g_ovl_5f9c": "0x01B05F9C",
+      "g_ovl_5fe0": "0x01B05FE0",
+      "g_ovl_buf": "0x01B91900",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_05c0": "0x01B005C0",
+      "g_ovl_dat_05d8": "0x01B005D8",
+      "g_ovl_dat_0600": "0x01B00600",
+      "g_ovl_dat_42e8": "0x01B042E8",
+      "g_ovl_mgr": "0x01B05FA0",
+      "g_ovl_ptr_64a0": "0x01B064A0",
+      "g_ovl_ptr_64a4": "0x01B064A4",
+      "g_ovl_res": "0x01B0B9C0"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
     "src": "ovl_09290_0cb8.c",
     "containers": [
       9290
@@ -35,6 +75,35 @@
           "func_01B03E28": "0x01B03E28"
         }
       }
+    ]
+  },
+  {
+    "src": "ovl_09290_0d48.c",
+    "containers": [
+      9290
+    ],
+    "text_start": "0x01B00D48",
+    "text_end": "0x01B01020",
+    "functions": 2,
+    "discovered_code_bytes": 724,
+    "syms": {
+      "fn_ovl_0ee8": "0x01B00EE8",
+      "fn_ovl_1020": "0x01B01020",
+      "fn_ovl_1428": "0x01B01428",
+      "fn_ovl_3a68": "0x01B03A68",
+      "fn_ovl_3d48": "0x01B03D48",
+      "fn_ovl_4830": "0x01B04830",
+      "g_ovl_5110": "0x01B05110",
+      "g_ovl_5140": "0x01B05140",
+      "g_ovl_5f90": "0x01B05F90",
+      "g_ovl_5f9c": "0x01B05F9C",
+      "g_ovl_6110": "0x01B06110",
+      "g_ovl_6240": "0x01B06240",
+      "g_ovl_dat_0568": "0x01B00568",
+      "g_ovl_mgr": "0x01B05FA0"
+    },
+    "cflags": [
+      "-O2"
     ]
   },
   {

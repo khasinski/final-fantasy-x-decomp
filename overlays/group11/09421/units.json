@@ -88,5 +88,28 @@
     "cflags": [
       "-O2"
     ]
+  },
+  {
+    "src": "ovl_09421_0f00.c",
+    "containers": [
+      9421
+    ],
+    "text_start": "0x01B00F00",
+    "text_end": "0x01B01154",
+    "functions": 1,
+    "discovered_code_bytes": 596,
+    "syms": {
+      "fn_ovl_3b58": "0x01B03B58",
+      "fn_ovl_43c8": "0x01B043C8",
+      "fn_ovl_4960": "0x01B04960",
+      "fn_ovl_5068": "0x01B05068",
+      "func_002B3DB0": "0x002B3DB0",
+      "func_002B3DF8": "0x002B3DF8",
+      "func_002EFD78": "0x002EFD78",
+      "g_ovl_mgr": "0x01B06028"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]
