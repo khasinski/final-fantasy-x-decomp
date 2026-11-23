@@ -316,8 +316,227 @@ void func_001B98A8(Obj436 *p) {
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsSetRamChr);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsSetRamChrAbility);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B89D8/rodata", jtbl_0056E450);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B89D8/rodata", jtbl_0056E490);
+typedef struct {
+    u16 f00[0x14];
+    u16 f28[0x8];
+    u16 f38[0x8];
+    u16 f48[0x18];
+    u16 f78[0x18];
+    u16 fA8[0x20];
+    u16 fE8[0x20];
+    u16 f128[0x18];
+    u8 pad158[0x478 - 0x158];
+} BtlPlyWin;
+
+typedef struct {
+    u8 pad0[0x3D6C];
+    u16 f3D6C[16];
+    u8 pad3D8C[0x3ECC - 0x3D8C];
+    u16 f3ECC[0x70];
+    u8 pad3FAC[0x40CC - 0x3FAC];
+    u8 f40CC[0x70];
+    u8 pad413C[0x449C - 0x413C];
+    struct {
+        u16 h0;
+        u8 b2;
+        u8 b3;
+        u8 b4;
+        u8 b5;
+        u8 pad6[0x10];
+    } f449C[200];
+} SaveRamAbility;
+
+typedef struct {
+    u8 pad0[0x2C];
+    u8 f2C;
+    u8 pad2D[0x3E - 0x2D];
+    u16 f3E[6];
+    u8 pad4A[0x94 - 0x4A];
+} PartySlotLocal;
+
+void MsSortCommand(void *win);
+u8 *MsGetBattleList(int mode, int *out);
+
+void MsSetRamChrAbility(int id, BtlChr *chr) {
+    u16 *dst = chr->f324;
+    PartySlotLocal *ps = &((PartySlotLocal *)D_0031EA9C)[id];
+    SaveRamAbility *ram;
+    OfsTbl *cmd;
+    int is_yojimbo;
+    int is_magus;
+    int cmd_id;
+    int i;
+    int j;
+
+    for (i = 0; i < 6; i++) {
+        dst[i] = ps->f3E[i];
+    }
+    ram = (SaveRamAbility *)&D_003194D0;
+    for (i = 0; i < 16; i++) {
+        dst[6 + i] = ram->f3D6C[i];
+    }
+    is_yojimbo = 0;
+    is_magus = 0;
+    if (id == 0xE) {
+        is_yojimbo = 1;
+    }
+    if (id >= 0xF && id <= 0x11) {
+        is_magus = 1;
+    }
+    for (i = 0; i < 0x140; i++) {
+        int kind;
+        cmd = MsGetRomPlyCommand(i, 0);
+        kind = cmd->b16 & 0xF8;
+        if (kind == 8) {
+            int has = 0;
+            int sub = cmd->b17;
+            for (j = 0; j < 0x140; j++) {
+                OfsTbl *c2 = MsGetRomPlyCommand(j, 0);
+                if ((c2->b16 & 7) == 0 && ((u8 *)c2)[0x18] == sub) {
+                    if (func_001B93E8(id, j) & 1) {
+                        has = 1;
+                        break;
+                    }
+                }
+            }
+            switch (sub) {
+            case 6:
+            case 17:
+                for (j = 0; j < 0x70; j++) {
+                    if (((SaveRamAbility *)&D_003194D0)->f3ECC[j] != 0 && ((SaveRamAbility *)&D_003194D0)->f40CC[j] != 0) {
+                        has = 1;
+                    }
+                }
+                break;
+            case 5:
+                for (j = 8; j < 0x12; j++) {
+                    if (((PartySlotLocal *)D_0031EA9C)[j].f2C & 1) {
+                        has = 1;
+                        break;
+                    }
+                }
+                break;
+            case 7:
+                for (j = 0; j < 200; j++) {
+                    if (((SaveRamAbility *)&D_003194D0)->f449C[j].b2 != 0 &&
+                        ((SaveRamAbility *)&D_003194D0)->f449C[j].b5 == 0 &&
+                        ((SaveRamAbility *)&D_003194D0)->f449C[j].b4 == id &&
+                        !((((SaveRamAbility *)&D_003194D0)->f449C[j].b3 >> 1) & 1)) {
+                        has = 1;
+                        break;
+                    }
+                }
+                break;
+            case 15:
+                for (j = 0; j < 200; j++) {
+                    if (((SaveRamAbility *)&D_003194D0)->f449C[j].b2 != 0 &&
+                        ((SaveRamAbility *)&D_003194D0)->f449C[j].b5 == 1 &&
+                        ((SaveRamAbility *)&D_003194D0)->f449C[j].b4 == id &&
+                        !((((SaveRamAbility *)&D_003194D0)->f449C[j].b3 >> 1) & 1)) {
+                        has = 1;
+                        break;
+                    }
+                }
+                break;
+            case 10:
+                MsGetBattleList(sub, &has);
+                if (has != 0) {
+                    has = 1;
+                }
+                break;
+            }
+            if (kind == 8) {
+                func_001B9458(id, i, has);
+            } else if (has == 0) {
+                func_001B94E8(id, i, 1);
+            }
+        }
+        {
+            u8 owner = ((u8 *)cmd)[0x19];
+            if (owner == 0xFF) {
+                if (is_yojimbo != 0 || is_magus != 0) {
+                    func_001B9458(id, i, 0);
+                }
+            } else if (owner != id) {
+                func_001B9458(id, i, 0);
+            }
+        }
+    }
+    for (i = 0; i < 0x140; i++) {
+        u16 *list;
+        int max;
+        int on;
+        int empty;
+
+        cmd = MsGetRomPlyCommand(i, 0);
+        cmd_id = i + 0x3000;
+        list = 0;
+        max = 0;
+        if ((cmd->b16 & 7) == 0) {
+            switch (((u8 *)cmd)[0x18]) {
+            case 1:
+                list = ((BtlPlyWin *)btl_ply_win)[id].f78;
+                max = 0x18;
+                break;
+            case 2:
+                list = ((BtlPlyWin *)btl_ply_win)[id].f48;
+                max = 0x18;
+                break;
+            case 3:
+                list = ((BtlPlyWin *)btl_ply_win)[id].fA8;
+                max = 0x20;
+                break;
+            case 14:
+                list = ((BtlPlyWin *)btl_ply_win)[id].fE8;
+                max = 0x20;
+                break;
+            case 4:
+                list = ((BtlPlyWin *)btl_ply_win)[id].f128;
+                max = 0x18;
+                break;
+            }
+        } else {
+            if ((cmd->flags >> 12) & 1) {
+                list = ((BtlPlyWin *)btl_ply_win)[id].f28;
+                max = 8;
+            } else if ((cmd->flags >> 11) & 1) {
+                list = ((BtlPlyWin *)btl_ply_win)[id].f38;
+                max = 8;
+            } else {
+                list = ((BtlPlyWin *)btl_ply_win)[id].f00;
+                max = 0x14;
+            }
+        }
+        on = func_001B93E8(id, i) & 1;
+        empty = -1;
+        if (list != 0) {
+            for (j = 0; j < max; j++) {
+                if (list[j] == 0xFF && empty < 0) {
+                    empty = j;
+                }
+                if (list[j] == cmd_id) {
+                    if (on == 0) {
+                        list[j] = 0xFF;
+                    } else {
+                        on = -1;
+                    }
+                }
+            }
+            if (on > 0 && empty >= 0) {
+                list[empty] = cmd_id;
+            }
+        }
+    }
+    MsSortCommand(&((BtlPlyWin *)btl_ply_win)[id]);
+    for (i = 0; i < ((u8 *)chr)[0x38B]; i++) {
+        int pos;
+        cmd_id = ((struct { u8 pad[0x3DA]; u16 f3DA[4]; u8 f3E2[4]; } *)chr)->f3DA[i];
+        pos = ((struct { u8 pad[0x3DA]; u16 f3DA[4]; u8 f3E2[4]; } *)chr)->f3E2[i];
+        for (j = 7; j > pos; j--) {
+            ((BtlPlyWin *)btl_ply_win)[id].f28[j] = ((BtlPlyWin *)btl_ply_win)[id].f28[j - 1];
+        }
+        ((BtlPlyWin *)btl_ply_win)[id].f28[pos] = cmd_id;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", func_001BA720);

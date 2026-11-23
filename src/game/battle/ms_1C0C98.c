@@ -984,9 +984,101 @@ int func_001C3F58(int a, int b, Q4Act *act, int dmg) {
     return dmg;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C4008);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C0C98/rodata", jtbl_0056E640);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C0C98/rodata", jtbl_0056E660);
+extern s8 D_0031FA08[];
+
+int func_001C4008(BtlChr *src, BtlChr *dst, OfsTbl *act, Q4Act *b, int mode) {
+    u32 flags = act->flags;
+    int type;
+    int acc;
+    int hit;
+    int r;
+
+    if (((flags >> 23) & 1) && !(dst->f2C6 & 1) && !((dst->f2C6 >> 1) & 1)) {
+        return 2;
+    }
+    type = (flags >> 3) & 7;
+    acc = 0;
+    switch (type) {
+    case 0:
+        return 0;
+    case 1:
+    case 2:
+        acc = ((u8 *)act)[0x29];
+        break;
+    case 3:
+    case 4:
+        acc = src->pad26E[1];
+        break;
+    case 5:
+        acc = (src->pad26E[1] * 5) >> 1;
+        break;
+    case 6:
+        acc = (src->pad26E[1] * 3) >> 1;
+        break;
+    case 7:
+        acc = src->pad26E[1] >> 1;
+        break;
+    }
+    {
+        int sleep = b->b07;
+        if (sleep > 0) {
+            return 0;
+        }
+    }
+    if ((b->h14 >> 2) & 1) {
+        return 0;
+    }
+    if (D_003172F0.f4F != 0) {
+        return 1;
+    }
+    r = brnd(MsGetRndChr(src->f0C, 1)) % 101;
+    hit = 0;
+    switch (type) {
+    case 1:
+    case 3:
+    case 5:
+    case 6:
+    case 7: {
+        int idx;
+        int e;
+        idx = (acc * 2) / 5;
+        e = dst->pad26E[0] - 10;
+        idx -= e;
+        if (idx < 0) {
+            idx = 0;
+        }
+        if (idx > 8) {
+            idx = 8;
+        }
+        hit = D_0031FA08[idx];
+        if (((act->flags >> 6) & 1) && src->f2CA != 0) {
+            hit /= 10;
+        }
+        {
+            int a = src->pad31E[1] * 10 + hit;
+            int b = src->f322 + src->f26D;
+            hit = a + b - dst->f26D + dst->f323 - dst->pad31E[3] * 10;
+        }
+        break;
+    }
+    case 2:
+    case 4:
+        hit = acc - dst->pad26E[0];
+        if (((act->flags >> 6) & 1) && src->f2CA != 0) {
+            hit /= 10;
+        }
+        {
+            int a = src->pad31E[1] * 10 + hit;
+            int b = src->f322 + src->f26D;
+            hit = a + b - dst->f26D + dst->f323 - dst->pad31E[3] * 10;
+        }
+        break;
+    }
+    if ((r < hit && mode != 2) || (s8)D_003172F0.pad34[6] != 0) {
+        return 0;
+    }
+    return 1;
+}
 
 u32 func_001C4290(BtlChr *c, Q4Act *act, u32 flags, Triple *t) {
     int k;

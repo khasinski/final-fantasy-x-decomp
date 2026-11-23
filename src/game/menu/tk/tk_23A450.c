@@ -759,8 +759,240 @@ void func_0023BE40(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23A450", TkMenuCtrlWShop);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23A450/rodata", jtbl_00572A80);
+extern s32 D_00694108;
+extern s32 D_0069410C;
+extern u8 *_wshop_D_00694118 __asm__("D_00694118");
+extern u8 *_wshop_D_0069411C __asm__("D_0069411C");
+int _wshop_TOMenuCloseYesNoWindow(void) __asm__("TOMenuCloseYesNoWindow");
+
+void TkMenuCtrlWShop(Task *o)
+{
+    s32 *state = &o->x1C;
+    int st;
+
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    st = o->x1C;
+
+again:
+    switch (st) {
+    case 0:
+        D_00694108 = TkCdSize(0x2F, 1);
+        D_0069410C = TkCdSize(0x2F, 3);
+        _wshop_D_00694118 = (u8 *)func_002281E0();
+        _wshop_D_0069411C = (u8 *)func_002281E0() + ((D_00694108 + 0x3F) / 64) * 64;
+        *state = 1;
+    case 1:
+        if (TkCdReadSync(1) != 0) {
+            break;
+        }
+        TkCdReadNB(0x2F, 1, (s32)_wshop_D_00694118);
+        *state = 2;
+        break;
+    case 2:
+        if (TkCdReadSync(1) != 0) {
+            break;
+        }
+        *state = 3;
+        break;
+    case 3:
+        TkCdReadNB(0x2F, 3, (s32)_wshop_D_0069411C);
+        *state = 4;
+    case 4:
+        if (TkCdReadSync(1) != 0) {
+            break;
+        }
+        func_0023AA00();
+        TkMn2SetMainFrameRatioDiff(-0x10);
+        func_0023A8C8();
+        *state = 5;
+        st = 5;
+        goto again;
+    case 5:
+        if (TkMn2GetMainFrameRatio() > 0) {
+            break;
+        }
+        *state = 7;
+        st = 7;
+        goto again;
+    case 6:
+        func_002377C8();
+        *state = 7;
+        st = 7;
+        goto again;
+    case 7:
+        switch (D_00326030->x48) {
+        case 0:
+            if (D_00694124 == 0) {
+                func_0023B708();
+            }
+            func_0023BD00();
+            break;
+        case 1:
+            if (D_00694128 == 0) {
+                func_0023BC48();
+            }
+            func_0023B7B8();
+            break;
+        case 2:
+            break;
+        }
+        if (D_00326030->b45 < 0) {
+            *state = 0x1E;
+            st = 0x1E;
+            goto again;
+        }
+        if (D_00326030->b45 != 0) {
+            switch (D_00326030->x48) {
+            case 0:
+                *state = 8;
+                break;
+            case 1:
+                *state = 0x13;
+                break;
+            case 2:
+                *state = 0x1E;
+                st = 0x1E;
+                goto again;
+            default:
+                *state = 6;
+                break;
+            }
+        }
+        break;
+    case 8:
+    case 9:
+        func_0023B7F0();
+        *state = 0xA;
+        break;
+    case 0xA:
+        if (D_00694124->b45 < 0) {
+            *state = 0xC;
+            break;
+        }
+        if (D_00694124->b45 != 0) {
+            TkShopList *p = (TkShopList *)func_00228220(D_00694110, (s32)_wshop_D_0069411C);
+            if (func_0023B238(p->items[D_00694124->x48]) != 0) {
+                PLAY_SE(0x80000001);
+                st = 0xB;
+                goto again;
+            } else {
+                PLAY_SE(0x80000003);
+                st = 0xD;
+                goto again;
+            }
+        }
+        break;
+    case 0xB:
+        *state = 0xF;
+        break;
+    case 0xD: {
+        TkShopList *p = (TkShopList *)func_00228220(D_00694110, (s32)_wshop_D_0069411C);
+        int msg;
+
+        if (func_001BFE30(p->items[D_00694124->x48]) >= 99) {
+            msg = TkMenuMainMes(0x19);
+        } else {
+            msg = TkMenuMainMes(0x1A);
+        }
+        func_00236940(msg, 0, 0);
+        TOMenuGetYesNoWindow()->b3E = 4;
+        *state = 0xE;
+        break;
+    }
+    case 0xE: {
+        Task *yn = TOMenuGetYesNoWindow();
+
+        if (yn != 0 && yn->b45 != 0) {
+            _wshop_TOMenuCloseYesNoWindow();
+            *state = 9;
+        }
+        break;
+    }
+    case 0xF:
+        func_0023AD40(D_00694124);
+        *state = 0x10;
+        break;
+    case 0x10:
+        if (D_0069412C->b45 < 0) {
+            st = 0x12;
+            goto again;
+        }
+        if (D_0069412C->b45 != 0) {
+            st = 0x11;
+            goto again;
+        }
+        break;
+    case 0x11:
+    case 0x12:
+        func_0023AE10();
+        *state = 9;
+        break;
+    case 0x13:
+    case 0x14:
+        func_0023BD40();
+        *state = 0x15;
+        break;
+    case 0x15:
+        if (D_00694128->b45 < 0) {
+            *state = 0x17;
+            break;
+        }
+        if (D_00694128->b45 != 0) {
+            PLAY_SE(0x80000001);
+            st = 0x16;
+            goto again;
+        }
+        break;
+    case 0x16:
+        *state = 0x1A;
+        break;
+    case 0xC:
+    case 0x17:
+        *state = 6;
+        break;
+    case 0x1A:
+        func_0023B0B8(D_00694128);
+        *state = 0x1B;
+        break;
+    case 0x1B:
+        if (D_00694130->b45 < 0) {
+            st = 0x1D;
+            goto again;
+        }
+        if (D_00694130->b45 != 0) {
+            st = 0x1C;
+            goto again;
+        }
+        break;
+    case 0x1C:
+        func_0023B198();
+        func_002253E8(7);
+        *state = 0x14;
+        break;
+    case 0x1D:
+        func_0023B198();
+        *state = 0x14;
+        break;
+    case 0x1E:
+        func_0023BD00();
+        func_0023B7B8();
+        TkMn2SetMainFrameRatioDiff(0x10);
+        *state = 0x1F;
+        break;
+    case 0x1F:
+        if (TkMn2GetMainFrameRatio() < 0x80) {
+            break;
+        }
+        *state = 0x20;
+        break;
+    case 0x20:
+        func_00237818();
+        TkMenuMainSleepMenu(0xD);
+        break;
+    }
+}
 
 void func_0023C3E8(void) {
     func_002492F0();

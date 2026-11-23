@@ -133,9 +133,192 @@ u16 *func_00295418(ScriptThread *th, u16 *pc)
 
 extern void (*_opu_jtbl_00373518[])(ScriptThread *, u16 *) __asm__("jtbl_00373518");
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295560);
+u16 *func_00295560(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    register ScriptSub *tgt __asm__("$5");
+    u16 flags = th->flags;
+    register u32 raw __asm__("$6");
+    register s32 op1 __asm__("$3");
+    s16 op2;
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", opu_gw);
+    if (flags & 0x400) {
+        tgt = opus_no_get(th->obj300, sub, (s16)pc[1]);
+        pc += 1;
+        flags = th->flags;
+    } else {
+        tgt = sub;
+    }
+    op1 = pc[1];
+    raw = (u32)op1 << 16;
+    op1 = (s32)raw >> 16;
+    op2 = pc[2];
+    switch (flags & 0xF000) {
+    case 0x0000: {
+        register float val __asm__("$f1") = (float)op2;
+        register float *dst __asm__("$2") = (float *)((u8 *)tgt + op1);
+        __asm__("" : "+r"(dst) : "f"(val));
+        pc += 3;
+        *dst = val;
+        break;
+    }
+    case 0x1000: {
+        register u32 hi __asm__("$4") = raw >> 24;
+        register float *src __asm__("$2") = (float *)((u8 *)tgt + hi);
+        register float *dst __asm__("$3") = (float *)((u8 *)tgt + (op1 & 0xFF));
+        register float v __asm__("$f0");
+        __asm__("" : "+r"(src), "+r"(dst));
+        v = *src;
+        __asm__("" : "+r"(pc) : "f"(v));
+        pc += 2;
+        goto store_f0;
+    }
+    case 0x2000: {
+        register u32 hi __asm__("$4") = raw >> 24;
+        register float *p0 __asm__("$2") = (float *)((u8 *)tgt + hi);
+        register float *p1 __asm__("$3") = (float *)((u8 *)tgt + (op1 & 0xFF));
+        register float tmp0 __asm__("$f0");
+        register float tmp1 __asm__("$f1");
+        __asm__("" : "+r"(p0), "+r"(p1));
+        tmp0 = *p0;
+        __asm__("" : "+r"(pc) : "f"(tmp0));
+        pc += 2;
+        __asm__("" : "+r"(p1) : "r"(pc));
+        tmp1 = *p1;
+        *p1 = tmp0;
+        *p0 = tmp1;
+        break;
+    }
+    case 0x3000: {
+        register u32 hi __asm__("$4") = raw >> 24;
+        register float *src __asm__("$2") = (float *)((u8 *)tgt + hi);
+        register float *dst __asm__("$3");
+        register float v __asm__("$f0");
+        op1 &= 0xFF;
+        __asm__("" : "+r"(src));
+        __asm__("" : "+r"(op1) : "r"(src));
+        dst = (float *)((u8 *)sub + op1);
+        __asm__("" : "+r"(src) : "r"(dst));
+        v = *src;
+        __asm__("" : "+r"(pc) : "f"(v));
+        pc += 2;
+        goto store_f0;
+    }
+    case 0x4000: {
+        register u32 hi __asm__("$4");
+        register float *src __asm__("$2");
+        register float *dst __asm__("$3");
+        register float v __asm__("$f0");
+        op1 &= 0xFF;
+        __asm__("" : "+r"(op1));
+        hi = raw >> 24;
+        __asm__("" : "+r"(hi) : "r"(op1));
+        src = (float *)((u8 *)sub + op1);
+        __asm__("" : "+r"(pc) : "r"(src));
+        pc += 2;
+        __asm__("" : "+r"(src) : "r"(pc));
+        v = *src;
+        __asm__("" : "+r"(hi) : "f"(v));
+        dst = (float *)((u8 *)tgt + hi);
+        goto store_f0;
+    }
+    case 0x5000: {
+        register float *src __asm__("$2");
+        register float *dst __asm__("$3");
+        register float v __asm__("$f0");
+        op1 &= 0xFF;
+        pc += 2;
+        src = (float *)((u8 *)sub + op1);
+        __asm__("" : "+r"(src));
+        v = *src;
+        __asm__("" : "+r"(op1) : "f"(v));
+        dst = (float *)((u8 *)tgt + op1);
+        __asm__("" : "+f"(v) : "r"(dst));
+        v = -v;
+    store_f0:
+        *dst = v;
+        break;
+    }
+    }
+    if (flags & 0x200) {
+        _opu_jtbl_00373518[tgt->bBA](th, pc);
+    }
+    return pc;
+}
+
+u16 *opu_gw(ScriptThread *th, u16 *pc)
+{
+    u16 flags = th->flags;
+    int dst_off;
+    register ScriptSub *src __asm__("$5");
+    ScriptSub *dst;
+    float a;
+    float b;
+    float *dp;
+
+    if (flags & 0x400) {
+        src = opus_no_get(th->obj300, th->sub, (s16)pc[1]);
+        flags = th->flags;
+        if ((flags & 0xFF) == 0xA9) {
+            dst = src;
+        } else {
+            dst = th->sub;
+        }
+        pc += 1;
+    } else {
+        dst = th->sub;
+        src = dst;
+    }
+    if (flags & 0x800) {
+        u8 *bp = (u8 *)pc;
+        register u8 o1 __asm__("$3") = bp[3];
+        register u8 o2 __asm__("$2") = bp[4];
+        register float *p0 __asm__("$3");
+        register float *p1 __asm__("$2");
+        dst_off = bp[2];
+        __asm__("" : : "r"(dst_off));
+        p0 = (float *)((u8 *)dst + o1);
+        __asm__("" : "+r"(p0) : "r"(dst_off));
+        p1 = (float *)((u8 *)src + o2);
+        __asm__("" : "+r"(p1) : "r"(p0));
+        a = *p0;
+        b = *p1;
+    } else {
+        u8 *bp = (u8 *)pc;
+        register int imm __asm__("$2") = (s16)pc[1];
+        register int o5 __asm__("$3") = bp[5];
+        register float *p0 __asm__("$2");
+        b = (float)imm;
+        dst_off = bp[4];
+        p0 = (float *)((u8 *)src + o5);
+        __asm__("" : "+r"(p0));
+        a = *p0;
+    }
+    dp = (float *)((u8 *)dst + dst_off);
+    switch (flags & 0xF000) {
+    case 0x0000:
+        *dp = a + b;
+        break;
+    case 0x1000:
+        *dp = a - b;
+        break;
+    case 0x2000:
+        *dp = a * b;
+        break;
+    case 0x3000:
+        if (b == 0.0f) {
+            *dp = 0.0f;
+        } else {
+            *dp = a / b;
+        }
+        break;
+    }
+    pc += 3;
+    if (flags & 0x200) {
+        _opu_jtbl_00373518[dst->bBA](th, pc);
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295890);
 

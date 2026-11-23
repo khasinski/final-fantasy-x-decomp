@@ -365,8 +365,92 @@ void func_0024C8E8(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", TkMenuItemRefresh);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_24B828/rodata", jtbl_005733B0);
+u8 *MsSaveItemNumBuffer(s32 *max);
+int TkMenuSummonEnableMask(void);
+
+int TkMenuItemRefresh(int mode)
+{
+    s32 max;
+    s32 buf;
+    SysEntry *e = (SysEntry *)0x1D57300;
+    u16 *numTbl = (u16 *)0x1D56F00;
+    u16 *typeBuf;
+    u8 *numBuf;
+    int i;
+
+    TkMenuGetCurrentPlayer();
+    for (i = 0; i < 512; i++) {
+        e->h0 = 0;
+        e->b2 = 0;
+        e->b3 = 0;
+        *numTbl = 0;
+        e++;
+        numTbl++;
+    }
+    typeBuf = (u16 *)MsSaveItemTypeBuffer(&max);
+    numBuf = MsSaveItemNumBuffer(&max);
+    e = (SysEntry *)0x1D57300;
+    numTbl = (u16 *)0x1D56F00;
+    D_0069BE72 = -1;
+    D_0069BE48 = 0;
+    for (i = 0; i < max; i++) {
+        u16 id = *typeBuf++;
+        u8 num = *numBuf++;
+        OfsTbl *rom = TkMsGetRomItem(id, &buf);
+        int idx = id & 0xFF;
+
+        switch (mode) {
+        case 0:
+        case 4: {
+            int flag;
+
+            if (num == 0) {
+                e++;
+                break;
+            }
+            if (rom->flags & 1) {
+                if (!((rom->b22 >> 7) & 1) || ((rom->b22 >> 6) & 1) || TkMenuSummonEnableMask() != 0) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
+            } else {
+                flag = 0;
+            }
+            if (mode == 4) {
+                flag = 1;
+            }
+            if (num == 0) {
+                flag = 0;
+            }
+            if (flag != 0 && D_0069BE72 < 0) {
+                D_0069BE72 = i;
+            }
+            e->h0 = id;
+            e->b2 = num;
+            e->b3 = flag;
+            numTbl[idx] = num;
+            e++;
+            break;
+        }
+        case 6:
+            if (num != 0 && rom->b5D != 0xFF) {
+                e->h0 = id;
+                e->b2 = num;
+                e->b3 = 0;
+                numTbl[idx] = num;
+                e++;
+            }
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+            break;
+        }
+    }
+    D_0069BE48 = ((u32)e - 0x1D57300) >> 2;
+}
 
 int func_0024CB28(void) {
     return D_0069BE48;

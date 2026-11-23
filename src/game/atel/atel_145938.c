@@ -3,7 +3,9 @@
 #define func_00146B40 _hdr_func_00146B40
 #define func_00147A28 _hdr_func_00147A28
 #define func_00146180 _hdr_func_00146180
+#define func_00147290 _hdr_func_00147290
 #define Ch_SoundSetId _hdr_Ch_SoundSetId
+#define ChN_ReadSystemMGRPstart _hdr_ChN_ReadSystemMGRPstart
 #include "common.h"
 #include "ffx/q1.h"
 #include "ffx/r1.h"
@@ -15,8 +17,11 @@
 #undef func_00146B40
 #undef func_00147A28
 #undef func_00146180
+#undef func_00147290
 #undef Ch_SoundSetId
+#undef ChN_ReadSystemMGRPstart
 void Ch_SoundSetId(Chr *, int);
+void ChN_ReadSystemMGRPstart(int, int);
 
 void func_00145938(void) {
     D_0058E3F8 = 0x10001;
@@ -877,8 +882,215 @@ void func_00147048(Actor *a, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_145938", func_00147290);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_145938/rodata", jtbl_0056AE30);
+extern s32 D_0058D434;
+extern s32 D_0058D438;
+extern int Ch_DataReadSync(int);
+extern void func_0014B0B0(Actor *, int);
+extern int ChN_ReadSystemMGRPsync(int, int);
+extern Chr *TkCh_Allocate2(int, int);
+extern void TkChSetBattleChrNum(Actor *);
+extern void op_et_bindeff(Chr *);
+extern void AtelBindEff2On(Actor *, int);
+extern Chr *TkCh_Allocate(int);
+extern void TkCh_BindToElem(int, Chr *, Chr *, int, int);
+extern void Ch_Vu1SetClipmode(Chr *, int);
+extern void func_0014ADA8(void);
+
+int func_00147290(s32 *st)
+{
+    int ret = 0;
+    int saved = AtelChangeCurrentCtrl(0);
+    int s = *st;
+
+again:
+    switch (s) {
+    case 0:
+        D_0058D434 = 0;
+        D_0058D438 = AtelGetCtrlworkActorTotal(AtelGetCurCtrlWork());
+        if (func_00145188(0) == 0) {
+            ret = 1;
+        }
+        *st = 1;
+    case 1: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (AR(a)->stateAA == 1) {
+            s = 2;
+            goto again;
+        }
+        AtelRecoverFPFromBattle(a);
+        s = 14;
+        goto again;
+    }
+    case 2: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (a->ptr9C != 0 && !(a->b33 & 4)) {
+            s = 4;
+            goto again;
+        }
+        Ch_DataRead(a->hA8);
+        *st = 3;
+        s = 3;
+        goto again;
+    }
+    case 3:
+        if (Ch_DataReadSync(AtelGetBasicWork(D_0058D434)->hA8) == 1) {
+            break;
+        }
+        s = 4;
+        goto again;
+    case 4: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (a->w38 & 0x200) {
+            func_0014B0B0(a, 0);
+            a->w38 &= ~0x200;
+        }
+        if (AR(a)->arrAF4[0] != 0 || !(AR(a)->hB14 & 1)) {
+            s = 6;
+            goto again;
+        }
+        Ch_DataRead(AR(a)->hB04[0]);
+        *st = 5;
+        s = 5;
+        goto again;
+    }
+    case 5:
+        if (Ch_DataReadSync(AR(AtelGetBasicWork(D_0058D434))->hB04[0]) == 1) {
+            break;
+        }
+        s = 6;
+        goto again;
+    case 6: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (a->w38 & 0x400) {
+            func_0014B0B0(a, 1);
+            a->w38 &= ~0x400;
+        }
+        if (AR(a)->arrAF4[1] == 0 && (AR(a)->hB14 & 2) && AR(a)->hB04[1] != 0) {
+            Ch_DataRead(AR(a)->hB04[1]);
+            *st = 7;
+            s = 7;
+            goto again;
+        }
+        s = 8;
+        goto again;
+    }
+    case 7:
+        if (Ch_DataReadSync(AR(AtelGetBasicWork(D_0058D434))->hB04[1]) == 1) {
+            break;
+        }
+        s = 8;
+        goto again;
+    case 8: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (!(AR(a)->w34.b.f29 & 1)) {
+            s = 10;
+            goto again;
+        }
+        ChN_ReadSystemMGRPstart(a->hA8, 0);
+        *st = 9;
+        s = 9;
+        goto again;
+    }
+    case 9:
+        if (ChN_ReadSystemMGRPsync(AtelGetBasicWork(D_0058D434)->hA8, 0) == 1) {
+            break;
+        }
+        s = 10;
+        goto again;
+    case 10: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        if (!(AR(a)->w34.b.f29 & 2)) {
+            s = 12;
+            goto again;
+        }
+        ChN_ReadSystemMGRPstart(a->hA8, 2);
+        *st = 11;
+        s = 11;
+        goto again;
+    }
+    case 11:
+        if (ChN_ReadSystemMGRPsync(AtelGetBasicWork(D_0058D434)->hA8, 2) == 1) {
+            break;
+        }
+        *st = 12;
+        break;
+    case 12: {
+        Actor *a = AtelGetBasicWork(D_0058D434);
+        int i;
+        typedef struct {
+            u8 pad0[0xAF4];
+            Chr *arrAF4[2];
+            int arrAFC[2];
+            u16 hB04[2];
+            ActorBits2 arrB08[2];
+            int wB10;
+            u16 hB14;
+        } ActorElemView;
+        ActorElemView *ev = (ActorElemView *)a;
+        if (a->ptr9C == 0 || (a->b33 & 4)) {
+            a->ptr9C = TkCh_Allocate2(a->hA8, a->id);
+            TkChSetBattleChrNum(a);
+            if (a->w38 & 0x10) {
+                op_et_bindeff(a->ptr9C);
+                func_002994B8(a->ptr9C);
+            }
+            if (a->w38 & 0x20) {
+                AtelBindEff2On(a, 0);
+            }
+            if (a->w38 & 0x40) {
+                AtelBindEff2On(a, 1);
+            }
+            if (a->w38 & 0x80) {
+                AtelBindEff2On(a, 2);
+            }
+        }
+        a->b33 &= ~4;
+        for (i = 0; i < 2; i++) {
+            if (ev->arrAF4[i] == 0 && ((ev->hB14 >> i) & 1)) {
+                ev->hB04[i] = AtelGetElemId(a->w40, i);
+                if (ev->hB04[i] != 0) {
+                    ev->arrAF4[i] = TkCh_Allocate(ev->hB04[i]);
+                    Ch_SoundSetId(ev->arrAF4[i], 0xF);
+                    TkCh_BindToElem(a->hA8, ev->arrAF4[i], a->ptr9C, ev->arrAFC[i], i);
+                }
+            }
+            if (ev->arrAF4[i] != 0) {
+                Ch_EnClip(ev->arrAF4[i], ev->arrB08[i].b0);
+                Ch_Vu1SetClipmode(ev->arrAF4[i], ev->arrB08[i].b1);
+            }
+        }
+        if (!(AR(a)->w34.w & 0x400000) && a->ptr9C != 0 && !(ev->wB10 & 1)) {
+            func_00147048(a, 1);
+        }
+        *st = 13;
+        break;
+    }
+    case 13:
+        *st = 14;
+    case 14:
+        D_0058D434++;
+        if (D_0058D434 >= D_0058D438) {
+            *st = 15;
+            s = 15;
+            goto again;
+        }
+        *st = 1;
+        s = 1;
+        goto again;
+    case 15: {
+        int i;
+        for (i = 0; i < D_0058D438; i++) {
+            AR(AtelGetBasicWork(i))->w34.w |= 4;
+        }
+        ((u8 *)D_0058E3D8)[0x1EA] = 3;
+        ret = 1;
+        func_0014ADA8();
+        break;
+    }
+    }
+    AtelSetCurrentCtrl(saved);
+    return ret;
+}
 
 void func_00147890(void)
 {

@@ -405,8 +405,73 @@ int MsMessageCueRegist(int op, int a, int b, int b1, int b2) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", MsMessageCueProcess);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E08F0/rodata", jtbl_0056F8B0);
+int MsMessageCueProcess(void) {
+    if (D_003172F0.f2076 != 0) {
+        D_003172F0.f2076--;
+    }
+    while (D_003172F0.f2074 != 0) {
+        int r = D_003172F0.f2040;
+        if (r == 0) {
+            CmdEnt *c = &D_003172F0.f2044[D_003172F0.f2075 & 3];
+            r = -1;
+            switch (c->op) {
+            case 1:
+                r = func_00217200(c->a, c->b);
+                break;
+            case 4:
+                r = func_00217310(c->a, c->b);
+                break;
+            case 8:
+                r = func_00217400(c->a);
+                break;
+            case 5:
+                r = TOBtlDrawCaptureMonsterMessageWindow(c->a, c->b);
+                break;
+            case 6:
+                MsRegSEplay(0xFF, 0x39);
+                r = TOBtlDrawLearningMessageWindow(c->a, c->b);
+                break;
+            case 7:
+                MsRegSEplay(0xFF, 0x39);
+                r = func_00217270(c->a, c->b);
+                break;
+            case 2:
+                r = func_00217498();
+                break;
+            case 3:
+                r = func_002174C8();
+                break;
+            }
+            D_003172F0.f2040 = r;
+            D_003172F0.f2076 = c->b2;
+            D_003172F0.f2077 = c->b1;
+        } else {
+            GameState *g = &D_003172F0;
+            int done = 0;
+            if (r < 0) {
+                done = 1;
+            } else {
+                int t = g->f2076;
+                if (((g->w2034 & 0x20) && !(g->w2038 & 0x20) && t < g->f2077) || t == 0) {
+                    done = 1;
+                }
+            }
+            if (done != 0) {
+                if (r >= 0) {
+                    TOBtlCloseSimpleHelpMes();
+                }
+                D_003172F0.f2075 = (D_003172F0.f2075 + 1) % 4;
+                D_003172F0.f2074--;
+                D_003172F0.f2076 = 0;
+                D_003172F0.f2077 = 0;
+                D_003172F0.f2040 = 0;
+            } else {
+                break;
+            }
+        }
+    }
+    return D_003172F0.f2074;
+}
 
 int MsSystemMessageOpen(int a) {
     int p = D_003172F0.h32[0].w14;

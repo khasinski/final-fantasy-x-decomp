@@ -3,16 +3,20 @@
 #define Ch_SetMotionSpeed _hdr_Ch_SetMotionSpeed
 #define MsThreatProcess _hdr_MsThreatProcess
 #define msResetHeadTarget _hdr_msResetHeadTarget
+#define MsMessageCueRegist _hdr_MsMessageCueRegist
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/s3.h"
 #include "ffx/u2.h"
+#undef MsMessageCueRegist
 #undef MsCalcMotionSpeed
 #undef Ch_SetMotionSpeed
 #undef MsThreatProcess
 #undef msResetHeadTarget
+
+int MsMessageCueRegist(int, int, int, int, int);
 
 int msResetHeadTarget(BtlChr *c);
 
@@ -67,7 +71,294 @@ int func_001C5E90(int a, int v, int z) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C5E90", func_001C6050);
+typedef struct {
+    s8 s00;
+    s8 s01;
+    u8 b02;
+    u8 b03;
+    u8 b04;
+    u8 b05;
+    u8 b06;
+    u8 b07[13];
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    u16 pad1A;
+    s32 w1C;
+    s32 w20[3];
+} DmgSub1C6050;
+
+typedef struct {
+    u8 b00;
+    u8 b01;
+    u8 b02;
+    u8 b03;
+    u8 b04;
+    u8 b05;
+    u8 b06;
+    u8 b07;
+    s16 h08;
+    u16 h0A;
+    u8 b0C;
+    u8 pad0D[3];
+    s32 w10;
+    u8 pad14[3];
+    u8 b17;
+    DmgSub1C6050 sub[16];
+} DmgRec1C6050;
+
+typedef struct {
+    u8 pad00[0x27C];
+    u8 b27C;
+    u8 b27D;
+    u8 pad27E[0x48];
+    u16 h2C6;
+    u8 b2C8[13];
+    u8 pad2D5;
+    u16 h2D6;
+    u8 pad2D8[0xA4];
+    u16 h37C;
+    u8 pad37E[0x14];
+    u8 b392;
+    u8 pad393[0x9];
+    u8 b39C;
+    u8 b39D;
+    u8 pad39E[0x96];
+    DmgRec1C6050 rec[2];
+    u8 pad9E4[0xAA];
+    u8 bA8E;
+    u8 padA8F[0x1E];
+    u8 bAAD;
+    u8 padAAE[0x170];
+    u8 bC1E;
+    u8 padC1F;
+    s32 wC20;
+    u8 padC24[0x24];
+    void *pC48;
+} Chr1C6050;
+
+extern int MsMenuCloseTitleWindow(int);
+extern int func_001CF6A8(int, int);
+extern int MsPayGIL(int);
+extern int func_001CF6D0(int, int);
+extern int MsLimitTypeDamageCheck(int, void *, int, void *, int, int, int);
+extern void MsSubMP(int, BtlChr *, int, int, int, int);
+extern void MsSubCTB(int, BtlChr *, int, int, int, int);
+extern int MsLimitTypeStatusCheck(int, void *, int, void *, int, int);
+extern int func_001C7718(int, BtlChr *);
+extern int MsStoneProcess(int, BtlChr *);
+extern int func_001C88D8(int, BtlChr *, int, int, int, int, int);
+extern int func_001C87D8(int, BtlChr *, int);
+extern int MsSetChrWeak(int, int);
+extern int func_001C3758(int, void *, int, void *);
+extern int func_001CF278(int, int, int);
+extern void MsDamageSetMotion(int, int, int);
+
+int func_001C6050(int a0, int a1, int id, int *out, int flags)
+{
+    int i;
+    int ret;
+    int diff_chr;
+    int old_sleep;
+    int old_zombie;
+    int old_2CA;
+    int old_2C9;
+    int old_threat;
+    int hp_dmg;
+    DmgSub1C6050 *last_sub;
+    Chr1C6050 *src_chr;
+    Chr1C6050 *chr;
+
+    src_chr = (Chr1C6050 *)MsGetChr(a0);
+    ret = 0;
+    chr = (Chr1C6050 *)MsGetChr(id);
+    last_sub = 0;
+    diff_chr = (a0 != id);
+
+    for (i = 0; i < 2; i++) {
+        DmgRec1C6050 *rec = &chr->rec[i];
+        if (rec->b02 != a0 || rec->b03 != a1) {
+            continue;
+        }
+        chr->bC1E = flags & 0x7F;
+        chr->bAAD = a0;
+        if (!(flags & 8)) {
+            if (rec->b07 != 0) {
+                MsMenuCloseTitleWindow(0);
+                rec->b07 = 0;
+                MsMessageCueRegist(4, rec->h0A, rec->h08, 0x1B, 0x23);
+                if (rec->h08 > 0) {
+                    func_001CF6A8(id, rec->b01);
+                    MsRegSEplay2(id, 0x41);
+                }
+                rec->b05 |= 1;
+            }
+            if (rec->b0C != 0) {
+                MsMenuCloseTitleWindow(0);
+                rec->b0C = 0;
+                MsMessageCueRegist(8, rec->w10, 0, 0x1B, 0x23);
+                if (rec->w10 > 0) {
+                    MsPayGIL(-rec->w10);
+                    func_001CF6D0(id, rec->b01);
+                    MsRegSEplay2(id, 0x41);
+                }
+                rec->b05 |= 1;
+            }
+        }
+        if (rec->b04 != 0) {
+            if (rec->b04 & 1) {
+                u8 v = src_chr->b27C;
+                src_chr->b27C = 0;
+                chr->b27C = MsCheckRange(chr->b27C + v, 0, chr->b27D);
+            }
+            if (rec->b04 & 2) {
+                u16 *p = (u16 *)((Chr1C6050 *)MsGetChr(rec->b17))->pC48;
+                if (id == 3 && p != 0) {
+                    if (p[3] != 0) {
+                        int cmd = p[3];
+                        if (MsGetSaveCommand(3, cmd) == 0) {
+                            MsSetSaveCommand(3, cmd, 1);
+                            MsMessageCueRegist(6, 3, cmd, 0x1E, 0x32);
+                            chr->b27C = chr->b27D;
+                        }
+                    }
+                }
+            }
+            rec->b04 = 0;
+        }
+        if (rec->b00 < rec->b01) {
+            DmgSub1C6050 *sub = &rec->sub[rec->b00];
+            hp_dmg = 0;
+            if (!(flags & 8)) {
+                s8 st = sub->s01;
+                u8 b2 = sub->b02;
+                int j;
+                int old_dead, old_stone, old_blow;
+                u8 old_2D2;
+                switch (st) {
+                case 1:
+                    MsNumberRegist(id, 3, 0, 0, 1, b2, 0x81);
+                    break;
+                case 2:
+                    MsNumberRegist(id, 4, 0, 0, 2, b2, 0x81);
+                    break;
+                }
+                MsLimitTypeDamageCheck(a0, src_chr, id, chr, sub->w20[0], sub->w1C, rec->b06);
+                for (j = 0; j < 3; j++) {
+                    s32 val = sub->w20[j];
+                    if ((sub->h18 >> j) & 1) {
+                        switch (j) {
+                        case 0:
+                            hp_dmg += val;
+                            ((void (*)(int, BtlChr *, int, int, int, int, int))func_001C7DC0)(id, (BtlChr *)chr, val, sub->w20[1], st, b2, 0x81);
+                            chr->wC20 -= val;
+                            break;
+                        case 1:
+                            ((void (*)(int, BtlChr *, int, int, int, int, int))MsSubMP)(id, (BtlChr *)chr, val, sub->w20[0], st, b2, 0x81);
+                            break;
+                        case 2:
+                            MsSubCTB(id, (BtlChr *)chr, val, st, b2, 0x81);
+                            break;
+                        }
+                    }
+                }
+                MsLimitTypeStatusCheck(a0, src_chr, id, chr, sub->b04, sub->b03);
+                old_2CA = chr->b2C8[2];
+                old_2C9 = chr->b2C8[1];
+                old_dead = chr->h2C6 & 1;
+                old_2D2 = chr->b2C8[10];
+                old_blow = (chr->h2D6 >> 8) & 1;
+                old_stone = (chr->h2C6 >> 2) & 1;
+                old_sleep = (chr->h2C6 >> 3) & 1;
+                old_zombie = (chr->h2C6 >> 1) & 1;
+                old_threat = (chr->h2C6 >> 11) & 1;
+                chr->h2C6 = sub->h14;
+                for (j = 0; j < 13; j++) {
+                    chr->b2C8[j] = sub->b07[j];
+                }
+                chr->h2D6 = sub->h16;
+                MsLimitStatusProcess(id, (BtlChr *)chr, sub->b06);
+                if (chr->b2C8[10] != 0 && old_2D2 == 0) {
+                    chr->b392 = 0;
+                }
+                chr->bA8E = (chr->h2C6 >> 2) & 1;
+                if ((chr->h2C6 & 1) != old_dead) {
+                    ((int (*)(int, BtlChr *, int))func_001C7718)(id, (BtlChr *)chr, a0);
+                }
+                if (((chr->h2C6 >> 2) & 1) != old_stone) {
+                    MsStoneProcess(id, (BtlChr *)chr);
+                }
+                if (((chr->h2D6 >> 8) & 1) != old_blow) {
+                    MsBlowProcess(id, (BtlChr *)chr);
+                }
+                if (((chr->h2C6 >> 11) & 1) != old_threat) {
+                    MsThreatProcess(id, (BtlChr *)chr);
+                }
+                rec->b05 |= 1;
+                if ((chr->h37C >> 11) & 1) {
+                    func_001C88D8(id, (BtlChr *)chr, a0, old_sleep, old_zombie, old_2CA, old_2C9);
+                }
+                if (hp_dmg > 0 && ((chr->h37C >> 10) & 1)) {
+                    func_001C87D8(id, (BtlChr *)chr, a0);
+                }
+                MsSetChrWeak(id, -1);
+                ret |= 2;
+                rec->b00++;
+            }
+            if (chr->b39C != 0) {
+                func_001C3758(a0, src_chr, id, chr);
+            }
+            if (!(flags & 2)) {
+                if (sub->s00 != 1 || !(rec->b05 & 4)) {
+                    last_sub = sub;
+                    rec->b05 |= 4;
+                }
+            }
+            if (!(flags & 0x10)) {
+                MsStatusEffectCheck(id);
+                if (func_001CF278(a0, id, sub->h18) != 0) {
+                    *out = id;
+                }
+            }
+            if (rec->b00 < rec->b01) {
+                ret |= 1;
+                continue;
+            }
+        }
+        if ((rec->b05 & 1) && !(rec->b05 & 2)) {
+            chr->b39D = 0;
+            rec->b05 |= 2;
+            MsActionRequest(id, a0, 3, 0, 1, 0);
+        }
+        if (flags & 0x400) {
+            rec->b02 = 0xFF;
+        } else {
+            MsPopBtlPos(chr);
+        }
+    }
+
+    if (!(ret & 1)) {
+        if (MsDamageCheckDeath(a0, id, 0, diff_chr) != 0) {
+            last_sub = 0;
+        }
+    }
+    if (last_sub != 0) {
+        int kind = last_sub->s00;
+        if (flags & 0x20) {
+            switch (kind) {
+            case 5:
+            case 8:
+                kind = (brnd(9) & 3) + 0xD;
+                break;
+            case 6:
+                kind = (brnd(9) & 1) + 0xF;
+                break;
+            }
+        }
+        MsDamageSetMotion(id, kind, diff_chr);
+    }
+    return ret;
+}
 
 int func_001C6878(int a, int b, int id) {
     int r = 0;

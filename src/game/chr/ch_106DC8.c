@@ -28,8 +28,86 @@ void func_00106DD0(Chr *chr)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_106DC8", func_00106E58);
-INCLUDE_RODATA("build/ee_asm/game/chr/ch_106DC8/rodata", jtbl_00569570);
+typedef struct ChrSeView {
+    u8 pad000[0x190];
+    s8 b190;
+    u8 pad191[7];
+    s32 w198;
+    u8 pad19C[4];
+    struct {
+        u64 pad0 : 29;
+        u32 bit29 : 1;
+    } f1A0;
+    u8 pad1A8[0x830 - 0x1A8];
+    struct {
+        u64 pad0 : 32;
+        u32 bf32 : 2;
+        u32 bf34 : 1;
+        u32 bf35 : 2;
+    } f830;
+} ChrSeView;
+
+void func_002D6E48(int a, int b, int c, int d);
+int MsChrSEplayMotion(s32 a, s32 b);
+
+void func_00106E58(Chr *chr, s32 arg1)
+{
+    ChrSeView *v = (ChrSeView *)chr;
+    s32 lo = arg1 & 0xFF;
+    s32 hi = (arg1 >> 8) & 0xFF;
+    s32 cnt = 0;
+
+    if (hi == 0) {
+        switch (lo) {
+        case 1:
+            func_002D6E48(1, v->b190, func_00121AA0(chr), v->f830.bf32++);
+            func_00106DD0(chr);
+            break;
+        case 2:
+            func_002D6E48(0, v->b190, func_00121AA0(chr), v->f830.bf32++);
+            func_00106DD0(chr);
+            break;
+        case 10:
+        case 11:
+            func_002D6E48(0, v->b190, func_00121AA0(chr), v->f830.bf32++);
+            break;
+        case 3:
+            func_002D6E48(4, v->b190, func_00121AA0(chr), v->f830.bf34++);
+            break;
+        case 4:
+            Ch_GetDumpMotEv();
+            if (v->f1A0.bit29 != 0) {
+                func_002D6E48(3, v->b190, func_00121AA0(chr), v->f830.bf35++);
+            } else {
+                func_002D6E48(2, v->b190, func_00121AA0(chr), v->f830.bf35++);
+            }
+            break;
+        case 5:
+            func_002D6E48(5, v->b190, func_00121AA0(chr), 0);
+            break;
+        case 17:
+            cnt++;
+        case 16:
+            cnt++;
+        case 15:
+            cnt++;
+        case 14:
+            cnt++;
+        case 13:
+            cnt++;
+        case 12:
+            cnt += 2;
+            Ch_GetDumpMotEv();
+            func_002D6E48(0xFF, v->b190, 0, cnt);
+            break;
+        }
+    } else if (hi == 1) {
+        MsChrSEplayMotion(v->w198, lo);
+        if (lo == 6) {
+            func_00106DD0(chr);
+        }
+    }
+}
 
 void func_00107210(Chr *chr, Chr *other, s32 v)
 {

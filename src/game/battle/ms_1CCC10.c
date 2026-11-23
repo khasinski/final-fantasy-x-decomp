@@ -154,8 +154,217 @@ int MsEffectRead(int chr_id, int eff_id)
     return err;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectStart);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1CCC10/rodata", jtbl_0056E8B0);
+void MsExchangeParty(void);
+void MsSetLimitParty(int id, BtlChr *c);
+BtlChr *MsGetWeaponSpecial(int id, int a);
+int MsCheckStartEffect(int id, int mask);
+int func_002D6730(void);
+int SndGetStreamState(void);
+int MsSystemMessageCheck(void);
+int func_001E3518(int id, BtlChr *c);
+void func_001CFBC8(int id);
+void Sg_FilterSub(int a, int b, int c, int d);
+void Sg_FilterReset(void);
+void func_001E0A40(int id, int a, int b);
+void MsSetChrMoveFlagAll(int flag);
+int func_001CD480(int unused, BtlChr *c);
+void func_001CD538(int a, BtlChr *c);
+void func_001CD860(Obj1CD860 *o);
+void func_001CD900(int id, BtlChr *c);
+void func_001CDB68(BtlChr *c, s32 target, s32 mode, s32 flag);
+
+typedef struct {
+    int (*f0)(int);
+} EffStartCb;
+
+typedef struct {
+    u8 pad0[0x14];
+    s8 f14;
+    s8 f15;
+    u8 pad16[0x2C - 0x16];
+    u8 f2C;
+    u8 f2D;
+    u8 pad2E[0x4C - 0x2E];
+    s8 f4C;
+    u8 pad4D[0x2008 - 0x4D];
+    s32 f2008;
+    u8 pad200C[0x201C - 0x200C];
+    s32 f201C;
+    u8 pad2020[0x2106 - 0x2020];
+    s8 f2106;
+    u8 pad2107[0x2111 - 0x2107];
+    s8 f2111;
+    u8 pad2112[0x2137 - 0x2112];
+    s8 f2137;
+    u8 pad2138[0x2144 - 0x2138];
+    s8 f2144;
+} GameStateEffStart;
+extern GameStateEffStart _gs_eff_start __asm__("D_003172F0");
+
+void MsEffectStart(void)
+{
+    int i;
+
+    for (i = 0; i < 31; i++) {
+        BtlChr *c = MsGetChr(i);
+
+        switch (c->fABB) {
+        case 0:
+            break;
+        case 1: {
+            int ok = -1;
+            switch (((s8 *)c)[0xAAA]) {
+            case 1:
+                if (MsCheckChrMotionAll(1) != 0) {
+                    ok = 0;
+                } else {
+                    MsExchangeParty();
+                }
+                break;
+            case 2:
+            case 3:
+                _gs_eff_start.f2144 = 1;
+                break;
+            case 8:
+                if (MsCheckChrMotionAll(1) != 0) {
+                    ok = 0;
+                } else {
+                    MsSetLimitParty(i, c);
+                }
+                break;
+            }
+            if (ok != 0 && c->f1C8 == 0 && (*(u32 *)((u8 *)c + 0xF4) & 0xFFFF00) == 0) {
+                u8 k;
+                MsActionRequest(i, 0xFF, 7, 0, 2, 0);
+                MsSetVoiceCheck(i, 9, 1, 0, 0);
+                ((void (*)(int, int))MsMenuOpenTitleWindow)(_gs_eff_start.f2008, 0x3C);
+                c->fABB = 2;
+                k = c->fAC0;
+                c->fB2 = 0xFF;
+                if (c->fD3 != 0) {
+                    MsSetChrWeak(i, 0);
+                    if ((1 << i) != *(s32 *)((u8 *)c + 0xA80)) {
+                        c->f110 = 1;
+                    }
+                }
+                if (((s8 *)c)[0xABC] != 0) {
+                    BtlChr *w;
+                    ((s8 *)c)[0xABC] = 0;
+                    w = MsGetWeaponSpecial(i, 0);
+                    if (w != 0) {
+                        MsSetMotion(w->f0C, 8, 1, 0, 1, 0, 0);
+                    }
+                }
+                if (k == 0xFF) {
+                    c->fABB = 3;
+                } else {
+                    MsSetMotion(i, k, 1, 0, 1, 0, 0);
+                }
+                if (c->fC4C != 0) {
+                    MsAtelRequestCamera(0, i, c->fAC4, c->fAC8, 0, 1, 0, 0);
+                }
+            }
+            break;
+        }
+        case 3:
+            if (c->fABD == 0) {
+                if (MsCheckStartEffect(i, *(s32 *)((u8 *)c + 0xA80)) == 0 && _gs_eff_start.f2106 == 0
+                    && func_002D6730() == 0 && SndGetStreamState() == 0 && MsSystemMessageCheck() == 0
+                    && _gs_eff_start.f4C == 0) {
+                    if (_gs_eff_start.f14 != 0 && _gs_eff_start.f15 == 1) {
+                        break;
+                    }
+                    c->fABB = func_001E3518(i, c);
+                    func_001CD860((Obj1CD860 *)c);
+                }
+            }
+            if (c->fABB != 11) {
+                break;
+            }
+        case 11:
+            if (c->fC4C == 0) {
+                func_001CDB68(c, 0, c->fD3 != 0, 0);
+                c->fABB = 6;
+            } else {
+                int eff_id;
+                EffStartCb *fx;
+                c->fABB = 4;
+                _gs_eff_start.f2111 = i;
+                _gs_eff_start.f2D = _gs_eff_start.f2C;
+                _gs_eff_start.f2C = 0;
+                fx = (EffStartCb *)c->fC4C;
+                eff_id = MsGetEffID(*(u16 *)((u8 *)c + 0xADC), 2, i);
+                (*(u16 *)((u8 *)c + 0xADC))++;
+                MsSetChrMoveFlagAll(c->fD3);
+                func_001CFBC8(i);
+                func_002F8660(0);
+                func_002F8660(2);
+                fx->f0(eff_id);
+                func_0011AB80(1);
+            }
+            break;
+        case 12:
+            if (((int (*)(int))MsEffectLimitSync)(i) < 0) {
+                if (_gs_eff_start.f2137 < 6) {
+                    _gs_eff_start.f2137++;
+                }
+                Sg_FilterSub(0, 0, 0, 0x80 - (_gs_eff_start.f2137 << 3));
+            } else {
+                c->fABB = 13;
+            }
+            break;
+        case 13:
+            if (_gs_eff_start.f2137 > 0) {
+                _gs_eff_start.f2137--;
+                Sg_FilterSub(0, 0, 0, 0x80 - (_gs_eff_start.f2137 << 3));
+            } else {
+                register int next __asm__("$3");
+                Sg_FilterReset();
+                next = 11;
+                c->fABB = next;
+            }
+            break;
+        case 5:
+            func_001CD900(i, c);
+            break;
+        case 14:
+            c->fABB = 0;
+            MsEffectRead(i, _gs_eff_start.f201C);
+            break;
+        case 15:
+            if (func_001CD480(i, c) != 0) {
+                c->fABB = 0;
+                func_001CD538(i, c);
+            }
+            break;
+        case 7:
+        case 8:
+            if (func_001CD480(i, c) != 0) {
+                if (c->fABB == 7) {
+                    c->fABB = 0;
+                    c->fC5 = 1;
+                } else {
+                    c->fABB = 9;
+                }
+                func_001CD538(i, c);
+            }
+            break;
+        case 9:
+            if (((u8 *)c)[0xC25] != 0) {
+                ((u8 *)c)[0xC25]--;
+            } else if (c->fF2 == 0) {
+                func_001E0A40(i, ((u8 *)c)[0xC24], *(u16 *)((u8 *)c + 0xC26));
+            }
+            break;
+        case 10:
+            if (c->fABD == 0) {
+                func_001CDB68(c, 1, 1, 0);
+                c->fABB = 6;
+            }
+            break;
+        }
+    }
+}
 
 int func_001CD480(int unused, BtlChr *c) {
     int r = 1;

@@ -296,7 +296,147 @@ void func_00108178(Chr *chr, float a, float b)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_CalcElement);
+extern char D_00308100[];
+extern char D_005695C0[];
+void func_002DD128(void *);
+void func_002DD0C0(void *, void *);
+void func_002DD270(void *, void *, float);
+void func_002DD318(void *, void *, float);
+void func_002DD1C8(void *, void *, float);
+void func_002DCE08(void *, void *, void *);
+float func_001074D8(float, float, float);
+void Ch_ElemCalcQuaternion(void *);
+
+typedef union {
+    u64 d[2];
+    Vec4 v;
+} Vec4CE;
+
+#define SPAD_MAT ((float (*)[4])0x70000000)
+
+void Ch_CalcElement(Chr *chr)
+{
+    register u8 *gp __asm__("$28");
+    float m0[4][4];
+    float m40[4][4];
+    Vec4CE v80;
+    s32 i;
+    ChrSlot *slot = (ChrSlot *)chr->u1E0;
+
+    func_002DD128(slot->u90);
+    func_002DD128((u8 *)slot + 0x10);
+    func_002DD128((u8 *)slot + 0x50);
+    if (chr->p1A8 != 0) {
+        Chr *parent;
+        ChrParam *p;
+        float sc;
+
+        func_002DD128(SPAD_MAT);
+        parent = chr->p1A8;
+        {
+            register float one __asm__("$f2") = 1.0f;
+            sc = *(float *)((u8 *)chr + 0x1C0) * (one / parent->param->f30);
+        }
+        SPAD_MAT[2][2] = sc;
+        SPAD_MAT[1][1] = sc;
+        SPAD_MAT[0][0] = sc;
+        func_002DCE38(m0, parent->slots[*(s32 *)((u8 *)chr + 0x1AC)].u90, SPAD_MAT);
+        v80 = *(Vec4CE *)((u8 *)chr + 0x1B0);
+        p = chr->p1A8->param;
+        v80.v.x *= p->f30;
+        v80.v.y *= p->f30;
+        v80.v.z *= p->f30;
+        func_002DCE08(&v80, m0, &v80);
+        m0[3][0] = v80.v.x;
+        m0[3][1] = v80.v.y;
+        m0[3][2] = v80.v.z;
+        func_002DCE38((u8 *)slot + 0x10, (u8 *)chr->p1A8 + 0x1F0, m0);
+    } else if (*(void **)((u8 *)chr + 0x110) != 0) {
+        func_002DD0C0((u8 *)slot + 0x10, *(void **)((u8 *)chr + 0x110));
+    } else {
+        register float sc __asm__("$f2");
+        register float ry __asm__("$f20");
+        register float ry2 __asm__("$f21");
+        float pi;
+        register float neg_pi __asm__("$f0");
+
+        func_002DD128(SPAD_MAT);
+        {
+            register float f30 __asm__("$f0") = chr->param->f30;
+            register float f38 __asm__("$f2") = chr->param->f38;
+            sc = f30 / f38 * *(float *)(gp - 0x7EC8);
+        }
+        SPAD_MAT[0][0] = *(float *)((u8 *)chr + 0x60) * sc;
+        SPAD_MAT[1][1] = *(float *)((u8 *)chr + 0x64) * sc;
+        SPAD_MAT[2][2] = *(float *)((u8 *)chr + 0x68) * sc;
+        if (*(float *)((u8 *)chr + 0x16C) != 0.0f) {
+            *(float *)((u8 *)chr + 0x168) = func_001074D8(*(float *)((u8 *)chr + 0x168), *(float *)((u8 *)chr + 0x16C), *(float *)((u8 *)chr + 0x170));
+            func_002DD270(SPAD_MAT, SPAD_MAT, *(float *)((u8 *)chr + 0x168));
+        }
+        {
+            register float f164 __asm__("$f0") = *(float *)((u8 *)chr + 0x164);
+            register float c7ec4 __asm__("$f1") = *(float *)(gp - 0x7EC4);
+            ry = -f164 - c7ec4;
+        }
+        ry2 = ry;
+        if (!(ry < *(float *)(gp - 0x7EC0) && ry > *(float *)(gp - 0x7EBC))) {
+            func_002F0008(D_00308100, D_005695C0, func_002ED038(ry));
+        }
+        pi = *(volatile float *)(gp - 0x7EB8);
+        if (ry2 > pi) {
+            do {
+                ry -= *(volatile float *)(gp - 0x7EB4);
+            } while (ry > pi);
+        }
+        neg_pi = *(volatile float *)(gp - 0x7EB0);
+        while (ry < neg_pi) {
+            ry += *(float *)(gp - 0x7EAC);
+        }
+        func_002DD318(SPAD_MAT, SPAD_MAT, ry);
+        SPAD_MAT[3][0] = chr->f10 + *(float *)((u8 *)chr + 0x70);
+        SPAD_MAT[3][1] = chr->f14 + *(float *)((u8 *)chr + 0x74);
+        SPAD_MAT[3][2] = chr->f18 + *(float *)((u8 *)chr + 0x78);
+        func_002DD0C0((u8 *)slot + 0x10, SPAD_MAT);
+    }
+    func_002DD128(m40);
+    {
+        register float f114 __asm__("$f3") = *(float *)((u8 *)chr + 0x114);
+        register float sx __asm__("$f2") = *(float *)((u8 *)chr + 0x60) * f114;
+        register float sz __asm__("$f1") = *(float *)((u8 *)chr + 0x68) * f114;
+        register float sy __asm__("$f4") = *(float *)((u8 *)chr + 0x64) * f114;
+        register float f3C __asm__("$f0") = *(float *)((u8 *)chr->param + 0x3C);
+        register float d2 __asm__("$f1") = f3C / sz;
+        register float d0 __asm__("$f2") = f3C / sx;
+        register float d1 __asm__("$f0") = f3C / sy;
+
+        m40[2][2] = d2;
+        m40[0][0] = d0;
+        m40[1][1] = d1;
+    }
+    func_002DCE38((u8 *)slot + 0x50, (u8 *)slot + 0x10, m40);
+    slot = chr->slots;
+    for (i = 0; i < chr->hdr->h0A; i++, slot++) {
+        if (slot->wD0 != 0) {
+            func_002DD0C0(slot->u90, (void *)slot->wD0);
+            slot->wD0 = 0;
+        } else {
+            func_002DD128(SPAD_MAT);
+            SPAD_MAT[0][0] = *(float *)((u8 *)slot + 0x110);
+            SPAD_MAT[1][1] = *(float *)((u8 *)slot + 0x114);
+            SPAD_MAT[2][2] = *(float *)((u8 *)slot + 0x118);
+            func_002DD270(SPAD_MAT, SPAD_MAT, *(float *)((u8 *)slot + 0xF0));
+            func_002DD318(SPAD_MAT, SPAD_MAT, *(float *)((u8 *)slot + 0xF4));
+            func_002DD1C8(SPAD_MAT, SPAD_MAT, *(float *)((u8 *)slot + 0xF8));
+            SPAD_MAT[3][0] = *(float *)((u8 *)slot + 0x100);
+            SPAD_MAT[3][1] = *(float *)((u8 *)slot + 0x104);
+            SPAD_MAT[3][2] = *(float *)((u8 *)slot + 0x108);
+            func_002DCE38(slot->u90, (u8 *)slot->data + 0x90, SPAD_MAT);
+            if (slot->wD4 != 0) {
+                Ch_ElemCalcQuaternion(slot);
+            }
+        }
+    }
+}
 
 s32 func_00108750(Chr *chr, s32 key)
 {
@@ -791,7 +931,188 @@ void func_001095C8(Chr *chr, float *out)
     out[2] = chr->f38 - chr->f18;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", Ch_CalcMain);
+extern float D_00307F3C;
+void func_00107600(Chr *chr);
+void func_001078C0(Chr *chr);
+float func_002E8648(float);
+float func_002E89C0(float);
+void func_00122450(void);
+void func_00112F78(Chr *chr, s32 a);
+
+typedef struct {
+    u16 h00;
+    s8 active;
+    u8 pad03[0xD];
+    Vec4D v10;
+    Vec4D v20;
+    u8 pad30[0x20];
+    float f50;
+    float f54;
+    float f58;
+    u8 pad5C[0x104];
+    float f160;
+    u8 pad164[0x10];
+    float f174;
+    float f178;
+    float f17C;
+    u8 pad180[0xC];
+    s8 b18C;
+    s8 b18D;
+    s8 b18E;
+    u8 pad18F[3];
+    s8 b192;
+    u8 pad193[0xD];
+    s64 flags;
+    u8 pad1A8[0x180];
+    FloatTween tw328[7];
+    u8 pad37C[0x174];
+    float f4F0;
+    u8 pad4F4[0x14];
+    float f508;
+    u8 pad50C[4];
+    float f510;
+    u8 pad514[0xC];
+    float f520;
+    u8 pad524[0x31C];
+} ChrMainView;
+
+void Ch_CalcMain(void)
+{
+    register u8 *gp __asm__("$28");
+    ChrMainView *p;
+    float tmp;
+    u32 t0;
+
+    if (Sg_GetPause() != 0) {
+        return;
+    }
+    for (p = (ChrMainView *)D_00300664; p != (ChrMainView *)(D_00300664 + D_00300668); p++) {
+        if (!p->active) {
+            continue;
+        }
+        p->b18C &= 0x13;
+        if (p->b18C != 0 && p->b18D == 0) {
+            continue;
+        }
+        if (!FLAGS_BIT(p, 6)) {
+            switch (p->b192) {
+            case 0:
+                func_00107600((Chr *)p);
+                break;
+            case 2:
+                func_001078C0((Chr *)p);
+                break;
+            }
+        }
+        {
+            s32 gt = (p->f160 > p->f17C);
+            FLAGS_SET(p, 17, gt);
+        }
+        if (p->f160 != 0.0f) {
+            float spd;
+
+            tmp = p->f174;
+            if (Sg_GetKeepFps() == 2 && FLAGS_BIT(p, 20)) {
+                spd = p->f160 * *(float *)(gp - 0x7E9C) * D_00307F3C;
+            } else {
+                spd = p->f160 * *(float *)(gp - 0x7E98);
+            }
+            p->f50 = func_002E8648(tmp) * spd;
+            p->f58 = func_002E89C0(tmp) * spd;
+            p->flags |= (1ULL << 25);
+        } else {
+            *(volatile float *)&p->f58 = 0.0f;
+            *(volatile float *)&p->f50 = 0.0f;
+        }
+        p->v20 = p->v10;
+    }
+    func_00122450();
+    if (D_0057E9D4 < D_0057E9D0) {
+        D_0057E9D4 = D_0057E9D0;
+    }
+    for (p = (ChrMainView *)D_00300664; p != (ChrMainView *)(D_00300664 + D_00300668); p++) {
+        if (!p->active) {
+            continue;
+        }
+        if (p->b18C != 0 && p->b18D == 0) {
+            continue;
+        }
+        {
+            s32 sub = (D_0057E9D0 < p->v10.v.y - 8.5f);
+            register s64 flg __asm__("$4") = p->flags;
+            flg = (flg & ~(1LL << 29)) | ((s64)sub << 29);
+            p->flags = flg;
+        }
+        switch (p->b18E) {
+        case 0:
+            p->f510 = 0.0f;
+            if (!FLAGS_BIT(p, 7)) {
+                if (p->f178 < p->v10.v.y) {
+                    p->v10.v.y = p->f178;
+                }
+            }
+            break;
+        case 1:
+            p->f510 = 0.0f;
+            p->v10.v.y = p->f178;
+            break;
+        case 2: {
+            float damp;
+            float target;
+            float g = *(volatile float *)(gp - 0x7E94);
+
+            tmp = 0.0f;
+            if (D_0057E9D0 < p->v10.v.y - 8.5f) {
+                tmp = 1.0f;
+            } else if (D_0057E9D0 < p->v10.v.y) {
+                tmp = (p->v10.v.y - D_0057E9D0) / 8.5f;
+            }
+            if (tmp != 0.0f) {
+                damp = 0.5f;
+                p->f510 -= g * 0.5f;
+                if (p->v10.v.y < D_0057E9D4) {
+                    p->v10.v.y += (D_0057E9D4 - p->v10.v.y) / 10.0f;
+                    if (p->f510 < 0.0f) {
+                        p->f510 = 0.0f;
+                    }
+                }
+            } else {
+                damp = 1.0f;
+                p->f510 += g;
+            }
+            if (p->f510 < tmp * -2.0f) {
+                p->f510 = tmp * -2.0f;
+            }
+            target = (p->f520 < p->f4F0) ? p->f4F0 : p->f520;
+            p->f508 += (target - p->f508) / 30.0f;
+            if (p->f178 < p->v10.v.y + p->f510 + p->f508) {
+                p->f510 = 0.0f;
+                p->v10.v.y = p->f178 - p->f508;
+            }
+            p->v10.v.y += p->f510 * damp;
+            break;
+        }
+        }
+    }
+    t0 = *(volatile u32 *)0x10000000;
+    for (p = (ChrMainView *)D_00300664; p != (ChrMainView *)(D_00300664 + D_00300668); p++) {
+        if (!p->active) {
+            continue;
+        }
+        if (p->b18C != 0 && p->b18D == 0) {
+            continue;
+        }
+        p->flags |= (1ULL << 24);
+        func_00112F78((Chr *)p, FLAGS_BIT(p, 24));
+        {
+            s32 i;
+            for (i = 0; i < 7; i++) {
+                JobSchedule_Ch_CalcMiddle_Batch(&p->tw328[i]);
+            }
+        }
+    }
+    D_0057E9B0[1] = *(volatile u32 *)0x10000000 - t0;
+}
 
 void func_00109B80(void) {
 }

@@ -425,8 +425,108 @@ u16 *func_0029C550(ScriptThread *th, u16 *pc) {
     return pc + 2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_en_lock);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_29A8A8/rodata", jtbl_00575470);
+Chr *func_0013B150(int id);
+Chr *opd_target_handle_by_index();
+
+u16 *opu_en_lock(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    SlotEntry *e = &owu_eff_status[sub->h14];
+    int w;
+    s16 id;
+
+    switch (((s16)th->flags & 0xF000) >> 12) {
+    case 0: {
+        register u8 v __asm__("$5") = *(u8 *)((u8 *)e + 0x10);
+        if (v == 0xFF) {
+            v = *(u8 *)((u8 *)e + 0x18);
+        }
+        sub->b18 = v;
+        pc += 1;
+        break;
+    }
+    case 1:
+        if (th->b21E != 0) {
+            register u8 v __asm__("$5") = *(u8 *)(pc + 1);
+            sub->b18 = v;
+        } else {
+            func_00120108(D_005753E0);
+        }
+        pc += 2;
+        break;
+    case 3:
+        if (D_007649A0 != 0) {
+            register u8 cid __asm__("$5") = *(u8 *)(pc + 1);
+            if (owu_chr_hd[cid] == 0) {
+                int i = opus_get_chr_status_index(opd_target_handle_by_index(0), 0, 0);
+                register u8 v __asm__("$5") = owu_chr_status[i].hE;
+                sub->b18 = v;
+            } else {
+                sub->b18 = cid;
+            }
+        }
+        pc += 2;
+        break;
+    case 2:
+        if (th->b21E == 0) {
+            u16 cid = pc[1];
+            owu_chr_hd[cid] = func_0013B150(cid);
+        }
+        pc += 2;
+        break;
+    case 5: {
+        register int idx __asm__("$4");
+        id = pc[1];
+        idx = opus_get_chr_status_index_by_chrno(id);
+        if (idx >= 0) {
+            register int off __asm__("$4") = idx << 5;
+            register ResEntry *re __asm__("$2") = (ResEntry *)((u8 *)owu_chr_status + off);
+            __asm__("" : "+r"(re));
+            sub->b18 = re->hE;
+        } else {
+            func_00120108(D_00575408, id);
+        }
+        pc += 2;
+        break;
+    }
+    case 6: {
+        int r = ((int (*)(u8))MsGetSummonerNum)(sub->b18);
+        sub->b18 = r;
+        if ((u8)r < 0x20) {
+            pc += 2;
+        } else {
+            pc = SCRIPT_JUMP(pc);
+        }
+        break;
+    }
+    case 8:
+        sub->b18 = *(u8 *)((u8 *)e + 0x18);
+        pc += 1;
+        break;
+    case 9:
+        w = MsGetWeaponHandle(sub->b18, 0);
+    weapon_common:
+        if (w == 0) {
+            pc = SCRIPT_JUMP(pc);
+        } else {
+            register int idx __asm__("$4") = opus_get_chr_status_index((Chr *)w, 0, 0);
+            if (idx >= 0) {
+                register int off __asm__("$4") = idx << 5;
+                register ResEntry *re __asm__("$2") = (ResEntry *)((u8 *)owu_chr_status + off);
+                __asm__("" : "+r"(re));
+                sub->b18 = re->hE;
+            } else {
+                func_00120108(D_00575438);
+            }
+            pc += 2;
+        }
+        break;
+    case 10:
+        w = MsGetWeaponHandle(sub->b18, 1);
+        goto weapon_common;
+    }
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_en_on);
 

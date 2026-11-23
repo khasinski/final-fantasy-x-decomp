@@ -1075,8 +1075,160 @@ void func_00206980(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOGetChangeMacroAddress);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_2021E8/rodata", jtbl_005702F0);
+extern u8 D_00323708[];
+extern u8 D_00667600[];
+int func_00208090(int id);
+char *func_00207538(U3NumFmt *f);
+
+typedef struct {
+    u8 pad00[0xCC];
+    s32 wCC;
+    s8 bD0;
+    s8 bD1;
+    s8 bD2;
+    u8 padD3;
+    u16 hD4;
+    u8 padD6[0x16];
+    u16 hEC;
+    u16 hEE;
+} BtlGetDataMes;
+
+u8 *TOGetChangeMacroAddress(int id, u8 *s)
+{
+    u8 tmp[16];
+    s32 base;
+    u8 *ret;
+    u8 *tbl;
+    u16 off;
+    u8 idx = s[1] - 0x30;
+
+    switch (s[0]) {
+    case 0x12:
+        if (s[1] < 0x50) {
+            if (D_0066AB00[id][idx]->b1 == -1) {
+                return D_00323708;
+            }
+            if (D_0066AB00[id][idx]->b1 == 0) {
+                ret = (u8 *)D_0066AB00[id][idx]->w4;
+            }
+            if (D_0066AB00[id][idx]->b1 == 1) {
+                ret = (u8 *)func_00207538((U3NumFmt *)D_0066AB00[id][idx]);
+            }
+            if (D_0066AB00[id][idx]->b1 == 2) {
+                ret = (u8 *)func_00207538((U3NumFmt *)D_0066AB00[id][idx]);
+            }
+            if (D_0066AB00[id][idx]->b1 == 0x33) {
+                ret = (u8 *)func_00208068(D_0066AB00[id][idx]->w4);
+                break;
+            }
+            if (D_0066AB00[id][idx]->b1 == 0x34) {
+                ret = (u8 *)func_00208090(D_0066AB00[id][idx]->w4);
+                break;
+            }
+            if (D_0066AB00[id][idx]->b1 == 0x35) {
+                ret = (u8 *)func_002080B0(D_0066AB00[id][idx]->w4);
+                break;
+            }
+            if (D_0066AB00[id][idx]->b1 == 0x36) {
+                ret = (u8 *)func_002080D8(D_0066AB00[id][idx]->w4);
+                break;
+            }
+            if (D_0066AB00[id][idx]->b1 == 0x37) {
+                BtlGetDataMes *b;
+                s16 total;
+
+                MsFieldItemGetMes(D_0066AB00[id][idx]->w4);
+                b = (BtlGetDataMes *)&btlgetdata_mes;
+                total = 0;
+                if (b->wCC > 0) {
+                    total++;
+                }
+                total += b->bD0;
+                total += b->bD1;
+                total += b->bD2;
+                if (total != 1) {
+                    return D_00323708;
+                }
+                if (b->wCC > 0) {
+                    _TOIntToMes(b->wCC, D_00667600, 0, 0);
+                    ret = D_00667600;
+                    break;
+                }
+                if (b->bD0 > 0) {
+                    ret = (u8 *)func_00208068(b->hD4);
+                    break;
+                }
+                if (b->bD1 > 0) {
+                    ret = (u8 *)MsImportantName(b->hEC);
+                    break;
+                }
+                if (b->bD2 > 0) {
+                    ret = (u8 *)func_00208090(b->hEE);
+                    break;
+                }
+            }
+            if ((u8)D_0066AB00[id][idx]->b1 >= 0x13 && (u8)D_0066AB00[id][idx]->b1 <= 0x23) {
+                D_0066AB00[id][idx]->b1 += D_0066AB00[id][idx]->w4 / 0xD0;
+                D_0066AB00[id][idx]->w4 %= 0xD0;
+                tmp[0] = D_0066AB00[id][idx]->b1;
+                tmp[1] = D_0066AB00[id][idx]->w4 + 0x30;
+                tmp[2] = 0;
+                ret = TOGetChangeMacroAddress(id, tmp);
+            }
+            if ((u8)D_0066AB00[id][idx]->b1 >= 0x2B && (u8)D_0066AB00[id][idx]->b1 <= 0x32) {
+                _TOIntToMes(D_0066AB00[id][idx]->w4, D_00667600, D_0066AB00[id][idx]->b1 - 0x2A, 0);
+                ret = D_00667600;
+            }
+        } else {
+            tbl = (u8 *)D_003241C0;
+            off = *(u16 *)(tbl + (s[1] - 0x50) * 4 + ((RenewMsgCmd *)D_00668740[id])->h20 * 2);
+            ret = tbl + off;
+        }
+        break;
+    case 0x13:
+        ret = (u8 *)TOGetSaveChrName(idx);
+        break;
+    case 0x14:
+    case 0x15:
+    case 0x18:
+        break;
+    case 0x16:
+    case 0x17: {
+        OfsTbl *item = MsGetRomItem(idx, &base);
+        ret = (u8 *)(base + (u16)item->a[0].x);
+        break;
+    }
+    case 0x19:
+    case 0x1A:
+    case 0x1B:
+    case 0x1C:
+    case 0x1D:
+    case 0x1E:
+    case 0x1F:
+    case 0x20:
+    case 0x21:
+    case 0x22:
+        tbl = (u8 *)(D_0066AF00[func_001BD360()]->w - 19)[s[0]];
+        off = *(u16 *)(tbl + idx * 4 + ((RenewMsgCmd *)D_00668740[id])->h20 * 2);
+        ret = tbl + off;
+        break;
+    case 0x23:
+        ret = (u8 *)MsImportantName(idx);
+        break;
+    case 0x10:
+        if ((u8)(s[1] - 0x50) < 8) {
+            ((SlotZSel *)D_00669AE0[id])->w0C = _TOIntToMes(((SlotZSel *)D_00669AE0[id])->w0C, D_00667600, s[1] - 0x4F, 1);
+            ret = D_00667600;
+        } else {
+            ret = 0;
+        }
+        break;
+    default:
+        ret = 0;
+        break;
+    }
+    return ret;
+}
 
 s32 func_00206EB0(int a, int b)
 {

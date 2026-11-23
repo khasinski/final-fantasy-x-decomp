@@ -1,6 +1,7 @@
 /* tu_231 0x209460-0x20cc98: low; ~TOSetExeWindowArea (config/tu_map.tsv) */
 #define TODrawMessageWindowForMenu _hdr_TODrawMessageWindowForMenu
 #define TODrawMessageWindow _hdr_TODrawMessageWindow
+#define D_0066B530 _hdr_D_0066B530
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -9,8 +10,18 @@
 #include "ffx/u3.h"
 #include "ffx/v4.h"
 #include "ffx/s4.h"
+#undef D_0066B530
 #undef TODrawMessageWindow
 #undef TODrawMessageWindowForMenu
+
+typedef struct {
+    u8 *w0;
+    u8 *w4;
+    u32 w8;
+    s16 hC;
+    s16 hE;
+} FtcRec;
+extern FtcRec D_0066B530[];
 
 int TOGetSaveChrName(int i)
 {
@@ -33,9 +44,70 @@ void TOInitPadData(void)
     D_003238D0.b21 = 0x80;
 }
 
-/* DEBT(TYPE): buffer addresses are stored in the s32 members of R4Rec16 */
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_209460", TOFTCTransfer);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_209460/rodata", jtbl_00570960);
+typedef struct {
+    u8 pad00[4];
+    u16 h04;
+    u16 pad06;
+    u16 h08;
+    u8 pad0A[6];
+    u32 w10;
+    u8 pad14[0xC];
+    u32 w20;
+    u32 w24;
+    u16 h28;
+    u16 h2A;
+    u8 pad2C[4];
+    u32 w30;
+} FtcHdr;
+
+extern u8 D_0067A5A0[];
+extern u8 D_0068A5A0[];
+extern u8 D_0068E5A0[];
+extern u8 D_0068EA60[];
+extern u8 D_0068EBE0[];
+extern u8 D_0068ED60[];
+extern u8 D_0068E990[];
+
+int TOFTCTransfer(FtcHdr *p)
+{
+    if (p->h04 < 0xC8) {
+        return 1;
+    }
+    D_0066B530[p->h08].w0 = (u8 *)p + p->w20;
+    D_0066B530[p->h08].w8 = p->w24;
+    D_0066B530[p->h08].hC = p->h28;
+    D_0066B530[p->h08].hE = p->h2A;
+    if (p->h08 == 0) {
+        func_002EEF1C(D_0067A5A0, (u8 *)p + p->w20, p->w24);
+        D_0066B530[p->h08].w0 = D_0067A5A0;
+    }
+    if (p->h08 == 4) {
+        func_002EEF1C(D_0068A5A0, (u8 *)p + p->w20, p->w24);
+        D_0066B530[p->h08].w0 = D_0068A5A0;
+    }
+    switch (p->h08) {
+    case 0:
+        D_0066B530[p->h08].w4 = D_0068E5A0;
+        break;
+    case 1:
+        D_0066B530[p->h08].w4 = D_0068EA60;
+        break;
+    case 2:
+        D_0066B530[p->h08].w4 = D_0068EBE0;
+        break;
+    case 3:
+        D_0066B530[p->h08].w4 = D_0068ED60;
+        break;
+    case 4:
+        D_0066B530[p->h08].w4 = D_0068E990;
+        break;
+    default:
+        D_0066B530[p->h08].w4 = 0;
+        return 1;
+    }
+    func_002EEF1C(D_0066B530[p->h08].w4, (u8 *)p + p->w30, p->w10);
+    return 0;
+}
 
 void TOTransImageHL(u32 addr, int dbp, int psm, int x, int y, int w, int h)
 {
@@ -138,7 +210,7 @@ void TOTransTexture(void)
 {
     R4Rec16 *temp_2;
 
-    temp_2 = &D_0066B530[TOGetInternationalBaseDicType()];
+    temp_2 = (R4Rec16 *)&D_0066B530[TOGetInternationalBaseDicType()];
     TOTransImageHL((u32) temp_2->w0, 0x3C00, 0x14, 0, 0, (s32) temp_2->hC, (s32) temp_2->hE);
     if (MsBattleGetStatus() != 0)
     {

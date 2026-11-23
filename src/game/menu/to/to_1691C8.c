@@ -108,18 +108,11 @@ extern int (**D_0030E098)(int);
 void TOMenuHelpSetExtMode(int, int);
 void TOMenuTermHelp(void);
 void func_0016B838(void);
-void func_0016A268(s32, s32, s32, int *, int);
+u8 *func_0016A268(u8 *, u8 *, int, int *, int *);
 u16 func_00220318(void);
 u16 TOMenuGetControlPadTrg(void);
 u16 TOMenuGetControlPadRep(void);
 int func_0016B5B0(s32);
-void TOFTCTransfer(int);
-int sa_task_buff_size_get(int);
-void (**sa_task_init2(int, void *, int))(void);
-void func_00162CD8(int);
-void hdd_ins_size_check(void);
-void func_0016B898(void);
-void func_0016BA00(void);
 
 void func_00169278(void)
 {
@@ -281,9 +274,283 @@ void func_0016A048(u8 **a0, u8 **a1, int a2)
     *a1 = src;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016A268);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C040);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C060);
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    u16 h4;
+    u16 h6;
+    u16 h8;
+    u16 hA;
+    s32 wC;
+} To16A268Cond;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u16 h2;
+    u16 h4;
+    u16 h6;
+    s32 w8;
+} To16A268Set;
+
+typedef struct {
+    u16 h0;
+    s8 b2;
+    u8 b3;
+    u16 h4;
+    u16 h6;
+    s32 w8;
+} To16A268Call;
+
+extern s32 D_00597A00;
+extern void (**D_0030E09C)(int, int);
+extern void (**D_0030E0A4)(int);
+extern char D_0056C028[];
+
+u8 *func_0016A268(u8 *dst, u8 *src, int arg2, int *arg3, int *arg4)
+{
+    To16A268Cond cond;
+    To16A268Set setCmd;
+    To16A268Call callCmd;
+    s8 stack[32];
+    int depth = 0;
+    int i;
+    u8 c;
+
+    if (arg4 != 0) {
+        *arg4 = 0;
+    }
+    for (i = 0; i < 32; i++) {
+        stack[i] = 0;
+    }
+    for (;;) {
+        if ((s32)dst - (s32)D_0030E0B8 >= 0x4000) {
+            yiAssert(0, D_0056C020, D_0056C028);
+        }
+        c = *src++;
+        if (c == 0) {
+            break;
+        }
+        if (c < 0x30 && c != 3) {
+            u8 c2 = *src++;
+            u32 code = (c2 << 8) + c;
+
+            if (code == 0xF90B) {
+                D_00597A00 = 1;
+            } else if (c == 0x13 && (u32)(c2 - 0x30) < 8) {
+                *dst++ = c;
+                *dst++ = c2;
+            } else if (c == 0xB && ((u32)(c2 - 0x30) < 0x1A || c2 == 0x60)) {
+                *dst++ = c;
+                *dst++ = c2;
+            } else if (code == 0xF00B) {
+                s32 lhs = 0;
+                s32 rhs;
+                int res;
+
+                memcpy(&cond, src, 16);
+                src += 16;
+                switch (cond.b0) {
+                case 0:
+                    lhs = D_0030E098[cond.h4](cond.h6);
+                    break;
+                case 1:
+                    lhs = _to_D_00597E30[cond.h6].w;
+                    break;
+                }
+                switch (cond.b2) {
+                case 0:
+                    rhs = D_0030E098[cond.h8](cond.hA);
+                    break;
+                case 1:
+                    rhs = _to_D_00597E30[cond.hA].w;
+                    break;
+                case 2:
+                default:
+                    rhs = cond.wC;
+                    break;
+                }
+                switch (cond.b1) {
+                default:
+                case 0:
+                    res = (rhs == lhs);
+                    break;
+                case 1:
+                    res = (rhs != lhs);
+                    break;
+                case 2:
+                    res = (lhs >= rhs);
+                    break;
+                case 3:
+                    res = (lhs <= rhs);
+                    break;
+                case 4:
+                    res = (lhs > rhs);
+                    break;
+                case 5:
+                    res = (lhs < rhs);
+                    break;
+                case 6:
+                    res = ((rhs & lhs) != 0) ? 1 : 0;
+                    break;
+                }
+                stack[depth++] = res;
+            } else if (code == 0xF10B) {
+                if (stack[depth - 1] == 0) {
+                    int nest = 0;
+
+                    for (;;) {
+                        c = *src++;
+                        if (c == 0) {
+                            goto done;
+                        }
+                        if (c < 0x30 && c != 3) {
+                            c2 = *src++;
+                            code = (c2 << 8) + c;
+                            if (nest <= 0) {
+                                if (code == 0xF30B) {
+                                    break;
+                                }
+                                if (code == 0xF20B) {
+                                    stack[depth - 1] = 0;
+                                    depth--;
+                                    break;
+                                }
+                            }
+                            if (code == 0xF40B) {
+                                src += 8;
+                            } else if (code == 0xF60B) {
+                                src += 12;
+                            } else if (code == 0xF00B) {
+                                nest++;
+                                src += 16;
+                            } else if (code == 0xF70B) {
+                                src += 4;
+                            } else if (code == 0xF80B) {
+                                src += 12;
+                            } else if (code == 0xFA0B) {
+                                src += 4;
+                            } else if (code == 0xF20B) {
+                                nest--;
+                            }
+                        }
+                    }
+                }
+            } else if (code == 0xF20B) {
+                stack[depth - 1] = 0;
+                depth--;
+            } else if (code == 0xF30B) {
+                if (stack[depth - 1] != 0) {
+                    int nest = 0;
+
+                    for (;;) {
+                        c = *src++;
+                        if (c == 0) {
+                            goto done;
+                        }
+                        if (c < 0x30 && c != 3) {
+                            c2 = *src++;
+                            code = (c2 << 8) + c;
+                            if (code == 0xF00B) {
+                                nest++;
+                                src += 16;
+                            } else {
+                                if (nest <= 0 && code == 0xF20B) {
+                                    stack[depth - 1] = 0;
+                                    depth--;
+                                    break;
+                                }
+                                if (code == 0xF20B) {
+                                    nest--;
+                                }
+                                if (code == 0xF40B) {
+                                    src += 8;
+                                } else if (code == 0xF60B) {
+                                    src += 12;
+                                } else if (code == 0xF70B) {
+                                    src += 4;
+                                } else if (code == 0xF80B) {
+                                    src += 12;
+                                } else if (code == 0xFA0B) {
+                                    src += 4;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (code == 0xF40B) {
+                func_0016A048(&dst, &src, arg2);
+            } else if (code == 0xF60B) {
+                if (arg3 != 0) {
+                    memcpy(&setCmd, src, 12);
+                    switch (setCmd.b0) {
+                    case 0:
+                        D_0030E09C[setCmd.h4](setCmd.h2, setCmd.w8);
+                        break;
+                    case 1:
+                        _to_D_00597E30[setCmd.h2].w = setCmd.w8;
+                        break;
+                    }
+                }
+                src += 12;
+            } else if (code == 0xF70B) {
+                if (arg3 != 0) {
+                    int off;
+
+                    memcpy(&off, src, 4);
+                    *(int *)&D_00597A10 = (s32)D_0030E0C8 + off;
+                    *arg3 = 1;
+                    return 0;
+                }
+                src += 4;
+            } else if (code == 0xF80B) {
+                if (arg3 != 0) {
+                    memcpy(&callCmd, src, 12);
+                    switch (callCmd.b2) {
+                    case 0: {
+                        int v = _to_D_0030E070.fn[callCmd.h4](callCmd.h6);
+                        ((void (**)(int))_to_D_0030E070.p34)[callCmd.h0](v);
+                        break;
+                    }
+                    case 1: {
+                        int v = _to_D_00597E30[callCmd.h6].w;
+                        D_0030E0A4[callCmd.h0](v);
+                        break;
+                    }
+                    case 3: {
+                        int v = callCmd.w8;
+                        D_0030E0A4[callCmd.h0](v);
+                        break;
+                    }
+                    case 2:
+                    case 4:
+                        D_0030E0A4[callCmd.h0](0);
+                        break;
+                    }
+                }
+                src += 12;
+            } else if (code == 0xFA0B) {
+                if (arg4 != 0) {
+                    *arg4 = 1;
+                }
+                src += 4;
+            } else {
+                *dst++ = c;
+                *dst++ = c2;
+            }
+        } else {
+            *dst++ = c;
+        }
+    }
+done:
+    *dst++ = c;
+    if (arg3 != 0) {
+        *arg3 = 0;
+    }
+    return dst;
+}
 
 extern s32 D_0030E094;
 void func_002DA928(void *, s16, s16, s16, s16, s16, s16, s16);
@@ -371,8 +638,88 @@ void func_0016B4E0(void)
     D_0030E068 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016B5B0);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C0A0);
+typedef union {
+    struct {
+        u16 w;
+        u16 h;
+        u8 bpp;
+        u8 pad5[3];
+        s32 clutOff;
+        s32 imgOff;
+    } s;
+    s32 raw[4];
+} To16B5B0Ent;
+
+typedef union {
+    struct {
+        s32 psm;
+        u16 w;
+        u16 h;
+        s32 cbp;
+        s32 tbp;
+    } s;
+    s32 raw[4];
+} To16B5B0Tex;
+
+extern s32 D_0030E090;
+extern To16B5B0Tex _to_D_00597A30[] __asm__("D_00597A30");
+
+int func_0016B5B0(s32 arg0)
+{
+    u8 sp[0x60];
+    u8 *base = (u8 *)arg0;
+    To16B5B0Ent *ents = (To16B5B0Ent *)(base + 0x10);
+    To16B5B0Ent *e;
+    int vram = D_0030E090;
+    int i;
+
+    func_002DA610(0, 0);
+    e = ents;
+    for (i = 0; i < *(s32 *)(base + 4); i++, e++) {
+        _to_D_00597A30[i].s.w = e->s.w;
+        _to_D_00597A30[i].s.h = e->s.h;
+        _to_D_00597A30[i].s.cbp = vram;
+        func_002DA928(sp, vram, 1, 0, 0, 0, 0x10, 0x10);
+        vram += 4;
+        func_002F8660(0);
+        func_002DAC50(sp, base + e->s.clutOff);
+        func_002DA610(0, 0);
+    }
+    e = ents;
+    for (i = 0; i < *(s32 *)(base + 4); i++, e++) {
+        int psm;
+        int w;
+        u16 h;
+        switch (e->s.bpp) {
+        case 4:
+            psm = 0x14;
+            break;
+        case 8:
+            psm = 0x13;
+            break;
+        case 16:
+            psm = 2;
+            break;
+        case 24:
+            psm = 1;
+            break;
+        case 32:
+        default:
+            psm = 0;
+            break;
+        }
+        _to_D_00597A30[i].s.psm = psm;
+        _to_D_00597A30[i].s.tbp = vram;
+        w = e->s.w;
+        h = e->s.h;
+        func_002DA928(sp, vram, w / 64, psm, 0, 0, w, e->s.h);
+        func_002F8660(0);
+        func_002DAC50(sp, base + e->s.imgOff);
+        func_002DA610(0, 0);
+        vram += (s32)(w * h * e->s.bpp) / 2048;
+    }
+    return vram;
+}
 
 void func_0016B7D8(void)
 {

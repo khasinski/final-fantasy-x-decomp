@@ -320,8 +320,125 @@ void func_00235390(void)
     } while (D_00693F70[(s8) D_00693F68]->x0C != 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_234A30", TkMenuCtrlConfig);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_234A30/rodata", jtbl_00572340);
+extern s32 D_00325F1C;
+void TOSwapInternationalEnvInit(int a);
+int TOSwapInternationalEnvExecNonBlock(void);
+void TOSwapInternationalEnvInitMenu(int a);
+int TOSwapInternationalEnvExecMenu(void);
+void TkMenuMainSleepMenu(int a);
+void func_00201CD0(void);
+
+typedef struct {
+    s32 x00;
+    s32 x04;
+    s32 x08;
+    s32 x0C;
+    s32 x10;
+    s32 x14;
+} CfgRec;
+
+void TkMenuCtrlConfig(Task *t)
+{
+    u32 rep;
+    u32 trg;
+
+    func_00220318();
+    rep = TOMenuGetControlPadRep();
+    trg = TOMenuGetControlPadTrg();
+    if (func_002D27B8(0, 0) == 0) {
+        D_00325F1C = 0;
+        func_00235390();
+        func_00235338();
+    } else {
+        D_00325F1C = 1;
+    }
+    {
+        s32 *step = &t->x1C;
+        switch (*step) {
+        case 0:
+            *step = 1;
+            break;
+        case 1:
+            *step = 2;
+            break;
+        case 2:
+            *step = 3;
+            break;
+        case 3:
+            if (rep & 0x1000) {
+                SndSepPlaySimple(0x80000001);
+                func_00235338();
+            } else if (rep & 0x4000) {
+                SndSepPlaySimple(0x80000001);
+                func_00235390();
+            } else {
+                if (trg & 0x8000) {
+                    CfgRec *r;
+                    SndSepPlaySimple(0x80000001);
+                    r = (CfgRec *)D_00693F70[(s8)D_00693F68];
+                    if (--r->x08 < 0) {
+                        r->x08 = r->x04 - 1;
+                    }
+                    ((void (*)(CfgRec *))r->x14)(r);
+                }
+                if (trg & 0x2000) {
+                    CfgRec *r;
+                    SndSepPlaySimple(0x80000001);
+                    r = (CfgRec *)D_00693F70[(s8)D_00693F68];
+                    if (++r->x08 >= r->x04) {
+                        r->x08 = 0;
+                    }
+                    ((void (*)(CfgRec *))r->x14)(r);
+                }
+                if (trg & 0x40) {
+                    *step = 4;
+                }
+            }
+            break;
+        case 4:
+            if (D_00693F60 != func_001BD360()) {
+                *step = 6;
+            } else {
+                SndSepPlaySimple(0x80000004);
+                *step = 5;
+            }
+            break;
+        case 5:
+            *step = 11;
+            break;
+        case 6: {
+            s32 *p = &D_00693F64;
+            *p = func_002369A0((int)TkMenuConfigMes(0x22), 0, 0);
+            TOSwapInternationalEnvInit(func_001BD360());
+            *step = 7;
+            break;
+        }
+        case 7:
+            if (TOSwapInternationalEnvExecNonBlock() == 1) {
+                *step = 8;
+            }
+            break;
+        case 8:
+            TOSwapInternationalEnvInitMenu(func_001BD360());
+            *step = 9;
+            break;
+        case 9:
+            if (TOSwapInternationalEnvExecMenu() == 1) {
+                *step = 10;
+            }
+            break;
+        case 10:
+            ((int (*)(void))TOMenuCloseYesNoWindow)();
+            *step = 11;
+            break;
+        case 11:
+            TkMenuMainSleepMenu(10);
+            TkMenuMainActiveMenu(1, 0);
+            func_00201CD0();
+            break;
+        }
+    }
+}
 
 void func_00235710(void) { func_002270F8(); }
 

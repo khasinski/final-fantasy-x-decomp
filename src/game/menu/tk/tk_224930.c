@@ -1,6 +1,7 @@
 /* tu_250 0x224930-0x226bf0: low; ~Tk (config/tu_map.tsv) */
 #define func_00225E88 _hdr_func_00225E88
 #define func_00225920 _hdr_func_00225920
+#define func_002423F0 _hdr_func_002423F0
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -9,8 +10,11 @@
 #include "ffx/v5.h"
 #include "ffx/g3.h"
 #include "ffx/u4.h"
+#undef func_002423F0
 #undef func_00225920
 #undef func_00225E88
+
+void func_002423F0(void);
 
 s32 func_00224930(void)
 {
@@ -51,8 +55,406 @@ int func_002249B8(R5ChoiceList *choices)
     return result;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_224930", func_002249E8);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_224930/rodata", jtbl_00571320);
+typedef struct GrowEntry {
+    u8 b0;
+    u8 pad1;
+    u16 h2;
+    u16 h4;
+    u8 b6;
+    u8 pad7;
+} GrowEntry;
+
+typedef struct CmdPair {
+    u16 h0;
+    u16 h2;
+} CmdPair;
+
+extern u8 D_0036F1D8[];
+u16 *MsGetSaveWeaponList(int a, int b, int c, s32 *count);
+u16 *MsSaveItemTypeBuffer(s32 *count);
+u8 *MsSaveItemNumBuffer(s32 *count);
+int TkMenuSummonEnableMask(void);
+int func_00242940(void);
+int TkMenuGetCommandMax(void *tbl, int a, int b, int c);
+int TkMenuGetCommandOffset(void *tbl, int a, int b, int c);
+int MsGetSaveCommandMenuPanel(int id);
+int MsImportantGet(int id);
+
+void func_002249E8(int mode, int arg1)
+{
+    int arr0[4];
+    u32 arr1[4];
+    int arr2[4];
+    s32 buf30;
+    s32 n34;
+    s32 buf38;
+    s32 n3C;
+    s32 buf40;
+    s32 n44;
+    s32 buf48;
+    s32 n4C;
+    s32 buf50;
+    s32 buf54;
+    s32 buf58;
+    int i;
+    SysEntry *p;
+    SysEntry *end;
+    u16 *p2;
+    CmdPair *statusTbl;
+    int chr;
+    int flag;
+
+    p = SYS_TBL;
+    p2 = (u16 *)0x1D56F00;
+    statusTbl = (CmdPair *)MsMenuStatusNum(0, &buf30);
+    chr = TkMenuGetCurrentPlayer();
+    for (i = 0; i < 512; i++, p++, p2++) {
+        p->h0 = 0;
+        p->b2 = 0;
+        p->b3 = 0;
+        *p2 = 0;
+    }
+    p = SYS_TBL;
+    D_00693858 = 0;
+    flag = 0;
+    end = SYS_TBL;
+
+    switch (mode) {
+    case 21: {
+        u16 *list = MsGetSaveWeaponList(-1, -1, 0, &n34);
+
+        for (i = 0; i < n34; i++, p++) {
+            u16 id = list[i];
+            Unk1BFED8 *w = MsGetSaveWeapon(id, &buf38);
+
+            if (id != 0) {
+                if (w->b2 == 0 || ((w->b3 >> 1) & 1)) {
+                    p->h0 = id;
+                    p->b3 = 0;
+                    p->b2 = 0;
+                } else {
+                    p->h0 = id;
+                    if (((w->b3 >> 2) & 1) || ((w->b3 >> 3) & 1) || (w->b3 & 1)) {
+                        p->b3 = 0;
+                    } else if (((u8 *)w)[6] != 0xFF) {
+                        p->b3 = 0;
+                    } else {
+                        p->b3 = 1;
+                    }
+                    p->b2 = 1;
+                }
+            }
+        }
+        for (i = n34 - 1; i >= 0; i--) {
+            if (MsGetSaveWeapon(list[i], &buf38)->b2 != 0) {
+                i++;
+                break;
+            }
+        }
+        if (i <= 0) {
+            i = 1;
+            SYS_TBL[0].h0 = 0;
+            SYS_TBL[0].b3 = 0;
+            SYS_TBL[0].b2 = 0;
+        }
+        end = &SYS_TBL[i];
+        break;
+    }
+    case 19: {
+        u16 *list = MsGetSaveWeaponList(-1, -1, 0, &n3C);
+
+        for (i = 0; i < n3C; i++, p++) {
+            u16 id = list[i];
+            Unk1BFED8 *w = MsGetSaveWeapon(id, &buf40);
+
+            if (id != 0) {
+                if (w->b2 == 0 || ((w->b3 >> 1) & 1)) {
+                    p->h0 = 0;
+                    p->b3 = 0;
+                    p->b2 = 0;
+                } else {
+                    p->h0 = id;
+                    if (((w->b3 >> 2) & 1) || ((w->b3 >> 3) & 1) || (w->b3 & 1)) {
+                        p->b3 = 0;
+                    } else if (((u8 *)w)[6] != 0xFF) {
+                        p->b3 = 0;
+                    } else {
+                        p->b3 = 1;
+                    }
+                    p->b2 = 1;
+                }
+            }
+        }
+        for (i = n3C - 1; i >= 0; i--) {
+            if (MsGetSaveWeapon(list[i], &buf40)->b2 != 0) {
+                i++;
+                break;
+            }
+        }
+        if (i <= 0) {
+            i = 1;
+            SYS_TBL[0].h0 = 0;
+            SYS_TBL[0].b3 = 0;
+            SYS_TBL[0].b2 = 0;
+        }
+        end = &SYS_TBL[i];
+        break;
+    }
+    case 6:
+    case 7: {
+        u16 *types = MsSaveItemTypeBuffer(&n44);
+        u8 *nums = MsSaveItemNumBuffer(&n44);
+
+        for (i = 0; i < n44; i++, p++) {
+            u16 id = *types++;
+            u8 num = *nums++;
+            u8 *item = (u8 *)TkMsGetRomItem(id, &buf48);
+
+            if (num != 0) {
+                int ok;
+
+                if (*(u32 *)(item + 0x1C) & 1) {
+                    if ((item[0x22] >> 7) == 0 || ((item[0x22] >> 6) & 1) || TkMenuSummonEnableMask() != 0) {
+                        ok = 1;
+                    } else {
+                        ok = 0;
+                    }
+                } else {
+                    ok = 0;
+                }
+                if (mode == 7) {
+                    ok = 1;
+                }
+                if (num == 0) {
+                    ok = 0;
+                }
+                p->h0 = id;
+                p->b2 = 0x12;
+                p->b3 = ok;
+            }
+        }
+        end = p;
+        break;
+    }
+    case 2:
+        flag = 1;
+        chr = func_00242940();
+    case 0: {
+        int max;
+        int ofs;
+
+        switch (chr) {
+        case 0:
+            flag = 1;
+            break;
+        case 1: {
+            int mask = TkMenuSummonEnableMask();
+
+            for (i = 8; i < 16; i++) {
+                if ((mask >> i) & 1) {
+                    p->h0 = i;
+                    p->b2 = 2;
+                    p->b3 = 1;
+                    p++;
+                }
+            }
+            goto done_p;
+        }
+        case 2:
+            flag = 1;
+            break;
+        case 4:
+            flag = 1;
+            break;
+        }
+        func_002423F0();
+        max = TkMenuGetCommandMax(statusTbl, 5, chr, 0);
+        ofs = TkMenuGetCommandOffset(statusTbl, 5, chr, 0);
+        for (i = 0; i < max; i++, p++) {
+            u16 cmd = ((CmdPair *)((u8 *)statusTbl + ofs * 4))[i].h2;
+
+            if (MsGetSaveCommand(chr, cmd) != 0) {
+                p->h0 = cmd;
+                p->b2 = 1;
+                p->b3 = 1;
+            } else if (flag != 0) {
+                p--;
+            } else if (MsGetSaveCommandMenuPanel(cmd) == 0) {
+                p--;
+            }
+        }
+    done_p:
+        end = p;
+        break;
+    }
+    case 3: {
+        int imp = MsImportantGet(0xA022);
+        int max;
+        GrowEntry *g;
+
+        chr = func_00242940();
+        max = func_00227EA8();
+        g = (GrowEntry *)TkMn2GetSummonGrow();
+        for (i = 0; i < max; i++, p++, g++) {
+            u16 cmd = g->h2;
+
+            p->b3 = 0xFF;
+            if (MsGetSaveCommand(chr, cmd) != 0) {
+                p->h0 = cmd;
+                p->b2 = 5;
+                p->b3 = i;
+            } else {
+                int have = func_001BFE30(g->h4);
+
+                if (have != 0) {
+                    p->h0 = cmd;
+                    if (have >= g->b6) {
+                        if ((((g->b0 >> (chr - 8)) & 1) == 0) && imp == 0) {
+                            p->b3 = i;
+                            p->b2 = 6;
+                        } else {
+                            p->b3 = i;
+                            p->b2 = 4;
+                        }
+                    } else {
+                        p->b2 = 7;
+                        p->b3 = i;
+                    }
+                } else {
+                    p--;
+                }
+            }
+        }
+        end = p;
+        break;
+    }
+    case 1: {
+        int mask = func_00225648(chr);
+
+        for (i = 0; i < 20; i++) {
+            chr = D_0036F1D8[i];
+
+            if ((mask >> chr) & 1) {
+                p->h0 = chr;
+                p->b2 = 3;
+                p->b3 = 1;
+                p++;
+            }
+        }
+        end = p;
+        break;
+    }
+    case 20: {
+        int k;
+        u16 *list = MsGetSaveWeaponList(TkMenuGetCurrentPlayer(), arg1, 0, &n4C);
+
+        for (k = 0; k < n4C; k++) {
+            u16 id = list[k];
+
+            if (MsGetSaveWeapon(id, &buf50)->b2 != 0) {
+                p->h0 = id;
+                p->b3 = 1;
+                p->b2 = 1;
+                p++;
+            }
+        }
+        if (arg1 == 1) {
+            p->b3 = 1;
+            p->h0 = 0;
+            p->b2 = 0;
+            p++;
+        }
+        end = p;
+        break;
+    }
+    case 5: {
+        GrowEntry *g = (GrowEntry *)func_00227ED0();
+        int max = func_00227EF0();
+        int nslot;
+        int mask = 1;
+        int hasFF = 0;
+        int hidden;
+        u16 *slots = ((R5ChoiceList *)arg1)->entries;
+        int j;
+
+        if (((u8 *)arg1)[5] != 0) {
+            mask = 2;
+        }
+        for (i = 0; i < 4; i++) {
+            arr0[i] = 0;
+            arr1[i] = 0xFFFFFFFFU;
+        }
+        nslot = 0;
+        for (i = 0; i < 4; i++) {
+            u16 ab = slots[i];
+
+            if (ab != 0 && ab != 0xFF) {
+                u8 *rom = (u8 *)MsGetRomAbility(ab, &buf54);
+
+                arr0[nslot] = rom[0x69];
+                arr1[nslot] = rom[0x6A];
+                arr2[nslot] = rom[0x6B];
+                nslot++;
+                if (rom[0x6B] == 0xFF) {
+                    hasFF = 1;
+                }
+            }
+        }
+        hidden = 0;
+        for (i = 0; i < max; i++, g++) {
+            if (g->b0 & mask) {
+                u16 ab = g->h2;
+                u8 *rom = (u8 *)MsGetRomAbility(ab, &buf58);
+                int have = func_001BFE30(g->h4);
+
+                if (have != 0) {
+                    int st = 0xB;
+
+                    for (j = 0; j < nslot; j++) {
+                        if (arr0[j] == rom[0x69]) {
+                            if ((u32)rom[0x6A] < (u32)arr1[j]) {
+                                st = 0xF;
+                            }
+                            if (arr1[j] == rom[0x6A]) {
+                                st = (arr2[j] == rom[0x6B]) ? 0xC : 0xF;
+                            }
+                        }
+                        if (hasFF != 0 && rom[0x6B] == 0xFE) {
+                            st = 0xF;
+                        }
+                    }
+                    if (st == 0xB && have < g->b6) {
+                        st = 0xE;
+                    }
+                    if (func_002249B8((R5ChoiceList *)arg1) == 0) {
+                        st = 0x10;
+                    }
+                    p->h0 = ab;
+                    p->b3 = i;
+                    p->b2 = st;
+                    p++;
+                } else {
+                    hidden++;
+                }
+            }
+        }
+        end = p;
+        while (hidden > 0) {
+            p->h0 = 0;
+            p->b3 = 0xFF;
+            p->b2 = 0x11;
+            p++;
+            hidden--;
+        }
+        break;
+    }
+    }
+    D_00693858 = ((u32)p - (u32)SYS_TBL) >> 2;
+    D_0069385C = ((u32)end - (u32)SYS_TBL) >> 2;
+    if (D_0069385C == 0) {
+        D_0069385C = 1;
+    }
+}
 
 void func_002253E8(int a0) { func_002249E8(a0, 0); }
 

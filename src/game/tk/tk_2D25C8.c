@@ -401,8 +401,140 @@ void func_002D3468(s32 arg0, s32 arg1, s32 arg2) {
     _m2c_func_002D3468_func_002D2C98(temp_16, arg2, (*(u16 *)((u8 *)(temp_16) + (0x98))));
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D34E8);
-INCLUDE_RODATA("build/ee_asm/game/tk/tk_2D25C8/rodata", jtbl_00576020);
+int func_002DE2A8(int, int);
+int func_002DE3C0(int, int);
+int func_002DE688(int, int, int, int);
+int func_002DE7C0(int, int, int, int);
+int func_002D3180(int, int);
+void func_002DE930(int, int, void *);
+void func_002DE878(int, int, void *);
+
+void func_002D34E8(s32 port, s32 slot, W10PadInfo *info)
+{
+    u8 *buf = (u8 *)info;
+    W10Pad *p = &D_0078ACC8[port][slot];
+    s32 ret = 0;
+    s32 st;
+    s32 r;
+
+    r = func_002DE2A8(port, slot);
+    st = *(u8 *)((u8 *)p + 0x9F);
+    switch (r) {
+    case 0:
+        st = 1;
+        func_002D2B68(p);
+        func_002D2BB8(p);
+        p->stat[2] = 0;
+        break;
+    case 7:
+        ret = 2;
+        break;
+    case 2:
+    case 6:
+        func_002D3468(port, slot, (s32)buf);
+        if (st == 6 && func_002DE3C0(port, slot) == 1) {
+            st = 1;
+            break;
+        }
+        if (st == 7) {
+            s32 r = func_002DE3C0(port, slot);
+            if (r == 1) {
+                st = func_002D30E0(port, slot, 3, buf);
+                break;
+            }
+            if (r == 0) {
+                p->stat[2] = 1;
+                st = 3;
+            }
+        }
+        if (st == 4) {
+            st = 5;
+        }
+        switch (st) {
+        case 2:
+            if (func_002DE688(port, slot, 4, -1) != 0) {
+                st = func_002DE7C0(port, slot, 1, 3) ? 6 : 1;
+            } else {
+                st = 5;
+            }
+            break;
+        case 6:
+            p->stat[2] = 0;
+            st = func_002D30E0(port, slot, 3, buf);
+            break;
+        case 1:
+            p->stat[2] = 0;
+            if (p->stat[3] == 0) {
+                p->stat[3]++;
+            } else {
+                s32 m = func_002DE688(port, slot, 1, 0);
+                if (m != 0) {
+                    u16 m2 = func_002DE688(port, slot, 2, 0);
+                    if (m2 != 0) {
+                        m = m2;
+                    }
+                    switch (m) {
+                    case 7:
+                        st = 6;
+                        break;
+                    case 4:
+                        st = 2;
+                        break;
+                    default:
+                        st = 5;
+                        break;
+                    }
+                }
+            }
+            break;
+        case 3: {
+            u32 lo = func_002D3180(port, slot);
+            u32 hi = (lo >> 8) & 0xFF;
+
+            lo &= 0xFF;
+            func_002D3330(p, lo, hi);
+            hi = func_002D32F0(port, slot, hi);
+            lo = func_002D32F0(port, slot, lo);
+            p->shift[1] = 8 - hi;
+            p->shift[0] = 8 - lo;
+            if ((hi | lo) == 0) {
+                st = 5;
+            } else {
+                func_002DE930(port, slot, p->out);
+                st = 4;
+            }
+            break;
+        }
+        }
+        if (st == 5) {
+            st = func_002D30E0(port, slot, 5, buf);
+            if (st == 5) {
+                ret = 2;
+                func_002D32B8(p);
+                func_002DE878(port, slot, p->res);
+                if (*(s8 *)buf == 0) {
+                    ret = 1;
+                }
+            } else {
+                p->stat[2] = 0;
+            }
+        }
+        break;
+    case 1:
+    case 3:
+    case 4:
+    case 5:
+    default:
+        break;
+    }
+    *(u8 *)((u8 *)p + 0x9F) = st;
+    if (ret == 1) {
+        p->stat[0] = buf[1] >> 4;
+    } else if (ret != 2) {
+        p->stat[0] = 0xFF;
+    }
+    p->stat[1] = ret;
+}
 
 void func_002D3868(void) {
     s32 mask;

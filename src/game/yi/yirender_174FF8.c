@@ -182,7 +182,308 @@ void yiRender_setfogparam(Sys597F00 *s)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00175468);
+typedef struct YiBlk10 {
+    unsigned long d[2];
+} YiBlk10;
+
+typedef struct YiSys5468 {
+    u8 pad_00000[0x13B10];
+    u32 w13B10;
+    u8 pad_13B14[0x540AC];
+    u8 pkt67BC0[0x60];
+    u8 pkt67C20[0x60];
+    u8 pkt67C80[0x60];
+    u8 pkt67CE0[0x60];
+    u8 pad_67D40[0xC0];
+    u8 pkt67E00[0x60];
+    u8 pkt67E60[0x60];
+    u8 pkt67EC0[0x60];
+    u32 w67F20;
+    u32 w67F24;
+    u8 pad_67F28[0xC];
+    u32 w67F34;
+    u32 w67F38;
+    u32 w67F3C;
+    u32 w67F40;
+    u32 w67F44;
+    s32 w67F48;
+    s32 w67F4C;
+    V2Blk40 m67F50;
+    V2Blk40 m67F90;
+    V2Blk40 m67FD0;
+    V2Blk40 m68010;
+    V2Blk40 m68050;
+    V2Blk40 m68090;
+    V2Blk40 m680D0;
+    V2Blk40 m68110;
+    u64 v68150[2];
+    u64 v68160[2];
+    u64 v68170[2];
+    u8 pad_68180[0x34];
+    u32 w681B4;
+    u32 w681B8;
+    u32 w681BC;
+    float f681C0[4];
+    float f681D0[4];
+    float f681E0[4];
+    float f681F0[4];
+    float f68200[4];
+    float f68210[4];
+    u8 b68220[4];
+    u8 pad_68224[0xC];
+    float f68230[4];
+    float f68240[4];
+    float f68250[4];
+    u32 w68260;
+    u8 pad_68264[0x10C];
+    u8 b68370[4];
+    float f68374;
+    float f68378;
+    float f6837C;
+    u8 pad_68380[0x10];
+    float f68390;
+    u32 pad_68394;
+    float f68398;
+    float f6839C;
+    float f683A0;
+    u8 b683A4[4];
+    u8 b683A8[3][4];
+    u32 w683B4;
+    u8 pad_683B8[0x400];
+    u32 w687B8;
+    u8 pad_687BC[0x6004];
+    u32 w6E7C0;
+    u8 pad_6E7C4[0x3000C];
+    u32 w9E7D0;
+    u32 pad_9E7D4;
+    u32 w9E7D8;
+    u8 pad_9E7DC[0xA04];
+    u32 w9F1E0;
+    u32 w9F1E4;
+    u32 w9F1E8;
+    u32 w9F1EC;
+    u32 w9F1F0;
+    u32 w9F1F4;
+    u32 w9F1F8;
+    u8 anim9F1FC[0xF0C];
+    u32 wA0108;
+    u8 pad_A010C[0x1CA04];
+    u8 *pBCB10;
+    u8 *pBCB14;
+    u8 *pBCB18;
+    u32 wBCB1C;
+    u8 *pBCB20;
+    u8 *pBCB24;
+    u8 *pBCB28;
+    u32 wBCB2C;
+    u8 *pBCB30;
+    u8 *pBCB34;
+    u8 *pBCB38;
+    u32 wBCB3C;
+    u32 wBCB40;
+    float fBCB44;
+    float fBCB48;
+    float fBCB4C;
+    float fBCB50;
+    float fBCB54;
+    float fBCB58;
+    float fBCB5C;
+    float fBCB60;
+    float fBCB64;
+    float fBCB68;
+    float fBCB6C;
+    float fBCB70;
+    u8 pad_BCB74[0x42A0];
+    u32 wC0E14;
+    u32 wC0E18;
+} YiSys5468;
+
+extern u64 D_0056C300[2];
+extern const float D_0056C310;
+extern const float D_0056C314;
+void func_002DD610(void *, float, float, float, float, float, float, float, float, float);
+void func_00178520(V2Blk40 *, R2Qw *, int);
+void yiAnimInfo_init(void *);
+void yiImage_GSSInit(int, int);
+void func_001765D0(Sys597F00 *);
+void func_00188E88(void *);
+void func_00188E98(void *);
+void func_0018AA10(u32);
+void yiClutAlloc_makepacket(void *, int, int, u32);
+
+void func_00175468(Sys597F00 *s0, int a1, int a2, int a3)
+{
+    YiSys5468 *s = (YiSys5468 *)s0;
+    float v10[4];
+    u64 v20[2];
+    float m30[4][4];
+    float m70[4][4];
+    float mB0[4][4];
+    s32 i;
+    u8 *p;
+
+    func_002EF0D0(v10, 0, sizeof(v10));
+    v10[3] = 1.0f;
+    v20[0] = D_0056C300[0];
+    v20[1] = D_0056C300[1];
+    func_002EF0D0(m30, 0, sizeof(m30));
+    m30[0][0] = 1.0f;
+    m30[1][1] = 1.0f;
+    m30[2][2] = 1.0f;
+    m30[3][3] = 1.0f;
+    func_002EF0D0(m70, 0, sizeof(m70));
+    m70[0][3] = 1.0f;
+    m70[1][3] = 1.0f;
+    m70[2][3] = 1.0f;
+    m70[3][3] = 1.0f;
+    func_002EF0D0(mB0, 0, sizeof(mB0));
+    mB0[0][3] = 1.0f;
+    mB0[1][3] = 1.0f;
+    mB0[2][3] = 1.0f;
+    mB0[3][3] = 1.0f;
+
+    s->w67F24 = 0xFFFFFFFF;
+    s->w67F20 = 0;
+    s->w683B4 = 0;
+    s->w687B8 = 0;
+    s->w6E7C0 = 0;
+    s->w9E7D0 = 0;
+    s->w9E7D8 = 0;
+
+    *(YiBlk10 *)s->v68150 = *(YiBlk10 *)v10;
+    ((u32 *)s->v68150)[2] = 0;
+    ((u32 *)s->v68150)[3] = 0;
+    *(YiBlk10 *)s->v68160 = *(YiBlk10 *)v10;
+    *(YiBlk10 *)s->v68170 = *(YiBlk10 *)v10;
+    ((float *)s->v68170)[3] = -1.0f;
+
+    func_002DD610(&s->m67F50, 512.0f, 1.0f, 0.47f, 2048.0f, 2048.0f, 1.0f, 16777215.0f, 2.0f, 65536.0f);
+
+    s->m67F90 = *(V2Blk40 *)m30;
+    s->m67FD0 = *(V2Blk40 *)m30;
+    s->m68010 = *(V2Blk40 *)m30;
+    s->m68050 = *(V2Blk40 *)m30;
+    s->m680D0 = *(V2Blk40 *)m70;
+    s->m68110 = *(V2Blk40 *)mB0;
+    s->m68090 = *(V2Blk40 *)m30;
+
+    func_00178520(&s->m67F50, (R2Qw *)s->pkt67BC0, 8);
+    func_00178520(&s->m67F90, (R2Qw *)s->pkt67C20, 0xC);
+    func_00178520(&s->m67FD0, (R2Qw *)s->pkt67C80, 0xC);
+    func_00178520(&s->m68010, (R2Qw *)s->pkt67CE0, 0xC);
+    func_00178520(&s->m680D0, (R2Qw *)s->pkt67E00, 0x18);
+    func_00178520(&s->m68110, (R2Qw *)s->pkt67E60, 0x1C);
+    func_00178520(&s->m68090, (R2Qw *)s->pkt67EC0, 0x20);
+
+    s->f681C0[0] = 2048.0f;
+    s->f681C0[1] = 2048.0f;
+    s->f681C0[2] = 8388608.0f;
+    s->f681C0[3] = 1.0f;
+    s->f681D0[0] = 1.0f / 1983.0f;
+    s->f681D0[1] = 1.0f / 1983.0f;
+    s->f681D0[2] = 1.0f / 8388607.0f;
+    s->f681D0[3] = 1.0f;
+    s->f68210[0] = s->f68210[1] = s->f68210[2] = s->f68210[3] = 10.0f;
+    s->f68230[0] = s->f68230[1] = s->f68230[2] = s->f68230[3] = 1.0f;
+    s->f68240[0] = s->f68240[1] = s->f68240[2] = s->f68240[3] = 0.0f;
+    s->f681E0[0] = D_0056C310;
+    s->f681E0[1] = D_0056C310;
+    s->f681E0[2] = D_0056C310;
+    s->f681E0[3] = 1.0f;
+    s->f681F0[0] = D_0056C314;
+    s->f681F0[1] = D_0056C314;
+    s->f681F0[2] = D_0056C314;
+    s->f681F0[3] = 1.0f;
+    s->f68200[0] = 0.0f;
+    s->f68200[1] = 0.0f;
+    s->f68200[2] = 0.0f;
+    s->f68200[3] = 1.0f;
+    s->w681B4 = 1;
+    s->w681B8 = 1;
+    s->w681BC = 1;
+    s->b68220[0] = 0x80;
+    s->b68220[1] = 0x80;
+    s->b68220[2] = 0x80;
+    s->b68220[3] = 0x80;
+    s->b68370[0] = 0;
+    s->b68370[1] = 0;
+    s->b68370[2] = 0;
+    s->b68370[3] = 0x80;
+    s->f68378 = 0.0f;
+    s->f6837C = 0.0f;
+    s->f68374 = 0.0f;
+    for (i = 0; i < 3; i++) {
+        s->b683A8[i][0] = s->b683A8[i][1] = s->b683A8[i][2] = s->b683A8[i][3] = 0;
+    }
+    s->b683A4[0] = 0x80;
+    s->b683A4[1] = 0x80;
+    s->b683A4[2] = 0x80;
+    s->b683A4[3] = 0x20;
+    s->w9E7D8 = 0;
+    s->w9F1EC = 0;
+    s->w9F1E0 = 0;
+    s->w9F1E4 = 0;
+    s->w9F1E8 = 0;
+    s->w9F1F0 = 0;
+    s->w9F1F4 = 0;
+    s->f68250[0] = s->f68250[1] = s->f68250[2] = 0.0f;
+    s->f68250[3] = 1.0f;
+    yiAnimInfo_init(s->anim9F1FC);
+    {
+        register u8 *pA __asm__("$3") = (u8 *)s + 0xA0000;
+        register u8 *p6 __asm__("$2") = (u8 *)s + 0x60000;
+        __asm__ volatile("" : "+r"(pA), "+r"(p6));
+        *(u32 *)(pA + 0x108) = 0;
+        *(u32 *)(p6 + 0x7F34) = 0;
+    }
+    yiImage_GSSInit(0, 0);
+    if (a1 != 0) {
+        s->pBCB10 = (u8 *)func_0017DBA0(a1 << 4);
+        s->pBCB14 = s->pBCB10;
+        s->wBCB1C = a1;
+        s->pBCB18 = s->pBCB10 + (a1 << 4);
+    } else {
+        s->pBCB10 = 0;
+        s->pBCB14 = 0;
+        s->pBCB18 = 0;
+        s->wBCB1C = 0;
+    }
+    s->fBCB4C = s->fBCB50 = s->fBCB54 = 0.0f;
+    s->fBCB58 = 1.0f;
+    s->fBCB64 = 1.0f;
+    s->fBCB60 = 1.0f;
+    s->fBCB5C = 1.0f;
+    s->fBCB68 = s->fBCB6C = s->fBCB70 = 0.0f;
+    s->w67F44 = 0;
+
+    s->pBCB20 = (u8 *)func_0017DBA0(a2 << 4);
+    s->pBCB24 = s->pBCB20;
+    s->pBCB28 = s->pBCB20 + (a2 << 4);
+    s->wBCB2C = a2;
+
+    s->pBCB30 = (u8 *)func_0017DBA0(a3 << 4);
+    s->pBCB34 = s->pBCB30;
+    s->wBCB3C = 0;
+    s->wBCB40 = a3;
+
+    s->wC0E14 = 0;
+    s->wC0E18 = 0;
+    s->w9F1F8 = Sg_VramGetAddrZ();
+    s->f68390 = 1024.0f;
+    s->w68260 = 0;
+    s->fBCB48 = s->fBCB44 = 0.0f;
+    s->w67F40 = 0;
+    s->w67F48 = -1;
+    s->w67F4C = -1;
+    s->w13B10 = 0;
+    s->f6839C = s->f68398 = 2048.0f;
+    s->f683A0 = 0.0f;
+    func_001765D0(s);
+    func_00188E88(s);
+    func_00188E98(s);
+    func_0018AA10(s->w67F38);
+    yiClutAlloc_makepacket(s, 0, 0x48, s->w67F38);
+}
 
 typedef struct YiRender5C08 {
     u8 pad_00000[0x67BC0];
@@ -510,10 +811,6 @@ void func_001766D0(Sys597F00 *s) {
 }
 
 INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", func_00176778);
-
-typedef struct YiBlk10 {
-    unsigned long d[2];
-} YiBlk10;
 
 typedef struct YiSysVU1 {
     u8 pad_00000[0x676C0];

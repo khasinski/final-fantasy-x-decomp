@@ -1,14 +1,34 @@
 /* tu_029 0x11a538-0x11ba20: low; ~Sg (config/tu_map.tsv) */
 #define func_0011B9D8 _hdr_func_0011B9D8
 #define Sg_MainInit _hdr_Sg_MainInit
+#define func_00293158 _hdr_func_00293158
+#define func_00293160 _hdr_func_00293160
+#define D_00580821 _hdr_D_00580821
+#define op_gs1_transfer _hdr_op_gs1_transfer
+#define func_002D3FF0 _hdr_func_002D3FF0
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
 #include "ffx/v0.h"
 #include "ffx/g0.h"
+#undef func_002D3FF0
+#undef op_gs1_transfer
+#undef D_00580821
+#undef func_00293160
+#undef func_00293158
 #undef Sg_MainInit
 #undef func_0011B9D8
+
+extern s8 D_00580821;
+void func_00293158(void *, void *);
+void func_00293160(void *, void *);
+void MsCameraProcess(void);
+void MsEffectProcess(int);
+void Sg_SetDBuffDc(int);
+int op_gs1_transfer(void);
+void func_00125010(void);
+int func_002D3FF0(s32);
 
 void *Sg_GetDBuffDC(s32 *p)
 {
@@ -525,7 +545,208 @@ void func_0011B218(int dummy)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11A538", Sg_MainLoop);
+void Sg_MainLoop(void)
+{
+    float m0[16];
+    float m1[16];
+    float v[4];
+    int i, pass, ret, d;
+
+    v[2] = 10.0f;
+    v[1] = 10.0f;
+    v[0] = 10.0f;
+    Sg_ControlMain();
+    if (Sg_MainCheckMenu() == 0) {
+        Sg_MainCalcRate();
+        func_0011AC78();
+        func_001091C8();
+        for (i = 0; i < Sg_GetCurExecFrames(); i++) {
+            Sg_ControlPlayer();
+            func_001C8C80();
+            TkCtrl();
+            func_0020A998();
+            func_0011AD00(5);
+            if (D_00580823 == 0) {
+                func_00293570();
+                MsEffectProcess(0);
+                func_0011AD00(0xB);
+            }
+            MsCameraProcess();
+            if (D_00580823 == 0) {
+                func_0019BB40();
+                func_0011AD00(5);
+            }
+            if (D_00580827 != 0) {
+                Ch_CalcMain();
+            }
+            func_0011AD00(2);
+            Sg_CameraSetPlayer();
+        }
+        if (Sg_GetCurExecFrames() == 0) {
+            MsEffectProcess(0);
+            if (D_00580828 != 0) {
+                Sg_CameraSetPlayer();
+                MsCameraProcess();
+            }
+        }
+        func_0011AD00(5);
+        if (D_00580827 != 0) {
+            Ch_CalcMiddle_Batch();
+            func_0011AD00(2);
+        }
+        if (D_00580829 != 0 && D_00580831 != 0) {
+            func_001730C0();
+            func_0011AD00(4);
+        }
+        D_00580824 = D_00580823;
+        func_00157968();
+        func_0011AD00(7);
+        Sg_SetDBuffDc(D_00307F2C);
+        if (D_00580823 != 0) {
+            Sg_DrawSetEnvironmentInitMovie();
+        }
+        if (D_00580823 == 0) {
+            Sg_DrawSetEnvironmentInit();
+            func_0019BB80();
+            func_0010DF20();
+            Sg_CalcCameraMatrix();
+            for (pass = 0; pass < 2; pass++) {
+                for (i = 0; (ret = MsScreenProcess(i)) <= 0; i++) {
+                    if (ret != 0) {
+                        continue;
+                    }
+                    d = MsGetScreenData(0, 0, 0, 0, 0);
+                    if (d == 0 && pass == 0) {
+                        continue;
+                    }
+                    if (d == 1 && pass != 0) {
+                        continue;
+                    }
+                    if (d == 0) {
+                        D_0058082D = i;
+                    }
+                    if ((s8)D_00580821 != 0) {
+                        func_00293158(m1, m0);
+                    } else {
+                        func_001A9EE0(m1);
+                        func_001AACA0(m0);
+                        func_00293160(m1, m0);
+                    }
+                    func_00173420(v);
+                    func_001732F8(m0);
+                    func_00173370(m1);
+                    func_00106380(m0);
+                    func_001063D0(m1);
+                    Sg_DrawSetEnvironment(i);
+                    func_0011AD00(3);
+                    func_00118EE0();
+                    if (D_00580829 != 0 && D_00580831 != 0) {
+                        func_00118DE0();
+                        func_00173250();
+                        func_0011AD00(4);
+                    }
+                    if (D_0058082E != 0) {
+                        if (D_00580829 != 0 && D_00580831 != 0) {
+                            func_00173278();
+                            func_0011AD00(4);
+                        }
+                        if (D_0058082A != 0 && D_00580832 != 0) {
+                            func_00118E70();
+                            func_0010CA88();
+                            func_0011AD00(2);
+                        }
+                    } else {
+                        if (D_0058082A != 0 && D_00580832 != 0) {
+                            func_00118E70();
+                            func_0010CA88();
+                            func_0011AD00(2);
+                        }
+                        if (D_00580829 != 0 && D_00580831 != 0) {
+                            func_00118DE0();
+                            func_00173278();
+                            func_0011AD00(4);
+                        }
+                    }
+                }
+            }
+            MsScreenProcess(D_0058082D);
+            Sg_DrawSetEnvironment(D_0058082D);
+            func_0010E2D0();
+            func_0010E308();
+            Sg_MFIFOSync();
+            func_0011AD00(8);
+            if (D_00580830 != 0 && D_00580824 == 0 && D_00580825 == 0) {
+                int n;
+                for (i = 0; (n = Sg_GetCurExecFrames()) ? (i < n) : (i < 1); i++) {
+                    op_loop_ffx_after();
+                    func_0011AD00(0xB);
+                    if (i == 0) {
+                        MsBattleDraw();
+                        TkDrawNoTrans();
+                        func_0011AD00(3);
+                        if (D_00580829 != 0 && D_00580831 != 0) {
+                            func_0019BB60();
+                            if (func_0010EB38() != 0) {
+                                func_0010C798(0);
+                            }
+                            func_0011AD00(4);
+                        }
+                    }
+                    op_gs1_transfer();
+                    if (D_0058082F != 0) {
+                        yiCallFieldParticle();
+                    }
+                    MsEffectProcess(1);
+                    func_00293168();
+                    func_0011AD00(0xB);
+                    Sg_MFIFOSync();
+                    func_0011AD00(8);
+                    func_002B2810();
+                    func_0011AD00(0xC);
+                }
+            }
+        }
+        Sg_MFIFOSync();
+        func_0011AD00(8);
+        func_00158410();
+        func_0011AD00(7);
+        func_00118470();
+        sg_AccSetCurrent();
+        if (D_00580823 == 0) {
+            if (D_00580829 != 0 && D_00580831 != 0) {
+                func_00173108();
+            }
+            func_00125010();
+            if (D_0058082C != 0) {
+                TODrawMessageWindow();
+            }
+            func_00125008();
+            func_0011AD00(3);
+            if (D_00580830 != 0 && ffx_debugmode != 0) {
+                func_002B4340();
+            }
+            func_0011AD00(0xB);
+            ((void (*)(void))func_0011B218)();
+            func_0011AD00(1);
+            func_00293740();
+            func_0011AD00(0xB);
+        }
+    }
+    func_002F8660(0);
+    func_002DA610(0, 0);
+    Cache_SweepBG(1);
+    Ch_MemMove();
+    func_0011AD00(3);
+    func_0011ABC8();
+    func_002D3FF0(2);
+    D_00307F2C++;
+    func_002DB640(&D_005804F0, D_00307F2C);
+    Sg_SetTkAntiXYB(0, 1, 0x80);
+    func_0011FC58((u8 *)&D_005804F0 + (D_00307F2C & 1) * 0x28);
+    if (func_001577F8() != 0) {
+        TOSetEnvMovieMessage();
+    }
+}
 
 s32 _m2c_func_0011B9D8_SgStrdupD(s32, s32) __asm__("SgStrdupD");
 s32 _m2c_func_0011B9D8_Sg_MainInit() __asm__("Sg_MainInit");

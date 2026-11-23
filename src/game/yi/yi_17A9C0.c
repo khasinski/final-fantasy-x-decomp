@@ -629,15 +629,258 @@ void func_0017CCF8(s32 arg0) {
     func_0017CA18(sp, arg0 + 0x276B0);
 }
 
-void func_0017CD50(void *p) {
+int func_0017CD50(void *p) {
     func_002EF0D0(p, 0, 0x40);
 }
 
-void func_0017CD60(void *arg0) {
+int func_0017CD60(void *arg0) {
     func_002EF0D0(arg0, 0, 0x40);
 }
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CD70);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C5F0);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017D3C8);
+typedef struct YiSub1C {
+    u32 w00;
+    u32 w04;
+    void *p08;
+    u32 w0C;
+    void *p10;
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    u16 h1A;
+} YiSub1C;
+
+typedef struct YiGrp720 {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 w0C[4];
+    u32 count;
+    YiSub1C sub[64];
+} YiGrp720;
+
+typedef struct YiObjNode {
+    u8 pad00[0x44];
+    void *p44;
+    s32 w48;
+    struct YiObjNode *next;
+} YiObjNode;
+
+typedef struct YiSave2EntC0 {
+    u64 d00;
+    u8 pad08[0xA0];
+    YiObjNode *pA8;
+    u8 padAC[0x14];
+} YiSave2EntC0;
+
+typedef struct YiSave2Ctx {
+    u8 pad00[0x68260];
+    s32 w68260;
+    u8 pad68264[0x554];
+    u32 w687B8;
+    u32 pad687BC;
+    YiSave2EntC0 ent[1100];
+    u8 pad9C0C0[0x3B44];
+    u32 w9FC04;
+    void *p9FC08[64];
+    void *p9FD08[64];
+    u32 w9FE08[64];
+    u8 pad9FF08[0x200];
+    u32 wA0108;
+    YiGrp720 grp[64];
+} YiSave2Ctx;
+
+typedef struct YiHdr3C8Sub {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u16 h0C[4];
+    u16 h14[4];
+    u32 pad1C;
+} YiHdr3C8Sub;
+
+typedef struct YiHdr3C8 {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 w0C;
+    u32 w10[4];
+    YiHdr3C8Sub sub;
+} YiHdr3C8;
+
+typedef struct YiSub6 {
+    u32 w00;
+    u32 w04;
+    u32 w08[4];
+    u32 w18;
+    u32 w1C;
+    u32 w20;
+    u32 w24;
+    u32 w28;
+    u32 pad2C[5];
+} YiSub6;
+
+void func_0017D3C8(void *ctx_p, const char *filename)
+{
+    YiSave2Ctx *ctx = (YiSave2Ctx *)ctx_p;
+    YiHdr3C8 hdr;
+    u32 chunk[16];
+    V2State17AE state;
+    V2Save17A save17A;
+    u8 buf100[0x40];
+    YiSub6 sub6;
+    R2Mat40 mat40;
+    int fd;
+    int i;
+    u32 j;
+
+    fd = func_002FC4E0(filename, 0x602);
+    hdr.w00 = 0x214365;
+    hdr.w04 = 0x110;
+    hdr.w08 = 0;
+    hdr.w0C = 0;
+    func_002FCD90(fd, &hdr, 0x40);
+
+    for (i = 0; i < ctx->w687B8; i++) {
+        YiObjNode *p;
+
+        func_0017CD60(chunk);
+        chunk[0] = 0;
+        chunk[1] = 0x40;
+        func_002FCD90(fd, chunk, 0x40);
+        func_0017AE98(&state, (V2Save17AE *)&ctx->ent[i]);
+        func_002FCD90(fd, &state, 0x40);
+        hdr.w08 += 0x40;
+        hdr.w0C++;
+        p = ctx->ent[i].pA8;
+        while (p != 0) {
+            chunk[0] = 1;
+            chunk[1] = (p->w48 << 4) + 0x40;
+            func_002FCD90(fd, chunk, 0x40);
+            func_0017AFB0(&save17A, (Obj17A110 *)p);
+            func_002FCD90(fd, &save17A, 0x40);
+            func_002FCD90(fd, p->p44, p->w48 << 4);
+            hdr.w08 += chunk[1];
+            hdr.w0C++;
+            p = p->next;
+        }
+    }
+
+    func_0017B0D0(buf100, (u8 *)ctx);
+    func_0017CD60(chunk);
+    chunk[0] = 4;
+    chunk[1] = 0x40;
+    func_002FCD90(fd, chunk, 0x40);
+    func_002FCD90(fd, buf100, 0x40);
+    hdr.w08 += 0x40;
+    hdr.w0C++;
+
+    if (ctx->w68260 > 0) {
+        func_0017B2E8((R2Big68 *)ctx, &mat40);
+        func_0017CD60(chunk);
+        chunk[0] = 7;
+        chunk[1] = 0x140;
+        func_002FCD90(fd, chunk, 0x40);
+        func_002FCD90(fd, &mat40, chunk[1]);
+        hdr.w08 += chunk[1];
+        hdr.w0C++;
+    }
+
+    i = 0;
+    if (ctx->w9FC04 != 0) {
+        u32 *sub = &chunk[8];
+        do {
+            if (ctx->p9FC08[i] != 0) {
+                func_0017CD60(chunk);
+                chunk[0] = 5;
+                chunk[1] = ctx->w9FE08[i] << 7;
+                chunk[8] = 1;
+                sub[1] = i;
+                sub[2] = ctx->w9FE08[i];
+                func_002FCD90(fd, chunk, 0x40);
+                func_002FCD90(fd, ctx->p9FC08[i], chunk[1]);
+                hdr.w08 += chunk[1];
+                hdr.w0C++;
+            }
+            if (ctx->p9FD08[i] != 0) {
+                func_0017CD60(chunk);
+                chunk[0] = 8;
+                if (ctx->w9FE08[i] & 1) {
+                    chunk[1] = (ctx->w9FE08[i] + 1) << 5;
+                } else {
+                    chunk[1] = ctx->w9FE08[i] << 5;
+                }
+                chunk[8] = 1;
+                sub[1] = i;
+                sub[2] = ctx->w9FE08[i];
+                func_002FCD90(fd, chunk, 0x40);
+                func_002FCD90(fd, ctx->p9FD08[i], ctx->w9FE08[i] << 5);
+                if (ctx->w9FE08[i] & 1) {
+                    func_002FCD90(fd, ctx->p9FD08[i], 0x20);
+                }
+                hdr.w08 += chunk[1];
+                hdr.w0C++;
+            }
+            i++;
+        } while (i < ctx->w9FC04);
+    }
+
+    for (i = 0; i < ctx->wA0108; i++) {
+        for (j = 0; j < ctx->grp[i].count; j++) {
+            int k;
+
+            func_0017CD60(chunk);
+            sub6.w00 = i;
+            chunk[0] = 6;
+            chunk[1] = (ctx->grp[i].sub[j].w0C << 4) + 0x40;
+            if (j == 0) {
+                sub6.w04 = ctx->grp[i].w08;
+                for (k = 0; k < 4; k++) {
+                    sub6.w08[k] = ctx->grp[i].w0C[k];
+                }
+            } else {
+                sub6.w04 = 0;
+                for (k = 0; k < 4; k++) {
+                    sub6.w08[k] = 0;
+                }
+            }
+            sub6.w18 = ctx->grp[i].sub[j].w0C;
+            if (ctx->grp[i].sub[j].p10 != 0) {
+                sub6.w1C = ctx->grp[i].sub[j].h14;
+                sub6.w20 = ctx->grp[i].sub[j].h16;
+                sub6.w24 = ctx->grp[i].sub[j].h18 >> 2;
+                sub6.w28 = ctx->grp[i].sub[j].h1A;
+                chunk[1] += sub6.w24 << 4;
+            } else {
+                sub6.w24 = 0;
+                sub6.w1C = 0;
+                sub6.w20 = 0;
+                sub6.w28 = 0;
+            }
+            func_002FCD90(fd, chunk, 0x40);
+            func_002FCD90(fd, &sub6, 0x40);
+            func_002FCD90(fd, ctx->grp[i].sub[j].p08, ctx->grp[i].sub[j].w0C << 4);
+            if (ctx->grp[i].sub[j].p10 != 0) {
+                func_002FCD90(fd, ctx->grp[i].sub[j].p10, sub6.w24 << 4);
+            }
+            hdr.w08 += chunk[1];
+            hdr.w0C++;
+        }
+    }
+
+    {
+        YiHdr3C8Sub *hs = &hdr.sub;
+        hs->w00 = 0;
+        hs->w04 = 0;
+        hs->w08 = 0;
+        for (i = 0; i < 4; i++) {
+            hs->h0C[i] = 0;
+            hs->h14[i] = 0;
+        }
+    }
+    func_002FC8E8(fd, 0, 0);
+    func_002FCD90(fd, &hdr, 0x40);
+    func_002FC768(fd);
+}

@@ -811,8 +811,243 @@ void func_0013DB38(Actor *a, void *op)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013E150);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A960);
+typedef struct {
+    u16 h0;
+    u16 h2;
+    s16 h4;
+    s16 h6;
+    float f08;
+    float fC;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+} AtelSlotBR;
+
+void func_0013E150(Actor *a, void *op)
+{
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    AtelSlotAR *s44 = (AtelSlotAR *)((ObjBindR *)op)->s44;
+    float scale = 1.0f;
+    float ease = 1.0f;
+    u16 flags;
+    float spd;
+    float t;
+    float d0, d1, d2;
+
+    op = ((ObjBindR *)op)->s48;
+#define s ((AtelSlotBR *)op)
+    flags = s->h2;
+    if (s->h4 > 0) {
+        if (s->h6 < 0x7FFE) {
+            s->h6++;
+        }
+        if (s->h4 < s->h6) {
+            scale = (float)s->h6 / (float)s->h4;
+            if (scale > 8.0f) {
+                scale = 8.0f;
+            }
+        }
+    }
+    if (flags & 0x200) {
+        spd = s->f14;
+    } else {
+        spd = s->f10;
+    }
+    switch (flags & 0x1F) {
+    case 0:
+        break;
+    case 2: {
+        float f = s->f08;
+        float u;
+        f += s->fC;
+        if (f < 0.0f) {
+            f = 0.0f;
+        }
+        if (f >= 1.0f) {
+            if (s->f20 == st->f34) {
+                s->h2 = (s->h2 & ~0x1F) | 1;
+            }
+            f = 1.0f;
+        }
+        s->f08 = f;
+        u = f - 0.5f;
+        ease = (u * -4.0f * u + 1.0f) * 0.6f + 0.4f;
+        if (ease < 0.0f) {
+            ease = 0.0f;
+        }
+        if (ease > 1.0f) {
+            ease = 1.0f;
+        }
+    }
+    case 1:
+    case 5:
+        if (flags & 0x8000) {
+            int mode = 0;
+            float ox, oy;
+            if (flags & 0x800) {
+                mode = 1;
+            }
+            if (flags & 0x400) {
+                mode = 2;
+            }
+            if (flags & 0x2000) {
+                func_0013EC20(a, s->h0);
+            }
+            func_002D45C0(&ox, &oy, st->x, st->y, st->z, s44->f28, s44->f2C, s44->f30);
+            s->f2C = func_002D4338(s->f2C + ox - s->f20);
+            s->f30 = func_002D4338(s->f30 + oy - s->f24);
+            s->f20 = ox;
+            s->f24 = oy;
+            st->f34 = func_002D4798(st->f34, s->f20, spd * ease * scale, mode);
+            st->f30 = func_002D4798(st->f30, s->f24, s->f18 * ease * scale, mode);
+        } else {
+            st->f34 = func_002D4338(st->f34 + s->f10);
+            st->f30 = func_002D4338(st->f30 + s->f18);
+            st->f38 = func_002D4338(st->f38 + s->f1C);
+        }
+        break;
+    case 3: {
+        float f = s->f08 + 1.0f;
+        t = f / s->fC;
+        s->f08 = f;
+        if (t < 0.0f) {
+            t = 0.0f;
+        }
+        if (t > 1.0f) {
+            t = 1.0f;
+        }
+        if (flags & 0x8000) {
+            float ox, oy;
+            if (flags & 0x2000) {
+                func_0013EC20(a, s->h0);
+            }
+            func_002D45C0(&ox, &oy, st->x, st->y, st->z, s44->f28, s44->f2C, s44->f30);
+            s->f2C = func_002D4338(s->f2C + ox - s->f20);
+            s->f30 = func_002D4338(s->f30 + oy - s->f24);
+        }
+        if (t >= 1.0f) {
+            st->f34 = s->f20;
+            st->f30 = s->f24;
+            st->f38 = s->f28;
+        } else if (t == 0.0f) {
+            st->f34 = func_002D4338(s->f20 + s->f2C);
+            st->f30 = func_002D4338(s->f24 + s->f30);
+            st->f38 = func_002D4338(s->f28 + s->f34);
+        } else {
+            float u;
+            d0 = 0.0f;
+            d1 = 0.0f;
+            d2 = 0.0f;
+            if (flags & 0x800) {
+                if (s->f2C > 0.0f) {
+                    d0 = -6.2831855f;
+                }
+                if (s->f30 > 0.0f) {
+                    d1 = -6.2831855f;
+                }
+                if (s->f34 > 0.0f) {
+                    d2 = -6.2831855f;
+                }
+            }
+            if (flags & 0x400) {
+                if (s->f2C < 0.0f) {
+                    d0 = 6.2831855f;
+                }
+                if (s->f30 < 0.0f) {
+                    d1 = 6.2831855f;
+                }
+                if (s->f34 < 0.0f) {
+                    d2 = 6.2831855f;
+                }
+            }
+            u = 1.0f - t;
+            st->f34 = func_002D4338(s->f20 + (s->f2C + d0) * u);
+            st->f30 = func_002D4338(s->f24 + (s->f30 + d1) * u);
+            st->f38 = func_002D4338(s->f28 + (s->f34 + d2) * u);
+        }
+        break;
+    }
+    case 4: {
+        float f = s->f08 + 1.0f;
+        t = f / s->fC;
+        s->f08 = f;
+        if (t < 0.0f) {
+            t = 0.0f;
+        }
+        if (t > 1.0f) {
+            t = 1.0f;
+        }
+        if (flags & 0x8000) {
+            float ox, oy;
+            if (flags & 0x2000) {
+                func_0013EC20(a, s->h0);
+            }
+            func_002D45C0(&ox, &oy, st->x, st->y, st->z, s44->f28, s44->f2C, s44->f30);
+            s->f2C = func_002D4338(s->f2C + ox - s->f20);
+            s->f30 = func_002D4338(s->f30 + oy - s->f24);
+        }
+        if (t >= 0.5f) {
+            t = 1.0f - t;
+            t = 1.0f - (t + t) * t;
+        } else {
+            t = t * (t + t);
+        }
+        if (t >= 1.0f) {
+            st->f34 = s->f20;
+            st->f30 = s->f24;
+            st->f38 = s->f28;
+        } else if (t <= 0.0f) {
+            st->f34 = func_002D4338(s->f2C + s->f20);
+            st->f30 = func_002D4338(s->f30 + s->f24);
+            st->f38 = func_002D4338(s->f34 + s->f28);
+        } else {
+            float u;
+            d0 = 0.0f;
+            d1 = 0.0f;
+            d2 = 0.0f;
+            if (flags & 0x800) {
+                if (s->f2C > 0.0f) {
+                    d0 = -6.2831855f;
+                }
+                if (s->f30 > 0.0f) {
+                    d1 = -6.2831855f;
+                }
+                if (s->f34 > 0.0f) {
+                    d2 = -6.2831855f;
+                }
+            }
+            if (flags & 0x400) {
+                if (s->f2C < 0.0f) {
+                    d0 = 6.2831855f;
+                }
+                if (s->f30 < 0.0f) {
+                    d1 = 6.2831855f;
+                }
+                if (s->f34 < 0.0f) {
+                    d2 = 6.2831855f;
+                }
+            }
+            u = 1.0f - t;
+            st->f34 = func_002D4338(s->f20 + (s->f2C + d0) * u);
+            st->f30 = func_002D4338(s->f24 + (s->f30 + d1) * u);
+            st->f38 = func_002D4338(s->f28 + (s->f34 + d2) * u);
+        }
+        break;
+    }
+    }
+    if (flags & 0x1000) {
+        st->f20 = st->f34;
+        st->f24 = st->f30;
+    }
+#undef s
+}
 
 void func_0013E850(Actor *a) {
     ActorState *st = AtelGetPosWorkAdrs(a);

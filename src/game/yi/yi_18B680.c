@@ -85,8 +85,76 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018BD98);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C008);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C248);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_18B680/rodata", jtbl_0056D1B0);
+void func_0018C248(void *dst_p, void *src_p, int n)
+{
+    u32 *dst = (u32 *)dst_p;
+    float *src = (float *)src_p;
+    int i;
+
+    for (i = 0; i < n; i++, dst++) {
+        float h = src[0];
+        float s = src[1];
+        float v = src[2];
+        u32 a = (u32)src[3];
+        u32 ri, gi, bi;
+
+        if (s == 0.0f) {
+            gi = (u32)v;
+            ri = gi;
+            bi = gi;
+            src += 4;
+            *dst = (ri & 0xFF) | ((gi << 8) & 0xFF00) | ((bi << 16) & 0xFF0000) | (a << 24);
+        } else {
+            int hi;
+            float f, p, q, t;
+            float r, g, b;
+
+            h /= 60.0f;
+            hi = (int)h;
+            f = h - (float)hi;
+            p = v * (1.0f - s);
+            q = v * (1.0f - s * f);
+            t = v * (1.0f - s * (1.0f - f));
+            switch (hi) {
+            case 0:
+                r = v;
+                g = t;
+                b = p;
+                break;
+            case 1:
+                r = q;
+                g = v;
+                b = p;
+                break;
+            case 2:
+                r = p;
+                g = v;
+                b = t;
+                break;
+            case 3:
+                r = p;
+                g = q;
+                b = v;
+                break;
+            case 4:
+                r = t;
+                g = p;
+                b = v;
+                break;
+            default:
+                r = v;
+                g = p;
+                b = q;
+                break;
+            }
+            src += 4;
+            ri = (u32)(r * 255.0f);
+            gi = (u32)(g * 255.0f);
+            bi = (u32)(b * 255.0f);
+            *dst = (ri & 0xFF) | ((gi << 8) & 0xFF00) | ((bi << 16) & 0xFF0000) | (a << 24);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C468);
 

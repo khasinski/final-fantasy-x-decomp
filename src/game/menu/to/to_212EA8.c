@@ -110,15 +110,15 @@ int func_002130F8(MenuList *o)
 }
 
 typedef struct CtbWindowEntry {
-    u8 active, id;
+    s8 active, id;
     u8 pad2[2];
-    u32 value4, value8;
+    s32 value4, value8;
     u8 orderC, orderD, flags, padF;
     s16 x, y;
-    s32 state;
+    int (*state)();
 } CtbWindowEntry;
 typedef struct CtbListEntry {
-    u8 id, pad;
+    s8 id, pad;
     u16 value;
 } CtbListEntry;
 
@@ -128,6 +128,8 @@ extern s32 D_006902BC;
 extern CtbWindowEntry D_00690340[32];
 extern CtbWindowEntry *D_006902C0[32];
 CtbListEntry *MsGetCTBlist(int *);
+int func_00213E80(R4Walk *o);
+int func_00213FF0(FrameCounter *c);
 
 void TOBtlInitCtbWindow(void)
 {
@@ -164,7 +166,150 @@ void TOBtlInitCtbWindow(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_212EA8", TOBtlCtrlCtbWindow);
+void TOBtlCtrlCtbWindow(int a0, int mask)
+{
+    CtbWindowEntry *tmp[32];
+    int count;
+    int i, j, k;
+    int changed = 0;
+    CtbListEntry *src;
+
+    D_006902BC = mask;
+    src = MsGetCTBlist(&count);
+    for (i = 0; i < 16; i++) {
+        if (D_006902C0[i]->id != src[i].id) {
+            changed = 1;
+            break;
+        }
+    }
+    if (changed == 1) {
+        for (i = 0; i < 16; i++) {
+            D_006902C0[i]->active = 1;
+            D_006902C0[i]->y = i * 22;
+            D_006902C0[i]->value4 = D_006902C0[i]->value8;
+            D_006902C0[i]->x = 0;
+            D_006902C0[i]->padF = 0;
+            D_006902C0[i]->state = 0;
+        }
+        for (i = 16; i < 32; i++) {
+            if (D_006902C0[i] != 0) {
+                D_006902C0[i]->active = 0;
+                D_006902C0[i]->value4 = D_006902C0[i]->value8;
+                D_006902C0[i]->x = 0;
+                D_006902C0[i]->y = 0;
+                D_006902C0[i]->padF = 0;
+                D_006902C0[i]->state = 0;
+                D_006902C0[i] = 0;
+            }
+        }
+        func_002EF0D0(tmp, 0, 0x80);
+        for (i = 0; i < 16; i++) {
+            for (j = 0; j < 16; j++) {
+                if (tmp[j] == 0 && D_006902C0[i]->id == src[j].id) {
+                    tmp[j] = D_006902C0[i];
+                    D_006902C0[i]->orderD = D_006902C0[i]->orderC;
+                    tmp[j]->orderC = j;
+                    D_006902C0[i] = 0;
+                    tmp[j]->value8 = src[j].value;
+                    if (i == j) {
+                        tmp[j]->state = 0;
+                    } else if ((mask >> tmp[j]->id) & 1) {
+                        tmp[j]->state = (int (*)())func_00213E80;
+                    } else {
+                        tmp[j]->state = (int (*)())func_00213FF0;
+                    }
+                    break;
+                }
+            }
+        }
+        k = 16;
+        for (i = 0; i < 16; i++) {
+            if (D_006902C0[i] != 0) {
+                tmp[k] = D_006902C0[i];
+                D_006902C0[i]->orderD = D_006902C0[i]->orderC;
+                tmp[k]->orderC = k;
+                D_006902C0[i] = 0;
+                tmp[k]->value8 = src[i].value;
+                if ((mask >> tmp[k]->id) & 1) {
+                    tmp[k]->state = (int (*)())func_00213E80;
+                } else {
+                    tmp[k]->state = (int (*)())func_00213FF0;
+                }
+                k++;
+            }
+        }
+        k = 16;
+        for (i = 0; i < 16; i++) {
+            if (tmp[i] == 0) {
+                for (j = 0; j < 32; j++) {
+                    if (D_00690340[j].active == 0) {
+                        break;
+                    }
+                }
+                D_00690340[j].orderC = i;
+                D_00690340[j].active = 1;
+                D_00690340[j].orderD = k;
+                D_00690340[j].id = src[i].id;
+                D_00690340[j].value4 = src[i].value;
+                D_00690340[j].value8 = src[i].value;
+                D_00690340[j].y = k * 22;
+                D_00690340[j].x = 0;
+                if ((mask >> D_00690340[j].id) & 1) {
+                    D_00690340[j].state = (int (*)())func_00213E80;
+                } else {
+                    D_00690340[j].state = (int (*)())func_00213FF0;
+                }
+                tmp[i] = &D_00690340[j];
+                k++;
+            }
+        }
+        __builtin_memcpy(D_006902C0, tmp, 0x80);
+    }
+    for (i = 0; i < 32; i++) {
+        if (D_006902C0[i] != 0 && D_006902C0[i]->state != 0) {
+            D_006902C0[i]->state(D_006902C0[i]);
+        }
+    }
+    for (i = 0; i < 32; i++) {
+        if (D_006902C0[i] != 0 && D_006902C0[i]->value8 != D_006902C0[i]->value4) {
+            if (D_006902C0[i]->value8 < D_006902C0[i]->value4) {
+                D_006902C0[i]->value4 -= 3;
+                if (D_006902C0[i]->value8 >= D_006902C0[i]->value4) {
+                    D_006902C0[i]->value4 = D_006902C0[i]->value8;
+                }
+            }
+            if (D_006902C0[i]->value8 > D_006902C0[i]->value4) {
+                D_006902C0[i]->value4 += 3;
+                if (D_006902C0[i]->value8 <= D_006902C0[i]->value4) {
+                    D_006902C0[i]->value4 = D_006902C0[i]->value8;
+                }
+            }
+        }
+    }
+    if (D_003238D0.h12 & 8) {
+        if (D_0032498E == D_0032498A && (s8)D_00324990 > 0) {
+            D_00324990--;
+            D_0032498E += 22;
+        }
+    } else if (D_003238D0.h12 & 2) {
+        if (D_0032498E == D_0032498A && (s8)D_00324990 < 8) {
+            D_00324990++;
+            D_0032498E -= 22;
+        }
+    }
+    if (D_0032498E < D_0032498A) {
+        D_0032498A -= 11;
+        if (D_0032498E >= D_0032498A) {
+            D_0032498A = D_0032498E;
+        }
+    }
+    if (D_0032498E > D_0032498A) {
+        D_0032498A += 11;
+        if (D_0032498E <= D_0032498A) {
+            D_0032498A = D_0032498E;
+        }
+    }
+}
 
 extern s32 D_003241D0;
 extern s32 D_003241D4;

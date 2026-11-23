@@ -457,7 +457,165 @@ Chr *func_00102220(Chr *pool)
     return &pool[D_00300668];
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_00102288);
+typedef struct {
+    u64 b0 : 1;
+    u64 b1 : 1;
+    u64 b2 : 1;
+    u64 b3 : 1;
+    u64 b4 : 1;
+    u64 b5 : 1;
+    u64 b6 : 1;
+    u64 b7 : 1;
+    u64 b8 : 1;
+    u64 b9 : 1;
+    u64 b10 : 1;
+    u64 b11 : 1;
+    u64 b12 : 1;
+    u64 b13 : 1;
+    u64 b14 : 1;
+    u64 b15 : 1;
+    u64 b16 : 1;
+    u64 b17 : 1;
+    u64 b18 : 1;
+    u64 b19 : 1;
+    u64 b20 : 1;
+    u64 b21 : 1;
+    u64 b22 : 1;
+    u64 b23 : 1;
+    u64 b24 : 1;
+    u64 b25 : 1;
+    u64 b26 : 1;
+    u64 b27 : 1;
+    u64 b28 : 1;
+    u64 b29 : 1;
+    u64 b30 : 1;
+    u64 b31 : 1;
+    u64 b32 : 1;
+    u64 b33 : 1;
+    u64 b34 : 1;
+    u64 b35 : 1;
+    u64 b36 : 1;
+    u64 b37 : 1;
+    u64 b38 : 1;
+    u64 b39 : 1;
+    u64 b40 : 1;
+    u64 b41 : 1;
+    u64 b42 : 22;
+} ChrFlagBits;
+
+typedef struct {
+    u64 d[2];
+} ChrVec16;
+
+typedef struct {
+    u64 d[26];
+} ChrBlkD0;
+
+typedef struct {
+    u32 w[4];
+} ChrBlk10;
+
+typedef struct {
+    u32 w[21];
+} ChrBlk54;
+
+typedef struct {
+    u32 w[32];
+} ChrBlk80;
+
+extern void *AtelGetEventCharHandleFromID(s32 id);
+
+#define COPY_FLAG_LO(dst, src, n) \
+    ((dst)->flags = ((dst)->flags & ~(1LL << (n))) | ((s64)(((s32)((s64)(src)->flags >> (n))) & 1) << (n)))
+
+#define COPY_FLAG_HI(dst, src, n) \
+    ((dst)->flags = ((dst)->flags & ~(1ULL << (n))) | ((s64)(((s32)((u64)(src)->flags >> (n))) & 1) << (n)))
+
+void func_00102288(Chr *dst, Chr *src)
+{
+    *(ChrVec16 *)((u8 *)dst + 0x10) = *(ChrVec16 *)((u8 *)src + 0x10);
+    *(ChrVec16 *)((u8 *)dst + 0x20) = *(ChrVec16 *)((u8 *)src + 0x20);
+    *(ChrVec16 *)((u8 *)dst + 0x30) = *(ChrVec16 *)((u8 *)src + 0x30);
+    *(ChrVec16 *)((u8 *)dst + 0x60) = *(ChrVec16 *)((u8 *)src + 0x60);
+    *(ChrVec16 *)((u8 *)dst + 0x70) = *(ChrVec16 *)((u8 *)src + 0x70);
+    *(ChrVec16 *)((u8 *)dst + 0x80) = *(ChrVec16 *)((u8 *)src + 0x80);
+    *(ChrVec16 *)((u8 *)dst + 0xC0) = *(ChrVec16 *)((u8 *)src + 0xC0);
+
+    *(float *)((u8 *)dst + 0x164) = *(float *)((u8 *)src + 0x164);
+    *(float *)((u8 *)dst + 0x168) = *(float *)((u8 *)src + 0x168);
+    *(float *)((u8 *)dst + 0x16C) = *(float *)((u8 *)src + 0x16C);
+    *(float *)((u8 *)dst + 0x170) = *(float *)((u8 *)src + 0x170);
+    *(float *)((u8 *)dst + 0x174) = *(float *)((u8 *)src + 0x174);
+    *(float *)((u8 *)dst + 0x178) = *(float *)((u8 *)src + 0x178);
+    *(float *)((u8 *)dst + 0x17C) = *(float *)((u8 *)src + 0x17C);
+    *(float *)((u8 *)dst + 0x180) = *(float *)((u8 *)src + 0x180);
+    *(float *)((u8 *)dst + 0x188) = *(float *)((u8 *)src + 0x188);
+
+    *((u8 *)dst + 0x18C) = *((u8 *)src + 0x18C);
+    *((u8 *)dst + 0x18D) = *((u8 *)src + 0x18D);
+    *((u8 *)dst + 0x18E) = *((u8 *)src + 0x18E);
+    *((u8 *)dst + 0x18F) = *((u8 *)src + 0x18F);
+    *((u8 *)dst + 0x191) = *((u8 *)src + 0x191);
+    *((u8 *)dst + 0x192) = *((u8 *)src + 0x192);
+    *((u8 *)dst + 0x193) = *((u8 *)src + 0x193);
+    *((u8 *)dst + 0x194) = *((u8 *)src + 0x194);
+
+    COPY_FLAG_LO(dst, src, 0);
+    COPY_FLAG_LO(dst, src, 1);
+    COPY_FLAG_LO(dst, src, 2);
+    COPY_FLAG_LO(dst, src, 6);
+    COPY_FLAG_LO(dst, src, 7);
+    COPY_FLAG_LO(dst, src, 8);
+    COPY_FLAG_LO(dst, src, 11);
+    COPY_FLAG_LO(dst, src, 18);
+    COPY_FLAG_LO(dst, src, 19);
+    COPY_FLAG_LO(dst, src, 20);
+    COPY_FLAG_LO(dst, src, 21);
+    COPY_FLAG_LO(dst, src, 22);
+    COPY_FLAG_LO(dst, src, 29);
+    COPY_FLAG_LO(dst, src, 30);
+    COPY_FLAG_LO(dst, src, 31);
+    COPY_FLAG_HI(dst, src, 33);
+    COPY_FLAG_HI(dst, src, 34);
+    COPY_FLAG_HI(dst, src, 35);
+    COPY_FLAG_HI(dst, src, 39);
+    COPY_FLAG_HI(dst, src, 40);
+    *(volatile s64 *)&dst->flags = (dst->flags & ~(1ULL << 41)) | ((s64)(((s32)((u64)src->flags >> 41)) & 1) << 41);
+
+    {
+        volatile s32 *d_1ac = (volatile s32 *)((u8 *)dst + 0x1AC);
+        *d_1ac = *(volatile s32 *)((u8 *)src + 0x1AC);
+    }
+    *(ChrVec16 *)((u8 *)dst + 0x1B0) = *(ChrVec16 *)((u8 *)src + 0x1B0);
+    *(s32 *)((u8 *)dst + 0x1C4) = *(s32 *)((u8 *)src + 0x1C4);
+    *(float *)((u8 *)dst + 0x1C0) = *(float *)((u8 *)src + 0x1C0);
+    *(s32 *)((u8 *)dst + 0x404) = *(s32 *)((u8 *)src + 0x404);
+
+    *(ChrBlkD0 *)((u8 *)dst + 0x410) = *(ChrBlkD0 *)((u8 *)src + 0x410);
+    *(ChrBlk10 *)((u8 *)dst + 0x4E0) = *(ChrBlk10 *)((u8 *)src + 0x4E0);
+
+    *(float *)((u8 *)dst + 0x4F0) = *(float *)((u8 *)src + 0x4F0);
+    *(s32 *)((u8 *)dst + 0x6E4) = *(s32 *)((u8 *)src + 0x6E4);
+    *(u16 *)((u8 *)dst + 0x75C) = *(u16 *)((u8 *)src + 0x75C);
+    *(float *)((u8 *)dst + 0x4F8) = *(float *)((u8 *)src + 0x4F8);
+    *(float *)((u8 *)dst + 0x4FC) = *(float *)((u8 *)src + 0x4FC);
+    *(float *)((u8 *)dst + 0x500) = *(float *)((u8 *)src + 0x500);
+    *(float *)((u8 *)dst + 0x504) = *(float *)((u8 *)src + 0x504);
+    *(float *)((u8 *)dst + 0x508) = *(float *)((u8 *)src + 0x508);
+    *(float *)((u8 *)dst + 0x50C) = *(float *)((u8 *)src + 0x50C);
+    *(float *)((u8 *)dst + 0x820) = *(float *)((u8 *)src + 0x820);
+    *(float *)((u8 *)dst + 0x824) = *(float *)((u8 *)src + 0x824);
+    *(float *)((u8 *)dst + 0x828) = *(float *)((u8 *)src + 0x828);
+
+    *(ChrBlk54 *)((u8 *)dst + 0x328) = *(ChrBlk54 *)((u8 *)src + 0x328);
+    *(ChrBlk80 *)((u8 *)dst + 0x768) = *(ChrBlk80 *)((u8 *)src + 0x768);
+
+    if (*(s32 *)((u8 *)dst + 0x1C4) == -1) {
+        dst->p1A8 = 0;
+    } else {
+        dst->p1A8 = AtelGetEventCharHandleFromID(*(s32 *)((u8 *)dst + 0x1C4));
+    }
+}
 
 s32 func_001029F0(void)
 {

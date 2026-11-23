@@ -41,8 +41,114 @@ void func_00161AA0(int a0, int a1, int a2)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim_old", func_00161B00);
-INCLUDE_RODATA("build/ee_asm/game/chr/tex_anim_old/rodata", jtbl_0056B9C0);
+extern char D_0056B9B0[];
+void func_00162500(int a0, int a1, int a2);
+
+typedef struct {
+    s8 b[16];
+} TaBytes16;
+
+typedef struct {
+    u8 b00;
+    s8 b01;
+    u8 pad02[6];
+    TaOldWord0 w08;
+    TaBytes16 map;
+} TaFileHdrOld;
+
+typedef union {
+    u16 h;
+    char c;
+} TaOldHalf;
+
+typedef struct {
+    s32 pad[0x400 / 4];
+    TaOldWord0 w400;
+    s32 w404;
+    G1Sub160BA8Ent ent[8];
+    TaBytes16 map;
+    TaOldWord0 w5B8[4];
+    TaOldHalf h5C8[4];
+    TaOldHalf h5D0[4];
+} TexAnimWorkOldFull;
+
+typedef struct {
+    float f00;
+    float f04;
+    u8 pad08[0x90 - 8];
+} TaDataEntOld;
+
+void func_00161B00(int idx, int a1, ChrParamSub *sub)
+{
+    TaFileHdrOld *hdr = (TaFileHdrOld *)D_0078D898[idx].p00;
+    TexAnimWorkOldFull *w;
+    G1Sub160BA8Ent *ent;
+    int i;
+    int j;
+    int cnt;
+
+    w = (TexAnimWorkOldFull *)user_malloc(0x5D8, 10, D_0056B9B0, 0x69);
+    D_0078D898[idx].w04 = (s32)w;
+    D_0078D898[idx].w08 = 0;
+    ent = w->ent;
+    for (i = 7; i >= 0; i--, ent++) {
+        ent->w04 = 0;
+        ent->h14 = 0;
+        ent->h16 = 0;
+        ent->h18 = 0;
+        ent->h1A = 0;
+        ent->w24 = 0;
+        ent->w28 = 0;
+        ent->w2C = 0;
+        ent->w30 = 0;
+        ent->h1C = 0;
+        ent->h1E = 0;
+    }
+    w->map = hdr->map;
+    w->w404 = a1;
+    cnt = hdr->b01;
+    for (i = 0; i < 16; i++) {
+        if (w->map.b[i] != -1) {
+            switch (w->map.b[i]) {
+            case 0:
+                func_00161AA0(idx, i, 2);
+                func_00162500(idx, i, 0);
+                break;
+            case 4:
+                func_00161AA0(idx, i, 0);
+                func_00162500(idx, i, 0);
+                break;
+            case 1:
+            case 3:
+                func_00161AA0(idx, i, 1);
+                func_00162500(idx, i, 0);
+                break;
+            case 2:
+                func_00161AA0(idx, i, 3);
+                func_00162500(idx, i, 0);
+                {
+                    register int mv __asm__("$8") = w->map.b[i];
+                    if (mv != -1) {
+                        TaDataEntOld *d = &((TaDataEntOld *)((u8 *)hdr + hdr->w08.w))[i];
+                        G1Sub160BA8Ent *e = &w->ent[i];
+                        *(float *)&e->w24 = d->f00;
+                        *(float *)&e->w28 = d->f04;
+                    }
+                }
+                break;
+            }
+            if (cnt < i + 1) {
+                cnt = i + 1;
+            }
+        }
+    }
+    w->w400.w = cnt;
+    for (j = 0; j < sub->h0C; j++) {
+        w->w5B8[j].w = sub->ents[j].w0C;
+        w->h5C8[j].h = sub->ents[j].h08;
+        w->h5D0[j].h = sub->ents[j].h0A;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/tex_anim_old", chr_texanim_main_sub_old);
 INCLUDE_RODATA("build/ee_asm/game/chr/tex_anim_old/rodata", jtbl_0056B9E0);

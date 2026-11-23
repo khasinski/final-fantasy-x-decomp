@@ -564,8 +564,327 @@ s32 func_001E35D8(s32 a, s32 b, float x, float y) {
     return var_18;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", func_001E3698);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E2360/rodata", jtbl_0056F8E0);
+typedef struct {
+    u8 pad00[0x20];
+    s32 val[3];
+} DmgSub1E3698;
+
+typedef struct {
+    u8 b00;
+    u8 b01;
+    u8 b02;
+    u8 b03;
+    u8 b04;
+    u8 pad05[0x10];
+    u8 b15;
+    u8 b16;
+    u8 pad17[0x1];
+    DmgSub1E3698 sub[16];
+    u8 pad2D8_fix[0x2D8 - 0x18 - 16 * 0x2C];
+} DmgRec1E3698;
+
+typedef struct {
+    u8 pad00[0x1C];
+    u32 w1C;
+    u8 pad20[0xB];
+    u8 b2B;
+    u8 pad2C[0x2C];
+    u8 b58;
+} Cmd1E3698;
+
+typedef struct {
+    u8 pad00[0x9E6];
+    u8 b9E6;
+    u8 pad9E7[0x99];
+    u32 wA80;
+    u8 padA84[0x198];
+    u16 hC1C;
+} Chr1E3698;
+
+typedef struct {
+    u8 pad00[0x2];
+    u8 f2;
+    u8 f3;
+    u8 pad04[0xC];
+    struct {
+        u32 w00;
+        u8 pad04[0xC];
+    } ent[4];
+} Cc1E3698;
+
+extern int MsCalcDamage(int, void *, int, void *, void *, int, void *, int, int *, int *, int);
+extern u8 *MsGetTargetRandomList(int, int *, int);
+extern int MsCalcDrainResult(int, void *, void *, void *, int *, int);
+
+int func_001E3698(int id, BtlChr *chr, int flag)
+{
+    s8 hits[31];
+    s32 drain[4];
+    DmgRec1E3698 *recs[31];
+    s32 cmd_id;
+    s32 sub_cmd_id;
+    s32 out0;
+    s32 out1;
+    s32 rand_cnt;
+    int cnt;
+    int sub;
+    int kind;
+    Cc1E3698 *cc;
+    DmgRec1E3698 *drain_rec;
+    Cmd1E3698 *cmd;
+    Cmd1E3698 *sub_cmd;
+    DmgRec1E3698 *r;
+    int i, j;
+    int diff;
+    u32 mask;
+
+    cc = (Cc1E3698 *)MsGetChrCommand(id);
+    cnt = 0;
+    sub = cc->f2;
+    cmd_id = ((Chr1E3698 *)chr)->hC1C;
+    drain_rec = 0;
+    cmd = (Cmd1E3698 *)MsGetCommand(id, 0, -1, 0, &cmd_id);
+    kind = cmd->b58;
+
+    for (i = 0; i < 31; i++) {
+        BtlChr *c = MsGetChr(i);
+        hits[i] = 0;
+        recs[i] = 0;
+        for (j = 0; j < 2; j++) {
+            r = (DmgRec1E3698 *)((u8 *)c + 0x434 + j * 0x2D8);
+            if (r->b02 == id && r->b03 == sub) {
+                recs[i] = r;
+                cnt++;
+                if (!(r->b04 & 4)) {
+                    hits[i] = r->b01 - r->b00;
+                } else {
+                    drain_rec = r;
+                    r->b01 = 0;
+                }
+                break;
+            }
+        }
+    }
+
+    if (id == 0 || id == 2) {
+        ((Chr1E3698 *)chr)->b9E6 = 1;
+    }
+
+    diff = 0;
+    sub_cmd = 0;
+    switch (kind) {
+    case 0x30:
+        if (flag == 0) {
+            sub_cmd_id = 0x30EC;
+            sub_cmd = (Cmd1E3698 *)MsGetCommand(id, 0, -1, 0, &sub_cmd_id);
+            diff = cmd->b2B - sub_cmd->b2B;
+        }
+        break;
+    case 0x52:
+        if (flag == 0) {
+            sub_cmd_id = 0x310D;
+            sub_cmd = (Cmd1E3698 *)MsGetCommand(id, 0, -1, 0, &sub_cmd_id);
+            diff = cmd->b2B - sub_cmd->b2B;
+        }
+        break;
+    case 0x25:
+        sub_cmd = cmd;
+        if (flag <= 0) {
+            flag = 1;
+        }
+        diff = sub_cmd->b2B - flag;
+        if (diff < 0) {
+            diff = 0;
+        }
+        break;
+    }
+
+    if (diff != 0) {
+        if (sub_cmd != 0 && !((sub_cmd->w1C >> 15) & 1)) {
+            for (j = 0; j < 31; j++) {
+                if (hits[j] > 0) {
+                    hits[j] -= diff;
+                    if (hits[j] <= 0) {
+                        hits[j] = 0;
+                        recs[j]->b01 = recs[j]->b00;
+                    }
+                }
+            }
+        } else {
+            for (i = 0; i < diff; i++) {
+                u8 max_h = 0;
+                for (j = 0; j < 31; j++) {
+                    if (hits[j] > max_h) {
+                        max_h = hits[j];
+                    }
+                }
+                if (max_h != 0) {
+                    int n = 0;
+                    int pick;
+                    int t;
+                    t = max_h;
+                    __asm__("" : "+r"(t) : "r"(n));
+                    for (j = 0; j < 31; j++) {
+                        if (hits[j] == t) {
+                            n++;
+                        }
+                    }
+                    pick = brnd(0x10) % n;
+                    n = 0;
+                    for (j = 0; j < 31; j++) {
+                        if (hits[j] == max_h) {
+                            n++;
+                            if (n > pick) {
+                                hits[j]--;
+                                if (hits[j] <= 0) {
+                                    hits[j] = 0;
+                                    recs[j]->b01 = recs[j]->b00;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    mask = 0;
+    cmd = 0;
+    for (i = 0; i < 31; i++) {
+        r = recs[i];
+        if (r != 0 && hits[i] > 0) {
+            BtlChr *tc;
+            int mode;
+            mask |= 1 << i;
+            tc = MsGetChr(i);
+            sub_cmd_id = 0;
+            mode = 0;
+            switch (kind) {
+            case 0x20:
+                if (flag != 0) {
+                    mode = 1;
+                    sub_cmd_id = 0x3060;
+                } else {
+                    sub_cmd_id = 0x30EB;
+                }
+                break;
+            case 0x30:
+                if (flag != 0) {
+                    mode = 1;
+                    sub_cmd_id = 0x3061;
+                } else {
+                    sub_cmd_id = 0x30EC;
+                }
+                break;
+            case 0x40:
+                if (flag != 0) {
+                    mode = 1;
+                    sub_cmd_id = 0x3062;
+                } else {
+                    sub_cmd_id = 0x30ED;
+                }
+                break;
+            case 0x50:
+                if (flag != 0) {
+                    mode = 1;
+                    sub_cmd_id = 0x3112;
+                } else {
+                    hits[i] = 0;
+                    r->b01 = r->b00;
+                }
+                break;
+            case 0x22:
+                if (flag != 0) {
+                    if (r->b16 != 0) {
+                        mode = 1;
+                        sub_cmd_id = 0x3064;
+                    } else {
+                        mode = 2;
+                        sub_cmd_id = 0x310E;
+                    }
+                } else {
+                    sub_cmd_id = 0x310A;
+                }
+                break;
+            case 0x32:
+                if (flag != 0) {
+                    if (r->b16 != 0) {
+                        mode = 1;
+                        sub_cmd_id = 0x3065;
+                    } else {
+                        mode = 2;
+                        sub_cmd_id = 0x310F;
+                    }
+                } else {
+                    sub_cmd_id = 0x310B;
+                }
+                break;
+            case 0x42:
+                if (flag != 0) {
+                    if (r->b16 != 0) {
+                        mode = 1;
+                        sub_cmd_id = 0x3066;
+                    } else {
+                        mode = 2;
+                        sub_cmd_id = 0x3110;
+                    }
+                } else {
+                    sub_cmd_id = 0x310C;
+                }
+                break;
+            case 0x52:
+                if (flag != 0) {
+                    if (r->b16 != 0) {
+                        mode = 1;
+                        sub_cmd_id = 0x3067;
+                    } else {
+                        mode = 2;
+                        sub_cmd_id = 0x3111;
+                    }
+                } else {
+                    sub_cmd_id = 0x310D;
+                }
+                break;
+            case 0x25:
+                sub_cmd_id = cmd_id;
+                break;
+            }
+            r->b15 = mode;
+            if (sub_cmd_id != 0) {
+                r->b00 = 0;
+                cmd = (Cmd1E3698 *)MsGetCommand(id, 0, -1, 0, &sub_cmd_id);
+                MsCalcDamage(id, chr, i, tc, cmd, sub_cmd_id, r, 0, &out0, &out1, hits[i]);
+            }
+        }
+    }
+
+    ((Chr1E3698 *)chr)->wA80 = mask;
+    if (sub < cc->f3) {
+        cc->ent[sub].w00 = mask;
+    }
+    ((Chr1E3698 *)chr)->b9E6 = 0;
+
+    if (drain_rec != 0 && cmd != 0) {
+        u8 *rlist;
+        for (i = 0; i < 31; i++) {
+            hits[i] = 0;
+        }
+        rlist = MsGetTargetRandomList(id, &rand_cnt, 1);
+        D_003172F0.f213E = rand_cnt;
+        for (i = 0; i < rand_cnt; i++) {
+            u8 tid = rlist[i];
+            r = recs[tid];
+            for (j = 0; j < 3; j++) {
+                drain[j] = -r->sub[hits[tid]].val[j];
+            }
+            MsCalcDrainResult(id, chr, cmd, drain_rec, drain, 0);
+            hits[tid]++;
+        }
+    }
+
+    return cnt;
+}
 
 void func_001E3DA8(BtlChr *c)
 {

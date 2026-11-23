@@ -613,7 +613,277 @@ void func_0014E800(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14D940", AtelEventSetUp);
+extern char D_0056B278[];
+extern char D_0056B288[];
+extern char D_0056B2A0[];
+extern char D_0056B2B8[];
+extern char D_0056B2C8[];
+extern char D_0056B2D8[];
+extern char D_0056B2E8[];
+extern char D_0056B2F8[];
+extern char D_0056B310[];
+extern char D_0056B320[];
+extern char D_0056B338[];
+extern char D_0056B348[];
+extern char D_0056B360[];
+extern char D_0056B370[];
+extern char D_0056B380[];
+extern char D_0056B390[];
+extern char D_0056B3A8[];
+extern char D_0056B3B8[];
+extern char D_0056B3D0[];
+extern char D_0056B3E0[];
+extern char D_0056B3F0[];
+extern char D_0056B400[];
+extern char D_0056B410[];
+extern char D_0056B420[];
+extern char D_0056B430[];
+extern char D_0056B440[];
+extern char D_0056B450[];
+extern char D_0056B460[];
+extern char D_0056B478[];
+extern char D_0056B488[];
+extern char D_0056B4A0[];
+extern char D_0056B4B0[];
+extern char D_0056B4C8[];
+extern char D_0056B4D0[];
+extern char D_0056B4E0[];
+extern char D_0056B4F0[];
+extern char D_0056B500[];
+extern char D_0056B510[];
+extern char D_0056B520[];
+extern char D_0056B530[];
+extern char D_0056B540[];
+extern char D_0056B550[];
+extern char D_0056B568[];
+extern char D_0056B578[];
+
+extern void func_00144A90(void);
+extern void MsBattleExeClear(void);
+extern void AtelSetShopRatio(int);
+extern void func_00138700(void);
+extern void func_00138588(void);
+extern void func_00144D48(int);
+extern void func_001387D0(int, int, int);
+extern void func_00145938(void);
+extern void func_0014AD58(int);
+extern void func_0014ADA8(void);
+extern void func_0014ADC8(void);
+extern void func_2058750(void);
+extern char *TkCdReadWithMallocWithMessage(int, int);
+extern void func_0014D7B8(char *);
+extern int func_00138E60(char *);
+extern int AtelGetMapIndex(char *, int);
+extern void MsBattleInitAtEvent(int);
+extern int AtelGetActorBufferSize(char *);
+extern void TOFTCTransfer(char *);
+extern int func_20590E8(int, int);
+extern void func_2058FE8(int, int);
+extern int func_2058D28(int, int);
+extern int func_2058D48(int, int);
+extern int func_2058D08(int, int);
+extern void func_00124748(int);
+extern void func_00124708(int);
+extern int func_2058CF0(int);
+extern void AtelActorSetUp2(int, char *, char *, char *, int, void *, int);
+extern void TkCdReadSync(int);
+extern void AtelEventLoadMusic(char *);
+extern void AtelEventSetUpSep(char *, char *, int);
+extern void func_00139A08(char *);
+extern void AtelMapLoadNoCache(int);
+extern void func_00139748(int);
+extern void func_0014D8A8(void);
+extern void func_00139588(void);
+extern int func_00139048(char *);
+extern void func_002D6C08(void);
+extern void AtelEventPlayMusic(char *);
+extern void func_0014AA00(void);
+extern void func_00138A48(void);
+
+typedef struct {
+    int count;
+    struct {
+        void *a;
+        char *b;
+        int c;
+    } ent[8];
+} EventSrcDbg;
+
+void AtelEventSetUp(int id)
+{
+    EventSrcDbg dbg;
+    int hasDbg;
+    int mapIdx;
+    char *ev;
+    char *s3;
+    int s1;
+    int bufSize;
+    int buf;
+    char *p8;
+    char *p14;
+
+    AtelPs2DebugString(D_0056B278);
+    func_00144A90();
+    func_0014D9E8();
+    func_0014AD08(0);
+    AtelClearPauseFlag();
+    MsBattleExeClear();
+    AtelSetShopRatio(100);
+    func_0014B150(-1, -1, -1, -1);
+    AtelRegistAlbhedDic(0, 0);
+    func_00138700();
+    func_00138588();
+    func_00138C78(0);
+    func_00144D48(0);
+    AtelSetEncountBattleEndStatus(0, 0, 0);
+    func_001387D0(-1, 0, 0);
+    func_00145938();
+    func_0014AF68(-1);
+    func_0014AD58(0);
+    func_0014ADA8();
+    func_0014ADC8();
+    func_0014AEA0();
+    AtelPs2DebugString(D_0056B288);
+    func_0014DEA0();
+    AtelPs2DebugString(D_0056B2A0);
+    if (TkIsDebug()) {
+        func_2058750();
+    }
+    AtelPs2DebugString(D_0056B2B8);
+    ev = TkCdReadWithMallocWithMessage(0xC, id * 0x12);
+    AtelPs2DebugString(D_0056B2C8);
+    if (ev[0] != 'E' || ev[1] != 'V') {
+        AtelPs2DebugString(D_0056B2D8);
+        while (1) {
+        }
+    }
+    p8 = 0;
+    p14 = 0;
+    AtelPs2DebugString(D_0056B2E8);
+    func_0014DB28(0, (int)ev);
+    s3 = ev + *(int *)(ev + 4);
+    func_0014D7B8(s3 + *(int *)(s3 + 0xC));
+    s1 = func_00138E60(s3);
+    mapIdx = AtelGetMapIndex(s3, 0);
+    AtelPs2DebugString(D_0056B2F8);
+    AtelPs2DebugString(D_0056B310);
+    MsBattleInitAtEvent(mapIdx);
+    AtelPs2DebugString(D_0056B320);
+    AtelPs2DebugString(D_0056B338);
+    bufSize = AtelGetActorBufferSize(s3);
+    buf = func_0014DA58(0, bufSize);
+    AtelPs2DebugString(D_0056B348);
+    if (*(int *)(ev + 8) != 0) {
+        p8 = ev + *(int *)(ev + 8);
+    }
+    if (*(int *)(ev + 0x14) != 0) {
+        p14 = ev + *(int *)(ev + 0x14);
+    }
+    if (*(int *)(ev + 0x10) != 0) {
+        char *p10 = ev + *(int *)(ev + 0x10);
+        AtelPs2DebugString(D_0056B360);
+        func_0014D7D0((int)p10);
+        TOFTCTransfer(p10);
+        AtelPs2DebugString(D_0056B370);
+    } else {
+        func_0014D7D0(0);
+    }
+    if (TkIsDebug()) {
+        int i;
+        hasDbg = func_20590E8(0, id);
+        if (hasDbg != 0) {
+            func_2058FE8(0, id);
+        }
+        for (i = 0; i < 8; i++) {
+            int b = func_2058D28(0, i);
+            int c = func_2058D48(0, i);
+            int a;
+            if (c == 0) {
+                break;
+            }
+            func_00124748(func_2058D08(0, i));
+            a = func_2058D08(0, i);
+            dbg.ent[i].a = (void *)a;
+            dbg.ent[i].b = (char *)b;
+            dbg.ent[i].c = c;
+        }
+        dbg.count = i;
+        if (hasDbg != 0) {
+            AtelActorSetUp2(buf, s3, p8, p14, func_2058CF0(0), &dbg, bufSize);
+            for (i = 0; i < dbg.count; i++) {
+                func_00124708(func_2058D08(0, i));
+            }
+        } else {
+            AtelActorSetUp2(buf, s3, p8, p14, 0, 0, bufSize);
+        }
+    } else {
+        AtelPs2DebugString(D_0056B380);
+        AtelActorSetUp2(buf, s3, p8, p14, 0, 0, bufSize);
+        AtelPs2DebugString(D_0056B390);
+    }
+    AtelPs2DebugString(D_0056B3A8);
+    TkCdReadSync(0);
+    AtelPs2DebugString(D_0056B3B8);
+    AtelPs2DebugString(D_0056B3D0);
+    AtelEventLoadMusic(s3);
+    AtelPs2DebugString(D_0056B3E0);
+    {
+        int off = *(int *)(ev + 0xC);
+        char *pC = (off != 0) ? (ev + off) : 0;
+        AtelPs2DebugString(D_0056B3F0);
+        AtelEventSetUpSep(s3, pC, 1);
+    }
+    AtelPs2DebugString(D_0056B400);
+    SndSepLock(0);
+    AtelPs2DebugString(D_0056B410);
+    SndEventClearPcToActorFoot();
+    AtelPs2DebugString(D_0056B420);
+    func_00139A08(s3);
+    AtelPs2DebugString(D_0056B430);
+    if (s1 & 1) {
+        AtelMapLoadNoCache(mapIdx);
+    } else {
+        func_00139748(mapIdx);
+    }
+    AtelPs2DebugString(D_0056B440);
+    func_0014D8A8();
+    if (mapIdx > 0) {
+        AtelPs2DebugString(D_0056B450);
+        func_00139588();
+        AtelPs2DebugString(D_0056B460);
+    }
+    AtelPs2DebugString(D_0056B478);
+    AtelEventRegistFootInfo(s3);
+    AtelPs2DebugString(D_0056B488);
+    AtelPs2DebugString(D_0056B4A0);
+    SndEventSetSoundEvent(func_00139048(s3));
+    AtelPs2DebugString(D_0056B4B0);
+    func_002D6C08();
+    AtelPs2DebugString(D_0056B4C8);
+    AtelEventKickBGSep(s3, 1);
+    AtelPs2DebugString(D_0056B4D0);
+    AtelPs2DebugString(D_0056B4E0);
+    func_002D6630();
+    func_002D3FF0(0);
+    AtelPs2DebugString(D_0056B4F0);
+    AtelPs2DebugString(D_0056B500);
+    AtelEventPlayMusic(s3);
+    AtelPs2DebugString(D_0056B510);
+    AtelPs2DebugString(D_0056B520);
+    func_002D6630();
+    func_002D3FF0(0);
+    AtelPs2DebugString(D_0056B530);
+    func_0014AA00();
+    func_00138A48();
+    AtelPs2DebugString(D_0056B540);
+    func_0014D960(0x7F);
+    func_0014D970(0x3F);
+    AtelPs2DebugString(D_0056B550);
+    func_0019CE30(1);
+    AtelPs2DebugString(D_0056B568);
+    TkCdReadSync(0);
+    AtelPs2DebugString(D_0056B578);
+}
 
 void _m2c_AtelEventRemove_MsBattleExeClear(void) __asm__("MsBattleExeClear");
 void _m2c_AtelEventRemove_func_00136430(float v) __asm__("func_00136430");

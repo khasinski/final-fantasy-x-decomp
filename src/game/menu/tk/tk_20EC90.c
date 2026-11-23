@@ -95,8 +95,185 @@ TblEntry *TkMenuIsTermScene(int a, int idx)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_20EC90", func_0020EEB8);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_20EC90/rodata", jtbl_00570A80);
+void func_0020EEB8(u16 flags, UiPrim *a, UiPrim *b, float t)
+{
+    int kind;
+    u32 col0;
+    u32 col1;
+    int x;
+    int y;
+    UiPrim s0;
+    UiPrim s1;
+    UiPrim s2;
+    UiPrim s3;
+    UiPrim s4;
+
+    kind = flags;
+    kind &= UI_PRIM_KIND;
+    switch (kind) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 8:
+    case 9:
+        return;
+    }
+    if (a == b) {
+        col0 = a->col0;
+        col1 = a->col1;
+    } else {
+        u32 a0 = a->col0;
+        u32 b0 = b->col0;
+        u32 a1, b1;
+        int r0 = a0 & 0xFF;
+        int g0 = (a0 >> 8) & 0xFF;
+        int bl0 = (a0 >> 16) & 0xFF;
+        int al0 = a0 >> 24;
+        int br0 = b0 & 0xFF;
+        int bg0 = (b0 >> 8) & 0xFF;
+        int bbl0 = (b0 >> 16) & 0xFF;
+        int bal0 = b0 >> 24;
+
+        if (br0 != r0) {
+            r0 = (int)(br0 * (1.0f - t) + r0 * t);
+        }
+        if (bg0 != g0) {
+            g0 = (int)(bg0 * (1.0f - t) + g0 * t);
+        }
+        if (bbl0 != bl0) {
+            bl0 = (int)(bbl0 * (1.0f - t) + bl0 * t);
+        }
+        if (bal0 != al0) {
+            al0 = (int)(bal0 * (1.0f - t) + al0 * t);
+        }
+        col0 = r0 | (g0 << 8) | (bl0 << 16) | (al0 << 24);
+        a1 = a->col1;
+        b1 = b->col1;
+        r0 = a1 & 0xFF;
+        g0 = (a1 >> 8) & 0xFF;
+        bl0 = (a1 >> 16) & 0xFF;
+        al0 = a1 >> 24;
+        br0 = b1 & 0xFF;
+        bg0 = (b1 >> 8) & 0xFF;
+        bbl0 = (b1 >> 16) & 0xFF;
+        bal0 = b1 >> 24;
+        if (br0 != r0) {
+            r0 = (int)(br0 * (1.0f - t) + r0 * t);
+        }
+        if (bg0 != g0) {
+            g0 = (int)(bg0 * (1.0f - t) + g0 * t);
+        }
+        if (bbl0 != bl0) {
+            bl0 = (int)(bbl0 * (1.0f - t) + bl0 * t);
+        }
+        if (bal0 != al0) {
+            al0 = (int)(bal0 * (1.0f - t) + al0 * t);
+        }
+        col1 = r0 | (g0 << 8) | (bl0 << 16) | (al0 << 24);
+    }
+    x = UI_LERP(a->x, b->x, t);
+    y = UI_LERP(a->y, b->y, t);
+    if (flags & UI_PRIM_SCREEN) {
+        x += D_00690288;
+        y += D_0069028C;
+    }
+    switch (kind) {
+    case 4: {
+        int p10 = UI_LERP(a->p10, b->p10, t);
+        int p12 = UI_LERP(a->p12, b->p12, t);
+
+        s0.col0 = col0;
+        s0.col1 = col1;
+        s0.x = x;
+        s0.y = y;
+        s0.p10 = p10;
+        s0.p12 = p12;
+        func_001FD0A0(&s0);
+        break;
+    }
+    case 5: {
+        int p10 = UI_LERP(a->p10, b->p10, t);
+        int p12 = UI_LERP(a->p12, b->p12, t);
+
+        if (flags & UI_PRIM_SCREEN) {
+            p10 += D_00690288;
+            p12 += D_0069028C;
+        }
+        s1.col0 = col0;
+        s1.col1 = col1;
+        s1.x = x;
+        s1.y = y;
+        s1.p10 = p10;
+        s1.p12 = p12;
+        func_001FCF88(&s1);
+        break;
+    }
+    case 6: {
+        int b14 = b->p14.u;
+        int a14 = a->p14.u;
+        int p14;
+        int p10;
+        int p12;
+
+        if (b14 == a14) {
+            p14 = a14;
+        } else {
+            p14 = (int)(b14 * (1.0f - t) + a14 * t);
+        }
+        p10 = UI_LERP(a->p10, b->p10, t);
+        p12 = UI_LERP(a->p12, b->p12, t);
+
+        s2.col0 = col0;
+        s2.col1 = col1;
+        s2.x = x;
+        s2.y = y;
+        s2.p10 = p10;
+        s2.p12 = p12;
+        s2.p14.s = p14;
+        func_001FD260(&s2);
+        break;
+    }
+    case 7: {
+        int p10 = UI_LERP(a->p10, b->p10, t);
+        int p12 = UI_LERP(a->p12, b->p12, t);
+        int p14 = UI_LERP(a->p14.s, b->p14.s, t);
+
+        s3.col0 = col0;
+        s3.col1 = col1;
+        s3.x = x;
+        s3.y = y;
+        s3.p10 = p10;
+        s3.p12 = p12;
+        s3.p14.s = p14;
+        TOMakePktSeqPrimMes((struct R4Msg *)&s3);
+        break;
+    }
+    case 10: {
+        int p14 = UI_LERP(a->p14.s, b->p14.s, t);
+        int p16 = UI_LERP(a->p16, b->p16, t);
+        int p18 = UI_LERP(a->p18, b->p18, t);
+        int p10 = UI_LERP(a->p10, b->p10, t);
+        int p12 = UI_LERP(a->p12, b->p12, t);
+        int p1C = UI_LERP(a->p1C, b->p1C, t);
+        int p1E = UI_LERP(a->p1E, b->p1E, t);
+
+        s4.col0 = col0;
+        s4.col1 = col1;
+        s4.x = x;
+        s4.y = y;
+        s4.p10 = p10;
+        s4.p12 = p12;
+        s4.p14.s = p14;
+        s4.p16 = p16;
+        s4.p18 = p18;
+        s4.p1C = p1C;
+        s4.p1E = p1E;
+        TOMakePktSeqPrimFunc((struct R4Msg *)&s4);
+        break;
+    }
+    }
+}
 
 float func_0020F750(u16 mode, int elapsed, int duration)
 {

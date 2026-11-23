@@ -11,8 +11,78 @@ void func_002D6808(s32 v) {
     D_0078BA48 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D6808", func_002D6818);
-INCLUDE_RODATA("build/ee_asm/game/snd/snd_2D6808/rodata", jtbl_00576060);
+extern s32 D_0078B188[16][4];
+extern s32 D_0078B288[16][4];
+extern s32 D_0078B388[16][4];
+extern s32 D_0078B488[16];
+extern s32 D_0078B4C8[16];
+extern s32 D_0078B508[16];
+extern s32 D_0078B548[16];
+extern s32 D_0078B588[16];
+extern s32 D_0078B5C8[16][4];
+extern s32 D_0078B6C8[16][4];
+extern s32 D_0078B7C8[16][4];
+extern s32 D_0078B8C8[16];
+extern s32 D_0078B908[16];
+extern s32 D_0078B948[16];
+extern s32 D_0078B988[16];
+extern s32 D_0078B9C8[16];
+
+s32 *func_002D6818(s32 a, s32 b, s32 c)
+{
+    register s32 idx __asm__("$3");
+    register s32 *base __asm__("$2");
+
+    b = (b < 0) ? 0 : (b > 15 ? 15 : b);
+
+    switch (a) {
+    case 10:
+        return &D_0078B8C8[b];
+    case 11:
+        return &D_0078B908[b];
+    case 12:
+        return &D_0078B9C8[b];
+    case 14:
+        return &D_0078B948[b];
+    case 15:
+        return &D_0078B988[b];
+    case 13:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B7C8[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    case 9:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B6C8[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    case 8:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B5C8[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    case 2:
+        return &D_0078B488[b];
+    case 3:
+        return &D_0078B4C8[b];
+    case 4:
+        return &D_0078B588[b];
+    case 6:
+        return &D_0078B508[b];
+    case 7:
+        return &D_0078B548[b];
+    case 5:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B388[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    case 1:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B288[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    case 0:
+    default:
+        idx = (c < 0) ? 0 : (c > 3 ? 3 : c);
+        base = D_0078B188[0];
+        return (s32 *)((b << 4) + (u32)(base + idx));
+    }
+}
 
 void func_002D6A28(s32 unused)
 {

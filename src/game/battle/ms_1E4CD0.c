@@ -85,8 +85,109 @@ int func_001E4F40(void)
 void func_001E4F50(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetBattleList);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1E4CD0/rodata", jtbl_0056F9B0);
+extern u8 D_00319296[];
+
+u8 *MsGetBattleList(int mode, int *out) {
+    int count = 0;
+    int total;
+    int i;
+    int j;
+    u8 id;
+    u8 *res = D_00319296;
+
+    switch (mode) {
+    case 5:
+        for (i = 0; i < 0x12; i++) {
+            if (MsGetChr(i)->f10 != 0 && MsGetRamChrSummon(i) != 0) {
+                res[count++] = i;
+            }
+        }
+        break;
+    case 8:
+        for (i = 0; i < 0x12; i++) {
+            if (MsGetChr(i)->f10 != 0) {
+                res[count++] = i;
+            }
+        }
+        break;
+    case 9:
+    case 16:
+        for (i = 0; i < 7; i++) {
+            BtlChr *c;
+            id = D_003192B5[i];
+            c = MsGetChr(id);
+            if (id != 0xFF && c->f10 != 0 && c->fA8D == 0 && (*(u32 *)&c->fA88 & 0xFF00FF) != 0) {
+                res[count++] = id;
+            }
+        }
+        for (i = 0; i < 0x12; i++) {
+            BtlChr *c = MsGetChr(i);
+            if ((c->f10 != 0 && c->fA8D == 0 && (*(u32 *)&c->fA88 & 0xFF00FF) != 0) || D_003172F0.f2119 == i) {
+                int add = 1;
+                for (j = 0; j < count; j++) {
+                    if (res[j] == i) {
+                        add = 0;
+                        break;
+                    }
+                }
+                if (add != 0) {
+                    res[count++] = i;
+                }
+            }
+        }
+        if (mode == 9) {
+            break;
+        }
+    case 11:
+        for (i = 0; i < 8; i++) {
+            BtlChr *c = ((BtlChr *(*)(int))MsGetMon)(i);
+            if (c->f10 != 0 && c->fA8D == 0 && (*(u32 *)&c->fA88 & 0xFF00FF) != 0) {
+                res[count++] = i + 0x14;
+            }
+        }
+        break;
+    case 19:
+        for (i = 0; i < 8; i++) {
+            BtlChr *c = ((BtlChr *(*)(int))MsGetMon)(i);
+            if (c->fE != 0xFFFF && c->fA99 != 0) {
+                res[count++] = i + 0x14;
+            }
+        }
+        break;
+    case 10:
+        for (i = 0; i < 0x11; i++) {
+            BtlChr *c;
+            id = ((struct { u8 pad[0x1FD3]; u8 f1FD3[17]; } *)&D_003172F0)->f1FD3[i];
+            c = MsGetChr(id);
+            if (id != 0xFF && c->f10 != 0 && c->fA8D == 0 && (*(u32 *)&c->fA88 & 0xFF00FF) != 0 && D_003172F0.f2119 != i) {
+                res[count++] = id;
+            }
+        }
+        for (i = 0; i < 8; i++) {
+            BtlChr *c = MsGetChr(i);
+            if (c->f10 != 0 && c->fA8D == 0 && (*(u32 *)&c->fA88 & 0xFF00FF) != 0 && D_003172F0.f2119 != i) {
+                int add = 1;
+                for (j = 0; j < count; j++) {
+                    if (res[j] == i) {
+                        add = 0;
+                        break;
+                    }
+                }
+                if (add != 0) {
+                    res[count++] = i;
+                }
+            }
+        }
+        break;
+    }
+    for (total = count; count < 0x1F; count++) {
+        res[count] = 0xFF;
+    }
+    if (out != 0) {
+        *out = total;
+    }
+    return res;
+}
 
 u8 *MsGetTargetList(u8 id, int *out) {
     u8 *res = 0;

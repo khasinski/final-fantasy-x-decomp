@@ -517,8 +517,125 @@ void func_00158A68(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00158AA8);
-INCLUDE_RODATA("build/ee_asm/game/movie/movie_157798/rodata", jtbl_0056B5E0);
+extern s8 D_0030D407;
+extern char D_0056B5D0[];
+int func_0015C9B0(void *p);
+int func_0015C968(void *p);
+void func_206C630(int a);
+int func_002E1D20(void);
+int func_002D64E0(int a);
+
+int func_00158AA8(void)
+{
+    s32 dc;
+
+    switch (D_0030D410) {
+    case 1:
+        if (D_0058FE50 == 0) {
+            func_001577A8(D_0056B5A8, D_0056B5C0, 0x448);
+        }
+        if (D_0030D3EC == 0) {
+            func_001577A8(D_0056B5D0, D_0056B5C0, 0x449);
+        }
+        D_0058FE54->b50772 = 0;
+        switch (D_0030D407) {
+        case 0:
+            ((int (*)(void *, int))audioStop)(D_0058FE54, 0);
+            D_0030D407 = 1;
+            /* fallthrough */
+        case 1:
+            if (((MovWork58FE54 *)D_0058FE54)->w50544 < 0) {
+                goto set40;
+            }
+            D_0030D407 = 2;
+            /* fallthrough */
+        case 2:
+            if (((MovWork58FE54 *)D_0058FE54)->b5075D != 0) {
+                D_0030D407 = 10;
+                goto step10;
+            }
+            if (((MovWork58FE54 *)D_0058FE54)->b5075C != 0) {
+                D_0030D407 = 30;
+                goto step30;
+            }
+            D_0030D407 = 3;
+            /* fallthrough */
+        case 3:
+            if (func_0015C9B0(D_0058FE54) != 0) {
+                break;
+            }
+            ((int (*)(int))func_206C630)(((MovWork58FE54 *)D_0058FE54)->w50544);
+            D_0030D407 = 40;
+            goto step40;
+        case 10:
+        step10:
+            if (func_0015C968(D_0058FE54) != 0) {
+                break;
+            }
+            ((int (*)(int))func_206C630)(((MovWork58FE54 *)D_0058FE54)->w50544);
+            D_0030D407 = 40;
+            goto step40;
+        case 30:
+        step30:
+            if (func_002E1D20() == 0) {
+                break;
+            }
+            D_0030D407 = 35;
+            /* fallthrough */
+        case 35:
+            if (func_0015C9B0(D_0058FE54) != 0) {
+                break;
+            }
+        set40:
+            D_0030D407 = 40;
+            /* fallthrough */
+        case 40:
+        step40:
+            ((MovWork58FE54 *)D_0058FE54)->w50544 = -1;
+            if (((MovWork58FE54 *)D_0058FE54)->w50714 == 0) {
+                D_0030D407 = 100;
+                goto step100;
+            }
+            func_002D5F58(1);
+            D_0030D407 = 50;
+            /* fallthrough */
+        case 50:
+            if (func_002D64E0(0) != 0) {
+                break;
+            }
+            D_0030D407 = 100;
+            ((MovWork58FE54 *)D_0058FE54)->w50714 = 0;
+            /* fallthrough */
+        case 100:
+        step100:
+            ((void (*)(s32 *))Sg_GetDBuffDC)(&dc);
+            if (!(dc & 1)) {
+                break;
+            }
+            if (D_0030D400 != 0) {
+                func_0011A5A0(0, 0);
+                D_0030D400 = 0;
+            }
+            func_00158660();
+            func_001585D0();
+            if (D_0030D3FC & 0x1000000) {
+                yiRenderEnable(0x1000000);
+            }
+            return 1;
+        }
+        return 0;
+    case 2:
+        if (D_0058FE58 == 0) {
+            return 1;
+        }
+        if (D_0058FE5C == 0) {
+            return 1;
+        }
+        func_00158768();
+        break;
+    }
+    return 1;
+}
 
 void mpegstrendsub(void *, int);
 
