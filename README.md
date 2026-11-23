@@ -7,11 +7,11 @@ with compiled code that matches the original game.
 
 | Part | Files | Code in C | Functions in C |
 |---|---:|---:|---:|
-| Main ELF | 1 | 60.04% | 10,410 / 11,612 (89.65%) |
-| Completed overlays | 220 | 100% | 32,774 / 32,774 (100%) |
-| Partially decompiled overlays | 364 | 58.55% | 58,130 / 66,776 (87.05%) |
+| Main ELF | 1 | 62.06% | 10,447 / 11,612 (89.97%) |
+| Completed overlays | 241 | 100% | 36,937 / 36,937 (100%) |
+| Partially decompiled overlays | 343 | 68.63% | 56,353 / 62,613 (90.00%) |
 
-**About 67.33% of known EE code** by code size and **91.14% of functions** (101,314 / 111,162; 1,672 / 4,220 distinct overlay functions).
+**About 75.19% of known EE code** by code size and **93.32% of functions** (103,737 / 111,162; 1,953 / 4,220 distinct overlay functions).
 Overlay sizes and function counts are estimates; shared code counts in each overlay. This excludes IOP and VU code.
 
 Every one of the 584 known overlays now has matching C code.
