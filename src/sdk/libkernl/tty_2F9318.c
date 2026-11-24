@@ -269,7 +269,32 @@ int func_002F9A38(void *buf, int n)
 extern int D_00568DE4;
 extern char D_00792240[];
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9B08);
+extern u8 D_00791FC0[];
+extern u8 D_00792100[];
+
+int func_002F9B08(void)
+{
+    u8 *pkt;
+
+    func_002F8660(0);
+    D_00791F90.sid = func_002F94C8(0x210, (int)&D_00791F90, (int)func_002F9750);
+    if (D_00791F90.sid < 0) {
+        return 0;
+    }
+    D_00791F90.busy = 0;
+    D_00791F90.tx_rem = 0;
+    D_00791F90.rx_pos = 0;
+    D_00791F90.rx_buf = (u8 *)((u32)D_00792100 | 0x20000000);
+    pkt = (u8 *)((u32)D_00791FC0 | 0x20000000);
+    D_00791F90.tx_ptr = pkt;
+    *(u16 *)(pkt + 4) = 0x210;
+    pkt[6] = 'E';
+    pkt[7] = 'H';
+    *(u16 *)(pkt + 2) = 0;
+    *(u32 *)(pkt + 8) = 0;
+    D_00791F90.ring = (W11Ring *)func_002F96A8(0x100);
+    return 1;
+}
 
 int func_002F9BC8(int c)
 {

@@ -6,6 +6,7 @@
 #define op_deg_get _hdr_op_deg_get
 #define func_002D41E8 _hdr_func_002D41E8
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
 #include "ffx/u4.h"
@@ -41,7 +42,141 @@ void func_00293E08(void);
 void SndStandbySepWave(void);
 int func_00294188(R6W8 *o, int flags);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_init_ffx);
+extern s32 D_003730F0;
+extern u8 D_004F8620[];
+extern char D_005744B0[];
+void ops_init_work(void);
+void func_206B608(void);
+void func_206A6B0(void);
+void func_002B1E08(void);
+void func_002B22F8(s32, s32);
+void func_00124690(s32);
+void func_002B4220(s32);
+void func_2069D88(void);
+void opu_et_init(void);
+void opu_test_data_read(s32);
+void op_et_battle_init(s32);
+void func_00297578(s32);
+void func_002B4340(void);
+void func_002B41B0(char *);
+void func_002B4390(s32, s32);
+void func_002B4520(s32);
+void func_002B42E0(s32);
+void func_002B45E0(void);
+void func_206C380(void);
+void op_et_tex_load_triger(s32);
+
+typedef struct {
+    u8 pad00[0xD];
+    s8 b0D;
+    u8 pad0E[2];
+    s8 b10;
+    u8 pad11[3];
+    s8 b14;
+    u8 pad15[7];
+    s32 w1C;
+    u8 pad20[0x1F];
+    s8 b3F;
+    u8 pad40[4];
+    s8 b44;
+} OpInitWork;
+
+typedef struct {
+    s32 w00;
+    s32 w04;
+    void *p08;
+} OpInit703E20;
+
+void op_init_ffx(void)
+{
+    u8 *d2 = (u8 *)&D_2008250;
+
+    if (D_003730F0 != 0) {
+        return;
+    }
+    D_003730F0 = 1;
+    ops_init_work();
+    if (FFXIsDebug() != 0) {
+        s32 v = func_0011A428();
+        if (v == 1 || v == 2) {
+            func_206B608();
+            ((OpInitWork *)&D_00764990)->b44 = 1;
+        } else {
+            func_206A6B0();
+            ((OpInitWork *)&D_00764990)->b44 = 0;
+        }
+    } else {
+        ((OpInitWork *)&D_00764990)->b10 = 0;
+    }
+    func_002B1E08();
+    if (((OpInitWork *)&D_00764990)->b14 != 0) {
+        ((OpInitWork *)&D_00764990)->b10 = 0;
+    }
+    func_002B22F8(0x3400, 0xC00);
+    func_002EFD68(0x3F4CF27B);
+    {
+        register u32 seed __asm__("$2") = 0xBFBFBFBFU;
+        VU0_QMTC2_NI(31, seed);
+        VU0_OP("vrinit R, $vf31x");
+    }
+    {
+        register s32 b10 __asm__("$3") = ((OpInitWork *)&D_00764990)->b10;
+        if (b10 != 0) {
+            if (*(s8 *)(d2 + 8) != 0) {
+                ((OpInitWork *)&D_00764990)->b3F = 1;
+                func_00124690(0);
+            }
+            if (*(s8 *)(d2 + 2) != 0) {
+                func_002B4220(*(s16 *)(d2 + 0x42) << 8);
+            }
+            func_2069D88();
+        }
+    }
+    if (((OpInitWork *)&D_00764990)->b14 == 0) {
+        register void (*fn)(s32) __asm__("$2");
+        register s32 b10_2 __asm__("$2");
+        opu_et_init();
+        fn = *(void (**)(s32))&D_003737A0;
+        fn(0);
+        ((OpInit703E20 *)&D_00703E20)->p08 = D_004F8620;
+        b10_2 = ((OpInitWork *)&D_00764990)->b10;
+        if (b10_2 != 0) {
+            register s32 b0d __asm__("$3");
+            opu_test_data_read(0);
+            b0d = ((OpInitWork *)&D_00764990)->b0D;
+            if (b0d != 0) {
+                if (*(u16 *)(d2 + 0x40) & 1) {
+                    s32 v = *(s32 *)(d2 + 0x80);
+                    ((OpInit703E20 *)&D_00703E20)->w00 = v;
+                    op_et_battle_init(v);
+                }
+                if (*(u16 *)(d2 + 0x40) & 0x20) {
+                    ((OpInit703E20 *)&D_00703E20)->p08 = *(void **)(d2 + 0x98);
+                }
+            }
+        }
+        func_00297578((s32)((OpInit703E20 *)&D_00703E20)->p08);
+    }
+    if (((OpInitWork *)&D_00764990)->w1C != 0) {
+        func_002B4220(0x3000);
+        func_002B4340();
+        func_002B41B0(D_005744B0);
+        func_002B4390(0x10, 0x10);
+        func_002B4520(0x70000000);
+        func_002B42E0(0);
+        func_002B4580(0);
+        func_002B45E0();
+    }
+    if (((OpInitWork *)&D_00764990)->b10 != 0) {
+        func_206C380();
+    }
+    if (((OpInitWork *)&D_00764990)->b14 != 0) {
+        *(s16 *)(d2 + 0x42) = 0x2C00;
+        func_002B4220(0x2C0000);
+        op_et_tex_load_triger(0);
+        func_002D09D0(0);
+    }
+}
 
 void ops_init_work(void)
 {

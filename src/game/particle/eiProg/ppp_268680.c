@@ -343,11 +343,277 @@ void func_00268EE8(s32 arg0) {
         return;
     }
 }
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", func_00269050);
+extern char D_00574038[];
+extern char D_00574048[];
+extern char D_00574058[];
+void func_002DCF48(void *, void *);
+void func_002DD0B0(void *, void *);
+void func_002B4390(s32, s32);
+void func_002B41B0(char *);
+void func_001742A0(void *, void *);
+void yiGetMatrixDObj(void *, void *);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpInfPrint);
+void func_00269050(u8 *s80, u8 *s50, u8 *ent)
+{
+    float m[4][4];
+    float tmp[4];
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpLoop);
+    pppFpSetRotMatrix(s80, ent[0x4B]);
+    if (*(u32 *)s50 & 0xF) {
+        float *g = (float *)D_006A3930;
+        g[12] = g[13] = g[14] = 0.0f;
+        func_002DD128(m);
+        if (*(void **)(s50 + 4) != 0) {
+            if (*(u32 *)s50 & 1) {
+                register s32 k __asm__("$2");
+                register float *p1 __asm__("$3");
+                register float *p2 __asm__("$4");
+                func_001072F8(*(void **)(s50 + 4), *(s32 *)(s50 + 8), m);
+                k = 0x447A0000;
+                VU0_QMTC2_NI(9, k);
+                VU0_LQC2(10, 0, m);
+                VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+                VU0_SQC2(10, 0, m);
+                p1 = m[1];
+                VU0_QMTC2_NI(9, k);
+                VU0_LQC2(10, 0, p1);
+                VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+                VU0_SQC2(10, 0, p1);
+                p2 = m[2];
+                VU0_QMTC2_NI(9, k);
+                VU0_LQC2(10, 0, p2);
+                VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+                VU0_SQC2(10, 0, p2);
+            } else if (*(u32 *)s50 & 2) {
+                func_001742A0(*(void **)(s50 + 4), m);
+            } else if (*(u32 *)s50 & 8) {
+                yiGetMatrixDObj(*(void **)(s50 + 4), m);
+            }
+        }
+        if (*(u32 *)s50 & 0x20) {
+            func_002DCEC8(m[0], m[0]);
+            func_002DCEC8(m[1], m[1]);
+            func_002DCEC8(m[2], m[2]);
+        }
+        if (*(u32 *)s50 & 0x40) {
+            u8 *gm = (u8 *)D_006A3930;
+            register float *out __asm__("$3");
+            register u8 *r1 __asm__("$4");
+            float v;
+
+            func_002DD0C0(gm, s50 + 0x10);
+            func_002DCE38(gm, m, gm);
+            out = tmp;
+            VU0_LQC2(10, 0, gm);
+            VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+            VU0_OP("vmove.xyz $vf9, $vf10");
+            VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+            VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+            VU0_OP("vsqrt Q, $vf9z");
+            VU0_OP("vwaitq");
+            VU0_OP("vaddq.x $vf10, $vf0, Q");
+            VU0_SQC2(10, 0, out);
+            v = tmp[0];
+            *(float *)(s80 + 0x60) = v;
+
+            r1 = gm + 0x10;
+            VU0_LQC2(10, 0, r1);
+            VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+            VU0_OP("vmove.xyz $vf9, $vf10");
+            VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+            VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+            VU0_OP("vsqrt Q, $vf9z");
+            VU0_OP("vwaitq");
+            VU0_OP("vaddq.x $vf10, $vf0, Q");
+            VU0_SQC2(10, 0, out);
+            gm += 0x20;
+            *(float *)(s80 + 0x64) = v;
+            VU0_LQC2(10, 0, gm);
+            VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+            VU0_OP("vmove.xyz $vf9, $vf10");
+            VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+            VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+            VU0_OP("vsqrt Q, $vf9z");
+            VU0_OP("vwaitq");
+            VU0_OP("vaddq.x $vf10, $vf0, Q");
+            VU0_SQC2(10, 0, out);
+            *(float *)(s80 + 0x68) = v;
+        } else {
+            u8 *gm = (u8 *)D_006A3930;
+            func_002DCE38(gm, s50 + 0x10, gm);
+            func_002DCE38(gm, m, gm);
+        }
+    } else if (*(u32 *)s50 & 0x100) {
+        func_002DD0C0(D_006A3930, s50 + 0x10);
+    } else {
+        pppFpSetRotMatrix(s80, ent[0x4B]);
+    }
+    func_00268EE8(ent[0x4A]);
+}
+
+void pppFpInfPrint(void)
+{
+    float cam_pos[4];
+    float ply_pos[4];
+    float diff[4];
+    float inv_m[4][4];
+    char buf[0x100];
+    float len_vec[4];
+    void *ply;
+    float dist;
+
+    func_002DCF48(inv_m, D_006A3970);
+    func_002DD0B0(cam_pos, inv_m[3]);
+    cam_pos[3] = 0;
+    ply = (void *)Sg_GetPlayer();
+    if (ply != 0) {
+        Ch_GetPos(ply, &ply_pos[0], &ply_pos[1], &ply_pos[2]);
+        ply_pos[3] = 0;
+    } else {
+        ply_pos[0] = ply_pos[1] = ply_pos[2] = ply_pos[3] = 0.0f;
+    }
+    func_002DD038(diff, ply_pos, cam_pos);
+    {
+        register float *out __asm__("$3") = len_vec;
+        VU0_LQC2(10, 0, diff);
+        VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+        VU0_OP("vmove.xyz $vf9, $vf10");
+        VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+        VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+        VU0_OP("vsqrt Q, $vf9z");
+        VU0_OP("vwaitq");
+        VU0_OP("vaddq.x $vf10, $vf0, Q");
+        VU0_SQC2(10, 0, out);
+    }
+    dist = len_vec[0];
+    func_002B4390(2, 2);
+    func_002F0008(buf, D_00574038, (s32)cam_pos[0], (s32)cam_pos[1], (s32)cam_pos[2]);
+    func_002B41B0(buf);
+    func_002F0008(buf, D_00574048, (s32)ply_pos[0], (s32)ply_pos[1], (s32)ply_pos[2]);
+    func_002B41B0(buf);
+    func_002F0008(buf, D_00574058, (s32)dist);
+    func_002B41B0(buf);
+}
+
+extern char D_00574060[];
+void func_001AACA0(void *);
+void func_001A9EE0(void *);
+void func_0026A450(void);
+void func_00173730(void *);
+void func_002DD068(void *, void *, float);
+s32 _pppRunPartFp(void *, s32);
+void pppFpPointLightProc(void);
+
+void pppFpLoop(void)
+{
+    float col[4];
+    s32 i;
+    s32 dbg;
+    s32 used;
+    s32 tot;
+    s32 sz;
+
+    if (D_003708B8 == 0) {
+        return;
+    }
+    func_001AACA0(D_006A3A70);
+    func_001A9EE0(D_006A3970);
+    {
+        register s32 bill __asm__("$2") = D_006EA400;
+        if (bill != 0) {
+            func_00268CA8();
+        }
+    }
+    D_006A3BCC = (void *)D_003708E8;
+    D_006A3924 = (HeapMgr *)&D_006E7BD0;
+    func_0026A450();
+    for (i = 0; i < D_006E7BFC->count; i++) {
+        Slot50 *s50 = &D_006E7C00[i];
+        Slot80 *s80 = &D_006E3BD0[i];
+        Ent50 *ent;
+
+        if (s50->flags & 0x10) {
+            continue;
+        }
+        if (s80->f0 == -0x1000) {
+            continue;
+        }
+        ent = &D_006E7BFC->ents[i];
+        if (ent->f44 == 0) {
+            if (func_002686F0(D_006A3970, (u8 *)s80 + 0x40, *(float *)((u8 *)s80 + 0x20), *(float *)((u8 *)s80 + 0x24), *(float *)((u8 *)s80 + 0x28)) != 0) {
+                continue;
+            }
+        }
+        if (s80->f0 < 0) {
+        run_part:
+            func_00269050(s80, s50, ent);
+            func_00173730(col);
+            if (col[0] > 1.0f) {
+                col[0] = 1.0f;
+            }
+            if (col[1] > 1.0f) {
+                col[1] = 1.0f;
+            }
+            if (col[2] > 1.0f) {
+                col[2] = 1.0f;
+            }
+            if (col[3] > 1.0f) {
+                col[3] = 1.0f;
+            }
+            func_002DD068(col, col, 4096.0f);
+            *(s16 *)((u8 *)s80 + 0x70) = (s16)col[0];
+            *(s16 *)((u8 *)s80 + 0x72) = (s16)col[1];
+            *(s16 *)((u8 *)s80 + 0x74) = (s16)col[2];
+            *(s16 *)((u8 *)s80 + 0x76) = (s16)col[3];
+            D_006A3924 = (HeapMgr *)&D_006E7BD0;
+            if (_pppRunPartFp(s80, 0x30) != 0) {
+                D_006A3924 = (HeapMgr *)&D_006E7BD0;
+                _pppAllFreePObject(s80);
+                s80->f0 = -0x1000;
+            }
+        } else {
+            s32 t = s80->f0 - 1;
+            s80->f0 = t;
+            if (t < 0) {
+                s32 is_2 = (s80->f1D == 2);
+                D_006A3924 = (HeapMgr *)&D_006E7BD0;
+                _pppAllFreePObject(s80);
+                D_006A3924 = (HeapMgr *)&D_006E7BD0;
+                ent = &D_006E7BFC->ents[i];
+                _pppStartPart((void *)s80, 0x1000, (s32)((void **)(*(s32 *)((u8 *)D_006E7BFC + 0x10)))[*(s32 *)((u8 *)ent + 0x34)], 1);
+                if (is_2) {
+                    s80->f1D = 1;
+                }
+                goto run_part;
+            }
+        }
+    }
+    pppFpPointLightProc();
+    dbg = FFXIsDebug();
+    used = (s32)D_006A3BCC - D_003708E8;
+    if (dbg != 0 && used > D_003708D4) {
+        func_002EF240(D_00574060, used / 1024);
+        BREAK();
+    }
+    D_003708D8 = used;
+    if (used > D_003708DC) {
+        D_003708DC = used;
+    }
+    D_006A3BCC = 0;
+    {
+        s32 *h = (s32 *)&D_006E7BD0;
+        tot = h[3] + h[7];
+    }
+    sz = func_00268C08();
+    D_003708E0 = tot;
+    if (tot > D_003708E4) {
+        D_003708E4 = tot;
+    }
+    if (dbg != 0) {
+        ((void (*)(s32, s32, s32))func_00293DA8)(used, D_003708D4, 0x601);
+        ((void (*)(s32, s32, s32))func_00293DA8)(tot, sz, 0x603);
+    }
+}
 
 extern s32 D_003708E8;
 extern s32 D_003708EC;
@@ -871,7 +1137,65 @@ void func_0026A450(void) {
     D_003708C4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpPointLightProc);
+extern char D_005741B8[];
+void Sg_PLightGetPos(int idx, float *x, float *y, float *z);
+float Sg_PLightGetRadius(int idx);
+void Sg_PLightGetColor(int idx, int *r, int *g, int *b);
+int Sg_PLightGetLight(int idx);
+void Sg_PLightAllocate(int n);
+void Sg_PLightSetEnable(int idx, int en);
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float rad;
+    s32 r;
+    s32 g;
+    s32 b;
+    s32 light;
+    float atten;
+} PLightSave;
+
+void pppFpPointLightProc(void)
+{
+    s32 cur = D_003708C0;
+    s32 i;
+    PLightSave *buf;
+
+    if (cur < D_003708BC) {
+        buf = 0;
+        if (cur > 0) {
+            buf = (PLightSave *)user_malloc(cur * sizeof(PLightSave), 0xB, D_005741B8, 0);
+            for (i = 0; i < cur; i++) {
+                Sg_PLightGetPos(i, &buf[i].x, &buf[i].y, &buf[i].z);
+                buf[i].rad = Sg_PLightGetRadius(i);
+                Sg_PLightGetColor(i, &buf[i].r, &buf[i].g, &buf[i].b);
+                buf[i].light = Sg_PLightGetLight(i);
+                buf[i].atten = (float)((s32 (*)(s32))Sg_PLightGetAttenuation)(i);
+            }
+            func_0010D720();
+        }
+        Sg_PLightAllocate(D_003708BC);
+        D_003708C0 = D_003708BC;
+        for (i = 0; i < cur; i++) {
+            ((void (*)(int, float, float, float, float, int, int, int, int))Sg_PLightDefine)(
+                i, buf[i].x, buf[i].y, buf[i].z, buf[i].rad, buf[i].r, buf[i].g, buf[i].b, buf[i].light);
+            ((void (*)(s32, double))Sg_PLightSetAttenuation)(i, (double)buf[i].atten);
+        }
+        for (; i < D_003708BC; i++) {
+            Sg_PLightSetEnable(i, 0);
+        }
+        if (buf != 0) {
+            func_0011D590((int)buf, 0xB);
+        }
+    } else {
+        for (i = D_003708BC; i < D_003708C0; i++) {
+            Sg_PLightSetEnable(i, 0);
+        }
+    }
+    func_0026A400();
+}
 
 void Sg_PLightDispose(void)
 {

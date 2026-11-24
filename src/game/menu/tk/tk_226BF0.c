@@ -1,4 +1,5 @@
 /* tu_251 0x226bf0-0x227c88: low; ~Tk (config/tu_map.tsv) */
+#define func_00226890 _hdr_func_00226890
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -6,6 +7,8 @@
 #include "ffx/v5.h"
 #include "ffx/q5.h"
 #include "ffx/s5.h"
+#undef func_00226890
+extern void func_00226890(int, int, int, int);
 
 void func_00226BF0(int a, int b, int c, int d)
 {
@@ -348,6 +351,87 @@ int func_00227768(int id) {
 
 int func_002277C0(int a0) { return MsMenuGetText(5, a0, MsGetSaveConfigHiragana()); }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_226BF0", func_002277F8);
+extern s16 D_00325878[2];
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_226BF0", func_00227A08);
+void func_002277F8(int x, int y, int id, int cost)
+{
+    FlagRec plate = D_00325A40;
+    int px;
+    int py;
+
+    plate.rect[0] = x;
+    plate.rect[1] = y;
+    func_00226FE0((DrawArgs *)&plate);
+    px = x + D_00325A58[0];
+    py = y + D_00325A58[1];
+    func_00226D88(px, py, 8);
+    func_00226E10(px + D_00325878[0] + 0x58, py + D_00325878[1], 0xD7);
+    func_00226E10(x + D_00325A60[0] + 0x10, y + D_00325A60[1], 0xFF);
+    px = x + D_00325A58[0];
+    py = y + D_00325A58[1];
+    if (id >= 0) {
+        int val = func_001BFE30(id);
+        register int one __asm__("$16") = 1;
+        int lack = val < cost;
+        int x2;
+        int x3;
+        int y3;
+
+        func_00226890(id, px, py, lack);
+        x2 = x + D_00325A60[0];
+        py = y + D_00325A60[1];
+        px = x2 + 0x10;
+        func_00226C78(x2 + D_00325A68[0], py + D_00325A68[1], val, lack);
+        val -= cost;
+        x3 = px + D_00325A70[0] - 0x10;
+        y3 = py + D_00325A70[1];
+        if (lack == one) {
+            func_002265A8(x3, y3, TkMenuMainMes(0x15), 1);
+        } else {
+            func_00226C78(x3, y3, val, lack);
+        }
+    }
+}
+
+void func_00227A08(int x, int y, int id, int cost)
+{
+    FlagRec plate = D_00325AD0;
+    int px;
+    int py;
+
+    plate.rect[0] = x;
+    plate.rect[1] = y;
+    func_00226FE0((DrawArgs *)&plate);
+    func_00226210(plate.rect[0] - D_00325AC8[0], plate.rect[1] - D_00325AC8[1], 8);
+    func_00226210(plate.rect[0] + D_00325AF0[0] - D_00325AD0.rect[0],
+                  plate.rect[1] + D_00325AF0[1] - D_00325AD0.rect[1], 9);
+    px = x + D_00325AE8[0];
+    py = y + D_00325AE8[1];
+    func_00226E10(px + D_00325878[0] + 0x58, py + D_00325878[1], 0x10B);
+    {
+        register int ox __asm__("$5") = D_00325AD0.rect[0] - 0x10;
+        px = (x + D_00325AF8[0]) - ox;
+        py = (y + D_00325AF8[1]) - D_00325AD0.rect[1];
+    }
+    func_00226E10(px, py, 0xFF);
+    if (id >= 0) {
+        int val = func_001BFE30(id);
+        register int one __asm__("$17") = 1;
+        int lack;
+
+        x += D_00325AE8[0];
+        y += D_00325AE8[1];
+        func_00226C78(x + 0xD3, y + 6, cost, 0);
+        lack = val < cost;
+        func_00226890(id, x, y, 0);
+        func_00226C78(px + D_00325B08[0] - 0x10, py + D_00325B08[1], val, 0);
+        val -= cost;
+        x = px + D_00325B10[0] - 0x10;
+        y = py + D_00325B10[1];
+        if (lack == one) {
+            func_002265A8(x, y, TkMenuMainMes(0x15), 0);
+        } else {
+            func_00226C78(x, y, val, 0);
+        }
+    }
+}

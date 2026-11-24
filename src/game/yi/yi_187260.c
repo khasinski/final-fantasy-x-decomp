@@ -1,5 +1,6 @@
 /* tu_134 0x187260-0x188d98: low; ~yiAnimInfo_init (config/tu_map.tsv) */
 #define yiAnimInfo_init _hdr_yiAnimInfo_init
+#define func_00187EA0 _hdr_func_00187EA0
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
@@ -7,6 +8,7 @@
 #include "ffx/t2.h"
 #include "ffx/v2.h"
 #undef yiAnimInfo_init
+#undef func_00187EA0
 
 void func_00187260(float t, float *p0, float *p1, float *m0, float *m1, float *out) {
     float t2 = t * t;
@@ -230,8 +232,9 @@ typedef struct {
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", yiKeyFrame_attachDObj);
 
-typedef struct {
+typedef union {
     float f[16];
+    u64 d[8];
 } YiMat64;
 
 typedef struct {
@@ -248,15 +251,15 @@ typedef struct {
 } YiDObj188450;
 
 typedef struct {
-    u8 pad00[4];
-    s32 w04;
-    u8 pad08[0x14];
+    u8 pad00[8];
+    s32 w08;
+    u8 pad0C[0x10];
 } YiGrpSub188450;
 
 typedef struct {
     u32 flags;
     s32 cur;
-    u8 pad08[0x1C];
+    u8 pad08[0x18];
     YiGrpSub188450 sub[64];
 } YiGrp188450;
 
@@ -400,7 +403,60 @@ int func_001880A8(void *p, int id, int id2) { /* DEBT(TYPE): funcs.h declares in
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00188138);
+void func_00188138(YiAnimSysFull *s, YiAnimEntFull *e, u32 t)
+{
+    if (Sg_GetPause() != 0) {
+        u32 d = t - e->w18;
+        e->w18 = t;
+        e->w14 += d;
+        return;
+    }
+    if (t < e->w14) {
+        e->w14 = t;
+    }
+    e->w18 = t;
+    while (t >= e->p24->w04 + e->w14) {
+        if ((e->p24->h00 & 1) != 0) {
+            e->h0 = 0;
+            e->w14 = t;
+            e->w18 = t;
+            e->h8 = 0;
+            e->hA = 0;
+            e->h6 = 0;
+            e->p24 = 0;
+            break;
+        }
+        e->hA++;
+        if (e->hA < s->n9FE08[e->h8]) {
+            e->w14 = e->p24->w04 + e->w14;
+            e->w18 = t;
+            e->p24 = (YiAnimInterpKey *)((u8 *)e->p24 + 0x80);
+            if (e->p24->w04 == 0) {
+                break;
+            }
+        } else if (e->h2 != 0) {
+            if (t > e->p24->w04 + e->w14) {
+                e->w14 = t;
+                e->w18 = t;
+                e->h0 = 0;
+                s->cnt--;
+                e->h8 = 0;
+                e->hA = 0;
+                e->h6 = 0;
+                e->p24 = 0;
+            }
+            break;
+        } else {
+            e->w14 = e->p24->w04 + e->w14;
+            e->w18 = t;
+            e->p24 = (YiAnimInterpKey *)s->p9FC08[e->h8];
+            e->hA = 0;
+            if (e->p24->w04 == 0) {
+                break;
+            }
+        }
+    }
+}
 
 void yiKeyFrame_main(YiAnimSys *s, YiAnimEnt *e, u32 t)
 {

@@ -2,6 +2,7 @@
 #define MsGetMoveTargetPos _hdr_MsGetMoveTargetPos
 #define MsNearRag _hdr_MsNearRag
 #define func_001AC310 _hdr_func_001AC310
+#define MsMoveSplineRegist _hdr_MsMoveSplineRegist
 #include "common.h"
 #include "vu0.h"
 #include "ffx/s3.h"
@@ -10,6 +11,7 @@
 #include "ffx/u2.h"
 #include "ffx/v3.h"
 #include "ffx/s2.h"
+#undef MsMoveSplineRegist
 #undef MsGetMoveTargetPos
 #undef MsNearRag
 #undef func_001AC310
@@ -772,7 +774,22 @@ void MsMoveSplineSet(u32 i) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsMoveSplineRegist);
+void MsMoveSplineRegist(u32 idx, int chr_id, int mode, u_long128 *pos)
+{
+    if (idx < 3) {
+        int cnt = D_00662660[idx];
+        if (cnt < 0x20) {
+            u_long128 *dst;
+            D_00662660[idx] = cnt + 1;
+            dst = (u_long128 *)((u8 *)&D_00662670[idx] + (cnt + 1) * 0x10);
+            if (pos != 0) {
+                MMI_COPY_LQ_T0(dst, pos);
+                MMI_COPY_SQ_T0(dst);
+            }
+            MsGetMoveTargetPos(chr_id, (TargetChr *)MsGetChr(chr_id), mode, (float *)dst, 0);
+        }
+    }
+}
 
 /* DEBT(CAST): signed/width views follow the existing shared interfaces. */
 void MsMoveSpline(s32 a, s32 b, s32 c, float f, s32 d)

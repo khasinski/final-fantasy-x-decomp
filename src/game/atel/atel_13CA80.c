@@ -1139,9 +1139,140 @@ int func_0013EC20(Actor *a, int v) {
     func_0013EB88(a, st->x, st->y, st->z);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013EC80);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A980);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056A9A0);
+typedef struct {
+    u16 h0;
+    union {
+        u16 raw;
+        struct {
+            u16 mode : 7;
+            u16 pad : 9;
+        } bf;
+    } h2;
+    s16 h4;
+    s16 h6;
+    float f08;
+    float fC;
+    float f10;
+    int w14;
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    float f40;
+} AtelSlotARU;
+
+void _atel_func_0013BD70(Actor *a, int v) __asm__("func_0013BD70");
+
+void func_0013EC80(Actor *a, void *op_p)
+{
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    AtelSlotARU *s = (AtelSlotARU *)((ObjBindR *)op_p)->s44;
+    float spd = 0.0f;
+
+    if (s->h2.raw != 0) {
+        spd = st->f0C;
+    }
+    if (AQ(a)->stateAA == 1 && AQ(a)->ptr9C != 0) {
+        int m = func_00110560(AQ(a)->ptr9C);
+        if (m != 0) {
+            if (m != 2) {
+                goto set_sp;
+            }
+            goto do_dir;
+        }
+        switch (s->h2.bf.mode) {
+        case 2:
+        case 4: {
+            float sx;
+        do_dir:
+            sx = func_002E89C0(st->f24) * spd;
+            spd *= func_002E8648(st->f24);
+            func_00110270(AQ(a)->ptr9C, sx);
+            break;
+        }
+        case 5:
+        case 6: {
+            float sx;
+            spd *= func_002E8648(st->f24);
+            sx = func_002E89C0(st->f24) * spd;
+            spd *= 10.0f;
+            func_00110270(AQ(a)->ptr9C, sx * 10.0f);
+            break;
+        }
+        case 7:
+        case 9:
+            if (AQ(a)->ptr9C != 0) {
+                spd = 0.0f;
+                graphicPreviousLevelGetNameHash(AQ(a)->ptr9C, st->x, st->y, st->z);
+            }
+            break;
+        }
+    set_sp:
+        Ch_SetSp(AQ(a)->ptr9C, spd);
+    }
+
+    switch (s->h2.bf.mode) {
+    case 0:
+        switch (AQ(a)->stateAA) {
+        case 1:
+            if (AQ(a)->ptr9C != 0 && (s->h2.raw & 0x800)) {
+                graphicPreviousLevelGetNameHash(AQ(a)->ptr9C, s->f28, s->f2C, s->f30);
+                s->h2.raw &= ~0x800;
+            }
+            break;
+        case 4:
+        case 5:
+            AtelSetBindObject(a);
+            break;
+        }
+        break;
+    case 7:
+    case 9:
+        if (s->f08 > s->fC) {
+            _atel_func_0013BD70(a, -1);
+            s->h2.raw = 0;
+            st->x = s->f28;
+            st->y = s->f2C;
+            st->z = s->f30;
+        }
+        break;
+    case 5:
+    case 6:
+        if (s->f08 > s->fC) {
+            _atel_func_0013BD70(a, -1);
+            s->h2.raw = 0;
+            s->w14 = 0;
+        }
+        break;
+    default: {
+        int r;
+        if (s->h2.raw & 0x400) {
+            r = func_0013D868(a, s->f38, s->f28, s->f2C, s->f30);
+        } else {
+            r = func_0013D8D0(a, s->f38, s->f28, s->f2C, s->f30);
+        }
+        if (r != 0) {
+            if ((u8)s->h2.bf.mode) {
+                _atel_func_0013BD70(a, -1);
+            }
+            s->h2.raw = 0;
+        }
+        if (s->h2.raw & 0x1000) {
+            if ((u8)s->h2.bf.mode) {
+                _atel_func_0013BD70(a, -1);
+                s->h2.raw &= 0x800;
+            }
+        }
+        break;
+    }
+    }
+}
 
 int func_002D5458(float *a, float *b, float *c, float *d);
 float func_002D5540(float *a, float *b, float *c, float *d);

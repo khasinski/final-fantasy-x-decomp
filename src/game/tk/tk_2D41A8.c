@@ -1,6 +1,7 @@
 /* tu_338 0x2d41a8-0x2d5b90: low; ~Tk (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: pad/vector helpers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r7.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
@@ -176,7 +177,29 @@ float func_002D4690(float a, float b)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D46B0);
+float func_002D46B0(float a, float b, float c)
+{
+    register float b_tmp __asm__("$f22") = b;
+    register float b_save __asm__("$f23");
+    float diff;
+    float step;
+
+    __asm__("" : "+f"(b_tmp));
+    b_save = b_tmp;
+    __asm__("" : "+f"(b_save));
+    diff = func_002D4338(b_save - a);
+    step = func_002D4690(diff, c);
+    if (step == c) {
+        if (diff < 0.0f) {
+            a -= step;
+        } else {
+            a += step;
+        }
+    } else {
+        a = b_save;
+    }
+    return func_002D4338(a);
+}
 
 float func_002D4740(float a, float b, float c)
 {
@@ -464,9 +487,79 @@ INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D56E8);
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5798);
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5A40);
+float func_002D5A40(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2)
+{
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float res[4];
+    register float *pr __asm__("$4") = res;
+    register float *p1 __asm__("$3") = v1;
+    register float *p2 __asm__("$2") = v2;
+    __asm__("" : "+r"(pr), "+r"(p1), "+r"(p2));
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D41A8", func_002D5AE8);
+    v0[0] = x0;
+    v0[1] = y0;
+    v0[2] = z0;
+    v1[0] = x1;
+    v1[1] = y1;
+    v1[2] = z1;
+    v2[0] = x2;
+    v2[1] = y2;
+    v2[2] = z2;
+    VU0_LQC2(4, 0, v0);
+    VU0_LQC2(5, 0, p1);
+    VU0_LQC2(6, 0, p2);
+    VU0_OP("vsub.xyz $vf7, $vf6, $vf5");
+    VU0_OP("vsub.xyz $vf8, $vf5, $vf4");
+    VU0_OP("vmul.xyz $vf9, $vf7, $vf7");
+    VU0_OP("vaddy.x $vf9, $vf9, $vf9y");
+    VU0_OP("vaddz.x $vf9, $vf9, $vf9z");
+    VU0_SQC2(9, 0, pr);
+    if (res[0] >= 0.0f) {
+        VU0_OP("vdiv Q, $vf0w, $vf9x");
+        VU0_OP("vmul.xyz $vf9, $vf7, $vf8");
+        VU0_OP("vaddy.x $vf9, $vf9, $vf9y");
+        VU0_OP("vaddz.x $vf9, $vf9, $vf9z");
+        VU0_OP("vwaitq");
+        VU0_OP("vmulq.x $vf9, $vf9, Q");
+        VU0_OP("vsub.x $vf9, $vf0, $vf9");
+        VU0_OP("vminiw.x $vf9, $vf9, $vf0w");
+        VU0_OP("vmaxx.x $vf9, $vf9, $vf0x");
+        VU0_SQC2(9, 0, pr);
+        return res[0];
+    }
+    return 0.0f;
+}
+
+float func_002D5AE8(float *v0, float *v1, float *v2)
+{
+    float res[4];
+
+    VU0_LQC2(4, 0, v0);
+    VU0_LQC2(5, 0, v1);
+    VU0_LQC2(6, 0, v2);
+    VU0_OP("vsub.xyz $vf7, $vf6, $vf5");
+    VU0_OP("vsub.xyz $vf8, $vf5, $vf4");
+    VU0_OP("vmul.xyz $vf9, $vf7, $vf7");
+    VU0_OP("vaddy.x $vf9, $vf9, $vf9y");
+    VU0_OP("vaddz.x $vf9, $vf9, $vf9z");
+    VU0_SQC2(9, 0, res);
+    if (res[0] >= 0.0f) {
+        VU0_OP("vdiv Q, $vf0w, $vf9x");
+        VU0_OP("vmul.xyz $vf9, $vf7, $vf8");
+        VU0_OP("vaddy.x $vf9, $vf9, $vf9y");
+        VU0_OP("vaddz.x $vf9, $vf9, $vf9z");
+        VU0_OP("vwaitq");
+        VU0_OP("vmulq.x $vf9, $vf9, Q");
+        VU0_OP("vsub.x $vf9, $vf0, $vf9");
+        VU0_OP("vminiw.x $vf9, $vf9, $vf0w");
+        VU0_OP("vmaxx.x $vf9, $vf9, $vf0x");
+        VU0_SQC2(9, 0, res);
+        return res[0];
+    }
+    return 0.0f;
+}
 
 float func_002D5B60(float x1, float y1, float x2, float y2, float x3, float y3)
 {

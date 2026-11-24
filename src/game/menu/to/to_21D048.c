@@ -1,6 +1,7 @@
 /* tu_244 0x21d048-0x21f9a8: low; ~TOBtlMakeStatusBuff (config/tu_map.tsv) */
 #define func_0021D820 _hdr_func_0021D820
 #define toTarget _hdr_toTarget
+#define D_003249C0 _hdr_D_003249C0
 #define MsMenuBitStatus _hdr_MsMenuBitStatus
 #define MsMenuCountStatus _hdr_MsMenuCountStatus
 #define MsMenuBitStatus2 _hdr_MsMenuBitStatus2
@@ -20,6 +21,7 @@
 #include "ffx/g2.h"
 #undef func_0021D820
 #undef toTarget
+#undef D_003249C0
 #undef MsMenuBitStatus
 #undef MsMenuCountStatus
 #undef MsMenuBitStatus2
@@ -62,7 +64,32 @@ typedef struct {
     s16 h132;
 } R4InitFull;
 
+typedef struct {
+    u8 pad00[0x02];
+    s8 b02;
+    u8 pad03[0x0A - 0x03];
+    s8 b0A;
+    s8 b0B;
+    u16 h0C;
+    s16 h0E[4];
+    s16 h16[4];
+    u8 pad1E[2];
+    s16 *p20;
+    s32 w24;
+    u8 pad28[0x38 - 0x28];
+    s16 h38;
+    s16 h3A;
+    u8 pad3C[0x40 - 0x3C];
+    s16 h40;
+    s16 h42;
+    u8 pad44[0xC4 - 0x44];
+    s16 hC4;
+    s16 hC6;
+    s32 wC8;
+} R4RecFull;
+
 extern R4InitFull toTarget;
+extern R4RecFull D_003249C0[];
 extern s16 D_00324348;
 extern s16 D_0032434A;
 extern s16 D_00324350;
@@ -228,7 +255,7 @@ void func_0021D6C8(void)
 
 void func_0021D7A0(int a, int b)
 {
-    R4Rec *r;
+    R4RecFull *r;
 
     func_002EF0D0(&toTarget, 0, 0x134);
     toTarget.h0 = a;
@@ -330,29 +357,6 @@ void TOBtlMakeTargetChrStatusBit(void)
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", func_0021DBF0);
-
-typedef struct {
-    u8 pad00[0x02];
-    s8 b02;
-    u8 pad03[0x0B - 0x03];
-    s8 b0B;
-    u16 h0C;
-    s16 h0E[4];
-    s16 h16[4];
-    u8 pad1E[2];
-    s16 *p20;
-    s32 w24;
-    u8 pad28[0x38 - 0x28];
-    s16 h38;
-    s16 h3A;
-    u8 pad3C[0x40 - 0x3C];
-    s16 h40;
-    s16 h42;
-    u8 pad44[0xC4 - 0x44];
-    s16 hC4;
-    s16 hC6;
-    s32 wC8;
-} R4RecFull;
 
 typedef struct {
     u16 v[4][4];
@@ -552,9 +556,183 @@ void _TOBtlGetTargetPad(s16 *arg)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlSearchRevNearTarget);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", func_0021ECC0);
+typedef struct {
+    s16 h00;
+    s16 h02;
+    s16 h04[4];
+    u16 h0C[4];
+    u16 h14;
+    s16 h16;
+    s16 h18;
+    s16 h1A;
+    s32 w1C;
+    s16 h20;
+    s16 h22;
+} CursorSaveSlot;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlSetDefaultCursorPos);
+extern u8 D_006906A0[];
+extern CursorSaveSlot D_006906B8[][10];
+
+void func_0021ECC0(void)
+{
+    u16 cmd = D_003249C0[1].h0C;
+    int i, j;
+
+    if (cmd == 0xFFFE || cmd == 0xFFFF || cmd == 0x3002) {
+        return;
+    }
+    for (i = 0; i <= D_00325020; i++) {
+        D_006906B8[D_003252A4][i].h00 = D_003249C0[i].b02;
+        D_006906B8[D_003252A4][i].h02 = D_003249C0[i].b0A;
+        for (j = 0; j < D_003249C0[i].b0A; j++) {
+            D_006906B8[D_003252A4][i].h04[j] = D_003249C0[i].h0E[j];
+            D_006906B8[D_003252A4][i].h0C[j] = D_003249C0[i].h16[j];
+        }
+        {
+            R4RecFull *src = &D_003249C0[i];
+            D_006906B8[D_003252A4][i].h14 = src->h0C;
+            D_006906B8[D_003252A4][i].w1C = src->wC8;
+            D_006906B8[D_003252A4][i].h18 = src->hC4;
+            D_006906B8[D_003252A4][i].h1A = src->hC6;
+            D_006906B8[D_003252A4][i].h20 = src->h42;
+            D_006906B8[D_003252A4][i].h16 = src->h40;
+        }
+    }
+    D_006906A0[D_003252A4] = 1;
+}
+
+void TOBtlSetDefaultCursorPos(void)
+{
+    int found = 0;
+    int i, j;
+
+    if (((R4RecFull *)D_003249C0)[D_00325020].h0C != D_006906B8[D_003252A4][D_00325020].h14) {
+        return;
+    }
+    if (((R4RecFull *)D_003249C0)[D_00325020].b02 == 0) {
+        for (i = 0; i < ((R4RecFull *)D_003249C0)[D_00325020].w24; i++) {
+            if (D_006906B8[D_003252A4][D_00325020].h0C[((R4RecFull *)D_003249C0)[D_00325020].b0B] ==
+                ((R4RecFull *)D_003249C0)[D_00325020].p20[i]) {
+                found = 1;
+                break;
+            }
+        }
+        if (found == 1) {
+            D_003249C0[D_00325020].b02 = D_006906B8[D_003252A4][D_00325020].h00;
+            D_003249C0[D_00325020].h0E[D_003249C0[D_00325020].b0B] = i;
+            D_003249C0[D_00325020].h16[D_003249C0[D_00325020].b0B] = D_006906B8[D_003252A4][D_00325020].h0C[D_003249C0[i].b0B];
+            D_003249C0[D_00325020].h0C = D_006906B8[D_003252A4][D_00325020].h14;
+            {
+                R4RecFull *cur = &D_003249C0[D_00325020];
+                cur->h40 = (i / cur->h38) * cur->h38 - cur->h38;
+                if (cur->w24 < cur->h38 * cur->h3A) {
+                    cur->h40 = 0;
+                } else {
+                    if (i < cur->h38) {
+                        cur->h40 = 0;
+                    }
+                    if (i > ((cur->w24 + cur->h38 - 1) / cur->h38) * cur->h38 - cur->h38 - 1) {
+                        cur->h40 = ((cur->w24 + cur->h38 - 1) / cur->h38) * cur->h38 - cur->h38 * cur->h3A;
+                    }
+                }
+            }
+            {
+                R4RecFull *cur2 = &D_003249C0[D_00325020];
+                cur2->h42 = i;
+                cur2->wC8 = D_006906B8[D_003252A4][D_00325020].w1C;
+            }
+        } else {
+            D_003249C0[D_00325020].h42 = 0;
+            D_003249C0[D_00325020].h40 = 0;
+        }
+    }
+    if (D_003249C0[D_00325020].b02 == 1) {
+        if (D_006906B8[D_003252A4][D_00325020].w1C != 0) {
+            switch (D_006906B8[D_003252A4][D_00325020].h1A) {
+            case 0:
+                if (D_006906B8[D_003252A4][D_00325020].h18 == 0) {
+                    for (i = 0; i < 0x14; i++) {
+                        if (toTarget.ally_bits[i] == D_006906B8[D_003252A4][D_00325020].w1C) {
+                            toTarget.wA8 = toTarget.ally_bits[i];
+                            toTarget.h12C = i;
+                            toTarget.h130 = 0;
+                            for (j = 0; j < 0x14; j++) {
+                                if ((toTarget.wA8 >> j) & 1) {
+                                    toTarget.h124 = j;
+                                }
+                            }
+                            toTarget.h126 = toTarget.hAC;
+                            toTarget.p128 = toTarget.ally_bits;
+                            break;
+                        }
+                    }
+                } else {
+                    for (i = 0; i < 8; i++) {
+                        if (toTarget.enemy_bits[i] == D_006906B8[D_003252A4][D_00325020].w1C) {
+                            toTarget.wA8 = toTarget.enemy_bits[i];
+                            toTarget.h130 = 1;
+                            toTarget.h12C = i;
+                            for (j = 0x14; j < 0x1C; j++) {
+                                if ((toTarget.wA8 >> j) & 1) {
+                                    toTarget.h124 = j;
+                                }
+                            }
+                            toTarget.h126 = toTarget.h100;
+                            toTarget.p128 = toTarget.enemy_bits;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case 2:
+                if (D_006906B8[D_003252A4][D_00325020].h18 == 0) {
+                    toTarget.wA8 = toTarget.ally_bits[0];
+                    toTarget.h126 = toTarget.hAC;
+                    toTarget.h124 = 0xFF;
+                    toTarget.p128 = toTarget.ally_bits;
+                    toTarget.h12C = 0;
+                    toTarget.h130 = 0;
+                } else {
+                    s32 b = toTarget.enemy_bits[0];
+                    toTarget.h130 = 1;
+                    toTarget.h126 = toTarget.h100;
+                    toTarget.wA8 = b;
+                    toTarget.h124 = 0xFF;
+                    toTarget.p128 = toTarget.enemy_bits;
+                    toTarget.h12C = 0;
+                }
+                break;
+            case 1:
+                if (D_006906B8[D_003252A4][D_00325020].h18 == 0) {
+                    for (i = 0; i < toTarget.hAC; i++) {
+                        if (D_006906B8[D_003252A4][D_00325020].w1C & toTarget.ally_bits[i]) {
+                            toTarget.h12C = i;
+                            toTarget.h126 = toTarget.hAC;
+                            toTarget.wA8 = toTarget.ally_bits[i];
+                            toTarget.h124 = 0xFF;
+                            toTarget.p128 = toTarget.ally_bits;
+                            toTarget.h130 = 0;
+                            break;
+                        }
+                    }
+                } else {
+                    for (i = 0; i < toTarget.h100; i++) {
+                        if (D_006906B8[D_003252A4][D_00325020].w1C & toTarget.enemy_bits[i]) {
+                            toTarget.h130 = 1;
+                            toTarget.h12C = i;
+                            toTarget.wA8 = toTarget.enemy_bits[i];
+                            toTarget.h124 = 0xFF;
+                            toTarget.p128 = toTarget.enemy_bits;
+                            toTarget.h126 = toTarget.h100;
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
 
 void graphicGetTime(void)
 {

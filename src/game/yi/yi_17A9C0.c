@@ -1,11 +1,13 @@
 /* tu_128 0x17a9c0-0x17db20: low; unk_17A9C0 (config/tu_map.tsv) */
 #define func_0017AB10 _hdr_func_0017AB10
+#define func_0017AAE8 _hdr_func_0017AAE8
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/r1.h"
 #include "ffx/v2.h"
 #include "ffx/r2.h"
 #undef func_0017AB10
+#undef func_0017AAE8
 
 typedef struct YiMat17A9C0 {
     u64 d[8];
@@ -63,7 +65,7 @@ void func_0017A9C0(YiObj17A9C0 *o)
     o->m10 = m;
 }
 
-void func_0017AAE8(Obj17A110 *o) {
+int func_0017AAE8(Obj17A110 *o) {
     o->h30 = 0;
     o->h32 = 0;
     o->h36 = 0;
@@ -408,8 +410,335 @@ void func_0017B390(void) {
     _m2c_func_0017B390_func_002DA610(0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B480);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C420);
+int func_002DA928(void *ctx, s16 a, s16 b, s16 c, s16 d, s16 e, s16 f, s16 g);
+void func_002DAC50(void *ctx, void *buf);
+void func_0017BC40(void *ctx, void *tex, void *p);
+void yiClutAlloc_makepacket(void *ctx, void *p, int n, int mode);
+void func_002DD270(void *dst, void *src, float a);
+void func_002DD318(void *dst, void *src, float a);
+void Sg_MFIFOSync(void);
+
+typedef struct {
+    u8 pad00[0x34];
+    u16 h34;
+    u8 pad36[0xE];
+    void *p44;
+    u32 w48;
+    void *next;
+    void *prev;
+    void *w54;
+    u8 pad58[8];
+} YiLoadNode60;
+
+typedef struct {
+    u8 pad00[0xA8];
+    YiLoadNode60 *pA8;
+    u32 wAC;
+    u8 padB0[0x10];
+} YiLoadEntC0;
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 psm;
+    u32 w;
+    u32 h;
+    u32 pad18[4];
+} YiLoadTex28;
+
+typedef struct {
+    u32 w00;
+    void *w04;
+    void *p08;
+    u32 w0C;
+    void *p10;
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    u16 h1A;
+} YiLoadSub1C;
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 w0C[4];
+    u32 count;
+    YiLoadSub1C sub[64];
+} YiLoadGrp720;
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08[4];
+    u32 w18;
+    u32 w1C;
+    u32 w20;
+    u32 w24;
+    u32 w28;
+    u32 pad2C[5];
+} YiLoadSub6;
+
+typedef struct {
+    u8 pad00[0x67F38];
+    u32 mode67F38;
+    u8 pad67F3C[0x68090 - 0x67F3C];
+    u8 mat68090[0x40];
+    u8 pad680D0[0x687B8 - 0x680D0];
+    u32 w687B8;
+    u32 pad687BC;
+    YiLoadEntC0 ent[128];
+    u32 w6E7C0;
+    u8 pad6E7C4[0x6E7D0 - 0x6E7C4];
+    YiLoadNode60 nodes[2048];
+    u32 pad9E7D0[2];
+    u32 texCnt;
+    u32 pad9E7DC;
+    YiLoadTex28 tex[128];
+    u8 pad9FBE0[0x9FC04 - 0x9FBE0];
+    u32 w9FC04;
+    void *p9FC08[64];
+    void *p9FD08[64];
+    u32 w9FE08[64];
+    u8 pad9FF08[0x200];
+    u32 wA0108;
+    YiLoadGrp720 grp[64];
+    u8 padBC90C[0xBCB44 - 0xBC90C];
+    float fBCB44;
+    float fBCB48;
+} YiLoadCtx;
+
+int func_0017B480(YiLoadCtx *ctx, u8 *data)
+{
+    u8 gs_ctx[0x60];
+    u32 info[5];
+    YiLoadNode60 *prev;
+    u32 *hdr;
+    YiLoadEntC0 *curEnt;
+    u32 curIdx;
+
+    Sg_MFIFOSync();
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    hdr = (u32 *)data;
+    data += 0x40;
+    if (hdr[0] != 0x214365) {
+        BREAK();
+        return;
+    }
+    if (hdr[1] != 0x110) {
+        BREAK();
+        return;
+    }
+    curEnt = 0;
+    while (hdr[3] != 0) {
+        u32 *chunk = (u32 *)data;
+        data += 0x40;
+        switch (chunk[0]) {
+        case 0: {
+            u32 idx = ctx->w687B8;
+            if (idx > 0x80) {
+                BREAK();
+            }
+            curIdx = idx;
+            ctx->w687B8 = curIdx + 1;
+            prev = 0;
+            curEnt = &ctx->ent[curIdx];
+            func_0017A9C0((YiObj17A9C0 *)curEnt);
+            func_0017ADF8((V2Save17AE *)curEnt, (V2State17AE *)data);
+            data += chunk[1];
+            curEnt->wAC = 0;
+            break;
+        }
+        case 1: {
+            u32 idx = ctx->w6E7C0;
+            YiLoadNode60 *node;
+            u32 qwc;
+            if (idx > 0x800) {
+                BREAK();
+            }
+            ctx->w6E7C0 = idx + 1;
+            node = &ctx->nodes[idx];
+            func_0017AAE8((Obj17A110 *)node);
+            curEnt->wAC++;
+            func_0017AF38((Obj17A110 *)node, (V2Save17A *)data);
+            data += 0x40;
+            node->p44 = data;
+            if (prev == 0) {
+                curEnt->pA8 = node;
+                prev = node;
+                node->prev = 0;
+                node->w54 = 0;
+            } else {
+                prev->next = node;
+                node->prev = prev;
+                node->w54 = 0;
+                prev = node;
+            }
+            qwc = (chunk[1] - 0x40) >> 4;
+            node->h34 = curIdx;
+            data += qwc << 4;
+            if (node->w48 != qwc) {
+                BREAK();
+                return;
+            }
+            if ((u32)node->p44 & 0xF) {
+                BREAK();
+            }
+            break;
+        }
+        case 2: {
+            YiLoadTex28 *tex = &ctx->tex[ctx->texCnt];
+            func_0017B1B8((R2Cpy20 *)tex, (R2Cpy38 *)data);
+            data += 0x40;
+            Sg_MFIFOSync();
+            _m2c_func_0017B390_func_002DA610(0, 0);
+            if (tex->psm == 0x14) {
+                func_002DA928(gs_ctx, (s16)tex->w04, (s16)(tex->w08 >> 1), 0, 0, 0, (s16)(tex->w >> 1), (s16)(tex->h >> 2));
+                info[2] = tex->w08 >> 1;
+                info[3] = tex->w >> 1;
+                info[4] = tex->h >> 1;
+                info[0] = tex->w04;
+                info[1] = 0;
+            } else {
+                u32 w04, w08, psm, w, h;
+                func_002DA928(gs_ctx, (s16)tex->w04, (s16)tex->w08, (s16)tex->psm, 0, 0, (s16)tex->w, (s16)tex->h);
+                w04 = tex->w04;
+                w08 = tex->w08;
+                psm = tex->psm;
+                w = tex->w;
+                h = tex->h;
+                info[2] = w08;
+                info[1] = psm;
+                info[3] = w;
+                info[4] = h;
+                info[0] = w04;
+            }
+            if (tex->w04 >= 0x3C00) {
+                func_0017BC40(ctx, tex, data);
+            } else {
+                _m2c_func_0017B390_func_002DA610(0, 0);
+                _m2c_func_0017B390_func_002F8660(0);
+                func_002DAC50(gs_ctx, data);
+            }
+            data += chunk[1] - 0x40;
+            ctx->texCnt++;
+            break;
+        }
+        case 3: {
+            u32 m = chunk[9];
+            if (m == 2) goto clut_2;
+            if (m < 2) goto clut_end;
+            if (m == 4) goto clut_4;
+            if (m < 4) goto clut_3;
+            goto clut_end;
+        clut_2:
+            ctx->mode67F38 = m;
+            yiClutAlloc_makepacket(ctx, data, 0x48, m);
+            goto clut_end;
+        clut_3:
+            ctx->mode67F38 = m;
+            yiClutAlloc_makepacket(ctx, data, 0x48, m);
+            goto clut_end;
+        clut_4:
+            ctx->mode67F38 = m;
+            yiClutAlloc_makepacket(ctx, data, 0x48, m);
+        clut_end:
+            data += chunk[1];
+            break;
+        }
+        case 4: {
+            u8 *mat;
+            func_0017B028((u8 *)ctx, data);
+            mat = ctx->mat68090;
+            func_002DD128(mat);
+            func_002DD270(mat, mat, (float)((double)(ctx->fBCB44 / 180.0f) * 3.141592653589793));
+            func_002DD318(mat, mat, (float)((double)(ctx->fBCB48 / 180.0f) * 3.141592653589793));
+            data += chunk[1];
+            break;
+        }
+        case 5: {
+            u32 *sub = &chunk[8];
+            if (sub[0] != 0) {
+                u32 idx = sub[1];
+                ctx->w9FE08[idx] = sub[2];
+                ctx->p9FC08[idx] = data;
+                ctx->w9FC04++;
+            } else {
+                u32 idx = ctx->w9FC04;
+                ctx->w9FE08[idx] = chunk[1] >> 7;
+                ctx->p9FC08[idx] = data;
+                ctx->w9FC04++;
+            }
+            data += chunk[1];
+            break;
+        }
+        case 8: {
+            u32 *sub = &chunk[8];
+            if (sub[0] != 0) {
+                u32 idx = sub[1];
+                ctx->w9FE08[idx] = sub[2];
+                ctx->p9FD08[idx] = data;
+                ctx->w9FC04++;
+            } else {
+                u32 idx = ctx->w9FC04;
+                ctx->w9FE08[idx] = chunk[1] >> 5;
+                ctx->p9FD08[idx] = data;
+                ctx->w9FC04++;
+            }
+            data += chunk[1];
+            break;
+        }
+        case 6: {
+            YiLoadSub6 *s6 = (YiLoadSub6 *)data;
+            u32 j;
+            if (s6->w00 >= ctx->wA0108) {
+                ctx->wA0108 = s6->w00 + 1;
+            }
+            j = ctx->grp[s6->w00].count;
+            ctx->grp[s6->w00].sub[j].w00 = 0;
+            ctx->grp[s6->w00].sub[j].w04 = 0;
+            ctx->grp[s6->w00].sub[j].w0C = s6->w18;
+            ctx->grp[s6->w00].sub[j].p08 = data + 0x40;
+            {
+                u32 w24 = s6->w24;
+                if (w24 != 0) {
+                    ctx->grp[s6->w00].sub[j].h18 = w24 << 2;
+                    ctx->grp[s6->w00].sub[j].p10 = data + 0x40 + (s6->w18 << 4);
+                    ctx->grp[s6->w00].sub[j].h14 = s6->w1C;
+                    ctx->grp[s6->w00].sub[j].h16 = s6->w20;
+                    ctx->grp[s6->w00].sub[j].h1A = s6->w28;
+                } else {
+                    ctx->grp[s6->w00].sub[j].p10 = 0;
+                    ctx->grp[s6->w00].sub[j].h18 = 0;
+                    ctx->grp[s6->w00].sub[j].h14 = 0;
+                    ctx->grp[s6->w00].sub[j].h16 = 0;
+                    ctx->grp[s6->w00].sub[j].h1A = 0;
+                }
+            }
+            ctx->grp[s6->w00].count++;
+            if (s6->w04 != 0) {
+                int i;
+                ctx->grp[s6->w00].w08 = s6->w04;
+                for (i = 0; i < 4; i++) {
+                    ctx->grp[s6->w00].w0C[i] = s6->w08[i];
+                }
+            }
+            data += chunk[1];
+            break;
+        }
+        case 7:
+            func_0017B270((R2Big68 *)ctx, (R2Mat40 *)data);
+            data += chunk[1];
+            break;
+        default:
+            BREAK();
+            break;
+        }
+        hdr[3]--;
+    }
+    return 0;
+}
 
 typedef struct {
     u8 b[16];
@@ -581,7 +910,7 @@ int func_0017C470(int w, int h, u8 *src, u8 *dst)
         }
     }
     if (i == 11) {
-        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), D_0056C450);
+        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), "Error : width is not 2^n\n");
         return -1;
     }
     for (i = 0; i < 11; i++) {
@@ -590,7 +919,7 @@ int func_0017C470(int w, int h, u8 *src, u8 *dst)
         }
     }
     if (i == 11) {
-        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), D_0056C450);
+        func_002ED6A0(*(void **)((u8 *)D_005681A4 + 0xC), "Error : width is not 2^n\n");
         return -1;
     }
 

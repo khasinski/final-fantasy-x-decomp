@@ -246,9 +246,41 @@ u16 *func_002A1680(ScriptThread *th, u16 *pc) {
     return pc + 2;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1698);
-
+void func_002B2E50(void *, void *, void *, s32);
 #include "vu0.h"
+
+void func_002A1778(u8 *a, u8 *b);
+
+u16 *func_002A1698(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+
+    *(u16 *)((u8 *)sub + 0xA8) = pc[1];
+    switch (*(s16 *)((u8 *)th + 0x21A) & 0xF000) {
+    case 0x0000:
+        ((u8 *)sub)[0xBB] = 4;
+        opus_draw_on((u8 *)th + 0x300, *(s16 *)((u8 *)th + 0x214));
+        break;
+    case 0x1000: {
+        register u32 rgba __asm__("$7");
+        VU0_LQC2(31, 0x40, sub);
+        VU0_CTC2_NI(21, 0x437F0000);
+        VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+        VU0_OP("vminii.xyzw $vf31, $vf31, I");
+        VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+        VU0_OP("vftoi0.xyzw $vf31, $vf31");
+        VU0_QMFC2_NI(rgba, 31);
+        MMI_OP2Z("ppach", rgba, rgba);
+        MMI_OP2Z("ppacb", rgba, rgba);
+        func_002B2FF0(rgba, ((u8 *)pc)[2], ((u8 *)pc)[3]);
+        break;
+    }
+    case 0x2000:
+        ((void (*)(void *, void *, void *, s32))func_002B2E50)(func_002A1778, sub, pc, 1);
+        break;
+    }
+    return pc + 2;
+}
 
 void func_002A1778(u8 *a, u8 *b)
 {
@@ -271,7 +303,98 @@ void func_002A1778(u8 *a, u8 *b)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", ope_anm_sippo);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1A60);
+u16 *func_002A1A60(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    ScriptSub *orig_sub = sub;
+    u8 *entry;
+    s32 step;
+
+    switch (th->flags & 0x7000) {
+    case 0x0000: {
+        u16 cnt;
+        register u8 *mem __asm__("$7");
+
+        ((u8 *)sub)[0xBB] = 9;
+        cnt = pc[1];
+        {
+            u8 *p = (u8 *)op_malloc(*(void **)((u8 *)th + 0x3A8), cnt * 0x50 + 0x70);
+            *(u8 * volatile *)((u8 *)sub + 0xBC) = p;
+            mem = p;
+        }
+        __asm__("" : "+r"(mem));
+        *(volatile u16 *)mem = cnt;
+        entry = mem + 0x20;
+        *(volatile u16 *)(mem + 2) = 0;
+        *(volatile u16 *)(mem + 4) = *(u16 *)((u8 *)sub + 0xC4);
+        *(volatile u16 *)(mem + 6) = *(u16 *)((u8 *)sub + 0xC6);
+        *(volatile u32 *)(mem + 8) = *(volatile u32 *)((u8 *)sub + 0xC8);
+        __asm__("" : "+r"(mem));
+        *(u8 **)((u8 *)sub + 0xA8) = mem;
+        while (cnt != 0) {
+            *(u32 *)entry = 0;
+            cnt--;
+            entry += 0x50;
+        }
+        {
+            register u16 *npc __asm__("$18") = pc + 2;
+            __asm__("" : "+r"(npc));
+            pc = npc;
+        }
+        opus_draw_on((u8 *)th + 0x300, *(s16 *)((u8 *)th + 0x214));
+        break;
+    }
+    case 0x1000:
+        step = 4;
+    common:
+        if (*(s16 *)((u8 *)th + 0x212) == 0) {
+            if (((u8 *)sub)[0xBB] == 9) {
+                register u8 *hdr __asm__("$7") = *(u8 **)((u8 *)sub + 0xA8);
+                u16 cur = *(u16 *)(hdr + 2);
+                u16 max = *(u16 *)hdr;
+                register u32 next_cur __asm__("$5") = cur + 1;
+                u32 idx = cur % max;
+
+                *(u16 *)(hdr + 2) = next_cur;
+                entry = hdr + (idx * 0x50 + 0x20);
+                MMI_SQ_ZERO(0, entry);
+                {
+                    s32 off = (s16)pc[1];
+                    entry[9] = 1;
+                    *(u32 *)(entry + 4) = 0;
+                    *(u8 **)entry = (u8 *)pc + off;
+                }
+                MMI_SQ_ZERO(0x4C, entry);
+                {
+                    register u32 d __asm__("$3") = ((u32)((u8 *)orig_sub - *(u8 **)((u8 *)th + 0x320))) >> 8;
+                    *(volatile u16 *)(entry + 0x4C) = d;
+                }
+                __asm__ volatile("" : : : "memory");
+                *(u_long128 *)(entry + 0x20) = *(u_long128 *)((u8 *)orig_sub + 0x60);
+                {
+                    register u_long128 q80 __asm__("$2") = *(u_long128 *)((u8 *)orig_sub + 0x80);
+                    *(u_long128 *)(entry + 0x30) = q80;
+                }
+                {
+                    register s32 fl __asm__("$3") = *(s16 *)((u8 *)th + 0x21A);
+                    if (fl & 0x8000) {
+                        ((void (*)(void *, void *, float))func_002B5978)(entry + 0x10, (u8 *)orig_sub + 0x90, 16.0f);
+                    } else {
+                        *(u_long128 *)(entry + 0x10) = *(u_long128 *)((u8 *)orig_sub + 0x40);
+                    }
+                }
+            }
+            *(u32 *)(entry + 0x3C) = 0;
+        }
+        pc = (u16 *)((u8 *)pc + step);
+        break;
+    case 0x2000:
+        sub = opus_no_get((u8 *)th + 0x300, sub, (s16)pc[2]);
+        step = 6;
+        goto common;
+    }
+    return pc;
+}
 
 u16 *func_002A1C90(ScriptThread *th, s16 *pc) {
     register ScriptThread *s1 __asm__("$17") = th;
@@ -339,7 +462,106 @@ u16 *func_002A1C90(ScriptThread *th, s16 *pc) {
     return (u16 *)s0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_rgba_map);
+void func_001750A8(s32);
+void func_001750E8(float, float, float, float);
+void func_00175110(float, float, float, float, float, float);
+void func_00175140(void);
+void func_00175148(void *, void *);
+void opus_map_rgba_free(void);
+void func_002A2168(void);
+void func_002A21A8(void *arg0);
+
+u16 *opu_rgba_map(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+
+    switch (th->flags & 0xF000) {
+    case 0x0000:
+        VU0_LQC2(31, 0x40, sub);
+        pc += 1;
+        break;
+    case 0x1000:
+        opus_map_rgba_free();
+        return pc + 1;
+    case 0x2000:
+        yiRenderDisable(4);
+        yiRenderEnable(1);
+        ((float *)th)[0] = ((float *)th)[1] = ((float *)th)[2] = ((float *)th)[3] = 1.0f;
+        func_00173720(th);
+        ((void (*)(void *))func_002A2168)((u8 *)sub + 0x40);
+        return pc + 1;
+    case 0x3000:
+        yiRenderEnable(4);
+        yiRenderDisable(1);
+        MMI_SQ_ZERO(0, th);
+        func_00173720(th);
+        func_002A21A8(th);
+        return pc + 1;
+    case 0x4000:
+        func_001750A8(4);
+        func_001750E8(
+            *(float *)((u8 *)sub + 0x40) * (1.0f / 4096.0f),
+            *(float *)((u8 *)sub + 0x44) * (1.0f / 4096.0f),
+            *(float *)((u8 *)sub + 0x48) * (1.0f / 4096.0f),
+            *(float *)((u8 *)sub + 0x3C) * (1.0f / 4096.0f));
+        return pc + 1;
+    case 0x5000:
+    case 0xA000:
+        func_00175140();
+        return pc + 1;
+    case 0x6000:
+        func_002A21A8((u8 *)sub + 0x40);
+        return pc + 1;
+    case 0x7000:
+        yiSetDrawMask(yiGetDrawMask() | 4);
+        return pc + 1;
+    case 0x8000:
+        yiSetDrawMask(yiGetDrawMask() & 0xFFFFFFFBu);
+        return pc + 1;
+    case 0x9000:
+        func_001750A8(8);
+        func_00175110(
+            *(float *)((u8 *)sub + 0x40) * (1.0f / 256.0f),
+            *(float *)((u8 *)sub + 0x44) * (1.0f / 256.0f),
+            *(float *)((u8 *)sub + 0x48) * (1.0f / 256.0f),
+            *(float *)((u8 *)sub + 0x30) * (1.0f / 16.0f),
+            *(float *)((u8 *)sub + 0x34) * (1.0f / 16.0f),
+            *(float *)((u8 *)sub + 0x38) * (1.0f / 16.0f));
+        return pc + 1;
+    case 0xB000: {
+        float c[4];
+        float p[4];
+        c[0] = *(float *)((u8 *)sub + 0x40) * (1.0f / 256.0f);
+        c[1] = *(float *)((u8 *)sub + 0x44) * (1.0f / 256.0f);
+        c[2] = *(float *)((u8 *)sub + 0x48) * (1.0f / 256.0f);
+        c[3] = 1.0f;
+        p[0] = *(float *)((u8 *)sub + 0x30) * (1.0f / 16.0f);
+        p[1] = *(float *)((u8 *)sub + 0x34) * (1.0f / 16.0f);
+        p[2] = *(float *)((u8 *)sub + 0x38) * (1.0f / 16.0f);
+        p[3] = 1.0f;
+        func_00175148(c, p);
+        func_00175140();
+        return pc + 1;
+    }
+    }
+    {
+        register u32 r2 __asm__("$2");
+        register u32 r3 __asm__("$3");
+        __asm__ volatile("" : : : "$2", "$3");
+        r2 = 0x3F800000;
+        r3 = 0x3C000000;
+        VU0_CTC2_NI(21, r2);
+        VU0_QMTC2_NI(29, r3);
+        VU0_OP("vmulx.xyzw $vf31, $vf31, $vf29x");
+        VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+        VU0_OP("vminii.xyzw $vf31, $vf31, I");
+        VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, th);
+    }
+    yiRenderEnable(4);
+    func_00173720(th);
+    return pc;
+}
 
 void opus_map_rgba_free(void)
 {

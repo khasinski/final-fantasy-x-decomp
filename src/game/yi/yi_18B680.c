@@ -1,5 +1,6 @@
 /* tu_137 0x18b680-0x18d0f8: low; unk_18B680 (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r2.h"
 #include "ffx/q3.h"
 #include "ffx/v2.h"
@@ -190,7 +191,89 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C468);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C6D8);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C9D0);
+typedef struct {
+    u64 a;
+    u64 b;
+} YiConst16;
+
+extern YiConst16 D_0056D290;
+
+int func_0018C9D0(void *dst_p, void *src_p, int n, float scale)
+{
+    s32 tmp[4][4];
+    u8 pad[0x10];
+    YiConst16 c = D_0056D290;
+    u32 *dst;
+    register volatile u32 *src __asm__("$8");
+    int i;
+    int j;
+
+    {
+        register void *cp __asm__("$2") = &c;
+        *(float *)&c = scale;
+        VU0_LQC2(12, 0, cp);
+    }
+    {
+        register int cnt __asm__("$2") = n / 4;
+        register int limit __asm__("$15");
+        src = (volatile u32 *)src_p;
+        dst = (u32 *)dst_p;
+        i = 0;
+        if (cnt > 0) {
+            limit = cnt;
+            do {
+                for (j = 0; j < 4; j++) {
+                    volatile s32 *p = tmp[j];
+                    p[0] = *src & 0xFF;
+                    p[1] = (*src >> 8) & 0xFF;
+                    p[2] = (*src >> 16) & 0xFF;
+                    p[3] = *src >> 24;
+                    src++;
+                }
+        VU0_LQC2(16, 0, tmp);
+        VU0_LQC2(17, 0x10, tmp);
+        VU0_LQC2(18, 0x20, tmp);
+        VU0_LQC2(19, 0x30, tmp);
+        VU0_OP("vitof0.xyz $vf16, $vf16");
+        VU0_OP("vitof0.xyz $vf17, $vf17");
+        VU0_OP("vitof0.xyz $vf18, $vf18");
+        VU0_OP("vitof0.xyz $vf19, $vf19");
+        VU0_OP("vsubz.xyz $vf16, $vf16, $vf12z");
+        VU0_OP("vsubz.xyz $vf17, $vf17, $vf12z");
+        VU0_OP("vsubz.xyz $vf18, $vf18, $vf12z");
+        VU0_OP("vsubz.xyz $vf19, $vf19, $vf12z");
+        VU0_OP("vmulx.xyz $vf16, $vf16, $vf12x");
+        VU0_OP("vmulx.xyz $vf17, $vf17, $vf12x");
+        VU0_OP("vmulx.xyz $vf18, $vf18, $vf12x");
+        VU0_OP("vmulx.xyz $vf19, $vf19, $vf12x");
+        VU0_OP("vaddz.xyz $vf16, $vf16, $vf12z");
+        VU0_OP("vaddz.xyz $vf17, $vf17, $vf12z");
+        VU0_OP("vaddz.xyz $vf18, $vf18, $vf12z");
+        VU0_OP("vaddz.xyz $vf19, $vf19, $vf12z");
+        VU0_OP("vmaxx.xyz $vf16, $vf16, $vf0x");
+        VU0_OP("vmaxx.xyz $vf17, $vf17, $vf0x");
+        VU0_OP("vmaxx.xyz $vf18, $vf18, $vf0x");
+        VU0_OP("vmaxx.xyz $vf19, $vf19, $vf0x");
+        VU0_OP("vminiy.xyz $vf16, $vf16, $vf12y");
+        VU0_OP("vminiy.xyz $vf17, $vf17, $vf12y");
+        VU0_OP("vminiy.xyz $vf18, $vf18, $vf12y");
+        VU0_OP("vminiy.xyz $vf19, $vf19, $vf12y");
+        VU0_OP("vftoi0.xyz $vf16, $vf16");
+        VU0_OP("vftoi0.xyz $vf17, $vf17");
+        VU0_OP("vftoi0.xyz $vf18, $vf18");
+        VU0_OP("vftoi0.xyz $vf19, $vf19");
+        VU0_SQC2(16, 0, tmp);
+        VU0_SQC2(17, 0x10, tmp);
+        VU0_SQC2(18, 0x20, tmp);
+        VU0_SQC2(19, 0x30, tmp);
+        for (j = 0; j < 4; j++) {
+            volatile s32 *q = tmp[j];
+            *dst++ = (q[0] & 0xFF) | ((q[3] << 24) & 0xFF000000) | (((q[2] << 16) & 0xFF0000) | ((q[1] << 8) & 0xFF00));
+        }
+            } while (++i < limit);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018CB90);
 

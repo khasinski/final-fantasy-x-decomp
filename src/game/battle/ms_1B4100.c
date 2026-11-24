@@ -1,5 +1,6 @@
 /* tu_183 0x1b4100-0x1b5298: low; ~Ms (config/tu_map.tsv) */
 #define MsBtlChrRegist _hdr_MsBtlChrRegist
+#define MsBtlWeaponRegist _hdr_MsBtlWeaponRegist
 #include "common.h"
 #include "ffx/r2.h"
 #include "ffx/q4.h"
@@ -8,6 +9,7 @@
 #include "ffx/v2.h"
 #include "ffx/g2.h"
 #undef MsBtlChrRegist
+#undef MsBtlWeaponRegist
 
 void func_001B4100(void) {
     D_00662570 = 0;
@@ -354,7 +356,112 @@ BtlChr *MsGetWeaponSpecial(int kind, int flag) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B4100", MsBtlWeaponRegist);
+extern int MsGetSaveWeaponModel(int);
+extern void MsGetChrBtlPos(int, float *);
+extern void MsSetChrPosReset(int, float *);
+extern void MsSetChrDirF(int, float);
+extern void func_001B4D48(Chr *, BtlChr *);
+extern void MsSetWeaponEffectAttribute(int, void *);
+
+void *MsBtlWeaponRegist(int chr_id, int a1, int slot)
+{
+    float pos[4];
+    u8 *chr = (u8 *)MsGetChr(chr_id);
+    int f2E;
+    int f2B;
+    int f175;
+    int f34;
+    int f32;
+    int created = 0;
+    u8 *wep = (u8 *)MsGetWeapon(chr_id, slot);
+    int model = MsGetSaveWeaponModel((chr + slot)[0x252]);
+    void *hdl;
+
+    if (*(int *)(wep + 4) != model) {
+        *(int *)(wep + 4) = model;
+        if (*(void **)wep != 0) {
+            Ch_Dispose(*(void **)wep);
+            ChN_DataDispose(*(int *)(wep + 4), 0);
+            *(void **)wep = 0;
+        }
+    }
+    hdl = *(void **)wep;
+    func_001B4538(wep);
+    if (model != 0 && hdl == 0) {
+        created = 1;
+        hdl = func_00102B98(model);
+        *(void **)wep = hdl;
+    }
+    if (hdl != 0) {
+        u8 *sp = (u8 *)MsGetWeaponSpecial(chr_id, slot);
+
+        f175 = 1;
+        f32 = 0;
+        f34 = 1;
+        f2E = 0;
+        f2B = 0;
+
+        if (sp != 0) {
+            u8 sp_id = sp[0xC];
+            *(void **)sp = hdl;
+            switch (sp_id) {
+            case 0x1C:
+                f34 = 0;
+                break;
+            case 0x1E:
+                sp[0x1BC] = 0;
+                sp[0x1BE] = chr_id;
+                sp[0x1BD] = 0xE;
+                f175 = 0;
+                MsPushBtlPos(sp);
+                MsGetChrBtlPos(0x1E, pos);
+                MsSetChrPosReset(0x1E, pos);
+                *(float *)(sp + 0x1D4) = *(float *)(chr + 0x1D4);
+                *(float *)(sp + 0x1D8) = *(float *)(chr + 0x1D8);
+                MsSetChrDirF(0x1E, ((BtlChr *)sp)->f1D4[((s8 *)sp)[0x1D1]]);
+            case 0x1D:
+                f2E = 1;
+                f2B = 1;
+                f32 = 1;
+                break;
+            }
+            chr[0x13] = sp_id;
+            sp[0x14] = chr_id;
+            sp[0x12] = 1;
+            sp[0x15] = 1;
+            sp[0x2B] = f2B;
+            sp[0x2E] = f2E;
+            sp[0x32] = f32;
+            sp[0x34] = f34;
+            MsSetMotBinAddress(sp, sp[0x17B]);
+            Ch_SetBattleChrNum(hdl, sp_id);
+            Ch_SetWeight(hdl, *(float *)(sp + 0x19C));
+            if (*(int *)(wep + 8) != 0) {
+                sp[0x38] = 1;
+                MsSetMotion(sp_id, 0x27, 0, 0, 1, 0, 0);
+                MsSetMotion(sp_id, 0, 0, 0, 1, 0, 0);
+            }
+        }
+        wep[0x2B] = f2B;
+        wep[0x2E] = f2E;
+        wep[0x32] = f32;
+        wep[0x34] = f34;
+        func_001B4D48((Chr *)hdl, (BtlChr *)wep);
+        chr[0x175] = f175;
+        if (f175 == 0 || ((s8 *)chr)[0x1D] == 0) {
+            func_00110738(hdl, 1);
+            func_00110718(hdl, 1);
+        } else if (created != 0) {
+            func_00110540(hdl, 0, 0.0f);
+            func_00110540(hdl, 8, 1.0f);
+        }
+        MsAttachWeapon(chr_id, slot);
+        if (a1 == 0) {
+            MsSetWeaponEffectAttribute(chr_id, chr);
+        }
+    }
+    return hdl;
+}
 
 void func_001B4D48(Chr *chr, BtlChr *c)
 {

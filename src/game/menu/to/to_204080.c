@@ -341,9 +341,161 @@ void func_00204C60(int i)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_00204CA8);
+u8 *func_00204CA8(u8 *s, void *out)
+{
+    s16 *ci = (s16 *)out;
+    int idx = 0;
+    s16 base;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", TOGetFontInfoInterMode);
+    if (D_00323950 == 1) {
+        if (func_0020B850() == 0) {
+            base = func_001BD360() != 0 ? 0x3D40 : 0x3C00;
+        } else {
+            base = 0x3C00;
+        }
+    } else {
+        base = 0x3C00;
+    }
+    if (func_0020B850() == 0 && func_001BD360() == 0 && (*s == 0x5C || *s == 0x5D || *s == 0x5E)) {
+        idx = 0xA;
+        ci[1] = 0x14;
+        ci[0] = base;
+        ci[9] = 0x12;
+        ci[7] = 0;
+        ci[8] = idx;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + 0xA;
+        ci[6] = ci[4] + 0x12;
+        ci[2] = 0;
+        return s + 1;
+    } else if (*s >= 0x2C) {
+        u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(TOGetInternationalBaseDicType());
+        if (*s < 0x30) {
+            idx = (*s++ - 0x2B) * 0xD0;
+        }
+        idx += *s - 0x30;
+        ci[0] = base;
+        ci[1] = 0x14;
+        if ((u32)(idx - 0xEA) < 0x1A) {
+            ci[7] = 2;
+        } else {
+            ci[7] = 0;
+        }
+        ci[8] = (s8)tbl[idx];
+        ci[9] = 0x12;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + ci[8];
+        ci[6] = ci[4] + 0x12;
+        ci[2] = idx & 1;
+        return s + 1;
+    } else if (*s == 0x2A || *s == 0x2B) {
+        u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(1);
+        idx = (*s - 0x2A) * 0xD0;
+        idx += s[1] - 0x30;
+        ci[0] = 0x3D00;
+        ci[7] = 0;
+        ci[1] = 0x14;
+        ci[8] = (s8)tbl[idx];
+        ci[9] = 0x12;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + ci[8];
+        ci[6] = ci[4] + 0x12;
+        ci[2] = idx & 1;
+        return s + 2;
+    } else if (*s == 0x28 || *s == 0x29) {
+        u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(2);
+        idx = (*s - 0x28) * 0xD0;
+        idx += s[1] - 0x30;
+        ci[0] = 0x3D00;
+        ci[7] = 0;
+        ci[1] = 0x14;
+        ci[8] = (s8)tbl[idx];
+        ci[9] = 0x12;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + ci[8];
+        ci[6] = ci[4] + 0x12;
+        ci[2] = idx & 1;
+        return s + 2;
+    } else if (*s == 0x26 || *s == 0x27) {
+        u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(3);
+        idx = (*s - 0x26) * 0xD0;
+        idx += s[1] - 0x30;
+        ci[0] = 0x3D00;
+        ci[7] = 0;
+        ci[1] = 0x14;
+        ci[8] = (s8)tbl[idx];
+        ci[9] = 0x12;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + ci[8];
+        ci[6] = ci[4] + 0x12;
+        ci[2] = idx & 1;
+        return s + 2;
+    }
+    return s;
+}
+
+u8 *TOGetFontInfoInterMode(u8 *s, void *out, int mode)
+{
+    s16 *ci = (s16 *)out;
+    int idx = 0;
+
+    if (func_0020B850() == 0 && mode == 0) {
+        if (func_0020B850() == 0 && func_001BD360() == 0 && (*s == 0x5C || *s == 0x5D || *s == 0x5E)) {
+            idx = 0xA;
+            ci[0] = 0x3C00;
+            ci[1] = 0x14;
+            ci[9] = 0x12;
+            ci[7] = 0;
+            ci[8] = idx;
+            ci[3] = ((idx % 0x12) / 2) * 0xE;
+            ci[4] = (idx / 0x12) * 0x12;
+            ci[5] = ci[3] + idx;
+            ci[6] = ci[4] + 0x12;
+            ci[2] = idx & 1;
+            return s + 1;
+        } else if (*s >= 0x2C) {
+            u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(0);
+            if (*s < 0x30) {
+                idx = (*s++ - 0x2B) * 0xD0;
+            }
+            idx += *s - 0x30;
+            ci[0] = 0x3C00;
+            ci[1] = 0x14;
+            if (idx >= 0xEA && idx < 0x104) {
+                ci[7] = 2;
+            } else {
+                ci[7] = 0;
+            }
+            ci[8] = (s8)tbl[idx];
+            ci[9] = 0x12;
+            ci[3] = ((idx % 0x12) / 2) * 0xE;
+            ci[4] = (idx / 0x12) * 0x12;
+            ci[5] = ci[3] + ci[8];
+            ci[6] = ci[4] + 0x12;
+            ci[2] = idx & 1;
+            return s + 1;
+        }
+    } else if (*s >= 0x2C) {
+        u8 *tbl = (u8 *)TOGetFontWidthTblAdrs(4);
+        idx = *s - 0x30;
+        ci[0] = 0x3D40;
+        ci[1] = 0x14;
+        ci[8] = (s8)tbl[idx];
+        ci[9] = 0x12;
+        ci[3] = ((idx % 0x12) / 2) * 0xE;
+        ci[4] = (idx / 0x12) * 0x12;
+        ci[5] = ci[3] + ci[8];
+        ci[6] = ci[4] + 0x12;
+        ci[2] = idx & 1;
+        return s + 1;
+    }
+    return s;
+}
 
 u8 *func_00205228(u8 *s, int flags, int *width)
 {
@@ -358,7 +510,51 @@ u8 *func_00205278(u8 *s, int flags, int *width, int d)
     return func_002052F8(s, flags, width, 4);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2021E8", func_002052F8);
+u8 *func_002052F8(u8 *s, int flags, int *width, int dict)
+{
+    int w;
+
+    if (*s >= 0x30) {
+        w = ((s8 *)TOGetFontWidthTblAdrs(dict))[*s - 0x30];
+    }
+    if (*s >= 0x2C && *s < 0x30) {
+        s8 *tbl = (s8 *)TOGetFontWidthTblAdrs(0);
+        int idx = (*s - 0x2B) * 0xD0;
+        idx -= 0x30;
+        w = tbl[idx + s[1]];
+    }
+    if (*s >= 0x2A && *s < 0x2C) {
+        s8 *tbl = (s8 *)TOGetFontWidthTblAdrs(1);
+        int idx = (*s - 0x2A) * 0xD0;
+        idx -= 0x30;
+        w = tbl[idx + s[1]];
+    }
+    if (*s >= 0x28 && *s < 0x2A) {
+        s8 *tbl = (s8 *)TOGetFontWidthTblAdrs(2);
+        int idx = (*s - 0x28) * 0xD0;
+        idx -= 0x30;
+        w = tbl[idx + s[1]];
+    }
+    if (*s >= 0x26 && *s < 0x28) {
+        s8 *tbl = (s8 *)TOGetFontWidthTblAdrs(3);
+        int idx = (*s - 0x26) * 0xD0;
+        idx -= 0x30;
+        w = tbl[idx + s[1]];
+    }
+    if (flags == 0) {
+        w += 2;
+    }
+    if (flags == 1 || flags == 3) {
+        w += 4;
+    }
+    *width = w;
+    if (*s >= 0x30) {
+        s += 1;
+    } else {
+        s += 2;
+    }
+    return s;
+}
 
 int func_00205480(u8 *s)
 {
@@ -1286,7 +1482,7 @@ int TOGetChangeMacroWidth(int a, u8 *b, int flags)
 }
 
 extern u8 D_00323930[];
-void func_00204CA8(u8 *s, void *out);
+u8 *func_00204CA8(u8 *s, void *out);
 void TOMakePktFont1612(TextItem *item, void *info);
 
 int func_002070A8(int id, u8 *s, TextItem *item, int count, int limit)

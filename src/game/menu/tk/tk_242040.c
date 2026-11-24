@@ -1425,7 +1425,116 @@ void TkMenuRefreshPartyList(void) {
     func_00243088(0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00244F00);
+void func_00244F00(int flag)
+{
+    s32 dc;
+    int done;
+    int step;
+    int mask = 0x800;
+    int prev;
+    u8 *work;
+
+    prev = AtelChangeCurrentCtrl(0);
+    work = (u8 *)AtelGetCurCtrlWork();
+    func_002253F8(0x80, 0x80, 0x80, 0x80);
+    if (flag != 0) {
+        mask = 0xFFFF;
+    }
+    if ((*(u32 *)(work + 0x210) >> 4) & 1) {
+        void *db = Sg_GetDBuffDC(&dc);
+        int alpha = 0x80;
+        int waitRel = 1;
+
+        done = 0;
+        step = -4;
+        D_0069A804 = ((u8)dc ^ 1) & 1;
+        func_002449E0(db, D_0069A804);
+        func_002D8870(6, 1);
+        func_002446E8();
+        func_00244678();
+        func_002D3FF0(0);
+        func_0014D4E8(1);
+        while (1) {
+            int trg;
+            int pad;
+
+            D_0069A804++;
+            db = Sg_GetDBuffDC(&dc);
+            func_002449E0(db, D_0069A804);
+            func_0020CBE8();
+            func_00124F08();
+            func_00245548();
+            func_002455C0();
+            func_002492F0();
+            func_00124F08();
+            func_00244780(0x80, alpha, 0, 0);
+            func_00124F08();
+            func_00225A38();
+            func_00225920();
+            if (alpha == 0x40) {
+                if (flag != 0) {
+                    int msg = func_00220960(0x2032);
+                    u32 wh = func_00226AF0(msg);
+                    u32 x = 0x200U, y = 0x1A0U;
+                    u32 w = wh & 0xFFFF, h = wh >> 16;
+                    y -= h;
+                    x -= w;
+                    func_00226350(x >> 1, y >> 1, msg, 0);
+                } else {
+                    func_00226E10(0x100, 0xD0, 0x1FD);
+                }
+            }
+            func_00225B00();
+            func_0014E5E0(D_0069A804);
+            if (D_0069A804 & 1) {
+                func_002D6630();
+            }
+            TOMenuGetPadStatus();
+            trg = TOMenuGetControlPadTrg();
+            pad = func_00220318();
+            func_001656D8();
+            if ((trg & mask) && waitRel == 0 && alpha == 0x40) {
+                step = 4;
+                done = 1;
+            }
+            if (!(pad & 0x800)) {
+                waitRel = 0;
+            }
+            if (done != 0 && alpha == 0x80) {
+                break;
+            }
+            alpha += step;
+            if (alpha < 0x40) {
+                alpha = 0x40;
+            }
+            if (alpha > 0x80) {
+                alpha = 0x80;
+            }
+            func_002D3FF0(0);
+        }
+        func_002D3FF0(0);
+        func_002449E0(db, D_0069A804 + 1);
+        func_00245548();
+        func_002455C0();
+        func_002492F0();
+        func_00124F08();
+        func_00244780(0x80, 0x80, 0, 0);
+        func_002D3FF0(0);
+        func_002449E0(db, D_0069A804);
+        func_00245548();
+        func_002455C0();
+        func_002492F0();
+        func_00124F08();
+        func_00244780(0x80, 0x80, 0, 0);
+        func_00244938();
+        func_002D3FF0(0);
+        func_002D8870(6, 0);
+        func_002D6630();
+        func_002D3FF0(0);
+        func_0014D4E8(0);
+    }
+    AtelSetCurrentCtrl(prev);
+}
 
 extern char D_00573058[];
 extern char D_00573070[];

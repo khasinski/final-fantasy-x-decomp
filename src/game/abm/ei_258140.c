@@ -1,5 +1,6 @@
 /* tu_282 0x258140-0x25aeb0: low; ~ei (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
@@ -340,7 +341,92 @@ float func_00258B88(u16 id, float *out)
     return out[2] = out[0] = out[1] = 0.0f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258C48);
+extern float eff_sin_t[];
+
+void func_00258C48(float *out, float *p0, float *p1, float *center, float t)
+{
+    float v0[4];
+    float v1[4];
+    float a0;
+    float a1;
+    register float da __asm__("$f2");
+    register float l0 __asm__("$f5");
+    register float l1 __asm__("$f1");
+    float rad;
+    s16 idx;
+    u32 tmp_l0;
+    u32 tmp_l1;
+
+    v0[0] = p0[0] - center[0];
+    v0[1] = p0[1] - center[1];
+    v0[2] = 0;
+    v0[3] = 1.0f;
+    a0 = ((float (*)(float, float))func_002E94A0)(v0[1], v0[0]);
+
+    v1[0] = p1[0] - center[0];
+    v1[1] = p1[1] - center[1];
+    v1[2] = 0;
+    v1[3] = 1.0f;
+    a1 = ((float (*)(float, float))func_002E94A0)(v1[1], v1[0]);
+
+    {
+        register u32 r2 __asm__("$2");
+        VU0_LQC2(10, 0, v0);
+        VU0_OP("vadd.xyz $vf8, $vf0, $vf10");
+        VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+        VU0_OP("vmove.xyz $vf9, $vf10");
+        VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+        VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+        VU0_OP("vsqrt Q, $vf9z");
+        VU0_OP("vwaitq");
+        VU0_OP("vaddq.x $vf10, $vf0, Q");
+        VU0_QMFC2_NI(r2, 10);
+        VU0_OP("vdiv Q, $vf0w, $vf10x");
+        VU0_OP("vwaitq");
+        VU0_OP("vmulq.xyz $vf9, $vf8, Q");
+        VU0_SQC2(9, 0, v0);
+        tmp_l0 = r2;
+    }
+    l0 = *(float *)&tmp_l0;
+    {
+        register float *p __asm__("$2") = v1;
+        register u32 r3 __asm__("$3");
+        VU0_LQC2(10, 0, p);
+        VU0_OP("vadd.xyz $vf8, $vf0, $vf10");
+        VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+        VU0_OP("vmove.xyz $vf9, $vf10");
+        VU0_OP("vaddx.y $vf9, $vf9, $vf9x");
+        VU0_OP("vaddy.z $vf9, $vf9, $vf9y");
+        VU0_OP("vsqrt Q, $vf9z");
+        VU0_OP("vwaitq");
+        VU0_OP("vaddq.x $vf10, $vf0, Q");
+        VU0_QMFC2_NI(r3, 10);
+        VU0_OP("vdiv Q, $vf0w, $vf10x");
+        VU0_OP("vwaitq");
+        VU0_OP("vmulq.xyz $vf9, $vf8, Q");
+        VU0_SQC2(9, 0, p);
+        tmp_l1 = r3;
+    }
+    l1 = *(float *)&tmp_l1;
+
+    da = a1 - a0;
+    if (a1 >= a0) {
+        if (da > 3.1415927f) {
+            da -= 6.2831855f;
+        }
+    } else {
+        if (da < -3.1415927f) {
+            da += 6.2831855f;
+        }
+    }
+    a0 += da * t;
+    rad = l0 + (l1 - l0) * t;
+    idx = (s16)(s32)(a0 * 32768.0f / 3.1415927f);
+    out[0] = eff_sin_t[((u16)(idx + 0x4000)) >> 4] * rad + center[0];
+    out[1] = eff_sin_t[((u16)idx) >> 4] * rad + center[1];
+    out[2] = center[2];
+    out[3] = 1.0f;
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00258EA0);
 
@@ -542,7 +628,96 @@ EiPt50 *func_002599C0(int i)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_00259BA8);
+#include "vu0.h"
+
+int func_002598C8(void *arg0);
+extern s32 D_00327934;
+extern s32 D_00327938;
+
+void func_00259BA8(u8 *obj, float *out)
+{
+    float v[4];
+    float x;
+    float y;
+
+    func_002598C8(obj);
+    {
+        u8 *m = (u8 *)lpamng + 0x113D0;
+        register u8 *p __asm__("$4") = obj + 0x10;
+        VU0_LQC2(27, 0, p);
+        VU0_LQC2(28, 0, m);
+        VU0_LQC2(29, 0x10, m);
+        VU0_LQC2(30, 0x20, m);
+        VU0_LQC2(31, 0x30, m);
+        VU0_OP("vmulax.xyzw ACC, $vf28, $vf27x");
+        VU0_OP("vmadday.xyzw ACC, $vf29, $vf27y");
+        VU0_OP("vmaddaz.xyzw ACC, $vf30, $vf27z");
+        VU0_OP("vmaddw.xyzw $vf26, $vf31, $vf0w");
+        VU0_SQC2(26, 0, v);
+    }
+    if (v[3] <= 0.0f) {
+        out[0] = 100000000000.0f;
+        return;
+    }
+    {
+        register u32 w __asm__("$2");
+        MIPS_MFC1(w, v[3]);
+        VU0_LQC2(4, 0, v);
+        VU0_QMTC2_NI(5, w);
+        VU0_OP("vdiv Q, $vf0w, $vf5x");
+        VU0_OP("vwaitq");
+        VU0_OP("vmulq.xyz $vf4, $vf4, Q");
+        VU0_SQC2(4, 0, v);
+    }
+    x = v[0] + (float)(*(s16 *)(obj + 0x46) >> 4);
+    y = v[1] + (float)(*(s16 *)(obj + 0x48) >> 4);
+    v[0] = x;
+    v[1] = y;
+    switch (obj[0x4E] & 3) {
+    case 0: {
+        register float h __asm__("$f1") = (float)D_00327938;
+        register float w __asm__("$f0") = (float)D_00327934;
+        float t1;
+        ((volatile float *)out)[0] = x;
+        __asm__("" : "+f"(x));
+        ((volatile float *)out)[3] = y;
+        __asm__("" : "+f"(y));
+        t1 = y - h;
+        __asm__("" : "+f"(w) : "f"(t1));
+        out[1] = t1;
+        out[2] = x + w;
+        break;
+    }
+    case 1: {
+        float w = (float)D_00327934;
+        float h = (float)D_00327938;
+        out[3] = y;
+        out[2] = x;
+        out[0] = x - w;
+        out[1] = y - h;
+        break;
+    }
+    case 2: {
+        float w = (float)D_00327934;
+        float h = (float)D_00327938;
+        out[2] = x;
+        out[1] = y;
+        out[0] = x - w;
+        out[3] = y + h;
+        break;
+    }
+    case 3: {
+        register float w __asm__("$f1") = (float)D_00327934;
+        register float h __asm__("$f0") = (float)D_00327938;
+        ((volatile float *)out)[0] = x;
+        ((volatile float *)out)[1] = y;
+        __asm__("" : "+f"(x) : "f"(y));
+        out[2] = x + w;
+        out[3] = y + h;
+        break;
+    }
+    }
+}
 
 int func_00259DB0(float a, float b, float c, float d) {
     if (a < c) {

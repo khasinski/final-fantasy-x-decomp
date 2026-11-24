@@ -1,4 +1,13 @@
 {
+  "game/yi/yi_17A9C0": {
+    "piece": "piece_0056C448",
+    "address": 5686344,
+    "size": 34,
+    "symbols": {
+      "D_0056C448": 0,
+      "D_0056C450": 8
+    }
+  },
   "game/menu/tk/tk_234A30": {
     "piece": "piece_00572370",
     "address": 5710704,

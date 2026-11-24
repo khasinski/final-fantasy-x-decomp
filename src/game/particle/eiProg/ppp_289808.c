@@ -8,7 +8,105 @@
 #include "ffx/v6.h"
 #include "ffx/q6.h"
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_289808", func_00289808);
+extern s32 D_006A3BC4;
+void func_002DD0B0(void *, void *);
+void func_00282798(void *, void *);
+
+typedef struct {
+    u16 v0[4];
+    u16 v1[4];
+    u16 dv0[4];
+    u16 ddv0[4];
+    u16 dv1[4];
+    u16 ddv1[4];
+    float pos[28][4];
+    s32 w1F0;
+    s16 h1F4;
+    s16 h1F6;
+    u8 idx;
+} PppTailWork28;
+
+typedef struct {
+    s32 frame;
+    u8 pad04[0x1C];
+    u16 d0[4];
+    u16 d1[4];
+    u16 d2[4];
+    u16 d3[4];
+    u16 d4[4];
+    u16 d5[4];
+} PppTailArg28;
+
+void func_00289808(u8 *base, PppTailArg28 *arg, ScriptCtx *ctx)
+{
+    PppTailWork28 *w;
+    float tmp[4];
+    s32 i;
+    u8 idx;
+
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    w = SLOT_WORK(PppTailWork28, base, ctx, 0);
+    if (*(s32 *)(base + 0x0C) == 0) {
+        float (*p)[4] = w->pos;
+        func_002DD0B0(tmp, base + 0x40);
+        tmp[3] = 1.0f;
+        for (i = 28; i > 0; i--, p++) {
+            func_002DD0B0(p, tmp);
+        }
+    }
+    if (w->idx == 0) {
+        w->idx = 28;
+    }
+    w->idx--;
+    func_00282798(w->pos[w->idx], base + 0x40);
+
+    w->v0[0] += w->dv0[0];
+    w->dv0[0] += w->ddv0[0];
+    w->v0[1] += w->dv0[1];
+    w->dv0[1] += w->ddv0[1];
+    w->v0[2] += w->dv0[2];
+    w->dv0[2] += w->ddv0[2];
+    w->v0[3] += w->dv0[3];
+    w->dv0[3] += w->ddv0[3];
+
+    w->v1[0] += w->dv1[0];
+    w->dv1[0] += w->ddv1[0];
+    w->v1[1] += w->dv1[1];
+    w->dv1[1] += w->ddv1[1];
+    w->v1[2] += w->dv1[2];
+    w->dv1[2] += w->ddv1[2];
+    w->v1[3] += w->dv1[3];
+    w->dv1[3] += w->ddv1[3];
+
+    if (*(s32 *)(base + 0x0C) == arg->frame) {
+        w->v0[0] += arg->d0[0];
+        w->v0[1] += arg->d0[1];
+        w->v0[2] += arg->d0[2];
+        w->v0[3] += arg->d0[3];
+        w->dv0[0] += arg->d2[0];
+        w->dv0[1] += arg->d2[1];
+        w->dv0[2] += arg->d2[2];
+        w->dv0[3] += arg->d2[3];
+        w->ddv0[0] += arg->d3[0];
+        w->ddv0[1] += arg->d3[1];
+        w->ddv0[2] += arg->d3[2];
+        w->ddv0[3] += arg->d3[3];
+        w->v1[0] += arg->d1[0];
+        w->v1[1] += arg->d1[1];
+        w->v1[2] += arg->d1[2];
+        w->v1[3] += arg->d1[3];
+        w->dv1[0] += arg->d4[0];
+        w->dv1[1] += arg->d4[1];
+        w->dv1[2] += arg->d4[2];
+        w->dv1[3] += arg->d4[3];
+        w->ddv1[0] += arg->d5[0];
+        w->ddv1[1] += arg->d5[1];
+        w->ddv1[2] += arg->d5[2];
+        w->ddv1[3] += arg->d5[3];
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_289808", func_00289B68);
 
@@ -42,7 +140,114 @@ void func_0028A350(char *base, ScriptCtx *ctx) {
     w->q28 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_289808", func_0028A388);
+typedef struct {
+    u16 v0[4];
+    u16 v1[4];
+    u16 dv0[4];
+    u16 ddv0[4];
+    u16 dv1[4];
+    u16 ddv1[4];
+    float pos[27][4];
+    float f1E0;
+    float f1E4;
+    float f1E8;
+    s32 w1EC;
+    s16 h1F0;
+    s16 h1F2;
+    u8 idx;
+} PppTailWork27;
+
+typedef struct {
+    s32 frame;
+    u8 pad04[0x18];
+    float df0;
+    float df1;
+    float df2;
+    u8 pad28[0x08];
+    u16 d0[4];
+    u16 d1[4];
+    u16 d2[4];
+    u16 d3[4];
+    u16 d4[4];
+    u16 d5[4];
+} PppTailArg27;
+
+void func_0028A388(u8 *base, PppTailArg27 *arg, ScriptCtx *ctx)
+{
+    PppTailWork27 *w;
+    float tmp[4];
+    s32 i;
+    u8 idx;
+
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    w = SLOT_WORK(PppTailWork27, base, ctx, 0);
+    if (*(s32 *)(base + 0x0C) == 0) {
+        float (*p)[4] = w->pos;
+        func_002DD0B0(tmp, base + 0x40);
+        tmp[3] = 1.0f;
+        for (i = 27; i > 0; i--, p++) {
+            func_002DD0B0(p, tmp);
+        }
+    }
+    if (w->idx == 0) {
+        w->idx = 27;
+    }
+    w->idx--;
+    func_00282798(w->pos[w->idx], base + 0x40);
+
+    w->dv0[0] += w->ddv0[0];
+    w->v0[0] += w->dv0[0];
+    w->dv0[1] += w->ddv0[1];
+    w->v0[1] += w->dv0[1];
+    w->dv0[2] += w->ddv0[2];
+    w->v0[2] += w->dv0[2];
+    w->dv0[3] += w->ddv0[3];
+    w->v0[3] += w->dv0[3];
+
+    w->dv1[0] += w->ddv1[0];
+    w->v1[0] += w->dv1[0];
+    w->dv1[1] += w->ddv1[1];
+    w->v1[1] += w->dv1[1];
+    w->dv1[2] += w->ddv1[2];
+    w->v1[2] += w->dv1[2];
+    w->dv1[3] += w->ddv1[3];
+    w->v1[3] += w->dv1[3];
+
+    w->f1E4 += w->f1E8;
+    w->f1E0 += w->f1E4;
+
+    if (*(s32 *)(base + 0x0C) == arg->frame) {
+        w->v0[0] += arg->d0[0];
+        w->v0[1] += arg->d0[1];
+        w->v0[2] += arg->d0[2];
+        w->v0[3] += arg->d0[3];
+        w->dv0[0] += arg->d2[0];
+        w->dv0[1] += arg->d2[1];
+        w->dv0[2] += arg->d2[2];
+        w->dv0[3] += arg->d2[3];
+        w->ddv0[0] += arg->d3[0];
+        w->ddv0[1] += arg->d3[1];
+        w->ddv0[2] += arg->d3[2];
+        w->ddv0[3] += arg->d3[3];
+        w->v1[0] += arg->d1[0];
+        w->v1[1] += arg->d1[1];
+        w->v1[2] += arg->d1[2];
+        w->v1[3] += arg->d1[3];
+        w->dv1[0] += arg->d4[0];
+        w->f1E0 += arg->df0;
+        w->dv1[1] += arg->d4[1];
+        w->f1E4 += arg->df1;
+        w->dv1[2] += arg->d4[2];
+        w->dv1[3] += arg->d4[3];
+        w->f1E8 += arg->df2;
+        w->ddv1[0] += arg->d5[0];
+        w->ddv1[1] += arg->d5[1];
+        w->ddv1[2] += arg->d5[2];
+        w->ddv1[3] += arg->d5[3];
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_289808", pppKeShpTailPhtDraw);
 

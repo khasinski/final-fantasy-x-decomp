@@ -1,5 +1,6 @@
 /* tu_243 0x218a78-0x21d048: low; ~TOBtlDrawInfoWin (config/tu_map.tsv) */
 #define func_0021BAB8 _hdr_func_0021BAB8
+#define TOBtlSetInfoWinMes _hdr_TOBtlSetInfoWinMes
 #define func_001FCB88 _hdr_func_001FCB88
 #define MsMenuBitStatus _hdr_MsMenuBitStatus
 #define MsMenuCountStatus _hdr_MsMenuCountStatus
@@ -22,6 +23,7 @@
 #include "ffx/text.h"
 #include "ffx/t4.h"
 #undef func_0021BAB8
+#undef TOBtlSetInfoWinMes
 #undef func_001FCB88
 #undef MsMenuBitStatus
 #undef MsMenuCountStatus
@@ -35,6 +37,7 @@
 #undef D_006925C0
 
 int func_001FCB88(float f, int x, int y, u32 c);
+void TOBtlSetInfoWinMes(int id);
 int MsMenuBitStatus(int id);
 u8 *MsMenuCountStatus(int id);
 int MsMenuBitStatus2(int id);
@@ -205,7 +208,66 @@ void TOBtlInitInfoWinMes(int a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlInfoWinMes);
+void TOBtlCtrlInfoWinMes(void)
+{
+    Popup tmp[4];
+    int i;
+    int n;
+
+    if (D_003249C0[D_00325020].b2 != 1) {
+        D_003249AD = 0;
+        return;
+    }
+    if (MsMenuCheckLook() == -1 && (u16)(toTarget.h124 - 0x14) < 8) {
+        if (D_00692502 != (u16)toTarget.h124) {
+            TOBtlSetInfoWinMes((u16)toTarget.h124);
+            D_00692502 = (u16)toTarget.h124;
+        }
+        D_003249AD = 1;
+    } else {
+        D_003249AD = 0;
+    }
+    if (MsMenuCheckChrLive((u16)toTarget.h124) == 1 && (u16)(toTarget.h124 - 0x14) < 8) {
+        if (D_00692502 != (u16)toTarget.h124) {
+            TOBtlSetInfoWinMes((u16)toTarget.h124);
+            D_00692502 = (u16)toTarget.h124;
+        }
+        D_003249AD = 1;
+    }
+    if (D_00692560[0].h0 == 8) {
+        return;
+    }
+    func_002EF0D0(tmp, 0, sizeof(tmp));
+    for (i = 0; i < 4; i++) {
+        if (D_00692560[i].h0 != 0) {
+            D_00692560[i].hA -= 2;
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        if (D_00692560[i].h0 == 2 && D_00692560[i].hA + D_00692560[i].hE < D_006925BA - 0x14) {
+            D_00692560[i + 1].h0 = 2;
+            D_00692560[i + 1].hA = D_006925BA;
+            D_00692560[i + 1].w10 = D_00692560[i].w10;
+            D_00692560[i + 1].hC = D_00692560[i].hC;
+            D_00692560[i + 1].hE = D_00692560[i].hE;
+            D_00692560[i].h0 = 3;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (D_00692560[i].h0 == 3 && D_00692560[i].hA + D_00692560[i].hE < D_006925B6) {
+            D_00692560[i].h0 = 0;
+        }
+    }
+    n = 0;
+    for (i = 0; i < 4; i++) {
+        if (D_00692560[i].h0 != 0) {
+            tmp[n] = D_00692560[i];
+            n++;
+        }
+    }
+    __builtin_memcpy(D_00692560, tmp, sizeof(tmp));
+    D_006925B0 = n;
+}
 
 void TOBtlDrawInfoWinMes(void)
 {

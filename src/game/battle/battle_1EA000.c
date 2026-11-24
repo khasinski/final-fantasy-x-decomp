@@ -3,6 +3,7 @@
 #define func_001EE8E0 _hdr_func_001EE8E0
 #define func_001EE9E8 _hdr_func_001EE9E8
 #define func_001EBF18 _hdr_func_001EBF18
+#define MsGetMoveTargetPos _hdr_MsGetMoveTargetPos
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -14,6 +15,7 @@
 #include "ffx/w5.h"
 #include "ffx/r4.h"
 #include "ffx/s4.h"
+#undef MsGetMoveTargetPos
 #undef func_001EBF18
 #undef func_001EA718
 #undef func_001EE8E0
@@ -1051,7 +1053,104 @@ int func_001ECD10(Actor *a, void *b, ScriptCtx *c) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/battle_1EA000", func_001ECD68);
+extern float sqrtf(float);
+extern float MsGetMoveTargetPos(int, void *, int, float *, int *);
+extern float func_001AC388(float *, float *);
+extern float func_001AC348(float *, float *);
+extern float MsNearRag(float, float);
+extern int MsGetDirDivide(float *, float *, int, int, int);
+
+int func_001ECD68(Actor *a, void *b, ScriptCtx *ctx)
+{
+    float pos0[4];
+    float pos1[4];
+    float polar0;
+    float polar1;
+    float dir;
+    u8 id = *func_00144158(a);
+    float f26 = AtelPopStackFloat(a, ctx);
+    float f24 = AtelPopStackFloat(a, ctx);
+    float f27 = AtelPopStackFloat(a, ctx);
+    float f23 = AtelPopStackFloat(a, ctx);
+    float f25 = AtelPopStackFloat(a, ctx);
+    float f21 = AtelPopStackFloat(a, ctx);
+    float f22 = AtelPopStackFloat(a, ctx);
+    float f20 = AtelPopStackFloat(a, ctx);
+    int mode = AtelPopStackInteger(a, ctx);
+    int ret = 0;
+
+    if (id != 0xFF) {
+        u8 *chr = (u8 *)MsGetChr(id);
+        float t_off;
+        float dist;
+        float f_frames;
+        int frames;
+        float diff;
+        float ff;
+        float ff2;
+
+        *(float *)(chr + 0x124) = f22;
+        chr[0xD7] = 0;
+        *(float *)(chr + 0x120) = f20;
+        *(float *)(chr + 0x128) = f21;
+        *(int *)(chr + 0x148) = 0;
+        *(int *)(chr + 0x158) = 0;
+        chr[0xD5] = mode | 0x80;
+        func_001B6790(id, pos0);
+        t_off = MsGetMoveTargetPos(id, chr, mode, pos1, 0);
+        if (((s8 *)chr)[0x34] == 0) {
+            dist = func_001AC388(pos0, pos1);
+        } else {
+            dist = func_001AC348(pos0, pos1);
+        }
+        dist -= t_off;
+        if (f21 == 0.0f) {
+            frames = (int)(dist / f20);
+        } else {
+            float disc = f20 * f20 + (f21 + f21) * dist;
+            frames = (int)((-f20 + sqrtf(disc)) / f21);
+        }
+        ((BtlChr *)chr)->f112 = 0;
+        ((BtlChr *)chr)->f11A = frames;
+        MsVectorRect2Polar(pos1, pos0, (int)&polar0, (int)&polar1, 0);
+        func_001B6E48(id, &dir);
+        dir = MsNearRag(0.0f, dir);
+        polar0 = MsNearRag(dir, polar0);
+        diff = polar0 - dir;
+        *(float *)(chr + 0x154) = diff;
+        if ((double)diff < 0.0) {
+            diff = -diff;
+        }
+        *(float *)(chr + 0x150) = dir;
+        if (chr[0xDB] != 0) {
+            *(float *)(chr + 0x12C) = 0.0f;
+            ff = (float)frames;
+        } else {
+            ff = (float)frames;
+            *(float *)(chr + 0x12C) = (diff * f26) / ff;
+        }
+        diff = (polar0 - dir) * f25;
+        polar0 -= diff;
+        if ((double)diff < 0.0) {
+            diff = -diff;
+        }
+        ff2 = (float)(frames * 2);
+        *(float *)(chr + 0x130) = polar0;
+        *(float *)(chr + 0x138) = f23;
+        *(float *)(chr + 0x134) = ((diff + diff) - f23 * ff * ff) / ff2;
+        polar1 = MsNearRag(0.0f, polar1);
+        diff = polar1 * f27;
+        polar1 -= diff;
+        if ((double)diff < 0.0) {
+            diff = -diff;
+        }
+        *(float *)(chr + 0x13C) = polar1;
+        *(float *)(chr + 0x144) = f24;
+        *(float *)(chr + 0x140) = ((diff + diff) - f24 * ff * ff) / ff2;
+        ret = MsGetDirDivide(pos1, pos0, id, 0x10, 1);
+    }
+    return ret;
+}
 
 int func_001ED130(Actor *a, void *u, ScriptCtx *ctx) {
     int v = AtelPopStackInteger(a, ctx);

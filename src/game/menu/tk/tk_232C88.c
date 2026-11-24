@@ -332,7 +332,57 @@ void func_002336E8(int a, int b) {
     D_00693E30 = a + b * 15;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233700);
+void func_00233700(void)
+{
+    U4Id4 *info = func_00232C88();
+    u16 *tbl;
+    u8 *s;
+    int col;
+    int len;
+    int c;
+
+    if (func_0020B850() == 0) {
+        if (func_001BD360() == 0) {
+            if (D_00693E20 < 0) {
+                tbl = *(u16 **)((D_00693E24 * 4) + (u8 *)&_m2c_func_002335E0_D_00325D28);
+            } else {
+                tbl = &_m2c_func_002335E0_D_00325C98;
+            }
+        } else {
+            tbl = &_m2c_func_002335E0_D_00325D00;
+        }
+    } else {
+        tbl = &_m2c_func_002335E0_D_00325CC0;
+    }
+    col = D_00693E30 % 5;
+    s = (u8 *)TOMenuGetNameMes(tbl[D_00693E30 / 5]);
+    while (col > 0) {
+        c = *s++;
+        if ((u8)(c - 6) < 0x2A) {
+            s++;
+        }
+        col--;
+    }
+    len = 0;
+    do {
+        if (D_00693E48[len].on == 0) {
+            break;
+        }
+        len++;
+    } while (1);
+    if (len >= *(u16 *)((u8 *)info + 2)) {
+        len = *(u16 *)((u8 *)info + 2) - 1;
+    }
+    c = *s++;
+    D_00693E48[len].on = c;
+    if (c >= 6 && c <= 0x2F) {
+        D_00693E48[len].b1 = *s;
+        D_00693E48[len].b2 = 0;
+    } else {
+        D_00693E48[len].b1 = 0;
+    }
+    D_00693E48[len + 1].on = 0;
+}
 
 void func_00233890(void)
 {

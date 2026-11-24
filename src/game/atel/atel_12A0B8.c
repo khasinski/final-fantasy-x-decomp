@@ -236,7 +236,48 @@ int func_0012AAC8(Actor *a, void *op, ScriptCtx *ctx) {
     return AtelPopStackInteger(a, ctx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12A0B8", func_0012AAE8);
+extern float func_002D4278(float, float, float);
+extern float func_002D4290(float);
+
+int func_0012AAE8(Actor *a, void *op, ScriptCtx *ctx) {
+    float *pos = (float *)AtelGetPosWorkAdrs(a);
+    float f30 = AtelPopStackFloat(a, ctx);
+    float f29 = AtelPopStackFloat(a, ctx);
+    int type = a->hdr->type;
+
+    if (type == 2 || type == 5) {
+        float x0 = pos[0];
+        float y0 = pos[1];
+        float z0 = pos[2];
+        float x1 = pos[12];
+        float y1 = pos[13];
+        float z1 = pos[14];
+        float dx = x1 - x0;
+        float dy = y1 - y0;
+        float dz = z1 - z0;
+        float len = func_002D4290(func_002D4278(dx, dy, dz));
+
+        if (len > 0.0f) {
+            float s1 = f29 / len;
+            float s0 = f30 / len;
+            x0 -= s1 * dx;
+            y0 -= s1 * dy;
+            z0 -= s1 * dz;
+            x1 += s0 * dx;
+            y1 += s0 * dy;
+            z1 += s0 * dz;
+            pos[0] = x0;
+            pos[1] = y0;
+            pos[2] = z0;
+            pos[12] = x1;
+            pos[13] = y1;
+            pos[14] = z1;
+        }
+        a->flags34.w |= 0x10000;
+        return 1;
+    }
+    return 0;
+}
 
 int func_0012AC80(void) {
     return AtelGetNowCtrlTopId();

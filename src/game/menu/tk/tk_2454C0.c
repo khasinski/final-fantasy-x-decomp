@@ -1478,7 +1478,44 @@ GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y)
     return q;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248F98);
+GsAdPacket *func_00248F98(GsAdPacket *q, int x, int y, int w1, int w2)
+{
+    register int rx __asm__("$22") = x;
+    register int ry __asm__("$19") = y;
+    register int rw1 __asm__("$18") = w1;
+    register int rw2 __asm__("$20") = w2;
+    u8 *s1 = func_00247F48(0x29, D_003264A0);
+    u8 *s2;
+    u64 tex;
+    GsAdPacket *p2;
+
+    rw1 -= 0x10;
+    s2 = func_00247F48(0x2A, D_003264A0);
+    rw2 -= 0x10;
+    tex = func_001F6EA0();
+    q[0].data = 0x1000000000000001UL;
+    q[0].reg = 0xE;
+    q[1].data = 1;
+    q[1].reg = 0x14;
+    q[2].data = 0x2400000000008001UL;
+    p2 = q + 2;
+    q += 4;
+    p2[0].reg = 0x16;
+    p2[1].data = tex;
+    p2[1].reg = 0x80808080UL;
+    q = (GsAdPacket *)func_00248558(q, rx, ry, 0x29);
+    q = func_00248D50(q, rw1, s1, rx + *(u16 *)(s1 + 0xC), ry);
+    {
+        register int t1 __asm__("$3") = rx + 0x10;
+        rx = t1 + rw1;
+    }
+    q = (GsAdPacket *)func_00248558(q, rx, ry, 0x2A);
+    q = func_00248D50(q, rw2, s2, rx + *(u16 *)(s2 + 0xC), ry);
+    {
+        register int t2 __asm__("$5") = rx + 0x10;
+        return (GsAdPacket *)func_00248558(q, t2 + rw2, ry, 0x2B);
+    }
+}
 
 void func_00249108(int x0, int y0, int x1, int y1, int x2, int y2)
 {
