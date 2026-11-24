@@ -69,7 +69,129 @@ int func_002EF318(const char *s)
     return func_002EF290(D_005681A4, s);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2EF0D0", func_002EF340);
+#define QSORT_MIN(a, b) ((a) < (b) ? (a) : (b))
+#define swapcode(TYPE, parmi, parmj, n) { \
+    long i = (n) / sizeof(TYPE); \
+    register TYPE *pi = (TYPE *)(parmi); \
+    register TYPE *pj = (TYPE *)(parmj); \
+    do { \
+        register TYPE t = *pi; \
+        *pi++ = *pj; \
+        *pj++ = t; \
+    } while (--i > 0); \
+}
+#define SWAPINIT(a, es) swaptype = ((char *)a - (char *)0) % sizeof(long) || \
+    es % sizeof(long) ? 2 : es == sizeof(long) ? 0 : 1;
+
+static inline void swapfunc(char *a, char *b, int n, int swaptype)
+{
+    if (swaptype <= 1) {
+        swapcode(long, a, b, n)
+    } else {
+        swapcode(char, a, b, n)
+    }
+}
+
+#define swap(a, b) \
+    if (swaptype == 0) { \
+        long t = *(long *)(a); \
+        *(long *)(a) = *(long *)(b); \
+        *(long *)(b) = t; \
+    } else { \
+        swapfunc(a, b, es, swaptype); \
+    }
+
+#define vecswap(a, b, n) if ((n) > 0) swapfunc(a, b, n, swaptype)
+
+static inline char *med3(char *a, char *b, char *c, int (*cmp)(const void *, const void *))
+{
+    return cmp(a, b) < 0 ? (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a))
+                         : (cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c));
+}
+
+void func_002EF340(void *a, u32 n, u32 es, int (*cmp)(const void *, const void *))
+{
+    char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
+    int d, r, swaptype, swap_cnt;
+
+loop:
+    SWAPINIT(a, es);
+    swap_cnt = 0;
+    if (n < 7) {
+        for (pm = (char *)a + es; pm < (char *)a + n * es; pm += es) {
+            for (pl = pm; pl > (char *)a && cmp(pl - es, pl) > 0; pl -= es) {
+                swap(pl, pl - es);
+            }
+        }
+        return;
+    }
+    pm = (char *)a + (n / 2) * es;
+    if (n > 7) {
+        pl = a;
+        pn = (char *)a + (n - 1) * es;
+        if (n > 40) {
+            d = (n / 8) * es;
+            pl = med3(pl, pl + d, pl + 2 * d, cmp);
+            pm = med3(pm - d, pm, pm + d, cmp);
+            pn = med3(pn - 2 * d, pn - d, pn, cmp);
+        }
+        pm = med3(pl, pm, pn, cmp);
+    }
+    swap(a, pm);
+    pa = pb = (char *)a + es;
+    pc = pd = (char *)a + (n - 1) * es;
+    for (;;) {
+        while (pb <= pc && (r = cmp(pb, a)) <= 0) {
+            if (r == 0) {
+                swap_cnt = 1;
+                swap(pa, pb);
+                pa += es;
+            }
+            pb += es;
+        }
+        while (pb <= pc && (r = cmp(pc, a)) >= 0) {
+            if (r == 0) {
+                swap_cnt = 1;
+                swap(pc, pd);
+                pd -= es;
+            }
+            pc -= es;
+        }
+        if (pb > pc) {
+            break;
+        }
+        swap(pb, pc);
+        swap_cnt = 1;
+        pb += es;
+        pc -= es;
+    }
+    if (swap_cnt == 0) {
+        for (pm = (char *)a + es; pm < (char *)a + n * es; pm += es) {
+            for (pl = pm; pl > (char *)a && cmp(pl - es, pl) > 0; pl -= es) {
+                swap(pl, pl - es);
+            }
+        }
+        return;
+    }
+    pn = (char *)a + n * es;
+    r = QSORT_MIN(pa - (char *)a, pb - pa);
+    vecswap(a, pb - r, r);
+    r = QSORT_MIN(pd - pc, pn - pd - es);
+    vecswap(pb, pn - r, r);
+    if ((r = pb - pa) > es) {
+        func_002EF340(a, r / es, es, cmp);
+    }
+    if ((r = pd - pc) > es) {
+        a = pn - r;
+        n = r / es;
+        goto loop;
+    }
+}
+#undef QSORT_MIN
+#undef swapcode
+#undef SWAPINIT
+#undef swap
+#undef vecswap
 
 void func_002EFD68(u32 seed)
 {

@@ -176,19 +176,68 @@ void func_002F9710(W11Ring *q)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9750);
-
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F98E8);
-
 typedef struct TtyState {
     volatile int sid;
-    int tx_rem;
-    int rx_pos;
-    int busy;
+    volatile int tx_rem;
+    volatile int rx_pos;
+    volatile int busy;
     u8 *tx_ptr;
     u8 *rx_buf;
     W11Ring *ring;
 } TtyState;
+
+extern char D_00578B20[];
+extern char D_00578B48[];
+extern char D_00578B60[];
+extern char D_00578B78[];
+
+int func_002FA4A8(const char *fmt, ...);
+
+void func_002F9750(int type, int len, TtyState *st)
+{
+    int r;
+
+    switch (type) {
+    case 1:
+    case 2:
+        if (len != 0) {
+            if ((u32)(st->rx_pos + len) > 0x140) {
+                func_002FA4A8(D_00578B20);
+            }
+            len = func_002F9590(st->sid, (int)(st->rx_buf + st->rx_pos), (u16)len);
+            if (len < 0) {
+                func_002FA4A8(D_00578B48);
+            }
+            st->rx_pos += len;
+        } else {
+            u8 *buf = st->rx_buf;
+            for (len = 12; len < *(u16 *)buf; len++) {
+                *st->ring->wr = st->rx_buf[len];
+                func_002F96D0(st->ring);
+            }
+            st->rx_pos = 0;
+        }
+        break;
+    case 3:
+        r = func_002F95C8(st->sid, (int)st->tx_ptr, (u16)st->tx_rem);
+        if (r < 0) {
+            func_002FA4A8(D_00578B60, r);
+            st->busy = 0;
+        } else {
+            st->tx_ptr += r;
+            st->tx_rem -= r;
+        }
+        break;
+    case 4:
+        if (st->tx_rem != 0) {
+            func_002FA4A8(D_00578B78, st->tx_rem);
+        }
+        st->busy = 0;
+        break;
+    }
+}
+
+INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F98E8);
 
 extern TtyState D_00791F90;
 

@@ -1,10 +1,74 @@
 /* tu_353 0x2deef0-0x2e06d0: medium; libmc (config/tu_map.tsv) */
 #include "common.h"
 #include "ffx/r7.h"
+#define func_002DEEF0 func_002DEEF0_orig
 #include "ffx/q7.h"
+#undef func_002DEEF0
 #include "ffx/u5.h"
 
-INCLUDE_ASM("build/ee_asm/sdk/libmc/libmc", func_002DEEF0);
+extern char D_00576B60[];
+extern char D_00576B78[];
+extern char D_00576BA0[];
+int func_002F8420(int);
+void func_002FAC88(int);
+int func_002FB2F8(void *, int, int);
+
+int func_002DEEF0(void)
+{
+    SemaParam sema;
+    int ret;
+    int i;
+
+    if (D_0056638C < 0) {
+        sema.option = 0;
+        sema.initCount = 1;
+        sema.maxCount = 1;
+        D_0056638C = func_002F83E0(&sema);
+    }
+    func_002DF8F0(0, 0, 0);
+    func_002F8420(D_0056638C);
+    func_002FAC88(0);
+    while (1) {
+        if (func_002FB2F8(&D_0078C000, 0x80000400, 0) < 0) {
+            func_002EF240(D_00576B60);
+            while (1) {
+                __asm__ volatile("nop");
+                __asm__ volatile("nop");
+                __asm__ volatile("nop");
+                __asm__ volatile("nop");
+                __asm__ volatile("nop");
+            }
+        }
+        if (D_0078C000.serve != 0) {
+            break;
+        }
+        i = 0x100000;
+        do {
+            i--;
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+            __asm__ volatile("nop");
+        } while (i != 0);
+    }
+    ret = func_002FB4C8(&D_0078C000, 0xFE, 0, &D_0078C080, 0x30, D_0078D5C0, 0xC, 0, 0);
+    func_002F8400(D_0056638C);
+    if (ret < 0) {
+        D_0078C000.serve = 0;
+        return ret - 100;
+    }
+    if (D_0078D5C0[1] < 0x20A) {
+        func_002EF240(D_00576B78);
+        D_0078C000.serve = 0;
+        return -120;
+    }
+    if (D_0078D5C0[2] < 0x20E) {
+        func_002EF240(D_00576BA0);
+        D_0078C000.serve = 0;
+        return -121;
+    }
+    return D_0078D5C0[0];
+}
 
 SifClientData *func_002DF0A8(s32 **rdata, s32 **cmd)
 {

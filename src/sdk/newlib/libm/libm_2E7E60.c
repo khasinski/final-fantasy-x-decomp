@@ -23,7 +23,74 @@ int func_002E7E98(V128 *value)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E7EC0);
+#define INSERT_WORDS(d, ix0, ix1) \
+    do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
+
+extern const double D_00577B90[2];
+
+double func_002E7EC0(double x)
+{
+    int i0, j0, sx;
+    unsigned int i, i1;
+    double w, t;
+
+    EXTRACT_WORDS(i0, i1, x);
+    sx = (i0 >> 31) & 1;
+    j0 = ((i0 >> 20) & 0x7ff) - 0x3ff;
+    if (j0 < 20) {
+        if (j0 < 0) {
+            if (((i0 & 0x7fffffff) | i1) == 0) {
+                return x;
+            }
+            i1 |= (i0 & 0x0fffff);
+            i0 &= 0xfffe0000;
+            i0 |= ((i1 | -i1) >> 12) & 0x80000;
+            SET_HIGH_WORD(x, i0);
+            {
+                double two52 = D_00577B90[sx];
+                w = func_002EBBB0(two52, x);
+                t = func_002EBC08(w, two52);
+            }
+            GET_HIGH_WORD(i0, t);
+            SET_HIGH_WORD(t, (i0 & 0x7fffffff) | (sx << 31));
+            return t;
+        } else {
+            i = (0x000fffff) >> j0;
+            if (((i0 & i) | i1) == 0) {
+                return x;
+            }
+            i >>= 1;
+            if (((i0 & i) | i1) != 0) {
+                if (j0 == 19) {
+                    i1 = 0x40000000;
+                } else {
+                    i0 = (i0 & (~i)) | ((0x20000) >> j0);
+                }
+            }
+        }
+    } else if (j0 > 51) {
+        if (j0 == 0x400) {
+            return func_002EBBB0(x, x);
+        } else {
+            return x;
+        }
+    } else {
+        i = ((unsigned int)(0xffffffff)) >> (j0 - 20);
+        if ((i1 & i) == 0) {
+            return x;
+        }
+        i >>= 1;
+        if ((i1 & i) != 0) {
+            i1 = (i1 & (~i)) | ((0x40000000) >> (j0 - 20));
+        }
+    }
+    INSERT_WORDS(x, i0, i1);
+    {
+        double two52 = D_00577B90[sx];
+        w = func_002EBBB0(two52, x);
+        return func_002EBC08(w, two52);
+    }
+}
 
 extern const double D_00577BC0;
 extern const double D_00577BC8;

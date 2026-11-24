@@ -200,7 +200,59 @@ extern s32 D_00693E28;
 extern s32 D_00693E2C;
 extern s32 D_00693E3C;
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00233398);
+void func_00233398(int a)
+{
+    DrawArgs box;
+    int x;
+    int y;
+    Pt16 *p;
+
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    ((void (*)(void))func_00225920)();
+    x = D_00693F18.x;
+    y = D_00693F18.y;
+    box = *(DrawArgs *)&D_00693F18;
+    p = func_00232D30();
+    while ((u16)p->x != 0) {
+        register int tx __asm__("$19");
+        int ty;
+        int ox;
+        int oy;
+        int msg;
+        int w;
+
+        box.x = x;
+        box.y = y;
+        func_00226E90(&box);
+        {
+            /* DEBT(FAKE): register pins fix v0/v1/a1 allocation on D_00693ED0 */
+            register Pt16 *off __asm__("$2") = &D_00693ED0;
+            register int ox_r __asm__("$3");
+            register int oy_r __asm__("$5");
+            int id;
+            __asm__("" : "+r"(off));
+            ox_r = D_00693ED0.x;
+            oy_r = (s16)off->y;
+            __asm__("" : "+r"(oy_r) : : "memory");
+            id = (u16)p->x;
+            __asm__ volatile("" : "+r"(id));
+            tx = x + ox_r;
+            ty = y + oy_r;
+            msg = TOMenuGetNameMes(id);
+        }
+        w = func_00226AD0(msg);
+        func_00226350(tx, ty, msg, 0);
+        if ((u16)p->y == D_00693E28) {
+            func_00225BE8(0, tx, ty, w);
+        }
+        y += D_00693ED4;
+        p++;
+    }
+    func_00233328(a, 0, 0);
+    func_00225B00();
+}
 
 int func_00233518(void) { return 1; }
 

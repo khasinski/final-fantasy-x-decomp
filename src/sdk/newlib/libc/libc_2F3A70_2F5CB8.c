@@ -1,6 +1,8 @@
 /* tu_368 0x2f5cb8-0x2f8000: low; newlib/strtod; split at 0x2f5cb8: flag split: 0x2F5CB8-0x2F6D58 (newlib Bigint helpers) needs -fno-strict-aliasing, func_002F3A70 and func_002F48D0 do not (config/tu_map.tsv) */
 #include "common.h"
+#define func_002F74C0 func_002F74C0_r7
 #include "ffx/r7.h"
+#undef func_002F74C0
 #include "ffx/q7.h"
 #include "ffx/w11.h"
 #include "ffx/v7.h"
@@ -805,9 +807,65 @@ int func_002F7478(double x)
     return 1 - (((u32)(hx | (-hx))) >> 31);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F74C0);
+unsigned long func_002F74C0(W11Reent *rptr, const char *nptr, char **endptr, int base)
+{
+    const char *s = nptr;
+    unsigned long acc;
+    int c;
+    unsigned long cutoff;
+    int neg = 0, any, cutlim;
 
-int func_002F76E0(int a, int b, int c)
+    do {
+        c = *s++;
+    } while (D_005780C9[c] & 8);
+    if (c == '-') {
+        neg = 1;
+        c = *s++;
+    } else if (c == '+') {
+        c = *s++;
+    }
+    if ((base == 0 || base == 16) && c == '0' && (*s == 'x' || *s == 'X')) {
+        c = s[1];
+        s += 2;
+        base = 16;
+    }
+    if (base == 0) {
+        base = c == '0' ? 8 : 10;
+    }
+    cutoff = (unsigned long)0xffffffffffffffffUL / (unsigned long)base;
+    cutlim = (unsigned long)0xffffffffffffffffUL % (unsigned long)base;
+    for (acc = 0, any = 0;; c = *s++) {
+        if (D_005780C9[c] & 4) {
+            c -= '0';
+        } else if (D_005780C9[c] & 3) {
+            c -= (D_005780C9[c] & 1) ? 'A' - 10 : 'a' - 10;
+        } else {
+            break;
+        }
+        if (c >= base) {
+            break;
+        }
+        if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim)) {
+            any = -1;
+        } else {
+            any = 1;
+            acc *= base;
+            acc += c;
+        }
+    }
+    if (any < 0) {
+        acc = 0xffffffffffffffffUL;
+        rptr->_errno = 34;
+    } else if (neg) {
+        acc = -acc;
+    }
+    if (endptr != 0) {
+        *endptr = (char *)(any ? s - 1 : nptr);
+    }
+    return acc;
+}
+
+unsigned long func_002F76E0(const char *a, char **b, int c)
 {
     return func_002F74C0(D_005681A4, a, b, c);
 }

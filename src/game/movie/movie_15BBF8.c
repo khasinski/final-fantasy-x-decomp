@@ -89,7 +89,35 @@ void func_0015C328(u32 tag_addr, u32 data_addr, int size)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", setLoadImageTagsTexAnim);
+u32 *setLoadImageTagsTexAnim(u32 *tag, u32 *data, u32 x, u32 y, int w, int h, int tbw, u32 tbp)
+{
+    int qwc = (w * h) / 16;
+
+    tbw = (tbw + 0x3F) / 64;
+    tag[0] = 0x10000006;
+    tag[1] = 0;
+    tag[2] = 0;
+    tag[3] = 0;
+    tag[4] = 0;
+    tag[5] = 0;
+    tag[6] = 0;
+    tag[7] = 0x50000005;
+    func_0015BF50(tag + 8, 0xE, 1, 0, 0, 0, 1, 4);
+    func_0015BFD0((int *)(tag + 12), tbp, tbw, 0x13, 0);
+    func_0015C040((int *)(tag + 16), w, h);
+    func_0015C020((int *)(tag + 20), 0, x, y);
+    func_0015C058((int *)(tag + 24), 0);
+    data[0] = 0;
+    data[1] = 0;
+    data[2] = 0;
+    data[3] = (qwc + 1) | 0x50000000;
+    func_0015BF50(data + 4, 0, 0, 2, 0, 0, 1, qwc);
+    tag[28] = (qwc + 2) | 0x30000000;
+    tag[29] = (u32)data & 0x7FFFFFFF;
+    tag[30] = 0;
+    tag[31] = 0;
+    return tag + 32;
+}
 
 void func_0015C560(u64 *p, u32 a, u32 b, u32 c)
 {

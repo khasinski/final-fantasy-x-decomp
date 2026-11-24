@@ -549,7 +549,128 @@ typedef struct HwRegs2008250_Full {
     int wBC;
 } HwRegs2008250_Full;
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", op_et_eff);
+extern int D_00373554;
+extern char D_00574DC8[];
+extern char D_00574DF0[];
+extern char D_00574E20[];
+extern char D_00574E60[];
+extern char D_00574E98[];
+extern char D_00574ED8[];
+extern char D_00574F10[];
+extern char D_00574F48[];
+extern char D_00574F88[];
+int func_00298680(int);
+int func_00298698(int);
+int func_002986D0(int);
+
+/* DEBT(FAKE): register pin fixes s3/s4 swap between a0 and hw */
+int op_et_eff(int a0, int a1, int a2, int a3)
+{
+    register int a0_s __asm__("$19") = a0;
+    int h = a0_s;
+    HwRegs2008250 *hw = &D_2008250;
+
+    if (D_007649A0 != 0) {
+        __asm__("" : "+r"(h));
+        if (h == 0) {
+            goto type1;
+        }
+        if (func_00298680(h) >= 0) {
+            goto type0;
+        }
+        if (func_00298698(h) >= 0) {
+            goto type1;
+        }
+        if (func_002986D0(h) >= 0) {
+            goto type2;
+        }
+        if (hw->h40 & 1) {
+            h = hw->w80;
+            goto do_bit1;
+        }
+        if (hw->h40 & 2) {
+            h = *(int *)((u8 *)hw + 0x88);
+            goto do_bit2;
+        }
+        if (hw->h40 & 4) {
+            h = *(int *)((u8 *)hw + 0x90);
+            goto do_bit4;
+        }
+        func_00120108(D_00574DC8);
+        return -1;
+    }
+    {
+        register char *fmt __asm__("$4") = D_00574DF0;
+        __asm__("" : "+r"(h));
+        func_00120108(fmt, h, a2, a3);
+    }
+    opu_et_unit(h, a1, a2, a3);
+    D_00373554 = a3;
+    return 1;
+
+type0:
+    if (hw->h40 & 1) {
+        h = hw->w80;
+    do_bit1:
+        if (h == 0) {
+            return -1;
+        }
+        D_00373554 = a3;
+        if (*(int *)((u8 *)hw + 0xB0) != 0) {
+            a2 = *(int *)((u8 *)hw + 0xB0);
+        }
+        func_00120108(D_00574E20, h, a2, a3);
+    } else {
+        func_00120108(D_00574E60, h, a2, a3);
+    }
+    opu_et_unit(h, a1, a2, a3);
+    return 1;
+
+type1:
+    if (hw->h40 & 2) {
+        h = *(int *)((u8 *)hw + 0x88);
+    do_bit2:
+        if (h == 0) {
+            return -1;
+        }
+        D_00373554 = a3;
+        if ((u32)(a2 - 4) >= 4) {
+            if (*(int *)((u8 *)hw + 0xB4) != 0) {
+                a2 = *(int *)((u8 *)hw + 0xB4);
+            }
+        }
+        if (func_00296390(h) < 0) {
+            op_et_monster_init((Chr *)h, -1);
+        }
+        func_00120108(D_00574E98, h, a2, a3);
+    } else {
+        if (a0_s == 0) {
+            func_00120108(D_00574F10);
+            return -1;
+        }
+        func_00120108(D_00574ED8, a0_s, a2, a3);
+    }
+    opu_et_unit(h, a1, a2, a3);
+    return 1;
+
+type2:
+    if (hw->h40 & 4) {
+        h = *(int *)((u8 *)hw + 0x90);
+    do_bit4:
+        if (h == 0) {
+            return -1;
+        }
+        D_00373554 = a3;
+        if (*(int *)((u8 *)hw + 0xB8) != 0) {
+            a2 = *(int *)((u8 *)hw + 0xB8);
+        }
+        func_00120108(D_00574F48, h, a2, a3);
+    } else {
+        func_00120108(D_00574F88, h, a2, a3);
+    }
+    opu_et_unit(h, a1, a2, a3);
+    return 1;
+}
 
 int op_et_eff_off_signal(int id)
 {

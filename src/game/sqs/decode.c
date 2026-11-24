@@ -28,7 +28,9 @@ typedef struct {
     float f50510;
     u8 pad50514[0x14];
     s32 w50528;
-    u8 pad5052C[0x50773 - 0x5052C];
+    u8 pad5052C[0x5076C - 0x5052C];
+    s8 b5076C;
+    u8 pad5076D[6];
     s8 b50773;
 } Decode503E0;
 
@@ -62,7 +64,69 @@ void func_002545E0(Decode503E0 *a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/decode", func_00254730);
+typedef struct {
+    float f00;
+    float f04;
+    float f08;
+    float f0C;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+} MsScreen;
+
+extern MsScreen _dec_ms_screen __asm__("ms_screen");
+float func_002E8AB0(float);
+void func_002DD610(float *, float, float, float, float, float, float, float, float, float);
+
+void func_00254730(float *a0, int a1, int a2, Decode503E0 *a3)
+{
+    MsScreen *scr = &_dec_ms_screen;
+    float f20 = (float)a1;
+    /* DEBT(FAKE): register pins fix $f0..$f4 allocation in tanf argument */
+    register float pi __asm__("$f1") = 3.1415f;
+    register float d180 __asm__("$f4") = 180.0f;
+    register float f4 __asm__("$f3") = 4.0f;
+    float aspect = ((float)a2 * f4) / (f20 * 3.0f);
+    float t;
+    float d;
+    float sx;
+
+    {
+        register float fov __asm__("$f12") = a0[9];
+        register float prod __asm__("$f1") = fov * pi;
+        register float q __asm__("$f12") = prod / d180;
+        t = q * 0.5f;
+    }
+
+    t = func_002E8AB0(t);
+
+    if (a3->b5076C == 0) {
+        a3->f50510 = 1024.0f;
+    } else {
+        a3->f50510 = (f20 * 0.5f) / t;
+    }
+    d = a3->f50510;
+    sx = f20 / ((d + d) * t);
+    func_002DD610(a3->m1, d, sx, sx * aspect,
+        scr->f20, scr->f24,
+        scr->f00, scr->f04,
+        scr->f08, scr->f0C);
+    a3->v0[0] = a0[0];
+    a3->v0[1] = -a0[1];
+    a3->v0[2] = -a0[2];
+    a3->v0[3] = 1.0f;
+    a3->v1[0] = a0[3];
+    a3->v1[1] = -a0[4];
+    a3->v1[2] = -a0[5];
+    a3->v1[3] = 1.0f;
+    a3->v2[0] = a0[6] - a0[0];
+    a3->v2[1] = -(a0[7] - a0[1]);
+    a3->v2[2] = -(a0[8] - a0[2]);
+    a3->v2[3] = 1.0f;
+}
 
 int func_00254910(u8 *p, void *dst, int *out)
 {

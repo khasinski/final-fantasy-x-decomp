@@ -232,7 +232,114 @@ double func_002EBC08(double arg_a, double arg_b)
 
 /* Module: libgcc soft-float (fp-bit.c: double + single precision), newlib libm helpers */
 
-INCLUDE_ASM("build/ee_asm/sdk/libgcc/fp_bit", func_002EBC70);
+/* _fpmul_parts from libgcc fp-bit.c, inlined into __muldf3 */
+extern fractype fpmul_muldi3(fractype a, fractype b) __asm__("func_002EAC30") __attribute__((const));
+
+static inline fp_number_type *fpmul_parts(fp_number_type *a, fp_number_type *b, fp_number_type *tmp)
+{
+    fractype low = 0;
+    fractype high = 0;
+
+    if (isnan(a)) {
+        a->sign = a->sign != b->sign;
+        return a;
+    }
+    if (isnan(b)) {
+        b->sign = a->sign != b->sign;
+        return b;
+    }
+    if (isinf(a)) {
+        if (iszero(b)) {
+            return &D_00791608;
+        }
+        a->sign = a->sign != b->sign;
+        return a;
+    }
+    if (isinf(b)) {
+        if (iszero(a)) {
+            return &D_00791608;
+        }
+        b->sign = a->sign != b->sign;
+        return b;
+    }
+    if (iszero(a)) {
+        a->sign = a->sign != b->sign;
+        return a;
+    }
+    if (iszero(b)) {
+        b->sign = a->sign != b->sign;
+        return b;
+    }
+
+    {
+        fractype nl = a->fraction.ll & 0xffffffffULL;
+        fractype nh = a->fraction.ll >> 32;
+        fractype ml = b->fraction.ll & 0xffffffffULL;
+        fractype mh = b->fraction.ll >> 32;
+        fractype pp_ll = fpmul_muldi3(ml, nl);
+        fractype pp_hl = fpmul_muldi3(mh, nl);
+        fractype pp_lh = fpmul_muldi3(ml, nh);
+        fractype pp_hh = fpmul_muldi3(mh, nh);
+        fractype res2 = 0;
+        fractype res0 = 0;
+        fractype ps_hh__ = pp_hl + pp_lh;
+
+        if (ps_hh__ < pp_hl) {
+            res2 += (fractype)1 << 32;
+        }
+        pp_hl = (pp_hl + pp_lh) << 32;
+        res0 = pp_ll + pp_hl;
+        if (res0 < pp_ll) {
+            res2++;
+        }
+        res2 += ((ps_hh__ >> 32) & 0xffffffffULL) + pp_hh;
+        high = res2;
+        low = res0;
+    }
+
+    tmp->normal_exp = a->normal_exp + b->normal_exp + FRAC_NBITS - (52 + NGARDS);
+    tmp->sign = a->sign != b->sign;
+    while (high >= IMPLICIT_2) {
+        tmp->normal_exp++;
+        if (high & 1) {
+            low >>= 1;
+            low |= (fractype)1 << (FRAC_NBITS - 1);
+        }
+        high >>= 1;
+    }
+    while (high < IMPLICIT_1) {
+        tmp->normal_exp--;
+        high <<= 1;
+        if (low & ((fractype)1 << (FRAC_NBITS - 1))) {
+            high |= 1;
+        }
+        low <<= 1;
+    }
+    if ((high & GARDMASK) == GARDMSB) {
+        if (high & (1 << NGARDS)) {
+            high += GARDROUND + 1;
+        } else if (low) {
+            high += GARDROUND + 1;
+        }
+    }
+    tmp->fraction.ll = high;
+    tmp->class = CLASS_NUMBER;
+    return tmp;
+}
+
+double func_002EBC70(double arg_a, double arg_b)
+{
+    fp_number_type a;
+    fp_number_type b;
+    fp_number_type tmp;
+    FLO_union_type au, bu;
+
+    au.value = arg_a;
+    bu.value = arg_b;
+    func_002EB8D0(&au, &a);
+    func_002EB8D0(&bu, &b);
+    return func_002EB7A0(fpmul_parts(&a, &b, &tmp));
+}
 
 /* _fpdiv_parts from libgcc fp-bit.c, inlined into __divdf3 */
 static inline fp_number_type *fpdiv_parts(fp_number_type *a, fp_number_type *b)

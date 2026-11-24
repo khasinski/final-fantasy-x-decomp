@@ -2,6 +2,9 @@
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
 #define func_002B21E0 _hdr_func_002B21E0
 #define TkGetControlerHist _hdr_TkGetControlerHist
+#define func_00293740 _hdr_func_00293740
+#define op_deg_get _hdr_op_deg_get
+#define func_002D41E8 _hdr_func_002D41E8
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -13,6 +16,9 @@
 #include "ffx/q7.h"
 #undef func_002B21E0
 #undef TkGetControlerHist
+#undef func_00293740
+#undef op_deg_get
+#undef func_002D41E8
 
 extern int D_003730F8[];
 extern int D_00551BD0;
@@ -138,7 +144,127 @@ void op_loop_ffx_after(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", func_00293740);
+extern s16 D_00551C90;
+extern void *D_00764AD8;
+extern int D_003F3940;
+extern char D_005744B8[];
+extern char D_005744C8[];
+extern char D_005744D8[];
+extern char D_005744F0[];
+extern char D_00574508[];
+extern char D_00574520[];
+extern char D_00574538[];
+extern char D_00574550[];
+extern char D_00574568[];
+extern char D_00574578[];
+void func_002D41F0(int);
+int TkGetSyncH(int);
+int func_002D41E8(int);
+int func_00293CD8(u8 *p);
+void func_2068188(void);
+void func_2068988(void);
+void func_2069078(void);
+void func_206C488(void);
+void func_20694D0(void);
+int func_0020D540(void);
+int op_oef2_sound_cue_check(int);
+int func_002D0570(int);
+void TODapsSetPos(int, int);
+void TODapsString(char *);
+void func_2058398(void);
+
+void func_00293740(void)
+{
+    char buf[0x400];
+    s8 *hw = (s8 *)&D_2008250;
+
+    if ((s8)(&D_00764990)->pad0[0x10] != 0) {
+        int *q;
+        s16 sync;
+
+        func_002D41F0(3);
+        sync = TkGetSyncH(3);
+        D_00551C90 = sync;
+        func_002D41E8(3);
+        ((int (*)(int, int, int))func_206C3F8)(func_00293CD8((u8 *)D_00764AD8), 0x60000, 0x800);
+        q = (int *)&D_006F2CB0;
+        {
+            /* DEBT(FAKE): register pins fix a1/v0/s2 allocation for diff */
+            register int q2 __asm__("$5") = q[2];
+            register int q1 __asm__("$2") = q[1];
+            register int diff __asm__("$18");
+            register int sign __asm__("$5");
+            __asm__("" : "+r"(q2), "+r"(q1));
+            diff = q2 - q1;
+            sign = (u32)diff >> 31;
+            ((int (*)(int, int, int))func_206C3F8)(q[3], (diff + sign) >> 1, 0x801);
+        }
+        ((int (*)(int, int, int))func_206C3F8)(D_003F3944 - D_003F3940, 0xC0000, 0x802);
+        if (hw[1] != 0) {
+            if ((s8)(&D_00764990)->pad0[0xC] == 0) {
+                if (hw[3] != 0) {
+                    func_2068188();
+                    func_2068988();
+                }
+                func_2069078();
+                func_206C488();
+            } else {
+                if ((u8)hw[9] & 1) {
+                    func_2069078();
+                }
+                if ((u8)hw[9] & 2) {
+                    func_206C488();
+                }
+            }
+        } else {
+            if ((u8)hw[9] & 1) {
+                func_2069078();
+            }
+            if ((u8)hw[9] & 2) {
+                func_206C488();
+            }
+        }
+        if ((&D_00764990)->pad0[0x44] == 1) {
+            func_20694D0();
+        }
+    }
+    if (D_00703FF0.b[0xA] != 0 && func_0020D540() != 0) {
+        register char *p __asm__("$17");
+        int cue;
+
+        p = buf + func_002F0008(buf, D_005744B8);
+        cue = op_oef2_sound_cue_check(0xFFFF);
+        if (cue != 0) {
+            p += func_002F0008(p, D_005744C8);
+            p += func_002F0008(p, D_005744D8, D_006EA790.count);
+            p += func_002F0008(p, D_005744F0, *(s8 *)D_006EA790.pad104);
+            if (cue & 0x1000) {
+                if (cue & 1) {
+                    p += func_002F0008(p, D_00574508);
+                } else {
+                    p += func_002F0008(p, D_00574520);
+                }
+            } else if (cue & 0x2000) {
+                if (cue & 1) {
+                    p += func_002F0008(p, D_00574538);
+                } else {
+                    p += func_002F0008(p, D_00574550);
+                }
+            }
+        }
+        if (func_002D0570(0xFFFF) != 0) {
+            p += func_002F0008(p, D_00574568);
+        }
+        if (D_00703FF0.b[1] != 0) {
+            func_002F0008(p, D_00574578);
+        }
+        TODapsSetPos(0x10, 0x28);
+        TODapsString(buf);
+    }
+    if ((s8)(&D_00764990)->pad0[0x10] != 0) {
+        func_2058398();
+    }
+}
 
 #ifndef MMI_SQ_ZERO
 #define MMI_SQ_ZERO(off, p) __asm__ volatile("sq $0, " #off "(%0)" : : "r"(p) : "memory")
@@ -576,7 +702,83 @@ check_slots:
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2931B0", op_3d_vol_pan_get);
+typedef struct {
+    float f00;
+    float f04;
+    float f08;
+    float f0C;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+} Op3dSoundParam;
+
+extern Op3dSoundParam D_006EA750;
+extern float D_004F3FD0[];
+void func_002B5880(float *, float *, int);
+float op_length_get(float *, float *);
+float op_deg_get(int, float, float, float, float);
+
+int op_3d_vol_pan_get(int pos, int vol, int *out_vol)
+{
+    float v0[4];
+    float v1[4];
+    float pad[8];
+    Op3dSoundParam *s = &D_006EA750;
+    float *vp = v0;
+    float d;
+    /* DEBT(FAKE): register pin fixes $f0/$f1 swap in volume clamp */
+    register float f __asm__("$f1");
+    int v;
+    float deg;
+    float pan;
+
+    func_002B5880(v0, D_004F3FD0, pos);
+    MMI_SQ_ZERO(0x10, vp);
+    {
+        float len = op_length_get(v0, v1);
+        register float f24 __asm__("$f1") = s->f24;
+        f = len * f24 + s->f20;
+    }
+    if (f > s->f08) {
+        f = s->f08;
+    }
+    if (f < s->f0C) {
+        f = s->f0C;
+    }
+    v = (int)f;
+    v = (v * vol) / 256;
+    if (v >= 0x80) {
+        v = 0x7F;
+    }
+    *out_vol = v;
+    deg = op_deg_get(0, 0.0f, 0.0f, v0[0], v0[2]);
+    if (deg > 1024.0f && deg < 3072.0f) {
+        if (deg < 2048.0f) {
+            pan = (2048.0f - deg) * s->f2C;
+        } else {
+            pan = -((deg - 2048.0f) * s->f2C);
+        }
+    } else {
+        if (deg < 1024.0f) {
+            pan = deg * s->f2C;
+        } else {
+            pan = -((4096.0f - deg) * s->f2C);
+        }
+    }
+    pan += 64.0f;
+    if (pan < s->f1C) {
+        pan = s->f1C;
+    }
+    if (pan > s->f18) {
+        pan = s->f18;
+    }
+    return (int)pan;
+}
 
 int op_oef2_se_3d_on(PtrHolder8 *ent, int a, int b)
 {
