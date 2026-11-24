@@ -55,7 +55,169 @@ void Ch_ArcMapping(ArcHdr *arc)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_CbArcMapping);
+typedef struct {
+    s32 w00;
+    float f04;
+    float f08;
+    float f0C;
+    float f10;
+    float f14;
+    float f18;
+    float f1C;
+    float f20;
+    u8 b24;
+    u8 b25;
+    u8 b26;
+    u8 b27;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    u8 b40;
+    u8 b41;
+    u8 b42;
+    u8 b43;
+    u8 b44;
+    u8 b45;
+} CbParamData;
+
+typedef struct {
+    s32 base;
+    u32 count;
+    s32 pad08;
+    s32 pad0C;
+    void *p10;
+    s32 pad14;
+    u32 p18;
+    u32 w1C;
+    u8 pad20[0x10];
+    u32 p30;
+    u32 w34;
+    u8 pad38[0x20];
+    CbParamData *p58;
+    s32 pad5C;
+    void *p60;
+} CbArcHdr;
+
+typedef struct {
+    s32 w00;
+    void *p04;
+    u8 pad08[0xC];
+    u32 p14;
+    u32 w18;
+    float f1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    float f30;
+    float f34;
+    float f38;
+    float f3C;
+    u8 b40;
+    u8 b41;
+    u8 b42;
+    u8 b43;
+    float f44;
+    float f48;
+    float f4C;
+    float f50;
+    s32 w54;
+    float f58;
+    float f5C;
+    u8 b60;
+    u8 b61;
+    u8 b62;
+    u8 b63;
+    u8 b64;
+    u8 b65;
+    u8 pad66[0x6];
+    u32 p6C;
+    u8 pad70[0xA0];
+    u16 h110;
+    u16 pad112;
+    void *p114;
+    u8 pad118[0x8];
+    void *p120;
+} CbRecView;
+
+void Ch_CbArcMapping(Rec12C *r_in, s32 arc_in)
+{
+    CbRecView *r = (CbRecView *)r_in;
+    CbArcHdr *arc = (CbArcHdr *)arc_in;
+
+    Ch_ArcMapping((ArcHdr *)arc);
+    r->p14 = arc->p18;
+    r->p04 = arc->p10;
+    r->w18 = arc->w1C;
+    r->p6C = (u32)arc;
+    r->h110 = arc->w34;
+    r->p114 = (void *)arc->p30;
+    if (arc->count < 11) {
+        r->p120 = 0;
+    } else {
+        r->p120 = arc->p60;
+    }
+    r->f1C = 1.0f;
+    r->f20 = 1.0f;
+    r->f24 = 1.0f;
+    r->f2C = 8.0f;
+    r->f30 = 1.0f;
+    r->f34 = 1.0f;
+    r->f38 = 1.0f;
+    r->b43 = 1;
+    r->b40 = 0;
+    r->b42 = 2;
+    r->f44 = r->f48 = r->f4C = 0.0f;
+    r->f50 = 1.0f;
+    r->f58 = 1.0f;
+    r->f5C = 2.0f;
+    r->b60 = 0x80;
+    r->b61 = 0x80;
+    r->b62 = 0x80;
+    r->b63 = 0x7F;
+    r->b64 = 0;
+    r->b65 = 0;
+    if (((r->w00 & 0xF000) >> 12) == 2) {
+        r->b40 = 1;
+        r->b43 = 0;
+    }
+    r->w54 = 0;
+    r->f3C = 1000.0f;
+    if (arc->count >= 10) {
+        CbParamData *pa = arc->p58;
+
+        r->f30 = pa->f0C;
+        r->w54 = pa->w00;
+        r->f3C = 1000.0f / r->f30;
+        r->f28 = pa->f14;
+        r->f2C = pa->f08;
+        r->f1C = pa->f04;
+        r->f20 = pa->f10;
+        r->f24 = pa->f18;
+        r->f34 = pa->f1C;
+        r->f38 = pa->f20;
+        r->b40 = pa->b24;
+        r->b42 = pa->b26;
+        r->b43 = pa->b27;
+        r->f44 = pa->f28;
+        r->f48 = pa->f2C;
+        r->f4C = pa->f30;
+        r->f50 = pa->f34;
+        if (pa->w00 >= 0x1624) {
+            r->f58 = pa->f38;
+            r->f5C = pa->f3C;
+            r->b60 = pa->b40;
+            r->b61 = pa->b41;
+            r->b62 = pa->b42;
+            r->b63 = pa->b43;
+            r->b64 = pa->b44;
+            r->b65 = pa->b45;
+        }
+    }
+}
 
 typedef struct {
     s32 w0;

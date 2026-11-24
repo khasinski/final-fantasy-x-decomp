@@ -1607,7 +1607,90 @@ void func_0013FB40(Actor *a, void *op, Actor *target)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_00140038);
+float fabsf(float);
+int func_00140038(Actor *a, void *op, Actor *a2)
+{
+    register int ret __asm__("$20") = 0; /* DEBT(REG) */
+    ActorState *st = AtelGetPosWorkAdrs(a);
+    ActorState *st2 = AtelGetPosWorkAdrs(a2);
+    int hit;
+    float cy, py, cx, pz, px, cz;
+    float f1C;
+    float dist;
+    u32 flags;
+    __asm__("" : "=r"(hit) : "0"(ret));
+
+    {
+        register int stAA __asm__("$3") = a->stateAA; /* DEBT(REG) */
+        register int one __asm__("$4") = 1; /* DEBT(REG) */
+        __asm__("" : "+r"(stAA));
+        __asm__("" : "+r"(stAA));
+        __asm__("" : "+r"(one));
+        flags = a->flags34.w;
+        f1C = st->f1C;
+        px = st->x;
+        py = st->y;
+        pz = st->z;
+        cx = D_0058E3D8->cur[0];
+        cy = D_0058E3D8->cur[1];
+        cz = D_0058E3D8->cur[2];
+        if (stAA != one) {
+            return 0;
+        }
+    }
+    a->flags34.w = flags & ~0x10000;
+    if (fabsf(cy - py) < f1C) {
+        float t = func_002D4278(cx - px, 0.0f, cz - pz);
+        dist = st->f48 * st->f48;
+        if (t <= dist) {
+            hit = 1;
+        }
+    }
+    if (hit != 0) {
+        ret = func_0014B720(0xFFFF, a->id, 3);
+    }
+    a->flags34.w = (a->flags34.w & ~0x40) | (hit << 6);
+    if (a->flagsAB & 1) {
+        hit = 0;
+        if (D_0058E3D8->b1E4 == 1) {
+            float r;
+            float r2;
+            px = st->x;
+            py = st->y;
+            pz = st->z;
+            cx = D_0058E3D8->cur[0];
+            cy = D_0058E3D8->cur[1];
+            cz = D_0058E3D8->cur[2];
+            if (st->f2C < 0.0f) {
+                dist = func_002D4278(cx - px, cy - py, cz - pz);
+            } else {
+                dist = func_002D4278(cx - px, 0.0f, cz - pz);
+            }
+            r = st->f40 + D_0058E3D8->f1F0;
+            r2 = r * r;
+            if (st->f2C < 0.0f) {
+                if (dist < r2) {
+                    if ((a->flags34.w & 0x80220) == 0) {
+                        hit = 1;
+                    }
+                }
+            } else {
+                if (dist < r2 && (a->flags34.w & 0x80220) == 0 && fabsf(cy - py) < st->f2C) {
+                    hit = 1;
+                }
+            }
+            if (hit != 0) {
+                if (D_0058E3D8->h1E8 == 0xFFFF || dist < D_0058E3D8->f1EC) {
+                    if (func_002D47E8(st2->f34, st->f3C, cx, cz, px, pz)) {
+                        D_0058E3D8->f1EC = dist;
+                        D_0058E3D8->h1E8 = a->id;
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+}
 
 void func_001402F8(Actor *a, void *op)
 {
@@ -1854,5 +1937,891 @@ void func_00140A00(u8 op, void *unused, Actor *a, ScriptCtx *ctx)
     AtelPushStackInteger(a, ctx, res);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_00140B48);
-INCLUDE_RODATA("build/ee_asm/game/atel/atel_13CA80/rodata", jtbl_0056AB10);
+typedef struct {
+    u32 w00[4];
+    u16 h10[4];
+    char *p18;
+    u8 b1C;
+    s8 b1D;
+    u8 b1E;
+    u8 b1F;
+    int w20;
+    int w24;
+    float f28;
+    u16 h2C;
+    u16 h2E;
+    u16 h30;
+} ActorBindVM;
+
+typedef struct {
+    s32 flags;
+    u8 pad04[0x24];
+    void (*f28)(int id, u32 op);
+    u8 pad2C[0x2C];
+    void (*f58)(Actor *a, ActorBind *b);
+    void (*f5C)(Actor *a, ActorBind *b);
+    int (*f60)(void);
+    Ent3D8 ent[4];
+} Sys3D8VM;
+
+typedef struct {
+    ActorHdr *hdr;
+    void *blob;
+    u8 pad08[0x26];
+    u16 id;
+    u8 pad30[2];
+    u8 slotIdx;
+    u8 pad33;
+    s32 flags34;
+    u8 pad38[0x10];
+    int w48[4];
+    float f58[10];
+    u8 pad80[0x18];
+    float f98;
+    u8 pad9C[0x28];
+    ScriptCtx ctxC4;
+} ActorVM;
+
+extern int D_0030B8C8[];
+int MsBattleCheck(void);
+int func_0013CA30(Actor *a, int n);
+int func_0013B008(int id);
+void func_0013A3B8(Actor *a, int x, int y, int z);
+int func_00143FB8(Actor *a, int x, int y);
+void func_0014BA30(int arg, Actor *a, void *slot, ScriptCtx *ctx);
+int func_0014B9E0(int arg, Actor *a, void *slot);
+void func_0014B920(int arg, Actor *a, void *slot, ScriptCtx *ctx);
+int _vm_func_001406F0(u8 op, Actor *a, void *r, ScriptCtx *ctx, int running) __asm__("func_001406F0");
+int _vm_func_00140878(u8 op, Actor *a, void *r, ScriptCtx *ctx, int running) __asm__("func_00140878");
+
+int func_00140B48(Actor *a, int mode, int cbFlag)
+{
+    ActorVM *av = (ActorVM *)a;
+    ActorBindVM *bind;
+    ScriptCtx *ctx;
+    int running;
+    int advance;
+    int savedOp;
+    int flag10;
+    int ret;
+    int steps;
+    u32 op;
+    u32 arg;
+    int res;
+    int b;
+    u16 *slot;
+
+    if (!(a->flags34.w & 2)) {
+        return 0;
+    }
+    if (!(a->flags34.w & 4)) {
+        if (!(a->flags34.w & 0x400000)) {
+            if (MsBattleCheck()) {
+                return 0;
+            }
+        }
+    }
+    {
+        u8 st = ((u8 *)D_0058E3D8)[3] & 3;
+        if (st == 1 || (st == 2 && (s32)a->flags34.w >= 0)) {
+            return 0;
+        }
+    }
+
+    ctx = &av->ctxC4;
+    bind = (ActorBindVM *)func_0013C9C8(a, av->slotIdx);
+    {
+        float acc = av->f98;
+        acc += func_0013D818(a);
+        if (func_0013D818(a) >= 1.0f) {
+            acc -= 1.0f;
+            running = 1;
+        } else {
+            running = 0;
+        }
+        ret = 0;
+        av->f98 = acc;
+        if (acc >= 1.0f) {
+            ret = 1;
+        }
+    }
+    flag10 = 1;
+    savedOp = -1;
+    if (cbFlag) {
+        ((Sys3D8VM *)D_0058E3D8)->f58(a, (ActorBind *)bind);
+    }
+
+check_wait:
+    switch (bind->b1F) {
+    case 2:
+        if (func_00142748(bind->h2E, bind->h2C) != 0) {
+            goto done;
+        }
+        bind->b1F = 0;
+        goto check_wait;
+    case 1: {
+        void *node = func_0013D7A8(a, (u8 *)bind);
+        if (node == 0) {
+            goto done;
+        }
+        AtelDeleteSignal(av->id, node);
+        bind->b1F = 0;
+        break;
+    }
+    case 0:
+        break;
+    default:
+        goto done;
+    }
+
+    a->flags34.w = (a->flags34.w & ~0x1C00) | 0x400;
+    __asm__ volatile("");
+    steps = 1;
+    while (1) {
+        if (steps > 0x10000) {
+            running = 0;
+            a->flags34.w = (a->flags34.w & ~0x1C00) | 0x1400;
+            func_0013AB38(a, 6);
+        }
+        if (mode == 1) {
+            if (!running) {
+                if (func_0013D790((int *)ctx)) {
+                    flag10 = 0;
+                }
+                break;
+            }
+        } else {
+            if (!running && !func_0013D790((int *)ctx)) {
+                break;
+            }
+        }
+
+        op = func_0013CD18(a, (ActorBind *)bind);
+        advance = 1;
+        flag10 = 1;
+        steps++;
+        arg = op & 0xFFFFFF;
+        __asm__("" : "+r"(arg));
+        op >>= 24;
+
+    dispatch:
+    switch (op) {
+    case 0x40: {
+        Ent3D8 *e = ((Sys3D8VM *)D_0058E3D8)->ent;
+        int i;
+        a->flags34.w &= ~0x1C00;
+        advance = 0;
+        running = 0;
+        for (i = 0; i < 4; i++, e++) {
+            char *pc = func_0013CBF8(a, (ActorBind *)bind);
+            savedOp = e->bE;
+            if (e->w0 >= 0 && (char *)e->w8 == pc) {
+                if (e->bF != 0 || mode == 1) {
+                    int raw;
+                    int flg;
+                    e->bF = 0;
+                    advance = 1;
+                    running = 1;
+                    raw = savedOp;
+                    flg = func_0013CCA0((u8)raw);
+                    arg = func_0013CCA8(flg, (u8 *)func_0013CBF8(a, (ActorBind *)bind)) & 0xFFFFFF;
+                    op = raw & 0xFFFFFF7Fu;
+                    op = (u8)op;
+                    goto dispatch;
+                } else {
+                    e->bF = 1;
+                    ret |= 0x8000;
+                    mode = 1;
+                    break;
+                }
+            }
+        }
+        break;
+    }
+    case 0x01: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        res = x;
+        if (res != 0 || b != 0) {
+            res = 1;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x02:
+        b = AtelPopStackInteger(a, ctx);
+        if (AtelPopStackInteger(a, ctx) == 0 || b == 0) {
+            res = 0;
+        } else {
+            res = 1;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    case 0x05: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x & b);
+        break;
+    }
+    case 0x03: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x | b);
+        break;
+    }
+    case 0x04: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x ^ b);
+        break;
+    }
+    case 0x06:
+    case 0x07: {
+        res = 0;
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            res = (x == b);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            if (bf == xf) {
+                res = 1;
+            }
+        }
+        if (op == 7) {
+            res = !res;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x08:
+    case 0x0D: {
+        res = 0;
+        if (func_0013CE70(a, ctx)) {
+            u32 y = AtelPopStackInteger(a, ctx);
+            u32 x = AtelPopStackInteger(a, ctx);
+            res = (y < x);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            if (bf < xf) {
+                res = 1;
+            }
+        }
+        if (op == 0x0D) {
+            res = !res;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x09:
+    case 0x0C: {
+        res = 0;
+        if (func_0013CE70(a, ctx)) {
+            u32 y = AtelPopStackInteger(a, ctx);
+            u32 x = AtelPopStackInteger(a, ctx);
+            res = (y <= x);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            if (bf <= xf) {
+                res = 1;
+            }
+        }
+        if (op == 0x09) {
+            res = !res;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x0A:
+    case 0x0F: {
+        res = 0;
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            res = (b < x);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            if (bf < xf) {
+                res = 1;
+            }
+        }
+        if (op == 0x0F) {
+            res = !res;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x0B:
+    case 0x0E: {
+        res = 0;
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            res = (b <= x);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            if (bf <= xf) {
+                res = 1;
+            }
+        }
+        if (op == 0x0B) {
+            res = !res;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x10: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, (x >> b) & 1);
+        break;
+    }
+    case 0x11: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, ((x >> b) & 1) ^ 1);
+        break;
+    }
+    case 0x12: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x << b);
+        break;
+    }
+    case 0x13: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x >> b);
+        break;
+    }
+    case 0x14:
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            AtelPushStackInteger(a, ctx, x + b);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            func_0013CE10(a, ctx, xf + bf);
+        }
+        break;
+    case 0x15:
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            AtelPushStackInteger(a, ctx, x - b);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            func_0013CE10(a, ctx, xf - bf);
+        }
+        break;
+    case 0x16:
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            AtelPushStackInteger(a, ctx, x * b);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            func_0013CE10(a, ctx, xf * bf);
+        }
+        break;
+    case 0x17:
+        if (func_0013CE70(a, ctx)) {
+            int x;
+            b = AtelPopStackInteger(a, ctx);
+            x = AtelPopStackInteger(a, ctx);
+            AtelPushStackInteger(a, ctx, x / b);
+        } else {
+            float bf = AtelPopStackFloat(a, ctx);
+            float xf = AtelPopStackFloat(a, ctx);
+            func_0013CE10(a, ctx, xf / bf);
+        }
+        break;
+    case 0x18: {
+        int x;
+        b = AtelPopStackInteger(a, ctx);
+        x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, x % b);
+        break;
+    }
+    case 0x19:
+        res = AtelPopStackInteger(a, ctx);
+        if (res != 0) {
+            res = 0;
+        } else {
+            res = 1;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    case 0x1C: {
+        int x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, ~x);
+        break;
+    }
+    case 0x1A: {
+        float xf = AtelPopStackFloat(a, ctx);
+        func_0013CE10(a, ctx, -xf);
+        break;
+    }
+    case 0x22:
+        func_0013D688(a, ctx, arg);
+        break;
+    case 0x27:
+        func_0013D6D8(a, ctx, arg);
+        break;
+    case 0x23: {
+        u32 v = func_0013CC80(a, arg);
+        u32 kind = v >> 28;
+        func_0013CC40(a, arg);
+        AtelGetRealVarAdrs(a, v);
+        if (kind != 6) {
+            int val = AtelPopStackInteger(a, ctx);
+            int idx = AtelPopStackInteger(a, ctx);
+            func_0013D1C0(a, arg, idx, val, 0);
+        } else {
+            float f = AtelPopStackFloat(a, ctx);
+            int idx = AtelPopStackInteger(a, ctx);
+            func_0013D2E8(a, arg, idx, 0, f);
+        }
+        break;
+    }
+    case 0x24: {
+        u32 v = func_0013CC80(a, arg);
+        u32 kind = v >> 28;
+        func_0013CC40(a, arg);
+        AtelGetRealVarAdrs(a, v);
+        if (kind != 6) {
+            int val = AtelPopStackInteger(a, ctx);
+            int idx = AtelPopStackInteger(a, ctx);
+            func_0013D1C0(a, arg, idx, val, 1);
+        } else {
+            float f = AtelPopStackFloat(a, ctx);
+            int idx = AtelPopStackInteger(a, ctx);
+            func_0013D2E8(a, arg, idx, 1, f);
+        }
+        break;
+    }
+    case 0x1F:
+        func_0013D680(a, ctx, arg);
+        break;
+    case 0x20: {
+        u32 v = func_0013CC80(a, arg);
+        u32 kind = v >> 28;
+        func_0013CC40(a, arg);
+        AtelGetRealVarAdrs(a, v);
+        if (kind != 6) {
+            int val = AtelPopStackInteger(a, ctx);
+            func_0013D1C0(a, arg, 0, val, 0);
+        } else {
+            float f = AtelPopStackFloat(a, ctx);
+            func_0013D2E8(a, arg, 0, 0, f);
+        }
+        break;
+    }
+    case 0x21: {
+        u32 v = func_0013CC80(a, arg);
+        u32 kind = v >> 28;
+        func_0013CC40(a, arg);
+        AtelGetRealVarAdrs(a, v);
+        if (kind != 6) {
+            int val = AtelPopStackInteger(a, ctx);
+            func_0013D1C0(a, arg, 0, val, 1);
+        } else {
+            float f = AtelPopStackFloat(a, ctx);
+            func_0013D2E8(a, arg, 0, 1, f);
+        }
+        break;
+    }
+    case 0x26:
+        func_0013CE10(a, ctx, bind->f28);
+        break;
+    case 0x67:
+    case 0x68:
+    case 0x69:
+    case 0x6A:
+        AtelPushStackInteger(a, ctx, av->w48[op - 0x67]);
+        break;
+    case 0x6B:
+    case 0x6C:
+    case 0x6D:
+    case 0x6E:
+    case 0x6F:
+    case 0x70:
+    case 0x71:
+    case 0x72:
+    case 0x73:
+    case 0x74:
+        func_0013CE10(a, ctx, av->f58[op - 0x6B]);
+        break;
+    case 0x59:
+    case 0x5A:
+    case 0x5B:
+    case 0x5C:
+        av->w48[op - 0x59] = AtelPopStackInteger(a, ctx);
+        break;
+    case 0x5D:
+    case 0x5E:
+    case 0x5F:
+    case 0x60:
+    case 0x61:
+    case 0x62:
+    case 0x63:
+    case 0x64:
+    case 0x65:
+    case 0x66:
+        av->f58[op - 0x5D] = AtelPopStackFloat(a, ctx);
+        break;
+    case 0x75:
+        AtelPushStackInteger(a, ctx, D_0030B8C8[arg]);
+        break;
+    case 0x28:
+        AtelPushStackInteger(a, ctx, bind->w20);
+        break;
+    case 0x29:
+        AtelPushStackInteger(a, ctx, bind->w24);
+        break;
+    case 0x2A:
+        bind->w20 = AtelPopStackInteger(a, ctx);
+        break;
+    case 0x2C:
+        bind->w24 = AtelPopStackInteger(a, ctx);
+        break;
+    case 0x2B:
+        AtelPushStackInteger(a, ctx, func_0013CF40(a, ctx));
+        break;
+    case 0x2D:
+        AtelPushStackInteger(a, ctx, ((int *)((u8 *)av->blob + *(int *)((u8 *)av->hdr + 0x18)))[arg]);
+        break;
+    case 0x2E:
+        AtelPushStackInteger(a, ctx, (s16)arg);
+        break;
+    case 0x2F:
+        func_0013CE10(a, ctx, ((float *)((u8 *)av->blob + *(int *)((u8 *)av->hdr + 0x1C)))[arg]);
+        break;
+    case 0x55:
+        bind->w20 = AtelPopStackInteger(a, ctx);
+        goto do_jump;
+    case 0x56:
+        bind->w20 = AtelPopStackInteger(a, ctx);
+    case 0x31:
+        res = bind->w20;
+        if (res == 0) {
+            break;
+        }
+        goto do_jump;
+    case 0x57:
+        bind->w20 = AtelPopStackInteger(a, ctx);
+    case 0x32:
+        res = bind->w20;
+        if (res != 0) {
+            break;
+        }
+    case 0x30:
+    do_jump:
+        advance = 0;
+        func_0013CB60(a, (ActorBind *)bind, arg);
+        break;
+    case 0x33: {
+        int depth = bind->b1D;
+        if (depth >= 3) {
+            func_0013AB38(a, 4);
+        } else {
+            int off = func_0013CB48(a, (ActorBind *)bind) + 3;
+            advance = 0;
+            bind->w00[depth] = off;
+            bind->h10[depth] = arg;
+            depth++;
+            bind->b1D = depth;
+            func_0013CAD0(a, (ActorBind *)bind, func_0013CA30(AtelGetBasicWork(arg), 0));
+        }
+        break;
+    }
+    case 0x34: {
+        int depth = bind->b1D;
+        if (depth <= 0) {
+            func_0013AB38(a, 5);
+        } else {
+            depth--;
+            advance = 0;
+            func_0013CAD0(a, (ActorBind *)bind, bind->w00[depth]);
+            bind->b1D = depth;
+        }
+        break;
+    }
+    case 0x35:
+    case 0x58: {
+        register int one __asm__("$4") = 1;
+        u8 st;
+        int r;
+        __asm__("" : "+r"(one));
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x400;
+        advance = 0;
+        running = 0;
+        st = bind->b1E;
+        if (st == 0) {
+            goto ext_0;
+        }
+        if (st == one) {
+            goto ext_1;
+        }
+        break;
+    ext_0:
+        slot = &bind->h2C;
+        __asm__("" : "+r"(slot));
+        bind->b1E = one;
+        func_0014BA30(arg, a, slot, ctx);
+        goto ext_poll;
+    ext_1:
+        slot = &bind->h2C;
+    ext_poll:
+        {
+            register int r4 __asm__("$4") = func_0014B9E0(arg, a, slot);
+            __asm__("" : "+r"(r4));
+            r = r4;
+        }
+        if (r & 2) {
+            flag10 = 0;
+        }
+        if (r & 4) {
+            running = 1;
+        } else {
+            running = 0;
+        }
+        {
+            register int r1 __asm__("$2") = r & 1;
+            if (r1) {
+                func_0014B920(arg, a, slot, ctx);
+                advance = 1;
+                bind->b1E = 0;
+                if (op == 0x58) {
+                    goto case_25;
+                }
+            }
+        }
+        break;
+    }
+    case 0x25:
+    case_25:
+        bind->f28 = AtelPopStackFloat(a, ctx);
+        break;
+    case 0x39: {
+        int x = AtelPopStackInteger(a, ctx);
+        int y = AtelPopStackInteger(a, ctx);
+        int z = AtelPopStackInteger(a, ctx);
+        res = func_0013B008(y);
+        if (x != 0 && res >= 0) {
+            res = func_001425E0(av->id, res, 0, z, x);
+        } else {
+            res = 0;
+        }
+        AtelPushStackInteger(a, ctx, res);
+        break;
+    }
+    case 0x36:
+    case 0x45:
+    case 0x46:
+    case 0x47:
+    case 0x48:
+    case 0x49:
+        func_00140A00(op, bind, a, ctx);
+        break;
+    case 0x3A: {
+        int x, z, id, r;
+        x = AtelPopStackInteger(a, ctx);
+        b = AtelPopStackInteger(a, ctx);
+        z = AtelPopStackInteger(a, ctx);
+        id = func_0013B008(b);
+        if (x != 0 && id >= 0) {
+            r = func_001425E0(av->id, id, 1, z, x);
+        } else {
+            r = 0;
+        }
+        AtelPushStackInteger(a, ctx, r);
+        if (r != 0) {
+            slot = &bind->h2C;
+            slot[0] = x;
+            slot[1] = id;
+            slot[2] = z;
+            bind->b1F = 1;
+        }
+        running = 0;
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x800;
+        break;
+    }
+    case 0x37:
+    case 0x4A:
+    case 0x4B:
+    case 0x4C:
+    case 0x4D:
+    case 0x4E:
+        running = _vm_func_001406F0(op, a, bind, ctx, running);
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x800;
+        break;
+    case 0x3B: {
+        int x, z, id, r;
+        x = AtelPopStackInteger(a, ctx);
+        b = AtelPopStackInteger(a, ctx);
+        z = AtelPopStackInteger(a, ctx);
+        id = func_0013B008(b);
+        if (x != 0 && id >= 0) {
+            r = func_001425E0(av->id, id, 2, z, x);
+        } else {
+            r = 0;
+        }
+        AtelPushStackInteger(a, ctx, r);
+        if (r != 0) {
+            slot = &bind->h2C;
+            slot[0] = x;
+            slot[1] = id;
+            slot[2] = z;
+            bind->b1F = 1;
+        }
+        running = 0;
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x800;
+        break;
+    }
+    case 0x38:
+    case 0x4F:
+    case 0x50:
+    case 0x51:
+    case 0x52:
+    case 0x53:
+        running = _vm_func_00140878(op, a, bind, ctx, running);
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x800;
+        break;
+    case 0x78: {
+        int x = AtelPopStackInteger(a, ctx);
+        int y = AtelPopStackInteger(a, ctx);
+        int id = func_0013B008(y);
+        if (func_00142748(id, x) != 0 && id >= 0) {
+            bind->h2E = id;
+            bind->h2C = x;
+            running = 0;
+            a->flags34.w = (a->flags34.w & ~0x1C00) | 0x400;
+            bind->b1F = 2;
+        }
+        break;
+    }
+    case 0x77: {
+        int x = AtelPopStackInteger(a, ctx);
+        int id = AtelPopStackInteger(a, ctx);
+        if (func_00142748(id, x) != 0) {
+            bind->h2E = id;
+            bind->h2C = x;
+            running = 0;
+            a->flags34.w = (a->flags34.w & ~0x1C00) | 0x400;
+            bind->b1F = 2;
+        }
+        break;
+    }
+    case 0x79: {
+        int z = AtelPopStackInteger(a, ctx);
+        int y = AtelPopStackInteger(a, ctx);
+        int x = AtelPopStackInteger(a, ctx);
+        func_0013A3B8(a, x, y, z);
+        break;
+    }
+    case 0x7A: {
+        int y = AtelPopStackInteger(a, ctx);
+        int x = AtelPopStackInteger(a, ctx);
+        AtelPushStackInteger(a, ctx, func_00143FB8(a, x, y));
+        break;
+    }
+    case 0x54:
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0x1000;
+        running = 0;
+        advance = 0;
+        AtelExecReturn(av->id, 0, 0);
+        break;
+    case 0x3C:
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0xC00;
+        advance = 0;
+        running = 0;
+        if (((Sys3D8VM *)D_0058E3D8)->f28 != 0) {
+            ((Sys3D8VM *)D_0058E3D8)->f28(av->id, op);
+        } else {
+            AtelExecReturn(av->id, -1, 0);
+        }
+        break;
+    case 0x3D: {
+        int v;
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0xC00;
+        advance = 0;
+        running = 0;
+        v = AtelPopStackInteger(a, ctx);
+        AtelExecReturn(av->id, v, 0);
+        break;
+    }
+    case 0x3E:
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0xC00;
+        advance = 0;
+        running = 0;
+        if (((Sys3D8VM *)D_0058E3D8)->f28 != 0) {
+            ((Sys3D8VM *)D_0058E3D8)->f28(av->id, op);
+        } else {
+            AtelExecReturn(av->id, -1, 1);
+        }
+        break;
+    case 0x3F: {
+        int v;
+        a->flags34.w = (a->flags34.w & ~0x1C00) | 0xC00;
+        advance = 0;
+        running = 0;
+        v = AtelPopStackInteger(a, ctx);
+        AtelExecReturn(av->id, v, 1);
+        break;
+    }
+    case 0x00:
+    case 0x1D:
+    case 0x1E:
+    case 0x76:
+        break;
+    default:
+        func_0013AB38(a, 7);
+        advance = 0;
+        break;
+    }
+
+        if (advance) {
+            func_0013CD40(a, (ActorBind *)bind, savedOp);
+        }
+        savedOp = -1;
+        if (mode == 1) {
+            if (running) {
+                ret |= 0x4000;
+            }
+            running = 0;
+            ret &= 0xC000;
+        }
+    }
+
+done:
+    bind = (ActorBindVM *)func_0013C9C8(a, av->slotIdx);
+    if (cbFlag) {
+        ((Sys3D8VM *)D_0058E3D8)->f5C(a, (ActorBind *)bind);
+    }
+    a->flags34.w = (a->flags34.w & ~8) | ((flag10 & 1) << 3);
+    return ret;
+}
+

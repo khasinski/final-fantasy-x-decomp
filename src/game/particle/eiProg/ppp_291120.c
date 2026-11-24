@@ -243,7 +243,30 @@ INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_002928A0);
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_00292B20);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_00292E70);
+void func_00292E70(float *a0, float *a1, u32 *a2) {
+    u32 idx = a2[0];
+    if (idx != 0xFFFFFFFFU) {
+        float sp00[4];
+        u8 *mng = (u8 *)ppvMng;
+        u8 *p = *(u8 **)(*(u8 **)(mng + 0x3C) + idx * 0x10 + 4) + (a2[1] + 0xA0);
+        float *src = *(float **)(p + 0xC);
+        s16 *s = *(s16 **)(p + 0x10);
+        sp00[0] = src[0];
+        sp00[1] = src[1];
+        sp00[2] = src[2];
+        sp00[3] = 1.0f;
+        func_002DCE08((void *)a0, (void *)&D_006A3930, (void *)sp00);
+        a0[3] = *(float *)(p + 8) * *(float *)(mng + 0x60);
+        a1[0] = (float)((double)(float)s[0] * (1.0 / 16384.0));
+        a1[1] = (float)((double)(float)s[1] * (1.0 / 16384.0));
+        a1[2] = (float)((double)(float)s[2] * (1.0 / 16384.0));
+        a1[3] = (float)((double)(float)s[3] * (1.0 / 16384.0));
+    } else {
+        *(u_long128 *)a0 = 0;
+        *(u_long128 *)a1 = 0;
+        a0[3] = 1.0f;
+    }
+}
 
 /* DEBT(CAST) */
 void func_00293010(u8 *arg0, u8 *arg1, u8 *arg2) {

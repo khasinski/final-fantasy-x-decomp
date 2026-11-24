@@ -3,6 +3,7 @@
 #define op_et_bindeff2 _hdr_op_et_bindeff2
 #define op_et_weapon_afterimage _hdr_op_et_weapon_afterimage
 #define func_00295EB8 _hdr_func_00295EB8
+#define func_002967E8 _hdr_func_002967E8
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -12,6 +13,7 @@
 #include "ffx/g4.h"
 #include "ffx/v6.h"
 #include "ffx/u5.h"
+#undef func_002967E8
 #undef func_00295EB8
 #undef op_et_bindeff2
 #undef op_et_weapon_afterimage
@@ -41,7 +43,180 @@ void func_0029A1F8(void);
 void opus_free_eff_status(int key);
 void func_002EA328(int);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", func_002967E8);
+extern s8 D_007649A0;
+extern char D_005746E0[];
+extern char D_00574700[];
+extern char D_00574718[];
+extern char D_00574730[];
+extern char D_00574750[];
+extern char D_00574768[];
+extern char D_00574780[];
+extern char D_005747A0[];
+extern char D_005747C8[];
+extern char D_00574830[];
+extern char D_00574848[];
+extern char D_00574860[];
+extern char D_00574880[];
+extern char D_00574898[];
+extern char D_005748B0[];
+extern char D_005748D0[];
+extern char D_005748F0[];
+extern char D_00574910[];
+extern char D_00574928[];
+extern char D_00574940[];
+extern char D_00574958[];
+extern char D_005749B8[];
+extern char D_005749D0[];
+extern char D_005749E8[];
+extern char D_00574A08[];
+extern char D_00574A28[];
+extern char D_00574A48[];
+extern char D_00574A60[];
+
+s32 _op_printf(char *fmt) __asm__("func_00120108");
+
+typedef struct OpHw2008250 {
+    u8 pad[0xA];
+    s8 b0A;
+    u8 pad0B[0x40 - 0xB];
+    u16 h40;
+    u8 pad42[0x88 - 0x42];
+    int w88;
+} OpHw2008250;
+
+void func_002967E8(int a0, u16 *b)
+{
+    int low;
+    int mid;
+    int hi;
+    OpHw2008250 *hw = (OpHw2008250 *)&D_2008250;
+
+    if (0 && &a0) {
+    }
+    if (D_007649A0 != 0 && hw->b0A != 0) {
+        u16 v = *b;
+        mid = v & 0xE00;
+        low = v & 0x1FF;
+        hi = (s16)(v & 0xF000);
+        switch (low) {
+        case 0x5F:
+            switch (hi) {
+            case 0x1000:
+                _op_printf(D_005746E0);
+                return;
+            case 0x2000:
+                _op_printf(D_00574700);
+                return;
+            case 0x3000:
+                _op_printf(D_00574718);
+                return;
+            case 0x5000:
+                _op_printf(D_00574730);
+                return;
+            }
+        case 0x48:
+            switch (hi) {
+            case 0x3000:
+                _op_printf(D_00574750);
+                return;
+            case 0x4000:
+                _op_printf(D_00574768);
+                return;
+            case 0x5000:
+                _op_printf(D_00574780);
+                return;
+            case 0x6000:
+                _op_printf(D_005747A0);
+                return;
+            case 0x7000:
+                _op_printf(D_005747C8);
+                return;
+            }
+        case 0x72:
+            switch (hi) {
+            case 0x3000:
+                _op_printf(D_00574830);
+                return;
+            case 0x4000:
+                _op_printf(D_00574848);
+                return;
+            case 0x6000:
+                _op_printf(D_00574860);
+                return;
+            }
+        case 0x8C:
+            switch (hi) {
+            case 0x0000:
+                _op_printf(D_00574880);
+                return;
+            case 0x4000:
+                _op_printf(D_00574898);
+                return;
+            case 0x6000:
+                _op_printf(D_005748B0);
+                return;
+            }
+        case 0x8E:
+            switch (hi) {
+            case 0x0000:
+                _op_printf(D_005748D0);
+                return;
+            case 0x1000:
+                _op_printf(D_005748F0);
+                return;
+            }
+        case 0xA1:
+            switch (hi) {
+            case 0x1000:
+            case 0x2000:
+                _op_printf(D_00574910);
+                return;
+            case 0x3000:
+                _op_printf(D_00574928);
+                return;
+            case 0x4000:
+                _op_printf(D_00574940);
+                return;
+            }
+        case 0x1E:
+            if (mid == 0x200) {
+                _op_printf(D_00574958);
+                return;
+            }
+        case 0x22:
+        case 0x97:
+            _op_printf(D_005749B8);
+            return;
+        case 0x35:
+            _op_printf(D_005749D0);
+            return;
+        case 0x4F:
+            switch (hi) {
+            case 0x0000:
+                _op_printf(D_005749E8);
+                return;
+            case 0x1000:
+                _op_printf(D_00574A08);
+                return;
+            }
+        case 0xDC:
+            switch (hi) {
+            case 0x1000:
+                _op_printf(D_00574A28);
+                return;
+            }
+        case 0x41:
+            switch (hi) {
+            case 0x1000:
+                _op_printf(D_00574A48);
+                return;
+            case 0x2000:
+                _op_printf(D_00574A60);
+                return;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_init);
 

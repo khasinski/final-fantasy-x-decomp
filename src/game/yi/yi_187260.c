@@ -192,7 +192,7 @@ void func_00187AB0(R2ResTbl *t) {
 
 typedef struct {
     u8 pad0[8];
-    u16 h8;
+    u32 h8;
 } YiAnimHdr;
 
 typedef struct {
@@ -230,7 +230,125 @@ typedef struct {
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", yiKeyFrame_attachDObj);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00187D40);
+typedef struct {
+    float f[16];
+} YiMat64;
+
+typedef struct {
+    u8 pad00[0x10];
+    YiMat64 m10;
+    float v50[4];
+    float v60[4];
+    u8 pad70[0x16];
+    u16 h86;
+    u8 pad88[0x10];
+    float f98;
+    float f9C;
+    u8 padA0[0x20];
+} YiDObj188450;
+
+typedef struct {
+    u8 pad00[4];
+    s32 w04;
+    u8 pad08[0x14];
+} YiGrpSub188450;
+
+typedef struct {
+    u32 flags;
+    s32 cur;
+    u8 pad08[0x1C];
+    YiGrpSub188450 sub[64];
+} YiGrp188450;
+
+typedef struct {
+    u16 h00;
+    u16 h02;
+    u32 w04;
+    u8 pad08[8];
+    float f10[4];
+    float f20[4];
+    float f30[4];
+    float f40[4];
+} YiAnimInterpKey;
+
+typedef struct {
+    u16 h0;
+    u16 h2;
+    u16 h4;
+    u16 h6;
+    u16 h8;
+    u16 hA;
+    u32 w0C;
+    u32 w10;
+    u32 w14;
+    u32 w18;
+    u8 pad1C[8];
+    YiAnimInterpKey *p24;
+} YiAnimEntFull;
+
+typedef struct {
+    u8 pad0[0x687B8];
+    u32 w687B8;
+    u8 pad687BC[4];
+    YiDObj188450 dobj[0x40];
+    u8 pad6B7C0[0x9F200 - 0x6B7C0];
+    u32 cnt;
+    YiAnimEntFull ent[0x40];
+    s32 w9FC04;
+    YiAnimHdr *p9FC08[0x40];
+    YiAnimKey *p9FD08[0x40];
+    u32 n9FE08[0x40];
+    u32 a9FF08[0x40];
+    u32 aA0008[0x40];
+    u32 wA0108;
+    YiGrp188450 grp[0x40];
+    u8 padBC90C[0xBCB20 - (0xA010C + 0x40 * 0x720)];
+    u32 wBCB20;
+    u32 wBCB24;
+} YiAnimSysFull;
+
+u32 yiGetFCount(void);
+u32 yiGetVCount(void);
+
+int func_00187D40(void *arg0, int grpIdx, int animIdx, int loop)
+{
+    YiAnimSysFull *s = (YiAnimSysFull *)arg0;
+    u32 t;
+    int i;
+
+    if (_m2c_yiAnimInfo_init_D_0065FD18 == 0) {
+        t = yiGetFCount();
+    } else {
+        t = yiGetVCount();
+    }
+    if (s->p9FC08[animIdx] == 0) {
+        BREAK();
+        return 0;
+    }
+    if ((u32)grpIdx >= s->wA0108) {
+        BREAK();
+        return 0;
+    }
+    for (i = 0; i < 0x40; i++) {
+        if ((s->ent[i].h0 & 1) == 0) {
+            s->ent[i].h0 = 1;
+            s->ent[i].h2 = loop;
+            s->ent[i].h4 = s->p9FC08[animIdx]->h8;
+            s->ent[i].w14 = t;
+            s->ent[i].w18 = t;
+            s->ent[i].p24 = (YiAnimInterpKey *)s->p9FC08[animIdx];
+            s->cnt++;
+            s->ent[i].h6 = grpIdx;
+            s->ent[i].h8 = animIdx;
+            s->ent[i].hA = 0;
+            break;
+        }
+    }
+    if (i >= 0x40) {
+        BREAK();
+        return 0;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_187260", func_00187EA0);
 

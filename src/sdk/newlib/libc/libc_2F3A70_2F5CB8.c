@@ -945,7 +945,82 @@ int func_002F7808(int c, W11File *fp)
     return c;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7990);
+#define V7_PREV_INUSE 0x1
+#define V7_SIZE_BITS (0x1 | 0x2)
+#define V7_CHUNKSIZE(p) ((p)->size & ~V7_SIZE_BITS)
+#define V7_CHUNK_AT_OFFSET(p, s) ((V7MChunk *)(((char *)(p)) + (s)))
+#define V7_INUSE_BIT_AT_OFFSET(p, s) (((V7MChunk *)(((char *)(p)) + (s)))->size & V7_PREV_INUSE)
+#define V7_SET_INUSE_BIT_AT_OFFSET(p, s) (((V7MChunk *)(((char *)(p)) + (s)))->size |= V7_PREV_INUSE)
+#define V7_SET_HEAD(p, s) ((p)->size = (s))
+#define V7_SET_HEAD_SIZE(p, s) ((p)->size = (((p)->size & V7_PREV_INUSE) | (s)))
+#define V7_MEM2CHUNK(mem) ((V7MChunk *)((char *)(mem) - 2 * sizeof(u32)))
+#define V7_CHUNK2MEM(p) ((void *)((char *)(p) + 2 * sizeof(u32)))
+#define V7_REQUEST2SIZE(req) (((u32)((req) + (sizeof(u32) + 7)) < (16 + 7)) ? 16 : ((req) + (sizeof(u32) + 7)) & ~7)
+#define V7_MALLOC_ZERO(charp, nbytes) \
+    do { \
+        u32 mzsz = (nbytes); \
+        if (mzsz <= 9 * sizeof(mzsz)) { \
+            u32 *mz = (u32 *)(charp); \
+            if (mzsz >= 5 * sizeof(mzsz)) { \
+                *mz++ = 0; \
+                *mz++ = 0; \
+                if (mzsz >= 7 * sizeof(mzsz)) { \
+                    *mz++ = 0; \
+                    *mz++ = 0; \
+                    if (mzsz >= 9 * sizeof(mzsz)) { \
+                        *mz++ = 0; \
+                        *mz++ = 0; \
+                    } \
+                } \
+            } \
+            *mz++ = 0; \
+            *mz++ = 0; \
+            *mz = 0; \
+        } else { \
+            func_002EF0D0((charp), 0, mzsz); \
+        } \
+    } while (0)
+#define V7_MALLOC_COPY(dest, src, nbytes) \
+    do { \
+        u32 mcsz = (nbytes); \
+        if (mcsz <= 9 * sizeof(mcsz)) { \
+            u32 *mcsrc = (u32 *)(src); \
+            u32 *mcdst = (u32 *)(dest); \
+            if (mcsz >= 5 * sizeof(mcsz)) { \
+                *mcdst++ = *mcsrc++; \
+                *mcdst++ = *mcsrc++; \
+                if (mcsz >= 7 * sizeof(mcsz)) { \
+                    *mcdst++ = *mcsrc++; \
+                    *mcdst++ = *mcsrc++; \
+                    if (mcsz >= 9 * sizeof(mcsz)) { \
+                        *mcdst++ = *mcsrc++; \
+                        *mcdst++ = *mcsrc++; \
+                    } \
+                } \
+            } \
+            *mcdst++ = *mcsrc++; \
+            *mcdst++ = *mcsrc++; \
+            *mcdst = *mcsrc; \
+        } else { \
+            func_002EEF1C((dest), (src), mcsz); \
+        } \
+    } while (0)
+
+void *func_002F7990(W11Reent *reent_ptr, int n, int elem_size)
+{
+    V7MChunk *p;
+    u32 csz;
+    u32 sz = (u32)n * (u32)elem_size;
+    void *mem = func_002EE630(reent_ptr, sz);
+
+    if (mem == 0) {
+        return 0;
+    }
+    p = V7_MEM2CHUNK(mem);
+    csz = V7_CHUNKSIZE(p);
+    V7_MALLOC_ZERO(mem, csz - sizeof(u32));
+    return mem;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70_2F5CB8", func_002F7A50);
 

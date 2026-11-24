@@ -4,6 +4,15 @@
 #define func_0010BE38 _hdr_func_0010BE38
 #define func_0010BFA0 _hdr_func_0010BFA0
 #define Sg_GsloadSetBase _hdr_Sg_GsloadSetBase
+#define func_0010EA60 _hdr_func_0010EA60
+#define func_0010EA70 _hdr_func_0010EA70
+#define func_0010EA80 _hdr_func_0010EA80
+#define func_0010EA90 _hdr_func_0010EA90
+#define func_0010EAA0 _hdr_func_0010EAA0
+#define func_0010EAC0 _hdr_func_0010EAC0
+#define func_0010EAD0 _hdr_func_0010EAD0
+#define func_0010EAE0 _hdr_func_0010EAE0
+#define func_0010EB10 _hdr_func_0010EB10
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -14,6 +23,15 @@
 #undef func_0010BE38
 #undef func_0010BFA0
 #undef Sg_GsloadSetBase
+#undef func_0010EA60
+#undef func_0010EA70
+#undef func_0010EA80
+#undef func_0010EA90
+#undef func_0010EAA0
+#undef func_0010EAC0
+#undef func_0010EAD0
+#undef func_0010EAE0
+#undef func_0010EB10
 
 s32 Sg_GsloadSetBase(V0TexUpload *t);
 
@@ -70,7 +88,118 @@ void func_0010AF88(Chr *chr, float v)
     chr->f188 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010AF90);
+extern float D_0057EA50[];
+extern float D_0057EA88[];
+extern void *D_0057EA0C;
+void func_002DD900(void *out, void *m, void *v, s32 w);
+
+typedef union {
+    struct {
+        u64 q0;
+        u64 q8;
+    } q;
+    struct {
+        u32 w0, w4, w8, wC;
+    } w;
+    struct {
+        u8 r, g, b, a;
+        u32 pad4;
+        u64 q8;
+    } rgba;
+} ShadowPkt;
+
+typedef struct {
+    float x, y, z, w;
+} ShadowVec4;
+
+typedef struct {
+    u64 q0;
+    u64 q8;
+} ShadowTagA;
+
+ShadowPkt *func_0010AF90(void *mat, ShadowPkt *pkt, float r, float alpha, float y)
+{
+    float center[4];
+    u8 pad10[0xA0];
+    ShadowVec4 ring[13];
+    u8 pad180[0x30];
+    ShadowPkt *orig = pkt;
+    ShadowVec4 *vp;
+    s32 i;
+    s32 clipped;
+
+    vp = ring;
+    for (i = 0; i < 13; i++, vp++) {
+        vp->x = D_0057EA50[i] * r;
+        vp->y = y;
+        vp->z = D_0057EA88[i] * r;
+        vp->w = 1.0f;
+    }
+    ((volatile u64 *)pkt)[0] = 0;
+    *(void *volatile *)&D_0057EA0C = pkt;
+    ((volatile u64 *)pkt)[1] = 0x4444444444444E4EULL;
+    ((volatile u64 *)pkt)[0] = 0x0126C00000008001ULL;
+    pkt++;
+    pkt->w.w8 = 0;
+    pkt->rgba.b = 0;
+    pkt->rgba.g = 0;
+    pkt->rgba.r = 0;
+    pkt->rgba.a = (s32)(alpha * 104.0f);
+    pkt->q.q8 = 1;
+    pkt++;
+    center[0] = 0.0f;
+    center[1] = y;
+    center[2] = 0.0f;
+    center[3] = 1.0f;
+    func_002DD900(pkt, mat, center, 0);
+    if ((s32)pkt->w.w0 < 0x6E70) {
+        return orig;
+    }
+    if ((s32)pkt->w.w0 > 0x9190) {
+        return orig;
+    }
+    if ((s32)pkt->w.w4 < 0x71C0) {
+        return orig;
+    }
+    if ((s32)pkt->w.w4 > 0x8E40) {
+        return orig;
+    }
+    if (pkt->w.w8 > 0x7FFFFFFU) {
+        return orig;
+    }
+    pkt++;
+    pkt->w.w8 = 0;
+    pkt->q.q8 = 1;
+    pkt->rgba.b = 0;
+    pkt->rgba.g = 0;
+    pkt->rgba.r = 0;
+    pkt->rgba.a = 0;
+    pkt++;
+    clipped = 0;
+    for (i = 0; i < 13; i++) {
+        func_002DD900(pkt, mat, &ring[i], 0);
+        pkt->w.wC = 0;
+        if ((s32)pkt->w.w0 < 0x6E70) {
+            pkt->w.w0 = 0x6E70;
+        } else if ((s32)pkt->w.w0 > 0x9190) {
+            pkt->w.w0 = 0x9190;
+        }
+        if ((s32)pkt->w.w4 < 0x71C0) {
+            pkt->w.w4 = 0x71C0;
+        } else if ((s32)pkt->w.w4 > 0x8E40) {
+            pkt->w.w4 = 0x8E40;
+        }
+        if (pkt->w.w8 > 0x7FFFFFFU) {
+            clipped = 1;
+            pkt->w.wC |= 0x8000;
+        } else if (clipped != 0) {
+            clipped = 0;
+            pkt->w.wC |= 0x8000;
+        }
+        pkt++;
+    }
+    return pkt;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B230);
 
@@ -361,18 +490,18 @@ s32 func_0010BA08(s32 a, s32 b, s32 c, s32 d)
     return 0;
 }
 
+typedef struct {
+    u8 pad[0x7FEC];
+    u32 vif1;
+    u32 gif;
+} TexDataHdr;
+
 INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010BA90);
 
 s8 func_0010BE28(void)
 {
     return D_0057EAE9;
 }
-
-typedef struct {
-    u8 pad[0x7FEC];
-    u32 vif1;
-    u32 gif;
-} TexDataHdr;
 
 typedef union {
     struct {

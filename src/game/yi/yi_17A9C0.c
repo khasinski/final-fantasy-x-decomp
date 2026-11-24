@@ -752,8 +752,191 @@ int func_0017CD60(void *arg0) {
     func_002EF0D0(arg0, 0, 0x40);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CD70);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C5F0);
+void func_002DADD0(void *ctx, void *buf);
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 psm;
+    u32 w;
+    u32 h;
+    u32 pad18[4];
+} YiTexEnt28;
+
+typedef struct {
+    u8 pad00[0x10];
+    struct {
+        u8 pad00[0x60];
+        u32 d[64][4];
+    } blk[0x48];
+    u8 pad13B10[0x67F38 - 0x13B10];
+    u32 mode67F38;
+    u8 pad67F3C[0x9E7D8 - 0x67F3C];
+    u32 texCnt;
+    u32 pad9E7DC;
+    YiTexEnt28 tex[128];
+} YiSaveTexCtx;
+
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 pad08[6];
+    u32 sub[8];
+} YiChunk40;
+
+int func_0017CD70(YiSaveTexCtx *ctx, const char *filename)
+{
+    u32 hdr[16];
+    u32 chunk[16];
+    R2Cpy38 cpy38;
+    u8 gs_ctx[0x70];
+    int fd;
+    u32 i;
+    int size;
+    u8 *buf;
+
+    fd = func_002FC4E0(filename, 0x602);
+    func_0017CD50(hdr);
+    hdr[0] = 0x214365;
+    hdr[1] = 0x110;
+    hdr[2] = 0;
+    hdr[3] = 0;
+    func_002FCD90(fd, hdr, 0x40);
+
+    for (i = 0; i < ctx->texCnt; i++) {
+#define TEX(idx) (((YiSaveTexCtx *)((u8 *)ctx + (idx) * 0x28))->tex[0])
+        size = TEX(i).w * TEX(i).h;
+
+        switch (TEX(i).psm) {
+        case 0x14:
+        case 0x24:
+        case 0x2C:
+            size /= 2;
+            break;
+        case 2:
+            size <<= 1;
+            break;
+        case 0:
+        case 1:
+            size <<= 2;
+            break;
+        }
+
+        switch (TEX(i).psm) {
+        case 0x14:
+            buf = (u8 *)func_0017DBA0(size << 1);
+            _m2c_func_0017CCF8_func_002DAB10(gs_ctx, (s16)TEX(i).w04, (s16)(TEX(i).w08 >> 1), 0, 0, 0, (s16)(TEX(i).w >> 1), (s16)(TEX(i).h >> 2));
+            _m2c_func_0017B390_func_002F8660(0);
+            func_002DADD0(gs_ctx, buf);
+            _m2c_func_0017B390_func_002DA610(0, 0);
+            _m2c_func_0017B390_func_002F8660(0);
+            break;
+        case 0x2C: {
+            int j;
+            buf = (u8 *)func_0017DBA0(size << 3);
+            _m2c_func_0017CCF8_func_002DAB10(gs_ctx, (s16)TEX(i).w04, (s16)TEX(i).w08, 0, 0, 0, (s16)TEX(i).w, (s16)TEX(i).h);
+            _m2c_func_0017B390_func_002F8660(0);
+            func_002DADD0(gs_ctx, buf);
+            _m2c_func_0017B390_func_002DA610(0, 0);
+            _m2c_func_0017B390_func_002F8660(0);
+            for (j = 0; j < size; j++) {
+                buf[j] = (buf[j * 8 + 3] >> 4) | (buf[j * 8 + 7] & 0xF0);
+            }
+            _m2c_func_0017B390_func_002F8660(0);
+            break;
+        }
+        case 0x24: {
+            int j;
+            buf = (u8 *)func_0017DBA0(size << 3);
+            _m2c_func_0017CCF8_func_002DAB10(gs_ctx, (s16)TEX(i).w04, (s16)TEX(i).w08, 0, 0, 0, (s16)TEX(i).w, (s16)TEX(i).h);
+            _m2c_func_0017B390_func_002F8660(0);
+            func_002DADD0(gs_ctx, buf);
+            _m2c_func_0017B390_func_002DA610(0, 0);
+            _m2c_func_0017B390_func_002F8660(0);
+            for (j = 0; j < size; j++) {
+                buf[j] = (buf[j * 8 + 3] & 0xF) | (buf[j * 8 + 7] << 4);
+            }
+            _m2c_func_0017B390_func_002F8660(0);
+            break;
+        }
+        case 0x1B:
+        default:
+            buf = (u8 *)func_0017DBA0(size);
+            _m2c_func_0017CCF8_func_002DAB10(gs_ctx, (s16)TEX(i).w04, (s16)TEX(i).w08, (s16)TEX(i).psm, 0, 0, (s16)TEX(i).w, (s16)TEX(i).h);
+            _m2c_func_0017B390_func_002F8660(0);
+            func_002DADD0(gs_ctx, buf);
+            _m2c_func_0017B390_func_002DA610(0, 0);
+            _m2c_func_0017B390_func_002F8660(0);
+            break;
+        }
+
+        func_0017CD60(chunk);
+        chunk[0] = 2;
+        chunk[1] = size + 0x40;
+        func_0017B178(&cpy38, (R2Cpy20 *)&ctx->tex[i]);
+        func_002FCD90(fd, chunk, 0x40);
+        func_002FCD90(fd, &cpy38, 0x40);
+        func_002FCD90(fd, buf, size);
+        if (buf != 0) {
+            func_0017DC70(buf);
+        }
+        hdr[2] += size + 0x80;
+        hdr[3]++;
+#undef TEX
+    }
+
+    size = 0x12000;
+    buf = (u8 *)func_0017DBA0(size);
+    switch (ctx->mode67F38) {
+    case 0:
+        _m2c_func_0017CCF8_func_002DAB10(gs_ctx, 0x2D80, 4, 0, 0, 0, 0x100, 0x48);
+        _m2c_func_0017B390_func_002F8660(0);
+        func_002DADD0(gs_ctx, buf);
+        break;
+    case 1:
+        _m2c_func_0017CCF8_func_002DAB10(gs_ctx, 0x2D80, 1, 0, 0, 0, 0x40, 0x120);
+        _m2c_func_0017B390_func_002F8660(0);
+        func_002DADD0(gs_ctx, buf);
+        break;
+    case 2:
+    case 3:
+    case 4: {
+        int j;
+        register int k __asm__("$7");
+        u32 *dst = (u32 *)buf;
+        for (j = 0; j < 0x48; j++) {
+            u32 *src = (u32 *)(ctx->blk[j].d);
+            for (k = 63; k >= 0; k--) {
+                dst[0] = src[0];
+                dst[1] = src[1];
+                dst[2] = src[2];
+                { u32 _c = src[3]; __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); __asm__("" : "+r"(_c)); dst[3] = _c; }
+                src += 4;
+                dst += 4;
+            }
+        }
+        break;
+    }
+    }
+    _m2c_func_0017B390_func_002F8660(0);
+    func_0017CD60(chunk);
+    chunk[0] = 3;
+    chunk[1] = size;
+    {
+        u32 *sub = &chunk[8];
+        sub[1] = ctx->mode67F38;
+    }
+    func_002FCD90(fd, chunk, 0x40);
+    func_002FCD90(fd, buf, 0x12000);
+    hdr[2] += size + 0x40;
+    hdr[3]++;
+    func_0017DC70(buf);
+    func_002FC8E8(fd, 0, 0);
+    func_002FCD90(fd, hdr, 0x40);
+    func_002FC768(fd);
+    return 0;
+}
 
 typedef struct YiSub1C {
     u32 w00;

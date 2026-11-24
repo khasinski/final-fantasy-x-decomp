@@ -272,7 +272,105 @@ typedef struct ChrColView {
     s32 w830;
 } ChrColView;
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00121428);
+extern s32 D_00580B88;
+extern s16 *D_00580B8C;
+extern s16 *D_00580B90;
+extern float D_00580B94;
+
+s32 func_00121428(Chr *chr, float *pos, s32 idx)
+{
+    s16 *v[3];
+    float nrm[4];
+    ChrColView *cv = (ChrColView *)chr;
+    s16 *poly;
+    u8 *verts;
+    s32 next_idx;
+    s16 *e0;
+    s16 *e1;
+    s32 hit;
+
+    if (idx == -1) {
+        return 1;
+    }
+    poly = &D_00308900[idx * 8];
+    verts = D_00580B2C;
+    next_idx = 0;
+    e0 = 0;
+    e1 = 0;
+    v[0] = (s16 *)(verts + poly[0] * 8);
+    v[1] = (s16 *)(verts + poly[1] * 8);
+    v[2] = (s16 *)(verts + poly[2] * 8);
+    hit = 0;
+    if ((float)(v[0][2] - v[1][2]) * pos[0] + (float)(v[1][0] - v[0][0]) * pos[2] + (float)(v[0][0] * v[1][2]) - (float)(v[1][0] * v[0][2]) > 0.0f) {
+        next_idx = poly[3];
+        e0 = v[0];
+        e1 = v[1];
+        hit = 1;
+    }
+    if ((float)(v[1][2] - v[2][2]) * pos[0] + (float)(v[2][0] - v[1][0]) * pos[2] + (float)(v[1][0] * v[2][2]) - (float)(v[2][0] * v[1][2]) > 0.0f) {
+        if (hit != 0) {
+            if ((cv->f48 - pos[2]) * (float)v[1][0] + (pos[0] - cv->f40) * (float)v[1][2] + cv->f40 * pos[2] - pos[0] * cv->f48 < 0.0f) {
+                goto check_next;
+            }
+        }
+        next_idx = poly[4];
+        e0 = v[1];
+        e1 = v[2];
+        hit = 2;
+    }
+    if ((float)(v[2][2] - v[0][2]) * pos[0] + (float)(v[0][0] - v[2][0]) * pos[2] + (float)(v[2][0] * v[0][2]) - (float)(v[0][0] * v[2][2]) > 0.0f) {
+        switch (hit) {
+        case 1:
+            if ((cv->f48 - pos[2]) * (float)v[0][0] + (pos[0] - cv->f40) * (float)v[0][2] + cv->f40 * pos[2] - pos[0] * cv->f48 > 0.0f) {
+                goto check_next;
+            }
+        case 2:
+            if ((cv->f48 - pos[2]) * (float)v[2][0] + (pos[0] - cv->f40) * (float)v[2][2] + cv->f40 * pos[2] - pos[0] * cv->f48 < 0.0f) {
+                goto check_next;
+            }
+            break;
+        }
+        e0 = v[2];
+        e1 = v[0];
+        next_idx = poly[5];
+    } else if (hit == 0) {
+        cv->f90 = (float)v[0][0];
+        cv->f94 = (float)v[0][1];
+        cv->f98 = (float)v[0][2];
+        cv->fA0 = (float)v[1][0];
+        cv->fA4 = (float)v[1][1];
+        cv->fA8 = (float)v[1][2];
+        cv->fB0 = (float)v[2][0];
+        cv->fB4 = (float)v[2][1];
+        cv->fB8 = (float)v[2][2];
+        cv->h82E = idx;
+        return 0;
+    }
+check_next:
+    if (next_idx != -1 && func_00121328(chr, next_idx) != 0) {
+        D_00580B8C = e0;
+        D_00580B90 = e1;
+        return 1;
+    }
+    if (D_00580B88 >= 11) {
+        D_00580B8C = e0;
+        D_00580B90 = e1;
+        return 1;
+    }
+    if (next_idx == -1) {
+        D_00580B8C = e0;
+        D_00580B90 = e1;
+        return 1;
+    }
+    func_00120EB8((int)nrm, next_idx);
+    if (nrm[1] != 0.0f && func_00120F28(pos, next_idx) < cv->f44 - D_00580B94) {
+        D_00580B8C = e0;
+        D_00580B90 = e1;
+        return 1;
+    }
+    D_00580B88++;
+    return func_00121428(chr, pos, next_idx);
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_001218B0);
 

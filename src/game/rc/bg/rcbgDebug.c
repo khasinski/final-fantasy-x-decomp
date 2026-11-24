@@ -257,11 +257,100 @@ void func_00191388(void)
     func_001927F8();
 }
 
+extern u8 D_003135C0[][0x10];
+void func_00192618(u32);
+void func_001925D8(void *, void *);
+void func_002DCE08(void *, void *, void *);
+void func_002DCFD8(void *, void *, float);
+void func_0018FE80(void *, void *, float, float, float, float);
+void func_00190120(void *, void *, float, float, float, float);
+void func_00190230(void *, void *, int, void *, void *);
+void func_00191A70(s32 a0, s32 a1);
+
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001914C0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001916D0);
+void func_001916D0(R2Pkt *pkt, void *item)
+{
+    float sp00[16];
+    float sp40[16];
+    u8 *s3 = (u8 *)R2_DBGWORK_FULL;
+    int s5, s4;
+    u8 *s6;
+    int i;
+    int col;
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191920);
+    if (*(s32 *)(s3 + 0x8C0) != 0) {
+        s4 = *(s32 *)(s3 + 0x8C8);
+        s5 = s4;
+    } else {
+        int n = *(s32 *)(s3 + 0x8BC);
+        int last = n - 1;
+        s5 = *(s32 *)(s3 + 0x8C4);
+        s4 = s5 + 9;
+        if (s4 >= n) {
+            s4 = last;
+        }
+    }
+    s6 = *(u8 **)(s3 + 0x8CC);
+    for (i = 0; i < *(s32 *)(s3 + 0x8BC); i++) {
+        float *v;
+        func_001072F8(item, i, sp40);
+        func_00192618((u32)sp40);
+        func_001925D8(sp00, sp40);
+        v = (float *)((u32)(i << 4) + (u32)s6);
+        VU0_SQC2(0, 0, v);
+        func_002DCE08(v, sp00, v);
+        func_002DCFD8(v, v, v[3]);
+    }
+    for (i = 0; i < *(s32 *)(s3 + 0x8BC); i++) {
+        int par = Ch_ElemGetParent(item, i);
+        if (par != -1) {
+            if ((i >= s5 && i <= s4) || (par >= s5 && par <= s4)) {
+                col = 5;
+            } else {
+                col = 6;
+            }
+            func_00190120(pkt, D_003135C0[col], ((float (*)[4])s6)[i][0], ((float (*)[4])s6)[i][1], ((float (*)[4])s6)[par][0], ((float (*)[4])s6)[par][1]);
+        }
+    }
+    for (i = 0; i < *(s32 *)(s3 + 0x8BC); i++) {
+        if (i >= s5 && i <= s4) {
+            col = 1;
+        } else {
+            col = 6;
+        }
+        func_0018FE80(pkt, D_003135C0[col], ((float (*)[4])s6)[i][0], ((float (*)[4])s6)[i][1], 4.0f, 14.0f / 3.0f);
+    }
+    if (*(s32 *)(s3 + 0x8C0) != 0) {
+        func_001072F8(item, *(s32 *)(s3 + 0x8C8), sp40);
+        func_00192618((u32)sp40);
+        func_00191A70((s32)pkt, (s32)sp40);
+    }
+}
+
+void func_00191920(R2Pkt *a0, void *a1)
+{
+    float sp00[16];
+    float sp40[16];
+    float sp80[4];
+    u8 *s3 = (u8 *)R2_DBGWORK_FULL;
+    int i;
+
+    for (i = 0; i < *(s32 *)(s3 + 0x8D0); i++) {
+        int col;
+        func_001089E0(a1, i, 0, sp40);
+        func_00192618((u32)sp40);
+        func_001925D8(sp00, sp40);
+        VU0_SQC2(0, 0, sp80);
+        func_002DCE08(sp80, sp00, sp80);
+        func_002DCFD8(sp80, sp80, sp80[3]);
+        col = (i == *(s32 *)(s3 + 0x8D4)) ? 1 : 6;
+        func_0018FE80(a0, D_003135C0[col], sp80[0], sp80[1], 4.0f, 14.0f / 3.0f);
+    }
+    func_001089E0(a1, *(s32 *)(s3 + 0x8D4), 0, sp40);
+    func_00192618((u32)sp40);
+    func_00191A70((s32)a0, (s32)sp40);
+}
 
 void _m2c_func_00191A70_func_00191A78() __asm__("func_00191A78");
 void func_00191A70(s32 a0, s32 a1)
