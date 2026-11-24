@@ -11,5 +11,30 @@
     },
     "text_end": "0x01B02DB0",
     "text_start": "0x01B02CD8"
+  },
+  {
+    "src": "ovl_09617_3168.c",
+    "containers": [
+      9617
+    ],
+    "text_start": "0x01B03168",
+    "text_end": "0x01B0330C",
+    "discovered_code_bytes": 420,
+    "functions": 1,
+    "syms": {
+      "D_01B008F0": "0x01B008F0",
+      "D_01B00B00": "0x01B00B00",
+      "D_01B00B18": "0x01B00B18",
+      "func_01B02EE0": "0x01B02EE0",
+      "func_01B0E9E0": "0x01B0E9E0",
+      "func_01B0EDE8": "0x01B0EDE8",
+      "func_01B08CA8": "0x01B08CA8",
+      "func_01B05B50": "0x01B05B50",
+      "func_01B09DA0": "0x01B09DA0",
+      "func_01B05E98": "0x01B05E98",
+      "func_01B05610": "0x01B05610",
+      "func_01B0AA58": "0x01B0AA58",
+      "func_01B05808": "0x01B05808"
+    }
   }
 ]

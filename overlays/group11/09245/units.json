@@ -33,5 +33,100 @@
       "func_01B0CF80": "0x01B0CF80",
       "func_01B0D388": "0x01B0D388"
     }
+  },
+  {
+    "src": "ovl_09245_01b045b8.c",
+    "containers": [
+      9245,
+      9247,
+      9317
+    ],
+    "text_start": "0x01B045B8",
+    "text_end": "0x01B04740",
+    "discovered_code_bytes": 392,
+    "functions": 1,
+    "syms": {
+      "func_01B04598": "0x01B04598",
+      "func_01B04778": "0x01B04778"
+    },
+    "container_layouts": [
+      {
+        "cid": 9245,
+        "text_start": "0x01B045B8",
+        "text_end": "0x01B04740",
+        "syms": {
+          "func_01B04598": "0x01B04598",
+          "func_01B04778": "0x01B04778"
+        }
+      },
+      {
+        "cid": 9247,
+        "text_start": "0x01B050E0",
+        "text_end": "0x01B05268",
+        "syms": {
+          "func_01B04598": "0x01B050C0",
+          "func_01B04778": "0x01B052A0"
+        }
+      },
+      {
+        "cid": 9317,
+        "text_start": "0x01B054B8",
+        "text_end": "0x01B05640",
+        "syms": {
+          "func_01B04598": "0x01B05498",
+          "func_01B04778": "0x01B05678"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09245_01b044d0.c",
+    "containers": [
+      9245,
+      9247,
+      9317,
+      9431
+    ],
+    "text_start": "0x01B044D0",
+    "text_end": "0x01B04594",
+    "discovered_code_bytes": 196,
+    "functions": 2,
+    "syms": {
+      "D_01B025B0": "0x01B025B0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9245,
+        "text_start": "0x01B044D0",
+        "text_end": "0x01B04594",
+        "syms": {
+          "D_01B025B0": "0x01B025B0"
+        }
+      },
+      {
+        "cid": 9247,
+        "text_start": "0x01B04FF8",
+        "text_end": "0x01B050BC",
+        "syms": {
+          "D_01B025B0": "0x01B02040"
+        }
+      },
+      {
+        "cid": 9317,
+        "text_start": "0x01B053D0",
+        "text_end": "0x01B05494",
+        "syms": {
+          "D_01B025B0": "0x01B028B0"
+        }
+      },
+      {
+        "cid": 9431,
+        "text_start": "0x01B1EC60",
+        "text_end": "0x01B1ED24",
+        "syms": {
+          "D_01B025B0": "0x01B199A0"
+        }
+      }
+    ]
   }
 ]

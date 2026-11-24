@@ -1,0 +1,18 @@
+[
+  {
+    "src": "ovl_09317_3268.c",
+    "containers": [
+      9317
+    ],
+    "text_start": "0x01B03268",
+    "text_end": "0x01B032E0",
+    "discovered_code_bytes": 120,
+    "functions": 1,
+    "syms": {
+      "D_01B00990": "0x01B00990",
+      "func_01B03150": "0x01B03150",
+      "func_01B0DA80": "0x01B0DA80",
+      "func_01B0DE88": "0x01B0DE88"
+    }
+  }
+]

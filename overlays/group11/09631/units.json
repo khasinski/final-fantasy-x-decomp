@@ -1,0 +1,37 @@
+[
+  {
+    "src": "ovl_09631_2c88.c",
+    "containers": [
+      9631
+    ],
+    "text_start": "0x01B02C88",
+    "text_end": "0x01B02D90",
+    "discovered_code_bytes": 264,
+    "functions": 2,
+    "syms": {
+      "D_01B0A1E0": "0x01B0A1E0",
+      "func_01B05138": "0x01B05138",
+      "func_01B01AE0": "0x01B01AE0"
+    }
+  },
+  {
+    "src": "ovl_09631_30c0.c",
+    "containers": [
+      9631
+    ],
+    "text_start": "0x01B030C0",
+    "text_end": "0x01B033CC",
+    "discovered_code_bytes": 772,
+    "functions": 3,
+    "syms": {
+      "D_01B0A1E0": "0x01B0A1E0",
+      "func_01B05138": "0x01B05138",
+      "func_01B06D50": "0x01B06D50",
+      "func_01B05760": "0x01B05760",
+      "func_01B019A8": "0x01B019A8",
+      "func_01B09E70": "0x01B09E70",
+      "func_01B057B8": "0x01B057B8",
+      "func_01B05F88": "0x01B05F88"
+    }
+  }
+]

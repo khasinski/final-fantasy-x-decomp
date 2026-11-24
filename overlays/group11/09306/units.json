@@ -1,0 +1,40 @@
+[
+  {
+    "src": "ovl_09306_01b09d08.c",
+    "containers": [
+      9306,
+      9307
+    ],
+    "text_start": "0x01B09D08",
+    "text_end": "0x01B09DE4",
+    "discovered_code_bytes": 220,
+    "functions": 1,
+    "syms": {
+      "func_01B09E90": "0x01B09E90",
+      "func_01B09F58": "0x01B09F58"
+    },
+    "container_layouts": [
+      {
+        "cid": 9306,
+        "text_start": "0x01B09D08",
+        "text_end": "0x01B09DE4",
+        "syms": {
+          "func_01B09E90": "0x01B09E90",
+          "func_01B09F58": "0x01B09F58"
+        }
+      },
+      {
+        "cid": 9307,
+        "text_start": "0x01B0A490",
+        "text_end": "0x01B0A56C",
+        "syms": {
+          "func_01B09E90": "0x01B0A618",
+          "func_01B09F58": "0x01B0A6E0"
+        }
+      }
+    ],
+    "cflags": [
+      "-O0"
+    ]
+  }
+]

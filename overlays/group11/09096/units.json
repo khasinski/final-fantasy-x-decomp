@@ -1,0 +1,70 @@
+[
+  {
+    "src": "ovl_09096_01b016d0.c",
+    "containers": [
+      9096,
+      9108
+    ],
+    "text_start": "0x01B016D0",
+    "text_end": "0x01B01998",
+    "discovered_code_bytes": 704,
+    "functions": 4,
+    "syms": {
+      "D_01B054D0": "0x01B054D0",
+      "D_01B05540": "0x01B05540",
+      "D_01B05544": "0x01B05544",
+      "func_01B00588": "0x01B00588",
+      "func_01B01BA0": "0x01B01BA0",
+      "func_01B01C30": "0x01B01C30",
+      "func_01B01D58": "0x01B01D58",
+      "func_01B01E88": "0x01B01E88",
+      "func_01B022A8": "0x01B022A8",
+      "func_01B035A8": "0x01B035A8",
+      "func_01B03608": "0x01B03608",
+      "func_01B04A98": "0x01B04A98",
+      "func_01B04DE8": "0x01B04DE8"
+    },
+    "container_layouts": [
+      {
+        "cid": 9096,
+        "text_start": "0x01B016D0",
+        "text_end": "0x01B01998",
+        "syms": {
+          "D_01B054D0": "0x01B054D0",
+          "D_01B05540": "0x01B05540",
+          "D_01B05544": "0x01B05544",
+          "func_01B00588": "0x01B00588",
+          "func_01B01BA0": "0x01B01BA0",
+          "func_01B01C30": "0x01B01C30",
+          "func_01B01D58": "0x01B01D58",
+          "func_01B01E88": "0x01B01E88",
+          "func_01B022A8": "0x01B022A8",
+          "func_01B035A8": "0x01B035A8",
+          "func_01B03608": "0x01B03608",
+          "func_01B04A98": "0x01B04A98",
+          "func_01B04DE8": "0x01B04DE8"
+        }
+      },
+      {
+        "cid": 9108,
+        "text_start": "0x01B01610",
+        "text_end": "0x01B018D8",
+        "syms": {
+          "D_01B054D0": "0x01B05410",
+          "D_01B05540": "0x01B05480",
+          "D_01B05544": "0x01B05484",
+          "func_01B00588": "0x01B00570",
+          "func_01B01BA0": "0x01B01AE0",
+          "func_01B01C30": "0x01B01B70",
+          "func_01B01D58": "0x01B01C98",
+          "func_01B01E88": "0x01B01DC8",
+          "func_01B022A8": "0x01B021E8",
+          "func_01B035A8": "0x01B034E8",
+          "func_01B03608": "0x01B03548",
+          "func_01B04A98": "0x01B049D8",
+          "func_01B04DE8": "0x01B04D28"
+        }
+      }
+    ]
+  }
+]

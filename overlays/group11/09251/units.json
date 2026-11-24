@@ -41,5 +41,34 @@
         "syms": {}
       }
     ]
+  },
+  {
+    "src": "ovl_09251_3ba8.c",
+    "containers": [
+      9251
+    ],
+    "text_start": "0x01B03BA8",
+    "text_end": "0x01B03C6C",
+    "functions": 1,
+    "discovered_code_bytes": 196,
+    "syms": {
+      "D_01B023A0": "0x01B023A0"
+    }
+  },
+  {
+    "src": "ovl_09251_3868.c",
+    "containers": [
+      9251
+    ],
+    "text_start": "0x01B03868",
+    "text_end": "0x01B03BA8",
+    "functions": 2,
+    "discovered_code_bytes": 832,
+    "syms": {
+      "func_01B03DA8": "0x01B03DA8"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

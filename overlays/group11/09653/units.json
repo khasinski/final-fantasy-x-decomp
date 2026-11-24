@@ -1,0 +1,43 @@
+[
+  {
+    "src": "ovl_09653_01b0ad20.c",
+    "containers": [
+      9653,
+      9657
+    ],
+    "text_start": "0x01B0AD20",
+    "text_end": "0x01B0B004",
+    "discovered_code_bytes": 736,
+    "functions": 2,
+    "syms": {
+      "D_01B00CE8": "0x01B00CE8",
+      "func_01B1A2E8": "0x01B1A2E8",
+      "func_01B1A390": "0x01B1A390",
+      "func_01B1A6F0": "0x01B1A6F0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9653,
+        "text_start": "0x01B0AD20",
+        "text_end": "0x01B0B004",
+        "syms": {
+          "D_01B00CE8": "0x01B00CE8",
+          "func_01B1A2E8": "0x01B1A2E8",
+          "func_01B1A390": "0x01B1A390",
+          "func_01B1A6F0": "0x01B1A6F0"
+        }
+      },
+      {
+        "cid": 9657,
+        "text_start": "0x01B0A740",
+        "text_end": "0x01B0AA24",
+        "syms": {
+          "D_01B00CE8": "0x01B00CE8",
+          "func_01B1A2E8": "0x01B19FF0",
+          "func_01B1A390": "0x01B1A098",
+          "func_01B1A6F0": "0x01B1A3F8"
+        }
+      }
+    ]
+  }
+]
