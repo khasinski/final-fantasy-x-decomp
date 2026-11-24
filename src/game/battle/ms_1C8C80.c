@@ -416,9 +416,383 @@ void msSetEndDir(BtlChr *c) {
     c->f15C = c->f1D4[(s8)c->f1D1] + 3.1415927f;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", func_001C9920);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E6C0);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1C8C80/rodata", jtbl_0056E740);
+extern int _ms_MsCheckMegas(void) __asm__("MsCheckMegas");
+extern void MsSetPartyRelifeTime(void);
+extern void MsDeathYoujinbou(int);
+extern void MsInsertChrCommand(int, int, int);
+extern void MsReturnSummon(int);
+extern void MsCommandReturnChrStatusAll(int);
+extern int func_002D6730(void);
+extern int SndGetStreamState(void);
+extern int SndIsReadShoutVoiceStatus(void);
+extern int MsSystemMessageCheck(void);
+extern void MsAtelRequestSystemCheckExe(int, int, int, int);
+extern void TOAllCloseMessageWindow(void);
+extern int AtelGetPlayStatusFanfare(void);
+extern int AtelGetPlayStatusGameOver(void);
+extern int SndGetNowPlayMusic(void);
+extern void MsMusicReadStart(int);
+extern int MsMusicSync(int);
+extern void MsEffectSepClearAll(void);
+extern int AtelGetStatusWinFadeOut(void);
+extern void MsLimitTypeWinCheck(void);
+extern int op_et_battle_genko_counter_get(void);
+extern void MsSEP3DfadeOutAll(int);
+extern void MsEventEffectRead(int);
+extern void MsEventEffectStart(int);
+extern void func_00117E18(int);
+extern void func_00139E98(int, int);
+extern void func_001CEAD8(int);
+
+typedef struct {
+    u8 pad0[0x10];
+    s8 f10;
+    u8 pad11[2];
+    s8 f13;
+    s8 f14;
+    u8 pad15[0x30 - 0x15];
+    s8 f30;
+    u8 pad31;
+    s8 f32;
+    u8 pad33[0x1511 - 0x33];
+    s8 f1511;
+    u8 pad1512[0x175B - 0x1512];
+    u8 f175B;
+    u8 pad175C[0x2034 - 0x175C];
+    s32 f2034;
+    s32 f2038;
+    u8 pad203C[0x207C - 0x203C];
+    u16 f207C;
+    u16 f207E;
+    u8 pad2080[0x2105 - 0x2080];
+    s8 f2105;
+    u8 pad2106[0x2118 - 0x2106];
+    s8 f2118;
+    u8 pad2119[3];
+    u8 f211C;
+    u8 f211D;
+    u8 f211E;
+    s8 f211F;
+    union {
+        u64 d2120;
+        struct {
+            u8 f2120;
+            u8 f2121;
+            u8 f2122;
+            u8 f2123;
+            u8 f2124;
+        } b;
+    } u2120;
+    u8 pad2128[0x2131 - 0x2128];
+    s8 f2131;
+    u8 f2132;
+    u8 pad2133[0x2138 - 0x2133];
+    u8 f2138;
+    u8 f2139;
+    u8 pad213A[0x2141 - 0x213A];
+    s8 f2141;
+} GsEndSeq;
+extern GsEndSeq _gs_end __asm__("D_003172F0");
+
+void func_001C9920(void)
+{
+    register int st __asm__("$17") = _gs_end.f10;
+    switch (st) {
+    case 1:
+        if (MsGetEndBattleStatus(0) != 0) {
+            _gs_end.f10 = 2;
+        }
+        break;
+    case 2:
+        if (_gs_end.f1511 == 0 && _gs_end.f2105 == 0) {
+            int st2 = MsGetEndBattleStatus(0);
+            register int f2118 __asm__("$4") = _gs_end.f2118;
+            if (f2118 != 0 && _gs_end.f2141 == 0 && (st2 == 1 || st2 == 3)) {
+                register int m __asm__("$17") = _ms_MsCheckMegas();
+                BtlChr *c = MsGetChr(m);
+                MsSetPartyRelifeTime();
+                MsDeathYoujinbou(m);
+                {
+                    register int f3c2 __asm__("$3") = ((u8 *)c)[0x3C2];
+                    if (f3c2 == 1) {
+                        MsInsertChrCommand(m, ((s8 *)c)[0xAAE], 2);
+                    } else {
+                        MsReturnSummon(0);
+                        MsCommandReturnChrStatusAll(0);
+                    }
+                }
+                _gs_end.f10 = 1;
+            } else if (st2 != 0) {
+                _gs_end.f10 = 0x17;
+            } else {
+                _gs_end.f10 = 1;
+            }
+        }
+        if (_gs_end.f10 != 0x17) {
+            break;
+        }
+    case 0x17:
+        if (func_002D6730() != 0 || SndGetStreamState() != 0 || SndIsReadShoutVoiceStatus() != 0 || MsSystemMessageCheck() != 0) {
+            break;
+        }
+        {
+            int end_st = MsGetEndBattleStatus(0);
+            _gs_end.f10 = 0x18;
+            _gs_end.u2120.b.f2121 = end_st;
+        }
+        MsAtelRequestSystemCheckExe(4, 1, 0, 0);
+    case 0x18: {
+        GsEndSeq *g = &_gs_end;
+        if (g->f14 != 0 || func_002D6730() != 0 || SndGetStreamState() != 0 || SndIsReadShoutVoiceStatus() != 0 || MsSystemMessageCheck() != 0) {
+            break;
+        }
+        TOAllCloseMessageWindow();
+        {
+            register int wait __asm__("$19") = 0;
+            register int next __asm__("$17") = 0x1B;
+            register int fade __asm__("$2");
+            register int bgm __asm__("$3");
+            switch (g->u2120.b.f2121) {
+            case 2: {
+                register int ff __asm__("$4") = AtelGetPlayStatusFanfare();
+                __asm__("" : "+r"(ff));
+                if (ff == 1) {
+                    fade = 0xC;
+                    bgm = 0x8A;
+                    __asm__("" : "+r"(fade), "+r"(bgm));
+                    g->u2120.b.f2122 = ff;
+                    __asm__("" : : "m"(g->u2120.b.f2122));
+                    wait = 0xA;
+                    goto set_bgm;
+                }
+                break;
+            }
+            case 1:
+                if (AtelGetPlayStatusGameOver() != 0) {
+                    fade = 0x14;
+                    bgm = 0x8C;
+                    __asm__("" : "+r"(fade), "+r"(bgm));
+                    g->u2120.b.f2124 = 1;
+                    wait = 0x1E;
+                set_bgm:
+                    g->f211E = fade;
+                    __asm__("" : : "m"(g->f211E));
+                    next = 0x19;
+                    __asm__("" : "+r"(bgm) : "r"(next));
+                    g->f207C = bgm;
+                }
+                break;
+            case 4:
+                wait = 0x1E;
+                break;
+            }
+            _gs_end.f211C = wait;
+            __asm__("" : : "m"(_gs_end.f211C));
+            _gs_end.f10 = next;
+        }
+        break;
+    }
+    case 0x19:
+        _gs_end.f10 = 0x1A;
+        _gs_end.f211C = _gs_end.f211E;
+        SndMusicVolumeFadeOut(SndGetNowPlayMusic(), _gs_end.f211E);
+        return;
+    case 0x1A: {
+        int _z = 0;
+        if (_z) {
+            ((void (*)(int, int, int, int, int, int, int, int, int))0)(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+        _gs_end.f211C = 0xA;
+        MsMusicReadStart(_gs_end.f207C);
+        _gs_end.f10 = 0x1B;
+        break;
+    }
+    case 0x1C:
+        if (MsMusicSync(_gs_end.f207C) != 0) {
+            _gs_end.f10 = 0x1D;
+        }
+        break;
+    case 0x1B: {
+        int busy = 0;
+        int i;
+        for (i = 0; i < 31; i++) {
+            BtlChr *c = MsGetChr(i);
+            if (func_001CA948(i, c) != 0) {
+                MsSetMotion(i, 0, 0, 0, 1, 0, 0);
+            }
+            if (c->fA8E == 0 && ((s8 *)c)[0x15] != 0) {
+                if (c->f1C8 != 0 || ((u8 *)c)[0xEE] != 0 || ((u8 *)c)[0xD5] != 0 || (c->fDC != 0 && c->fDD != 0)) {
+                    _gs_end.f2138 = i;
+                    busy = 1;
+                    _gs_end.f2139 = 0xFD;
+                    break;
+                }
+            }
+        }
+        if (busy != 0) {
+            break;
+        }
+        if ((_gs_end.u2120.d2120 & 0x000000FF00FF0000ULL) != 0) {
+            _gs_end.f10 = 0x1C;
+            break;
+        }
+        _gs_end.f10 = 0x1D;
+    }
+    case 0x1D: {
+        register int sys __asm__("$17") = -1;
+        register int cam __asm__("$18") = -1;
+        register int wait1 __asm__("$19") = 0;
+        int wait2 = 0xA;
+        _gs_end.f10 = 0x1E;
+        _gs_end.f13 = _gs_end.u2120.b.f2121;
+        func_001C98B8();
+        MsEffectSepClearAll();
+        switch ((s8)(_gs_end.f13 - 1)) {
+        case 0:
+            wait2 = 0x2D;
+            wait1 = 0x3C;
+            sys = 1;
+            cam = 0x43;
+            break;
+        case 1:
+            sys = 0;
+            wait1 = 0x58;
+            cam = 0x42;
+            break;
+        case 2:
+        case 4:
+            sys = 2;
+            cam = 0x44;
+            break;
+        case 3:
+            sys = 3;
+            cam = 0x45;
+            break;
+        }
+        if (sys >= 0) {
+            MsAtelRequestSystemCheckExe(sys, 1, 0, 0);
+        }
+        if (AtelGetStatusWinFadeOut() == 0 && _gs_end.u2120.b.f2124 == 0) {
+            _gs_end.u2120.b.f2123 = 1;
+            if (_gs_end.f13 != 2 || _gs_end.u2120.b.f2122 == 0) {
+                wait1 = 0;
+            }
+        } else {
+            if (cam >= 0) {
+                MsAtelRequestCamera(0, 0xFF, cam, 0xFFFF, 1, 1, 0, 0);
+            }
+        }
+        _gs_end.f211D = wait1;
+        _gs_end.u2120.b.f2120 = wait2;
+        _gs_end.f211C = 0;
+        MsLimitTypeWinCheck();
+        {
+            register int f24 __asm__("$3") = _gs_end.u2120.b.f2124;
+            if (f24 != 0 && _gs_end.f30 == 0) {
+                register int p1 __asm__("$3") = 1;
+                register int m1 __asm__("$2");
+                __asm__("" : "+r"(p1));
+                m1 = -1;
+                __asm__("" : "+r"(m1) : "r"(p1));
+                _gs_end.f2038 = m1;
+                __asm__("" : : "m"(_gs_end.f2038));
+                _gs_end.f211F = p1;
+            }
+        }
+    }
+    case 0x1E:
+        if (_gs_end.u2120.b.f2123 != 0) {
+            register int i __asm__("$17");
+            for (i = 0; i < 31; i++) {
+                register BtlChr *c __asm__("$16") = MsGetChr(i);
+                __asm__("" : "+r"(c));
+                if (c->fF2 != 0 || c->fF6 != 0) {
+                    break;
+                }
+            }
+            if (i >= 31 && op_et_battle_genko_counter_get() == 0) {
+                _gs_end.u2120.b.f2123 = 0;
+            }
+        }
+        if (_gs_end.f13 == 2 && _gs_end.u2120.b.f2122 != 0) {
+            register int i __asm__("$17");
+            for (i = 0; i < 18; i++) {
+                register BtlChr *c __asm__("$16") = MsGetChr(i);
+                __asm__("" : "+r"(c));
+                if (c->fA88 != 0 && ((s8 *)c)[0xA92] != 0 && ((s8 *)c)[0xFB] != 0 && ((s8 *)c)[0xFA] == 0 && c->fA8E == 0 && ((u8 *)c)[0x2C8] == 0 && c->fA8C == 0) {
+                    ((s8 *)c)[0xFA] = 1;
+                    MsSetMotion(i, 0x2D, 0, 0, 1, 0, 0);
+                }
+            }
+        }
+        if (_gs_end.f211D == 0) {
+            _gs_end.f2132 = 1;
+            MsSEP3DfadeOutAll(0xA);
+        }
+        if (_gs_end.f211F != 0) {
+            switch (MsEventEffectGetStat()) {
+            case 0:
+                if (_gs_end.f14 == 0 && SndGetStreamState() == 0 && MsStoneEffectCheck() == 0 && MsSystemMessageCheck() == 0) {
+                    int id = _gs_end.f207E;
+                    if (_gs_end.f32 != 0) {
+                        id = 0;
+                    }
+                    MsEventEffectRead(id);
+                }
+                break;
+            case 3: {
+                register int v __asm__("$3");
+                MsEventEffectStart(0);
+                v = 0x3C;
+                __asm__("" : "+r"(v));
+                _gs_end.f211D = v;
+                break;
+            }
+            case 5: {
+                int pad = _gs_end.f2034;
+                if (_gs_end.f211D != 0) {
+                    return;
+                }
+                if (_gs_end.f2038 == 0 && (pad & 0xF0) != 0) {
+                    _gs_end.f211F = -1;
+                }
+                break;
+            }
+            }
+        }
+        if (_gs_end.f211D != 0 || _gs_end.f211F > 0 || _gs_end.u2120.b.f2123 != 0 || _gs_end.f14 != 0 || _gs_end.f175B != 0 ||
+            SndGetStreamState() != 0 || MsSystemMessageCheck() != 0 || MsStoneEffectCheck() != 0) {
+            break;
+        }
+        if (AtelGetStatusWinFadeOut() != 0 || _gs_end.u2120.b.f2124 != 0) {
+            _gs_end.f10 = 0x1F;
+            _gs_end.f211D = _gs_end.u2120.b.f2120;
+            func_00117E18(_gs_end.u2120.b.f2120);
+            if (_gs_end.u2120.b.f2124 != 0) {
+                func_00139E98(_gs_end.u2120.b.f2120, 0);
+                SndMusicVolumeFadeOut(SndGetNowPlayMusic(), _gs_end.u2120.b.f2120);
+            }
+        } else {
+            _gs_end.f10 = 0x1F;
+        }
+    case 0x1F:
+        if (_gs_end.f211D != 0 || _gs_end.f2131 != 0 || SndGetStreamState() != 0 || MsSystemMessageCheck() != 0) {
+            break;
+        }
+        if (_gs_end.f211F != 0) {
+            func_001CEAD8(_gs_end.f207E);
+            _gs_end.f10 = 0x20;
+        } else {
+            _gs_end.f10 = 0x21;
+        }
+        break;
+    case 0x20:
+        if (MsEventEffectGetStat() == 0) {
+            _gs_end.f10 = 0x21;
+        }
+        break;
+    }
+}
 
 u8 *MsOrderCalc(int *n);
 int MsRegistInputCue(int id, int a, int b, int c);

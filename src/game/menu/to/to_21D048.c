@@ -8,6 +8,7 @@
 #define MsGetChrLimitGaugeMax _hdr_MsGetChrLimitGaugeMax
 #define MsGetChrDist _hdr_MsGetChrDist
 #define MsGetChrCursorFlag _hdr_MsGetChrCursorFlag
+#define _TOBtlGetTargetPad _hdr__TOBtlGetTargetPad
 #include "common.h"
 #include "ffx/q5.h"
 #include "ffx/w6.h"
@@ -26,6 +27,7 @@
 #undef MsGetChrLimitGaugeMax
 #undef MsGetChrDist
 #undef MsGetChrCursorFlag
+#undef _TOBtlGetTargetPad
 
 typedef struct {
     s16 h0;
@@ -34,7 +36,7 @@ typedef struct {
     s32 w8;
     s32 wC;
     s32 w10;
-    u8 pad14[0x84 - 0x14];
+    s32 pad14[0x1C];
     s32 w84;
     s32 w88;
     s32 w8C;
@@ -43,7 +45,21 @@ typedef struct {
     s32 w98;
     s32 w9C;
     s32 wA0;
-    u8 padA4[0x134 - 0xA4];
+    s32 wA4;
+    s32 wA8;
+    s16 hAC;
+    u8 padAE[2];
+    s32 ally_bits[20];
+    s16 h100;
+    u8 pad102[2];
+    s32 enemy_bits[8];
+    s16 h124;
+    s16 h126;
+    s32 *p128;
+    s16 h12C;
+    s16 h12E;
+    s16 h130;
+    s16 h132;
 } R4InitFull;
 
 extern R4InitFull toTarget;
@@ -315,9 +331,224 @@ void TOBtlMakeTargetChrStatusBit(void)
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", func_0021DBF0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlMakeTargetTargetBit);
+typedef struct {
+    u8 pad00[0x02];
+    s8 b02;
+    u8 pad03[0x0B - 0x03];
+    s8 b0B;
+    u16 h0C;
+    s16 h0E[4];
+    s16 h16[4];
+    u8 pad1E[2];
+    s16 *p20;
+    s32 w24;
+    u8 pad28[0x38 - 0x28];
+    s16 h38;
+    s16 h3A;
+    u8 pad3C[0x40 - 0x3C];
+    s16 h40;
+    s16 h42;
+    u8 pad44[0xC4 - 0x44];
+    s16 hC4;
+    s16 hC6;
+    s32 wC8;
+} R4RecFull;
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", _TOBtlGetTargetPad);
+typedef struct {
+    u16 v[4][4];
+} PadDirTbl;
+
+extern PadDirTbl D_00571148;
+
+int TOBtlSearchRevNearTarget(void);
+void MsSetBtlTarget(u16, s32);
+void MsResetBtlTarget(int);
+void TOBtlSetPrevAction(void);
+int TOBtlSetNextAction(int, int);
+
+void TOBtlMakeTargetTargetBit(void)
+{
+    s32 buf;
+    u8 *com;
+    int i;
+    int bit;
+    R4RecFull *r;
+
+    func_002EF0D0(toTarget.ally_bits, 0, 0x50);
+    func_002EF0D0(toTarget.enemy_bits, 0, 0x20);
+    com = (u8 *)MsGetComData(toTarget.h2, &buf);
+    toTarget.wA4 = toTarget.w84 & toTarget.wA0 & toTarget.w98 & toTarget.w9C;
+    toTarget.hAC = 0;
+    toTarget.h100 = 0;
+    switch (toTarget.w10) {
+    case 0:
+        for (i = 0; i < D_00692008; i++) {
+            bit = toTarget.wA4 & ((s32 *)toTarget.pad14)[D_00692010[i]];
+            if (bit != 0) {
+                toTarget.ally_bits[toTarget.hAC++] = bit;
+            }
+        }
+        for (i = 0; i < D_00692020; i++) {
+            bit = toTarget.wA4 & ((s32 *)toTarget.pad14)[D_00692028[i]];
+            if (bit != 0) {
+                toTarget.enemy_bits[toTarget.h100++] = bit;
+            }
+        }
+        break;
+    case 2:
+        if (toTarget.wA4 & toTarget.pad14[0]) {
+            toTarget.ally_bits[0] = toTarget.wA4 & toTarget.pad14[0];
+            toTarget.hAC = 1;
+        }
+        if (toTarget.wA4 & toTarget.pad14[0x14]) {
+            toTarget.enemy_bits[0] = toTarget.wA4 & toTarget.pad14[0x14];
+            toTarget.h100 = 1;
+        }
+        break;
+    case 1:
+        for (i = 0; i < 8; i++) {
+            if (toTarget.wA4 & ((s32 *)toTarget.pad14)[i]) {
+                toTarget.ally_bits[toTarget.hAC++] = toTarget.wA4 & ((s32 *)toTarget.pad14)[i];
+            }
+        }
+        for (i = 0; i < 8; i++) {
+            if (toTarget.wA4 & ((s32 *)toTarget.pad14)[i + 0x14]) {
+                toTarget.enemy_bits[toTarget.h100++] = toTarget.wA4 & ((s32 *)toTarget.pad14)[i + 0x14];
+            }
+        }
+        break;
+    case 3:
+        if ((u16)toTarget.h0 < 0x14) {
+            toTarget.ally_bits[0] = 1 << (u16)toTarget.h0;
+            toTarget.hAC = 1;
+        }
+        if ((u16)toTarget.h0 >= 0x14 && (u16)toTarget.h0 < 0x1C) {
+            toTarget.enemy_bits[0] = 1 << (u16)toTarget.h0;
+            toTarget.h100 = 1;
+        }
+        break;
+    }
+
+    toTarget.h12C = 0;
+    if ((*(u16 *)(com + 0x1A) >> 1) & 1) {
+        toTarget.h130 = 1;
+        toTarget.p128 = toTarget.enemy_bits;
+        toTarget.h126 = toTarget.h100;
+    } else {
+        toTarget.h130 = 0;
+        toTarget.h126 = toTarget.hAC;
+        toTarget.p128 = toTarget.ally_bits;
+        if (toTarget.w10 == 0) {
+            for (i = 0; i < toTarget.h126; i++) {
+                if (toTarget.p128[i] == (1 << (u16)toTarget.h0)) {
+                    toTarget.h12C = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    if ((*(u16 *)(com + 0x1A) >> 5) & 1) {
+        toTarget.h12E = 1;
+    } else {
+        toTarget.h12E = 0;
+    }
+
+    toTarget.wA8 = toTarget.p128[toTarget.h12C];
+    if (toTarget.w10 == 0 || toTarget.w10 == 3) {
+        for (i = 0; i < 0x1C; i++) {
+            if ((toTarget.wA8 >> i) & 1) {
+                toTarget.h124 = i;
+            }
+        }
+    } else {
+        toTarget.h124 = 0xFF;
+    }
+
+    r = (R4RecFull *)D_003249C0;
+    r[D_00325020].wC8 = toTarget.wA8;
+    r[D_00325020].hC4 = toTarget.h130;
+    r[D_00325020].hC6 = toTarget.w10;
+    r[D_00325020].h42 = toTarget.h12C;
+}
+
+void _TOBtlGetTargetPad(s16 *arg)
+{
+    PadDirTbl tbl = D_00571148;
+    int type;
+    s16 prev_idx;
+    s16 prev_side;
+    int i;
+    R4RecFull *r;
+
+    type = MsBattleCursorType() & 0xFF;
+    prev_idx = toTarget.h12C;
+    prev_side = toTarget.h130;
+    if (D_003238D0.h16 & tbl.v[type][0]) {
+        toTarget.h12C--;
+    }
+    if (D_003238D0.h16 & tbl.v[type][1]) {
+        toTarget.h12C++;
+    }
+    if (toTarget.h12C < 0) {
+        toTarget.h12C = toTarget.h126 - 1;
+    }
+    if (toTarget.h12C >= toTarget.h126) {
+        toTarget.h12C = 0;
+    }
+    if ((D_003238D0.h14 & tbl.v[type][2]) || (D_003238D0.h14 & tbl.v[type][3])) {
+        if (toTarget.h12E == 1) {
+            if (toTarget.h130 == 0) {
+                if (toTarget.h100 > 0) {
+                    s16 old = toTarget.h12C;
+                    toTarget.h126 = toTarget.h100;
+                    toTarget.p128 = toTarget.enemy_bits;
+                    toTarget.h12C = TOBtlSearchRevNearTarget();
+                    toTarget.h132 = old;
+                    toTarget.h130 = 1;
+                }
+            } else {
+                if (toTarget.hAC > 0) {
+                    s16 old = toTarget.h12C;
+                    toTarget.h126 = toTarget.hAC;
+                    toTarget.p128 = toTarget.ally_bits;
+                    toTarget.h12C = TOBtlSearchRevNearTarget();
+                    toTarget.h132 = old;
+                    toTarget.h130 = 0;
+                }
+            }
+        }
+    }
+    if (toTarget.h12C != prev_idx || toTarget.h130 != prev_side) {
+        func_002D70D8(1);
+    }
+    toTarget.wA8 = toTarget.p128[toTarget.h12C];
+    if (toTarget.w10 == 0 || toTarget.w10 == 3) {
+        for (i = 0; i < 0x1C; i++) {
+            if ((toTarget.wA8 >> i) & 1) {
+                toTarget.h124 = i;
+            }
+        }
+    } else {
+        toTarget.h124 = 0xFF;
+    }
+    r = (R4RecFull *)D_003249C0;
+    r[D_00325020].h42 = toTarget.h12C;
+    r[D_00325020].wC8 = toTarget.wA8;
+    r[D_00325020].hC4 = toTarget.h130;
+    MsSetBtlTarget(toTarget.h0, toTarget.wA8);
+    if (D_003238D0.h14 & 0x40) {
+        MsResetBtlTarget(arg[4]);
+        TOBtlSetPrevAction();
+        func_002D70D8(4);
+    } else if (D_003238D0.h14 & 0x20) {
+        if (TOBtlSetNextAction(arg[4], 0x3115) >= 0) {
+            func_002D70D8(1);
+        } else {
+            func_002D70D8(3);
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_21D048", TOBtlSearchRevNearTarget);
 

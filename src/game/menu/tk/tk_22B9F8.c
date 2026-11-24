@@ -217,10 +217,144 @@ void func_0022C060(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22B9F8", TkMn2ArmsRefreshArms);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_22B9F8/rodata", jtbl_005718B0);
+int AtelGetTotalActorNumber2(void);
+int MsGetSaveChrWeaponModel(int);
+int MsGetSaveChrArmorModel(int);
 
-int TkMn2ArmsRefreshArms(int *);
+int TkMn2ArmsRefreshArms(int *stp)
+{
+    int ret = 0;
+    int prevCtrl = AtelChangeCurrentCtrl(0);
+    int total = AtelGetTotalActorNumber2();
+    int st = *stp;
+
+again:
+    switch (st) {
+    case 0:
+        D_00693B70 = -1;
+        /* fallthrough */
+    case 1:
+        *stp = 9;
+        /* fallthrough */
+    case 9:
+        D_00693B70++;
+        if (D_00693B70 < total) {
+            u8 *w = AtelGetBasicWork(D_00693B70);
+            register int id __asm__("$4") = func_0013B068(w);
+            register int ok __asm__("$5") = 0;
+            if (w[0xAA] == 1 && *(void **)(w + 0x9C) != 0) {
+                ok = (u32)id < 7;
+            }
+            if (ok) {
+                *stp = 2;
+                st = 2;
+                goto again;
+            } else {
+                st = 9;
+                goto again;
+            }
+        } else {
+            st = 10;
+            goto again;
+        }
+        break;
+    case 2:
+        st = 3;
+        goto again;
+    case 3: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        int id = func_0013B068(w);
+        if (*(u16 *)(w + 0xB14) & 1) {
+            if (D_00693AF0[id] != TkMenuGetWeapon(id)) {
+                if (*(void **)(w + 0xAF4) != 0) {
+                    TkCh_Dispose(*(void **)(w + 0xAF4));
+                }
+                ChN_DataDispose(*(u16 *)(w + 0xB04), 0);
+                *(void **)(w + 0xAF4) = 0;
+                *(u16 *)(w + 0xB04) = MsGetSaveChrWeaponModel(id);
+                Ch_DataRead(*(u16 *)(w + 0xB04));
+                *stp = 4;
+                goto case_4;
+            }
+            st = 6;
+            goto again;
+        }
+        st = 6;
+        goto again;
+    }
+    case 4:
+    case_4: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        if (Ch_DataReadSync(*(u16 *)(w + 0xB04)) == 1) {
+            break;
+        }
+        st = 5;
+        goto again;
+    }
+    case 5: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        void *ch = TkCh_Allocate(*(u16 *)(w + 0xB04));
+        *(void **)(w + 0xAF4) = ch;
+        Ch_SoundSetId(ch, 0xF);
+        TkCh_BindToElem(*(u16 *)(w + 0xA8), *(void **)(w + 0xAF4), *(void **)(w + 0x9C), *(int *)(w + 0xAFC), 0);
+        Ch_EnClip(*(void **)(w + 0xAF4), *(u32 *)(w + 0xB08) & 1);
+        Ch_Vu1SetClipmode(*(void **)(w + 0xAF4), (*(u32 *)(w + 0xB08) >> 1) & 1);
+        st = 6;
+        goto again;
+    }
+    case 6: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        int id = func_0013B068(w);
+        if (*(u16 *)(w + 0xB14) & 2) {
+            if (D_00693B10[id] != TkMenuGetArmor(id)) {
+                if (*(void **)(w + 0xAF8) != 0) {
+                    TkCh_Dispose(*(void **)(w + 0xAF8));
+                }
+                if (*(u16 *)(w + 0xB06) != 0) {
+                    ChN_DataDispose(*(u16 *)(w + 0xB06), 0);
+                }
+                *(void **)(w + 0xAF8) = 0;
+                *(u16 *)(w + 0xB06) = MsGetSaveChrArmorModel(id);
+                if (*(u16 *)(w + 0xB06) != 0) {
+                    Ch_DataRead(*(u16 *)(w + 0xB06));
+                    *stp = 7;
+                    break;
+                }
+                st = 9;
+                goto again;
+            }
+            st = 9;
+            goto again;
+        }
+        st = 9;
+        goto again;
+    }
+    case 7: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        if (Ch_DataReadSync(*(u16 *)(w + 0xB06)) == 1) {
+            break;
+        }
+        st = 8;
+        goto again;
+    }
+    case 8: {
+        u8 *w = AtelGetBasicWork(D_00693B70);
+        void *ch = TkCh_Allocate(*(u16 *)(w + 0xB06));
+        *(void **)(w + 0xAF8) = ch;
+        Ch_SoundSetId(ch, 0xF);
+        TkCh_BindToElem(*(u16 *)(w + 0xA8), *(void **)(w + 0xAF8), *(void **)(w + 0x9C), *(int *)(w + 0xB00), 1);
+        Ch_EnClip(*(void **)(w + 0xAF8), *(u32 *)(w + 0xB0C) & 1);
+        Ch_Vu1SetClipmode(*(void **)(w + 0xAF8), (*(u32 *)(w + 0xB0C) >> 1) & 1);
+        st = 9;
+        goto again;
+    }
+    case 10:
+        ret = 1;
+        break;
+    }
+    AtelSetCurrentCtrl(prevCtrl);
+    return ret;
+}
 
 extern int D_00693AB8;
 extern char D_005718E0[];

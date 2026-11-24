@@ -1,6 +1,9 @@
 /* tu_356 0x2e4250-0x2e7c68: medium; unk_2E4250 (config/tu_map.tsv) */
 #include "common.h"
+#define D_00577A10 D_00577A10_r7
 #include "ffx/r7.h"
+#undef D_00577A10
+extern const int D_00577A10[];
 
 #define zero 0.0f
 #define half 5.0000000000e-01f
@@ -594,7 +597,190 @@ float func_002E6888(float x, float y)
 #undef C5
 #undef C6
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E69E0);
+float func_002E8860(float x, int n); /* scalbnf */
+float func_002E8750(float x); /* floorf */
+
+#define zero 0.0f
+#define one 1.0f
+#define two8 2.5600000000e+02f
+#define twon8 3.9062500000e-03f
+int func_002E69E0(float *x, float *y, int e0, int nx, int prec, const int *ipio2)
+{
+    int jz, jx, jv, jp, jk, carry, n, iq[20], i, j, k, m, q0, ih;
+    float z, fw, f[20], fq[20], q[20];
+
+    jk = D_00577A10[prec];
+    jp = jk;
+    jx = nx - 1;
+    jv = (e0 - 3) / 8;
+    if (jv < 0) {
+        jv = 0;
+    }
+    q0 = e0 - 8 * (jv + 1);
+    j = jv - jx;
+    m = jx + jk;
+    for (i = 0; i <= m; i++, j++) {
+        f[i] = (j < 0) ? zero : (float)ipio2[j];
+    }
+    for (i = 0; i <= jk; i++) {
+        for (j = 0, fw = 0.0f; j <= jx; j++) {
+            fw += x[j] * f[jx + i - j];
+        }
+        q[i] = fw;
+    }
+    jz = jk;
+recompute:
+    for (i = 0, j = jz, z = q[jz]; j > 0; i++, j--) {
+        fw = (float)((int)(twon8 * z));
+        iq[i] = (int)(z - two8 * fw);
+        z = q[j - 1] + fw;
+    }
+    z = func_002E8860(z, q0);
+    z -= 8.0f * func_002E8750(z * 0.125f);
+    n = (int)z;
+    z -= (float)n;
+    ih = 0;
+    if (q0 > 0) {
+        i = (iq[jz - 1] >> (8 - q0));
+        n += i;
+        iq[jz - 1] -= i << (8 - q0);
+        ih = iq[jz - 1] >> (7 - q0);
+    } else if (q0 == 0) {
+        ih = iq[jz - 1] >> 8;
+    } else if (z >= 0.5f) {
+        ih = 2;
+    }
+    if (ih > 0) {
+        n += 1;
+        carry = 0;
+        for (i = 0; i < jz; i++) {
+            j = iq[i];
+            if (carry == 0) {
+                if (j != 0) {
+                    carry = 1;
+                    iq[i] = 0x100 - j;
+                }
+            } else {
+                iq[i] = 0xff - j;
+            }
+        }
+        if (q0 > 0) {
+            switch (q0) {
+            case 1:
+                iq[jz - 1] &= 0x7f;
+                break;
+            case 2:
+                iq[jz - 1] &= 0x3f;
+                break;
+            }
+        }
+        if (ih == 2) {
+            z = one - z;
+            if (carry != 0) {
+                z -= func_002E8860(one, q0);
+            }
+        }
+    }
+    if (z == zero) {
+        j = 0;
+        for (i = jz - 1; i >= jk; i--) {
+            j |= iq[i];
+        }
+        if (j == 0) {
+            for (k = 1; iq[jk - k] == 0; k++) {
+            }
+            for (i = jz + 1; i <= jz + k; i++) {
+                f[jx + i] = (float)ipio2[jv + i];
+                for (j = 0, fw = 0.0f; j <= jx; j++) {
+                    fw += x[j] * f[jx + i - j];
+                }
+                q[i] = fw;
+            }
+            jz += k;
+            goto recompute;
+        }
+    }
+    if (z == 0.0f) {
+        jz -= 1;
+        q0 -= 8;
+        while (iq[jz] == 0) {
+            jz--;
+            q0 -= 8;
+        }
+    } else {
+        z = func_002E8860(z, -q0);
+        if (z >= two8) {
+            fw = (float)((int)(twon8 * z));
+            iq[jz] = (int)(z - two8 * fw);
+            jz += 1;
+            q0 += 8;
+            iq[jz] = (int)fw;
+        } else {
+            iq[jz] = (int)z;
+        }
+    }
+    fw = func_002E8860(one, q0);
+    for (i = jz; i >= 0; i--) {
+        q[i] = fw * (float)iq[i];
+        fw *= twon8;
+    }
+    for (i = jz; i >= 0; i--) {
+        for (fw = 0.0f, k = 0; k <= jp && k <= jz - i; k++) {
+            fw += D_00577A20[k] * q[i + k];
+        }
+        fq[jz - i] = fw;
+    }
+    switch (prec) {
+    case 0:
+        fw = 0.0f;
+        for (i = jz; i >= 0; i--) {
+            fw += fq[i];
+        }
+        y[0] = (ih == 0) ? fw : -fw;
+        break;
+    case 1:
+    case 2:
+        fw = 0.0f;
+        for (i = jz; i >= 0; i--) {
+            fw += fq[i];
+        }
+        y[0] = (ih == 0) ? fw : -fw;
+        fw = fq[0] - fw;
+        for (i = 1; i <= jz; i++) {
+            fw += fq[i];
+        }
+        y[1] = (ih == 0) ? fw : -fw;
+        break;
+    case 3:
+        for (i = jz; i > 0; i--) {
+            fw = fq[i - 1] + fq[i];
+            fq[i] += fq[i - 1] - fw;
+            fq[i - 1] = fw;
+        }
+        for (i = jz; i > 1; i--) {
+            fw = fq[i - 1] + fq[i];
+            fq[i] += fq[i - 1] - fw;
+            fq[i - 1] = fw;
+        }
+        for (fw = 0.0f, i = jz; i >= 2; i--) {
+            fw += fq[i];
+        }
+        if (ih == 0) {
+            y[0] = fq[0];
+            y[1] = fq[1];
+            y[2] = fw;
+        } else {
+            y[0] = -fq[0];
+            y[1] = -fq[1];
+            y[2] = -fw;
+        }
+    }
+    return n & 7;
+}
+#undef zero
+#undef one
+#undef two8
+#undef twon8
 
 #define half 5.0000000000e-01f
 #define S1 -1.6666667163e-01f
@@ -698,7 +884,76 @@ float func_002E7438(float x, float y, int iy)
 
 /* Module: sound/misc glue, VU0 helpers */
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E76D0);
+extern const double D_00577AC0[]; /* atanhi */
+extern const double D_00577AE0[]; /* atanlo */
+extern const double D_00577B00[]; /* aT */
+extern const double D_00577B68; /* huge */
+double func_002E7C30(double x);
+
+double func_002E76D0(double x)
+{
+    double w, s1, s2, z;
+    s32 ix, hx, id;
+
+    GET_HIGH_WORD(hx, x);
+    ix = hx & 0x7fffffff;
+    if (ix >= 0x44100000) {
+        u32 low;
+        do {
+            ieee_double_shape_type gl_u;
+            gl_u.value = x;
+            low = gl_u.parts.lsw;
+        } while (0);
+        if (ix > 0x7ff00000 || (ix == 0x7ff00000 && low != 0)) {
+            return func_002EBBB0(x, x);
+        }
+        if (hx > 0) {
+            return func_002EBBB0(D_00577AC0[3], D_00577AE0[3]);
+        } else {
+            return func_002EBC08(func_002EBC08(0.0, D_00577AC0[3]), D_00577AE0[3]);
+        }
+    }
+    if (ix < 0x3fdc0000) {
+        if (ix < 0x3e200000) {
+            if (func_002EC198(func_002EBBB0(x, D_00577B68), 1.0) > 0) {
+                return x;
+            }
+        }
+        id = -1;
+    } else {
+        x = func_002E7C30(x);
+        if (ix < 0x3ff30000) {
+            if (ix < 0x3fe60000) {
+                id = 0;
+                x = func_002EBF18(func_002EBC08(func_002EBBB0(x, x), 1.0), func_002EBBB0(x, 2.0));
+            } else {
+                id = 1;
+                x = func_002EBF18(func_002EBC08(x, 1.0), func_002EBBB0(x, 1.0));
+            }
+        } else {
+            if (ix < 0x40038000) {
+                id = 2;
+                x = func_002EBF18(func_002EBC08(x, 1.5), func_002EBBB0(func_002EBC70(x, 1.5), 1.0));
+            } else {
+                id = 3;
+                x = func_002EBF18(-1.0, x);
+            }
+        }
+    }
+    z = func_002EBC70(x, x);
+    w = func_002EBC70(z, z);
+    s1 = func_002EBC70(z, func_002EBBB0(D_00577B00[0], func_002EBC70(w, func_002EBBB0(D_00577B00[2], func_002EBC70(w, func_002EBBB0(D_00577B00[4], func_002EBC70(w, func_002EBBB0(D_00577B00[6], func_002EBC70(w, func_002EBBB0(D_00577B00[8], func_002EBC70(w, D_00577B00[10])))))))))));
+    s2 = func_002EBC70(w, func_002EBBB0(D_00577B00[1], func_002EBC70(w, func_002EBBB0(D_00577B00[3], func_002EBC70(w, func_002EBBB0(D_00577B00[5], func_002EBC70(w, func_002EBBB0(D_00577B00[7], func_002EBC70(w, D_00577B00[9])))))))));
+    if (id < 0) {
+        return func_002EBC08(x, func_002EBC70(x, func_002EBBB0(s1, s2)));
+    } else {
+        double res = func_002EBC08(D_00577AC0[id], func_002EBC08(func_002EBC08(func_002EBC70(x, func_002EBBB0(s1, s2)), D_00577AE0[id]), x));
+        if (hx < 0) {
+            return func_002EBC08(0.0, res);
+        }
+        return res;
+    }
+}
 
 double func_002E7AE0(double x, double y)
 {

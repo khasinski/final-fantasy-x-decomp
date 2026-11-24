@@ -761,8 +761,173 @@ u16 *opu_mdmap(ScriptThread *th, u16 *pc)
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opu_encount);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_2A6FE8/rodata", jtbl_00575820);
+void func_002A9960(void *p);
+void func_002A9A70(ScriptThread *th, ScriptSub *sub, void *p);
+void op_ota_encount1_draw(void *p);
+int func_001AE5D8(void);
+int func_002AA6C8(int res, int start, int n);
+void opus_encount4_init(void *p, int res, void *p324, ScriptSub *sub, s16 *pc);
+int opus_encount4_calc(void *p, ScriptThread *th, void *obj300, ScriptSub *sub, void *no, s16 *pc);
+void func_002AAF30(void *p);
+void func_002AB178(void *p);
+void func_002B2E10(void (*fn)(void *), void *arg, int a, int b);
+void func_002B2E50(void (*fn)(void *), void *arg, s16 *pc, int b);
+void func_002AB3F8(u8 *a0, float *a1);
+void func_002AB678(ScriptThread *th, ScriptSub *sub, int addr, void *pos, int w328);
+
+typedef struct {
+    void *p0;
+    void *p4;
+    void *p8;
+    int wC;
+    s16 *p10;
+} EncWork;
+
+typedef struct {
+    s16 h0;
+    s16 h2;
+    s16 h4;
+    s16 h6;
+    void *p8;
+} EncWork0;
+
+s16 *opu_encount(ScriptThread *th, s16 *pc_arg)
+{
+    register ScriptSub *sub __asm__("$18") = th->sub;
+    register s16 *pc __asm__("$19") = pc_arg;
+    s16 mode = pc[1];
+    int res = th->res[sub->b1E];
+    u8 stack_pad[0x20];
+
+    switch (mode) {
+    case 0: {
+        register EncWork0 *p0 __asm__("$2") = op_malloc(*(void **)((u8 *)th + 0x3A8), 0xD830);
+        EncWork0 *p = p0;
+        register int c12 __asm__("$3") = 12;
+        register int a0 __asm__("$4");
+        register int a1 __asm__("$5");
+        __asm__ volatile("" : "+r"(p0), "+r"(c12));
+        *(void **)((u8 *)sub + 0xBC) = p0;
+        __asm__ volatile("" : "+r"(res), "+r"(c12) : "r"(p0) : "memory");
+        a0 = res;
+        __asm__ volatile("" : "+r"(a0), "+r"(c12));
+        p->h6 = c12;
+        __asm__ volatile("" : "+r"(c12) : "r"(a0) : "memory");
+        a1 = 4;
+        __asm__ volatile("" : "+r"(a1), "+r"(c12));
+        p->h2 = c12;
+        __asm__ volatile("" : "+r"(c12));
+        p->h4 = c12;
+        p->p8 = op_oef2_a_get(a0, a1, pc[2]);
+        pc += 3;
+        func_002A9960(p);
+        break;
+    }
+    case 1:
+        func_002A9A70(th, sub, *(void **)((u8 *)sub + 0xBC));
+        pc += 2;
+        break;
+    case 2: {
+        EncWork *p = *(EncWork **)((u8 *)sub + 0xBC);
+        void *m;
+        if (p == 0) {
+            register EncWork *p0 __asm__("$2") = op_malloc(*(void **)((u8 *)th + 0x3A8), 0xE0);
+            *(void **)((u8 *)sub + 0xBC) = p0;
+            p = p0;
+        }
+        p->p0 = *(void **)((u8 *)th + 0x324);
+        p->p4 = sub;
+        p->p8 = opus_no_get((u8 *)th + 0x300, sub, pc[2]);
+        p->wC = res;
+        p->p10 = pc;
+        pc += 9;
+        op_unit_m_scale((u8 *)p + 0x20, 0.0625f);
+        __asm__("" : "+r"(p));
+        m = opus_local_get(th, sub);
+        op_m_copy((u8 *)p + 0x60, m);
+        func_002DD610((u8 *)p + 0xA0, 512.0f, 0.8f, 0.87285f,
+                      *(float *)((u8 *)sub + 0x40) + 2048.0f,
+                      *(float *)((u8 *)sub + 0x44) + 2048.0f,
+                      1.0f, 16777215.0f, 1.0f, 65536.0f);
+        func_002B2E10(op_ota_encount1_draw, p, th->h214, 1);
+        break;
+    }
+    case 4:
+        if (func_001AE5D8() != 0) {
+            pc += 2;
+        } else {
+            *((u8 *)th + 0x210) = 1;
+        }
+        break;
+    case 8: {
+        void *p = op_malloc(*(void **)((u8 *)th + 0x3A8), func_002AA6C8(res, pc[2], pc[3]));
+        register s16 *old_pc __asm__("$8") = pc;
+        void *p324;
+        __asm__("" : "+r"(old_pc));
+        p324 = *(void **)((u8 *)th + 0x324);
+        *(void **)((u8 *)sub + 0xBC) = p;
+        pc += 5;
+        opus_encount4_init(p, res, p324, sub, old_pc);
+        break;
+    }
+    case 9: {
+        u8 *obj300 = (u8 *)th + 0x300;
+        void *no = opus_no_get(obj300, sub, pc[2]);
+        if (opus_encount4_calc(*(void **)((u8 *)sub + 0xBC), th, obj300, sub, no, pc) == 0) {
+            *(u16 *)((u8 *)sub + 0xB0) |= 0x8000;
+        }
+        pc += 3;
+        break;
+    }
+    case 10:
+    case 11: {
+        void *p = *(void **)((u8 *)sub + 0xBC);
+        void *m = opus_local_get(th, sub);
+        op_m_copy((u8 *)p + 0x60, m);
+        if (mode == 10) {
+            func_002B2E50(func_002AAF30, p, pc, 1);
+        } else {
+            func_002B2E50(func_002AB178, p, pc, 1);
+        }
+        pc += 5;
+        break;
+    }
+    case 12:
+        MMI_SQ_ZERO(0, th);
+        ((s32 *)th)[0] = 0;
+        ((s32 *)th)[1] = 0;
+        func_002AB3F8((u8 *)0x1D00000, (float *)th);
+        pc += 1;
+        break;
+    case 13: {
+        float f;
+        register ScriptThread *a0 __asm__("$4");
+        register ScriptSub *a1 __asm__("$5");
+        register int a2 __asm__("$6");
+        register u8 *a3 __asm__("$7");
+        MMI_SQ_ZERO(0, th);
+        f = 2048.0f;
+        __asm__ volatile("" : "+f"(f));
+        a0 = th;
+        __asm__ volatile("" : "+r"(a0));
+        a1 = sub;
+        a2 = 0x1D00000;
+        __asm__ volatile("" : "+r"(a0), "+r"(a1), "+r"(a2), "+f"(f));
+        ((float *)th)[1] = f;
+        __asm__ volatile("" : "+r"(a1), "+f"(f) : : "memory");
+        a3 = (u8 *)a1 + 0x90;
+        __asm__ volatile("" : "+r"(a3), "+f"(f));
+        ((float *)th)[0] = f;
+        __asm__ volatile("" : "+r"(pc) : "r"(a2), "r"(a3) : "memory");
+        pc += 1;
+        __asm__ volatile("" : "+r"(pc) : : "memory");
+        func_002AB678(a0, a1, a2, a3, *(int *)((u8 *)a0 + 0x328));
+        break;
+    }
+    }
+    (void)stack_pad;
+    return pc;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A9960);
 

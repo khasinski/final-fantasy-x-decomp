@@ -25,6 +25,17 @@ void func_00184EA0(s32 arg0, s32 arg1) {
     func_002DA610(0, 0);
 }
 
+typedef struct {
+    u64 x0 : 11;
+    u64 pad0 : 5;
+    u64 x1 : 11;
+    u64 pad1 : 5;
+    u64 y0 : 11;
+    u64 pad2 : 5;
+    u64 y1 : 11;
+    u64 pad3 : 5;
+} YiScissorBits;
+
 INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_00184F50);
 
 void Sg_GetDBuffDC(void *p);
@@ -111,7 +122,108 @@ int func_001854D8(YiMesh1854D8 *m, float *min, float *max)
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_001855C0);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", yiPacketConvToOMD_DRAWACC);
+void op_gs1_transfer(void);
+void func_00184F50(u64, u64, int, int);
+void func_001786F8(void *);
+void func_00178730(void *);
+void *Sg_PacketGetPtr(void);
+void op_md_draw_map_test(void *, void *, void *);
+void func_001855C0(void *, float *, float *, void *, float, u64, u64);
+
+int yiPacketConvToOMD_DRAWACC(void *a0, YiMesh1854D8 *a1, float *a2, float *a3, void *a4, u64 a5, u64 scissor, float scale)
+{
+    float min[4];
+    float max[4];
+    float sc[4];
+    float mat[4][4];
+    YiScissorBits *sc_bits;
+    int w;
+    int h;
+    int i;
+    int j;
+    float dx;
+    float dz;
+    float sx;
+    float sz;
+    float cx;
+    float cz;
+    float t0;
+    float t1;
+
+    float fw;
+    float fh;
+
+    if (scissor != 0) {
+        sc_bits = (YiScissorBits *)&scissor;
+        w = (int)sc_bits->x1 - (int)sc_bits->x0 + 1;
+        h = (int)sc_bits->y1 - (int)sc_bits->y0 + 1;
+    } else {
+        w = 0x100;
+        h = 0x100;
+    }
+
+    if (a2 == 0 || a3 == 0) {
+        func_001854D8(a1, min, max);
+    } else {
+        func_001854D8(a1, min, max);
+        if (a2[0] < a3[0]) {
+            min[0] = a2[0];
+            max[0] = a3[0];
+        } else {
+            min[0] = a3[0];
+            max[0] = a2[0];
+        }
+        if (a2[2] < a3[2]) {
+            min[2] = a2[2];
+            max[2] = a3[2];
+        } else {
+            min[2] = a3[2];
+            max[2] = a2[2];
+        }
+    }
+
+    fw = (float)w;
+    fh = (float)h;
+    t0 = -min[2];
+    t1 = -max[2];
+    max[2] = t0;
+    min[2] = t1;
+
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            mat[i][j] = 0.0f;
+        }
+    }
+
+    dz = max[2] - min[2];
+    dx = max[0] - min[0];
+    sz = (fh / dz) * scale;
+    sx = (fw / dx) * scale;
+    cz = (dz * 0.5f + min[2]) * sz;
+    cx = (dx * 0.5f + min[0]) * sx;
+
+    mat[0][0] = sx;
+    mat[1][2] = -1.0f;
+    mat[2][1] = -sz;
+    sc[2] = sz;
+    sc[0] = sx;
+    mat[3][0] = (float)(((int)sc_bits->x0 >> 1) + 0x800) - cx;
+    mat[3][1] = (float)(((int)sc_bits->y0 >> 1) + 0x800) - cz;
+    mat[3][2] = 1000.0f - min[1];
+    mat[3][3] = 1.0f;
+
+    func_002DA610(0, 0);
+    op_gs1_transfer();
+    func_002DA610(0, 0);
+    func_00184F50(a5, scissor, w, h);
+    func_001786F8(a0);
+    func_00178730(a0);
+    op_md_draw_map_test(a1, mat, Sg_PacketGetPtr());
+    func_002DA610(0, 0);
+    func_00185408();
+    func_001855C0(a1, min, max, a4, scale, a5, scissor);
+    return 0;
+}
 
 extern u8 D_00597F00[];
 extern char D_0056CF70[];

@@ -299,7 +299,49 @@ void func_002ED6D8(W11Reent *ptr, void *mem)
     func_002EF198(ptr);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2ED128", func_002ED9F8);
+extern char *D_005685C0; /* sbrk_base */
+extern struct { int arena; } D_005685D8; /* current_mallinfo */
+char *func_002EFF40(W11Reent *ptr, int incr); /* _sbrk_r */
+unsigned long func_002EAC90(unsigned long a, unsigned long b); /* __udivdi3 */
+void func_002EE3D8(W11Reent *ptr, u32 nb); /* malloc_extend_top */
+
+int func_002ED9F8(W11Reent *ptr, u32 pad)
+{
+    long top_size;
+    long extra;
+    char *current_brk;
+    char *new_brk;
+    unsigned long pagesz = 4096;
+
+    func_002EF190(ptr);
+    top_size = V7_TOP->size & ~3;
+    extra = func_002EAC30(func_002EAC90((unsigned long)(top_size - pad + pagesz - 1 - 16), pagesz) - 1, pagesz);
+    if (extra < (long)pagesz) {
+        func_002EF198(ptr);
+        return 0;
+    }
+    current_brk = func_002EFF40(ptr, 0);
+    if (current_brk != (char *)V7_TOP + top_size) {
+        func_002EF198(ptr);
+        return 0;
+    }
+    new_brk = func_002EFF40(ptr, -extra);
+    if (new_brk == (char *)(-1)) {
+        current_brk = func_002EFF40(ptr, 0);
+        top_size = current_brk - (char *)V7_TOP;
+        if (top_size >= 16) {
+            D_005685D8.arena = current_brk - D_005685C0;
+            V7_TOP->size = top_size | 1;
+        }
+        func_002EF198(ptr);
+        return 0;
+    } else {
+        V7_TOP->size = (top_size - extra) | 1;
+        D_005685D8.arena -= extra;
+        func_002EF198(ptr);
+        return 1;
+    }
+}
 
 /* fseek; the gotos are those of the BSD source */
 int func_002EDB68(W11File *fp, long offset, int whence)
@@ -572,7 +614,189 @@ void func_002EE288(W11File *fp)
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2ED128", func_002EE3D8);
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2ED128", func_002EE630);
+#define V7_LONG_SUB_SIZE_T(x, y) ((x) < (y) ? -(long)((y) - (x)) : (long)((x) - (y)))
+#define V7_BIN_INDEX(sz) \
+    (((((unsigned long)(sz)) >> 9) == 0) ? (((unsigned long)(sz)) >> 3) \
+    : ((((unsigned long)(sz)) >> 9) <= 4) ? 56 + (((unsigned long)(sz)) >> 6) \
+    : ((((unsigned long)(sz)) >> 9) <= 20) ? 91 + (((unsigned long)(sz)) >> 9) \
+    : ((((unsigned long)(sz)) >> 9) <= 84) ? 110 + (((unsigned long)(sz)) >> 12) \
+    : ((((unsigned long)(sz)) >> 9) <= 340) ? 119 + (((unsigned long)(sz)) >> 15) \
+    : ((((unsigned long)(sz)) >> 9) <= 1364) ? 124 + (((unsigned long)(sz)) >> 18) \
+    : 126)
+
+void *func_002EE630(W11Reent *ptr, int bytes)
+{
+    V7MChunk *victim;
+    u32 victim_size;
+    int idx;
+    V7MChunk *bin;
+    V7MChunk *remainder;
+    long remainder_size;
+    int remainder_index;
+    unsigned long block;
+    int startidx;
+    V7MChunk *fwd;
+    V7MChunk *bck;
+    V7MChunk *q;
+    u32 nb;
+
+    nb = ((u32)bytes + 4 + 15) < (16 + 15) ? 16 : (((u32)bytes + 4 + 15) & ~15);
+    func_002EF190(ptr);
+
+    if (nb < 504) {
+        idx = (unsigned long)nb >> 3;
+        q = V7_BIN_AT(idx);
+        victim = q->bk;
+        if (victim != q) {
+            victim_size = victim->size & ~3;
+            V7_UNLINK(victim, bck, fwd);
+            ((V7MChunk *)((char *)victim + victim_size))->size |= 1;
+            func_002EF198(ptr);
+            return (char *)victim + 8;
+        }
+        idx += 2;
+    } else {
+        idx = V7_BIN_INDEX(nb);
+        bin = V7_BIN_AT(idx);
+        for (victim = bin->bk; victim != bin; victim = victim->bk) {
+            victim_size = victim->size & ~3;
+            remainder_size = V7_LONG_SUB_SIZE_T(victim_size, nb);
+            if (remainder_size >= 16) {
+                --idx;
+                break;
+            } else if (remainder_size >= 0) {
+                V7_UNLINK(victim, bck, fwd);
+                ((V7MChunk *)((char *)victim + victim_size))->size |= 1;
+                func_002EF198(ptr);
+                return (char *)victim + 8;
+            }
+        }
+        ++idx;
+    }
+
+    if ((victim = V7_LAST_REMAINDER->fd) != V7_LAST_REMAINDER) {
+        victim_size = victim->size & ~3;
+        remainder_size = V7_LONG_SUB_SIZE_T(victim_size, nb);
+        if (remainder_size >= 16) {
+            remainder = (V7MChunk *)((char *)victim + nb);
+            victim->size = nb | 1;
+            V7_LAST_REMAINDER->fd = V7_LAST_REMAINDER->bk = remainder;
+            remainder->fd = remainder->bk = V7_LAST_REMAINDER;
+            remainder->size = remainder_size | 1;
+            ((V7MChunk *)((char *)remainder + remainder_size))->prev_size = remainder_size;
+            func_002EF198(ptr);
+            return (char *)victim + 8;
+        }
+        V7_LAST_REMAINDER->fd = V7_LAST_REMAINDER->bk = V7_LAST_REMAINDER;
+        if (remainder_size >= 0) {
+            ((V7MChunk *)((char *)victim + victim_size))->size |= 1;
+            func_002EF198(ptr);
+            return (char *)victim + 8;
+        }
+        if (victim_size < 512) {
+            remainder_index = (unsigned long)victim_size >> 3;
+            V7_MARK_BINBLOCK(remainder_index);
+            bck = V7_BIN_AT(remainder_index);
+            fwd = bck->fd;
+            victim->bk = bck;
+            victim->fd = fwd;
+            fwd->bk = bck->fd = victim;
+        } else {
+            remainder_index = V7_BIN_INDEX(victim_size);
+            bck = V7_BIN_AT(remainder_index);
+            fwd = bck->fd;
+            if (fwd == bck) {
+                V7_MARK_BINBLOCK(remainder_index);
+            } else {
+                while (fwd != bck && victim_size < (fwd->size & ~3)) {
+                    fwd = fwd->fd;
+                }
+                bck = fwd->bk;
+            }
+            victim->bk = bck;
+            victim->fd = fwd;
+            fwd->bk = bck->fd = victim;
+        }
+    }
+
+    if ((block = ((unsigned long)1 << (idx / 4))) <= V7_BINBLOCKS) {
+        if ((block & V7_BINBLOCKS) == 0) {
+            idx = (idx & ~3) + 4;
+            block <<= 1;
+            while ((block & V7_BINBLOCKS) == 0) {
+                idx += 4;
+                block <<= 1;
+            }
+        }
+        for (;;) {
+            q = bin = V7_BIN_AT(idx);
+            startidx = idx;
+            do {
+                for (victim = bin->bk; victim != bin; victim = victim->bk) {
+                    victim_size = victim->size & ~3;
+                    remainder_size = V7_LONG_SUB_SIZE_T(victim_size, nb);
+                    if (remainder_size >= 16) {
+                        V7_UNLINK(victim, bck, fwd);
+                        remainder = (V7MChunk *)((char *)victim + nb);
+                        victim->size = nb | 1;
+                        V7_LAST_REMAINDER->fd = V7_LAST_REMAINDER->bk = remainder;
+                        remainder->fd = remainder->bk = V7_LAST_REMAINDER;
+                        remainder->size = remainder_size | 1;
+                        ((V7MChunk *)((char *)remainder + remainder_size))->prev_size = remainder_size;
+                        func_002EF198(ptr);
+                        return (char *)victim + 8;
+                    } else if (remainder_size >= 0) {
+                        ((V7MChunk *)((char *)victim + victim_size))->size |= 1;
+                        V7_UNLINK(victim, bck, fwd);
+                        func_002EF198(ptr);
+                        return (char *)victim + 8;
+                    }
+                }
+                bin = (V7MChunk *)((char *)bin + 2 * sizeof(V7MChunk *));
+                if (idx < 63) {
+                    bin = (V7MChunk *)((char *)bin + 2 * sizeof(V7MChunk *));
+                    ++idx;
+                }
+                ++idx;
+            } while ((idx & 3) != 0);
+
+            do {
+                if ((startidx & 3) == 0) {
+                    V7_BINBLOCKS &= ~block;
+                    break;
+                }
+                --startidx;
+                q = (V7MChunk *)((char *)q - 2 * sizeof(V7MChunk *));
+            } while (q->fd == q);
+
+            if ((block <<= 1) <= V7_BINBLOCKS && block != 0) {
+                while ((block & V7_BINBLOCKS) == 0) {
+                    idx += 4;
+                    block <<= 1;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    remainder_size = V7_LONG_SUB_SIZE_T(V7_TOP->size & ~3, nb);
+    if ((V7_TOP->size & ~3) < nb || remainder_size < 16) {
+        func_002EE3D8(ptr, nb);
+        remainder_size = V7_LONG_SUB_SIZE_T(V7_TOP->size & ~3, nb);
+        if ((V7_TOP->size & ~3) < nb || remainder_size < 16) {
+            func_002EF198(ptr);
+            return 0;
+        }
+    }
+
+    victim = V7_TOP;
+    victim->size = nb | 1;
+    V7_TOP = (V7MChunk *)((char *)victim + nb);
+    V7_TOP->size = remainder_size | 1;
+    func_002EF198(ptr);
+    return (char *)victim + 8;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2ED128", func_002EEDA8);
 

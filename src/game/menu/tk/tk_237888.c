@@ -932,8 +932,368 @@ Task *func_002397D8(void) {
     return t;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00239840);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_237888/rodata", jtbl_00572610);
+extern char D_00572600[];
+extern s32 D_00693FE4, D_00693FE8, D_00693FEC;
+extern u8 *_tk_D_00694088 __asm__("D_00694088");
+extern u8 *_tk_D_0069408C __asm__("D_0069408C");
+extern u8 *_tk_D_00694090 __asm__("D_00694090");
+int _tk_SndSepPlaySimple(u32) __asm__("SndSepPlaySimple");
+int _tk_TOMenuCloseYesNoWindow(void) __asm__("TOMenuCloseYesNoWindow");
+
+void func_00239840(Sub1C *t)
+{
+    register s32 *st_p __asm__("$19") = &t->f1C;
+    int st;
+
+    func_00220318();
+    TOMenuGetControlPadRep();
+    TOMenuGetControlPadTrg();
+    st = t->f1C;
+again:
+    switch (st) {
+        case 0: {
+            register s32 sz2 __asm__("$3");
+            D_00693FE4 = TkCdSize(0x2F, 0);
+            D_00693FEC = TkCdSize(0x2F, 2);
+            D_00693FE8 = TkCdSize(0x2F, 4);
+            _tk_D_00694088 = (u8 *)func_002281E0();
+            sz2 = D_00693FEC;
+            _tk_D_0069408C = _tk_D_00694088 + ((D_00693FE4 + 0x3F) / 64) * 64;
+            _tk_D_00694090 = _tk_D_0069408C + ((sz2 + 0x3F) / 64) * 64;
+            *st_p = 1;
+            return;
+        }
+        case 1:
+            if (TkCdReadSync(1) != 0) {
+                return;
+            }
+            TkCdReadNB(0x2F, 0, D_00694088);
+            *st_p = 2;
+            return;
+        case 2:
+            if (TkCdReadSync(1) != 0) {
+                return;
+            }
+            *st_p = 3;
+            st = 3;
+            goto again;
+        case 3:
+            TkCdReadNB(0x2F, 2, D_0069408C);
+            *st_p = 4;
+            return;
+        case 4:
+            if (TkCdReadSync(1) != 0) {
+                return;
+            }
+            *st_p = 5;
+            st = 5;
+            goto again;
+        case 5:
+            TkCdReadNB(0x2F, 4, D_00694090);
+            *st_p = 6;
+            return;
+        case 6:
+            if (TkCdReadSync(1) != 0) {
+                return;
+            }
+            func_002394F8();
+            func_002394E8();
+            TkMn2SetMainFrameRatioDiff(-0x10);
+            func_00237888();
+            *st_p = 7;
+            st = 7;
+            goto again;
+        case 7:
+            if (TkMn2GetMainFrameRatio() > 0) {
+                return;
+            }
+            *st_p = 9;
+            st = 9;
+            goto again;
+        case 8:
+            func_002377C8();
+            *st_p = 9;
+            st = 9;
+            goto again;
+        case 9:
+            switch (D_00326030->x48) {
+            case 0:
+                if (D_00693FD0 == 0) {
+                    func_002388A0();
+                }
+                func_00238E98();
+                break;
+            case 1:
+                if (D_00693FD4 == 0) {
+                    func_00238DF0();
+                }
+                func_00238940();
+                break;
+            case 2:
+                break;
+            }
+            if (D_00326030->b45 < 0) {
+                *st_p = 0x22;
+                st = 0x22;
+                goto again;
+            }
+            if (D_00326030->b45 != 0) {
+                switch (D_00326030->x48) {
+                case 0:
+                    *st_p = 0xA;
+                    break;
+                case 1:
+                    *st_p = 0x17;
+                    break;
+                case 2:
+                    *st_p = 0x22;
+                    st = 0x22;
+                    goto again;
+                default:
+                    *st_p = 8;
+                    break;
+                }
+            }
+            return;
+        case 0xA:
+        case 0xB:
+            func_002395F8();
+            *st_p = 0xC;
+            return;
+        case 0xC:
+            if (D_00693FD0->b45 < 0) {
+                *st_p = 0xE;
+                return;
+            }
+            if (D_00693FD0->b45 != 0) {
+                register u16 *p __asm__("$2") = (u16 *)func_00228220(D_00694080, (s32)_tk_D_0069408C);
+                p += D_00693FD0->x48;
+                if (func_002383F8(func_00237E00(p[1])) != 0) {
+                    _tk_SndSepPlaySimple(0x80000001);
+                    st = 0xD;
+                    goto again;
+                }
+                _tk_SndSepPlaySimple(0x80000003);
+                st = 0xF;
+                goto again;
+            }
+            return;
+        case 0xD:
+            *st_p = 0x11;
+            return;
+        case 0xF: {
+            int msg;
+            if (D_00693FF4 != 0) {
+                msg = TkMenuMainMes(0x1A);
+            } else {
+                msg = TkMenuMainMes(0x19);
+            }
+            func_00236940(msg, 0, 0);
+            TOMenuGetYesNoWindow()->b3E = 4;
+            *st_p = 0x10;
+            return;
+        }
+        case 0x10: {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn != 0 && yn->b45 != 0) {
+                _tk_TOMenuCloseYesNoWindow();
+                *st_p = 0xB;
+            }
+            return;
+        }
+        case 0x11:
+            func_002390D8(D_00693FD0);
+            *st_p = 0x12;
+            return;
+        case 0x12:
+            if (D_00693FD8->b45 < 0) {
+                st = 0x14;
+                goto again;
+            }
+            if (D_00693FD8->b45 != 0) {
+                st = 0x13;
+                goto again;
+            }
+            return;
+        case 0x13:
+            func_002391A0();
+            func_002394F8();
+            func_002394E8();
+            *st_p = 0x15;
+            return;
+        case 0x14:
+            func_002391A0();
+            *st_p = 0xB;
+            return;
+        case 0x15: {
+            int r = func_00237C88(D_00693FF8);
+            int m1 = TkMenuMainMes(0x1C);
+            int m2 = TkMenuMainMes(0x1D);
+            int msg;
+            switch (r) {
+            case 1:
+                msg = TkMenuMainMes(0x31);
+                break;
+            case 2:
+                msg = TkMenuMainMes(0x32);
+                break;
+            case 3:
+                msg = TkMenuMainMes(0x33);
+                break;
+            case 0:
+            default:
+                msg = TkMenuMainMes(0x28);
+                break;
+            }
+            func_00236940(msg, m1, m2);
+            {
+                Task *yn = TOMenuGetYesNoWindow();
+                yn->b3E = 5;
+                yn->b37 = 0;
+            }
+            *st_p = 0x16;
+            return;
+        }
+        case 0x16: {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn->b45 < 0) {
+                func_002394F8();
+                func_002394E8();
+                _tk_TOMenuCloseYesNoWindow();
+                *st_p = 0xB;
+                return;
+            }
+            if (yn->b45 != 0) {
+                int sel = yn->x48;
+                _tk_TOMenuCloseYesNoWindow();
+                if (sel == 0) {
+                    _tk_SndSepPlaySimple(0x80000038);
+                    func_00237D88(D_00693FF8);
+                } else {
+                    _tk_SndSepPlaySimple(0x80000001);
+                }
+                func_002394F8();
+                func_002394E8();
+                *st_p = 0xB;
+            }
+            return;
+        }
+        case 0x18:
+            func_002394F8();
+            func_002394E8();
+        case 0x17:
+            func_00239638();
+            *st_p = 0x19;
+            return;
+        case 0x19:
+            if (D_00693FD4->b45 < 0) {
+                *st_p = 0x1B;
+                return;
+            }
+            if (D_00693FD4->b45 != 0) {
+                st = 0x1A;
+                goto again;
+            }
+            return;
+        case 0x1A: {
+            register SysEntry *tbl __asm__("$3") = SYS_TBL;
+            register u32 b __asm__("$4");
+            tbl = &tbl[D_00693FD4->x48];
+            __asm__("" : "+r"(tbl));
+            b = tbl->b3;
+            __asm__("" : "+r"(b));
+            if (b == 0) {
+                _tk_SndSepPlaySimple(0x80000003);
+                *st_p = 0x1C;
+            } else {
+                _tk_SndSepPlaySimple(0x80000001);
+                *st_p = 0x1E;
+            }
+            return;
+        }
+        case 0xE:
+        case 0x1B:
+            *st_p = 8;
+            return;
+        case 0x1C: {
+            u16 id = *(u16 *)&SYS_TBL[D_00693FD4->x48];
+            int msg;
+            if (id != 0) {
+                s32 buf;
+                Unk1BFED8 *w = MsGetSaveWeapon(id, &buf);
+                if (((w->b3 >> 2) & 1) || ((w->b3 >> 3) & 1) || (w->b3 & 1)) {
+                    msg = TkMenuMainMes(0x36);
+                } else if (w->b5 != 0) {
+                    msg = TkMenuMainMes(0x35);
+                } else {
+                    msg = TkMenuMainMes(0x34);
+                }
+            } else {
+                msg = TkMenuMainMes(0x36);
+            }
+            func_00236940(msg, 0, 0);
+            TOMenuGetYesNoWindow()->b3E = 4;
+            *st_p = 0x1D;
+            return;
+        }
+        case 0x1D: {
+            Task *yn = TOMenuGetYesNoWindow();
+            if (yn != 0 && yn->b45 != 0) {
+                _tk_TOMenuCloseYesNoWindow();
+                *st_p = 0x18;
+            }
+            return;
+        }
+        case 0x1E:
+            func_002393D8(D_00693FD4);
+            *st_p = 0x1F;
+            return;
+        case 0x1F:
+            if (D_00693FDC->b45 < 0) {
+                st = 0x21;
+                goto again;
+            }
+            if (D_00693FDC->b45 != 0) {
+                st = 0x20;
+                goto again;
+            }
+            return;
+        case 0x20: {
+            s32 buf;
+            u16 id;
+            int price;
+            register SysEntry *tbl __asm__("$3");
+            _tk_SndSepPlaySimple(0x8000000E);
+            tbl = SYS_TBL;
+            id = *(u16 *)&tbl[D_00693FD4->x48];
+            price = func_002382D0((s32)MsGetSaveWeapon(id, &buf));
+            func_001C0318(id);
+            MsPayGIL(-price);
+        }
+        case 0x21:
+            func_002394C0();
+            *st_p = 0x18;
+            return;
+        case 0x22:
+            AtelRegistCallbackQue2(0, TkMn2ArmsRefreshArms, D_00572600);
+            func_00238E98();
+            func_00238940();
+            TkMn2SetMainFrameRatioDiff(0x10);
+            *st_p = 0x23;
+            return;
+        case 0x23:
+            if (TkMn2GetMainFrameRatio() >= 0x80) {
+                *st_p = 0x24;
+            }
+            return;
+        case 0x24:
+            func_00237818();
+            TkMenuMainSleepMenu(0xC);
+            return;
+        default:
+            return;
+    }
+}
 
 void func_0023A110(void) {
     func_002492F0();

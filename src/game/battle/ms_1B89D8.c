@@ -127,6 +127,279 @@ void MsCheckStatus(void) {
     }
 }
 
+extern u8 D_00662580[];
+void MsSetRamChrParam(int id);
+void MsSetChrImageDamageAttack(void *c);
+void MsSetRamChrAbility(int id, BtlChr *chr);
+void func_001BA720(int id);
+
+typedef struct {
+    u8 name[0x28];
+    u8 pad28[0x50 - 0x28];
+    u8 b50;
+    u8 b51;
+    u8 b52[2];
+    s32 w54;
+    s32 w58;
+    s32 w5C;
+    s32 w60;
+    s32 w64;
+    u8 b68;
+    u8 b69;
+    u8 b6A;
+    u8 b6B;
+    u8 b6C;
+    u8 b6D;
+    u8 b6E;
+    u8 b6F;
+    u8 pad70[8];
+    u16 h78;
+    u8 b7A;
+    u8 b7B;
+    u8 b7C;
+    u8 b7D;
+    u8 pad7E[3];
+    u8 b81;
+    u8 b82;
+    u8 b83;
+    u8 pad84;
+    u8 b85;
+    u8 b86;
+    u8 b87;
+    u8 b88;
+    u8 b89;
+    u8 pad8A[2];
+    s32 w8C;
+    s32 w90;
+    s32 w94;
+    u8 pad98;
+    u8 b99;
+    u8 b9A;
+    u8 b9B;
+    u8 b9C;
+    u8 b9D;
+    u8 pad9E[0xC6 - 0x9E];
+    u16 hC6;
+    u8 padC8[0xD6 - 0xC8];
+    u16 hD6;
+    u8 padD8[0xEA - 0xD8];
+    u16 hEA;
+    u8 padEC[2];
+    u16 hEE;
+    u16 hF0;
+    u16 hF2;
+    u16 hF4;
+    u16 hF6;
+    u16 hF8;
+    u16 hFA;
+    u8 bFC;
+    u8 padFD[4];
+    u8 b101[0x19];
+    u16 h11A;
+    u8 pad11C[0x150 - 0x11C];
+    u16 h150[0x16];
+    u8 pad17C[0x186 - 0x17C];
+    u16 h186;
+    u16 h188;
+    u8 pad18A[7];
+    u8 b191;
+    u8 pad192;
+    u8 b193;
+    u8 b194;
+    u8 pad195;
+    u16 h196;
+    u8 b198;
+    u8 b199;
+    u8 pad19A[7];
+    u8 b1A1;
+    u8 pad1A2[2];
+    s32 w1A4;
+    s32 w1A8;
+    u8 pad1AC[0x1BC - 0x1AC];
+    s32 w1BC;
+    u8 pad1C0[0x1CC - 0x1C0];
+    float f1CC;
+    u8 pad1D0[2];
+    u16 h1D2;
+    u8 pad1D4[5];
+    u8 b1D9;
+    u8 pad1DA[0x1EC - 0x1DA];
+} BtlChrSub200;
+
+typedef struct {
+    u8 pad00[0x04];
+    s32 w04;
+    s32 w08;
+    u8 b0C;
+    u8 b0D;
+    u16 h0E;
+    s8 b10;
+    s8 b11;
+    u8 pad12;
+    u8 b13;
+    u8 b14;
+    s8 b15;
+    s8 b16[4];
+    u8 pad1A;
+    s8 b1B;
+    s8 b1C;
+    s8 b1D;
+    s8 b1E;
+    u8 pad1F;
+    s8 b20;
+    s8 b21;
+    s8 b22;
+    s8 b23;
+    s8 b24;
+    s8 b25;
+    s8 b26;
+    s8 b27;
+    s8 b28;
+    u8 pad29;
+    s8 b2A;
+    s8 b2B;
+    s8 b2C;
+    s8 b2D;
+    s8 b2E[4];
+    s8 b32;
+    u8 pad33;
+    s8 b34;
+    u8 pad35[2];
+    s8 b37;
+    u8 pad38;
+    s8 b39;
+    u8 pad3A[6];
+    float f40;
+    float f44;
+    void *p48;
+    u8 pad4C[0x60 - 0x4C];
+    float f60;
+    float f64;
+    float f68;
+    float f6C;
+    u8 pad70[0xB0 - 0x70];
+    u8 bB0;
+    u8 bB1;
+    u8 bB2;
+    u8 padB3[2];
+    s8 bB5;
+    s8 bB6;
+    u8 padB7;
+    s8 bB8;
+    s8 bB9;
+    u8 padBA[2];
+    s16 hBC;
+    u8 padBE[2];
+    s16 hC0;
+    u8 padC2[4];
+    s8 bC6;
+    u8 padC7;
+    s8 bC8;
+    s8 bC9;
+    u8 padCA[5];
+    s8 bCF;
+    u8 padD0[0xDD - 0xD0];
+    s8 bDD;
+    u8 padDE[4];
+    s8 bE2;
+    u8 padE3[0xF7 - 0xE3];
+    s8 bF7;
+    u8 bF8;
+    u8 padF9[2];
+    s8 bFB;
+    u8 padFC;
+    s8 bFD;
+    u8 padFE;
+    u8 bFF;
+    u8 pad100[2];
+    u8 b102;
+    u8 pad103[4];
+    s8 b107;
+    u8 pad108[7];
+    s8 b10F;
+    u8 pad110[0x170 - 0x110];
+    s16 h170;
+    s16 h172;
+    u8 pad174[4];
+    s8 b178;
+    s8 b179;
+    s8 b17A;
+    u8 pad17B;
+    float f17C;
+    s32 w180;
+    s32 w184;
+    u8 pad188[8];
+    float f190;
+    float f194;
+    float f198;
+    float f19C;
+    u8 pad1A0[0x1B0 - 0x1A0];
+    float f1B0;
+    u8 pad1B4[9];
+    s8 b1BD;
+    s8 b1BE;
+    u8 pad1BF[0x1CC - 0x1BF];
+    s8 b1CC;
+    u8 pad1CD[0x1F4 - 0x1CD];
+    s32 w1F4;
+    u8 pad1F8[8];
+    BtlChrSub200 s200;
+    u8 pad3EC[0xA88 - 0x3EC];
+    s8 bA88;
+    u8 padA89[3];
+    s8 bA8C;
+    u8 padA8D[5];
+    s8 bA92;
+    s8 bA93;
+    s8 bA94;
+    s8 bA95;
+    s8 bA96;
+    s8 bA97;
+    s8 bA98;
+    s8 bA99;
+    s8 bA9A;
+    u8 padA9B[3];
+    u16 hA9E;
+    u8 padAA0[4];
+    u8 bAA4;
+    u8 bAA5;
+    u8 padAA6[0xAB3 - 0xAA6];
+    s8 bAB3;
+    u8 padAB4[5];
+    s8 bAB9;
+    u8 padABA[0xACE - 0xABA];
+    s8 bACE;
+    s8 bACF;
+    u8 padAD0[5];
+    s8 bAD5;
+    u8 padAD6[0xAEC - 0xAD6];
+    s32 wAEC;
+    u8 padAF0[0xC20 - 0xAF0];
+    s32 wC20;
+    u8 padC24[0xC34 - 0xC24];
+    u8 bC34;
+    u8 bC35;
+    u8 padC36[0xC40 - 0xC36];
+    void *pC40[2];
+    void *pC48;
+} BtlChrEx;
+
+typedef struct {
+    u8 pad00[0x4D];
+    s8 b4D;
+    s8 b4E;
+    u8 pad4F[0x68 - 0x4F];
+    RangeTbl *p68;
+    u8 pad6C[0xF0 - 0x6C];
+    u16 *pF0;
+    u8 padF4[0x20FE - 0xF4];
+    s8 b20FE;
+    u8 pad20FF[0x2115 - 0x20FF];
+    u8 b2115;
+} GameStateEx;
+
+#define GS_EX ((GameStateEx *)&D_003172F0)
+
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsSetRamChrData);
 
 void MsSetRamMonData(void) {
@@ -314,7 +587,295 @@ void func_001B98A8(Obj436 *p) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", MsSetRamChr);
+typedef struct {
+    u8 raw[0x118];
+} BtlItemSlot;
+
+typedef struct {
+    u8 pad00[0x14];
+    s32 w14;
+    u8 pad18[4];
+    s32 w1C;
+    s32 w20;
+    s32 w24;
+    u8 pad28[4];
+    u8 b2C;
+    u8 pad2D[0x37 - 0x2D];
+    u8 b37;
+    u8 b38;
+    u8 b39;
+    u8 b3A;
+    u8 pad3B[2];
+    u8 b3D;
+    u8 pad3E[0x94 - 0x3E];
+} PartySlotEx;
+
+typedef struct {
+    u8 pad00[0x10];
+    u8 b10;
+    u8 pad11[0x2A - 0x11];
+    u8 b2A;
+    u8 b2B;
+} PlyExcelEx;
+
+typedef struct {
+    u8 pad00[0x14];
+    s32 w14;
+    s32 w18;
+    s32 w1C;
+    u8 b20;
+    u8 b21;
+    u8 b22;
+    u8 b23;
+    u8 b24;
+    u8 b25;
+    u8 b26;
+    u8 b27;
+    u16 h28;
+    u8 b2A;
+    u8 b2B;
+    u8 b2C;
+    u8 b2D;
+    u8 b2E;
+    u8 b2F[0x19];
+    u16 h48;
+    u16 h4A;
+    u16 h4C;
+    u16 h4E;
+    u16 h50[16];
+    u16 h70;
+    u8 pad72[2];
+    u16 h74;
+    u8 b76;
+    u8 b77;
+    u16 h78;
+} MonDataEx;
+
+void MsSetRamChr(int unused, int id)
+{
+    BtlChrEx *c = (BtlChrEx *)MsGetChr(id);
+    BtlChrSub200 *s = &c->s200;
+
+    MsStructClear(s, 0x1EC);
+    if (MsGetRamChrMonster(id) == 0) {
+        PlyExcelEx *ex = (PlyExcelEx *)MsGetExcelData(id, GS_EX->p68, 0);
+        PartySlotEx *ps = &((PartySlotEx *)D_0031EA9C)[id];
+        u8 *name = ((u8 *)D_0031EA9C) + 0xD80 + id * 0x14;
+        int j;
+
+        for (j = 0; j < 0x14; j++) {
+            s->name[j] = *name++;
+        }
+        s->b50 = ex->b10;
+        s->b51 = ps->b2C;
+        s->b7A = MsCheckRange(ps->b37, 0, 0xFF);
+        s->b85 = 0xFF;
+        s->b86 = 0xFF;
+        s->h78 = 0;
+        s->b7B = ps->b38;
+        s->b7C = ps->b39;
+        s->b7D = ps->b3A;
+        s->b88 = 0;
+        s->b89 = ex->b2A;
+        s->h196 = 0;
+        s->b198 = ps->b3D;
+        s->b199 = ex->b2B;
+        s->w8C = ps->w14;
+        s->w90 = ps->w1C;
+        s->w94 = ps->w20;
+        s->w64 = ps->w24;
+        s->w1A4 = s->w90;
+        s->w1A8 = s->w94;
+        s->w1BC = -1;
+        s->b191 = 0xFF;
+        s->b1A1 = 0x32;
+        s->b1D9 = 0;
+        c->wC20 = s->w64;
+        s->b82 = id;
+        s->b83 = 0;
+        s->f1CC = 1.0f;
+        s->h1D2 = 0xFF;
+        MsSetRamChrParam(id);
+        {
+            register s32 off __asm__("$2") = id * 0x118; /* DEBT(REG) */
+            register s32 base __asm__("$5") = D_006625E0; /* DEBT(REG) */
+            register u16 c3000 __asm__("$3") = 0x3000; /* DEBT(REG) */
+            register void *p __asm__("$7"); /* DEBT(REG) */
+            s->hC6 = 0;
+            s->hD6 = 0;
+            s->h186 = c3000;
+            p = (void *)(base + off);
+            c->pC48 = p;
+        }
+        if (MsGetRamChrSummon(id) != 0) {
+            s->h188 = 0;
+        } else {
+            s->h188 = 0x3021;
+        }
+        s->h78 |= 0x200;
+        s->b193 = 0xFF;
+        s->b194 = 0xFF;
+        for (j = 0; j < 0x16; j++) {
+            s->h150[j] = 0;
+        }
+        MsSetChrImageDamageAttack(c);
+        MsSetRamChrAbility(id, (BtlChr *)c);
+        func_001BA720(id);
+        if (GS_EX->b20FE != 0 || GS_EX->b2115 == 2) {
+            func_001B96E8(id, 0x3002, 1);
+        }
+        if (GS_EX->b4D != 0) {
+            s->w90 = 1;
+        }
+    } else {
+        MonDataEx *m = (MonDataEx *)c->pC40[0];
+        register u8 *lang __asm__("$3") = (u8 *)c->pC40[func_001BD360()]; /* DEBT(REG) */
+        u8 *m48 = (u8 *)c->p48;
+        int cnt;
+        int i;
+
+        if (m48 != 0) {
+            register u8 *mname __asm__("$5"); /* DEBT(REG) */
+            BtlItemSlot *dst;
+            u8 *m2F;
+
+            {
+                register u16 w08 __asm__("$2") = m->h74; /* DEBT(REG) */
+                c->w08 = w08;
+                __asm__("" : "+m"(c->w08), "+r"(m)); /* DEBT(ORDER) */
+            }
+            m2F = m->b2F;
+            __asm__("" : "+r"(m2F), "+r"(lang)); /* DEBT(ORDER) */
+            {
+                register int loff __asm__("$2") = *(u16 *)lang; /* DEBT(REG) */
+                __asm__("" : "+r"(loff)); /* DEBT(ORDER) */
+                mname = lang + (loff + 0x80);
+            }
+            {
+                register int j __asm__("$6"); /* DEBT(REG) */
+                for (j = 0; j < 0x28; j++) {
+                    s->name[j] = mname[j];
+                }
+            }
+            {
+                register u8 *p52_base __asm__("$7") = s->b52; /* DEBT(REG) */
+                register u8 *p52 __asm__("$2"); /* DEBT(REG) */
+                register u8 ff __asm__("$3"); /* DEBT(REG) */
+                register int k __asm__("$6"); /* DEBT(REG) */
+                __asm__("" : "+r"(p52_base)); /* DEBT(ORDER) */
+                p52 = p52_base + 1;
+                __asm__ volatile("" : "+r"(p52)); /* DEBT(ORDER) */
+                ff = 0xFF;
+                for (k = 1; k >= 0; k--) {
+                    *p52-- = ff;
+                }
+            }
+            s->w54 = m->w14;
+            s->w58 = m->w18;
+            s->w5C = m->w14;
+            s->w60 = m->w18;
+            s->b68 = MsCheckRange(m->b20, 1, 0xFF);
+            s->b69 = MsCheckRange(m->b21, 1, 0xFF);
+            s->b6A = MsCheckRange(m->b22, 1, 0xFF);
+            s->b6B = MsCheckRange(m->b23, 1, 0xFF);
+            s->b6C = MsCheckRange(m->b24, 1, 0xFF);
+            s->b6D = MsCheckRange(m->b25, 1, 0xFF);
+            s->b6E = MsCheckRange(m->b26, 0, 0xFF);
+            s->b6F = MsCheckRange(m->b27, 1, 0xFF);
+            s->b7A = MsCheckRange(m->b2A, 0, 0xFF);
+            s->h78 = m->h28;
+            s->b81 = 1;
+            s->b85 = 0xFF;
+            s->b86 = 0xFF;
+            s->b87 = 0x10;
+            s->b7D = 0x64;
+            s->b7B = 0;
+            s->b7C = 0;
+            s->b88 = 0;
+            s->b89 = m->b77;
+            s->h196 = m->h78;
+            s->b198 = 0;
+            s->b199 = 0;
+            s->w90 = m->w14;
+            s->w94 = m->w18;
+            s->w64 = m->w1C;
+            c->wC20 = s->w64;
+            s->b191 = 0xFF;
+            {
+                register s32 hp __asm__("$2") = s->w90; /* DEBT(REG) */
+                register s32 mp __asm__("$3") = s->w94; /* DEBT(REG) */
+                s->b1D9 = 1;
+                s->w1A8 = mp;
+                s->w1BC = -1;
+                s->w1A4 = hp;
+            }
+            s->b1A1 = 0;
+            s->b99 = 0;
+            s->b9A = m->b2B;
+            s->b9B = m->b2C;
+            s->b9C = m->b2D;
+            s->b9D = m->b2E;
+            s->bFC = 0;
+            s->hEA = 0;
+            s->hEE = 0;
+            s->hF0 = m->h48;
+            {
+                register u16 h4A __asm__("$4") = m->h4A; /* DEBT(REG) */
+                s->hF2 = h4A;
+            }
+            s->hF4 = m->h4C;
+            s->hF6 = 0;
+            s->hF8 = 0;
+            s->hFA = 0;
+            {
+                register s32 soff __asm__("$5") = *(s32 *)(m48 + 0x14); /* DEBT(REG) */
+                BtlItemSlot *src = (BtlItemSlot *)(m48 + soff);
+                dst = &((BtlItemSlot *)D_006625E0)[id];
+                *dst = *src;
+                c->pC48 = dst;
+            }
+            for (i = 0; i < 0x19; i++) {
+                s->b101[i] = MsCheckRange(s->b101[i] + m2F[i], 0, 0xFF);
+            }
+            s->h11A = m->h4E;
+            s->h186 = m->h70;
+            s->b194 = s->b193 = s->h188 = 0xFF;
+            s->b82 = m->b76;
+            s->b83 = 0;
+        }
+        s->h1D2 = 0xFF;
+        s->f1CC = 1.0f;
+        MsSetChrImageDamageAttack(c);
+        cnt = 0;
+        {
+            register u16 cmd0 __asm__("$2") = 0x3001; /* DEBT(REG) */
+            ((u16 *)((u8 *)btl_ply_win + id * 0x478))[cnt++] = cmd0;
+        }
+        {
+            int j;
+            for (j = 0; j < 16; j++) {
+                if (cnt < 0x14 && m->h50[j] != 0) {
+                    ((u16 *)((u8 *)btl_ply_win + id * 0x478))[cnt++] = m->h50[j];
+                }
+            }
+        }
+        for (; cnt < 0x14; cnt++) {
+            ((u16 *)((u8 *)btl_ply_win + id * 0x478))[cnt] = 0xFF;
+        }
+        if (GS_EX->b4E != 0) {
+            s->w90 = 1;
+        }
+    }
+    MsSetEternalRelife((BtlChr *)c);
+    MsSetChrWeak(id, -1);
+    MsSetAutoStatus((BtlChr *)c);
+    if (s->w90 <= 0 || (((BtlChr *)c)->f2C6 & 1)) {
+        register u16 f __asm__("$2") = ((BtlChr *)c)->f2C6 | 1; /* DEBT(REG) */
+        register s8 v2 __asm__("$3") = 2; /* DEBT(REG) */
+        ((BtlChr *)c)->f2C6 = f;
+        c->bA8C = v2;
+    }
+}
 
 typedef struct {
     u16 f00[0x14];

@@ -758,8 +758,115 @@ void func_00215B78(R4Wk *o, int b)
     o->f78 = func_0021BDC0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_214650", TOBtlScanCommandWH);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_214650/rodata", jtbl_00570D90);
+typedef struct {
+    u8 pad00[0x8];
+    s16 h8;
+    u8 pad0A[0x16];
+    s16 *list;
+    s32 w24;
+    s16 h28;
+    u8 pad2A[2];
+    u16 h2C[0x1B];
+    s16 h62;
+    s16 h64;
+    s16 h66;
+    u8 pad68[0x38];
+    s32 wA0;
+    u8 *pA4[1];
+} ScanCmdWk;
+
+void TOBtlScanCommandWH(MenuList *arg)
+{
+    ScanCmdWk *o = (ScanCmdWk *)arg;
+    s16 w0;
+    s16 h0;
+    s16 w1;
+    s16 h1;
+    u8 *strBase;
+    s32 cnt;
+    register int maxW __asm__("$21") = 0;
+    register int i __asm__("$20");
+
+    for (i = 0; i < o->w24; i++) {
+        s16 cmd = o->list[i];
+        OfsTbl *com;
+
+        if (cmd == 0xFF) {
+            continue;
+        }
+        com = MsGetComData(cmd, (int *)&strBase);
+        if ((com->b16 & 0xF8) == 8) {
+            TOGetSaveWindow(o->h8, com->b17, &cnt);
+            if (cnt == 0) {
+                continue;
+            }
+        }
+        _TOGetMessageWH(-1, strBase + *(u16 *)com, &w0, &h0, 0, 0);
+        if (maxW < w0) {
+            maxW = w0;
+        }
+    }
+    w0 = maxW;
+    i = 0;
+    if (o->h28 > 0) {
+        register int cond __asm__("$2");
+        do {
+            u16 entry = o->h2C[i];
+            int param = entry & 0xFF;
+
+            switch (entry >> 8) {
+            case 3:
+                w0 += 12;
+                break;
+            case 2:
+            case 4: {
+                int t = (u16)w0 + param * 12;
+                __asm__("" : "+r"(t));
+                w0 = t + 5;
+                break;
+            }
+            case 1:
+            case 7:
+                w0 += 20;
+                break;
+            case 17: {
+                u16 x;
+                u16 t;
+                register int lim __asm__("$2");
+                i = 0;
+                if (o->wA0 > 0) {
+                    do {
+                        _TOGetMessageWH(-1, o->pA4[i], &w1, &h1, 0, 0);
+                        t = w1;
+                    } while (++i < (lim = o->wA0));
+                } else {
+                    t = w1;
+                }
+                x = w0;
+                w0 = x + t;
+                break;
+            }
+            case 5:
+            case 6:
+            case 18:
+                w0 += param * 12;
+                break;
+            }
+            i++;
+            cond = i < o->h28;
+        } while (cond);
+    }
+    {
+        register int finalW __asm__("$3") = w0;
+        register int h64v __asm__("$2");
+        __asm__ volatile("" : "+r"(finalW));
+        h64v = 18;
+        o->h66 = maxW;
+        o->h64 = h64v;
+        __asm__ volatile("" : "+r"(finalW) : "r"(h64v));
+        o->h62 = finalW;
+    }
+}
 
 void func_0021BE28(void);
 void func_0021BDC8(void);
