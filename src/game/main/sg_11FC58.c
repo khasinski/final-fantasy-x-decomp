@@ -1,5 +1,6 @@
 /* tu_037 0x11fc58-0x1201b0: low; ~Sg (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
 #include "ffx/u0.h"
@@ -119,7 +120,48 @@ void func_0011FEC8(s32 a, s32 b)
     func_0011FE00(a, b);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11FC58", Sg_Assert);
+extern char D_00569DE8[];
+extern char D_00569F18[];
+extern char D_00569F70[];
+extern char D_00569FA0[];
+extern void *D_003080FC;
+int func_0011A330(int);
+void Ch_FunctionHistoryDump(void);
+
+void Sg_Assert(int flag, int msg, int file, int line, char *expr, int pc)
+{
+    char buf1[0x400];
+    char buf2[0x400];
+    u32 ra;
+    int s_pc;
+    const char *s_cur;
+    int s_ra;
+
+    {
+        register void *rp __asm__("$2") = &ra; /* DEBT(REG): preserve addiu v0,sp,0x820 + move t7,v0 */
+        register void *t7 __asm__("$15");
+        __asm__ volatile("" : "+r"(rp));
+        t7 = rp;
+        MIPS_STORE_RA(t7);
+    }
+    s_pc = func_0011A330(pc);
+    if (D_003080FC != 0) {
+        s_cur = (const char *)func_0011A330((int)D_003080FC);
+    } else {
+        s_cur = D_00569DE8;
+    }
+    s_ra = func_0011A330((int)ra);
+    func_002F0008(buf1, D_00569F18, s_ra, msg, file, line, s_pc, pc, s_cur, D_003080FC, expr != 0 ? expr : D_00569DE8);
+    func_0011FEC8((s32)buf1, (s32)buf2);
+    if (flag != 0) {
+        Ch_FunctionHistoryDump();
+        ((int (*)(int))Sg_MemDump)(0);
+        func_002F0008(buf1, D_00569F70, file, line, s_pc, pc, s_cur, D_003080FC, expr != 0 ? expr : D_00569DE8);
+        func_0011FEC8((s32)buf1, (s32)buf2);
+        func_002F0008(buf1, D_00569FA0, s_ra, msg);
+        yiAssert(flag == 2, buf1, buf2);
+    }
+}
 
 void func_00120080(int a, int b, int c, int d, char *fmt, int f, ...)
 {

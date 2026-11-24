@@ -385,4 +385,128 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00181C28);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_001836E0);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_180B70", func_00184AA8);
+typedef struct {
+    u32 w00;
+    u32 w04;
+    u32 w08;
+    u32 w0C;
+    u16 h10;
+    u16 h12;
+    u16 h14;
+    u16 pad16;
+    u32 pad18;
+    void *w1C;
+} YiEmptyOmd;
+
+void func_002DD068(float *dst, float *src, float s);
+void func_001836E0(void *, void *, void *, u32 *, void *, float *, float *, int);
+void func_00181C28(void *, void *, void *, void *, u32 *, u32 *, void *, float *, float *, int);
+
+int func_00184AA8(u8 *a0, YiEmptyOmd *a1, u32 a2, YiEmptyOmd *a3, u32 t0, void *t1, float *t2, float *t3, int sp140) {
+    float min[4];
+    float max[4];
+    float pad30[4];
+    float bmin[4];
+    float bmax[4];
+    float pt[4];
+    u32 sz1;
+    u32 sz2;
+    u8 *head;
+    u8 *tail;
+    int cnt;
+    u32 i;
+    int j;
+
+    if (t1 != 0) {
+        for (i = 0; (int)i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+            }
+        }
+    }
+
+    func_002DD068(min, t2, 1.0f);
+    func_002DD068(max, t3, 1.0f);
+
+    for (i = 0; (int)i < 4; i++) {
+        if (min[i] > max[i]) {
+            float tmp = min[i];
+            min[i] = max[i];
+            max[i] = tmp;
+        }
+    }
+
+    head = 0;
+    cnt = 0;
+    for (i = 0; i < *(u32 *)(a0 + 0x687B8); i++) {
+        u8 *ent = (a0 + i * 0xC0) + 0x68000;
+        u8 *node;
+        if (*(u16 *)(ent + 0x842) == 1) {
+            continue;
+        }
+        if (*(u16 *)(ent + 0x844) == 3) {
+            continue;
+        }
+        for (node = *(u8 **)(ent + 0x868); node != 0; node = *(u8 **)(node + 0x4C)) {
+            if (t1 != 0) {
+                pt[0] = ((float *)node)[0];
+                pt[1] = ((float *)node)[1];
+                pt[2] = ((float *)node)[2];
+                pt[3] = 1.0f;
+                func_002DCE08(pt, t1, pt);
+                bmin[0] = pt[0] - ((float *)node)[11];
+                bmax[0] = pt[0] + ((float *)node)[11];
+                bmin[2] = pt[2] - ((float *)node)[11];
+                bmax[2] = pt[2] + ((float *)node)[11];
+            } else {
+                bmin[0] = ((float *)node)[0] - ((float *)node)[11];
+                bmax[0] = ((float *)node)[0] + ((float *)node)[11];
+                bmin[2] = ((float *)node)[2] - ((float *)node)[11];
+                bmax[2] = ((float *)node)[2] + ((float *)node)[11];
+            }
+            if (bmin[0] <= max[0] && bmax[0] >= min[0] && bmin[2] <= max[2] && bmax[2] >= min[2]) {
+                if (head == 0) {
+                    head = node;
+                } else {
+                    *(u8 **)(tail + 0x54) = node;
+                }
+                *(u8 **)(node + 0x54) = 0;
+                cnt++;
+                tail = node;
+            }
+        }
+    }
+
+    if (head == 0) {
+        if (a1 != 0) {
+            a1->w00 = 0x400;
+            a1->w0C = 0;
+            a1->w08 = 0;
+            a1->w04 = 0;
+            a1->h14 = 0;
+            a1->h12 = 0;
+            a1->h10 = 0;
+            a1->w1C = 0;
+        }
+        if (a3 != 0) {
+            a3->w00 = 0x400;
+            a3->w0C = 0;
+            a3->w08 = 0;
+            a3->w04 = 0;
+            a3->h14 = 0;
+            a3->h12 = 0;
+            a3->h10 = 0;
+            a3->w1C = 0;
+        }
+        return 0;
+    }
+
+    if (a3 == 0) {
+        sz1 = a2 >> 2;
+        func_001836E0(a0, head, a1, &sz1, t1, min, max, sp140);
+    } else {
+        sz1 = a2 >> 2;
+        sz2 = t0 >> 2;
+        func_00181C28(a0, head, a1, a3, &sz1, &sz2, t1, min, max, sp140);
+    }
+    return cnt;
+}

@@ -56,7 +56,52 @@ int func_0012C450(Actor *a, void *op, ScriptCtx *ctx) {
     return a->arrAE0[AtelPopStackInteger(a, ctx)];
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12C2D0", func_0012C488);
+typedef struct {
+    u8 pad0[0x20];
+    float f20;
+    u8 pad24[0x44 - 0x24];
+} Slot12C488;
+
+typedef struct {
+    u8 pad0[0x864];
+    Slot12C488 slotB[9];
+} Actor12C488;
+
+float fabsf(float x);
+
+int func_0012C488(Actor *a, void *op, ScriptCtx *ctx) {
+    ActorState *s = AtelGetPosWorkAdrs(a);
+    Slot12C488 *slot = &((Actor12C488 *)a)->slotB[a->slotIdx];
+    int p1 = AtelPopStackInteger(a, ctx);
+    int p2 = AtelPopStackInteger(a, ctx);
+    int flags = AtelPopStackInteger(a, ctx);
+    float ang = func_002D4338(slot->f20 - s->f34);
+    float f;
+    float t;
+
+    ang = fabsf(ang);
+    if (flags & 2) {
+        f = 1.0f - (1.0f - ang / 3.1415927f) * 1.2f;
+        if (f < 0.0f) {
+            t = 0.0f;
+        } else if (f > 1.0f) {
+            t = 1.0f;
+        } else {
+            t = f;
+        }
+        return (int)((float)p1 * t);
+    } else {
+        f = 1.0f - (1.0f - ang / 1.5707964f);
+        if (f < 0.0f) {
+            t = 0.0f;
+        } else if (f > 1.0f) {
+            t = 1.0f;
+        } else {
+            t = f;
+        }
+        return (int)((float)p2 * t);
+    }
+}
 
 int func_0012C610(Actor *a, void *op, ScriptCtx *ctx) {
     ActorState *st = AtelGetPosWorkAdrs(a);

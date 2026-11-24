@@ -181,7 +181,58 @@ int func_001271F8(Actor *a, void *op, ScriptCtx *ctx) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_126D68", func_00127260);
+extern Chr *TkCh_Allocate(int id);
+extern void TkCh_BindToElem(int a, Chr *b, Chr *c, int d, int e);
+
+typedef struct {
+    u8 pad0[0xAF4];
+    Chr *chrAF4[2];
+    s32 valAFC[2];
+    u16 hB04[2];
+    u32 wB08[2];
+} Actor127260;
+
+s32 func_00127260(Actor *a, void *op, ScriptCtx *ctx) {
+    int v22 = AtelPopStackInteger(a, ctx);
+    int v21 = AtelPopStackInteger(a, ctx);
+    u32 v20 = AtelPopStackInteger(a, ctx);
+    s32 tmp;
+    s32 *pchr;
+    s32 *pval;
+
+    AtelPushStackInteger(a, ctx, v20);
+    func_00126D68(a, op, ctx);
+    if (a->ptr9C == 0) {
+        return 0;
+    }
+    if (v21 == 0) {
+        return 0;
+    }
+    tmp = (s32)TkCh_Allocate(v21);
+    {
+        s32 *chr_arr = (s32 *)((Actor127260 *)a)->chrAF4;
+        s32 *val_arr = ((Actor127260 *)a)->valAFC;
+        pchr = &chr_arr[v20];
+        pval = &val_arr[v20];
+        *pchr = tmp;
+        *pval = v22;
+    }
+    CALL_Ch_SoundSetId_U8((Chr *)*pchr, 0xF);
+    if (*pchr != 0) {
+        u8 *p = (u8 *)a + v20 * 4;
+        u8 *p2;
+        TkCh_BindToElem(a->hA8, (Chr *)*pchr, a->ptr9C, *pval, v20);
+        ((void (*)(Chr *, int))Ch_SetGravMode)((Chr *)*pchr, 0);
+        Ch_EnMapID((Chr *)*pchr, 0);
+        ((s8 (*)(Chr *, int))func_001108B8)((Chr *)*pchr, 0);
+        Ch_EnClip((Chr *)*pchr, *(u32 *)(p + 0xB08) & 1);
+        Ch_Vu1SetClipmode((Chr *)*pchr, (*(u32 *)(p + 0xB08) >> 1) & 1);
+        a->hB14 |= 1 << v20;
+        p2 = (u8 *)a + v20 * 2;
+        *(u16 *)(p2 + 0xB04) = v21;
+    }
+    return 1;
+}
 
 int func_001273D8(Actor *a, void *op, ScriptCtx *ctx)
 {

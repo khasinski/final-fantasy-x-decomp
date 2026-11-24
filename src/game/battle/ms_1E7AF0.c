@@ -549,7 +549,27 @@ s32 MsGetDirDivide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     return (s32) (((u32) temp_hi >> 0x1F) + temp_hi) >> 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E7AF0", func_001E8DF0);
+int func_001E8DF0(int id, int div, int mode) {
+    BtlChr *chr = MsGetChr(id);
+    float sp0[4];
+    float a, b, diff;
+    int k;
+
+    func_001B6E48(id, sp0);
+    a = MsNearRag(0.0f, sp0[0]);
+    sp0[0] = a;
+    b = MsNearRag(a, chr->f1D4[chr->f1D1]);
+    diff = b - sp0[0];
+    if (mode != 0) {
+        k = (int)((diff * 180.0f / 3.1415927f + 360.0f) * (float)div / 360.0f);
+        k %= div;
+    } else {
+        k = (int)((diff * 180.0f / 3.1415927f + 360.0f) * (float)div / 180.0f);
+        k = (k + 1) % (div * 2);
+        k /= 2;
+    }
+    return k;
+}
 
 int func_001E8F58(Actor *a, void *unused, ScriptCtx *ctx) {
     float p1[4];

@@ -670,7 +670,69 @@ void AtelMapLoadNoCache(int a) {
     func_00139700(a, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_138588", func_001397F0);
+extern int func_00149210(int, int);
+extern void func_00149200(void);
+extern void func_002D7CA0(int, int, int, int, int, int, int, int);
+
+void func_001397F0(char *unused, int mode, int bit) {
+    int arr[16];
+    int i;
+    int old;
+    void *p48;
+    int count;
+    int n;
+
+    for (i = 15; i >= 0; i--) {
+        arr[i] = -1;
+    }
+    n = 0;
+    old = AtelChangeCurrentCtrl(0);
+    p48 = D_0058E3D8->p48;
+    count = func_00138E90(p48);
+    func_00149200();
+    for (i = 0; i < count; i++) {
+        int id = func_00138ED8(p48, i);
+        int skip = 1;
+        int flags = func_00138F30(p48, i);
+        if (mode != 0) {
+            if (bit >= 0 && ((func_00138C58() >> bit) & 1)) {
+                if ((flags >> (bit + 16)) & 1) {
+                    skip = 1;
+                } else {
+                    skip = 0;
+                }
+            } else if (flags & 1) {
+                skip = func_00149210(id, flags);
+            } else {
+                skip = 1;
+            }
+        } else {
+            if (flags & 2) {
+                if (!(flags & 4)) {
+                    skip = func_00149210(id, flags);
+                }
+            } else if (flags & 8) {
+                skip = func_00149210(id, flags);
+            }
+        }
+        if (skip != 1 && !(id & 0x80000000)) {
+            arr[n] = id;
+            if (n <= 14) {
+                n++;
+            }
+        }
+    }
+    if (bit >= 0) {
+        func_00138C18(bit);
+    }
+    AtelSetCurrentCtrl(old);
+    if (arr[0] != -1) {
+        func_002D7CA0(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7]);
+    } else {
+        SndSepClearAll();
+    }
+    func_00138C08();
+}
 
 void func_00139A00(char *p, int b) {
     func_001397F0(p, b, -1);

@@ -213,7 +213,62 @@ void func_0023D4B8(int arg0, int arg1, int arg2)
 void func_0023D748(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023D750);
+extern s32 D_0069A65C;
+void func_001FA548(int, int, int, int);
+void TOMkpShapeXY(int, int, int);
+void func_001F3808(int, int, int, int);
+
+void func_0023D750(void)
+{
+    s16 w0;
+    s16 h0;
+    s16 w1;
+    s16 h1;
+    s16 winW;
+    s16 totalH;
+    s16 maxW;
+    s16 winX;
+    s16 winY;
+    int textX;
+    int textY;
+    int i;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    _TOGetMessageWH(0, (u8 *)func_00220960(0x2000), &w0, &h0, 0, 0);
+    winW = w0;
+    h0 += 10;
+    totalH = h0;
+    _TOGetMessageWH(0, (u8 *)func_00220960(0x2001), &w1, &h1, 0, 0);
+    maxW = w1;
+    totalH += 20;
+    _TOGetMessageWH(0, (u8 *)func_00220960(0x2002), &w1, &h1, 0, 0);
+    if (maxW < w1) {
+        maxW = w1;
+    }
+    totalH += 20;
+    totalH += 0x1D;
+    winW += 0x3E;
+    winX = (0x200 - winW) / 2;
+    winY = (0x1A0 - totalH) / 2;
+    textX = (0x200 - maxW) / 2;
+    {
+        int dy = h0 + 0xD;
+        textY = winY + dy;
+    }
+    func_001FA548(winX, winY, winW, totalH);
+    TOMkpShapeXY(0x2B, winX + 8, winY + 8);
+    func_001F3808(func_00220960(0x2000), winX + 0x2E, winY + 0xD, 0);
+    for (i = 0; i < 2; i++, textY += 20) {
+        int gray = (D_0069A660[i] == 0);
+        func_001F3808(func_00220960(0x2001 + i), textX, textY, gray);
+        if (i == D_0069A65C) {
+            func_001FE7F8(0, textX, textY);
+        }
+    }
+    TOMenuDrawKickTmp();
+    func_00124F08();
+}
 
 extern u16 D_0069A684;
 extern s32 D_00572CD8;
@@ -1033,6 +1088,7 @@ loop:
 }
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023F298);
+
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572DB0);
 
 void func_00241240(void) {

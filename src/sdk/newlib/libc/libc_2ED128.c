@@ -612,7 +612,78 @@ void func_002EE288(W11File *fp)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2ED128", func_002EE3D8);
+extern unsigned long D_005685C8;
+extern unsigned long D_005685D0;
+
+void func_002EE3D8(W11Reent *ptr, u32 nb)
+{
+    char *brk;
+    u32 front_misalign;
+    u32 correction;
+    char *new_brk;
+    u32 top_size;
+    V7MChunk *old_top = V7_TOP;
+    u32 old_top_size = old_top->size & ~3;
+    char *old_end = (char *)old_top + old_top_size;
+    unsigned long pagesz = 4096;
+    int sbrk_size = (int)((unsigned long)nb + D_005685B8 + 16);
+
+    if (D_005685C0 != (char *)-1) {
+        sbrk_size = (int)(((unsigned long)(u32)sbrk_size + (pagesz - 1)) & ~(pagesz - 1));
+    }
+
+    brk = func_002EFF40(ptr, sbrk_size);
+    if (brk == (char *)-1 || (brk < old_end && old_top != V7_BIN_AT(0))) {
+        return;
+    }
+
+    D_005685D8.arena += sbrk_size;
+    if (brk == old_end) {
+        top_size = sbrk_size + old_top_size;
+        V7_TOP->size = top_size | 1;
+    } else {
+        if (D_005685C0 == (char *)-1) {
+            D_005685C0 = brk;
+        } else {
+            D_005685D8.arena += brk - old_end;
+        }
+        front_misalign = ((u32)(brk + 8)) & 15;
+        if (front_misalign > 0) {
+            correction = 16 - front_misalign;
+            brk += correction;
+        } else {
+            correction = 0;
+        }
+        correction += (u32)(pagesz - (((u32)(brk + sbrk_size)) & (pagesz - 1)));
+        new_brk = func_002EFF40(ptr, correction);
+        if (new_brk == (char *)-1) {
+            return;
+        }
+        D_005685D8.arena += correction;
+        V7_TOP = (V7MChunk *)brk;
+        top_size = (new_brk - brk) + correction;
+        V7_TOP->size = top_size | 1;
+        if (old_top != V7_BIN_AT(0)) {
+            if (old_top_size < 16) {
+                V7_TOP->size = 1;
+                return;
+            }
+            old_top_size = (old_top_size - 12) & ~15;
+            old_top->size = (old_top->size & 1) | old_top_size;
+            ((V7MChunk *)((char *)old_top + old_top_size))->size = 5;
+            ((V7MChunk *)((char *)old_top + old_top_size))->fd = (V7MChunk *)5;
+            if (old_top_size >= 16) {
+                func_002ED6D8(ptr, (char *)old_top + 8);
+            }
+        }
+    }
+    if ((unsigned long)D_005685D8.arena > D_005685C8) {
+        D_005685C8 = D_005685D8.arena;
+    }
+    if ((unsigned long)D_005685D8.arena > D_005685D0) {
+        D_005685D0 = D_005685D8.arena;
+    }
+}
 
 #define V7_LONG_SUB_SIZE_T(x, y) ((x) < (y) ? -(long)((y) - (x)) : (long)((x) - (y)))
 #define V7_BIN_INDEX(sz) \

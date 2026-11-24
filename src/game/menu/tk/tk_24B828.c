@@ -281,7 +281,56 @@ void func_0024C438(Task *o) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024C458);
+void func_00226E90(FlagRec *);
+
+void func_0024C458(Task *t) {
+    s32 buf;
+    int chr = -1;
+
+    if (D_0069BE74 != 0) {
+        SysEntry *e = (SysEntry *)0x1D57300;
+        Unk1BFED8 *wpn;
+        e += *(s16 *)((u8 *)t + 0x48);
+        if (e->h0 != 0 && e->b2 != 0) {
+            wpn = MsGetSaveWeapon(e->h0, &buf);
+            if (wpn->b2 != 0) {
+                chr = wpn->b4;
+            }
+        } else {
+            wpn = 0;
+        }
+        func_00226018(D_00326110.x, D_00326110.y, chr);
+        if (e->h0 != 0 && e->b2 != 0) {
+            int eq;
+            Unk1BFED8 *cur;
+            if (wpn->b5 != 0) {
+                eq = TkMenuGetArmor(chr);
+            } else {
+                eq = TkMenuGetWeapon(chr);
+            }
+            if (eq != 0xFF) {
+                cur = MsGetSaveWeapon(eq, &buf);
+            } else {
+                cur = 0;
+            }
+            func_00226E90(&D_00326098);
+            func_00226210(D_00326078[0], D_00326078[1], 0x12);
+            if (cur != 0) {
+                ((int (*)(int, int, void *))func_00237E28)(D_00326080[0], D_00326080[1], cur);
+                func_00226A40(cur, D_00326070[0] + D_00326098.rect[0], D_00326070[1] + D_00326098.rect[1], 0);
+            } else {
+                int x = D_00326098.rect[0] + 0x1D;
+                int y = D_00326098.rect[1] + 1;
+                func_00226350(D_00326070[0] + x, D_00326070[1] + y, func_00220A78(0x17), 0);
+            }
+            func_00226210(D_00326088[0], D_00326088[1], 0x13);
+            func_00237E28(D_00326090[0], D_00326090[1], wpn);
+        }
+    } else {
+        func_00226018(D_00326110.x, D_00326110.y, -1);
+    }
+    graphicUiRemapY2();
+}
 
 void func_0024C670(Task *o)
 {
@@ -1621,7 +1670,64 @@ void func_0024EFC8(Task *t, int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024F0E0);
+void func_0024F0E0(Task *t) {
+    int y;
+    int baseY;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    if (D_0069BED4 == 1) {
+        func_00200A58(D_0069BEE0[0], D_0069BEE0[1], D_0069BEE0[2], D_0069BEE0[3], t->x32, (u16)t->x3A, (u16)t->x30);
+    } else {
+        func_00200A58(D_0069BEE8[0], D_0069BEE8[1], D_0069BEE8[2], D_0069BEE8[3], t->x32, (u16)t->x3A, (u16)t->x30);
+    }
+    TOMenuDrawKickTmp();
+    func_00124F08();
+    func_002492F0();
+    func_002492F0();
+    func_00225A38();
+    func_00225920();
+    if (t->b43 == 2) {
+        baseY = 0x77;
+        func_00225800(0, 0x72, 0x1FF, 0x120);
+    } else {
+        baseY = 0x62;
+        func_00225800(0, 0x5D, 0x1FF, 0x19C);
+    }
+    {
+        int h = ((u16)t->x3A) * 0x20;
+        y = baseY - 0x20;
+        if (t->x32 == t->x34) {
+            int i;
+            for (i = -1; i < (u16)t->x3A + 1; i++, y += 0x20) {
+                func_0024ECE8(t, 0x1E, y, i * 2, 0);
+                func_0024ECE8(t, 0x117, y, i * 2 + 1, 0);
+                ((int (*)(void))graphicUiRemapY2)();
+            }
+        } else {
+            int i;
+            func_002274A0(baseY - 8, h + 8, 1, t->x46);
+            y = baseY;
+            for (i = 0; i < (u16)t->x3A; i++, y += 0x20) {
+                func_0024ECE8(t, 0x1E, y, i * 2, 2);
+                func_0024ECE8(t, 0x117, y, i * 2 + 1, 2);
+                ((int (*)(void))graphicUiRemapY2)();
+            }
+            y = baseY - (t->x46 * 0x13F) / 4096;
+            func_002274A0(baseY - 8, h + 8, 2, t->x46);
+            for (i = 0; i < (u16)t->x3A; i++, y += 0x20) {
+                func_0024ECE8(t, 0x1E, y, i * 2, 1);
+                func_0024ECE8(t, 0x117, y, i * 2 + 1, 1);
+                ((int (*)(void))graphicUiRemapY2)();
+            }
+        }
+    }
+    func_00225908();
+    if (*(s32 *)((u8 *)t + 0x94) != 0) {
+        func_0024EFC8(t, 0x1E, baseY);
+    }
+    func_00225B00();
+}
 
 int func_0024F3E0(void)
 {

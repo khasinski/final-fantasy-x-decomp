@@ -226,7 +226,98 @@ void func_00199620(W3Pool *p) {
     func_00199630(p, 1, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgScene", func_00199630);
+extern Blk64 D_0056DB20;
+void func_0018FCF0(void *, void *);
+void func_00192BC0(void *, int);
+void func_001927F8(void);
+
+typedef struct RcbgVoice {
+    s32 flags;
+    u8 pad4[0x10];
+    float z;
+    u8 pad18[0xA8];
+} RcbgVoice;
+
+void func_00199630(W3Pool *p, int a1, int a2)
+{
+    Blk64 tag = D_0056DB20;
+    int i;
+    int j;
+    RcbgVoice *v;
+
+    if (a1 != 0 || a2 != 0) {
+        func_0018FCF0((u8 *)p + 0x110, W3_CORE()->buf0C);
+    }
+    if (p->count == 0) {
+        return;
+    }
+    if ((p->flags & 1) == 0) {
+        return;
+    }
+    if (a2 != 0 && *(float *)&p->pad100[8] == 0.0f) {
+        return;
+    }
+    ((u64 *)&tag)[0] = 0x60ULL;
+    ((u64 *)&tag)[2] = 0x5000FULL;
+    ((u64 *)&tag)[4] = 0x8000008080ULL;
+    func_00192708((void *)&tag);
+    v = (RcbgVoice *)p->voices;
+    for (i = 0; i < p->count; i++, v++) {
+        v->flags &= ~0x8000;
+    }
+    for (i = 0; i < p->count; i++) {
+        int best = -1;
+        float bestZ = -1.0f;
+        RcbgVoice *voices = (RcbgVoice *)p->voices;
+
+        v = voices;
+        for (j = 0; j < p->count; j++, v++) {
+            if ((v->flags & 0x8000) == 0 && v->z > bestZ) {
+                bestZ = v->z;
+                best = j;
+            }
+        }
+        if (best == -1) {
+            break;
+        }
+        {
+            int doDraw;
+            int mode;
+
+            v = &voices[best];
+            if (a2 != 0) {
+                if (*(float *)&p->pad100[8] > v->z) {
+                    mode = 0;
+                    doDraw = 0;
+                } else {
+                    doDraw = !((v->flags >> 6) & 1);
+                    mode = v->flags >> 4;
+                    mode &= 1;
+                }
+            } else if (a1 != 0) {
+                mode = 0;
+                doDraw = v->flags >> 6;
+                doDraw &= 1;
+            } else {
+                doDraw = !((v->flags >> 6) & 1);
+                mode = v->flags >> 4;
+                mode &= 1;
+            }
+            if (doDraw != 0) {
+                func_00192BC0(v, mode);
+            }
+            v->flags |= 0x8000;
+        }
+    }
+    func_001927F8();
+    {
+        W3Core *core = W3_CORE();
+        s32 diff = *(s32 *)((u8 *)p + 0x114) - *(s32 *)((u8 *)p + 0x110);
+        if (core->w10 < diff) {
+            core->w10 = diff;
+        }
+    }
+}
 
 int func_001999A0(void);
 

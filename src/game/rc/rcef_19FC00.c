@@ -185,7 +185,44 @@ void func_001A0040(S2Obj1C *arg0, S2Obj1A *arg1, s32 arg2) {
     _m2c_func_001A0040_func_001A1A08(arg1->b3C0, _m2c_func_001A0040_op_oef2_a_get(arg0->w8, 4, arg2), arg1->m1F0, arg1->v170);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0080);
+void func_001A1378(S2Obj1A *, s32, s32);
+
+void func_001A0080(S2Obj1C *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                   void *arg5, void *arg6, void *arg7, u32 arg8, s32 arg9)
+{
+    S2Obj1A *obj;
+
+    if (func_001A2040(&arg0->sched.head) != 0) {
+        obj = (S2Obj1A *)func_0019FF48(arg0);
+    } else {
+        obj = *(S2Obj1A **)((u8 *)arg0 + 0x24);
+        if (arg9 == 0 && func_001A1400(obj) == 0) {
+            return;
+        }
+    }
+    rcefMainKickPar(arg0, obj, arg1, arg2);
+    func_001A1378(obj, arg3, arg4);
+    {
+        u8 *d0 = (u8 *)obj + 0xD0;
+        VU0_LQC2(31, 0, arg5);
+        VU0_SQC2(31, 0, d0);
+    }
+    {
+        u8 *d1 = (u8 *)obj + 0x100;
+        VU0_LQC2(31, 0, arg6);
+        VU0_SQC2(31, 0, d1);
+    }
+    {
+        u8 *d2 = (u8 *)obj + 0x130;
+        VU0_LQC2(31, 0, arg7);
+        VU0_SQC2(31, 0, d2);
+    }
+    {
+        u32 f = obj->flagsBC & 0xFFFFF00F;
+        __asm__("" : "+r"(f));
+        obj->flagsBC = (f & 0xFFFFEFFF) | arg8;
+    }
+}
 
 void func_001A01B0(u32 a0, u32 a1, u32 a2)
 {
@@ -286,7 +323,78 @@ void func_001A02E8(int a)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A0308);
+void *func_001A04D8(int, void *, u32, u8, u8);
+void *func_002B2F30(void *, u32, u8, u8);
+void func_001A0700(int, u32, u8, u8);
+
+void func_001A0308(void *arg0)
+{
+    u8 *s1 = (u8 *)arg0;
+    float col[4];
+    s32 cur = *(s32 *)(s1 + 0x1F4);
+    u32 a;
+
+    if (cur == 0) {
+        u8 *src = s1 + 0x1D0;
+        VU0_LQC2(31, 0, src);
+        VU0_SQC2(31, 0, col);
+    } else if (cur == *(s32 *)(s1 + 0x1F0)) {
+        u8 *src = s1 + 0x1E0;
+        VU0_LQC2(31, 0, src);
+        VU0_SQC2(31, 0, col);
+    } else {
+        register u8 *pE0 __asm__("$3") = s1 + 0x1E0;
+        register u8 *pD0 __asm__("$2") = s1 + 0x1D0;
+        register float f0 __asm__("$f0") = (float)cur;
+        register float f1 __asm__("$f1") = (float)*(s32 *)(s1 + 0x1F0);
+        register float t __asm__("$f0") = f0 / f1;
+        register u32 ti __asm__("$3");
+
+        VU0_LQC2(31, 0, pE0);
+        VU0_LQC2(30, 0, pD0);
+        VU0_OP("vsub.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, col);
+        MIPS_MFC1(ti, t);
+        VU0_LQC2(31, 0, col);
+        VU0_QMTC2_NI(30, ti);
+        VU0_OP("vmulx.xyzw $vf31, $vf31, $vf30x");
+        VU0_SQC2(31, 0, col);
+        VU0_LQC2(31, 0, col);
+        VU0_LQC2(30, 0, pD0);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, col);
+    }
+    a = (u32)(s32)col[3] & 0xFF;
+    if (a != 0) {
+        u32 g = (u32)(s32)col[1] & 0xFF;
+        u32 b = (u32)(s32)col[2] & 0xFF;
+        u32 r = (u32)(s32)col[0] & 0xFF;
+        u32 ra = r | (a << 24);
+        u32 bg = (b << 16) | (g << 8);
+        u32 rgba = ra | bg;
+
+        switch (*(s32 *)(s1 + 0x1C0)) {
+        case 1:
+            D_006A3BCC = func_001A04D8((int)s1, D_006A3BCC, rgba, s1[0x1F8], s1[0x1F9]);
+            break;
+        case 2:
+            D_006A3BCC = func_002B2F30(D_006A3BCC, rgba, s1[0x1F8], s1[0x1F9]);
+            break;
+        case 3:
+            func_001A0700((int)s1, rgba, s1[0x1F8], s1[0x1F9]);
+            break;
+        }
+    }
+    if (*(s32 *)(s1 + 0x1FC) != 0) {
+        s32 next = *(s32 *)(s1 + 0x1F4) + 1;
+        s32 max = *(s32 *)(s1 + 0x1F0);
+        *(s32 *)(s1 + 0x1F4) = next;
+        if (next > max) {
+            *(s32 *)(s1 + 0x1F4) = max;
+            *(s32 *)(s1 + 0x1FC) = 0;
+        }
+    }
+}
 
 typedef struct RcefPktCtx {
     void *head;
@@ -563,7 +671,134 @@ void func_001A0C70(S2Obj1A *o) {
     func_001A1A68(o->b3C0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", rcefObjCalcLocalMatrix);
+void rcMat4fSetScaleVec3f(float *, float *);
+void rcVec3fMul(float *, float *, float *);
+void op_rt_m_yxz(float *, float *, float *, float *);
+
+void rcefObjCalcLocalMatrix(S2Obj1A *o)
+{
+    u8 *s4 = (u8 *)o;
+    float m0[4][4];
+    float rot[4];
+    float m1[4][4];
+    float m2[4][4];
+    float v0[4];
+    float v1[4];
+    float m3[4][4];
+    float v2[4];
+    u8 *pE0;
+    register u8 *pD0 __asm__("$22");
+    register float *pRot __asm__("$21");
+    u8 *p100;
+    u8 *p130;
+
+    pE0 = s4 + 0xE0;
+    {
+        u8 *pF0 = s4 + 0xF0;
+        VU0_LQC2_INPUTS(31, pE0, pF0, pE0);
+        VU0_LQC2(30, 0, pF0);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, pE0);
+    }
+    pD0 = s4 + 0xD0;
+    VU0_LQC2(31, 0, pD0);
+    VU0_LQC2(30, 0, pE0);
+    VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+    VU0_SQC2(31, 0, pD0);
+
+    {
+        register u8 *p110 __asm__("$2") = s4 + 0x110;
+        register u8 *p120 __asm__("$3") = s4 + 0x120;
+        VU0_LQC2(31, 0, p110);
+        VU0_LQC2(30, 0, p120);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p110);
+        p100 = s4 + 0x100;
+        VU0_LQC2(31, 0, p100);
+        VU0_LQC2(30, 0, p110);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p100);
+    }
+    {
+        register u8 *p140 __asm__("$3") = s4 + 0x140;
+        register u8 *p150 __asm__("$2") = s4 + 0x150;
+        VU0_LQC2(31, 0, p140);
+        VU0_LQC2(30, 0, p150);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p140);
+        p130 = s4 + 0x130;
+        VU0_LQC2(31, 0, p130);
+        VU0_LQC2(30, 0, p140);
+        VU0_OP("vadd.xyz $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p130);
+    }
+    {
+        register u8 *p180 __asm__("$4") = s4 + 0x180;
+        register u8 *p190 __asm__("$3") = s4 + 0x190;
+        register u8 *p170 __asm__("$2");
+        VU0_LQC2(31, 0, p180);
+        VU0_LQC2(30, 0, p190);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p180);
+        p170 = s4 + 0x170;
+        VU0_LQC2(31, 0, p170);
+        VU0_LQC2(30, 0, p180);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p170);
+    }
+    {
+        float k = 11.377778053283691f;
+        u32 ki;
+        pRot = rot;
+        __asm__ volatile("" : "+r"(pRot));
+        MIPS_MFC1(ki, k);
+        VU0_LQC2(31, 0, p100);
+        VU0_QMTC2_NI(30, ki);
+        VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+        VU0_SQC2(31, 0, pRot);
+    }
+    func_002DD128(m0);
+    rcMat4fSetScaleVec3f((float *)m0, (float *)p130);
+    if (o->flagsBC & 0x2000) {
+        float neg1 = -1.0f;
+        register float *m1_2 __asm__("$18");
+        u32 ni;
+        func_002DD128(m1);
+        v0[0] = v0[1] = v0[2] = v0[3] = 0.0f;
+        op_rt_m_yxz((float *)m2, (float *)m0, pRot, v0);
+        rot[0] = rot[1] = rot[2] = rot[3] = 0.0f;
+        MIPS_MFC1(ni, neg1);
+        VU0_LQC2(31, 0, pE0);
+        VU0_QMTC2_NI(30, ni);
+        VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+        VU0_SQC2(31, 0, v0);
+        rcVec3fNormalize(v0);
+        m1_2 = m1[2];
+        __asm__ volatile("" : "+r"(m1_2));
+        VU0_LQC2(31, 0, v0);
+        VU0_SQC2(31, 0, m1_2);
+        v1[0] = 0.0f;
+        v1[1] = neg1;
+        v1[2] = 0.0f;
+        v1[3] = 0.0f;
+        rcVec3fMul(m1[0], v0, v1);
+        rcVec3fNormalize(m1[0]);
+        rcVec3fMul(m1[1], m1[0], m1_2);
+        rcVec3fNormalize(m1[1]);
+        func_002DCE38(m0, m1, m2);
+    }
+    if (o->flagsBC & 0x4000) {
+        rot[1] = 0.0f;
+        rot[0] = 0.0f;
+        func_002DD128(m3);
+        v2[0] = v2[1] = v2[2] = v2[3] = 0.0f;
+        op_rt_m_yxz((float *)m3, (float *)m3, pRot, v2);
+        func_002DCE38(m0, m3, m0);
+        func_002DCE38(m0, D_00313EF0, m0);
+        rot[2] = 0.0f;
+    }
+    op_rt_m_yxz((float *)(s4 + 0x1B0), (float *)m0, pRot, (float *)pD0);
+}
 
 typedef struct {
     u64 pad0[0x17];
@@ -856,9 +1091,6 @@ void func_001A19F0(void *b) {
 void func_001A1A00(void *b)
 {
 }
-
-extern u8 D_006A3B70[];
-extern u8 D_006A3B30[];
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcef_19FC00", func_001A1A08);
 

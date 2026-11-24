@@ -91,7 +91,44 @@ s32 func_002080D8(int a)
     return pos + t->a[0].x;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207F50", func_00208100);
+void func_002082B8(s32 arg0, u8 *arg1, TextItem *arg2);
+
+void func_00208100(s32 a0, u8 *s, int x, int y, int b13)
+{
+    ToFont207F70 *p = &D_00323918;
+    u8 *q = D_00323930;
+
+    func_002EF0D0(q, 0, 0x20);
+    func_002EF0D0(p, 0, 0x14);
+    p->x = x;
+    p->y = y;
+    D_00323918.r = 0x80;
+    p->g = 0x80;
+    p->b = 0x80;
+    p->a = 0x80;
+    p->b13 = b13;
+    p->b12 = 0;
+    while (*s != 0) {
+        switch (TOGetGroup(*s)) {
+        case 4:
+            func_00204CA8(s, q);
+            TOMakePktFont1612(p, q);
+            break;
+        case 2:
+            if (*s == 0x10 && (u32)(s[1] - 0x50) < 8) {
+                func_002082B8(a0, s, (TextItem *)p);
+            } else if (*s == 0x0B) {
+                func_001FABF0(s[1], p->x, p->y);
+                p->x += func_002083E8(s[1]);
+            }
+            break;
+        case 3:
+            func_002082B8(a0, s, (TextItem *)p);
+            break;
+        }
+        s = (u8 *)TOSkipCode(s);
+    }
+}
 
 extern s32 _m2c_func_002082B8_D_00323930 __asm__("D_00323930");
 /* DEBT(CAST) */ /* DEBT(FAKE) */

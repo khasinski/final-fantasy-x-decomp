@@ -5,6 +5,8 @@ INCLUDE config/undefined_funcs_auto.txt
 /* Projection work backing view starts inside an existing BSS allocation. */
 D_00600110 = 0x00600110;
 D_0069247A = 0x0069247a;
+D_0057CB88 = 0x0057cb88;
+D_0057CB8C = 0x0057cb8c;
 /* data inside .text that splat folds into padding: absolute aliases */
 func_0017A540 = 0x17A540;
 /* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */

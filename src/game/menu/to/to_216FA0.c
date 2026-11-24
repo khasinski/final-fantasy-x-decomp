@@ -303,7 +303,52 @@ int func_00217CD0(s16 x, s16 y, int w4, int w8, u8 c0, u8 c1, u8 c2, u8 c3)
     return D_00692450 = D_00692450 + 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_216FA0", func_00217D50);
+void func_00217D50(void)
+{
+    u8 buf[0x20];
+    u8 item[0x20];
+    u8 str[4];
+    s16 i;
+
+    func_002EF0D0(str, 0, 4);
+    func_001F1EB8();
+    for (i = 0; i < D_00692450; i++) {
+        R4Ent16 *e = &D_00692050[i];
+        item[0x13] = 0;
+        *(u16 *)(item + 4) = e->x;
+        *(u16 *)(item + 6) = e->y;
+        item[0] = e->bC;
+        item[1] = e->bD;
+        item[2] = e->bE;
+        item[3] = e->bF;
+        if (e->w8 >= 0 && e->w8 <= 9) {
+            str[0] = e->w8 + 0x30;
+        }
+        if (e->w8 >= 0x41 && e->w8 <= 0x5A) {
+            if (e->w8 >= 0x47) {
+                str[0] = 0x23;
+                str[1] = (e->w8 - 0x47) * 2 + 0x30;
+                str[2] = 0;
+            } else {
+                str[1] = 0;
+                str[0] = (e->w8 - 0x41) * 2 - 0xC;
+            }
+        }
+        if (i[D_00692050].w8 >= 0x61 && i[D_00692050].w8 <= 0x7A) {
+            if (i[D_00692050].w8 >= 0x67) {
+                str[2] = 0;
+                str[0] = 0x23;
+                str[1] = (i[D_00692050].w8 - 0x67) * 2 + 0x31;
+            } else {
+                str[1] = 0;
+                str[0] = (i[D_00692050].w8 - 0x61) * 2 - 0xB;
+            }
+        }
+        func_0020E468(str, buf);
+        func_001F1F60(item, buf);
+    }
+    D_00692450 = 0;
+}
 
 extern s16 D_00324348;
 extern s16 D_0032434A;

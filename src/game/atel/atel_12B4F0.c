@@ -95,7 +95,22 @@ s32 func_0012B8B8(Actor *a, void *op, ScriptCtx *ctx)
     return v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12B4F0", func_0012B918);
+s32 func_0012B918(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int p0 = AtelPopStackInteger(a, ctx);
+    int p1 = AtelPopStackInteger(a, ctx);
+    int p2 = AtelPopStackInteger(a, ctx);
+    int p3 = AtelPopStackInteger(a, ctx);
+    u32 rgba;
+
+    p1 &= 0xFF;
+    p2 &= 0xFF;
+    p3 &= 0xFF;
+    rgba = (p0 << 24) | (p3 << 16) | (p2 << 8) | p1;
+
+    AtelPushStackInteger(a, ctx, rgba);
+    return func_0012B8B8(a, op, ctx);
+}
 
 float func_0012B9E0(Actor *a, void *op, ScriptCtx *ctx)
 {

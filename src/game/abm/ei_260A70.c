@@ -9,6 +9,7 @@
 #define func_00262C90 _hdr_func_00262C90
 #define func_0025A158 _hdr_func_0025A158
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/s6.h"
@@ -245,9 +246,115 @@ void func_00260F60(void)
     LPA(u_long128, 0x11310) = *src;
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00260F88);
+typedef int (*EntFilterFn)(WorkEnt *);
+float func_002DCEA0(float *, float *);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00261130);
+WorkEnt *func_00260F88_impl(S6Pt50 *pt, float *dir, EntFilterFn cb) __asm__("func_00260F88");
+WorkEnt *func_00260F88_impl(S6Pt50 *pt, float *dir, EntFilterFn cb)
+{
+    register S6Pt50 *rpt __asm__("$19") = pt;
+    float v[4];
+    WorkEnt *best = 0;
+    WorkEnt *e = lpamng->ents;
+    WorkEnt *end = &lpamng->ents[*(s16 *)((u8 *)lpamng + 2)];
+    float best_score;
+
+    v[2] = 0.0f;
+    v[3] = 1.0f;
+    best_score = v[2];
+    for (; e < end; e++) {
+        float dot;
+        float dist;
+        float score;
+        union {
+            int i;
+            float f;
+        } u;
+
+        if (*(u16 *)((u8 *)e + 6) == 0xFFFF) {
+            continue;
+        }
+        if (cb != 0 && cb(e) == 0) {
+            continue;
+        }
+        {
+            float px = rpt->x;
+            float py = rpt->y;
+            v[0] = (float)e->x - px;
+            v[1] = (float)e->y - py;
+        }
+        dot = ((float (*)(float *, float *))func_002DCEA0)(v, dir);
+        if (dot > 0.5f) {
+            register int bits __asm__("$2");
+            VU0_LQC2(10, 0, v);
+            VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+            VU0_OP("vaddx.y $vf10, $vf10, $vf10x");
+            VU0_OP("vaddy.z $vf10, $vf10, $vf10y");
+            VU0_OP("vsqrt Q, $vf10z");
+            VU0_OP("vwaitq");
+            VU0_OP("vaddq.x $vf10, $vf0, Q");
+            VU0_QMFC2_NI(bits, 10);
+            u.i = bits;
+            dist = u.f;
+            if (dist > 0.0f) {
+                score = dot / (dist * dist);
+                if (score > best_score) {
+                    best_score = score;
+                    best = e;
+                }
+            }
+        }
+    }
+    return best;
+}
+
+WorkEnt *func_00261130_impl(float *out_dist, S6Pt50 *pt, EntFilterFn cb) __asm__("func_00261130");
+WorkEnt *func_00261130_impl(float *out_dist, S6Pt50 *pt, EntFilterFn cb)
+{
+    float v[4];
+    WorkEnt *best = 0;
+    WorkEnt *e = lpamng->ents;
+    WorkEnt *end = &lpamng->ents[*(s16 *)((u8 *)lpamng + 2)];
+    float best_dist = 1000000000.0f;
+
+    v[3] = 1.0f;
+    v[2] = 0.0f;
+    for (; e < end; e++) {
+        float dist;
+        union {
+            int i;
+            float f;
+        } u;
+
+        if (*(u16 *)((u8 *)e + 6) == 0xFFFF) {
+            continue;
+        }
+        if (cb != 0 && cb(e) == 0) {
+            continue;
+        }
+        v[0] = (float)e->x - pt->x;
+        v[1] = (float)e->y - pt->y;
+        {
+            register int bits __asm__("$2");
+            VU0_LQC2(10, 0, v);
+            VU0_OP("vmul.xyz $vf10, $vf10, $vf10");
+            VU0_OP("vaddx.y $vf10, $vf10, $vf10x");
+            VU0_OP("vaddy.z $vf10, $vf10, $vf10y");
+            VU0_OP("vsqrt Q, $vf10z");
+            VU0_OP("vwaitq");
+            VU0_OP("vaddq.x $vf10, $vf0, Q");
+            VU0_QMFC2_NI(bits, 10);
+            u.i = bits;
+            dist = u.f;
+        }
+        if (dist < best_dist) {
+            best_dist = dist;
+            best = e;
+        }
+    }
+    *out_dist = best_dist;
+    return best;
+}
 
 void func_00261288(void)
 {

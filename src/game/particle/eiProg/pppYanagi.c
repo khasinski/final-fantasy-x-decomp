@@ -686,9 +686,169 @@ void func_00274CE8(char *base, void *k, ScriptCtx *ctx)
     func_00274FB0(base, k, ctx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274D80);
+typedef struct Yanagi4D80Key {
+    u32 w00;
+    float f04;
+    u32 count;
+} Yanagi4D80Key;
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274FB0);
+typedef struct Yanagi4D80Ent {
+    float pos[4];
+    float vel[4];
+    float ofs[4];
+} Yanagi4D80Ent;
+
+void func_00274D80(char *base, void *k_raw, ScriptCtx *ctx)
+{
+    float center[4];
+    float minv[4];
+    float maxv[4];
+    float tmp[4];
+    Yanagi4D80Key *k = (Yanagi4D80Key *)k_raw;
+    Yanagi4D80Ent *p;
+    u32 i;
+    float r;
+
+    p = (Yanagi4D80Ent *)(SLOT_WORK(R6HeapRef2, base, ctx, 1)->p4);
+    func_00275320(center);
+    r = k->f04;
+    minv[0] = center[0] - r;
+    minv[1] = center[1] - r;
+    minv[2] = center[2] - r;
+    maxv[0] = center[0] + r;
+    maxv[1] = center[1] + r;
+    maxv[2] = center[2] + r;
+    for (i = 0; i < k->count; i++, p++) {
+        float *v1 = p->vel;
+        register float *v2 __asm__("$3");
+        VU0_LQC2(31, 0, p->pos);
+        VU0_LQC2(30, 0, v1);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, p->pos);
+        v2 = p->ofs;
+        VU0_LQC2(31, 0, p->pos);
+        VU0_LQC2(30, 0, v2);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, tmp);
+        if (p->pos[0] < minv[0] && tmp[0] < minv[0]) {
+            func_00274A30(p, k, center, 2);
+        }
+        if (p->pos[1] < minv[1] && tmp[1] < minv[1]) {
+            func_00274A30(p, k, center, 4);
+        }
+        if (p->pos[2] < minv[2] && tmp[2] < minv[2]) {
+            func_00274A30(p, k, center, 6);
+        }
+        if (p->pos[0] > maxv[0] && tmp[0] > maxv[0]) {
+            func_00274A30(p, k, center, 1);
+        }
+        if (p->pos[1] > maxv[1] && tmp[1] > maxv[1]) {
+            func_00274A30(p, k, center, 3);
+        }
+        if (p->pos[2] > maxv[2] && tmp[2] > maxv[2]) {
+            func_00274A30(p, k, center, 5);
+        }
+    }
+}
+
+void func_002DCFD8(void *dst, void *src, float s);
+int func_002DD9B0(void *v);
+
+void func_00274FB0(char *base, void *k_raw, ScriptCtx *ctx)
+{
+    float v0[4];
+    float v1[4];
+    float col[4];
+    s32 iv4[4];
+    s32 iv0[4];
+    struct W3Whole m1;
+    struct W3Whole m2;
+    PrcPacket_Yanagi pkt;
+    Yanagi4D80Key *k = (Yanagi4D80Key *)k_raw;
+    Yanagi4D80Ent *p;
+    s16 *c;
+    QWunion_Yanagi *q;
+    u32 i;
+
+    pkt.base = (QWunion_Yanagi *)D_006A3BCC;
+    q = pkt.ptr = pkt.base + 1;
+    p = (Yanagi4D80Ent *)(SLOT_WORK(R6HeapRef2, base, ctx, 1)->p4);
+    c = SLOT_WORK(s16, base, ctx, 0);
+    pkt.size = 0x7FFFFFFF;
+    func_00270CD8(&m1);
+    func_002DCE38(&m1, &m1, D_006A3970);
+    func_002DCE38(&m2, D_006A3A70, D_006A3970);
+    col[0] = (c[0] * *(u16 *)((u8 *)ppvMng + 0x70)) >> 19;
+    col[1] = (c[1] * *(u16 *)((u8 *)ppvMng + 0x72)) >> 19;
+    col[2] = (c[2] * *(u16 *)((u8 *)ppvMng + 0x74)) >> 19;
+    col[3] = (c[3] * *(u16 *)((u8 *)ppvMng + 0x76)) >> 19;
+    q->d[0] = 0x1000000000000001ULL;
+    q->d[1] = 0xE;
+    q++;
+    q->d[0] = 0x44;
+    q->d[1] = 0x42;
+    q++;
+    for (i = 0; i < k->count; i++, p++) {
+        float *ofs;
+        VU0_LQC2(31, 0, p->pos);
+        VU0_SQC2(31, 0, v0);
+        ofs = p->ofs;
+        VU0_LQC2(31, 0, p->pos);
+        VU0_LQC2(30, 0, ofs);
+        VU0_OP("vadd.xyzw $vf31, $vf31, $vf30");
+        VU0_SQC2(31, 0, v1);
+        if (func_00270DD8((char *)&m1, (char *)v0, 2) == 0) {
+            func_002DCE08(v0, &m2, v0);
+            func_002DCFD8(v0, v0, v0[3]);
+            func_002DCE08(v1, &m2, v1);
+            func_002DCFD8(v1, v1, v1[3]);
+            if (func_002DD9B0(v0) == 0 && func_002DD9B0(v1) == 0) {
+                s32 *p4 = iv4;
+                s32 *p0;
+                q->d[0] = 0x4024C00000000001ULL;
+                q->d[1] = 0x5151;
+                q++;
+                q->w[0] = (s32)col[0];
+                q->w[1] = (s32)col[1];
+                q->w[2] = (s32)col[2];
+                q->w[3] = (s32)col[3];
+                q++;
+                VU0_LQC2(31, 0, v0);
+                VU0_OP("vftoi4.xyzw $vf31, $vf31");
+                VU0_SQC2(31, 0, p4);
+                p0 = iv0;
+                VU0_LQC2(31, 0, v0);
+                VU0_OP("vftoi0.xyzw $vf31, $vf31");
+                VU0_SQC2(31, 0, p0);
+                q->w[0] = iv4[0];
+                q->w[1] = iv4[1];
+                q->w[2] = iv0[2];
+                q->w[3] = 0;
+                q++;
+                q->w[0] = (s32)col[0];
+                q->w[1] = (s32)col[1];
+                q->w[2] = (s32)col[2];
+                q->w[3] = 0;
+                q++;
+                VU0_LQC2(31, 0, v1);
+                VU0_OP("vftoi4.xyzw $vf31, $vf31");
+                VU0_SQC2(31, 0, p4);
+                VU0_LQC2(31, 0, v1);
+                VU0_OP("vftoi0.xyzw $vf31, $vf31");
+                VU0_SQC2(31, 0, p0);
+                q->w[0] = iv4[0];
+                q->w[1] = iv4[1];
+                q->w[2] = iv0[2];
+                q->w[3] = 0;
+                q++;
+            }
+        }
+    }
+    pkt.ptr = q;
+    prcPacketDataClose(&pkt);
+    D_006A3BCC = (u8 *)(++pkt.ptr);
+    func_00270C78((int *)&pkt);
+}
 
 extern void func_002DCF48(void *dst, void *src);
 

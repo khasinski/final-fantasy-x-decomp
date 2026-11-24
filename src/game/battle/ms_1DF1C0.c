@@ -93,7 +93,87 @@ int MsSEPtransProcess(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DF1C0", MsRegistSEdata);
+extern s32 func_002D8030(void *);
+
+int MsRegistSEdata(BtlChr *chr, u8 *data) {
+    int count;
+    int i;
+    u32 off;
+
+    if (data != 0) {
+        count = *(int *)data;
+        for (i = 0; i < count; i++) {
+            off = ((u32 *)data)[1 + i];
+            if (off != 0) {
+                u32 *sub = (u32 *)(data + off);
+                int first = 0;
+                int found;
+                int sub_cnt;
+                int j;
+
+                if (i == 0) {
+                    sub_cnt = sub[0];
+                    found = 0;
+                    for (j = 0; j < sub_cnt; j++) {
+                        off = sub[1 + j];
+                        if (off != 0) {
+                            u8 *p = data + off;
+                            if (first == 0) {
+                                first = off;
+                            }
+                            found++;
+                            if (chr != 0) {
+                                if (j < 0x20) {
+                                    chr->fB6C[j] = func_002D8030(p);
+                                }
+                            } else {
+                                if (j < 0x80) {
+                                    D_003172F0.w175C[j] = func_002D8030(p);
+                                }
+                            }
+                        }
+                    }
+                    if (found != 0) {
+                        off = sub[1 + j];
+                        if (chr != 0) {
+                            chr->fBEE++;
+                            ((u8 *)chr)[0xBED]++;
+                            MsSEPtransRegist(chr->f0C, (s32)(data + first), off - first, i);
+                        } else {
+                            D_003172F0.f175A++;
+                            MsSEPtransRegist(0xFF, (s32)(data + first), off - first, i);
+                        }
+                    }
+                } else {
+                    sub_cnt = sub[0];
+                    found = 0;
+                    for (j = 0; j < sub_cnt; j++) {
+                        off = sub[1 + j];
+                        if (off != 0) {
+                            if (first == 0) {
+                                first = off;
+                            }
+                            found++;
+                        }
+                    }
+                    if (found != 0) {
+                        off = sub[1 + j];
+                        if (chr != 0) {
+                            chr->fBEE++;
+                            ((u8 *)chr)[0xBED]++;
+                            MsSEPtransRegist(chr->f0C, (s32)(data + first), off - first, i);
+                        } else {
+                            D_003172F0.f175A++;
+                            MsSEPtransRegist(0xFF, (s32)(data + first), off - first, i);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    return -1;
+}
 
 void MsSEPbattleClear(void)
 {

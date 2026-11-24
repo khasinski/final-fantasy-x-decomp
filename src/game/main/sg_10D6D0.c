@@ -205,4 +205,52 @@ void func_0010DC48(Chr *chr, s32 val, s32 mask)
     chr->b194 = ((u8)chr->b194 & ~mask) | val;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10D6D0", func_0010DC60);
+float sqrtf(float);
+double func_002E8E60(double, double);
+
+void func_0010DC60(Chr *chr)
+{
+    PLightEntry *pl = (PLightEntry *)D_0057EAFC;
+    u8 *p = (u8 *)chr;
+    s32 i;
+
+    for (i = 0; i < 4; i++, p += 0x10) {
+        *(float *)(p + 0x380) = *(float *)(p + 0x384) = *(float *)(p + 0x388) = 0.0f;
+        *(float *)(p + 0x38C) = 1.0f;
+        *(float *)(p + 0x3C0) = *(float *)(p + 0x3C4) = *(float *)(p + 0x3C8) = 0.0f;
+        *(float *)(p + 0x3CC) = 1.0f;
+    }
+    for (i = 0; i < D_0057EB00; i++, pl++) {
+        if (pl->flag != 0) {
+            float v[4];
+            float d;
+            float att;
+            s32 idx;
+            float *c;
+            float *dr;
+
+            v[0] = *(float *)((u8 *)chr + 0x6D0) - pl->x;
+            v[1] = *(float *)((u8 *)chr + 0x6D4) - pl->y;
+            v[2] = *(float *)((u8 *)chr + 0x6D8) - pl->z;
+            d = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+            att = pl->f20 - d;
+            if (att < 0.0f) {
+                continue;
+            }
+            if (pl->f24 != 0.0f) {
+                att = (float)(1.0 - func_002E8E60((double)(1.0f - att / pl->f20), (double)pl->f24));
+            } else {
+                att = 1.0f;
+            }
+            idx = pl->flag2;
+            c = (float *)((u8 *)chr + 0x380 + idx * 16);
+            dr = (float *)((u8 *)chr + 0x3C0 + idx * 16);
+            c[0] += pl->color[0] * att;
+            c[1] += pl->color[1] * att;
+            c[2] += pl->color[2] * att;
+            dr[0] += v[0] * att;
+            dr[1] += v[1] * att;
+            dr[2] += v[2] * att;
+        }
+    }
+}

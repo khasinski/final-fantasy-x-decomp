@@ -350,7 +350,49 @@ u8 *func_001E58F8(u8 id, int *out)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E4CD0", MsGetTargetSortList);
+float func_001E5B70(int mode, float *a, float *b, float *c);
+
+u8 *MsGetTargetSortList(u8 id, int *out_cnt, int mode) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    int cnt = 0;
+    u8 *list = 0;
+    BtlChr *chr;
+    int i, j;
+
+    if (MsBtlChrNumCheck(id) != 0) {
+        list = MsGetTargetList(id, &cnt);
+        MsGetChrInfo(1, MsGetChrBit(id, -14, 0, 1), 0, v0);
+        MsGetChrInfo(1, MsGetChrBit(id, -15, 0, 1), 0, v1);
+        for (i = 0; i < cnt; i++) {
+            u8 t = list[i];
+            chr = MsGetChr(t);
+            func_001B6790(t, v2);
+            *(float *)chr->padC28 = func_001E5B70(mode, v1, v0, v2);
+        }
+        for (i = 0; i < cnt - 1; i++) {
+            int best = -1;
+            float best_v = 0.0f;
+            for (j = i; j < cnt; j++) {
+                chr = MsGetChr(list[j]);
+                if (best < 0 || *(float *)chr->padC28 < best_v) {
+                    best_v = *(float *)chr->padC28;
+                    best = j;
+                }
+            }
+            if (i != best) {
+                u8 tmp = list[best];
+                list[best] = list[i];
+                list[i] = tmp;
+            }
+        }
+    }
+    if (out_cnt != 0) {
+        *out_cnt = cnt;
+    }
+    return list;
+}
 
 float sqrtf(float x);
 s32 _E5B70_func_002EC198(s64, s64) __asm__("func_002EC198");

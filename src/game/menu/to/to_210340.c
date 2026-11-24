@@ -369,7 +369,79 @@ int func_00210A30(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_210340", func_00210A38);
+int func_00210A38(MenuListLocal *o)
+{
+    s16 pages;
+    int start;
+    int end;
+    int i;
+    int color;
+    int curX;
+    int n;
+
+    n = o->count - 1;
+    pages = (n + o->cols) / o->cols;
+    _func_001F0328(o->frame[0], o->frame[1], o->frame[2] - o->frame[0], o->frame[3] - o->frame[1], D_00324304, D_00324308);
+    _func_001FBFB8(o->frame[2] - 10, o->area[1], 4, o->area[3] - o->area[1], pages, o->rows, o->top / o->cols);
+    TOMakePktScissor(o->area[0], o->area[1], o->area[2], o->area[3]);
+    o->draw(o);
+    if (o->top > o->count) {
+        start = o->count;
+    } else {
+        start = o->top;
+        if (start < 0) {
+            start = 0;
+        }
+    }
+    {
+        int tmp = o->rows * o->cols + start;
+        if (tmp > o->count) {
+            end = o->count;
+        } else {
+            end = tmp;
+            if (end < 0) {
+                end = 0;
+            }
+        }
+    }
+    for (i = start; i < end; i++) {
+        s16 w;
+        s16 h;
+        u8 *text;
+        u8 *com;
+        u8 *text2;
+        int res;
+        int x;
+        int y;
+
+        if (o->items[i] == 0xFF) {
+            continue;
+        }
+        res = TOCheckBtlCommandUse(o->owner, o->items[i]);
+        if (res == -4) {
+            continue;
+        }
+        com = (u8 *)MsGetComData(o->items[i], &text);
+        text2 = text + *(u16 *)com;
+        if (res < 0) {
+            color = 1;
+        } else {
+            color = 0;
+        }
+        _TOGetMessageWH(-1, text2, &w, &h, 0, 0);
+        x = o->area[0] + (o->colWidth - w) / 2 + (i % o->cols) * (o->colWidth + 16);
+        y = o->area[1] + ((i - o->top) / o->cols) * 20;
+        _func_00207F60(text2, x, y, color);
+        if (i == o->cursor) {
+            curX = x;
+        }
+    }
+    {
+        int curY = o->area[1] + ((o->cursor - o->top) / o->cols) * 20;
+        _func_0021F448(0, curX, curY);
+    }
+    return 0;
+}
 
 int func_00210D10(void)
 {

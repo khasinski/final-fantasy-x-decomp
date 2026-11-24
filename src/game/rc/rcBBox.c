@@ -141,7 +141,26 @@ void func_0018F410(float *a, float *out) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcBBox", func_0018F458);
+static __inline__ double rcbbox_fabs(double x) {
+    return x < 0.0 ? -x : x;
+}
+
+float func_0018F458(W3Obj20 *box) {
+    float *minp = (float *)box;
+    float *maxp = minp + 4;
+    float maxv = 0.0f;
+    int i;
+
+    for (i = 0; i < 3; i++) {
+        if ((double)maxv < rcbbox_fabs(minp[i])) {
+            maxv = rcbbox_fabs(minp[i]);
+        }
+        if ((double)maxv < rcbbox_fabs(maxp[i])) {
+            maxv = rcbbox_fabs(maxp[i]);
+        }
+    }
+    return maxv / 4000.0f;
+}
 
 void func_0018F5E8(char *fmt, ...) {
 }

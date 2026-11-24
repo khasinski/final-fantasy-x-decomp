@@ -37,7 +37,38 @@ void func_0019A840(void) {
     func_002DCE38(D_003138D0, D_00314260, D_00313890);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", func_0019A8A8);
+int func_0019A8A8(char *m, char *v, int n) {
+    register int f __asm__("$2");
+    int c;
+
+    VU0_LQC2(4, 0, m);
+    VU0_LQC2(5, 0x10, m);
+    VU0_LQC2(6, 0x20, m);
+    VU0_LQC2(7, 0x30, m);
+    f = 0x3F;
+loop:
+    VU0_LQC2(8, 0, v);
+    MIPS_ADDI(v, 0x10);
+    VU0_OP("vmulax.xyzw ACC, $vf4, $vf8x");
+    VU0_OP("vmadday.xyzw ACC, $vf5, $vf8y");
+    VU0_OP("vmaddaz.xyzw ACC, $vf6, $vf8z");
+    VU0_OP("vmaddw.xyzw $vf9, $vf7, $vf8w");
+    VU0_OP("vclipw.xyz $vf9, $vf9w");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_OP("vnop");
+    VU0_CFC2_NI(c, 18);
+    f &= c;
+    if (f != 0) {
+        MIPS_ADDI(n, -1);
+        if (n > 0) {
+            goto loop;
+        }
+    }
+    return f;
+}
 
 void func_0019A910(S2Ent *e, void *sub)
 {
@@ -211,7 +242,53 @@ void func_0019B168(R2Obj19B1 *o, int a, int b, float f) {
     o->w10 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgFP", rcbgFPm097shibukiProc);
+void rcbgFPm097shibukiProc(R2Obj19B1 *o)
+{
+    float mtx[16];
+    void *mng;
+    float *sea = (float *)Yn_SeaGetAng();
+    float ratio = 0.0f;
+    u8 *ent;
+
+    switch (o->w0) {
+    case 0:
+        if ((o->f8 < 0.0f && sea[2] < o->f8) || (o->f8 > 0.0f && o->f8 < sea[2])) {
+            pppFpIDdispOn((u16)o->w4);
+            pppFpIDon((u16)o->w4);
+            o->w0 = 1;
+        }
+        break;
+    case 1:
+        o->w10++;
+        ratio = (float)o->w10 / (float)o->wC;
+        if (o->w10 >= o->wC) {
+            o->w0 = 2;
+        }
+        break;
+    case 2:
+        ratio = 1.0f;
+        if ((o->f8 < 0.0f && o->f8 < sea[2]) || (o->f8 > 0.0f && sea[2] < o->f8)) {
+            o->w0 = 3;
+        }
+        break;
+    case 3:
+        o->w10--;
+        ratio = (float)o->w10 / (float)o->wC;
+        if (o->w10 <= 0) {
+            pppFpIDdispOff((u16)o->w4);
+            pppFpIDoff((u16)o->w4);
+            o->w0 = 0;
+        }
+        break;
+    }
+    ent = (u8 *)D_00313950 + (o->w4 << 6);
+    *(float *)(ent + 0x34) = ratio;
+    func_0019A910(ent, mtx);
+    pppFpGetMngPtr(*(s16 *)ent, 0, &mng);
+    if (mng != 0) {
+        func_002DD0C0((u8 *)mng + 0x10, mtx);
+    }
+}
 
 void *rcbgFPm173New(void) {
     void *p = _rcAlloc(0x28, D_0056DB98, 0x25A);

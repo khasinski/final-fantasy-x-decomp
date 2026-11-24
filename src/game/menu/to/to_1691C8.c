@@ -1626,8 +1626,178 @@ void func_0016BCA0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1691C8", func_0016BCE0);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_1691C8/rodata", jtbl_0056C160);
+extern int (*D_0030E0E8[])(int);
+extern void (*D_0030E860[])(int, int);
+extern void (*D_0030E8A0[])(int);
+extern s32 D_00597E34;
+extern void *_bce0_B8 __asm__("D_0030E0B8");
+extern void *_bce0_D0 __asm__("D_0030E0D0");
+extern void *_bce0_D4 __asm__("D_0030E0D4");
+extern void *_bce0_D8 __asm__("D_0030E0D8");
+extern s32 D_0030E05C;
+extern u8 *dvd_hdd_copy_system_cnf_buff;
+extern s32 D_0057CB88;
+extern s32 D_0057CB8C;
+extern s32 D_0057CB90;
+extern s32 D_0057CB94;
+void func_002202D0(void);
+void TOFTCTransfer(int);
+int sa_task_buff_size_get(int);
+void **sa_task_init2(int, int, int);
+void func_0016B7D8(void);
+void func_00162CD8(int);
+void hdd_ins_size_check(void);
+
+void func_0016BCE0(u32 arg0)
+{
+    u32 flag;
+    int size;
+
+    flag = arg0 & 0x8000;
+    arg0 &= 0xFF;
+    func_002202D0();
+    D_00597A18 = 0;
+    D_00597A1A = 0;
+    D_00597A1C = 0;
+    switch (arg0) {
+    default:
+    case 0:
+        _to_D_0030E070.w14 = 1;
+        _to_D_0030E070.w18 = 2;
+        _to_D_0030E070.w30 = 3;
+        _to_D_0030E070.fn = D_0030E0E8;
+        _to_D_0030E070.p2C = D_0030E860;
+        _to_D_0030E070.p34 = D_0030E8A0;
+        break;
+    case 1:
+        _to_D_0030E070.w14 = 4;
+        _to_D_0030E070.w18 = 5;
+        _to_D_0030E070.w30 = 6;
+        _to_D_0030E070.fn = D_0030E0E8;
+        _to_D_0030E070.p2C = D_0030E860;
+        _to_D_0030E070.p34 = D_0030E8A0;
+        break;
+    case 2:
+        _to_D_0030E070.w14 = 7;
+        _to_D_0030E070.w18 = 8;
+        _to_D_0030E070.w30 = 9;
+        _to_D_0030E070.fn = D_0030E0E8;
+        _to_D_0030E070.p2C = D_0030E860;
+        _to_D_0030E070.p34 = D_0030E8A0;
+        break;
+    case 3:
+        _to_D_0030E070.w14 = 10;
+        _to_D_0030E070.w18 = 11;
+        _to_D_0030E070.w30 = 12;
+        _to_D_0030E070.fn = D_0030E0E8;
+        _to_D_0030E070.p2C = D_0030E860;
+        _to_D_0030E070.p34 = D_0030E8A0;
+        break;
+    case 4:
+        _to_D_0030E070.w14 = 13;
+        _to_D_0030E070.w18 = 14;
+        _to_D_0030E070.w30 = 0;
+        _to_D_0030E070.fn = D_0030E0E8;
+        _to_D_0030E070.p2C = D_0030E860;
+        _to_D_0030E070.p34 = D_0030E8A0;
+        break;
+    }
+    D_00597A08[0] = 0;
+    D_00597A08[1] = 0;
+    D_00597A08[2] = 0;
+    D_00597A08[3] = 0;
+    D_0030E068 = 0;
+    D_0030E0C5 = 0;
+    D_0030E0C4 = 0;
+    D_0030E0DC = 0;
+    if (func_001BD360() == 0) {
+        _to_D_0030E070.w1C = 0x30;
+    } else {
+        _to_D_0030E070.w1C = 3;
+    }
+    D_0078E498.f10(_to_D_0030E070.w1C);
+    size = D_0078E498.f14(_to_D_0030E070.w18);
+    D_0030E0CC = func_0016BB88(0, size);
+    D_0078E498.f00(_to_D_0030E070.w18, D_0030E0CC, 0, 0);
+    D_0078E498.f08(0);
+    _to_D_0030E070.w24 = D_00597E34 = func_0016B5B0(D_0030E0CC);
+    func_0016BC30(size);
+    D_0030E0CC = 0;
+
+    D_0030E060 = func_0016BB88(1, D_0078E498.f14(0x12));
+    D_0078E498.f00(0x12, D_0030E060, 0, 0);
+    D_0078E498.f08(0);
+    TOFTCTransfer(D_0030E060);
+
+    {
+        void **tsk = sa_task_init2(1, func_0016BB88(1, sa_task_buff_size_get(1)), 0);
+        D_0030E064 = (void (**)(void))tsk;
+        ((void (*)(void (*)(void), int, int))tsk[2])(func_0016BCA0, 1, 0);
+    }
+
+    _to_D_00597E30 = (ToRegVal *)func_0016BB88(1, 0x400);
+    func_002EF0D0(_to_D_00597E30, 0, 0x400);
+    _bce0_B8 = (void *)func_0016BB88(1, 0x4000);
+    func_002EF0D0(_bce0_B8, 0, 0x4000);
+
+    D_0030E0C0 = (ChrRec1D8 *)0;
+    _bce0_D0 = 0;
+    _bce0_D8 = 0;
+    _bce0_D4 = 0;
+    D_0057CB90 = 0;
+    dvd_hdd_copy_system_cnf_buff = 0;
+    D_0030E05C = 0;
+    if (arg0 == 4) {
+        D_0057CB94 = -1;
+        D_0057CB88 = 0;
+        D_0057CB8C = 0;
+        size = ((int (*)(int))((s32 *)&D_0078E498)[5])(0xF);
+        D_0057CB90 = size;
+        _bce0_D8 = (void *)func_0016BB88(1, size);
+        D_0078E498.f00(0xF, _bce0_D8, 0, 0);
+        D_0078E498.f08(0);
+
+        _bce0_D0 = (void *)func_0016BB88(1, D_0078E498.f14(0x10));
+        D_0078E498.f00(0x10, _bce0_D0, 0, 0);
+        D_0078E498.f08(0);
+
+        _bce0_D4 = (void *)func_0016BB88(1, D_0078E498.f14(0x11));
+        D_0078E498.f00(0x11, _bce0_D4, 0, 0);
+        D_0078E498.f08(0);
+
+        D_0078E498.f10(1);
+        size = D_0078E498.f14(0xD);
+        dvd_hdd_copy_system_cnf_buff = (u8 *)func_0016BB88(1, size + 4);
+        D_0030E05C = size;
+        dvd_hdd_copy_system_cnf_buff[0] = 0;
+        D_0078E498.f00(0xD, dvd_hdd_copy_system_cnf_buff, 0, 0);
+        D_0078E498.f08(0);
+        dvd_hdd_copy_system_cnf_buff[D_0030E05C] = 0;
+        D_0078E498.f10(_to_D_0030E070.w1C);
+    } else {
+        D_0030E0C0 = (ChrRec1D8 *)func_0016BB88(1, D_0078E498.f14(0));
+        D_0078E498.f00(0, D_0030E0C0, 0, 0);
+        D_0078E498.f08(0);
+    }
+    {
+        int p = func_0016BB88(1, D_0078E498.f14(_to_D_0030E070.w14));
+        int id = _to_D_0030E070.w14;
+        _m2c_D_0030E0C8 = p;
+        D_0078E498.f00(id, p, 0, 0);
+    }
+    D_0078E498.f08(0);
+    D_0030E0BC = (s32)(void *)func_0016BB88(1, 0x42000);
+    func_0016B7D8();
+    if (arg0 == 4) {
+        func_00162CD8(1);
+        hdd_ins_size_check();
+    }
+    if (flag == 0) {
+        func_0016B898();
+    } else {
+        func_0016BA00();
+    }
+}
 
 int func_0016C318(void) {
     return D_0030E060;

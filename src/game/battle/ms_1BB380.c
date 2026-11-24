@@ -153,7 +153,93 @@ int func_001BB7F8(int a, int b, int *outA, int *outB, int *outC) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BB380", func_001BB930);
+int func_001BB930(int a, int b, u32 *o0, u32 *o1, u32 *o2, u32 *o3, u32 *o4, u32 *o5) {
+    u8 id = a;
+    u32 v16 = 0;
+    u32 v17 = 0;
+    u32 v18 = 0;
+    u32 v19 = 0;
+    u32 v20 = 0;
+    u32 v21 = 0;
+    int dmg = 0;
+    int ret = 0;
+
+    if (MsBtlChrNumCheck(id)) {
+        int sub = MsGetChrCommand(id)->f2;
+        BtlChr *chr = MsGetChr(b);
+        Obj436 *o = (Obj436 *)chr;
+        int hp = *(s32 *)((u8 *)chr + 0x290);
+        u16 st1 = *(u16 *)((u8 *)chr + 0x2C6);
+        u16 st2 = *(u16 *)((u8 *)chr + 0x2D6);
+        int i;
+
+        for (i = 0; i < 2; i++) {
+            struct Obj436Slot *s = &o->slot[i];
+            if (s->v == id && s->sub == sub) {
+                int k;
+                for (k = s->first; k < s->count; k++) {
+                    u8 *e = (u8 *)&s->ent[k];
+                    u16 n1 = *(u16 *)(e + 0x14);
+                    u16 n2 = *(u16 *)(e + 0x16);
+                    int j;
+
+                    dmg += *(s32 *)(e + 0x20);
+                    for (j = 0; j < 16; j++) {
+                        if (((st1 >> j) & 1) != ((n1 >> j) & 1)) {
+                            if ((n1 >> j) & 1) {
+                                v16 = (v16 | (1 << j)) & 0xFFFF;
+                            } else {
+                                v19 = (v19 | (1 << j)) & 0xFFFF;
+                            }
+                        }
+                        if (((st2 >> j) & 1) != ((n2 >> j) & 1)) {
+                            if ((n2 >> j) & 1) {
+                                v18 = (v18 | (1 << j)) & 0xFFFF;
+                            } else {
+                                v21 = (v21 | (1 << j)) & 0xFFFF;
+                            }
+                        }
+                    }
+                    for (j = 0; j < 13; j++) {
+                        u8 *p = (u8 *)chr + 0x2C8;
+                        u8 *q = e + 7;
+                        if (p[j] != q[j]) {
+                            if (q[j] != 0) {
+                                v17 |= 1 << j;
+                            } else {
+                                v20 |= 1 << j;
+                            }
+                        }
+                    }
+                    st1 = n1;
+                    st2 = n2;
+                }
+            }
+        }
+        if (hp - dmg <= 0 || (st1 & 1)) {
+            ret = 1;
+        }
+    }
+    if (o0) {
+        *o0 = v16;
+    }
+    if (o1) {
+        *o1 = v17;
+    }
+    if (o2) {
+        *o2 = v18;
+    }
+    if (o3) {
+        *o3 = v19;
+    }
+    if (o4) {
+        *o4 = v20;
+    }
+    if (o5) {
+        *o5 = v21;
+    }
+    return ret;
+}
 
 int MsGetDamageResult(int a, int b, int *outA, int *outB, int *outC) {
     u8 id = a;

@@ -66,17 +66,162 @@ void func_0018FE28(R2Pkt *b) {
     func_002DBF78((int)p, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_0018FE80);
+void func_0018FE80(R2Pkt *pkt, float *col, float cx, float cy, float w, float h)
+{
+    R2Qw *cur = pkt->cur;
+    float ftmp[4];
+    s32 itmp[4];
+    s32 *ip = itmp;
+    float hh;
+    float hw;
+    float x0, y0, x1, y1;
+    u64 prim;
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_0018FFD8);
+    cur->d.lo = 0x1000000000000001UL;
+    cur->d.hi = 1;
+    cur++;
+    w *= 0.5f;
+    cur->w[0] = (s32)col[0];
+    h *= 0.5f;
+    cur->w[1] = (s32)col[1];
+    cur->w[2] = (s32)col[2];
+    cur->w[3] = (s32)col[3];
+    cur++;
+    {
+        register float x1 __asm__("$f2") = cx + w;
+        register float y1 __asm__("$f3") = cy + h;
+        cx -= w;
+        cy -= h;
+        ftmp[0] = cx;
+        ftmp[1] = cy;
+        ftmp[2] = x1;
+        ftmp[3] = y1;
+    }
+    VU0_LQC2(31, 0, ftmp);
+    VU0_OP("vftoi4.xyzw $vf31, $vf31");
+    VU0_SQC2(31, 0, ip);
+    prim = ((s32)col[3] != 0x80) ? 0x44 : 0xC4;
+    cur->d.hi = 5;
+    cur->d.lo = 0x1000400000000004UL | (prim << 47);
+    cur++;
+    cur->w[0] = itmp[0];
+    cur->w[1] = itmp[1];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    cur->w[0] = itmp[2];
+    cur->w[1] = itmp[1];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    cur->w[0] = itmp[0];
+    cur->w[1] = itmp[3];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    cur->w[0] = itmp[2];
+    cur->w[1] = itmp[3];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    pkt->cur = cur;
+}
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190120);
+void func_0018FFD8(R2Pkt *pkt, float *col, float cx, float cy, float r)
+{
+    R2Qw *cur = pkt->cur;
+    float ftmp[4];
+    s32 itmp[4];
+    s32 *ip;
+    float *fp;
+    u64 prim;
+    int i;
+    u32 ang2;
+
+    cur->d.lo = 0x1000000000000001UL;
+    cur->d.hi = 1;
+    cur++;
+    cur->w[0] = (s32)col[0];
+    cur->w[1] = (s32)col[1];
+    cur->w[2] = (s32)col[2];
+    cur->w[3] = (s32)col[3];
+    cur++;
+    {
+        register u64 tag __asm__("$6") = 0x1000400000000011UL;
+        register u64 p42 __asm__("$7") = 0x42;
+        prim = ((s32)col[3] != 0x80) ? p42 : 0xC2;
+        cur->d.hi = 5;
+        cur->d.lo = (prim << 47) | tag;
+    }
+    cur++;
+    i = 0;
+    ip = itmp;
+    fp = ftmp;
+    for (ang2 = 0x4000; i < 0x11; i++, ang2 += 0x1000) {
+        ftmp[0] = cx + eff_sin_t[(i << 8) & 0xF00] * r;
+        ftmp[1] = cy + eff_sin_t[(ang2 >> 4) & 0xFFF] * r * (7.0f / 6.0f);
+        VU0_LQC2(31, 0, fp);
+        VU0_OP("vftoi4.xyzw $vf31, $vf31");
+        VU0_SQC2(31, 0, ip);
+        cur->w[0] = itmp[0];
+        cur->w[1] = itmp[1];
+        cur->w[2] = 0;
+        cur->w[3] = 0;
+        cur++;
+    }
+    pkt->cur = cur;
+}
+
+void func_00190120(R2Pkt *pkt, float *col, float x0, float y0, float x1, float y1)
+{
+    R2Qw *cur = pkt->cur;
+    float ftmp[4];
+    s32 itmp[4];
+    register s32 *ip __asm__("$8");
+    u64 prim;
+
+    cur->d.lo = 0x1000000000000001UL;
+    cur->d.hi = 1;
+    cur++;
+    cur->w[0] = (s32)col[0];
+    cur->w[1] = (s32)col[1];
+    cur->w[2] = (s32)col[2];
+    cur->w[3] = (s32)col[3];
+    cur++;
+    prim = 0xC1;
+    if ((s32)col[3] != 0x80) {
+        prim = 0x41;
+    }
+    cur->d.hi = 5;
+    cur->d.lo = (prim << 47) | 0x1000400000000002UL;
+    cur++;
+    ip = itmp;
+    ftmp[0] = x0;
+    ftmp[1] = y0;
+    VU0_LQC2(31, 0, ftmp);
+    VU0_OP("vftoi4.xyzw $vf31, $vf31");
+    VU0_SQC2(31, 0, ip);
+    cur->w[0] = itmp[0];
+    cur->w[1] = itmp[1];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    ftmp[0] = x1;
+    ftmp[1] = y1;
+    VU0_LQC2(31, 0, ftmp);
+    VU0_OP("vftoi4.xyzw $vf31, $vf31");
+    VU0_SQC2(31, 0, ip);
+    cur->w[0] = itmp[0];
+    cur->w[1] = itmp[1];
+    cur->w[2] = 0;
+    cur->w[3] = 0;
+    cur++;
+    pkt->cur = cur;
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190230);
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_00190408);
-
-extern void func_00190408(int prim, float *v, int n, int a);
 
 void func_00190588(int a, float cx, float cy, float w, float h)
 {
@@ -151,7 +296,26 @@ void func_00190698(int a, float cx, float cy, float r, float rot)
     func_00190408(0x4C, &v[0][0], 3, a);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_001907A8);
+void func_001907A8(int a, float cx, float cy, float r, float rot)
+{
+    RcAng3 ang = D_0056D600;
+    float v[4][4];
+    int i;
+    int base_ang = (int)(rot * 65536.0f / 6.2831855f);
+    int *ap;
+    float *p;
+    float *tp = &v[3][0];
+
+    for (i = 0, ap = ang.a, p = &v[0][0]; i < 3; i++, ap++, p += 4) {
+        unsigned int cur = base_ang + *ap;
+        p[0] = cx + eff_sin_t[(cur >> 4) & 0xFFF] * r;
+        p[1] = cy + eff_sin_t[((cur + 0x4000) >> 4) & 0xFFF] * r * (7.0f / 6.0f);
+        p[2] = 256.0f;
+    }
+    VU0_LQC2(31, 0, &v[0][0]);
+    VU0_SQC2(31, 0, tp);
+    func_00190408(0x42, &v[0][0], 4, a);
+}
 
 INCLUDE_ASM("build/ee_asm/game/rc/rcPacket", func_001908B0);
 

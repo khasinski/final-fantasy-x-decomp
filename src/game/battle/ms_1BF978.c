@@ -98,7 +98,47 @@ u8 *MsSaveItemNumBuffer(int *n) {
     return D_0031D59C;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BF978", MsSaveItemUse);
+void MsSetItemWindow(void);
+
+int MsSaveItemUse(int item, int delta) {
+    int empty = -1;
+    int i;
+
+    if ((item >> 12) != 2 || delta == 0) {
+        return -1;
+    }
+    for (i = 0; i < 0x70; i++) {
+        if (item == D_003194D0.h3ECC[i] && D_003194D0.b40CC[i] != 0) {
+            if (delta >= 0 || D_003194D0.b40CC[i] + delta >= 0) {
+                int cur = D_003194D0.b40CC[i];
+                int next = MsCheckRange(cur + delta, 0, 99);
+                D_003194D0.b40CC[i] = next;
+                if (next != cur) {
+                    if (delta > 0) {
+                        MsSetItemCheck(item, func_001BFEB8());
+                    } else if (delta < 0) {
+                        MsSetItemCheck(item, func_001BFEC8());
+                    }
+                }
+                if (next == 0) {
+                    D_003194D0.h3ECC[i] = 0xFF;
+                }
+                MsSetItemWindow();
+                return 0;
+            }
+        }
+        if ((D_003194D0.h3ECC[i] == 0 || D_003194D0.b40CC[i] == 0) && empty < 0) {
+            empty = i;
+        }
+    }
+    if (empty >= 0 && delta > 0) {
+        D_003194D0.h3ECC[empty] = item;
+        D_003194D0.b40CC[empty] = MsCheckRange(delta, 0, 99);
+        MsSetItemWindow();
+        return 0;
+    }
+    return -1;
+}
 
 void MsSetItemWindow(void) {
     int n;

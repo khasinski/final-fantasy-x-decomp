@@ -272,9 +272,168 @@ void func_0025B558(s16 x, s16 y, s16 h, int pos, int count, int view)
     func_002568C8(x + 1, y_start, x1, y_end, 0x3F80000080FFFFFFL);
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025B6E8);
+extern s32 D_006A3600;
+int FFXGetLang(void);
+int func_001BD360(void);
+void func_00256B78(int x0, int y0, int x1, int y1);
 
-INCLUDE_RODATA("build/ee_asm/game/abm/abm_25AEB0/rodata", jtbl_00573A10);
+void func_0025B6E8(ChrWork *w, int ofs)
+{
+    int x = (s16)w->rect1[0] + ofs;
+    int top;
+    int total;
+    int colW;
+    int col;
+    int baseX;
+    int curX;
+    int curY;
+    int i;
+
+    func_00256B78(x, (s16)w->rect1[1], x + (s16)w->rect1[2], (s16)w->rect1[1] + (s16)w->rect1[3]);
+    {
+        int rows = (s16)w->f16;
+        top = w->f1A;
+        if (w->f18 - top >= rows) {
+            int lim = rows - 1;
+            top += (w->f18 - top) - lim;
+        }
+        if (w->f28 != 0) {
+            func_0025B558((s16)w->rect1[2] + x - 10, (s16)w->rect1[1] - 2, (s16)w->rect1[3] + 4, w->f1A, w->f1E, rows);
+        }
+    }
+    baseX = x + (s16)w->f20;
+    curY = (s16)w->rect1[1];
+    curX = baseX;
+    col = 0;
+    colW = (s16)w->rect1[2] / w->f22;
+    total = (s16)w->f16 * w->f22;
+    switch (w->f26) {
+    case 0: {
+        int idx = top;
+        ChrSub *sub = &w->sub[idx];
+
+        for (i = 0; i < total && idx < w->f1E; i++, idx++, sub++) {
+            w->f38(w, sub, idx, curX, curY);
+            curX += colW;
+            if (++col >= w->f22) {
+                col = 0;
+                curX = baseX;
+                curY += 20;
+            }
+        }
+        break;
+    }
+    case 1: {
+        int idx = top;
+        ChrSub *sub = &w->sub[idx];
+        u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+               | ((u64)(s16)w->rect1[1] << 32) | ((u64)((s16)w->rect1[1] + (s16)w->rect1[3] - 1) << 48);
+
+        func_00257048(sc, 0x40);
+        curY += (w->f27 >> 3) - 20;
+        for (i = 0; i < (s16)w->f16 + 1; i++, curY += 20, idx++, sub++) {
+            w->f38(w, sub, idx, baseX, curY);
+        }
+        w->f27 += 0x35;
+        if (w->f27 >= 0x8C) {
+            w->f26 = 0;
+        }
+        func_00257048(D_006F2CE0.scissor, GS_REG_SCISSOR_1);
+        break;
+    }
+    case 2: {
+        int idx = top - 1;
+        ChrSub *sub = &w->sub[idx];
+        u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+               | ((u64)(s16)w->rect1[1] << 32) | ((u64)((s16)w->rect1[1] + (s16)w->rect1[3] - 1) << 48);
+
+        func_00257048(sc, 0x40);
+        curY -= (w->f27 >> 3);
+        for (i = 0; i < (s16)w->f16 + 1; i++, curY += 20, idx++, sub++) {
+            w->f38(w, sub, idx, baseX, curY);
+        }
+        w->f27 += 0x35;
+        if (w->f27 >= 0x8C) {
+            w->f26 = 0;
+        }
+        func_00257048(D_006F2CE0.scissor, GS_REG_SCISSOR_1);
+        break;
+    }
+    case 3: {
+        int idx = w->f1C;
+        ChrSub *sub = &w->sub[idx];
+        int dy;
+
+        if (++w->f27 >= 8) {
+            w->f26 = 0;
+        }
+        dy = (w->f27 * (s16)w->rect1[3]) / 8;
+        if (w->f26 != 0) {
+            u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+                   | ((u64)((s16)w->rect1[1] + dy) << 32) | ((u64)((s16)w->rect1[1] + (s16)w->rect1[3] - 1) << 48);
+
+            func_00257048(sc, 0x40);
+            for (i = 0; i < total; i++, idx++, sub++) {
+                w->f38(w, sub, idx, baseX, curY);
+                curY += 20;
+            }
+        }
+        {
+            u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+                   | ((u64)(s16)w->rect1[1] << 32) | ((u64)((s16)w->rect1[1] + (s16)w->rect1[3] - 1) << 48);
+
+            func_00257048(sc, 0x40);
+        }
+        idx = top;
+        sub = &w->sub[idx];
+        curY = (s16)w->rect1[1] + dy - (s16)w->rect1[3];
+        for (i = 0; i < total; i++, idx++, sub++) {
+            w->f38(w, sub, idx, baseX, curY);
+            curY += 20;
+        }
+        func_00257048(D_006F2CE0.scissor, GS_REG_SCISSOR_1);
+        break;
+    }
+    case 4: {
+        int idx = w->f1C;
+        ChrSub *sub = &w->sub[idx];
+        int dy;
+
+        if (++w->f27 >= 8) {
+            w->f26 = 0;
+        }
+        dy = (s16)w->rect1[3] - (w->f27 * (s16)w->rect1[3]) / 8;
+        if (w->f26 != 0) {
+            u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+                   | ((u64)(s16)w->rect1[1] << 32) | ((u64)((s16)w->rect1[1] + dy - 1) << 48);
+
+            func_00257048(sc, 0x40);
+            for (i = 0; i < total; i++, idx++, sub++) {
+                w->f38(w, sub, idx, baseX, curY);
+                curY += 20;
+            }
+        }
+        {
+            u64 sc = (u64)x | ((u64)(x + (s16)w->rect1[2] - 1) << 16)
+                   | ((u64)(s16)w->rect1[1] << 32) | ((u64)((s16)w->rect1[1] + (s16)w->rect1[3] - 1) << 48);
+
+            func_00257048(sc, 0x40);
+        }
+        idx = top;
+        sub = &w->sub[idx];
+        curY = (s16)w->rect1[1] + dy;
+        for (i = 0; i < total; i++, idx++, sub++) {
+            w->f38(w, sub, idx, baseX, curY);
+            curY += 20;
+        }
+        func_00257048(D_006F2CE0.scissor, GS_REG_SCISSOR_1);
+        break;
+    }
+    }
+    if (w->f25 != 0) {
+        func_0025B4E0(w, top, ofs);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025BE90);
 

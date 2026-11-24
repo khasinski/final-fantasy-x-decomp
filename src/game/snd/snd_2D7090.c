@@ -134,7 +134,57 @@ void func_002D7430(u32 a, int *b, int *c)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/snd/snd_2D7090", func_002D7480);
+typedef struct {
+    u8 pad0[0x11];
+    u8 b11[0x10];
+} Cfg2D7480;
+
+extern s8 D_005661F4;
+extern char D_00576198[];
+extern char *get_hdd_name(int a);
+extern int func_00166258(int a, int b);
+
+void func_002D7480(u32 id, int a1, int a2) {
+    char buf[0x10];
+    s32 sp10;
+    Cfg2D7480 *cfg = (Cfg2D7480 *)TkGetFFXCofingAdrs();
+
+    if (D_00576479 != 0 && D_005661F4 == 0) {
+        if (func_002D71C0(id) == 0xFFFFFFFF) {
+            func_002D70F8(id, buf);
+            D_0078BBA4 = 0x78;
+            func_002F072C(D_0078BBB0, buf);
+            id = 0x504;
+            func_002F072C(D_0078BBD0, buf);
+            func_002D5CB0(D_0078BBB0);
+            a1 = 0x19;
+            a2 = 1;
+        }
+        func_002D70F8(id, buf);
+        func_002F072C(D_0078BBD0, buf);
+        func_00252BB0((int)buf, 0, 0);
+    } else {
+        u32 v = func_002D71C0(id);
+        int r = func_002D72F8(&sp10, &a2, &a1, id, v);
+        int bit = cfg->b11[a1 / 8] & (1 << (a1 % 8));
+        int flag;
+        char *name = D_00576198;
+        int off = 0;
+        if (bit != 0) {
+            flag = 0;
+        } else {
+            flag = 1;
+        }
+        if (D_005661F4 != 0 && flag != 0) {
+            name = get_hdd_name(a1);
+            off = func_00166258(a1, sp10) + (v & 0xFFFF);
+        }
+        func_00252BB0((int)name, r, off);
+    }
+    func_002D5DB8();
+    D_0078BB70.pend |= 1;
+    D_0078BA1C |= D_0078BB70.pend;
+}
 
 void SndStandbyStream(s32 v)
 {

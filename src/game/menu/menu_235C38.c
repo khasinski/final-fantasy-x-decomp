@@ -79,7 +79,59 @@ again:
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_235C38", func_00235DC8);
+void func_00246238(s32, s32, s32);
+
+void func_00235DC8(Task *o)
+{
+    s32 w;
+    s32 h2;
+    s32 h;
+    s32 w2;
+    s32 x;
+    s32 y;
+    s32 tmp;
+
+    w2 = 0;
+    w = func_00245520(*(void **)((u8 *)o + 0x24), 0);
+    h2 = (u32)w >> 16;
+    w &= 0xFFFF;
+    h = h2;
+    w &= 0xFFFF;
+    if (*(s32 *)((u8 *)o + 0x58) != 0) {
+        s32 a;
+        s32 b;
+        h2 = h + 0x26;
+        a = func_00245520(*(void **)((u8 *)o + 0x58), 0) & 0xFFFF;
+        b = func_00245520(*(void **)((u8 *)o + 0x5C), 0) & 0xFFFF;
+        w2 = b;
+        if (b < a) {
+            w2 = a;
+        }
+    }
+    tmp = (0xC6 - h2) / 2;
+    x = (0x1DC - w) / 2;
+    y = tmp + *(s32 *)((u8 *)o + 0x60);
+    if (func_00247050(x, y, w + 0x24, h2 + 0xA) != 0) {
+        y += 5;
+        func_002462C0(*(s32 *)((u8 *)o + 0x24), 0, x + 0x12, y);
+        if (*(s32 *)((u8 *)o + 0x58) != 0) {
+            s32 x2 = (0x1DC - w2) / 2;
+            s32 y0 = y + h;
+            s32 y2 = y0 + 8;
+
+            func_00246238(*(s32 *)((u8 *)o + 0x58), x2, y2);
+            if (o->x48 == 0) {
+                func_00246220(x2, y2, w2);
+            }
+            y2 = y0 + 0x17;
+            func_00246238(*(s32 *)((u8 *)o + 0x5C), x2, y2);
+            if (o->x48 != 0) {
+                func_00246220(x2, y2, w2);
+            }
+        }
+    }
+    TkMenuDrawScissorClear();
+}
 
 int func_00235F48(void) { return 1; }
 

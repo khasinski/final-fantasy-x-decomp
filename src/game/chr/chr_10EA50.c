@@ -354,11 +354,10 @@ void *func_0010F0D8(QwPkt *pkt, s32 idx)
     return pkt + 1;
 }
 
+INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F1A0);
+
 extern s32 D_0057EB70;
 extern s32 D_0057EB78;
-extern u64 D_0057EB90[2];
-
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F1A0);
 
 s32 func_0010F308(QwPkt *pkt, s32 mode)
 {
@@ -430,7 +429,71 @@ INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F468);
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", Sg_VectorToMatrix);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F818);
+typedef union QwVec4 {
+    float f[4];
+    u64 d[2];
+    u_long128 q;
+} QwVec4;
+
+extern float D_00303760[4][4];
+extern QwVec4 D_0057EC20[4];
+extern QwVec4 D_0057EC60;
+extern QwVec4 D_0057EC70;
+extern float D_0057EB4C;
+extern float D_0057EB50;
+void func_00119548(float *);
+void func_002DCF00(void *, void *);
+
+typedef struct Dst10F818 {
+    u8 pad0[0x1D0];
+    u32 w1D0;
+    u32 w1D4;
+    u32 w1D8;
+    u32 w1DC;
+    u_long128 q1E0;
+    u_long128 q1F0;
+    u_long128 q200;
+    u_long128 q210;
+    u_long128 q220;
+} Dst10F818;
+
+void func_0010F818(Dst10F818 *dst)
+{
+    float mat0[4][4];
+    float mat1[4][4];
+
+    func_002DD128(mat1);
+    mat1[2][2] = 1000.0f;
+    mat1[1][1] = 1000.0f;
+    mat1[0][0] = 1000.0f;
+    func_002DCE38(mat0, D_00303760, mat1);
+    func_00119548(D_0057EC60.f);
+    D_0057EC60.f[0] -= mat0[3][0];
+    D_0057EC60.f[1] -= mat0[3][1];
+    D_0057EC60.f[2] -= mat0[3][2];
+    D_0057EC70.d[0] = D_0057EC60.d[0];
+    D_0057EC70.d[1] = D_0057EC60.d[1];
+    func_002DCF00(mat0, mat0);
+    func_002DCE08(D_0057EC60.f, mat0, D_0057EC60.f);
+    D_0057EC60.f[0] *= -1000.0f;
+    D_0057EC60.f[1] *= -1000.0f;
+    D_0057EC60.f[2] *= -1000.0f;
+    func_002DCE08(D_0057EC70.f, mat0, D_0057EC70.f);
+    func_002DCEC8(D_0057EC70.f, D_0057EC70.f);
+    Sg_VectorToMatrix((float (*)[4])D_0057EC20, D_0057EC70.f, 0x12);
+    func_002DCF00(D_0057EC20, D_0057EC20);
+    D_0057EC60.f[3] = D_0057EB4C;
+    D_0057EC70.f[3] = D_0057EB50;
+    dst->w1D0 = (u8)D_0057EB54;
+    dst->w1D4 = (u8)D_0057EB55;
+    dst->w1D8 = (u8)D_0057EB56;
+    dst->w1DC = (u8)D_0057EB57;
+    dst->q220 = D_0057EC70.q;
+    dst->q210 = D_0057EC60.q;
+    dst->q1E0 = D_0057EC20[0].q;
+    dst->q1F0 = D_0057EC20[1].q;
+    dst->q200 = D_0057EC20[2].q;
+}
 
 /* DEBT(TYPE): global type guessed from the access width only */
 void func_0010F9E0(u8 v)

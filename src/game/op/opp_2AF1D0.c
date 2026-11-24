@@ -76,7 +76,55 @@ INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002AF4B8);
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002AF648);
 
-INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", func_002AF828);
+#include "vu0.h"
+
+typedef union U64Alias0 {
+    u64 q;
+    u8 b[8];
+} U64Alias0;
+
+void func_002B58B0(void *, void *, void *);
+void func_002B2AD8(void *, s32, s32, s32);
+void _opp_func_002B56D8(void *, void *, void *) __asm__("func_002B56D8");
+void *_opp_opus_local_get(void *, void *) __asm__("opus_local_get");
+
+void func_002AF828(AnimCtx *o, int b)
+{
+    u8 *arg0 = (u8 *)o;
+    u8 *t = (u8 *)o->p220;
+    u8 *s0 = *(u8 **)((u8 *)b + 0x54);
+    s16 *pA8 = *(s16 **)(t + 0xA8);
+    s16 idx1 = pA8[1];
+    s16 idx2 = pA8[2];
+    u8 *t1 = (u8 *)opus_no_get(b, (AnimTgt *)t, idx1);
+    u8 *t2 = (u8 *)opus_no_get(b, (AnimTgt *)t, idx2);
+    void *loc = _opp_opus_local_get(arg0, t);
+    u_long128 c;
+
+    _opp_func_002B56D8(arg0, arg0 + 0x2C0, loc);
+    *(u64 *)(s0 + 0x10) = 0x5024C00000008001ULL;
+    *(u64 *)(s0 + 0x18) = 0x4141EULL;
+    *(s8 *)(s0 + 0x20) = -0x78;
+    ((U64Alias0 *)(s0 + 0x28))->q = 0x42ULL;
+    s0[0x34] = 0;
+    {
+        u32 w = 0xF0F0F0F0;
+        MMI_OP2Z("pextlb", c, w);
+        MMI_OP2Z("pextlh", c, c);
+    }
+    *(u_long128 *)(s0 + 0x30) = c;
+    func_002B58B0(s0 + 0x40, arg0, t1 + 0x90);
+    {
+        u32 w = 0xF00000F0;
+        MMI_OP2Z("pextlb", c, w);
+        MMI_OP2Z("pextlh", c, c);
+    }
+    *(u_long128 *)(s0 + 0x50) = c;
+    func_002B58B0(s0 + 0x60, arg0, t2 + 0x90);
+    s0 += 0x70;
+    func_002B2AD8(*(void **)((u8 *)b + 0x54), (s32)(s0 - *(u8 **)((u8 *)b + 0x54)) / 16, 0, 0);
+    *(u8 **)((u8 *)b + 0x54) = s0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", opp_dbg_draw_line_circle);
 
@@ -362,38 +410,6 @@ void opp_mdc_point4(void *arg0, void *arg1)
     _opp_func_002B0DC8(p100, arg0, arg1, t, pA8);
     *(s32 *)((u8 *)arg1 + 0x54) = _m2c_func_002B06B0_op1_mdc_draw(ret, p100, p80, (u8 *)arg0 + 0x280, (u8 *)arg0 + 0x2C0);
 }
-
-void *op_oef2_a_get(int, int, int);
-
-typedef struct MdcReq {
-    u32 w0;
-    u32 w4;
-    u16 h8;
-    u16 hA;
-    u32 wC;
-    u64 q10;
-    union {
-        u32 w;
-        u8 b[4];
-    } u18;
-    union {
-        u32 w;
-        u8 b[4];
-    } u1C;
-    u32 p20;
-    u32 p24;
-    u32 p28;
-    u32 p2C;
-    u32 w30;
-    u32 w34;
-    u64 q38;
-    u32 w40;
-    u32 w44;
-    u32 w48;
-    u8 b4C;
-    u8 b4D;
-    u8 pad4E[2];
-} MdcReq; /* DEBT(NAME) */
 
 INCLUDE_ASM("build/ee_asm/game/op/opp_2AF1D0", rcefChrDraw);
 
