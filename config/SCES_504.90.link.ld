@@ -1275,6 +1275,10 @@ SECTIONS
         build/src/sdk/newlib/libm/libm_2E4250.c.o(.rodata)
         . = 0x577468 - 0x568f00;
         build/asm/data/rodata/piece_00577468.s.o(.rodata)
+        . = 0x577c70 - 0x568f00;
+        build/src/sdk/newlib/libm/libm_2E7E60.c.o(.rodata)
+        . = 0x577c80 - 0x568f00;
+        build/asm/data/rodata/piece_00577C80.s.o(.rodata)
         . = 0x5781e0 - 0x568f00;
         build/src/sdk/newlib/libc/libc_2F0840.c.o(.rodata.cjt0)
         . = 0x578298 - 0x568f00;

@@ -1,21 +1,61 @@
 /* tu_229 0x207f50-0x208448: low; ~TOGetButtonIconWidth (config/tu_map.tsv) */
 #include "common.h"
+#define func_00207F70 _hdr_func_00207F70
 #include "ffx/q5.h"
+#undef func_00207F70
 #include "ffx/w6.h"
 #include "ffx/r4.h"
 #include "ffx/u3.h"
 
+void func_00207F70(u8 *str, int x, int y, u8 a3, u8 a4);
+
 void func_00207F50(int a, int b, int c)
 {
-    func_00207F70(a, b, c, 0, 0x80);
+    func_00207F70((u8 *)a, b, c, 0, 0x80);
 }
 
 void func_00207F60(int a, int b, int c, u8 d)
 {
-    func_00207F70(a, b, c, d, 0x80);
+    func_00207F70((u8 *)a, b, c, d, 0x80);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207F50", func_00207F70);
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+    s16 x;
+    s16 y;
+    u8 pad[10];
+    u8 b12;
+    u8 b13;
+} ToFont207F70;
+
+extern ToFont207F70 D_00323918;
+extern u8 D_00323930[];
+u8 *func_00204CA8(u8 *s, void *q);
+void TOMakePktFont1612(void *p, void *q);
+
+void func_00207F70(u8 *str, int x, int y, u8 a3, u8 a4)
+{
+    ToFont207F70 *p = &D_00323918;
+    u8 *q = D_00323930;
+
+    func_002EF0D0(q, 0, 0x20);
+    func_002EF0D0(p, 0, 0x14);
+    p->x = x;
+    p->y = y;
+    p->r = 0x80;
+    p->g = 0x80;
+    p->b = 0x80;
+    p->a = a4;
+    p->b12 = 0;
+    p->b13 = a3;
+    while (*str != 0) {
+        str = func_00204CA8(str, q);
+        TOMakePktFont1612(p, q);
+    }
+}
 
 int func_00208060(void)
 {

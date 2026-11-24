@@ -551,7 +551,153 @@ double func_002E8D40(double x, double y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E7E60", func_002E8E60);
+extern const double D_00577B80[];
+extern char D_00577C60[];
+extern double D_00577C68;
+double func_002E3528(double x, double y);
+int func_002E7C68(double x);
+
+double func_002E8E60(double x, double y)
+{
+    double z;
+    LibmException exc;
+
+    z = func_002E3528(x, y);
+    if (D_00577B88 == -1 || func_002E7E60(y)) {
+        return z;
+    }
+    if (func_002E7E60(x)) {
+        if (func_002EC198(y, 0.0) == 0) {
+            exc.type = 1;
+            exc.name = D_00577C60;
+            exc.err = 0;
+            exc.arg1 = x;
+            exc.arg2 = y;
+            exc.retval = x;
+            if (D_00577B88 == 2) {
+                exc.retval = 1.0;
+            } else if (!func_002E7E98((V128 *)&exc)) {
+                func_002ED118()->_errno = 33;
+            }
+            if (exc.err != 0) {
+                func_002ED118()->_errno = exc.err;
+            }
+            return exc.retval;
+        } else {
+            return z;
+        }
+    }
+    if (func_002EC198(x, 0.0) == 0) {
+        if (func_002EC198(y, 0.0) == 0) {
+            exc.type = 1;
+            exc.name = D_00577C60;
+            exc.err = 0;
+            exc.arg1 = x;
+            exc.arg2 = y;
+            exc.retval = 0.0;
+            if (D_00577B88 != 0) {
+                exc.retval = 1.0;
+            } else if (!func_002E7E98((V128 *)&exc)) {
+                func_002ED118()->_errno = 33;
+            }
+            if (exc.err != 0) {
+                func_002ED118()->_errno = exc.err;
+            }
+            return exc.retval;
+        }
+        if (func_002E7C68(y) && func_002EC198(y, 0.0) < 0) {
+            exc.type = 1;
+            exc.name = D_00577C60;
+            exc.err = 0;
+            exc.arg1 = x;
+            exc.arg2 = y;
+            if (D_00577B88 == 0) {
+                exc.retval = 0.0;
+            } else {
+                exc.retval = func_002EBC08(0.0, D_00577B80[0]);
+            }
+            if (D_00577B88 == 2) {
+                func_002ED118()->_errno = 33;
+            } else if (!func_002E7E98((V128 *)&exc)) {
+                func_002ED118()->_errno = 33;
+            }
+            if (exc.err != 0) {
+                func_002ED118()->_errno = exc.err;
+            }
+            return exc.retval;
+        }
+        return z;
+    }
+    if (!func_002E7C68(z) && func_002E7C68(x) && func_002E7C68(y)) {
+        if (func_002E7E60(z)) {
+            exc.type = 1;
+            exc.name = D_00577C60;
+            exc.err = 0;
+            exc.arg1 = x;
+            exc.arg2 = y;
+            if (D_00577B88 == 0) {
+                exc.retval = 0.0;
+            } else {
+                exc.retval = D_00577C68;
+            }
+            if (D_00577B88 == 2) {
+                func_002ED118()->_errno = 33;
+            } else if (!func_002E7E98((V128 *)&exc)) {
+                func_002ED118()->_errno = 33;
+            }
+            if (exc.err != 0) {
+                func_002ED118()->_errno = exc.err;
+            }
+            return exc.retval;
+        } else {
+            exc.type = 3;
+            exc.name = D_00577C60;
+            exc.err = 0;
+            exc.arg1 = x;
+            exc.arg2 = y;
+            if (D_00577B88 == 0) {
+                exc.retval = 3.40282346638528859812e+38;
+                y = func_002EBC70(y, 0.5);
+                if (func_002EC198(x, 0.0) < 0 && func_002EC198(func_002E7EC0(y), y) != 0) {
+                    exc.retval = -3.40282346638528859812e+38;
+                }
+            } else {
+                exc.retval = D_00577B80[0];
+                y = func_002EBC70(y, 0.5);
+                if (func_002EC198(x, 0.0) < 0 && func_002EC198(func_002E7EC0(y), y) != 0) {
+                    exc.retval = func_002EBC08(0.0, D_00577B80[0]);
+                }
+            }
+            if (D_00577B88 == 2) {
+                func_002ED118()->_errno = 34;
+            } else if (!func_002E7E98((V128 *)&exc)) {
+                func_002ED118()->_errno = 34;
+            }
+            if (exc.err != 0) {
+                func_002ED118()->_errno = exc.err;
+            }
+            return exc.retval;
+        }
+    }
+    if (func_002EC198(z, 0.0) == 0 && func_002E7C68(x) && func_002E7C68(y)) {
+        exc.type = 4;
+        exc.name = D_00577C60;
+        exc.err = 0;
+        exc.arg1 = x;
+        exc.arg2 = y;
+        exc.retval = 0.0;
+        if (D_00577B88 == 2) {
+            func_002ED118()->_errno = 34;
+        } else if (!func_002E7E98((V128 *)&exc)) {
+            func_002ED118()->_errno = 34;
+        }
+        if (exc.err != 0) {
+            func_002ED118()->_errno = exc.err;
+        }
+        return exc.retval;
+    }
+    return z;
+}
 
 double func_002E9290(double x)
 {

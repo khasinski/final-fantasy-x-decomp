@@ -67,6 +67,12 @@
     "size": 120,
     "symbols": {}
   },
+  "sdk/newlib/libm/libm_2E7E60": {
+    "piece": "piece_00577C70",
+    "address": 5733488,
+    "size": 16,
+    "symbols": {}
+  },
   "sdk/newlib/libc/libc_2F0840": {
     "piece": "piece_00578298",
     "address": 5735064,

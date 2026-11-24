@@ -173,7 +173,56 @@ s32 func_002E0C30(void)
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0C98);
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0F98);
+extern int D_005663DC;
+extern int D_005663F8;
+extern char D_00576C60[];
+extern char D_00576C88[];
+void func_002FAC88(int mode);
+int func_002F8430(int sid);
+int func_002FB2F8(void *cd, u32 sid, int mode);
+
+int func_002E0F98(int cmd)
+{
+    int i;
+    int ret;
+
+    func_002E0A68();
+    ret = func_002F8430(*(volatile int *)&D_005663E8);
+    if (*(volatile int *)&D_005663E8 != ret) {
+        if (D_005663D0 > 0) {
+            func_002FA4E0(D_00576C60, cmd, D_005663DC);
+        }
+        return 0;
+    }
+    D_005663DC = cmd;
+    func_002F82E0(D_0078D610, &D_0078D618);
+    if (func_002E11A0(1) != 0) {
+        func_002F8400(*(volatile int *)&D_005663E8);
+        return 0;
+    }
+    func_002FAC88(0);
+    if (*(volatile int *)&D_005663F8 < 0) {
+        while (1) {
+            if (func_002FB2F8(D_00567590, 0x80000595, 0) < 0) {
+                if (D_005663D0 > 0) {
+                    func_002FA4E0(D_00576C88);
+                }
+                i = 0x100000;
+                while (i--) {
+                }
+                continue;
+            }
+            if (((s32 *)D_00567590)[9] != 0) {
+                break;
+            }
+            i = 0x100000;
+            while (i--) {
+            }
+        }
+        D_005663F8 = 0;
+    }
+    return 1;
+}
 
 int func_002E1108(void)
 {
@@ -222,7 +271,53 @@ int func_002E1240(int mode)
     return func_002FB6B8(D_00567E08);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E12B0);
+extern int D_005663D8;
+extern int D_00566408;
+extern char D_00576CC0[];
+extern char D_00576CE8[];
+
+int func_002E12B0(int cmd)
+{
+    int i;
+    int ret;
+
+    func_002E0A68();
+    ret = func_002F8430(*(volatile int *)&D_005663EC);
+    if (*(volatile int *)&D_005663EC != ret) {
+        if (D_005663D0 > 0) {
+            func_002FA4E0(D_00576CC0, cmd, D_005663D8);
+        }
+        return 0;
+    }
+    D_005663D8 = cmd;
+    func_002F82E0(D_0078D610, &D_0078D618);
+    if (func_002E1240(1) != 0) {
+        func_002F8400(*(volatile int *)&D_005663EC);
+        return 0;
+    }
+    func_002FAC88(0);
+    if (*(volatile int *)&D_00566408 < 0) {
+        while (1) {
+            if (func_002FB2F8(D_00567E08, 0x80000593, 0) < 0) {
+                if (D_005663D0 > 0) {
+                    func_002FA4E0(D_00576CE8);
+                }
+                i = 0x100000;
+                while (i--) {
+                }
+                continue;
+            }
+            if (((s32 *)D_00567E08)[9] != 0) {
+                break;
+            }
+            i = 0x100000;
+            while (i--) {
+            }
+        }
+        D_00566408 = 0;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1420);
 

@@ -53,6 +53,38 @@ int func_002DC320(void)
     return v & 0xFFFF;
 }
 
-INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC330);
+#define VU0_CFC2_NI_NV(v, vi) __asm__("cfc2.ni %0, $vi" #vi : "=r"(v))
+
+int func_002DC330(u8 *buf)
+{
+    int v;
+
+    if (func_002DC170(buf) != 0) {
+        return 0;
+    }
+    VU0_CFC2_NI_NV(v, 16); *(u32 *)(buf + 0x200) = v;
+    VU0_CFC2_NI_NV(v, 17); *(u32 *)(buf + 0x204) = v;
+    VU0_CFC2_NI_NV(v, 18); *(u32 *)(buf + 0x208) = v;
+    VU0_CFC2_NI_NV(v, 20); *(u32 *)(buf + 0x20C) = v;
+    VU0_CFC2_NI_NV(v, 21); *(u32 *)(buf + 0x210) = v;
+    VU0_CFC2_NI_NV(v, 22); *(u32 *)(buf + 0x214) = v;
+    VU0_CFC2_NI_NV(v, 0); *(u16 *)(buf + 0x218) = v;
+    VU0_CFC2_NI_NV(v, 1); *(u16 *)(buf + 0x21A) = v;
+    VU0_CFC2_NI_NV(v, 2); *(u16 *)(buf + 0x21C) = v;
+    VU0_CFC2_NI_NV(v, 3); *(u16 *)(buf + 0x21E) = v;
+    VU0_CFC2_NI_NV(v, 4); *(u16 *)(buf + 0x220) = v;
+    VU0_CFC2_NI_NV(v, 5); *(u16 *)(buf + 0x222) = v;
+    VU0_CFC2_NI_NV(v, 6); *(u16 *)(buf + 0x224) = v;
+    VU0_CFC2_NI_NV(v, 7); *(u16 *)(buf + 0x226) = v;
+    VU0_CFC2_NI_NV(v, 8); *(u16 *)(buf + 0x228) = v;
+    VU0_CFC2_NI_NV(v, 9); *(u16 *)(buf + 0x22A) = v;
+    VU0_CFC2_NI_NV(v, 10); *(u16 *)(buf + 0x22C) = v;
+    VU0_CFC2_NI_NV(v, 11); *(u16 *)(buf + 0x22E) = v;
+    VU0_CFC2_NI_NV(v, 12); *(u16 *)(buf + 0x230) = v;
+    VU0_CFC2_NI_NV(v, 13); *(u16 *)(buf + 0x232) = v;
+    VU0_CFC2_NI_NV(v, 14); *(u16 *)(buf + 0x234) = v;
+    VU0_CFC2_NI_NV(v, 15); *(u16 *)(buf + 0x236) = v;
+    return 1;
+}
 
 INCLUDE_ASM("build/ee_asm/game/platform/platform_2DC110", func_002DC410);

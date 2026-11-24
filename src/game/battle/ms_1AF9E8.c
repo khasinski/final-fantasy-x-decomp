@@ -993,7 +993,28 @@ int MsBtlReadCueRegistWeapon(int id) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1AF9E8", func_001B1490);
+void func_001B1490(int id, int mask)
+{
+    u8 *p = (u8 *)MsGetChr(id) + 0x252;
+    int i;
+
+    for (i = 0; i < 2; i++) {
+        if ((mask >> i) & 1) {
+            int model = MsGetSaveWeaponModel(p[i]);
+            if (model != 0) {
+                u32 *wpn = (u32 *)MsGetWeapon(id, i);
+                if (MsBtlReadCueRegistWeapon(model) != 0) {
+                    wpn[2] = model;
+                    MsBtlReadCueRegist(0, id + 0x1F + i * 0x1F, id, model, 0);
+                    MsBtlReadCueRegist(2, id + 0x1F + i * 0x1F, id, model, i + 4);
+                } else {
+                    wpn[2] = 0;
+                    MsBtlReadCueRegist(0, id + 0x1F + i * 0x1F, id, model, i + 4);
+                }
+            }
+        }
+    }
+}
 
 void func_001B1598(void) {
     if (D_003172F0.f1751 != 0) {
