@@ -25,7 +25,12 @@ text_objs = "\n".join(f"        build/{p}.o(.text)" for p in ["asm/text.s"] + [f
 
 # Explicit ownership of compiler-emitted literal blocks, verified by ccwrap.
 C_RODATA = json.load(open("config/c_rodata.json")) if os.path.exists("config/c_rodata.json") else {}
-C_PIECES = {v["piece"]: (unit, v) for unit, v in C_RODATA.items()}
+C_PIECES = {}
+C_SKIP_PIECES = set()
+for _unit, _v in C_RODATA.items():
+    _plist = _v["piece"] if isinstance(_v["piece"], list) else [_v["piece"]]
+    C_PIECES[_plist[0]] = (_unit, _v)
+    C_SKIP_PIECES.update(_plist[1:])
 
 
 def rodata_objs():
@@ -36,6 +41,8 @@ def rodata_objs():
     for l in open("config/rodata_layout.txt"):
         f = l.split()
         if f[0] == "piece":
+            if f[1] in C_SKIP_PIECES:
+                continue
             if f[1] in C_PIECES:
                 unit, literal = C_PIECES[f[1]]
                 assert int(f[2], 16) == literal["address"]
@@ -82,7 +89,7 @@ n.rule("check", command="python3 tools/check.py $in", description="sha1 check")
 
 objs = []
 for s in sorted(glob.glob("asm/**/*.s", recursive=True)):
-    if s in {f"asm/data/rodata/{piece}.s" for piece in C_PIECES}:
+    if s in {f"asm/data/rodata/{piece}.s" for piece in (set(C_PIECES) | C_SKIP_PIECES)}:
         continue  # this exact block now comes from the compiler
     if s.startswith("asm/nonmatchings/"):
         continue  # pulled into src/*.c through INCLUDE_ASM

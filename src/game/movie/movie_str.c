@@ -533,7 +533,151 @@ void func_0015E8C0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015E910);
+typedef struct {
+    u8 b[0x2300];
+} MovStrSubBlk;
+
+typedef struct {
+    u8 pad0[0x2DDC0];
+    u8 buf2DDC0[0xF000];
+    u8 buf3CDC0[2][0x7800];
+    MovStrSubBlk buf4BDC0[2];
+    u8 pad503C0[0x5059C - 0x503C0];
+    u8 *p5059C;
+    u8 pad505A0[0x506C8 - 0x505A0];
+    s32 w506C8;
+    u8 pad506CC[0x50714 - 0x506CC];
+    s32 w50714;
+    u8 pad50718[8];
+    s32 w50720;
+    s32 w50724[2];
+    u8 pad5072C[4];
+    s32 w50730[7];
+    u8 pad5074C[12];
+    s32 w50758;
+    u8 pad5075C[9];
+    s8 b50765;
+    s8 b50766;
+    s8 b50767;
+    s8 b50768[2];
+    s8 b5076A[2];
+    u8 pad5076C[5];
+    u8 b50771;
+} __attribute__((aligned(8))) MovStrAudioCtx;
+
+extern MovStrAudioCtx *_movaud_D_0030DDF0 __asm__("D_0030DDF0");
+void func_0015AF88(void *, void *, int, void *, void *);
+void func_0015B008(void *, void *, int, void *, void *);
+void func_0015A828(void *);
+void func_0015A790(void *, void *, int, int, void *);
+void SndDataSendSync(int);
+int SqsStraightStreamingDataEnableStatus(void);
+int *func_002531B0(void);
+
+void func_0015E910(void)
+{
+    MovStrAudioCtx *s = _movaud_D_0030DDF0;
+    u8 *p = s->p5059C;
+    u32 sz = *(u32 *)p;
+    int idx;
+    void *sub;
+
+    switch (sz) {
+    case 0:
+        break;
+    case 0x40: {
+        int arg2 = *(s32 *)(p + 4);
+        sub = 0;
+        switch (s->w506C8) {
+        case 0:
+            sub = 0;
+            break;
+        case 1:
+            sub = p + ((((arg2 + 15) / 16) * 16) + 0x10);
+            break;
+        }
+        func_0015AF88(_movaud_D_0030DDF0->p5059C + 0x10, _movaud_D_0030DDF0->buf2DDC0, arg2, sub, _movaud_D_0030DDF0);
+        break;
+    }
+    case 0x50:
+    case 0x51: {
+        int arg2 = *(s32 *)(p + 4);
+        sub = 0;
+        switch (s->w506C8) {
+        case 0:
+            sub = 0;
+            break;
+        case 1:
+            sub = (p + (*(s32 *)(p + 8) + 0x10)) - *(s32 *)(p + 12);
+            break;
+        }
+        func_0015B008(_movaud_D_0030DDF0->p5059C + 0x10, _movaud_D_0030DDF0->buf2DDC0, arg2, sub, _movaud_D_0030DDF0);
+        break;
+    }
+    case 0x1C30:
+        func_0015ACC0(p + 0x10, s->buf2DDC0, 0, (S58FE54 *)s);
+        break;
+    case 0x3860:
+        func_0015ACC0(p + s->w506C8 * 0x1C30 + 0x10, s->buf2DDC0, 0, (S58FE54 *)s);
+        break;
+    case 0xC800:
+        func_0015AF10((s16 *)(p + (s->w506C8 * s->w50758 + 0x10)), 0, (S58FE54 *)s);
+        break;
+    case 0x7800:
+    case 0x6400:
+        func_0015AF10((s16 *)(p + 0x10), 0, (S58FE54 *)s);
+        break;
+    case 0x8700:
+    case 0x8000:
+        func_0015E8C0();
+        break;
+    case 0x3830:
+    case 0x3F30:
+        func_0015E858();
+        break;
+    }
+
+    if (sz == 0) {
+        if (_movaud_D_0030DDF0->b50766 == 0
+            && (_movaud_D_0030DDF0->b5076A[0] != 0 || _movaud_D_0030DDF0->b5076A[1] != 0)
+            && SqsStraightStreamingDataEnableStatus() != 0) {
+            func_0015A828(_movaud_D_0030DDF0);
+            idx = 0;
+            if (_movaud_D_0030DDF0->w50724[0] == -1) {
+                idx = 1;
+            } else if (_movaud_D_0030DDF0->w50724[1] < _movaud_D_0030DDF0->w50724[0] && _movaud_D_0030DDF0->w50724[1] >= 0) {
+                idx = 1;
+            }
+            if (_movaud_D_0030DDF0->w50714 != 0 && _movaud_D_0030DDF0->b50768[idx] != 0) {
+                sub = &_movaud_D_0030DDF0->buf4BDC0[idx];
+            } else {
+                sub = 0;
+            }
+            func_0015A790(_movaud_D_0030DDF0->buf3CDC0[idx], sub, 0, _movaud_D_0030DDF0->w50724[idx], _movaud_D_0030DDF0);
+            SndDataSendSync(1);
+            _movaud_D_0030DDF0->b5076A[idx] = 0;
+            _movaud_D_0030DDF0->b50768[idx] = 0;
+            _movaud_D_0030DDF0->w50724[idx] = -1;
+        }
+    } else {
+        _movaud_D_0030DDF0->w50720++;
+    }
+
+    {
+        int *st = func_002531B0();
+        MovStrAudioCtx *s2 = _movaud_D_0030DDF0;
+        s2->w50730[0] = st[0];
+        s2->w50730[1] = st[1];
+        s2->w50730[2] = st[2];
+        s2->w50730[3] = st[3];
+        s2->w50730[4] = st[4];
+        s2->w50730[5] = st[5];
+        s2->w50730[6] = st[6];
+        if (s2->b50765 != 0 && s2->w50730[6] != 0) {
+            s2->b50771++;
+        }
+    }
+}
 
 void func_0015ED58(int mb, int dx, int dy)
 {

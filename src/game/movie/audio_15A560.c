@@ -122,7 +122,83 @@ void func_0015A858(S58FE54 *s)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/audio_15A560", audioDma);
+typedef struct {
+    u8 b[0x2300];
+} AudioSubBlk;
+
+typedef struct {
+    u8 pad0[0x3CDC0];
+    u8 buf3CDC0[2][0x7800];
+    AudioSubBlk buf4BDC0[2];
+    u8 pad503C0[0x50714 - 0x503C0];
+    s32 w50714;
+    u8 pad50718[8];
+    s32 w50720;
+    s32 w50724[2];
+    u8 pad5072C[0x50758 - 0x5072C];
+    s32 w50758;
+    u8 pad5075C[10];
+    s8 b50766;
+    s8 b50767;
+    s8 b50768[2];
+    s8 b5076A[2];
+    u8 pad5076C[4];
+    u8 b50770;
+} __attribute__((aligned(8))) AudioDmaCtx;
+
+int SqsStraightStreamingDataEnableStatus(void);
+void SndDataSendSync(int);
+
+void audioDma(s16 *buf, int sub, S58FE54 *s0)
+{
+    AudioDmaCtx *s = (AudioDmaCtx *)s0;
+    int idx;
+    void *sub_ptr;
+
+    if (s->b50766 != 0) {
+        return;
+    }
+    func_0015A828((int)s);
+    if (SqsStraightStreamingDataEnableStatus() == 0) {
+        if (s->b5076A[0] != 0 && s->b5076A[1] != 0) {
+            s->b50770++;
+        }
+        idx = (s->w50724[0] > s->w50724[1]);
+        s->b5076A[idx] = 1;
+        func_002EEF1C((u8 *)s + idx * 0x7800 + 0x3CDC0, buf, s->w50758);
+        if (s->w50714 != 0 && sub != 0) {
+            s->buf4BDC0[idx] = *(AudioSubBlk *)sub;
+            s->b50768[idx] = 1;
+        }
+        s->w50724[idx] = s->w50720;
+        return;
+    }
+    sub_ptr = 0;
+    if (s->b5076A[0] != 0 || s->b5076A[1] != 0) {
+        idx = 0;
+        if (s->w50724[0] == -1) {
+            idx = 1;
+        } else if (s->w50724[1] < s->w50724[0] && s->w50724[1] >= 0) {
+            idx = 1;
+        }
+        if (s->w50714 != 0 && sub != 0) {
+            sub_ptr = &s->buf4BDC0[idx];
+        }
+        func_0015A790((int)s->buf3CDC0[idx], (int)sub_ptr, 0, s->w50724[idx], s0);
+        func_002EEF1C((void *)((idx * 0x7800 + (u32)s) + 0x3CDC0), buf, s->w50758);
+        if (s->w50714 != 0 && sub != 0) {
+            s->buf4BDC0[idx] = *(AudioSubBlk *)sub;
+            s->b50768[idx] = 1;
+        }
+        s->w50724[idx] = s->w50720;
+    } else {
+        if (s->w50714 != 0) {
+            sub_ptr = (void *)sub;
+        }
+        func_0015A790((int)buf, (int)sub_ptr, 0, s->w50720, s0);
+    }
+    SndDataSendSync(1);
+}
 
 INCLUDE_ASM("build/ee_asm/game/movie/audio_15A560", func_0015ACC0);
 

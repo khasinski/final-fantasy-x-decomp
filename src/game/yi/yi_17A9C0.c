@@ -411,13 +411,26 @@ void func_0017B390(void) {
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017B480);
 INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C420);
 
+typedef struct {
+    u8 b[16];
+} YiBlk16;
+
+typedef struct {
+    u8 b[32];
+} YiBlk32;
+
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BC40);
 
-extern u8 D_0030E9E8[];
-
 INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BD90);
+int func_0017BD90(u8 *src, u8 *dst);
 
 extern u8 D_0030EAE8[];
+extern u8 D_0030EB68[];
+extern u8 D_0030EB88[];
+extern u8 D_0030EBA8[];
+extern u8 D_0030EBC8[];
+void *func_0017DBA0(int size);
+void func_0017DC70(void *p);
 
 int func_0017BE90(u8 *src, u8 *dst)
 {
@@ -441,9 +454,111 @@ int func_0017BE90(u8 *src, u8 *dst)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017BF20);
+int func_0017BF20(int w, int h, u8 *src, u8 *dst)
+{
+    u8 buf1[0x100];
+    u8 buf2[0x100];
+    int *tblX;
+    int *tblY;
+    int i, j, k, n;
+    int nx, ny;
+    int sw = 0x40;
+    int dw = 0x100;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017C1C8);
+    tblX = (int *)func_0017DBA0(0x800);
+    tblY = (int *)func_0017DBA0(0x800);
+    n = 0;
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 8; j++) {
+            int idx = D_0030EB88[n];
+            tblX[idx] = j;
+            tblY[idx] = i;
+            n++;
+        }
+    }
+    nx = w / 32;
+    ny = h / 16;
+    func_002EF0D0(buf1, 0, 0x100);
+    func_002EF0D0(buf2, 0, 0x100);
+    for (i = 0; i < ny; i++) {
+        for (j = 0; j < nx; j++) {
+            int blk = D_0030EB68[i * nx + j];
+            u8 *p1 = src + i * (sw << 4) + j * 16;
+            u8 *b1 = buf1;
+            u8 *p2;
+            u8 *b2;
+            for (k = 0; k < 16; k++) {
+                *(YiBlk16 *)b1 = *(YiBlk16 *)p1;
+                b1 += 16;
+                p1 += sw;
+            }
+            func_0017BD90(buf1, buf2);
+            p2 = dst + tblY[blk] * (dw << 3) + tblX[blk] * 32;
+            b2 = buf2;
+            for (k = 0; k < 8; k++) {
+                *(YiBlk32 *)p2 = *(YiBlk32 *)b2;
+                b2 += 32;
+                p2 += dw;
+            }
+        }
+    }
+    func_0017DC70(tblX);
+    func_0017DC70(tblY);
+    return 0;
+}
+
+int func_0017C1C8(int w, int h, u8 *src, u8 *dst)
+{
+    u8 buf1[0x100];
+    u8 buf2[0x100];
+    int *tblX;
+    int *tblY;
+    int i, j, k, n;
+    int nx, ny;
+    int sw = 0x80;
+    int dw = 0x100;
+
+    tblX = (int *)func_0017DBA0(0x800);
+    tblY = (int *)func_0017DBA0(0x800);
+    n = 0;
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 8; j++) {
+            int idx = D_0030EBC8[n];
+            tblX[idx] = j;
+            tblY[idx] = i;
+            n++;
+        }
+    }
+    nx = w / 16;
+    ny = h / 16;
+    func_002EF0D0(buf1, 0, 0x100);
+    func_002EF0D0(buf2, 0, 0x100);
+    for (i = 0; i < ny; i++) {
+        for (j = 0; j < nx; j++) {
+            int blk = D_0030EBA8[i * nx + j];
+            u8 *p1 = src + i * (sw << 4) + j * 16;
+            u8 *b1 = buf1;
+            u8 *p2;
+            u8 *b2;
+            for (k = 0; k < 16; k++) {
+                *(YiBlk16 *)b1 = *(YiBlk16 *)p1;
+                b1 += 16;
+                p1 += sw;
+            }
+            func_0017BE90(buf1, buf2);
+            p2 = dst + tblY[blk] * (dw << 3) + tblX[blk] * 32;
+            b2 = buf2;
+            for (k = 0; k < 8; k++) {
+                *(YiBlk32 *)p2 = *(YiBlk32 *)b2;
+                b2 += 32;
+                p2 += dw;
+            }
+        }
+    }
+    func_0017DC70(tblX);
+    func_0017DC70(tblY);
+    return 0;
+}
 
 extern char D_0056C450[];
 void *func_0017DBA0(int size);

@@ -445,7 +445,8 @@ again:
 }
 
 int TkMenuGetPlayerListMax2(void);
-
+extern s16 D_00324204;
+extern s16 D_00324206;
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024A4A0);
 
 void func_0024AB60(void)
@@ -578,7 +579,41 @@ int TkMenuSummonEnableMask(void);
 Task *func_00243400(void);
 void TkMenuMainRegistWindow(Task *t);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_249928", func_0024AF68);
+extern s16 D_00324230;
+extern s16 D_00324232;
+extern s16 D_00324234;
+extern s16 D_00324236;
+extern s32 D_0032423C;
+extern s32 D_00324240;
+void TOMakePktBoxXYWHRGBA(int x, int y, int w, int h, int r, int g, int b, int a);
+void func_001FF398(int x, int y, int w, int h, u32 c0, u32 c1);
+void func_001F3850(int mes, int x, int y, int col, int alpha);
+
+extern s16 D_00324238;
+
+static inline int tk_lerp_4096(int a, int b, int t)
+{
+    return (a * t + b * (0x1000 - t)) / 0x1000;
+}
+
+void func_0024AF68(int idx, int x, int y_unused, int dy_unused, int ratio)
+{
+    int alpha = ratio / 32;
+    int py = tk_lerp_4096(D_00324232 + idx * D_00324238, 3, ratio);
+    int id;
+    int disabled;
+
+    TOMakePktBoxXYWHRGBA(x + D_00324230 + 4, py + 4, D_00324234, D_00324236, 0, 0, 0, alpha);
+    func_001FF398(x + D_00324230, py, D_00324234, D_00324236,
+                  (D_0032423C & 0xFFFFFF) | (alpha << 24),
+                  (D_00324240 & 0xFFFFFF) | (alpha << 24));
+    id = func_0024AE38(idx);
+    disabled = func_0024AE50(idx) == 0;
+    func_001F3850(TkMenuMainMes(id), x + D_00324230 + 0xF, py + 2, disabled, alpha);
+    if (idx == D_0069BCE8 && ratio == 0x1000) {
+        func_001FE7F8(0, x + D_00324230 + 0xF, py + 2);
+    }
+}
 
 void func_0024B140(void)
 {

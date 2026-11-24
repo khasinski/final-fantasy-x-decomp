@@ -2,6 +2,7 @@
 /* Module guess: event-script VM / field-event runtime (no __FILE__ string found for this range). */
 #define MsCameraSetScrDpt _hdr_MsCameraSetScrDpt
 #include "common.h"
+#include "vu0.h"
 #include "ffx/r6.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -202,7 +203,268 @@ u16 *func_0029B9B0(ScriptThread *th, u16 *pc) {
     return SCRIPT_JUMP(pc);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_jump_etc);
+#define SCRIPT_JUMP_AT_2(pc, idx) ((u16 *)((char *)(pc) + (s16)(pc)[idx]))
+
+extern u8 D_00703FFA;
+extern u32 D_00551CBC;
+extern u8 owu_chr_drawoff_back[];
+int func_002B3D68(int a);
+int func_001CE8E0(void);
+int func_001B8548(int id);
+int func_001730F0(void);
+int func_001AEBD8(void);
+float Sg_GetSuimen(void);
+
+u16 *opu_jump_etc(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    int v;
+    int target;
+    int ofs;
+    float f;
+
+    switch (th->flags & 0xF000) {
+    case 0x0000:
+        if ((s16)pc[1] <= func_002B3D68(0x100)) {
+            pc += 3;
+        } else {
+            ofs = (s16)pc[2];
+            goto do_jump;
+        }
+        break;
+    case 0x1000:
+        func_002967E8(th, pc);
+        v = func_001CE8E0();
+        if (D_007649A0 != 0 && *(s16 *)((u8 *)th + 0x3B8) != 0) {
+            v = *(s16 *)((u8 *)th + 0x3B8);
+        }
+        if (v != (s16)pc[1]) {
+            pc += 3;
+        } else {
+            ofs = (s16)pc[2];
+            goto do_jump;
+        }
+        break;
+    case 0x2000:
+        func_002967E8(th, pc);
+        v = func_001CE8E0();
+        if (D_007649A0 != 0 && *(s16 *)((u8 *)th + 0x3B8) != 0) {
+            v = *(s16 *)((u8 *)th + 0x3B8);
+        }
+        if (v == (s16)pc[1]) {
+            pc += 3;
+        } else {
+            ofs = (s16)pc[2];
+            goto do_jump;
+        }
+        break;
+    case 0x3000:
+        if (((s8 *)th)[0x21E] != 0 && func_001B8548(sub->b18) != 0) {
+            ofs = (s16)pc[1];
+            goto do_jump;
+        } else {
+            pc += 2;
+        }
+        break;
+    case 0x4000:
+        if (((s8 *)th)[0x21E] != 0 && func_001B85B0(sub->b18) != 0) {
+            ofs = (s16)pc[1];
+            goto do_jump;
+        } else {
+            pc += 2;
+        }
+        break;
+    case 0x5000:
+        v = func_001730F0();
+    cmp_u32:
+        target = pc[1] + ((u32)pc[2] << 16);
+        if (!(th->flags & 0x800)) {
+            if (v != target) {
+                pc += 4;
+            } else {
+                ofs = (s16)pc[3];
+                goto do_jump;
+            }
+        } else {
+            if (v == target) {
+                pc += 4;
+            } else {
+                ofs = (s16)pc[3];
+                goto do_jump;
+            }
+        }
+        break;
+    case 0x6000:
+        v = 0;
+        if (((s8 *)th)[0x21E] != 0) {
+            v = func_001AEBD8();
+        }
+        goto cmp_u32;
+    case 0x7000:
+    case 0x8000: {
+        int idx = opus_get_chr_status_index(owu_chr_hd[sub->b18], 0, 0);
+        ResEntry *re = &owu_chr_status[idx];
+        v = re->key;
+        target = (s16)pc[1];
+        if (th->flags & 0x1000) {
+            if (v != target) {
+                pc += 3;
+            } else {
+                ofs = (s16)pc[2];
+                goto do_jump;
+            }
+        } else {
+            if (v == target) {
+                pc += 3;
+            } else {
+                ofs = (s16)pc[2];
+                goto do_jump;
+            }
+        }
+        break;
+    }
+    case 0x9000:
+        v = func_001B8630(sub->b18);
+        if (th->flags & 0x800) {
+            if (v == 0) {
+                pc += 2;
+            } else {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            }
+        } else {
+            if (v == 0) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+        }
+        break;
+    case 0xA000:
+        if (D_007649A0 != 0) {
+            u8 *hw = (u8 *)&D_2008250;
+            u32 *pad = &D_00551CBC;
+            if (D_00703FFA != 0) {
+                if (*(u16 *)(hw + 0x40) & 0x10) {
+                    goto chk_pad;
+                }
+                goto adv1;
+            } else {
+                if (*(u16 *)(hw + 0x40) & 1) {
+                chk_pad:
+                    if ((*pad & 0xA0) != 0xA0) {
+                        goto set_wait;
+                    }
+                }
+            }
+        }
+    adv1:
+        pc += 1;
+        break;
+    set_wait:
+        ((s8 *)th)[0x210] = 1;
+        break;
+    case 0xB000:
+        func_00109590(owu_chr_hd[sub->b18], (float *)th);
+        VU0_LQC2(31, 0, th);
+        VU0_OP("vmul.xyz $vf31, $vf31, $vf31");
+        VU0_OP("vaddy.x $vf31, $vf31, $vf31y");
+        VU0_OP("vaddz.x $vf31, $vf31, $vf31z");
+        VU0_OP("vsqrt Q, $vf31x");
+        VU0_OP("vwaitq");
+        VU0_OP("vaddq.x $vf31, $vf0, Q");
+        VU0_SQC2(31, 0x10, th);
+        f = *(float *)((u8 *)th + 0x10);
+        switch (th->flags & 0xF00) {
+        case 0x000:
+            if (f < 0.4f) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+            break;
+        case 0x200:
+            if (f >= 0.4f && f < 1.2f) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+            break;
+        case 0x400:
+            if (f >= 1.2f) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+            break;
+        }
+        break;
+    case 0xC000:
+        f = Sg_GetSuimen();
+        Ch_OptposGet((int)owu_chr_hd[sub->b18], 1, (int)th);
+        if (f <= ((float *)th)[1]) {
+            ofs = (s16)pc[1];
+            goto do_jump;
+        } else {
+            pc += 2;
+        }
+        break;
+    case 0xD000:
+        if (th->flags & 0x800) {
+            if ((owu_chr_drawoff_back[sub->b18] & ((u8 *)sub)[0xB3]) != 0) {
+                pc += 2;
+            } else {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            }
+        } else {
+            if ((owu_chr_drawoff_back[sub->b18] & ((u8 *)sub)[0xB3]) != 0) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+        }
+        break;
+    case 0xE000: {
+        SlotEntry *e = &owu_eff_status[sub->h14];
+        if (((u8 *)e)[0x18] == sub->b18) {
+            ofs = (s16)pc[1];
+            goto do_jump;
+        } else {
+            pc += 2;
+        }
+        break;
+    }
+    case 0xF000:
+        v = (s16)(th->flags & 0x800);
+        if (D_007649A0 != 0) {
+            if (v == 0) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+        } else {
+            if (v != 0) {
+                ofs = (s16)pc[1];
+                goto do_jump;
+            } else {
+                pc += 2;
+            }
+        }
+        break;
+    }
+    goto done;
+do_jump:
+    pc = (u16 *)((char *)pc + ofs);
+done:
+    return pc;
+}
 
 int Sg_MemGetMaxFree(int a);
 
@@ -528,7 +790,118 @@ u16 *opu_en_lock(ScriptThread *th, u16 *pc)
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_en_on);
+void Ch_DrawEnEffect(Chr *c, int on);
+int graphicLevelGetNameHash(Chr *c, int mode);
+
+u16 *opu_en_on(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+    SlotEntry *eff = &owu_eff_status[sub->h14];
+    Chr *chr = owu_chr_hd[sub->b18];
+    int on;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0x0000:
+    case 0x1000:
+    case 0xC000:
+    case 0xD000:
+        on = (th->flags & 0x1000);
+        on = (on != 0);
+        if (((s8 *)th)[0x21E] != 0 && sub->b18 < 0x20) {
+            if (on != 0) {
+                on = 0;
+            } else {
+                on = 1;
+            }
+            MsSetChrVisible(sub->b18, on);
+            if (((s16)th->flags & 0xF000) == 0xC000 || ((s16)th->flags & 0xF000) == 0xD000) {
+                func_001B57F0(sub->b18, on);
+            }
+        } else {
+            func_00110718((int)owu_chr_hd[sub->b18], on);
+        }
+        pc += 1;
+        break;
+    case 0x2000:
+        func_00110718((int)owu_chr_hd[((u8 *)eff)[0x18]], 0);
+        pc += 1;
+        break;
+    case 0x3000:
+        func_00110718((int)owu_chr_hd[((u8 *)eff)[0x18]], 1);
+        pc += 1;
+        break;
+    case 0x4000:
+    case 0x5000:
+        if (((s8 *)th)[0x21E] != 0) {
+            if (th->flags & 0x1000) {
+                func_001B56A0(0);
+            } else {
+                func_001B56A0(1);
+            }
+        } else {
+            int on = (th->flags & 0x1000);
+            int i;
+            on = (on != 0);
+            for (i = 0; i < 0x20; i++) {
+                if (owu_chr_hd[i] != 0) {
+                    func_00110718((int)owu_chr_hd[i], on);
+                }
+            }
+        }
+        pc += 1;
+        break;
+    case 0x6000:
+        Ch_DrawEnEffect(chr, 0);
+        pc += 1;
+        break;
+    case 0x7000:
+        Ch_DrawEnEffect(chr, 1);
+        pc += 1;
+        break;
+    case 0x8000: {
+        int mode = (s16)pc[1];
+        u8 ofs = ((u8 *)pc)[4];
+        float *fp = (float *)((u8 *)sub + ofs);
+        if (mode < 2) {
+            on = graphicLevelGetNameHash(chr, mode);
+            if (ofs != 0) {
+                *fp = (float)on;
+            }
+        } else {
+            graphicLevelGetNameHash(chr, (int)*fp);
+        }
+        pc += 3;
+        break;
+    }
+    case 0x9000:
+        func_002967E8(th, pc);
+        pc += 1;
+        MsSetChrVisible(sub->b18, 1);
+        break;
+    case 0xA000:
+        func_002967E8(th, pc);
+        pc += 1;
+        MsSetChrVisible(sub->b18, 0);
+        break;
+    case 0xB000: {
+        int i;
+        func_002967E8(th, pc);
+        MMI_SQ_ZERO(0, th);
+        MMI_SQ_ZERO(0x10, th);
+        for (i = 0; i < ((u8 *)eff)[8]; i++) {
+            ((u8 *)th)[eff->list[i]] = 1;
+        }
+        for (i = 0; i < 0x20; i++) {
+            if (owu_chr_hd[i] != 0 && ((s8 *)th)[i] == 0 && sub->b18 != i) {
+                MsSetChrVisible(i, 0);
+            }
+        }
+        pc += 1;
+        break;
+    }
+    }
+    return pc;
+}
 
 void opus_camera_limit(void *obj300, int v);
 void func_001AAC18(float a, float b);
