@@ -625,7 +625,70 @@ void func_00234100(int unused, int a1, int a2)
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002341E8);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_00234428);
+void func_00234428(int unused)
+{
+    u8 ch[4];
+    u16 *tbl;
+    int x = 0;
+    int y = 0;
+    int idx;
+
+    if (func_0020B850() == 0) {
+        if (func_001BD360() == 0) {
+            if (D_00693E20 < 0) {
+                tbl = *(u16 **)((D_00693E24 * 4) + (u8 *)&_m2c_func_002335E0_D_00325D28);
+            } else {
+                tbl = &_m2c_func_002335E0_D_00325C98;
+            }
+        } else {
+            tbl = &_m2c_func_002335E0_D_00325D00;
+        }
+    } else {
+        tbl = &_m2c_func_002335E0_D_00325CC0;
+    }
+    idx = 0;
+    while (1) {
+        u16 id;
+        u8 *s;
+        int sx;
+        u8 c;
+
+        switch (idx % 3) {
+        case 0:
+            x = D_00693EF8[0];
+            y = D_00693EF8[1];
+            break;
+        case 1:
+            x = D_00693F00[0];
+            y = D_00693F00[1];
+            break;
+        case 2:
+            x = D_00693F08[0];
+            y = D_00693F08[1];
+            break;
+        }
+        y += D_00693EF0 * (idx / 3);
+        id = *tbl++;
+        if (id == 0) {
+            break;
+        }
+        s = (u8 *)TOMenuGetNameMes(id);
+        sx = x;
+        while ((c = *s++) != 0) {
+            if (c >= 6 && c <= 0x2F) {
+                ch[0] = c;
+                ch[1] = *s++;
+                ch[2] = 0;
+            } else {
+                ch[0] = c;
+                ch[1] = 0;
+            }
+            func_00226350(sx, y, (int)ch, 0);
+            sx += D_00693EEC;
+        }
+        idx++;
+    }
+}
 
 void func_00234628(int a)
 {
@@ -645,7 +708,78 @@ void func_00234628(int a)
 
 int func_002346D0(void) { return 1; }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_232C88", func_002346D8);
+extern char D_00572210[];
+int TkMn2GetMenuMode(void);
+void TkMn2InitStatusBG(void);
+
+Task *func_002346D8(int a0, int a1)
+{
+    Task *t;
+
+    if ((u32)a1 >= 0x12) {
+        a1 = -1;
+        a0 = 1;
+    }
+    D_00693E3C = 0;
+    if (a1 < 0) {
+        D_00693E3C = TOMenuGetNameMes(0x200C);
+    } else if ((TkMn2GetMenuMode() & 0x80000) != 0 && a1 >= 8) {
+        D_00693E3C = TOMenuGetNameMes(0x204E);
+    } else {
+        D_00693E3C = TOMenuGetNameMes(0x200B);
+    }
+    TkMn2InitStatusBG();
+    SET_ANGLE_I(0x155);
+    t = func_00243400();
+    t->ext[0] = a0;
+    t->ext[1] = a1;
+    t->cb = func_002335D8;
+    t->x0C = (s32)func_002338D0;
+    t->x10 = (s32)func_00234628;
+    t->x14 = (s32)func_002346D0;
+    t->b3E = 4;
+    TkMenuMainRegistWindow(t);
+    D_00693E20 = a1;
+    if (func_0020B850() == 0 && func_001BD360() == 0 && D_00693E20 >= 0) {
+        D_00693E24 = 2;
+    } else {
+        D_00693E24 = 0;
+    }
+    D_00693E28 = D_00693E24;
+    D_00693E30 = 0;
+    if (a0 == 0) {
+        t->ext[2] = (s32)func_00233280(a1);
+        D_00693E38 = 1;
+        if (func_0020B850() == 0) {
+            if (func_001BD360() == 0) {
+                if (D_00693E20 < 0) {
+                    D_00693E34 = 0;
+                } else {
+                    D_00693E34 = 1;
+                }
+            } else {
+                D_00693E34 = 1;
+            }
+        } else {
+            D_00693E34 = 1;
+        }
+    } else {
+        t->ext[2] = 0;
+        D_00693E38 = 0;
+        D_00693E34 = 0;
+    }
+    func_00232DB8();
+    TkMn2GetStatusPos();
+    t->ext[3] = (s32)func_00233560();
+    if (a1 >= 0) {
+        func_00233060(TOGetSaveChrName(a1));
+    } else {
+        func_00124828();
+        func_00233060((int)D_00572210);
+    }
+    D_00693E40 = (R5A *)t;
+    return t;
+}
 
 void func_002348D8(void)
 {

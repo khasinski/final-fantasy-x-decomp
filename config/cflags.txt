@@ -31,7 +31,6 @@ game/main/sg_11A538 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/op/opus_294CD8 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/yi/yi_171EF0 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/chr/tex_anim_old -Btools/cc/ee-as-delay/ -Wa,-mips4
-game/menu/to/to_218A78 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/chr/chr_10EA50 -Btools/cc/ee-as-delay/ -Wa,-mips4
 
 # This assembly-origin unit uses 4-byte function alignment.

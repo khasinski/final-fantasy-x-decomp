@@ -334,8 +334,292 @@ void func_00160D30(int idx, int a1, ChrParamSub *sub)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/tex_anim", chr_texanim_main_sub_new);
-INCLUDE_RODATA("build/ee_asm/game/chr/tex_anim/rodata", jtbl_0056B990);
+typedef struct {
+    s8 b[6];
+} TaNewInitList;
+
+extern TaNewInitList D_0056B988;
+
+typedef struct {
+    s16 dur;
+    u8 img_idx;
+    u8 rand_dur;
+} TaNewKey;
+
+typedef struct {
+    s16 h00;
+    s16 h02;
+    s16 w;
+    s16 h;
+    s32 ofs;
+} TaNewTex;
+
+typedef struct {
+    s32 ofs;
+    s16 cnt;
+    s16 pad;
+} TaNewAnim;
+
+typedef struct {
+    float f00;
+    float f04;
+    s16 h08;
+    s16 h0A;
+    s16 h0C;
+    s16 h0E;
+    TaNewAnim anim[32];
+} TaNewData;
+
+typedef struct {
+    s32 w00;
+    s32 w04;
+    s16 h08, h0A, h0C, h0E, h10, h12;
+    s16 h14, h16, h18, h1A, h1C, h1E;
+    s16 h20, h22;
+    float f24, f28, f2C, f30;
+} TaNewEntF;
+
+void chr_texanim_main_sub_new(int idx)
+{
+    TaNewInitList pass0_list = D_0056B988;
+    s8 pass1_list[48];
+    TaNewTex *tex_tbl;
+    Rec78D898 *r;
+    int pass;
+    int pass1_cnt;
+    u8 *hdr;
+    TexAnimWorkNewFull *w;
+    int anim;
+    s8 speed;
+    int k;
+    int i;
+    int cnt;
+    TaNewKey *keys;
+    TaNewKey *key;
+    TaNewTex *tex;
+
+    r = &D_0078D898[idx];
+    hdr = (u8 *)r->p00;
+    if (hdr == 0) {
+        return;
+    }
+    if ((u32)hdr > 0x1FFFFFFU) {
+        w = (TexAnimWorkNewFull *)r->w04;
+        w->wD48 = 1;
+        return;
+    }
+    switch (*(s8 *)hdr) {
+    case 1:
+        break;
+    case 2:
+        anim = r->w08;
+        speed = r->b0E;
+        pass1_cnt = 0;
+        pass1_list[0] = -1;
+        pass0_list.b[3] = anim;
+        if (anim == 1) {
+            pass0_list.b[3] = -1;
+        }
+        if (anim == 2) {
+            pass0_list.b[3] = -1;
+        }
+        if (anim == 21) {
+            pass0_list.b[3] = -1;
+        }
+        for (pass = 0; pass != 2; pass++) {
+            for (k = 0; ; k++) {
+                if (pass == 0) {
+                    anim = pass0_list.b[k];
+                    if (anim == -1) {
+                        break;
+                    }
+                    if (r->pad_0F[anim] & 2) {
+                        continue;
+                    }
+                    if (r->pad_0F[anim] & 1) {
+                        pass1_list[pass1_cnt++] = anim;
+                        pass1_list[pass1_cnt] = -1;
+                        continue;
+                    }
+                } else {
+                    anim = pass1_list[k];
+                    if (anim == -1) {
+                        break;
+                    }
+                }
+                w = (TexAnimWorkNewFull *)r->w04;
+                if ((u32)w > 0x1FFFFFFU) {
+                    w->wD48 = 2;
+                    return;
+                }
+                tex_tbl = (TaNewTex *)(hdr + *(s32 *)(hdr + 4));
+                for (i = 0; i < w->w00; i++) {
+                    {
+                        register int mv __asm__("$16") = w->map.b[i];
+                        if (mv != -1) {
+                            TaNewEntF *ent = (TaNewEntF *)&w->ent[i];
+                            u32 data_ofs = *(u32 *)(hdr + 8);
+                            u8 *dat_p;
+                            TaNewData *dat;
+
+                            if (data_ofs > 0x1FFFFFFU) {
+                                w->wD48 = 3;
+                                return;
+                            }
+                            __asm__("" : : "r"(mv));
+                            dat_p = hdr + data_ofs;
+                            if ((u32)dat_p > 0x1FFFFFFU) {
+                                w->wD48 = 4;
+                                return;
+                            }
+                            dat_p += i * sizeof(TaNewData);
+                            if ((u32)dat_p > 0x1FFFFFFU) {
+                                w->wD48 = 5;
+                                return;
+                            }
+                            dat = (TaNewData *)dat_p;
+                        cnt = dat->anim[anim].cnt;
+                        if (cnt != 0) {
+                            switch (ent->h1C) {
+                            case 0:
+                            case 5:
+                            default:
+                                keys = (TaNewKey *)(hdr + dat->anim[anim].ofs);
+                                key = &keys[ent->w04];
+                                if (key->dur >= 0) {
+                                    ent->h14 += speed;
+                                    if (ent->h14 >= key->dur + ent->h16) {
+                                        ent->h14 = 0;
+                                        ent->h16 = ((func_002EFD78() & 0xFF) * key->rand_dur) / 256;
+                                        ent->w04++;
+                                        if (ent->w04 >= cnt) {
+                                            ent->w04 = 0;
+                                            key = keys;
+                                        }
+                                    }
+                                }
+                                break;
+                            case 1:
+                            case 4:
+                                {
+                                    register u8 *ap __asm__("$2") = (u8 *)dat + (anim << 3);
+                                    int w04;
+                                    s32 ofs;
+                                    int kidx;
+                                    __asm__("" : "+r"(ap));
+                                    w04 = ent->w04;
+                                    ofs = *(s32 *)(ap + 0x10);
+                                    __asm__("" : "+r"(ofs));
+                                    kidx = (w04 == 0);
+                                    keys = (TaNewKey *)(hdr + ofs);
+                                    __asm__("" : "+r"(kidx));
+                                    key = &keys[kidx];
+                                }
+                                break;
+                            case 2:
+                                keys = (TaNewKey *)(hdr + dat->anim[anim].ofs);
+                                switch (ent->h1A) {
+                                case 0:
+                                    ent->h18 = func_002EFD78() % 90 + 60;
+                                    ent->h1A = 1;
+                                    ent->w04 = 0;
+                                    break;
+                                case 1:
+                                    ent->h18 -= speed;
+                                    if (ent->h18 < 0) {
+                                        ent->h1A = 2;
+                                        ent->h18 = 4;
+                                    }
+                                    break;
+                                case 2:
+                                    ent->h18 -= speed;
+                                    if (ent->h18 < 0) {
+                                        ent->w04++;
+                                        if (ent->w04 < cnt) {
+                                            ent->h18 = 1;
+                                        } else {
+                                            ent->w04--;
+                                            ent->h18 = 0;
+                                            ent->h1A = 0;
+                                        }
+                                    }
+                                    break;
+                                }
+                                key = &keys[ent->w04];
+                                break;
+                            case 3:
+                                keys = (TaNewKey *)(hdr + dat->anim[anim].ofs);
+                                key = &keys[ent->w04];
+                                if (key->dur >= 0) {
+                                    ent->h14 += speed;
+                                    if (ent->h14 > key->dur + ent->h16) {
+                                        ent->h14 = 0;
+                                        ent->h16 = ((func_002EFD78() & 0xFF) * key->rand_dur) / 256;
+                                        ent->w04++;
+                                        if (ent->w04 >= cnt) {
+                                            ent->w04 = 0;
+                                            key = keys;
+                                        }
+                                    }
+                                }
+                                ent->f2C += ent->f24;
+                                ent->f30 += ent->f28;
+                                tex = &tex_tbl[key->img_idx];
+                                if (ent->f2C < 0.0f) {
+                                    ent->f2C += tex->w;
+                                }
+                                if (ent->f30 < 0.0f) {
+                                    ent->f30 += tex->h;
+                                }
+                                if (ent->f2C >= tex->w) {
+                                    ent->f2C -= tex->w;
+                                }
+                                if (ent->f30 >= tex->h) {
+                                    ent->f30 -= tex->h;
+                                }
+                                break;
+                            }
+                            {
+                                u16 x;
+                                u8 *img;
+
+                                ent->h1E = 0;
+                                tex = &tex_tbl[key->img_idx];
+                                img = hdr + tex->ofs;
+                                x = dat->h08;
+                                ent->h08 = x;
+                                ent->h0A = dat->h0A;
+                                ent->h20 = dat->h0C;
+                                ent->h0C = tex->w;
+                                ent->h0E = tex->h;
+                                ent->h10 = tex->h00;
+                                ent->h12 = tex->h02;
+                                ent->w00 = (s32)img;
+                                if (ent->h1C == 3) {
+                                    u8 *src = img + 0x20;
+                                    u8 *dst = (u8 *)w->wD28[dat->h0C];
+                                    int pitch = (s16)w->hD38[dat->h0C];
+                                    int y0 = (int)ent->f30;
+                                    int y;
+
+                                    dst += (s16)x;
+                                    for (y = 0; y < tex->h; y++) {
+                                        int sy = (y + y0) % ent->h0E;
+                                        func_002EEF1C(dst + pitch * (y + ent->h0A), src + ent->h0C * sy, ent->h0C);
+                                    }
+                                }
+                            }
+                        } else if (k == 0) {
+                            ent->h1E = 1;
+                        }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+    }
+}
 
 u16 Ch_TextureGetImageBase(void *o, s32 i);
 s32 setLoadImageTagsTexAnim(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);

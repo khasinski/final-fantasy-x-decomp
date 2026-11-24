@@ -343,9 +343,111 @@ INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025F770);
 
 INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_0025F898);
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_002600F8);
+extern u64 D_006F2D30;
+extern u8 D_0033B050[];
+extern u8 D_0033B3D0[];
+void *func_00200040(void *list, int a, int b, int c, int d, int e, int f, int g);
+void func_00257090(int x0, int y0, int x1, int y1);
+void func_00256A90(void *p, float x, float y, float z);
+void func_00257810(int val, int x, int y, int z);
 
-INCLUDE_ASM("build/ee_asm/game/abm/abm_25AEB0", func_00260370);
+void func_002600F8(int x, int y) __attribute__((register_precision(s3, 128)));
+void func_002600F8(int x, int y)
+{
+    u8 mode;
+    int off;
+    u8 *p;
+
+    func_00257048(0x44, 0x42);
+    mode = ((u8 *)lpamng)[0x1156E];
+    if (mode == 1) {
+        off = (((u8 *)lpamng)[0x1156F] * 0x5B) / 4 - 0x50;
+    anim:
+        if (++((u8 *)lpamng)[0x1156F] >= 5) {
+            ((u8 *)lpamng)[0x1156E] = 0;
+            goto draw_normal;
+        }
+        {
+            int x0 = (x >= 0) ? x : 0;
+            int x1 = (x + 0x5C < 0x200) ? (x + 0x5C) : 0x1FF;
+            u64 sc = (u64)x0 | ((u64)x1 << 16) | ((u64)y << 32) | ((u64)(y + 0x61) << 48);
+
+            func_00257048(sc, 0x40);
+            p = D_006A3BCC;
+            D_006A3BCC = func_00200040(p + 0x10, ((u8 *)lpamng)[0x1156D], x, y, 0x80, 0x80, 0x80, ((u8 *)lpamng)[0x11569]);
+            func_002B2A80(p, (D_006A3BCC - p) >> 4, 1, 0);
+            p = D_006A3BCC;
+            D_006A3BCC = func_00200040(p + 0x10, ((u8 *)lpamng)[0x1156C], x + off, y, 0x80, 0x80, 0x80, ((u8 *)lpamng)[0x11569]);
+            func_002B2A80(p, (D_006A3BCC - p) >> 4, 1, 0);
+            func_00257048(D_006F2D30, 0x40);
+            return;
+        }
+    } else if (mode == 2) {
+        off = -(((u8 *)lpamng)[0x1156F] * 0x5B) / 4 + 0x50;
+        goto anim;
+    }
+draw_normal:
+    p = D_006A3BCC;
+    D_006A3BCC = func_00200040(p + 0x10, ((u8 *)lpamng)[0x1156C], x, y, 0x80, 0x80, 0x80, ((u8 *)lpamng)[0x11569]);
+    func_002B2A80(p, (D_006A3BCC - p) >> 4, 1, 0);
+}
+
+void func_00260370(void) __attribute__((register_precision(s3, 128)));
+void func_00260370(void)
+{
+    int w;
+    int h;
+    int pos;
+
+    if (((u8 *)lpamng)[0x11572] != 0) {
+        if (((u8 *)lpamng)[0x11570] == 0) {
+            pos = ((u8 *)lpamng)[0x11571] * 0x28 + 0x20;
+        } else {
+            pos = (3 - ((u8 *)lpamng)[0x11571]) * 0x28 + 0x20;
+        }
+        if (++((u8 *)lpamng)[0x11571] >= 4) {
+            u8 *p = (u8 *)lpamng;
+            p[0x11572] = 0;
+            p[0x11571] = 0;
+        }
+    } else {
+        pos = (((u8 *)lpamng)[0x11570] != 0) ? 0 : 0xA0;
+    }
+    if (pos > 0) {
+        u8 *name;
+        int x = pos - 2;
+        int x2 = pos - 0xD;
+
+        func_00257090(0, 0x33, x2, 0x58);
+        func_00257090(0, 0xBF, x2, 0xE3);
+        func_00256A90(D_0033B050, (float)x, 151.0f, 29440.0f);
+        func_002600F8(pos - 0x82, 0x5A);
+        name = (u8 *)TOGetSaveChrName(((u8 *)lpamng)[0x1156C]);
+        TOGetEasyMesWHFontL(name, &w, &h);
+        {
+            int hw = w / 2 + 0x50;
+            func_00257108(name, x - hw, 0x3B);
+        }
+        func_00257810(func_001BE7B8(((u8 *)lpamng)[0x1156C]) - *(s32 *)((u8 *)lpamng + 0x115CC), pos - 0x16, 0xC6, 0);
+    }
+    if (pos < 0xA0) {
+        u8 *name;
+        int x = pos + 0x169;
+        int x2 = pos + 0x174;
+
+        func_00257090(x2, 0x33, 0x200, 0x58);
+        func_00257090(x2, 0xBF, 0x200, 0xE3);
+        func_00256A90(D_0033B3D0, (float)x, 151.0f, 29440.0f);
+        func_002600F8(pos + 0x18E, 0x5A);
+        name = (u8 *)TOGetSaveChrName(((u8 *)lpamng)[0x1156C]);
+        TOGetEasyMesWHFontL(name, &w, &h);
+        {
+            int hw = w / 2 - 0x52;
+            func_00257108(name, x - hw, 0x3B);
+        }
+        func_00257810(func_001BE7B8(((u8 *)lpamng)[0x1156C]) - *(s32 *)((u8 *)lpamng + 0x115CC), pos + 0x1E9, 0xC6, 0);
+    }
+}
 
 void func_00260600(void)
 {

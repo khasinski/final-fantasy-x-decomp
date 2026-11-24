@@ -205,7 +205,42 @@ s32 func_0010B558(Chr *chr)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_10AD70", func_0010B6D0);
+typedef struct TexLinkEnt {
+    u16 h00;
+    u16 h02;
+    u8 pad04[0x14];
+    struct {
+        u64 tbp0 : 14;
+        u64 pad14 : 23;
+        u64 cbp : 14;
+        u64 pad51 : 13;
+    } tex0;
+} TexLinkEnt;
+
+typedef struct TexEnt70 {
+    u8 pad00[0x6A];
+    u16 h6A;
+    u8 pad6C[4];
+} TexEnt70;
+
+void func_0010B6D0(Chr *chr)
+{
+    TexLinkEnt *base = (TexLinkEnt *)chr->w6EC;
+    int i;
+
+    D_003036A8 = (s32)base;
+    if (base == 0) {
+        return;
+    }
+    for (i = 0; i < *(s32 *)((u8 *)chr + 0x700); i++) {
+        register u32 h02 __asm__("$4") = base[i].h02;
+        register u32 tbp __asm__("$2") = ((TexEnt70 *)chr->w6F8)[h02].h6A;
+        register u32 cbp __asm__("$2");
+        base[i].tex0.tbp0 = tbp;
+        cbp = ((TexEnt70 *)*(u32 *)((u8 *)chr + 0x6F0))[base[i].h00].h6A;
+        base[i].tex0.cbp = cbp;
+    }
+}
 
 void Ch_DrawEnEffect(Chr *chr, s32 v)
 {
@@ -605,6 +640,17 @@ void Ch_DrawSetSituation(Chr *chr, s8 v)
 }
 
 typedef union {
+    struct {
+        u64 nloop : 15;
+        u64 eop : 1;
+        u64 pad16 : 16;
+        u64 id : 14;
+        u64 pre : 1;
+        u64 prim : 11;
+        u64 flg : 2;
+        u64 nreg : 4;
+        u64 regs : 64;
+    } tag;
     struct {
         u64 q0;
         u64 q8;

@@ -368,7 +368,112 @@ void func_00191BF8(int idx)
     func_0018FE28(&pkt);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191ED0);
+void func_00191ED0(void)
+{
+    R2DbgWorkFull *dbg;
+    DbgPsm13 psm;
+    u32 z;
+    R2Pkt pkt;
+    u8 pad[0x10];
+    R2Qw *q;
+    int sw;
+    int sh;
+    int w;
+    int h;
+    int x0;
+    int y0;
+
+    dbg = R2_DBGWORK_FULL;
+    psm = D_0056D7C0;
+    z = func_00192458(0.1f);
+    func_0018FCE0(&pkt);
+    func_0018FD88(&pkt, (void *)D_00303550);
+    q = pkt.cur;
+    q->d.lo = 5 | ((u64)1 << 60);
+    q->d.hi = 0xE;
+    q++;
+    q->d.hi = 0x3F;
+    q++;
+    q->d.lo = SCE_GS_SET_TEX0(
+        *(s32 *)((u8 *)dbg + 0xAF0),
+        *(s32 *)((u8 *)dbg + 0xAF4),
+        psm.v[*(s32 *)((u8 *)dbg + 0xAF8)],
+        *(s32 *)((u8 *)dbg + 0xAFC),
+        *(s32 *)((u8 *)dbg + 0xB00),
+        1, 0,
+        *(s32 *)((u8 *)dbg + 0xB04),
+        0, 0, 0, 1);
+    q->d.hi = 0x6;
+    q++;
+    q->d.lo = 0x44;
+    q->d.hi = 0x42;
+    q++;
+    q->d.lo = 0x80808080;
+    q->d.hi = 0x1;
+    q++;
+    q->d.lo = 0x30003;
+    q->d.hi = 0x47;
+    q++;
+    sh = 0;
+    sw = 0;
+    switch (*(s32 *)((u8 *)dbg + 0xB10)) {
+    case 0:
+        sw = *(s32 *)((u8 *)dbg + 0xB08) << 4;
+        sh = *(s32 *)((u8 *)dbg + 0xB0C) << 4;
+        break;
+    case 1:
+        sw = (*(s32 *)((u8 *)dbg + 0xB08) << 4) + (*(s32 *)((u8 *)dbg + 0xB08) << 3);
+        sh = (*(s32 *)((u8 *)dbg + 0xB0C) << 4) + (*(s32 *)((u8 *)dbg + 0xB0C) << 3);
+        break;
+    case 2:
+        sw = *(s32 *)((u8 *)dbg + 0xB08) << 5;
+        sh = *(s32 *)((u8 *)dbg + 0xB0C) << 5;
+        break;
+    }
+    w = *(s32 *)((u8 *)dbg + 0xB08);
+    h = *(s32 *)((u8 *)dbg + 0xB0C);
+    {
+        int uw;
+        int uh;
+
+        q->d.lo = 0x408B400000000001ULL;
+        q->d.hi = 0x5353;
+        q++;
+        q->w[0] = 0;
+        q->w[1] = 0;
+        q++;
+        x0 = 0x7FF8 - (sw >> 1);
+        y0 = 0x7FF8 - (sh >> 1);
+        q->w[0] = x0;
+        q->w[1] = y0;
+        q->w[2] = z;
+        q->w[3] = 0;
+        q++;
+        {
+            register int uw __asm__("$4") = w << 4;
+            register int uh __asm__("$5") = h << 4;
+            int x1 = x0 + sw;
+            int y1 = y0 + sh;
+
+            q->w[0] = uw;
+            q->w[1] = uh;
+            __asm__ volatile("" : : "r"(w), "r"(h));
+            {
+                register R2Pkt *pktp __asm__("$4") = &pkt;
+                __asm__ volatile("" : "+r"(pktp));
+                q++;
+                q->w[0] = x1;
+                q->w[1] = y1;
+                q->w[2] = z;
+                q->w[3] = 0;
+                q++;
+                pkt.cur = q;
+                func_0018FDD0(pktp);
+            }
+        }
+    }
+    func_0018FE28(&pkt);
+}
 
 void func_001921A8(void)
 {
@@ -725,16 +830,98 @@ void func_00192AD8(W3Voice *v)
 
 u64 func_002EA358(float x);
 
-void func_00192E00(W3Voice *v, W3Pool *pool, float *rect);
-void func_00193110(W3Voice *v, W3Pool *pool, float *rect);
-
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192BC0);
-
-u64 func_002EA358(float x);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192E00);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00193110);
+void func_00193110(W3Voice *v, W3Pool *pool, float *rect)
+{
+    int tw;
+    int th;
+    int tbw;
+    u32 flags = *(u32 *)v;
+    int b5;
+    int b2;
+    R2Qw *base;
+    R2Qw *q;
+    u64 tex0;
+    u64 clamp;
+    u32 qwc;
+
+    if ((flags & 3) != 0) {
+        return;
+    }
+    b2 = (s32)flags >> 2;
+    b5 = (s32)flags >> 5;
+    rcCalcTex0Prm(*(s32 *)((u8 *)v + 4), *(s32 *)((u8 *)v + 8), &tw, &th, &tbw);
+    b5 &= 1;
+    tex0 = (u64)*(u16 *)((u8 *)v + 0x34)
+        | ((u64)tbw << 14)
+        | (0x1BULL << 20)
+        | ((u64)tw << 26)
+        | ((u64)th << 30)
+        | (1ULL << 34)
+        | ((u64)*(u16 *)((u8 *)v + 0x36) << 37)
+        | (1ULL << 61);
+    base = *(R2Qw **)((u8 *)pool + 0x114);
+    q = base + 1;
+    q->d.lo = 7 | ((u64)1 << 60);
+    q->d.hi = 0xE;
+    q++;
+    q->d.lo = tex0;
+    q->d.hi = 6;
+    q++;
+    b2 &= 1;
+    q->d.lo = v->d38;
+    q->d.hi = 0x42;
+    q++;
+    q->d.lo = (u64)v->rgba[0] | ((u64)v->rgba[1] << 8) | ((u64)v->rgba[2] << 16) | ((u64)v->b43 << 24);
+    q->d.hi = 1;
+    q++;
+    clamp = func_002EA358(rect[4]) << 4;
+    {
+        float h = rect[3];
+        clamp |= func_002EA358(rect[5] + h - 1.0f) << 34;
+    }
+    {
+        float w = rect[2];
+        u64 t = func_002EA358(rect[4] + w - 1.0f) << 14;
+        u64 ten = 0xA;
+        float v5;
+        __asm__ volatile("" : "+r"(ten));
+        v5 = rect[5];
+        __asm__ volatile("" : "+f"(v5));
+        t |= ten;
+        clamp |= t;
+        clamp |= func_002EA358(v5) << 24;
+    }
+    q->d.lo = clamp;
+    q->d.hi = 8;
+    q++;
+    q->d.lo = 0x31000108ULL | ((u64)b5 << 32);
+    q->d.hi = 0x4E;
+    q++;
+    q->d.lo = 0x60;
+    q->d.hi = 0x14;
+    q++;
+    q->d.lo = 0x5000F;
+    q->d.hi = 0x47;
+    q++;
+    if (b2 == 0) {
+        q = func_001933D0(q, rect, (float *)((u8 *)v + 0x14), *(float *)((u8 *)pool + 0xB4), *(float *)((u8 *)pool + 0xB8), *(float *)((u8 *)pool + 0xBC));
+    } else {
+        q = func_00193728(q, rect, (float *)((u8 *)v + 0x14), *(float *)((u8 *)pool + 0xB4), *(float *)((u8 *)pool + 0xB8), *(float *)((u8 *)pool + 0xBC));
+    }
+    q = func_00192848(q);
+    q->d.lo = 0x8000 | ((u64)1 << 60);
+    q->d.hi = 0;
+    q++;
+    *(u_long128 *)base = 0;
+    qwc = (u32)((u8 *)q - (u8 *)base) >> 4;
+    base->w[0] = qwc | 0x70000000;
+    func_002B2AD8(base, qwc, func_00192508(*(float *)((u8 *)v + 0x14)), 0);
+    *(R2Qw **)((u8 *)pool + 0x114) = q;
+}
 
 R2Qw *func_001933D0(R2Qw *q, float *rect, float *zp, float ang, float sx, float sy)
 {

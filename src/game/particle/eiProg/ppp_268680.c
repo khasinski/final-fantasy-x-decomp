@@ -1,5 +1,6 @@
 /* tu_288 0x268680-0x26a9a8: medium; ~ppp (config/tu_map.tsv) */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/w8.h"
 #include "ffx/q6.h"
 #include "ffx/r6.h"
@@ -242,8 +243,80 @@ void func_00268CA8(void) {
     q[2] = *(u_long128 *)c;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_268680", pppFpSetRotMatrix);
-INCLUDE_RODATA("build/ee_asm/game/particle/eiProg/ppp_268680/rodata", jtbl_00574020);
+extern void pppGetRotMatrixXYZ(void *, void *);
+extern void func_0026C068(void *, void *);
+extern void func_0026C1B8(void *, void *);
+extern void func_0026C308(void *, void *);
+extern void func_0026C458(void *, void *);
+extern void func_0026C5A8(void *, void *);
+
+void pppFpSetRotMatrix(u8 *a0, int a1) {
+    register float f0 __asm__("$f0");
+    register u8 *m __asm__("$2");
+    register s32 v3 __asm__("$3");
+    register s32 v4 __asm__("$4");
+    register u8 *p1 __asm__("$3");
+    register u8 *p2 __asm__("$4");
+
+    switch (a1 & 0xFF) {
+    case 0:
+        pppGetRotMatrixXYZ(D_006A3930, a0 + 0x50);
+        break;
+    case 1:
+        func_0026C068(D_006A3930, a0 + 0x50);
+        break;
+    case 2:
+        func_0026C308(D_006A3930, a0 + 0x50);
+        break;
+    case 3:
+        func_0026C1B8(D_006A3930, a0 + 0x50);
+        break;
+    case 4:
+        func_0026C458(D_006A3930, a0 + 0x50);
+        break;
+    case 5:
+        func_0026C5A8(D_006A3930, a0 + 0x50);
+        break;
+    default:
+        pppGetRotMatrixXYZ(D_006A3930, a0 + 0x50);
+        break;
+    }
+    f0 = *(float *)(a0 + 0x60);
+    __asm__ volatile("" : "+f"(f0));
+    m = (u8 *)D_006A3930;
+    MIPS_MFC1(v3, f0);
+    VU0_QMTC2_NI(9, v3);
+    VU0_LQC2(10, 0, m);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, m);
+
+    f0 = *(float *)(a0 + 0x64);
+    __asm__ volatile("" : "+f"(f0));
+    p1 = m + 0x10;
+    MIPS_MFC1(v4, f0);
+    VU0_QMTC2_NI(9, v4);
+    VU0_LQC2(10, 0, p1);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, p1);
+
+    f0 = *(float *)(a0 + 0x68);
+    __asm__ volatile("" : "+f"(f0));
+    p2 = m + 0x20;
+    MIPS_MFC1(v3, f0);
+    VU0_QMTC2_NI(9, v3);
+    VU0_LQC2(10, 0, p2);
+    VU0_OP("vmulx.xyz $vf10, $vf10, $vf9x");
+    VU0_SQC2(10, 0, p2);
+
+    {
+        register float f1 __asm__("$f1") = *(float *)(a0 + 0x40);
+        *(float *)(m + 0x30) = f1;
+        f0 = *(float *)(a0 + 0x44);
+        *(float *)(m + 0x34) = f0;
+        f1 = *(float *)(a0 + 0x48);
+        *(float *)(m + 0x38) = f1;
+    }
+}
 
 extern s32 _m2c_func_00268EE8_D_006A3A30 __asm__("D_006A3A30");
 void func_00268EE8(s32 arg0) {

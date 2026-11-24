@@ -205,9 +205,6 @@ void TOBtlInitInfoWinMes(int a)
     }
 }
 
-extern s8 D_00325020;
-void TOBtlSetInfoWinMes(int a);
-
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlInfoWinMes);
 
 void TOBtlDrawInfoWinMes(void)
@@ -225,7 +222,49 @@ void TOBtlDrawInfoWinMes(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlSetInfoWinParam);
+extern s16 D_006925B0;
+
+void TOBtlSetInfoWinParam(int id)
+{
+    s16 w;
+    s16 h;
+    int bits;
+    int i;
+    u8 *cnt;
+    s32 info;
+
+    func_002EF0D0(&D_00692508, 0, sizeof(InfoWinParam));
+    D_00692508.h0 = id;
+    D_00692508.h2 = 0x14;
+    D_00692508.h4 = 0;
+    D_00692508.h6 = 0;
+    D_00692508.h54 = MsGetRamChrHP(id);
+    D_00692508.h56 = MsGetRamChrHPmax(id);
+    bits = MsMenuBitStatus(D_00692508.h0);
+    for (i = 0; i < 0xC; i++) {
+        if ((bits >> i) & 1) {
+            D_00692508.h8[D_00692508.h6++] = i + 0x1006;
+        }
+    }
+    cnt = MsMenuCountStatus(D_00692508.h0);
+    for (i = 0; i < 0xD; i++) {
+        if (cnt[i] != 0) {
+            D_00692508.h8[D_00692508.h6++] = i + 0x1012;
+        }
+    }
+    bits = MsMenuBitStatus2(D_00692508.h0);
+    for (i = 0; i < 0xF; i++) {
+        if ((bits >> i) & 1) {
+            D_00692508.h8[D_00692508.h6++] = i + 0x1020;
+        }
+    }
+    info = MsGetMenuChrInfo(id, 1);
+    _TOGetMessageWH(0, (u8 *)info, &w, &h, 0, 0);
+    D_00692560[0].h0 = 2;
+    D_00692560[0].hE = w;
+    D_00692560[0].w10 = info;
+    D_006925B0 = 1;
+}
 
 void TOBtlSetInfoWinMes(int a)
 {
@@ -726,8 +765,78 @@ void TOBtlInitAuronLimitWindow(void)
     D_00692678.h6 = 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlAuronLimitWindow);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_218A78/rodata", jtbl_00570FB0);
+void TOBtlCtrlAuronLimitWindow(void)
+{
+    switch (D_00692678.state) {
+    case 0:
+        break;
+    case 1:
+        D_0069066C = 0;
+        TOSeqStartSceneDrawContinue(2, D_00570F90);
+        D_00692678.state++;
+        break;
+    case 2:
+        if (TOSeqCheckTermScene(2, D_00570F90) == 1) {
+            TOSeqStartScene(2, D_00570F98);
+            D_00692678.state++;
+        }
+        break;
+    case 3:
+        TOBtlStandbyLimitTimer();
+        D_00692678.state++;
+        break;
+    case 4:
+        TOBtlStartLimitTimer();
+        if (func_0021AA78() <= 0.0f) {
+            D_00692678.state = 7;
+            break;
+        }
+        if (D_003238E4 != 0) {
+            if (D_003238E4 == D_00692678.w10[D_00692678.h8]) {
+                D_00692678.h8++;
+            } else {
+                func_002D70D8(0x69);
+                D_00692678.h8 = 0;
+            }
+            if (D_00692678.h8 >= D_00692678.wC) {
+                D_00692678.state = 5;
+            }
+        }
+        break;
+    case 5:
+        TOBtlStopLimitTimer();
+        D_0069066C = 1;
+        TOSeqStartScene(2, D_00570FA0);
+        func_002D70D8(0x68);
+        D_00692678.state = 6;
+        break;
+    case 6:
+        if (TOSeqCheckTermScene(2, D_00570FA0) == 1) {
+            TOSeqStopScene(2, D_00570F90);
+            TOSeqStopScene(2, D_00570F98);
+            D_00692678.state = 9;
+        }
+        break;
+    case 7:
+        TOBtlStopLimitTimer();
+        D_0069066C = 0;
+        D_00692678.state = 8;
+        break;
+    case 8:
+        TOSeqStopScene(2, D_00570F90);
+        TOSeqStopScene(2, D_00570F98);
+        D_00692678.state = 9;
+        break;
+    case 9:
+        D_00692678.state++;
+        break;
+    case 10:
+        func_001E35D8(2, D_0069066C, func_0021AA78(), func_0021AA88());
+        TOBtlInitLimitTimer();
+        D_00692678.state = 0;
+        break;
+    }
+}
 
 void func_0021AD80(void)
 {
@@ -805,8 +914,98 @@ void TOBtlInitTidusLimitWindow(void)
     TOSeqGetColor(2, D_00571020, &D_00692690.w14);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlTidusLimitWindow);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_218A78/rodata", jtbl_00571030);
+void TOBtlCtrlTidusLimitWindow(void)
+{
+    switch (D_00692690.state) {
+    case 0:
+        break;
+    case 1:
+        D_0069066D = 0;
+        TOSeqStartSceneDrawContinue(2, D_00571028);
+        D_00692690.state++;
+        break;
+    case 2:
+        if (TOSeqCheckTermScene(2, D_00571028) == 1) {
+            D_00692690.state++;
+        }
+        break;
+    case 3:
+        TOBtlStandbyLimitTimer();
+        D_00692690.state++;
+        break;
+    case 4: {
+        int t1;
+        int t0;
+
+        TOBtlStartLimitTimer();
+        t1 = TkGetControlerTrigHist(0, 0, -1);
+        t0 = TkGetControlerTrigHist(0, 0, 0);
+        if (func_0021AA78() <= 0.0f) {
+            D_00692690.state = 7;
+            break;
+        }
+        if (t1 & 0x20) {
+            register S4PanelA *p __asm__("$4") = &D_00692690;
+            if (p->hE >= p->h8 && p->hE <= p->hA) {
+                D_00692690.state = 5;
+                break;
+            }
+            func_002D70D8(3);
+            D_00692690.h10 = (D_00692690.h10 < 0) ? -D_00692690.h10 : D_00692690.h10;
+            D_00692690.hE = D_00692690.h2;
+        } else if (t0 & 0x20) {
+            register S4PanelA *p __asm__("$4") = &D_00692690;
+            if (p->hE >= p->h8 && p->hE <= p->hA) {
+                D_00692690.state = 5;
+                break;
+            }
+            func_002D70D8(3);
+            D_00692690.h10 = (D_00692690.h10 < 0) ? -D_00692690.h10 : D_00692690.h10;
+            D_00692690.hE = D_00692690.h2;
+        }
+        D_00692690.hE += D_00692690.h10;
+        if (D_00692690.hE > D_00692690.h2 + D_00692690.h6) {
+            D_00692690.hE = (D_00692690.h2 + D_00692690.h6) - (D_00692690.hE - (D_00692690.h2 + D_00692690.h6));
+            D_00692690.h10 *= -1;
+        }
+        if (D_00692690.hE < D_00692690.h2) {
+            D_00692690.hE = D_00692690.h2 + (D_00692690.h2 - D_00692690.hE);
+            D_00692690.h10 *= -1;
+        }
+        break;
+    }
+    case 5:
+        TOBtlStopLimitTimer();
+        D_0069066D = 1;
+        TOSeqStartScene(2, D_00570FA0);
+        func_002D70D8(0x68);
+        D_00692690.state = 6;
+        break;
+    case 6:
+        if (TOSeqCheckTermScene(2, D_00570FA0) == 1) {
+            TOSeqStopScene(2, D_00571028);
+            D_00692690.state = 9;
+        }
+        break;
+    case 7:
+        TOBtlStopLimitTimer();
+        D_0069066D = 0;
+        D_00692690.state = 8;
+        break;
+    case 8:
+        TOSeqStopScene(2, D_00571028);
+        D_00692690.state = 9;
+        break;
+    case 9:
+        D_00692690.state++;
+        break;
+    case 10:
+        func_001E35D8(0, D_0069066D, func_0021AA78(), func_0021AA88());
+        TOBtlInitLimitTimer();
+        D_00692690.state = 0;
+        break;
+    }
+}
 
 void func_0021B358(void)
 {
@@ -887,8 +1086,109 @@ void TOBtlInitLuluLimitWindow(void)
     TOSeqGetPoint(2, D_005710A8, &D_006926A8.h10, &D_006926A8.h12);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", TOBtlCtrlLuluLimitWindow);
-INCLUDE_RODATA("build/ee_asm/game/menu/to/to_218A78/rodata", jtbl_005710E0);
+void TOBtlCtrlLuluLimitWindow(void)
+{
+    DirSeq8 cw = D_005710B0;
+    DirSeq8 ccw = D_005710B8;
+    int dir = 0xFF;
+    int i;
+
+    switch (D_006926A8.state) {
+    case 0:
+        break;
+    case 1:
+        TOSeqStartSceneDrawContinue(2, D_005710C0);
+        D_006926A8.state++;
+        break;
+    case 2:
+        if (TOSeqCheckTermScene(2, D_005710C0) == 1) {
+            TOSeqStartScene(2, D_005710C8);
+            D_006926A8.state++;
+        }
+        break;
+    case 3:
+        TOBtlStartLimitTimer();
+        D_006926A8.state++;
+        break;
+    case 4:
+        if (func_0021AA78() <= 0.0f) {
+            D_006926A8.state = 6;
+            break;
+        }
+        for (i = 0; i < 2; i++) {
+            u8 ax;
+            u8 ay;
+
+            if (i == 0) {
+                ax = TkGetControlerAnalogHist(0, 0, 0, -1);
+                ay = TkGetControlerAnalogHist(0, 0, 1, -1);
+            } else {
+                ax = TkGetControlerAnalogHist(0, 0, 0, 0);
+                ay = TkGetControlerAnalogHist(0, 0, 1, 0);
+            }
+            if (ax >= 0xA0 && ay < 0x60) {
+                dir = 4;
+            } else if (ax >= 0xA0 && ay >= 0xA0) {
+                dir = 5;
+            } else if (ax < 0x60 && ay >= 0xA0) {
+                dir = 6;
+            } else if (ax < 0x60 && ay < 0x60) {
+                dir = 7;
+            }
+            if (dir != 0xFF) {
+                if (D_006926A8.count == 0) {
+                    D_006926A8.seq[0] = dir;
+                    D_006926A8.count++;
+                } else if (D_006926A8.seq[D_006926A8.count - 1] != dir) {
+                    D_006926A8.seq[D_006926A8.count++] = dir;
+                }
+            }
+        }
+        if (D_006926A8.count >= 5) {
+            s8 first = D_006926A8.seq[0];
+
+            if (func_002EEE88(D_006926A8.seq, &cw.d[first - 4], 5) == 0
+                || func_002EEE88(D_006926A8.seq, &ccw.d[7 - first], 5) == 0) {
+                TOSeqStartScene(2, D_005710D0);
+                if (D_006926A8.b17 >= 0x10) {
+                    D_006926A8.b17 = 0x10;
+                } else {
+                    D_006926A8.b16++;
+                    if (D_006926A8.b16 >= D_006926D8[D_006926A8.b17]) {
+                        D_006926A8.b17++;
+                    }
+                }
+            }
+            func_002EEFCC(D_006926A8.seq, &D_006926A8.seq[4], 0xC);
+            D_006926A8.count = 0;
+        }
+        if (D_006926A8.h14 < (D_006926A8.h6 / 16) * D_006926A8.b17) {
+            D_006926A8.h14 += 3;
+        } else {
+            D_006926A8.h14 = (D_006926A8.h6 / 16) * D_006926A8.b17;
+        }
+        break;
+    case 5:
+        break;
+    case 6:
+        TOBtlStopLimitTimer();
+        TOBtlInitLimitTimer();
+        func_001E35D8(5, D_006926A8.b17, func_0021AA78(), func_0021AA88());
+        D_006926A8.state = 7;
+        break;
+    case 7:
+        D_006926A8.state++;
+        break;
+    case 8:
+        TOSeqStopScene(2, D_005710C0);
+        TOSeqStopScene(2, D_005710C8);
+        D_006926A8.state++;
+        break;
+    case 9:
+        D_006926A8.state = 0;
+        break;
+    }
+}
 
 void func_0021B9C8(void)
 {
@@ -1015,11 +1315,7 @@ void TOBtlDrawWakkaLimitWindow(void)
 void func_0021BDC0(void) {
 }
 
-void func_0021BDC8(R4Wk *o) {
-    R4Rgb3 t = D_00571140;
-    o->h3C -= func_00208060();
-    o->f78 = func_0021BDC0;
-}
+INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_0021BDC8);
 
 void func_0021BE28(R4Wk *o)
 {

@@ -1,4 +1,5 @@
 /* tu_269 0x242040-0x2454c0: low; ~Tk (config/tu_map.tsv) */
+#define func_00243088 _hdr_func_00243088
 #include "common.h"
 #include "ffx/w7.h"
 #include "ffx/q6.h"
@@ -6,6 +7,7 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #include "ffx/r5.h"
+#undef func_00243088
 
 u8 func_00242040(void) {
     return D_0069A804;
@@ -416,7 +418,56 @@ void TkMenuExchangePlayerPos(int first, int unused_a1)
     func_00242880();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_242040", func_00243088);
+void func_00243088(int unused)
+{
+    typedef struct {
+        u16 a;
+        u16 b;
+    } CmdPair;
+    CmdPair *tbl = (CmdPair *)MsMenuStatusNum(0, 0);
+    int i;
+    int max;
+    int ofs;
+    u8 *p;
+
+    D_0069BBF0 = 0;
+    p = D_0069BBC8;
+    p += 9;
+    for (i = 9; i >= 0; i--) {
+        *p-- = 0xFF;
+    }
+    D_0069BBE4 = 0;
+    max = TkMenuGetCommandMax(tbl, 5, 1, 0);
+    ofs = TkMenuGetCommandOffset(tbl, 5, 1, 0);
+    D_0069BBEC = max;
+    for (i = 0; i < max; i++) {
+        u16 id = *(u16 *)((ofs << 2) + (u32)&tbl[i] + 2);
+
+        if (id == 0x64) {
+            if (MsGetSavePlyJoin(0xF) != 0) {
+                D_0069BBC8[D_0069BBE4++] = 0xF;
+                D_0069BBF0 |= 1 << 0xF;
+                D_0069BBC8[D_0069BBE4++] = 0x10;
+                D_0069BBF0 |= 1 << 0x10;
+                D_0069BBC8[D_0069BBE4++] = 0x11;
+                D_0069BBF0 |= 1 << 0x11;
+            }
+        } else {
+            if (MsGetSavePlyJoin(id) != 0) {
+                D_0069BBC8[D_0069BBE4++] = id;
+                D_0069BBF0 |= 1 << id;
+            }
+        }
+        if (id == 0x64) {
+            D_0069BBD8[i++] = 0xF;
+            D_0069BBD8[i++] = 0x10;
+            D_0069BBD8[i] = 0x11;
+        } else {
+            D_0069BBD8[i] = id;
+        }
+    }
+    D_0069BBE8 = 0;
+}
 
 /* DEBT(CAST) */
 void func_00243298(void *arg0) {

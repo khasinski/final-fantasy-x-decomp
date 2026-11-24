@@ -414,7 +414,96 @@ int movie_hdd_file_open(int i, u64 sector) {
     return fd;
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00166AB0);
+typedef struct {
+    char name[0x80];
+    s32 is_dir;
+} DirListEnt;
+
+typedef struct {
+    u8 pad0[0x24];
+    char name[0x10];
+} FileOutEnt;
+
+extern char D_0056BE08[];
+extern char D_0056BE18[];
+extern char D_0056BE20[];
+
+typedef struct {
+    s32 w00;
+    s32 mode;
+    u8 pad08[0x38];
+    char name[0x110];
+} HddDent;
+
+int func_00166AB0(char *path, int *cnt, FileOutEnt *out)
+{
+    HddDent dent;
+    int fd;
+    int n;
+    int i;
+    int ret = 0;
+    DirListEnt *list;
+    char *tmp;
+
+    fd = func_002FDCC0(path);
+    if (fd < 0) {
+        return 1;
+    }
+    n = 0;
+    while (func_002FDEF0(fd, &dent) > 0) {
+        n++;
+    }
+    func_002FDD88(fd);
+    if (n == 0) {
+        return 0;
+    }
+    fd = func_002FDCC0(path);
+    if (fd < 0) {
+        return 1;
+    }
+    list = (DirListEnt *)user_malloc(n * sizeof(DirListEnt), 10, D_0056BE08, 0x480);
+    n = 0;
+    while (func_002FDEF0(fd, &dent) > 0) {
+        list[n].is_dir = dent.mode & 0x20;
+        for (i = 0; ; i++) {
+            list[n].name[i] = dent.name[i];
+            if (dent.name[i] == 0) {
+                break;
+            }
+        }
+        n++;
+    }
+    func_002FDD88(fd);
+    tmp = (char *)user_malloc(0x100, 10, D_0056BE08, 0x48C);
+    for (i = 0; i < n; i++) {
+        if (list[i].is_dir != 0) {
+            if (list[i].name[0] != '.') {
+                func_002EF0D0(tmp, 0, 0x100);
+                func_002F0008(tmp, D_0056BE18, path, list[i].name);
+                ret = func_00166AB0(tmp, cnt, out);
+                if (ret != 0) {
+                    break;
+                }
+            }
+        } else {
+            FileOutEnt *ent;
+            int j;
+            func_002EF0D0(tmp, 0, 0x100);
+            func_002F0008(tmp, D_0056BE20, path, list[i].name);
+            ent = &out[*cnt];
+            for (j = 0; ; j++) {
+                ent->name[j] = tmp[9 + j];
+                if (tmp[9 + j] == 0) {
+                    break;
+                }
+            }
+            (*cnt)++;
+        }
+    }
+    func_0011D590((int)tmp, 10);
+    func_0011D590((int)list, 10);
+    return ret;
+}
 
 typedef struct {
     u8 data[0x24];
@@ -580,7 +669,41 @@ char *func_001672C0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00167358);
+typedef struct {
+    u8 pad0[0x8];
+    int (*f08)(int);
+    u8 padC[0x6C - 0xC];
+    int (*f6C)(int, int);
+    u8 pad70[0x78 - 0x70];
+    void (*f78)(int, int, int, int, int);
+} HddBgOps;
+
+void func_00167358(void)
+{
+    HddBgOps *ops = (HddBgOps *)&D_0078E498;
+
+    while (1) {
+        while (D_005979D8 == 0) {
+            func_0017135C(1);
+        }
+        switch (D_005979D8) {
+        case 1:
+            ops->f78(D_005979DC, D_0030DE84, D_005979E0, 0, 0);
+            while (((HddBgOps *)&D_0078E498)->f08(1) != 0) {
+                func_0017135C(1);
+            }
+            break;
+        case 2:
+            ops->f78(ops->f6C(1, 1), D_0030DE84, 0x800, 0, 0);
+            while (((HddBgOps *)&D_0078E498)->f08(1) != 0) {
+                func_0017135C(1);
+            }
+            break;
+        }
+        D_005979D8 = 0;
+        TkSignalSemaBGThread();
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00167488);
 

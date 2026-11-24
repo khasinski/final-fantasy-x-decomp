@@ -22,7 +22,60 @@ void func_001074C0(s32 i, s32 v)
     D_0057E9B0[i] = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_001074D8);
+float func_001074D8(float a, float b, float step)
+{
+    register u8 *gp __asm__("$28");
+    float diff;
+    register float c __asm__("$f2");
+    float res;
+
+    __asm__("lwc1 %0, -0x7F64($gp)" : "=f"(c));
+    diff = a - b;
+    if (diff > c) {
+        do {
+            diff -= *(float *)(gp - 0x7F60);
+        } while (diff > c);
+    }
+    __asm__ volatile("" : "+r"(gp));
+    c = *(float *)(gp - 0x7F5C);
+    if (diff < c) {
+        do {
+            diff += *(float *)(gp - 0x7F58);
+        } while (diff < c);
+    }
+    if (diff == 0.0f) {
+        return b;
+    }
+    if (diff > 0.0f) {
+        if (diff < step) {
+            step = diff;
+        }
+        res = a - step;
+    } else {
+        if (diff > -step) {
+            step = -diff;
+        }
+        res = a + step;
+    }
+    {
+        register float c1 __asm__("$f1");
+        __asm__ volatile("" : "+r"(gp));
+        c1 = *(float *)(gp - 0x7F54);
+        if (res > c1) {
+            do {
+                res -= *(float *)(gp - 0x7F50);
+            } while (res > c1);
+        }
+        __asm__ volatile("" : "+r"(gp));
+        c1 = *(float *)(gp - 0x7F4C);
+        if (res < c1) {
+            do {
+                res += *(float *)(gp - 0x7F48);
+            } while (res < c1);
+        }
+    }
+    return res;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/ch_1074A8", func_00107600);
 

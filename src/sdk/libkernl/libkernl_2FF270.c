@@ -29,11 +29,69 @@ int func_002FF400(void)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FF270", func_002FF438);
+int func_002FF438(int id, int arglen, int args_i, int *res)
+{
+    const char *args = (const char *)args_i;
+
+    if (func_002FF270() < 0) {
+        return -0x10000;
+    }
+    if (func_002FF370() != 0) {
+        return -0x10004;
+    }
+    D_00795140.r.i = id;
+    if (args != 0) {
+        if (arglen >= 0xFD) {
+            __builtin_memcpy(D_00795140.arg, args, 0xFC);
+            D_00795140.w4 = 0xFC;
+        } else {
+            func_002EEF1C(D_00795140.arg, args, arglen);
+            D_00795140.w4 = arglen;
+        }
+    } else {
+        D_00795140.w4 = 0;
+    }
+    if (func_002FB4C8(&D_795340, 6, 0, &D_00795140, 0x200, &D_00795140, 8, 0, 0) < 0) {
+        return -0x10001;
+    }
+    {
+        int ret = D_00795140.r.i;
+        *res = D_00795140.w4;
+        return ret;
+    }
+}
 
 /* Module: EE kernel/syscall wrapper library, SIO, misc libc */
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FF270", func_002FF640);
+int func_002FF640(int id, int arglen, const char *args, int *res)
+{
+    if (func_002FF270() < 0) {
+        return -0x10000;
+    }
+    if (func_002FF370() != 0) {
+        return -0x10004;
+    }
+    D_00795140.r.i = id;
+    if (args != 0) {
+        if (arglen >= 0xFD) {
+            __builtin_memcpy(D_00795140.arg, args, 0xFC);
+            D_00795140.w4 = 0xFC;
+        } else {
+            func_002EEF1C(D_00795140.arg, args, arglen);
+            D_00795140.w4 = arglen;
+        }
+    } else {
+        D_00795140.w4 = 0;
+    }
+    if (func_002FB4C8(&D_795340, 7, 0, &D_00795140, 0x200, &D_00795140, 8, 0, 0) < 0) {
+        return -0x10001;
+    }
+    {
+        int ret = D_00795140.r.i;
+        *res = D_00795140.w4;
+        return ret;
+    }
+}
 
 int func_002FF848(int id)
 {
@@ -93,7 +151,40 @@ int func_002FFA28(int a, int b, int c, int *d)
     return func_002FF438(a, b, c, d);
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/libkernl_2FF270", func_002FFA48);
+int func_002FFA48(int path_i, int arglen, int args_i, int *res, int rpc)
+{
+    const char *path = (const char *)path_i;
+    const char *args = (const char *)args_i;
+
+    if (func_002FF270() < 0) {
+        return -0x10000;
+    }
+    if (func_002FF370() != 0) {
+        return -0x10004;
+    }
+    func_002F0C10(D_00795140.u.path, path, 0xFC);
+    D_00795140.u.path[0xFB] = 0;
+    if (args != 0) {
+        if (arglen >= 0xFD) {
+            __builtin_memcpy(D_00795140.arg, args, 0xFC);
+            D_00795140.r.i = 0xFC;
+        } else {
+            func_002EEF1C(D_00795140.arg, args, arglen);
+            D_00795140.r.i = arglen;
+        }
+    } else {
+        D_00795140.arg[0] = 0;
+        D_00795140.r.i = 0;
+    }
+    if (func_002FB4C8(&D_795340, rpc, 0, &D_00795140, 0x200, &D_00795140, 8, 0, 0) < 0) {
+        return -0x10001;
+    }
+    {
+        int ret = D_00795140.r.i;
+        *res = D_00795140.w4;
+        return ret;
+    }
+}
 
 int func_002FFC70(int a, int b, int c)
 {

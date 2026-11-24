@@ -4,6 +4,7 @@
 #define func_0022BC18 _hdr_func_0022BC18
 #define TkMenuGetArmor _hdr_TkMenuGetArmor
 #define TkMenuGetWeapon _hdr_TkMenuGetWeapon
+#define TkMenuMainActiveMenu _hdr_TkMenuMainActiveMenu
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/q5.h"
@@ -17,6 +18,7 @@
 #undef func_0022BC18
 #undef TkMenuGetArmor
 #undef TkMenuGetWeapon
+#undef TkMenuMainActiveMenu
 
 typedef struct {
     u16 h0;
@@ -218,8 +220,302 @@ void func_0022C060(void)
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22B9F8", TkMn2ArmsRefreshArms);
 INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_22B9F8/rodata", jtbl_005718B0);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_22B9F8", TkMenuCtrlEquip);
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_22B9F8/rodata", jtbl_00571930);
+int TkMn2ArmsRefreshArms(int *);
+
+extern int D_00693AB8;
+extern char D_005718E0[];
+extern char D_005718F0[];
+extern char D_00571900[];
+extern char D_00571910[];
+extern char D_00571920[];
+int AtelCheckCallbackQue(int);
+void func_002377C8(void);
+int TkMenuMainHelp(int);
+void TkMenuSetHelpMessage(int);
+int func_00242818(void);
+int func_002429D0(void);
+void func_002429F0(void);
+void func_00242980(void);
+int func_002277C0(int);
+void TkMenuSetHP(int, int);
+void TkMenuSetMP(int, int);
+Task *TOMenuGetYesNoWindow(void);
+void TOMenuCloseYesNoWindow(void);
+void TkMsSetSaveParamAll(void);
+void AtelRegistCallbackQue2(int, int (*)(int *), void *);
+void TkMenuMainSleepMenu(int);
+void TkMenuMainActiveMenu(int, int);
+
+void TkMenuCtrlEquip(Task *t)
+{
+    int pad0;
+    int padTrg;
+    int padRep;
+    int *stp;
+    int st;
+
+    pad0 = func_00220318();
+    padRep = TOMenuGetControlPadRep();
+    padTrg = TOMenuGetControlPadTrg();
+    func_00225500(0, &D_003258C8, &D_003258CC, &D_003258D0, &D_003258D4);
+    D_00693AA0 += D_00693AA4;
+    if (D_00693AA0 > 0x1000) {
+        D_00693AA0 = 0x1000;
+    }
+    if (D_00693AA0 < 0) {
+        D_00693AA0 = 0;
+    }
+    st = t->x1C;
+    stp = &t->x1C;
+again:
+    switch (st) {
+    case 0:
+        if (D_00693AB4 != 0) {
+            D_00693AC0 = TkMenuGetArmor(TkMenuGetCurrentPlayer());
+        } else {
+            D_00693AC0 = TkMenuGetWeapon(TkMenuGetCurrentPlayer());
+        }
+        st = 1;
+        goto again;
+    case 1:
+        if (D_00693AA0 < 0x1000) {
+            break;
+        }
+        *stp = 2;
+        break;
+    case 2:
+        if (AtelCheckCallbackQue(0) != 0) {
+            break;
+        }
+        *stp = 3;
+        st = 3;
+        goto again;
+    case 4:
+        func_002377C8();
+        /* fallthrough */
+    case 3:
+        *stp = 5;
+        break;
+    case 5:
+        *stp = 6;
+        break;
+    case 7:
+        TkMenuSetHelpMessage(TkMenuMainHelp(2));
+        /* fallthrough */
+    case 6:
+        *stp = 8;
+        break;
+    case 8:
+        *stp = 9;
+        break;
+    case 9:
+        *stp = 10;
+        break;
+    case 10:
+        if (D_00693AB4 != 0) {
+            D_00693AC0 = TkMenuGetArmor(TkMenuGetCurrentPlayer());
+        } else {
+            D_00693AC0 = TkMenuGetWeapon(TkMenuGetCurrentPlayer());
+        }
+        if (padTrg & 0x40) {
+            PLAY_SE(0x80000004);
+            *stp = 13;
+            break;
+        }
+        if (padTrg & 0x20) {
+            PLAY_SE(0x80000001);
+            *stp = 11;
+            break;
+        }
+        if (padRep & 0x5000) {
+            PLAY_SE(0x80000001);
+            D_00693AB4 = (D_00693AB4 == 0);
+            break;
+        }
+        if (func_00242818() < 2) {
+            break;
+        }
+        if (func_002429D0() == 0) {
+            break;
+        }
+        if ((padRep & 4) && pad0 == 4) {
+            SndSepPlaySimple(0x80000004);
+            func_002429F0();
+            break;
+        }
+        if ((padRep & 8) && pad0 == 8) {
+            SndSepPlaySimple(0x80000004);
+            func_00242980();
+            break;
+        }
+        break;
+    case 11:
+        *stp = 12;
+        /* fallthrough */
+    case 12:
+        *stp = 15;
+        break;
+    case 13:
+        *stp = 14;
+        break;
+    case 14:
+        *stp = 28;
+        break;
+    case 15: {
+        int type = func_0022C050();
+        func_0022BF20(TkMenuGetCurrentPlayer(), type);
+        D_00693ABC = 1;
+        *stp = 17;
+        break;
+    }
+    case 16:
+        func_0022C008();
+        *stp = 17;
+        break;
+    case 17:
+        *stp = 18;
+        break;
+    case 18:
+        *stp = 19;
+        break;
+    case 19:
+        func_0022C060();
+        if (D_00693AA8->b45 > 0) {
+            *stp = 20;
+            break;
+        }
+        if (D_00693AA8->b45 < 0) {
+            *stp = 26;
+        }
+        break;
+    case 20: {
+        register int chr __asm__("$19") = TkMenuGetCurrentPlayer();
+        int type;
+        int item;
+        int flag;
+        int s_yes;
+        int s_no;
+        int s_msg;
+        SysEntry *e;
+
+        switch (D_00693AB4) {
+        case 0:
+            D_00693AB8 = TkMenuGetWeapon(chr);
+            break;
+        case 1:
+            D_00693AB8 = TkMenuGetArmor(chr);
+            break;
+        }
+        type = func_0022C050();
+        e = SYS_TBL;
+        e += D_00693AA8->x2C;
+        item = (e->h0 != 0) ? e->h0 : 0xFF;
+        MsEquipSaveWeapon(chr, type, item);
+        TkMsSetSaveParam(chr);
+        func_002EF240(D_005718E0, D_00693B30[chr]);
+        func_002EF240(D_005718F0, TkMenuGetHP(chr));
+        flag = 0;
+        if (D_00693B30[chr] > TkMenuGetHP(chr)) {
+            flag |= 1;
+        }
+        if (D_00693B50[chr] > TkMenuGetMP(chr)) {
+            flag |= 2;
+        }
+        func_002EF240(D_00571900, flag);
+        s_yes = func_002277C0(0x11);
+        s_no = func_002277C0(0x12);
+        switch (flag) {
+        case 1:
+            s_msg = func_002277C0(0xE);
+            break;
+        case 2:
+            s_msg = func_002277C0(0xF);
+            break;
+        case 3:
+            s_msg = func_002277C0(0x10);
+            break;
+        default:
+            st = 23;
+            goto again;
+        }
+        MsEquipSaveWeapon(chr, type, D_00693AB8);
+        TkMsSetSaveParam(chr);
+        TkMenuSetHP(chr, D_00693B30[chr]);
+        TkMenuSetMP(chr, D_00693B50[chr]);
+        func_00236940(s_msg, s_yes, s_no);
+        st = 21;
+        goto again;
+    }
+    case 21:
+        *stp = 22;
+        /* fallthrough */
+    case 22: {
+        Task *w = TOMenuGetYesNoWindow();
+        if (w != 0) {
+            if (w->b45 < 0) {
+                TOMenuCloseYesNoWindow();
+                st = 16;
+                goto again;
+            }
+            if (w->b45 != 0) {
+                int sel = w->x2C;
+                TOMenuCloseYesNoWindow();
+                switch (sel) {
+                case 0:
+                    st = 23;
+                    goto again;
+                case 1:
+                    st = 16;
+                    goto again;
+                }
+            }
+            break;
+        }
+        func_002EF240(D_00571910);
+        break;
+    }
+    case 23: {
+        int chr = TkMenuGetCurrentPlayer();
+        int type = func_0022C050();
+        SysEntry *e = SYS_TBL;
+        int item;
+        e += D_00693AA8->x2C;
+        item = (e->h0 != 0) ? e->h0 : 0xFF;
+        MsEquipSaveWeapon(chr, type, item);
+        TkMsSetSaveParam(chr);
+        D_00693B30[chr] = TkMenuGetHP(chr);
+        D_00693B50[chr] = TkMenuGetMP(chr);
+        st = 24;
+        goto again;
+    }
+    case 24:
+        SndSepPlaySimple(0x80000038);
+        func_0022C030();
+        *stp = 25;
+        break;
+    case 26:
+        func_0022C030();
+        *stp = 27;
+        break;
+    case 25:
+    case 27:
+        D_00693ABC = 0;
+        *stp = 7;
+        break;
+    case 28:
+        *stp = 29;
+        break;
+    case 29:
+        *stp = 30;
+        break;
+    case 30:
+        TkMsSetSaveParamAll();
+        AtelRegistCallbackQue2(0, TkMn2ArmsRefreshArms, D_00571920);
+        TkMenuMainSleepMenu(4);
+        TkMenuMainActiveMenu(1, 0);
+        break;
+    }
+}
 
 /* DEBT(CAST): integer-width views follow the existing shared interfaces. */
 void func_0022CC20(void)

@@ -142,6 +142,7 @@ piece piece_0056DEE8 0x56dee8
 jtbl jtbl_0056DF10 game/battle/ms_1A56F8 0x56df10
 jtbl jtbl_0056DF30 game/battle/ms_1A56F8 0x56df30
 piece piece_0056DF58 0x56df58
+piece piece_0056DF80 0x56df80
 jtbl jtbl_0056E000 game/battle/ms_1ACFD8 0x56e000
 piece piece_0056E020 0x56e020
 jtbl jtbl_0056E150 game/battle/ms_1ACFD8 0x56e150

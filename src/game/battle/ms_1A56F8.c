@@ -2168,8 +2168,162 @@ void func_001AB6D8(u32 idx, int mask, int a, int b, int c, float f1, int d, floa
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", func_001AB838);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DF30);
+typedef struct {
+    u8 mode;
+    u8 rnd;
+    u16 amp;
+    s16 timer;
+    s16 total;
+    float prev;
+    float fC;
+    float pos;
+    float vel;
+    float acc;
+    float f1C;
+    u8 steps;
+    u8 decay;
+    s16 h22;
+} ShakeParam;
+
+double func_002E7B28(double);
+
+void func_001AB838(ShakeParam *s, float *out, float t) {
+    int r;
+    float v;
+
+    if (s->mode == 0) {
+        return;
+    }
+    if (s->rnd != 0) {
+        int m = brnd(9) % s->rnd;
+        r = (s->rnd >> 1) - m;
+    } else {
+        r = 0;
+    }
+    switch (s->mode) {
+    case 1:
+        v = func_002E89C0(t) * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = (v * s->timer) / s->total;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    case 2:
+        v = func_002E89C0(t) * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = (v * (s->total - s->timer)) / s->total;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    case 3:
+        v = (func_002E89C0(t) + func_002E8648(t + 0.3)) * 0.5f * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = (v * s->timer) / s->total;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    case 4:
+        v = (func_002E89C0(t) + func_002E8648(t + 0.3)) * 0.5f * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = (v * (s->total - s->timer)) / s->total;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    case 5: {
+        int k = brnd(9) & 0xF;
+        v = (func_002E89C0(t) + func_002E8648(t + 0.1)) * 0.5f * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            if ((s->timer & 1) || k == 0) {
+                v = s->prev * 0.5f;
+            }
+            *out = (v * s->timer) / s->total;
+            s->prev = v;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    }
+    case 6: {
+        int k = brnd(9) & 0xF;
+        v = (func_002E89C0(t) + func_002E8648(t + 0.1)) * 0.5f * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            if ((s->timer & 1) || k == 0) {
+                v = s->prev * 0.5f;
+            }
+            *out = (v * (s->total - s->timer)) / s->total;
+            s->prev = v;
+            if (--s->timer < 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    }
+    case 7:
+        v = func_002E89C0(t) * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = v;
+            if (--s->timer < 0 && s->total > 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    case 8: {
+        double d = func_002E89C0(t);
+        v = (d + func_002E7B28(t + 0.1)) * 0.5f * s->amp * (r + 32) * 0.03125f;
+        if (s->total != 0) {
+            *out = v;
+            if (--s->timer < 0 && s->total > 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    }
+    case 9:
+        if (s->total != 0) {
+            int i;
+            for (i = 0; i < s->steps; i++) {
+                float a = s->acc;
+                s->pos += s->vel;
+                if (s->pos > 0.0) {
+                    a = -a;
+                }
+                s->vel += a;
+            }
+            v = s->pos;
+            switch (s->decay) {
+            case 1:
+                v = (v * s->timer) / s->total;
+                break;
+            case 2:
+                v = (v * (s->total - s->timer)) / s->total;
+                break;
+            }
+            *out = v;
+            if (--s->timer < 0 && s->total > 0) {
+                s->mode = 0;
+                *out = 0.0f;
+            }
+        }
+        break;
+    }
+}
 
 void func_001ABFD8(int h, int which) {
     int cur = func_001A6738(h);

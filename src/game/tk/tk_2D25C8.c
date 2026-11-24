@@ -290,7 +290,86 @@ s32 func_002D2C00(W10Pad *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     return var_12;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2C98);
+void func_002D2C98(W10Pad *p, u8 *buf, u16 buttons)
+{
+    u8 *src = buf + 4;
+    s32 rem = buf[1];
+    u32 type = (u32)rem >> 4;
+    s32 i;
+    u8 *dpad;
+
+    rem &= 0xF;
+    rem <<= 1;
+    rem -= 2;
+    if (rem == 0) {
+        rem = -1;
+    }
+    func_002D2AA0(p);
+    if (type != 5 && type != 7) {
+        return;
+    }
+    for (i = 0; rem > 0 && i < 4; i++) {
+        p->axes[i] = *src++;
+        rem--;
+    }
+    dpad = src;
+    src += 4;
+    if (rem > 0) {
+        for (i = 0; rem > 0 && i < 8; i++, src++) {
+            if ((buttons >> (u8)D_00561F10[i]) & 1) {
+                p->axes[i + 4] = *src;
+            }
+            rem--;
+        }
+    } else {
+        for (i = 0; i < 8; i++) {
+            if ((buttons >> (u8)D_00561F10[i]) & 1) {
+                p->axes[i + 4] = 0x3F;
+            }
+        }
+    }
+    if (rem > 0) {
+        if (buttons & 0x2000) {
+            int v = dpad[0];
+            p->axes[12] = (v >> 1) - 0x80;
+        }
+        if (buttons & 0x8000) {
+            int v = dpad[1];
+            p->axes[12] = 0x7F - (v >> 1);
+        }
+        if (buttons & 0x1000) {
+            int v = dpad[2];
+            p->axes[13] = 0x7F - (v >> 1);
+        }
+        if (buttons & 0x4000) {
+            int v = dpad[3];
+            p->axes[13] = (v >> 1) - 0x80;
+        }
+    } else {
+        if (buttons & 0x2000) {
+            p->axes[12] = 0xBF;
+        }
+        if (buttons & 0x8000) {
+            p->axes[12] = 0x40;
+        }
+        if (buttons & 0x1000) {
+            p->axes[13] = 0x40;
+        }
+        if (buttons & 0x4000) {
+            p->axes[13] = 0xBF;
+        }
+    }
+    if (p->axes[2] < 0x20) {
+        *(u16 *)(p->pad94 + 6) = (*(u16 *)(p->pad94 + 6) | 0x8000) & 0xDFFF;
+    } else if (p->axes[2] >= 0xE1) {
+        *(u16 *)(p->pad94 + 6) = (*(u16 *)(p->pad94 + 6) | 0x2000) & 0x7FFF;
+    }
+    if (p->axes[3] >= 0xE1) {
+        *(u16 *)(p->pad94 + 6) = (*(u16 *)(p->pad94 + 6) | 0x4000) & 0xEFFF;
+    } else if (p->axes[3] < 0x20) {
+        *(u16 *)(p->pad94 + 6) = (*(u16 *)(p->pad94 + 6) | 0x1000) & 0xBFFF;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/tk/tk_2D25C8", func_002D2F20);
 

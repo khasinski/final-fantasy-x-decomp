@@ -32,7 +32,23 @@ int func_002E0738(int cb)
     return old;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0790);
+void func_002E0790(volatile int *p)
+{
+    D_00566414 = *p;
+    D_00566418 = D_00566414;
+    if (D_00566414 == 0xB) {
+        D_00566414 = 0;
+        *(volatile int *)&D_005663F0 = 0;
+        return;
+    }
+    ((int (*)(int))func_002F8410)(*(volatile int *)&D_005663E8);
+    if (D_005663D4 != 0 && D_0078D600 != 0) {
+        ((int (*)(int))func_002F8410)(*(volatile int *)&D_005663E0);
+    } else {
+        *(volatile int *)&D_005663F0 = 0;
+    }
+    D_00566414 = 0;
+}
 
 void func_002E0830(void *arg)
 {

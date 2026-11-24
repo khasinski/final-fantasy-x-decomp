@@ -241,7 +241,71 @@ s32 func_001248B8(void)
     return D_00580E5C;
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tklib", func_001248C8);
+void func_001248C8(u8 *s)
+{
+    char name[0x200];
+    char tok[0x1000];
+    char *p = tok;
+    int col = 0;
+    int val1 = -1;
+    int val2 = 0;
+    int active = 1;
+
+    name[0] = '\0';
+    if (Sg_GetUserName() == 0) {
+        return;
+    }
+    while (1) {
+        u8 c = *s++;
+
+        if (c == '\t' || c == ' ' || c == '\r' || c == '\n' || c == 0x1A || c == '\0') {
+            if (p != tok) {
+                *p = '\0';
+                switch (col) {
+                case 0:
+                    func_002F072C(name, tok);
+                    break;
+                case 1:
+                    val1 = func_002ED098(tok);
+                    break;
+                case 2:
+                    val2 = func_002ED098(tok);
+                    break;
+                }
+                col++;
+            }
+            p = tok;
+            tok[0] = '\0';
+            if (c == '\r' || c == '\n' || c == 0x1A || c == '\0') {
+                if (active) {
+                    if (func_002F05E8(name, (const void *)Sg_GetUserName()) == 0) {
+                        if (val1 >= 0) {
+                            func_00124870(val1, val2);
+                        }
+                    }
+                }
+                active = 1;
+                val2 = 0;
+                val1 = -1;
+                col = 0;
+                p = tok;
+                if (c == 0x1A) {
+                    break;
+                }
+                if (c == '\0') {
+                    break;
+                }
+            }
+        } else {
+            if (c == '#') {
+                active = 0;
+            }
+            if (active) {
+                *p++ = c;
+            }
+        }
+    }
+}
 
 /* DEBT(CAST): existing handle-based prototypes require pointer conversions. */
 void func_00124A98(void)
@@ -899,4 +963,102 @@ void func_00125E38(void)
     func_00125E20();
 }
 
-INCLUDE_ASM("build/ee_asm/game/tk/tklib", func_00125E40);
+extern char D_0056A328[], D_0056A338[], D_0056A340[], D_0056A350[], D_0056A358[];
+extern char D_0056A370[], D_0056A380[], D_0056A390[], D_0056A398[], D_0056A3A0[], D_0056A3A8[], D_0056A3B8[];
+void func_20645E0(void);
+void func_002D8978(void);
+void func_002D2370(void);
+void TkInitMc(void);
+int func_00162DE0(void);
+void func_00165B08(void);
+void TOInit(void);
+void func_00145950(void);
+void func_00265E00(void);
+
+void func_00125E40(void)
+{
+    u8 *cfg;
+    void *cd;
+    int i;
+    int lang;
+
+    func_00124D70(0x20);
+    func_001255A8();
+    if (TkIsDebug() != 0) {
+        func_20645E0();
+        func_002D8978();
+    }
+    func_002D2370();
+    func_00125028();
+    func_002D39D8(0, 0);
+    func_002D39D8(1, 0);
+    TkInitMc();
+    func_002D3FF0(2);
+    func_002EF0D0(TkGetFFXCofingAdrs(), 0, 0x40);
+    {
+        u8 *c = TkGetFFXCofingAdrs();
+        u8 hdd = D_005661F4;
+
+        c[0xF] = 1;
+        c[0xE] = hdd;
+        c[0x10] = 1;
+        for (i = 0; i < 8; i++) {
+            c[0x11 + i] = 0;
+        }
+        c[0x11] |= 2;
+        c[0x13] |= 0x20;
+        c[0x17] |= 2;
+        c[0x14] |= 0xA;
+    }
+    {
+        u8 *c = TkGetFFXCofingAdrs();
+        ((void (*)(int))func_002D6030)((s8)c[0xD]);
+        D_005661F4 = c[0xE];
+    }
+    func_00125638();
+    func_00162DE0();
+    if (D_00576479 == 0) {
+        func_00165B08();
+    }
+    cd = GetCD();
+    cfg = TkGetFFXCofingAdrs();
+    (*(void (**)(int))((u8 *)cd + 0x7C))((s8)cfg[0xA]);
+    (*(void (**)(int))((u8 *)cd + 0x84))((s8)cfg[0xF]);
+    func_00125558(D_0056A328);
+    func_001254B8();
+    func_00125558(D_0056A338);
+    TOInit();
+    func_001254E0();
+    func_00125558(D_0056A340);
+    func_00145950();
+    func_00125558(D_0056A350);
+    func_00125DC8();
+    lang = FFXGetLang();
+    if (lang < 7) {
+        if (lang > 0) {
+            SsSetProjectBase(D_0056A358);
+        }
+    }
+    switch (func_002D9868()) {
+    case 0:
+        func_002D63D8(0);
+        break;
+    case 1:
+        func_002D63D8(1);
+        break;
+    }
+    func_00125558(D_0056A370);
+    WMainProc();
+    func_00125558(D_0056A380);
+    func_00125560();
+    func_00125558(D_0056A390);
+    TkRefreshHDDMode();
+    func_00125558(D_0056A398);
+    func_00125E38();
+    func_00125558(D_0056A3A0);
+    func_00265E00();
+    func_00125558(D_0056A3A8);
+    func_00242050();
+    func_00124440();
+    func_00125558(D_0056A3B8);
+}

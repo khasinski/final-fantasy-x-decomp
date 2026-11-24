@@ -301,9 +301,75 @@ int func_002DA578(void)
 
 INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA610);
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DA928);
+extern char D_00576680[];
 
-INCLUDE_RODATA("build/ee_asm/sdk/libgraph/libgraph/rodata", jtbl_005766B0);
+typedef struct {
+    GsGifTag giftag1;
+    unsigned long bitbltbuf;
+    unsigned long bitbltbufaddr;
+    unsigned long trxpos;
+    unsigned long trxposaddr;
+    unsigned long trxreg;
+    unsigned long trxregaddr;
+    unsigned long trxdir;
+    unsigned long trxdiraddr;
+    GsGifTag giftag2;
+} GsLoadImage;
+
+int func_002DA928(GsLoadImage *p, s16 dbp, s16 dbw, s16 dpsm, s16 x, s16 y, s16 w, s16 h)
+{
+    int qwc = 0;
+
+    switch (dpsm) {
+    case 0x00:
+    case 0x30:
+        qwc = (w * h) >> 2;
+        break;
+    case 0x01:
+    case 0x31:
+        qwc = (w * h * 3) >> 4;
+        break;
+    case 0x02:
+    case 0x0A:
+    case 0x32:
+    case 0x3A:
+        qwc = (w * h) >> 3;
+        break;
+    case 0x13:
+    case 0x1B:
+        qwc = (w * h) >> 4;
+        break;
+    case 0x14:
+    case 0x24:
+    case 0x2C:
+        qwc = (w * h) >> 5;
+        break;
+    default:
+        break;
+    }
+    if (qwc > 0x7FFF) {
+        func_002EF240(D_00576680);
+        return 0;
+    }
+    *(u_long128 *)&p->giftag1 = 0;
+    p->giftag1.NLOOP = 4;
+    p->giftag1.NREG = 1;
+    p->giftag1.REGS0 = 0xE;
+    p->bitbltbuf = ((unsigned long)dbp << 32) | ((unsigned long)dbw << 48) | ((unsigned long)dpsm << 56);
+    p->bitbltbufaddr = 0x50;
+    p->trxpos = ((unsigned long)x << 32) | ((unsigned long)y << 48);
+    p->trxposaddr = 0x51;
+    p->trxreg = ((unsigned long)w) | ((unsigned long)h << 32);
+    p->trxregaddr = 0x52;
+    p->trxdir = 0;
+    p->trxdiraddr = 0x53;
+    *(u_long128 *)&p->giftag2 = 0;
+    p->giftag2.NLOOP = qwc;
+    p->giftag2.EOP = 1;
+    p->giftag2.FLG = 2;
+    SYNC();
+    return 6;
+}
 
 typedef struct {
     u32 vifcode[4];
@@ -380,8 +446,278 @@ int func_002DAC50(void *packet, void *src)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libgraph/libgraph", func_002DADD0);
-INCLUDE_RODATA("build/ee_asm/sdk/libgraph/libgraph/rodata", jtbl_005768C0);
+extern char D_005767E0[];
+extern char D_00576818[];
+extern char D_00576848[];
+extern char D_00576888[];
+extern u_long128 D_00566240;
+unsigned long func_002F8700(void);
+unsigned long _libgraph_func_002F8720(unsigned long mask) __asm__("func_002F8720");
+
+int func_002DADD0(GsStoreImage *sp, u_long128 *dstaddr)
+{
+    union {
+        u_long128 q;
+        u8 b[16];
+    } tmp;
+    unsigned int timeout = 0;
+    int dma_qwc = 0;
+    int rem_qwc = 0;
+    int rem_bytes = 0;
+    int pad_qwc = 0;
+    int i;
+    int h_aligned = 0;
+    int w = (int)(sp->trxreg & 0xFFF);
+    int psm = (int)((sp->bitbltbuf >> 24) & 0x3F);
+    int h = (int)((sp->trxreg >> 32) & 0xFFF);
+    int bytes;
+    unsigned long old_imr;
+
+    switch (psm) {
+    case 0x00:
+    case 0x30:
+        bytes = w * h * 4;
+        rem_bytes = bytes & 0xF;
+        dma_qwc = (bytes >> 4) & 0xFFFFFFF8UL;
+        rem_qwc = (bytes >> 4) & 7;
+        if (rem_bytes == 0) {
+            h_aligned = h;
+            pad_qwc = 0;
+        } else {
+            register int hv __asm__("$2") = h + 3;
+            register int m __asm__("$3");
+            register int q __asm__("$2");
+            h_aligned = hv & 0x1FFC;
+            m = w * h_aligned;
+            __asm__("" : "+r"(m));
+            q = m >> 2;
+            pad_qwc = q - dma_qwc - rem_qwc - 1;
+        }
+        break;
+    case 0x01:
+    case 0x31:
+        bytes = w * h * 3;
+        rem_bytes = bytes & 0xF;
+        dma_qwc = (bytes >> 4) & 0xFFFFFFF8UL;
+        rem_qwc = (bytes >> 4) & 7;
+        if (rem_bytes == 0) {
+            h_aligned = h;
+            pad_qwc = 0;
+        } else {
+            register int m __asm__("$3");
+            register int p3 __asm__("$2");
+            register int t __asm__("$3");
+            h_aligned = (h + 15) & 0x1FF0;
+            m = w * h_aligned;
+            __asm__("" : "+r"(m));
+            p3 = (m * 3) >> 4;
+            t = p3 - dma_qwc;
+            pad_qwc = t - rem_qwc - 1;
+        }
+        break;
+    case 0x02:
+    case 0x0A:
+    case 0x32:
+    case 0x3A:
+        bytes = w * h * 2;
+        rem_bytes = bytes & 0xF;
+        dma_qwc = (bytes >> 4) & 0xFFFFFFF8UL;
+        __asm__("" : : "r"(dma_qwc));
+        rem_qwc = (bytes >> 4) & 7;
+        if (rem_bytes == 0) {
+            h_aligned = h;
+            pad_qwc = 0;
+        } else {
+            register int hv __asm__("$2") = h + 7;
+            register int m __asm__("$3");
+            register int q __asm__("$2");
+            h_aligned = hv & 0xFFFFFFF8UL;
+            m = w * h_aligned;
+            __asm__("" : "+r"(m));
+            q = m >> 3;
+            pad_qwc = q - dma_qwc - rem_qwc - 1;
+        }
+        break;
+    case 0x13:
+    case 0x1B:
+        bytes = w * h;
+        rem_bytes = bytes & 0xF;
+        dma_qwc = (bytes >> 4) & 0xFFFFFFF8UL;
+        __asm__("" : : "r"(dma_qwc));
+        rem_qwc = (bytes >> 4) & 7;
+        if (rem_bytes == 0) {
+            h_aligned = h;
+            pad_qwc = 0;
+        } else {
+            register int hv __asm__("$2") = h + 7;
+            register int m __asm__("$3");
+            register int q __asm__("$2");
+            h_aligned = hv & 0xFFFFFFF8UL;
+            m = w * h_aligned;
+            __asm__("" : "+r"(m));
+            q = m >> 4;
+            pad_qwc = q - dma_qwc - rem_qwc - 1;
+        }
+        break;
+    case 0x14:
+    case 0x24:
+    case 0x2C:
+        {
+            int pix = w * h;
+            bytes = pix >> 1;
+            rem_bytes = bytes & 0xF;
+            dma_qwc = (pix >> 5) & 0xFFFFFFF8UL;
+            __asm__("" : : "r"(dma_qwc));
+            rem_qwc = (pix >> 5) & 7;
+            if (rem_bytes == 0) {
+                h_aligned = h;
+                pad_qwc = 0;
+            } else {
+                register int hv __asm__("$2") = h + 7;
+                register int m __asm__("$3");
+                register int q __asm__("$2");
+                h_aligned = hv & 0xFFFFFFF8UL;
+                m = w * h_aligned;
+                __asm__("" : "+r"(m));
+                q = m >> 5;
+                pad_qwc = q - dma_qwc - rem_qwc - 1;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+
+    __asm__("" : : "r"(rem_qwc));
+    __asm__("" : : "r"(rem_qwc));
+    __asm__("" : : "r"(rem_qwc));
+    __asm__("" : : "r"(rem_qwc));
+
+    if (rem_bytes != 0) {
+        *(volatile unsigned long *)(((u32)&sp->trxreg) | 0x20000000) =
+            (unsigned long)(int)(sp->trxreg & 0xFFF) | ((unsigned long)h_aligned << 32);
+    }
+
+    while (*(volatile u32 *)0x10009000 & 0x100) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_005767E0);
+            return -1;
+        }
+    }
+
+    old_imr = _libgraph_func_002F8720(func_002F8700() | 0x200);
+    *(volatile unsigned long *)0x12001000 = 2;
+    *(volatile u32 *)0x10009020 = 7;
+    if (((u32)sp & 0x70000000) == 0x70000000) {
+        *(volatile u32 *)0x10009010 = ((u32)sp & 0x0FFFFFFF) | 0x80000000;
+    } else {
+        *(volatile u32 *)0x10009010 = (u32)sp & 0x0FFFFFFF;
+    }
+    *(volatile u32 *)0x10009000 = 0x101;
+
+    while (*(volatile u32 *)0x10009000 & 0x100) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_005767E0);
+            return -1;
+        }
+    }
+
+    while ((*(volatile unsigned long *)0x12001000 & 2) == 0) {
+        if (timeout++ > 0x1000000U) {
+            func_002EF240(D_00576818);
+            *(volatile u_long128 *)0x10005000 = D_00566240;
+            return -1;
+        }
+    }
+
+    *(volatile u32 *)0x10003C00 = 0x800000;
+    *(volatile unsigned long *)0x12001040 = 1;
+
+    if (dma_qwc != 0) {
+        *(volatile u32 *)0x10009020 = dma_qwc;
+        if (((u32)dstaddr & 0x70000000) == 0x70000000) {
+            *(volatile u32 *)0x10009010 = ((u32)dstaddr & 0x0FFFFFFF) | 0x80000000;
+        } else {
+            *(volatile u32 *)0x10009010 = (u32)dstaddr & 0x0FFFFFFF;
+        }
+        *(volatile u32 *)0x10009000 = 0x100;
+        while (*(volatile u32 *)0x10009000 & 0x100) {
+            if (timeout++ > 0x1000000U) {
+                func_002EF240(D_00576848);
+                *(volatile unsigned long *)0x12001000 = 0x100;
+                *(volatile unsigned long *)0x12001040 = 0;
+                *(volatile u32 *)0x10003000 = 1;
+                *(volatile u32 *)0x10003C10 = 1;
+                return -1;
+            }
+        }
+    }
+
+    h_aligned = 0;
+    if (rem_qwc != 0) {
+        do {
+            while ((*(volatile u32 *)0x10003C00 & 0x1F000000) == 0) {
+                if (timeout++ > 0x1000000U) {
+                    func_002EF240(D_00576888);
+                    *(volatile unsigned long *)0x12001000 = 0x100;
+                    *(volatile unsigned long *)0x12001040 = 0;
+                    *(volatile u32 *)0x10003000 = 1;
+                    *(volatile u32 *)0x10003C10 = 1;
+                    return -1;
+                }
+            }
+            dstaddr[dma_qwc + h_aligned] = *(volatile u_long128 *)0x10005000;
+            h_aligned++;
+        } while (h_aligned < rem_qwc);
+    }
+
+    if (rem_bytes != 0) {
+        while ((*(volatile u32 *)0x10003C00 & 0x1F000000) == 0) {
+            if (timeout++ > 0x1000000U) {
+                func_002EF240(D_00576888);
+                *(volatile unsigned long *)0x12001000 = 0x100;
+                *(volatile unsigned long *)0x12001040 = 0;
+                *(volatile u32 *)0x10003000 = 1;
+                *(volatile u32 *)0x10003C10 = 1;
+                return -1;
+            }
+        }
+        tmp.q = *(volatile u_long128 *)0x10005000;
+        for (h_aligned = 0; h_aligned < rem_bytes; h_aligned++) {
+            ((u8 *)&dstaddr[dma_qwc + rem_qwc])[h_aligned] = tmp.b[h_aligned];
+        }
+        for (h_aligned = 0; h_aligned < pad_qwc; h_aligned++) {
+            while ((*(volatile u32 *)0x10003C00 & 0x1F000000) == 0) {
+                if (timeout++ > 0x1000000U) {
+                    func_002EF240(D_00576888);
+                    *(volatile unsigned long *)0x12001000 = 0x100;
+                    *(volatile unsigned long *)0x12001040 = 0;
+                    *(volatile u32 *)0x10003000 = 1;
+                    *(volatile u32 *)0x10003C10 = 1;
+                    return -1;
+                }
+            }
+            tmp.q = *(volatile u_long128 *)0x10005000;
+        }
+    }
+
+    *(volatile u32 *)0x10003C00 = 0;
+    {
+        unsigned long *busdir = (unsigned long *)0x12001040;
+        register unsigned long a0 __asm__("$4");
+        __asm__("" : "+r"(busdir));
+        a0 = old_imr;
+        __asm__ volatile("" : "+r"(a0));
+        *busdir = 0;
+        _libgraph_func_002F8720(a0);
+    }
+    {
+        u_long128 flush = D_00566240;
+        *(volatile unsigned long *)0x12001000 = 2;
+        *(volatile u_long128 *)0x10005000 = flush;
+    }
+    return 0;
+}
 
 int func_002DB460(unsigned long *p, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm)
 {

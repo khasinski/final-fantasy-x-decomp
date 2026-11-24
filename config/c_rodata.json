@@ -26,5 +26,17 @@
     "symbols": {
       "D_0056DE08": 0
     }
+  },
+  "game/battle/ms_1A56F8": {
+    "piece": "piece_0056DF58",
+    "address": 5693272,
+    "size": 40,
+    "symbols": {
+      "D_0056DF58": 0,
+      "D_0056DF60": 8,
+      "D_0056DF68": 16,
+      "D_0056DF70": 24,
+      "D_0056DF78": 32
+    }
   }
 }

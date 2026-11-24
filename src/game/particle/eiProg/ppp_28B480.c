@@ -650,7 +650,67 @@ void func_0028C9C8(char *base, ScriptCtx *ctx) {
     w->w4 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", pppKeHmgEff);
+typedef struct {
+    s32 id;
+    float f4;
+    u32 idx;
+    s32 ofs;
+} HmgMsg;
+
+typedef struct {
+    float f0;
+    void *p4;
+} HmgWk;
+
+typedef union {
+    float f[4];
+    u64 d[2];
+} Vec4U;
+
+void func_002DCEC8(void *dst, void *src);
+void func_002DCFF8(void *dst, void *a, void *b, float t);
+int func_00282628(void);
+void func_00282830(void *dst, void *a, void *b);
+
+void pppKeHmgEff(ScriptWork *base, void *m, ScriptCtx *ctx)
+{
+    Vec4U v0;
+    Vec4U v10;
+    Vec4U v20;
+    HmgMsg *msg = m;
+    HmgWk *w = SLOT_WORK(HmgWk, base, ctx, 2);
+
+    if (base->owner == msg->id) {
+        w->f0 = msg->f4;
+        if (msg->idx != 0xFFFFFFFF) {
+            w->p4 = ppvMng->p3C[msg->idx].base + (msg->ofs + 0xA0);
+        } else {
+            w->p4 = D_006EA450;
+        }
+        if (base->owner == 0) {
+            return;
+        }
+    }
+    if (D_006A3BC4 == 0 && w->p4 != D_006EA450) {
+        void *p0 = SLOT_WORK(void, base, ctx, 0);
+        void *p1 = SLOT_WORK(void, base, ctx, 1);
+        float len;
+
+        func_002DD038(&v0, w->p4, p0);
+        func_002DCEC8(&v0, &v0);
+        func_002DD0B0(&v20, p1);
+        len = KeVu0VecLen(&v20);
+        func_002DCEC8(&v20, &v20);
+        func_002DD020(&v10, &v20, &v0);
+        if (v10.d[0] == 0 && v10.d[1] == 0) {
+            v0.f[func_00282628() % 3] += 0.05f;
+        }
+        func_002DCFF8(&v0, &v0, &v20, w->f0);
+        func_002DCEC8(&v0, &v0);
+        func_002DD068(&v0, &v0, len);
+        func_00282798(p1, &v0);
+    }
+}
 
 void func_0028CBA8(void) {
 }
@@ -672,7 +732,52 @@ void func_0028CC00(char *base, ScriptCtx *ctx) {
     w->w8 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", func_0028CC18);
+typedef struct {
+    s32 id;
+    u32 idx;
+    s32 ofs;
+} PullMsg;
+
+typedef struct {
+    R6FPPtr *p0;
+} PullWk;
+
+void func_0028CC18(ScriptWork *base, void *m, ScriptCtx *ctx)
+{
+    Vec4U v0;
+    PullMsg *msg = m;
+    register ScriptWork *b __asm__("$7") = base;
+    register s32 *slot __asm__("$8") = ctx->info->slot;
+    PullWk *wk = (PullWk *)((u8 *)b + (slot[2] + 0xA0));
+    s32 owner = b->owner;
+
+    if (owner == msg->id) {
+        if (msg->idx != 0xFFFFFFFF) {
+            wk->p0 = (R6FPPtr *)(ppvMng->p3C[msg->idx].base + (msg->ofs + 0xA0));
+        } else {
+            wk->p0 = (R6FPPtr *)D_006EA450;
+        }
+        if (owner == 0) {
+            return;
+        }
+    }
+    if (D_006A3BC4 == 0) {
+        R6FPPtr *tgt = wk->p0;
+        if (tgt != (R6FPPtr *)D_006EA450) {
+            void *p0 = (u8 *)b + (slot[0] + 0xA0);
+            void *p1 = (u8 *)b + (slot[1] + 0xA0);
+            float len;
+
+            func_002DD038(&v0, tgt->p8, p0);
+            len = KeVu0VecLen(&v0);
+            func_002DCEC8(&v0, &v0);
+            if (len < tgt->f0) {
+                func_002DD068(&v0, &v0, (1.0f - len / tgt->f0) * tgt->f4);
+                func_00282830(p1, p1, &v0);
+            }
+        }
+    }
+}
 
 void func_0028CD58(void) {
 }

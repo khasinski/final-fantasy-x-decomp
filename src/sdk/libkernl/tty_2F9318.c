@@ -267,8 +267,226 @@ INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9CE8);
 
 INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9D78);
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F9EE0);
-INCLUDE_RODATA("build/ee_asm/sdk/libkernl/tty/rodata", jtbl_00578BC0);
+void func_002F9D78(double);
+long func_002E9C38(long, long);
+long func_002EA5C8(long, long);
+unsigned long func_002EAC90(unsigned long, unsigned long);
+unsigned long func_002EB260(unsigned long, unsigned long);
+
+int func_002F9EE0(const char *fmt, void *ap_arg)
+{
+    char *ap = (char *)ap_arg;
+    char buf[32];
+    char *pad;
+    char *p;
+    int mod;
+    int n;
+    long v;
+    unsigned long uv;
+
+    while (*fmt != '\0') {
+        pad = 0;
+        mod = 0;
+        if (*fmt == '%') {
+        again:
+            switch (*++fmt) {
+            case '0': {
+                int c2;
+                n = fmt[1] - '0';
+                c2 = fmt[2];
+                if ((u8)n < 10) {
+                    if ((u32)(c2 - '0') < 10) {
+                        n = n * 10 + (c2 - '0');
+                        if (n > 31) {
+                            n = 31;
+                        }
+                        fmt += 2;
+                    } else {
+                        fmt += 1;
+                    }
+                    {
+                        char *end = &buf[31];
+                        pad = end - n;
+                    }
+                    while (n > 0) {
+                        buf[31 - n] = '0';
+                        n--;
+                    }
+                }
+                goto again;
+            }
+            case 'l':
+                mod = 'l';
+                goto again;
+            case 'h':
+                mod = 'h';
+                goto again;
+            case 'o':
+                if (mod == 'l') {
+                    ap += 8;
+                    uv = *(unsigned long *)(ap - 8);
+                } else if (mod == 'h') {
+                    ap += 8;
+                    uv = *(unsigned short *)(ap - 8);
+                } else {
+                    ap += 8;
+                    uv = *(unsigned int *)(ap - 8);
+                }
+                p = &buf[31];
+                *p = '\0';
+                if (uv == 0) {
+                    *--p = '0';
+                } else {
+                    while (uv != 0) {
+                        *--p = (uv & 7) + '0';
+                        uv >>= 3;
+                    }
+                }
+                if (pad != 0 && pad < p) {
+                    p = pad;
+                }
+                while (*p != '\0') {
+                    ((void (*)(int))D_00568DE8)(*p++);
+                }
+                break;
+            case 'x':
+                if (mod == 'l') {
+                    ap += 8;
+                    uv = *(unsigned long *)(ap - 8);
+                } else if (mod == 'h') {
+                    ap += 8;
+                    uv = *(unsigned short *)(ap - 8);
+                } else {
+                    ap += 8;
+                    uv = *(unsigned int *)(ap - 8);
+                }
+                p = &buf[31];
+                *p = '\0';
+                if (uv == 0) {
+                    *--p = '0';
+                } else {
+                    while (uv != 0) {
+                        unsigned long d = uv & 0xF;
+                        if (d < 10) {
+                            *--p = d + '0';
+                        } else {
+                            *--p = d + 0x57;
+                        }
+                        uv >>= 4;
+                    }
+                }
+                if (pad != 0 && pad < p) {
+                    p = pad;
+                }
+                while (*p != '\0') {
+                    ((void (*)(int))D_00568DE8)(*p++);
+                }
+                break;
+            case 'd':
+                if (mod == 'l') {
+                    ap += 8;
+                    v = *(long *)(ap - 8);
+                } else if (mod == 'h') {
+                    ap += 8;
+                    v = *(short *)(ap - 8);
+                } else {
+                    ap += 8;
+                    v = *(int *)(ap - 8);
+                }
+                p = &buf[31];
+                *p = '\0';
+                if (v == 0) {
+                    *--p = '0';
+                } else {
+                    if (v < 0) {
+                        v = -v;
+                        ((void (*)(int))D_00568DE8)('-');
+                    }
+                    while (v != 0) {
+                        *--p = func_002EA5C8(v, 10) + '0';
+                        v = func_002E9C38(v, 10);
+                    }
+                }
+                if (pad != 0 && pad < p) {
+                    p = pad;
+                }
+                while (*p != '\0') {
+                    ((void (*)(int))D_00568DE8)(*p++);
+                }
+                break;
+            case 'u':
+                if (mod == 'l') {
+                    ap += 8;
+                    uv = *(unsigned long *)(ap - 8);
+                } else if (mod == 'h') {
+                    ap += 8;
+                    uv = *(unsigned short *)(ap - 8);
+                } else {
+                    ap += 8;
+                    uv = *(unsigned int *)(ap - 8);
+                }
+                p = &buf[31];
+                *p = '\0';
+                if (uv == 0) {
+                    *--p = '0';
+                } else {
+                    while (uv != 0) {
+                        *--p = func_002EB260(uv, 10) + '0';
+                        uv = func_002EAC90(uv, 10);
+                    }
+                }
+                if (pad != 0 && pad < p) {
+                    p = pad;
+                }
+                while (*p != '\0') {
+                    ((void (*)(int))D_00568DE8)(*p++);
+                }
+                break;
+            case 'e':
+            case 'f': {
+                float fv;
+                ap += 8;
+                fv = *(float *)(ap - 8);
+                if (fv == 0.0f) {
+                    ((void (*)(int))D_00568DE8)('0');
+                } else {
+                    func_002F9D78((double)fv);
+                }
+                break;
+            }
+            case 's': {
+                char *sp;
+                ap += 8;
+                sp = *(char **)(ap - 8);
+                if (*sp == '\0') {
+                    ((void (*)(int))D_00568DE8)('(');
+                    ((void (*)(int))D_00568DE8)('n');
+                    ((void (*)(int))D_00568DE8)('u');
+                    ((void (*)(int))D_00568DE8)('l');
+                    ((void (*)(int))D_00568DE8)('l');
+                    ((void (*)(int))D_00568DE8)(')');
+                } else {
+                    p = sp;
+                    do {
+                        ((void (*)(int))D_00568DE8)(*p++);
+                    } while (*p != '\0');
+                }
+                break;
+            }
+            case 'c':
+                ap += 8;
+                v = *(signed char *)(ap - 8);
+                ((void (*)(int))D_00568DE8)((int)v);
+                break;
+            default:
+                break;
+            }
+        } else {
+            ((void (*)(int))D_00568DE8)(*fmt);
+        }
+        fmt++;
+    }
+}
 
 /* Module: EE kernel/syscall wrapper library, SIO, misc libc */
 

@@ -240,7 +240,156 @@ Rec12C *Ch_BlkGetHandleFast(s32 id)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", Ch_BlkGetHandle);
+typedef struct {
+    s32 id;
+    u8 pad04[0x2C];
+    char s30[0x50];
+} ChrDbEnt;
+
+extern char D_00569200[];
+extern char D_00569220[];
+extern char D_00569228[];
+extern char D_00569238[];
+extern char D_00569248[];
+extern char D_00569260[];
+extern char D_00569270[];
+extern char D_00569280[];
+extern ChrDbEnt *_db_D_0057CD48[] __asm__("D_0057CD48");
+extern s32 D_0057CD68[];
+extern s8 ffx_debugmode;
+
+void func_0011C348(s32 a);
+void Ch_TexDataMapping(s32 a);
+void Chb_AttachMotionTBL_OLD(Rec12C *r);
+char *ch_create_name(s32 id);
+char *ch_create_section(s32 id);
+s32 Cache_Exist3(s32 a, s32 id);
+void Ch_DataRead(s32 id);
+void func_00113480(s32 a);
+s32 Cache_CheckYet(s32 a, s32 id);
+
+Rec12C *Ch_BlkGetHandle(s32 id)
+{
+    char buf0[0x100];
+    char buf1[0x40];
+    Rec12C *r;
+    s32 p;
+    s32 tex;
+    char *name;
+    char *sec;
+    char *tag;
+
+    r = Ch_BlkGetHandleFast(id);
+    if (r != 0) {
+        return r;
+    }
+    {
+        register ChrDbEnt *found __asm__("$11") = 0;
+        if ((id & 0xF000) == 0xF000) {
+        register s32 idx __asm__("$9") = id & 0xFFF;
+        register char *fmt __asm__("$5");
+        register char *arg2 __asm__("$6");
+        register char *arg3 __asm__("$7");
+        register s32 off __asm__("$4");
+        off = idx * 12;
+        name = *(char **)((u8 *)D_0057CD90 + off);
+        sec = D_0057CD90[idx * 3 + 2];
+        func_002F0008(buf1, D_00569200, sec, name);
+        tag = D_00569220;
+        func_002F0008(buf0, D_00569228, buf1, name);
+        p = Sg_PcRead(buf0);
+        if (p != 0) {
+            r = func_00101210(id, p);
+            *(char **)((u8 *)r + 0xB4) = tag;
+            r->w70 |= 2;
+            func_002F0008(buf0, D_00569238, buf1, name);
+            func_0011C348(0x80);
+            tex = Sg_PcRead(buf0);
+            if (tex != 0) {
+                register s32 f __asm__("$3");
+                func_0011BB08((void *)tex, buf0, -1);
+                Ch_TexDataMapping(tex);
+                f = r->w70;
+                r->w14 = tex;
+                r->w70 = f | 4;
+            }
+            func_002F072C((char *)r + 0xB8, buf1);
+            func_002F072C((char *)r + 0x71, name);
+            func_002F072C((char *)r + 0x91, sec);
+            fmt = D_00569248;
+            arg2 = (char *)r + 0x91;
+            arg3 = (char *)r + 0x71;
+        } else {
+            func_002F0008(buf0, D_00569260, buf1, name);
+            p = Sg_PcRead(buf0);
+            if (p == 0) {
+                return 0;
+            }
+            func_0011BB08((void *)p, buf0, -1);
+            func_002F0008(buf0, D_00569238, buf1, name);
+            func_0011C348(0x80);
+            tex = Sg_PcRead(buf0);
+            func_0011BB08((void *)tex, buf0, -1);
+            Ch_TexDataMapping(tex);
+            r = func_00101368(id, p, tex);
+            *(char **)((u8 *)r + 0xB4) = tag;
+            func_002F072C((char *)r + 0xB8, buf1);
+            func_002F072C((char *)r + 0x71, name);
+            func_002F072C((char *)r + 0x91, sec);
+            Chb_AttachMotionTBL_OLD(r);
+            fmt = D_00569270;
+            arg2 = sec;
+            arg3 = name;
+        }
+        func_002F0008(buf0, fmt, arg2, arg3);
+        func_0011BB08((void *)p, buf0, -1);
+        return r;
+    } else {
+        if (ffx_debugmode != 0) {
+            s32 grp = id >> 12;
+            register s32 sub __asm__("$9") = id & 0xFFF;
+            s32 i;
+            for (i = 0; i < D_0057CD68[grp]; i++) {
+                if (_db_D_0057CD48[grp][i].id == sub) {
+                    found = &_db_D_0057CD48[grp][i];
+                }
+            }
+            if (found == 0) {
+                return 0;
+            }
+            tag = found->s30;
+        } else {
+            tag = D_00568F00;
+        }
+        name = ch_create_name(id);
+        sec = ch_create_section(id);
+        p = Cache_Exist3(1, id);
+        if (p == 0) {
+            Ch_DataRead(id);
+            func_00113480(0);
+            p = Cache_Exist3(1, id);
+            if (p == 0) {
+                return 0;
+            }
+        }
+        if (Cache_CheckYet(1, id) == 1) {
+            func_00113480(0);
+        }
+        Cache_Use(1, id);
+        r = func_00101210(id, p);
+        *(char **)((u8 *)r + 0xB4) = tag;
+        if (ffx_debugmode != 0) {
+            func_002F0008(buf1, D_00569280, sec, name);
+            func_002F072C((char *)r + 0xB8, buf1);
+        } else {
+            *((u8 *)r + 0xB8) = D_00568F00[0];
+        }
+        func_002F072C((char *)r + 0x71, ch_create_name(id));
+        func_002F072C((char *)r + 0x91, ch_create_section(id));
+        return r;
+    }
+    }
+}
 
 u8 *func_00101B70(Chr *chr)
 {

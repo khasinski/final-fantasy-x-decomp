@@ -1313,7 +1313,110 @@ int func_001C5A80(int a, int b) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C5B10);
+int func_001C5B10(int a0, int a1, int a2, int a3, int a4, int a5, int *a6, int *a7, int *a8, OfsTbl *a9, int a10, int a11, int a12, int a13, int *a14)
+{
+    int i;
+    int max_val;
+    int max_idx;
+    int min_idx;
+    int min_val;
+    int low2;
+    int ret;
+    s8 f107;
+    BtlChr *chr;
+
+    if (a7[4] == 0) {
+        if (a7[6] != 0) {
+            a14[1]++;
+        } else if (a7[5] != 0) {
+            a14[0]++;
+        }
+    }
+    low2 = a12 & 3;
+    max_idx = -1;
+    min_idx = -1;
+    max_val = 0;
+    min_val = 0;
+    for (i = 0; i < 2; i++) {
+        int val = a6[i];
+        if (max_idx < 0 || max_val < val) {
+            max_idx = i;
+            max_val = val;
+        }
+        if (min_idx < 0 || val < min_val) {
+            min_val = val;
+            min_idx = i;
+        }
+    }
+    ret = 0;
+    chr = MsGetChr(a1);
+    f107 = *((s8 *)chr + 0x107);
+    if (max_val > 0) {
+        int denom;
+        int flag;
+        int unused;
+
+        switch (max_idx) {
+        case 1:
+            denom = MsGetRamChrMPmax(a1);
+            break;
+        case 2:
+            denom = func_001BB2B0(a1);
+            break;
+        default:
+            denom = MsGetRamChrHPmax(a1);
+            break;
+        }
+        flag = 0;
+        if (denom == 0) {
+            denom = 1;
+        }
+        ret = 5;
+        unused = max_val / denom;
+        if (a3 != 0 || (a5 >= 100 && a2 == 2) || (a4 >= 100 && a2 == 1)) {
+            if (a2 == 2 && (f107 & 2) && !((a10 >> 7) & 1)) {
+                flag = 1;
+                ret = 3;
+            }
+            if (a2 == 1 && (f107 & 1) && !((a10 >> 6) & 1)) {
+                flag = 1;
+                ret = 4;
+            }
+        }
+        if (a12 & 0x100) {
+            ret = flag ? 5 : 6;
+        }
+    } else if (a2 == 1 && low2 != 0) {
+        ret = (f107 & 1) ? 4 : 5;
+    } else if (a7[1] != 0) {
+        ret = 8;
+    } else if (a7[2] != 0) {
+        ret = 11;
+    } else if (a8[2] != 0) {
+        ret = 12;
+    } else if (a8[3] != 0) {
+        ret = 2;
+    } else if (min_val < 0) {
+        if (a0 != a1) {
+            ret = a11 ? 0 : 2;
+        }
+    } else if (a2 == 2 && low2 != 0 && (f107 & 2)) {
+        ret = 3;
+    } else if (low2 != 0) {
+        ret = 0;
+    } else if (a6[2] != 0) {
+        ret = 0;
+    } else if (a8[1] != 0) {
+        if (a0 != a1) {
+            ret = a11 ? 0 : 7;
+        }
+    } else if (a7[0] != 0) {
+        ret = 9;
+    } else {
+        ret = a8[0] ? 10 : 0;
+    }
+    return ret;
+}
 
 int func_001C5E60(int a, int *p) {
     int r = 0;

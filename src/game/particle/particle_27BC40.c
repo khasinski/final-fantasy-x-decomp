@@ -229,7 +229,44 @@ void func_0027D6E0(PtEmitter *e, T6_PSysC *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027D888);
+void func_0027D888(u8 *o, u8 *k, ScriptCtx *ctx)
+{
+    float m[4][4];
+    u8 *mng = (u8 *)ppvMng;
+    void *dst = SLOT_WORK(void, o, ctx, 0);
+    float *cam;
+
+    func_002DD068(m[0], o + 0x10, *(float *)(k + 0x20));
+    func_002DD068(m[1], o + 0x20, *(float *)(k + 0x24));
+    func_002DD068(m[2], o + 0x30, *(float *)(k + 0x28));
+    cam = (float *)D_006A3930;
+    m[3][0] = *(float *)(o + 0x40) - cam[12];
+    m[3][1] = *(float *)(o + 0x44) - cam[13];
+    m[3][2] = *(float *)(o + 0x48) - cam[14];
+    m[3][3] = 1.0f;
+    switch (*(u8 *)(k + 0x30)) {
+    case 0:
+        m[3][0] += *(float *)(k + 0x10);
+        m[3][1] += *(float *)(k + 0x14);
+        m[3][2] += *(float *)(k + 0x18);
+        func_002DCE38(m, D_006A39B0, m);
+        break;
+    case 1:
+        func_002DCE38(m, D_006A39B0, m);
+        m[3][0] += *(float *)(k + 0x10);
+        m[3][1] += *(float *)(k + 0x14);
+        m[3][2] += *(float *)(k + 0x18);
+        break;
+    case 2:
+        func_002DCE38(m, cam, m);
+        m[3][0] += *(float *)(k + 0x10) * *(float *)(mng + 0x60);
+        m[3][1] += *(float *)(k + 0x14) * *(float *)(mng + 0x64);
+        m[3][2] += *(float *)(k + 0x18) * *(float *)(mng + 0x68);
+        func_002DCE38(m, D_006A3970, m);
+        break;
+    }
+    func_002DCE38(dst, D_006A3A70, m);
+}
 
 int func_0027DA88(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
 {
@@ -290,7 +327,59 @@ typedef struct ParticleB { /* 0xB0 bytes */
     u8 pad60[0x50];
 } ParticleB;
 
-INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027DC40);
+void func_0027DF48(T6_PObj *, T6_PKey *, ScriptCtx *);
+void func_0027E080(T6_PObj *, T6_PKey *, ScriptCtx *, T6_PSysB *);
+void func_0027EBD8(PtEmitter *, PtOwnerB *);
+
+void func_0027DC40(T6_PObj *o, T6_PKey *k, ScriptCtx *ctx)
+{
+    T6_PSysB *s = SLOT_WORK(T6_PSysB, o, ctx, 0);
+    T6_PLife *life = *o->life;
+    T6_PRec *src;
+    ParticleB *p;
+    int t;
+    int i;
+    int n;
+
+    if (k->id == 0xFFFF) {
+        return;
+    }
+    if (D_006A3924->tbl[k->id] == 0) {
+        return;
+    }
+    if (s->parts == 0 && !func_0027DA88(o, k, ctx)) {
+        return;
+    }
+    t = o->t;
+    n = t / 4096;
+    if (s->done == 0 && (u32)n < s->nrec) {
+        src = SLOT_WORK(T6_PRec, o, ctx, 1);
+        s->rec[n].h[0] = src->h[0];
+        s->rec[n].h[1] = src->h[1];
+        s->rec[n].h[2] = src->h[2];
+        s->rec[n].h[3] = src->h[3];
+    }
+    if (t >= life->len - 0x1000) {
+        p = (ParticleB *)s->parts;
+        n = k->count;
+        for (i = 0; i < n; i++, p++) {
+            if (p->flags & 1) {
+                break;
+            }
+        }
+        if (i < n) {
+            o->t = t - 0x1000;
+        }
+        s->done = 1;
+    }
+    if (D_006A3BC4 == 0 && ppvMng->b1D == 0) {
+        func_0027DF48(o, k, ctx);
+    }
+    func_0027E080(o, k, ctx, s);
+    if (D_006A3BC4 == 0) {
+        func_0027EBD8((PtEmitter *)k, (PtOwnerB *)s);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/particle_27BC40", func_0027DE20);
 

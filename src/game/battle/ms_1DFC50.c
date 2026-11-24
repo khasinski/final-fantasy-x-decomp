@@ -1,11 +1,13 @@
 /* tu_208 0x1dfc50-0x1e08f0: low; ~Ms (config/tu_map.tsv) */
 #define func_001E0410 _hdr_func_001E0410
 #define MsChrSEplayMotion _hdr_MsChrSEplayMotion
+#define MsGetMoveTargetPos _hdr_MsGetMoveTargetPos
 #include "common.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/u2.h"
 #include "ffx/v3.h"
+#undef MsGetMoveTargetPos
 #undef MsChrSEplayMotion
 #undef func_001E0410
 
@@ -312,4 +314,146 @@ void func_001E0410(s32 arg0) {
     _m2c_func_001E0410_MsGetChrInfo(0xD, (*(s32 *)((u8 *)(temp_17) + (0xA80))), 0x10, &_m2c_func_001E0410_D_00662FD0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DFC50", MsSetBallSpline);
+extern double D_0056F7E8;
+extern double D_0056F7F0;
+double func_002ED038(float);
+extern float D_00662FD0[];
+void MsMoveSplineSet(int v);
+float MsGetMoveTargetPos(int id, void *c, int a, float *out, int b);
+void func_001AC750(float *pos, int w, float x, float y, float z);
+void func_001AC3D0(float *dst, float *a, float *b);
+void func_001AC258(float *dst, float *a, float *b, float f);
+void func_001AC290(float *dst, float *a, float *b, float f1, float f2);
+int Ch_OptposGet(void *ch, int idx, float *out);
+
+typedef struct {
+    void *f00;
+    u8 pad04[0x10];
+    u8 f14;
+    u8 pad15[0x3B];
+    float f50[4];
+    u8 pad60[0x80];
+    s8 fE0;
+    u8 padE1[0x31];
+    u16 f112;
+    u8 pad114[6];
+    u16 f11A;
+    u8 pad11C[0x964];
+    s32 fA80;
+} Chr1E0490;
+
+void MsSetBallSpline(int id) {
+    float pos[4];
+    float tmp[4];
+    float opt[4];
+    float rot[4];
+    Chr1E0490 *chr;
+    Chr1E0490 *owner;
+    u8 owner_id;
+    int target;
+    int dmg;
+    int i;
+    float t;
+    float dt;
+
+    target = -1;
+    chr = (Chr1E0490 *)MsGetChr(id);
+    owner_id = chr->f14;
+    owner = (Chr1E0490 *)MsGetChr(owner_id);
+    MsMoveSplineSet(2);
+    for (i = 0; i < 31; i++) {
+        if ((owner->fA80 >> i) & 1) {
+            target = i;
+            break;
+        }
+    }
+    dmg = 0;
+    if (target >= 0) {
+        dmg = MsGetDamageResult(owner_id, target, 0, 0, 0);
+    }
+    switch (chr->fE0) {
+    case 0:
+    case 1:
+        if (target == owner_id && chr->fE0 == 0) {
+            func_001B6790(target, pos);
+            func_001B6E48(target, rot);
+            func_001AC750(tmp, 0, rot[0], 0.0f, 40.0f);
+            func_001AC3D0(pos, pos, tmp);
+            if (D_003193EE == 0) {
+                pos[1] = MsGetChrGround(target);
+            }
+        } else {
+            float d = MsGetMoveTargetPos(id, chr, 12, pos, 0);
+            func_001AC3D0(pos, pos, D_00662FD0);
+            if (dmg == 1) {
+                func_001AC258(tmp, chr->f50, pos, d);
+                func_001AC3D0(pos, pos, tmp);
+                if (D_003193EE == 0) {
+                    pos[1] = MsGetChrGround(target);
+                }
+            }
+        }
+        MsMoveSplineRegist(2, 0, 0, chr->f50);
+        MsMoveSplineRegist(2, 0, 0, chr->f50);
+        t = 0.0f;
+        dt = 1.3f;
+        for (i = 0; i < 7; ) {
+            int n;
+
+            t += dt;
+            func_001AC290(tmp, chr->f50, pos, t, 10.0f - t);
+            n = 7 - i;
+            i++;
+            tmp[1] += (chr->f50[1] - tmp[1]) * n * 0.03125f;
+            MsMoveSplineRegist(2, 0, 0, tmp);
+            {
+                register double _x __asm__("$2") = func_002ED038(dt);
+                register double _d __asm__("$5");
+                __asm__(".set noat\nlui $1, %%hi(D_0056F7E8)\n.set at" : "+r"(_x));
+                __asm__(".set noat\nld %0, %%lo(D_0056F7E8)($1)\n.set at" : "=r"(_d), "+r"(_x));
+                dt = func_002EC440(func_002EBC08(_x, _d));
+            }
+        }
+        MsMoveSplineRegist(2, 0, 0, pos);
+        MsMoveSplineRegist(2, 0, 0, pos);
+        break;
+    case 2:
+    case 3:
+        {
+            float y_off;
+            float vy;
+            float ay;
+
+            MsMoveSplineRegist(2, 0, 0, chr->f50);
+            MsMoveSplineRegist(2, 0, 0, chr->f50);
+            Ch_OptposGet(owner->f00, 11, opt);
+            t = 0.0f;
+            dt = 1.1f;
+            y_off = 0.0f;
+            vy = (float)(-(int)((u32)chr->f11A / 3) - 1);
+            ay = -vy * 0.25f;
+            for (i = 0; i < 7; ) {
+                t += dt;
+                y_off += vy;
+                i++;
+                func_001AC290(tmp, chr->f50, opt, t, 10.0f - t);
+                vy += ay;
+                tmp[1] += y_off;
+                MsMoveSplineRegist(2, 0, 0, tmp);
+                {
+                    register double _x __asm__("$2") = func_002ED038(dt);
+                    register double _d __asm__("$5");
+                    __asm__(".set noat\nlui $1, %%hi(D_0056F7F0)\n.set at" : "+r"(_x));
+                    __asm__(".set noat\nld %0, %%lo(D_0056F7F0)($1)\n.set at" : "=r"(_d), "+r"(_x));
+                    dt = func_002EC440(func_002EBC08(_x, _d));
+                }
+            }
+            MsMoveSplineRegist(2, 0, 0, opt);
+            MsMoveSplineRegist(2, 0, 0, opt);
+            if ((int)chr->f11A - (int)chr->f112 < 8) {
+                chr->fE0 = 3;
+            }
+        }
+        break;
+    }
+}

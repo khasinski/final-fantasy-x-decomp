@@ -113,8 +113,140 @@ typedef struct {
     float f1D4[4];
 } ChrDirView;
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B3388", MsBtlGetPos);
-INCLUDE_RODATA("build/ee_asm/game/battle/ms_1B3388/rodata", jtbl_0056E300);
+typedef struct {
+    float x, y, z, w;
+} MsPosQuad;
+
+int MsBtlGetPos(int mode, BtlChr *chr, int a2, int type, int idx, float *out) {
+    u8 *p = (u8 *)D_003173D0;
+    register u8 *base __asm__("$12") = p;
+    int ret = 0;
+    float *vptr = 0;
+    float *fptr = 0;
+
+    if (a2 < 0 || a2 >= *(s8 *)(p + 1)) {
+        return -1;
+    }
+    if (*(s8 *)p != 0) {
+        p += a2 * 0x20;
+        if (type != 3) {
+            return -1;
+        }
+    } else {
+        p += a2 * 0x60;
+    }
+    if (chr != 0 && out != 0 && ((u8 *)chr)[0x394] != 0xFF) {
+        register u_long128 *src __asm__("$2") = (u_long128 *)((u8 *)chr + 0x70);
+        register u_long128 tmp __asm__("$8");
+        __asm__("" : "+r"(src));
+        tmp = *src;
+        *(u_long128 *)out = tmp;
+        __asm__("" : : "m"(*(u_long128 *)out));
+        return 0;
+    }
+    switch (type) {
+    case 3:
+        if (idx >= 0 && idx < *(s8 *)(p + 4)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x10));
+            vptr += idx * 4;
+        }
+        break;
+    case 6:
+        if (idx >= 0 && idx < *(s8 *)(p + 4)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x14));
+            vptr += idx * 4;
+        }
+        break;
+    case 5:
+        if (idx >= 0 && idx < *(s8 *)(p + 6)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x20));
+            vptr += idx * 4;
+        }
+        break;
+    case 8:
+        if (idx >= 0 && idx < *(s8 *)(p + 6)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x24));
+            vptr += idx * 4;
+        }
+        break;
+    case 4:
+        if (idx >= 0 && idx < *(s8 *)(p + 5)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x18));
+            vptr += idx * 4;
+        }
+        break;
+    case 7:
+        if (idx >= 0 && idx < *(s8 *)(p + 5)) {
+            vptr = (float *)(base + *(s32 *)(p + 0x1C));
+            vptr += idx * 4;
+        }
+        break;
+    case 9:
+        vptr = (float *)(p + 0x40);
+        ret = *(s8 *)(p + 2);
+        break;
+    case 10:
+        vptr = (float *)(p + 0x50);
+        ret = *(s8 *)(p + 3);
+        break;
+    case 2:
+        vptr = (float *)(p + 0x30);
+        break;
+    case 11:
+        if (idx >= 0 && idx < *(s8 *)(p + 9)) {
+            fptr = (float *)(base + *(s32 *)(p + 0x2C));
+            fptr += idx;
+        }
+        break;
+    case 12:
+        if (out == 0) {
+            return 0;
+        }
+        MsGetSummonerPos(chr, idx, 0, out);
+        __asm__("");
+        return 0;
+    case 13:
+        if (out == 0) {
+            return 0;
+        }
+        MsGetSummonerPos(chr, idx, 1, out);
+        __asm__("");
+        return 0;
+    case 14:
+        if (out == 0) {
+            return 0;
+        }
+        MsGetSummonerPos(chr, idx, 2, out);
+        return 0;
+    }
+    __asm__("" : : "r"(base));
+    if (vptr != 0) {
+        if (out != 0) {
+            if (mode != 0) {
+                vptr[0] = out[0];
+                vptr[1] = out[1];
+                vptr[2] = out[2];
+                vptr[3] = out[3];
+            } else {
+                out[0] = vptr[0];
+                out[1] = vptr[1];
+                out[2] = vptr[2];
+                out[3] = vptr[3];
+            }
+        }
+    } else if (fptr != 0) {
+        if (out != 0) {
+            if (mode != 0) {
+                *fptr = out[0];
+            } else {
+                out[0] = *fptr;
+            }
+        }
+    } else {
+        ret = -1;
+    }
+    return ret;
+}
 
 typedef struct Bw1B38E8 {
     u8 pad00[0xC0];

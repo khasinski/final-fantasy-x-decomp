@@ -5,7 +5,37 @@
 #include "ffx/v2.h"
 #include "ffx/s2.h"
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018B680);
+void func_002A3D88(void *, void *, int, double, double, double, double);
+void func_0018CB90(void *);
+
+void func_0018B680(u8 *ctx)
+{
+    s32 mode = *(s32 *)(ctx + 0x67F44);
+
+    switch (mode) {
+    case 4: {
+        u8 *p2 = ctx + 0xB8000;
+        u8 *p1 = ctx + 0x13B90;
+        u8 *p0 = ctx + 0x70;
+        s32 i = 0x47;
+
+        do {
+            i--;
+            func_002A3D88(p1, p0, 0x100,
+                *(float *)(p2 + 0x4B4C),
+                *(float *)(p2 + 0x4B50),
+                *(float *)(p2 + 0x4B54),
+                *(float *)(p2 + 0x4B58));
+            p0 += 0x460;
+            p1 += 0x460;
+        } while (i >= 0);
+        break;
+    }
+    case 8:
+        func_0018CB90(ctx);
+        break;
+    }
+}
 
 void func_0018B7A0(void *p, s32 a, s32 b) {
     s32 var_17;

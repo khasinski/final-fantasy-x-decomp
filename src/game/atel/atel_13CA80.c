@@ -1320,9 +1320,292 @@ void func_0013F288(Actor *a, void *op, Actor *target) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013F6D8);
+int func_0013F6D8(Actor *a, void *op)
+{
+    ActorState *st;
+    float sx, sy, sz;
+    float angle;
+    float hz, hx;
+    float f1C;
+    float prev_x, prev_y, prev_z;
+    float cur_x, cur_y, cur_z;
+    float s, c;
+    int code1, code2;
+    int crossed = 0;
+    int inside = 0;
+    int prev;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_0013FB40);
+    st = AtelGetPosWorkAdrs(a);
+    sy = st->y;
+    hz = st->f38;
+    angle = -st->f34;
+    hx = st->f30;
+    f1C = st->f1C;
+    sx = st->x;
+    sz = st->z;
+    if (st->h28 == 0xFFFF) {
+        Sys3D8 *g = D_0058E3D8;
+        prev_x = g->prev[0];
+        prev_y = g->prev[1];
+        prev_z = g->prev[2];
+        cur_x = g->cur[0];
+        cur_y = g->cur[1];
+        cur_z = g->cur[2];
+    } else {
+        ActorState *st2 = AtelGetPosWorkAdrs(AtelGetBasicWork(st->h28));
+        prev_x = st2->px;
+        prev_y = st2->py;
+        prev_z = st2->pz;
+        cur_x = st2->x;
+        cur_y = st2->y;
+        cur_z = st2->z;
+    }
+    s = func_002E89C0(angle);
+    c = func_002E8648(angle);
+    prev_x -= sx;
+    prev_z -= sz;
+    cur_x -= sx;
+    cur_z -= sz;
+    a->flags34.w &= ~0x10000;
+    {
+        float px = c * prev_x + (-s) * prev_z;
+        float pz = s * prev_x + c * prev_z;
+        prev_x = px;
+        prev_z = pz;
+        sx = c * cur_x + (-s) * cur_z;
+        sz = s * cur_x + c * cur_z;
+    }
+    prev_y -= sy;
+    cur_y -= sy;
+    code1 = 0;
+    code2 = 0;
+    if (prev_x >= hx) {
+        code1 |= 1;
+    }
+    if (prev_x <= -hx) {
+        code1 |= 2;
+    }
+    if (prev_z >= hz) {
+        code1 |= 4;
+    }
+    if (prev_z <= -hz) {
+        code1 |= 8;
+    }
+    if (f1C > 0.0f) {
+        if (prev_y >= f1C) {
+            code1 |= 0x10;
+        }
+        if (prev_y <= -f1C) {
+            code1 |= 0x20;
+        }
+    }
+    prev_x = sx;
+    prev_z = sz;
+    if (sx >= hx) {
+        prev_x = hx;
+        code2 |= 1;
+    }
+    if (sx <= -hx) {
+        prev_x = -hx;
+        code2 |= 2;
+    }
+    if (sz >= hz) {
+        prev_z = hz;
+        code2 |= 4;
+    }
+    if (sz <= -hz) {
+        prev_z = -hz;
+        code2 |= 8;
+    }
+    if (f1C > 0.0f) {
+        if (cur_y >= f1C) {
+            code2 |= 0x10;
+        }
+        if (cur_y <= -f1C) {
+            code2 |= 0x20;
+        }
+    }
+    if ((code1 & code2) == 0) {
+        if ((code1 | code2) != 0) {
+            crossed = 1;
+        }
+    }
+    prev = ((u32)a->flags34.w >> 6) & 1;
+    if (code2 == 0) {
+        a->flags34.w |= 0x100;
+        inside = 1;
+    } else {
+        a->flags34.w &= ~0x100;
+        if (f1C <= 0.0f || (prev_y <= f1C && prev_y >= -f1C)) {
+            if (func_002D4278(sx - prev_x, 0.0f, sz - prev_z) <= st->f48 * st->f48) {
+                inside = 1;
+            }
+        }
+    }
+    a->flags34.w = (a->flags34.w & ~0x40) | (inside << 6);
+    if (inside) {
+        if (!prev) {
+            func_0014B740(0xFFFF, a->id, 5);
+        }
+    } else {
+        if (crossed && !prev) {
+            func_0014B740(0xFFFF, a->id, 5);
+        }
+        if (prev == 1 || crossed) {
+            func_0014B740(0xFFFF, a->id, 6);
+        }
+    }
+}
+
+void func_0013FB40(Actor *a, void *op, Actor *target)
+{
+    ActorState *st;
+    ActorState *st2;
+    float angle;
+    float prev_x, prev_y, prev_z;
+    float cur_x, cur_y, cur_z;
+    float hz, hx, f1C;
+    float t, p1, p2, p3, p4;
+    int code1;
+    int crossed = 0;
+    int inside = 0;
+    int code2 = 0;
+    int prev;
+
+    st = AtelGetPosWorkAdrs(a);
+    st2 = AtelGetPosWorkAdrs(target);
+    angle = -st->f34;
+    t = st->x;
+    prev_x = D_0058E3D8->prev[0];
+    prev_y = D_0058E3D8->prev[1];
+    prev_x -= t;
+    cur_y = D_0058E3D8->cur[1];
+    p1 = st->z;
+    prev_y -= st->y;
+    prev_z = D_0058E3D8->prev[2];
+    cur_y -= st->y;
+    cur_z = D_0058E3D8->cur[2];
+    hx = st->f30;
+    prev_z -= p1;
+    cur_x = D_0058E3D8->cur[0];
+    cur_z -= p1;
+    hz = st->f38;
+    f1C = st->f1C;
+    cur_x -= t;
+    p1 = func_002E8648(angle) * prev_x;
+    t = p1 - func_002E89C0(angle) * prev_z;
+    p2 = func_002E89C0(angle) * prev_x;
+    prev_x = t;
+    prev_z = p2 + func_002E8648(angle) * prev_z;
+    p3 = func_002E8648(angle) * cur_x;
+    t = p3 - func_002E89C0(angle) * cur_z;
+    p4 = func_002E89C0(angle) * cur_x;
+    p4 = p4 + func_002E8648(angle) * cur_z;
+    a->flags34.w &= ~0x10000;
+    code1 = 0;
+    if (prev_x >= hx) {
+        code1 |= 1;
+    }
+    if (prev_x <= -hx) {
+        code1 |= 2;
+    }
+    if (prev_z >= hz) {
+        code1 |= 4;
+    }
+    if (prev_z <= -hz) {
+        code1 |= 8;
+    }
+    if (f1C > 0.0f) {
+        if (prev_y >= f1C) {
+            code1 |= 0x10;
+        }
+        if (prev_y <= -f1C) {
+            code1 |= 0x20;
+        }
+    }
+    prev_x = t;
+    prev_z = p4;
+    if (t >= hx) {
+        prev_x = hx;
+        code2 |= 1;
+    }
+    if (t <= -hx) {
+        prev_x = -hx;
+        code2 |= 2;
+    }
+    if (p4 >= hz) {
+        prev_z = hz;
+        code2 |= 4;
+    }
+    if (p4 <= -hz) {
+        prev_z = -hz;
+        code2 |= 8;
+    }
+    if (f1C > 0.0f) {
+        if (cur_y >= f1C) {
+            code2 |= 0x10;
+        }
+        if (cur_y <= -f1C) {
+            code2 |= 0x20;
+        }
+    }
+    if ((code1 & code2) == 0) {
+        if ((code1 | code2) != 0) {
+            crossed = 1;
+        }
+    }
+    if (crossed && !(a->flags34.w & 0x100)) {
+        func_0014B720(0xFFFF, a->id, 4);
+    }
+    prev = ((u32)a->flags34.w >> 6) & 1;
+    if (code2 == 0) {
+        a->flags34.w |= 0x100;
+        inside = 1;
+    } else {
+        a->flags34.w &= ~0x100;
+        if (f1C <= 0.0f || (prev_y <= f1C && prev_y >= -f1C)) {
+            if (func_002D4278(t - prev_x, 0.0f, p4 - prev_z) <= st->f48 * st->f48) {
+                inside = 1;
+            }
+        }
+    }
+    a->flags34.w = (a->flags34.w & ~0x40) | (inside << 6);
+    if (inside) {
+        func_0014B720(0xFFFF, a->id, 3);
+        if (!prev) {
+            func_0014B720(0xFFFF, a->id, 5);
+        }
+    } else {
+        if (crossed && !prev) {
+            func_0014B720(0xFFFF, a->id, 5);
+        }
+        if (prev == 1 || crossed) {
+            func_0014B720(0xFFFF, a->id, 6);
+        }
+    }
+    if (a->flagsAB & 1) {
+        int hit = 0;
+        if (D_0058E3D8->b1E4 == 1) {
+            float r = st->f40 + D_0058E3D8->f1F0;
+            float r2 = r * r;
+
+            if (code2 == 0) {
+                hit = 1;
+            } else if ((f1C <= 0.0f || (prev_y <= f1C && prev_y >= -f1C)) &&
+                       func_002D4278(t - prev_x, 0.0f, p4 - prev_z) <= r2) {
+                hit = 1;
+            }
+            if (hit) {
+                if (D_0058E3D8->h1E8 == 0xFFFF || r2 < D_0058E3D8->f1EC) {
+                    if (func_002D47E8(st2->f34, st->f3C, D_0058E3D8->cur[0], D_0058E3D8->cur[2], st->x, st->z)) {
+                        D_0058E3D8->f1EC = r2;
+                        D_0058E3D8->h1E8 = a->id;
+                    }
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/atel/atel_13CA80", func_00140038);
 

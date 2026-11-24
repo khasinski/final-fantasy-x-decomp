@@ -100,7 +100,75 @@ void *func_001F8800(void *list, int x, int y)
     return func_001F9548(list, x - 0x10, y + 4, 2);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F8418", func_001F8860);
+void *func_001F8860(void *list, int x, int y, int w, int h)
+{
+    w -= 0x16;
+    h -= 9;
+    InvokedFromSelectCursor = list;
+    GIF_CUR()->ul64[0] = 0x1000000000000001UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(0x4005D40621313E00UL, 6);
+    GIF_CUR()->ul64[0] = 0x50AB400000008009UL;
+    GIF_CUR()->ul64[1] = 0x43431;
+    GIF_NEXT();
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xD8, 0x28);
+    func_001FB678(x, y);
+    func_001FB550(0xE3, 0x2C);
+    func_001FB678(x + 0xB, y + 4);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE3, 0x28);
+    func_001FB678(x + 0xB, y);
+    func_001FB550(0xE6, 0x2C);
+    func_001FB678(x + 0xB + w, y + 4);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE7, 0x28);
+    func_001FB678(x + 0xB + w, y);
+    func_001FB550(0xF2, 0x2C);
+    func_001FB678(x + 0xB + w + 0xB, y + 4);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xD8, 0x2C);
+    func_001FB678(x, y + 4);
+    func_001FB550(0xE3, 0x2F);
+    func_001FB678(x + 0xB, y + 4 + h);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE3, 0x2C);
+    func_001FB678(x + 0xB, y + 4);
+    func_001FB550(0xE6, 0x2F);
+    func_001FB678(x + 0xB + w, y + 4 + h);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE7, 0x2C);
+    func_001FB678(x + 0xB + w, y + 4);
+    func_001FB550(0xF2, 0x2F);
+    func_001FB678(x + 0xB + w + 0xB, y + 4 + h);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xD8, 0x30);
+    func_001FB678(x, y + 4 + h);
+    func_001FB550(0xE2, 0x35);
+    func_001FB678(x + 0xB, y + 4 + h + 5);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE3, 0x30);
+    func_001FB678(x + 0xB, y + 4 + h);
+    func_001FB550(0xE6, 0x35);
+    func_001FB678(x + 0xB + w, y + 4 + h + 5);
+
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xE7, 0x30);
+    func_001FB678(x + 0xB + w, y + 4 + h);
+    func_001FB550(0xF2, 0x35);
+    func_001FB678(x + 0xB + w + 0xB, y + 4 + h + 5);
+
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F8BD8(void *list, int x, int y, int w)
 {
@@ -259,7 +327,31 @@ void *func_001F9350(void *list, int a, int b, int c)
     return func_001F9378(list, a, b, c, 0x80, 0x80, 0x80, 0x80);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F8418", func_001F9378);
+void *func_001F9378(void *list, int x, int y, int w, u8 r, u8 g, u8 b, u8 a)
+{
+    InvokedFromSelectCursor = list;
+    GIF_CUR()->ul64[0] = 0x00AF400000008001UL;
+    GIF_CUR()->ul64[1] = 0x434314343143431EUL;
+    GIF_NEXT();
+    GIF_AD(0x4005D40621313E00UL, 6);
+    w -= 0x18;
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x70, 0x28);
+    func_001FB678(x, y);
+    func_001FB550(0x7C, 0x3A);
+    func_001FB678(x + 0xC, y + 0x12);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x7C, 0x28);
+    func_001FB678(x + 0xC, y);
+    func_001FB550(0x7F, 0x3A);
+    func_001FB678(x + 0xC + w, y + 0x12);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x80, 0x28);
+    func_001FB678(x + 0xC + w, y);
+    func_001FB550(0x8C, 0x3A);
+    func_001FB678(x + 0xC + w + 0xC, y + 0x12);
+    return InvokedFromSelectCursor;
+}
 
 typedef struct {
     s16 v[13][4];

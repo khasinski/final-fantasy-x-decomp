@@ -215,7 +215,106 @@ void *func_001B1C70(int a, int b, int c, int *out) {
     return res;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B15C8", MsAtelRequestExe);
+void func_001B2940(void);
+
+int MsAtelRequestExe(int a0, int a1, int a2, int a3, int a4, int a5)
+{
+    int sig[8];
+    int off;
+    int req_val;
+    int flags = a3;
+    int *out_same = (int *)a5;
+    int res;
+    int kind = 0;
+    int save;
+    int same = 0;
+    u8 *ent;
+    u8 *found;
+    int i;
+    int arg18 = 0;
+
+    save = AtelChangeCurrentCtrl(a0);
+    ent = func_001B1C70(a0, a1, a2, &off);
+    res = -1;
+    if (ent != 0) {
+        found = 0;
+        for (i = 0; i < D_00661888; i++) {
+            req_val = D_00661890[i].h6;
+            switch (D_00661890[i].h0) {
+            case 2:
+                arg18 = D_00661890[i].h2;
+                kind = 0;
+                found = func_001B1BD8(_gs_1C70.h32[arg18].w10, D_00661890[i].h4, &req_val);
+                break;
+            case 3:
+                {
+                    BtlChr *chr;
+                    kind = 1;
+                    chr = MsGetChr(D_00661890[i].h2);
+                    arg18 = *(s8 *)((u8 *)chr + 0xAB5);
+                    found = func_001B1BD8(chr->pC3C, D_00661890[i].h4, &req_val);
+                }
+                break;
+            case 4:
+                kind = 2;
+                arg18 = 0;
+                found = func_001B1BD8((void *)D_00661918, D_00661890[i].h4, &req_val);
+                break;
+            }
+            if (found != 0 && req_val >= 0) {
+                break;
+            }
+        }
+        if (found != 0 && req_val >= 0) {
+            int mode = flags & 3;
+            if (a4 != 0) {
+                int c0 = func_00145630(a4);
+                register int c1 __asm__("$5") = func_00145628(a4);
+                if (a0 == c0) {
+                    register int id __asm__("$2") = *ent + off;
+                    register int eq __asm__("$2") = (id == c1);
+                    same = eq;
+                }
+            }
+            if (mode == 2) {
+                if (same == 1) {
+                    mode = 0;
+                } else {
+                    mode = 1;
+                }
+            }
+            res = kind;
+            AtelGetBattleIdAdrs(*ent + off)[1] = 0;
+            AtelSkipReqLevel2(*ent + off, 0);
+            {
+                register int id2 __asm__("$2") = *ent;
+                AtelExecReturn2(id2 + off, 0, 0);
+            }
+            sig[0] = 0xFFFF;
+            sig[1] = *ent + off;
+            sig[2] = 0;
+            sig[3] = 7;
+            sig[4] = req_val;
+            sig[5] = D_00661890[i].h0;
+            sig[6] = arg18;
+            sig[7] = *found;
+            AtelRegistSignal2((int)sig);
+            if (flags & 4) {
+                func_001B2940();
+            }
+            if (mode == 1) {
+                AtelDecodeSignal(*ent + off, -1);
+                AtelDecodeCommand(*ent + off, 0);
+            }
+        }
+    }
+    if (out_same != 0) {
+        *out_same = same;
+    }
+    MsAtelRequestInit();
+    AtelSetCurrentCtrl(save);
+    return res;
+}
 
 int MsAtelParseSysTag(int a, int b, int c) {
     int r = -1;

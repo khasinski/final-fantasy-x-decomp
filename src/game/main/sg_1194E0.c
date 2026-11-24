@@ -56,6 +56,15 @@ void Sg_CalcCameraMatrix(void)
     MsCameraSetRect(h, 1, D_00307EC0);
 }
 
+void func_002DD128(void *);
+void func_002DD270(void *, void *, float);
+void func_002DD318(void *, void *, float);
+void func_002DCE08(void *, void *, void *);
+extern float D_00307EE0[];
+extern float D_00307EF0[];
+extern s32 D_00307F00;
+extern s32 D_00307F04;
+
 INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_CalcViewClipMatrix);
 
 void Sg_InitCamera(void)
@@ -74,7 +83,56 @@ void func_00119830(s32 v)
     D_005804D0 = v;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", func_00119840);
+void func_00119840(void)
+{
+    float v0[4];
+    float v1[4];
+    float m[4][4];
+    float fx;
+    float fy;
+    if (D_005804D0 == 0) {
+        return;
+    }
+    {
+        register u8 *b0 __asm__("$6") = (u8 *)0x2000000;
+        register u8 *b1 __asm__("$3") = (u8 *)0x2000000;
+        register u8 *b2 __asm__("$4");
+        s32 btn;
+        __asm__("" : "+r"(b0));
+        __asm__("" : "+r"(b1));
+        btn = *(volatile s32 *)(b0 + 0x4ABC);
+        b2 = (u8 *)0x2000000;
+        __asm__ volatile("" : "+r"(b2));
+        fx = *(float *)(b1 + 0x4AC0);
+        fy = *(float *)(b2 + 0x4AC4);
+        if (btn & 1) {
+            D_00307F00 = (s32)((fx < 0.0f) ? (fx * -fx) : (fx * fx));
+            {
+                float t = *(volatile float *)(b2 + 0x4AC4);
+                D_00307F04 = (s32)((t < 0.0f) ? (t * -t) : (t * t));
+            }
+        }
+        {
+            s32 b = *(volatile s32 *)(b0 + 0x4ABC);
+            if (b & 0x100) {
+                D_00580468 = D_00580464 = D_00580464 - (fy * D_00580464) / 250.0f;
+                fy = 0.0f;
+            } else if (!(b & 0x10000)) {
+                return;
+            }
+        }
+    }
+    v0[0] = -(fx * D_00580464) / 1000.0f;
+    v0[1] = -(fy * D_00580464) / 1000.0f;
+    v0[2] = 0.0f;
+    func_002DD128(m);
+    func_002DD270(m, m, -D_00307EF0[0]);
+    func_002DD318(m, m, D_00307EF0[1]);
+    func_002DCE08(v1, m, v0);
+    D_00307EE0[0] += v1[0];
+    D_00307EE0[1] += v1[1];
+    D_00307EE0[2] += v1[2];
+}
 
 INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_ControlCamera);
 INCLUDE_RODATA("build/ee_asm/game/main/sg_1194E0/rodata", jtbl_00569A30);

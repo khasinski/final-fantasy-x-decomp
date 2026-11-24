@@ -58,9 +58,107 @@ float func_00127B38(Actor *a, void *op, ScriptCtx *ctx) {
     return s->f18 = AtelPopStackFloat(a, ctx);
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_127970", func_00127B78);
+typedef struct MoveWork {
+    u8 pad0[8];
+    float f08;
+    float f0C;
+    u8 pad10[8];
+    float f18;
+    float f1C;
+    float f20;
+    float f24;
+    u8 pad28[4];
+    float f2C;
+    u8 pad30[4];
+    float f34;
+    float f38;
+} MoveWork;
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_127970", func_00127D40);
+int func_00127B78(Actor *a, void *op, ScriptCtx *ctx) {
+    int p3 = AtelPopStackInteger(a, ctx);
+    int p2 = AtelPopStackInteger(a, ctx);
+    int p1 = AtelPopStackInteger(a, ctx);
+    MoveWork *w = (MoveWork *)func_0013BCC8(a);
+
+    AtelSetMoveHokanMode(a, 0);
+    switch (p2 & (int)0xFFFF007F) {
+    case 7: {
+        ActorState *st = AtelGetPosWorkAdrs(a);
+        w->f1C = st->x;
+        w->f20 = st->y;
+        w->f24 = st->z;
+        w->f18 = 0.0f;
+        w->f08 = 0.0f;
+        break;
+    }
+    case 5:
+    case 6:
+        w->f08 = 0.0f;
+        break;
+    case 9: {
+        float dy, h, t;
+        AtelGetPosWorkAdrs(a);
+        dy = w->f2C - w->f20;
+        if (dy > 0.0f) {
+            h = -w->f18;
+        } else {
+            h = w->f18;
+        }
+        t = (dy - h) * 2.0f;
+        if (t < 0.0f) {
+            t = -t;
+            h = dy - t * 0.5f;
+        }
+        w->f34 = t;
+        w->f18 = h;
+        w->f08 = 0.0f;
+        break;
+    }
+    default:
+        if (w->f0C != 0.0f) {
+            w->f0C = 1.0f / w->f0C;
+        }
+        break;
+    }
+    if (w->f38 == 0.0f) {
+        p2 |= 0x800;
+    }
+    func_0013C0E0(a, p1, p2, p3);
+    return 0;
+}
+
+int func_00127D40(Actor *a, void *op, ScriptCtx *ctx) {
+    int p3 = AtelPopStackInteger(a, ctx);
+    int p2 = AtelPopStackInteger(a, ctx);
+    int p1 = AtelPopStackInteger(a, ctx);
+    BindInfo *info = func_0013C9C8(a, a->slotIdx)->info;
+
+    AtelSetMoveHokanMode(a, 0);
+    switch (p2 & (int)0xFFFF001F) {
+    case 2: {
+        int v = (int)info->f2C;
+        if ((p2 & 0x800) && (float)v > 0.0f) {
+            v = (int)((float)v - 6.2831854820251465f);
+        }
+        if ((p2 & 0x400) && (float)v < 0.0f) {
+            v = (int)((float)v + 6.2831854820251465f);
+        }
+        info->offset = 0.0f;
+        info->scale = __builtin_fabsf((*(float *)&info->pad10[0] * 0.8333333134651184f) / (float)v);
+        break;
+    }
+    case 3:
+    case 4:
+        break;
+    default:
+        if (info->scale != 0.0f) {
+            info->scale = 1.0f / info->scale;
+        }
+        break;
+    }
+    func_0013C170(a, p1, p2, p3);
+    return 0;
+}
 
 int func_00127F08(Actor *a) {
     return (a->slot[a->slotIdx].flags & 0x7F) ? 0 : 5;

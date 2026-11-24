@@ -406,7 +406,81 @@ void func_00261728(int ch, int idx)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002618E0);
+typedef struct {
+    u8 pad0[0x3C];
+    float f3C;
+    u8 pad40[4];
+    u16 h44;
+    u8 pad46[0xA];
+} EiPt50;
+
+void func_002622D0(void);
+
+void func_002618E0(void)
+{
+    float v0[4];
+    float v1[4];
+
+    switch (LPV->u11600.b.b11600) {
+    case 0:
+        LPV->u11600.b.f11601++;
+        LPV->f11576 = -0x80 - (LPV->u11600.b.f11601 * 128) / 40;
+        if ((s8)LPV->f11576 < 0) {
+            LPV->f11576 = 0x80;
+        }
+        if (D_006A362E == 0) {
+            register s32 off __asm__("$2") = lpamng->f115E8 * 0x50 + 0x11090;
+            ((EiPt50 *)((u8 *)lpamng + off))->f3C = 0.0f;
+            LPV->u11600.b.b11600 = 1;
+            LPV->f11576 = 0;
+        }
+        break;
+    case 1: {
+        WorkEnt *e = &lpamng->ents[lpamng->f115E4];
+
+        v0[0] = e->x;
+        v0[1] = e->y;
+        v0[2] = 0.0f;
+        v0[3] = 1.0f;
+        lpamng->f115D0 += 1.0f / 12.0f;
+        if (lpamng->f115D0 >= 1.0f) {
+            LPV->u11600.b.b11600 = 2;
+            LPV->u11600.b.f11601 = 0;
+            SndSepPlaySimple(0x80000070);
+            LPA(u_long128, 0x11310) = *(u_long128 *)v0;
+            pppCreateHeap((HHead *)D_006A3690, (HBlk *)0x1E81000, 0x7D000);
+            func_002560D0(D_006A3610, 1, v0[0], v0[1], 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+            {
+                register s32 off __asm__("$2") = lpamng->f115E8 * 0x50 + 0x11090;
+                ((EiPt50 *)((u8 *)lpamng + off))->h44 = lpamng->f115E4;
+            }
+            func_0025A0C8(lpamng->f115E8);
+            func_002599C0(lpamng->f115E8);
+            LPV->f11577 = 1;
+            func_002622D0();
+        } else {
+            func_002DD968(v1, v0, LPV->f115F0, lpamng->f115D0);
+            LPV->f11310 = v1[0];
+            LPV->f11314 = v1[1];
+        }
+        break;
+    }
+    case 2:
+        LPV->u11600.b.f11601++;
+        LPV->f11576 = (LPV->u11600.b.f11601 * 128) / 40;
+        if ((s8)LPV->f11576 < 0) {
+            LPV->f11576 = 0x80;
+        }
+        if (D_006A362E == 0) {
+            LPV->f11576 = 0x80;
+            lpamng->cb_a = lpamng->next_a;
+            lpamng->cb_b = lpamng->next_b;
+            lpamng->next_a = 0;
+            lpamng->next_b = 0;
+        }
+        break;
+    }
+}
 
 void func_00261C08(void)
 {
@@ -719,9 +793,73 @@ void func_00262ED8(int a, int b, int sel, int ok) /* DEBT(NAME): argument meanin
     }
 }
 
+int func_00262F88(float *out);
 INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_00262F88);
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_260A70", func_002632D8);
+void func_002632D8(int cb) __attribute__((register_precision(s3, 128)));
+void func_002632D8(int cb)
+{
+    float vec[4];
+    float dist;
+    S6Pt50 *pt = &LPV->pt112C0;
+    WorkEnt *p;
+
+    if (lpamng->next_a != 0) {
+        return;
+    }
+    if (LPV->f11594 < 0.0f) {
+        LPV->f11594 = 1.0f;
+    }
+    if (func_00262F88(vec) == 0) {
+        if (((u8 *)lpamng)[0x1157D] != 0) {
+            ((u8 *)lpamng)[0x1157D] = 0;
+            p = (WorkEnt *)func_00261130(&dist, pt, cb);
+            if (p != 0) {
+                SndSepPlaySimple(0x80000001);
+                ((void (*)(int, float))func_00261430)(p - lpamng->ents, 0.5f);
+            }
+        } else if (vec[0] != 0.0f || vec[1] != 0.0f) {
+            p = (WorkEnt *)func_00260F88(pt, vec, cb);
+            if (p != 0) {
+                SndSepPlaySimple(0x80000001);
+                ((void (*)(int, float))func_00261430)(p - lpamng->ents, 0.25f);
+            }
+        }
+    } else {
+        ((u8 *)lpamng)[0x1157D] = 1;
+        pt->x += vec[0];
+        pt->y += vec[1];
+        if (pt->x < LPV->f115BC) {
+            pt->x = LPV->f115BC;
+        } else if (pt->x > LPV->f115C4) {
+            pt->x = LPV->f115C4;
+        }
+        if (pt->y < LPV->f115C0) {
+            pt->y = LPV->f115C0;
+        } else if (pt->y > LPV->f115C8) {
+            pt->y = LPV->f115C8;
+        }
+        func_00260F60();
+        p = (WorkEnt *)func_00261130(&dist, pt, cb);
+        if (dist <= pt->f3C) {
+            float target;
+
+            *(u16 *)((u8 *)pt + 0x44) = p - lpamng->ents;
+            target = func_002596D8(*(u16 *)((u8 *)pt + 0x44));
+            if (target < pt->f3C) {
+                pt->f3C -= 2.0f;
+                if (pt->f3C < target) {
+                    pt->f3C = target;
+                }
+            } else if (target > pt->f3C) {
+                pt->f3C += 2.0f;
+                if (pt->f3C > target) {
+                    pt->f3C = target;
+                }
+            }
+        }
+    }
+}
 
 void func_00264578(void);
 void func_00264140(void);

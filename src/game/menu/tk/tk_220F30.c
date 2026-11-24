@@ -989,7 +989,43 @@ extern u8 D_00693158[];
 extern u8 D_00693250[];
 extern u8 D_006932B0[];
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00222820);
+void func_00247408(int a, int b, int c);
+void func_00247300(int a, int b);
+void func_00246348(int a, int b, int c, int d);
+
+void func_00222820(Rec0E *r, int x)
+{
+    register int x_r __asm__("$17") = x;
+    int a;
+    register int px __asm__("$18");
+    int py;
+    int x2;
+    int y0;
+    u16 h;
+
+    x2 = x_r + 0xD8;
+    y0 = r->h0;
+    h = r->h0;
+    if (r->b0A > 0) {
+        a = 15 - r->b0A;
+        if (a >= 3) {
+            a = 2;
+        }
+        if (a < 0) {
+            a = 0;
+        }
+        func_00247408(x_r + 0xE0, y0 + 3, 0x10 + a);
+        r->b0A--;
+        h = r->h0;
+    }
+    func_00247300(x_r + 0xB2, (s16)h - 2);
+    px = x_r + 0x26;
+    py = r->h0 + 4;
+    func_00246348(TOGetSaveChrName(r->h6), px, py, (s8)r->pad8[0]);
+    px = x2;
+    py = r->h0 + 6;
+    func_00246670(func_001BE7B8(r->h6), px, py, 0);
+}
 
 void func_00222910(s16 *rec, int y)
 {

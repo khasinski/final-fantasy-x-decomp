@@ -3,6 +3,7 @@
 #define MsNearRag _hdr_MsNearRag
 #define func_001AC310 _hdr_func_001AC310
 #include "common.h"
+#include "vu0.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
@@ -58,7 +59,221 @@ s32 func_001D2878(s32 arg0, s32 arg1, float *arg2, float *arg3, float *arg4)
     return result;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", func_001D2958);
+float func_001AC2D0(float *);
+float func_001AC348(float *, float *);
+float func_001AC388(float *, float *);
+void func_001AC3D0(float *, float *, float *);
+void MsSetBallSpline(int);
+void MsSetMove(int, int, int, int, int, int, float, float, float, float, float);
+float MsGetMoveTargetPos();
+int func_001D34B0(void *, int, float *, float *, float);
+float MsGetDirMode();
+int MsCameraMoveCalc(int, float *, R2Fade *, float);
+
+void func_001D2958(int arg0)
+{
+    float pos[4];
+    float target_pos[4];
+    float vel[4];
+    R2Fade fade;
+    float ang;
+    float pitch;
+    s32 out_ok;
+    s32 out_ang_flag;
+    BtlChr *chr = MsGetChr(arg0);
+    void *obj = *(void **)chr;
+
+    if (obj == 0) {
+        return;
+    }
+    switch (((u8 *)chr)[0xD5] & 0x7F) {
+    case 0:
+        break;
+    case 7: {
+        BtlCommandWork *sp;
+        u16 cnt = ++*(u16 *)((u8 *)chr + 0x112);
+
+        if (cnt >= *(u16 *)((u8 *)chr + 0x11A)) {
+            ((u8 *)chr)[0xD5] = 0;
+            ((u8 *)chr)[0xD8] = 0;
+        }
+        if (*(u16 *)((u8 *)chr + 0x114) == 2) {
+            MsSetBallSpline(arg0);
+        }
+        sp = &D_00662670[*(u16 *)((u8 *)chr + 0x114)];
+        TkMtCalcSpline((s32)pos, (u8 *)sp + 0x10, sp->count, (float)*(u16 *)((u8 *)chr + 0x112) / (float)*(u16 *)((u8 *)chr + 0x11A));
+        MsSetChrPos(arg0, pos);
+        {
+            register int a __asm__("$3") = *(u16 *)((u8 *)chr + 0x112);
+            func_002D5188((s32)pos, (u8 *)sp + 0x10, sp->count, (float)a / (float)*(u16 *)((u8 *)chr + 0x11A));
+        }
+        if ((double)*(float *)((u8 *)chr + 0x12C) != 0.0) {
+            if ((double)func_001AC2D0(pos) != 0.0) {
+                float d;
+                s8 flg;
+
+                MsVectorRect2Polar(pos, 0, &ang, 0, 0);
+                ang = MsNearRag(*(float *)((u8 *)chr + 0x150), ang);
+                d = ang - *(float *)((u8 *)chr + 0x150);
+                flg = ((s8 *)chr)[0xEA];
+                if (flg < 0 && d > 1.5707964f) {
+                    d = -d;
+                } else if (flg > 0 && d < -1.5707964f) {
+                    d = -d;
+                }
+                *(float *)((u8 *)chr + 0x150) = *(float *)((u8 *)chr + 0x150) + d * *(float *)((u8 *)chr + 0x12C);
+                Ch_SetDirF(*(void **)chr, *(float *)((u8 *)chr + 0x150));
+            }
+        }
+        break;
+    }
+    case 0x10: {
+        u16 cnt;
+
+        func_001B6790(arg0, pos);
+        func_001AC750(vel, 0, *(float *)((u8 *)chr + 0x130), *(float *)((u8 *)chr + 0x13C), *(float *)((u8 *)chr + 0x120));
+        func_001AC3D0(pos, pos, vel);
+        MsSetChrPos(arg0, pos);
+        cnt = ++*(u16 *)((u8 *)chr + 0x112);
+        if (cnt >= *(u16 *)((u8 *)chr + 0x11A)) {
+            ((u8 *)chr)[0xD5] = 0;
+            ((u8 *)chr)[0xD8] = 0;
+        }
+        break;
+    }
+    default: {
+        float *tp = target_pos;
+        float ret = MsGetMoveTargetPos(arg0, chr, ((u8 *)chr)[0xD5], tp, 0);
+
+        if (arg0 == 0) {
+            MMI_COPY_LQ_T0(D_00662CA0, tp);
+            MMI_COPY_SQ_T0(D_00662CA0);
+        }
+        if (((u8 *)chr)[0xD5] & 0x80) {
+            register float d __asm__("$f1");
+
+            func_001B6790(arg0, pos);
+            MsVectorRect2Polar(tp, pos, &ang, &pitch, 0);
+            *(float *)((u8 *)chr + 0x120) += *(float *)((u8 *)chr + 0x128);
+            if (*(float *)((u8 *)chr + 0x120) > *(float *)((u8 *)chr + 0x124)) {
+                *(float *)((u8 *)chr + 0x120) = *(float *)((u8 *)chr + 0x124);
+            }
+            *(float *)((u8 *)chr + 0x134) += *(float *)((u8 *)chr + 0x138);
+            ang = MsNearRag(*(float *)((u8 *)chr + 0x130), ang);
+            d = ang - *(float *)((u8 *)chr + 0x130);
+            if (d > *(float *)((u8 *)chr + 0x134)) {
+                d = *(float *)((u8 *)chr + 0x134);
+            }
+            if (d < -*(float *)((u8 *)chr + 0x134)) {
+                d = -*(float *)((u8 *)chr + 0x134);
+            }
+            {
+                register float cur __asm__("$f3") = *(float *)((u8 *)chr + 0x130) + d;
+                register float d2 __asm__("$f1");
+                register float a0 __asm__("$f0");
+                *(float *)((u8 *)chr + 0x130) = cur;
+                a0 = ang;
+                d2 = a0 - cur;
+                if (*(u16 *)((u8 *)chr + 0x112) > *(u16 *)((u8 *)chr + 0x11A)) {
+                    int dt = *(u16 *)((u8 *)chr + 0x112) - *(u16 *)((u8 *)chr + 0x11A);
+
+                    a0 = d2 * dt;
+                    d2 = a0 / (*(u16 *)((u8 *)chr + 0x11A) * 4 + 1);
+                    d2 = cur + d2;
+                    *(float *)((u8 *)chr + 0x130) = d2;
+                }
+            }
+            if (((s8 *)chr)[0x34] == 0) {
+                register float res __asm__("$f0");
+
+                *(float *)((u8 *)chr + 0x140) += *(float *)((u8 *)chr + 0x144);
+                pitch = MsNearRag(*(float *)((u8 *)chr + 0x13C), pitch);
+                d = pitch - *(float *)((u8 *)chr + 0x13C);
+                if (d > *(float *)((u8 *)chr + 0x140)) {
+                    d = *(float *)((u8 *)chr + 0x140);
+                }
+                if (d < -*(float *)((u8 *)chr + 0x140)) {
+                    d = -*(float *)((u8 *)chr + 0x140);
+                }
+                res = *(float *)((u8 *)chr + 0x13C) + d;
+                *(float *)((u8 *)chr + 0x13C) = res;
+            }
+            func_001AC750(vel, 0, *(float *)((u8 *)chr + 0x130), *(float *)((u8 *)chr + 0x13C), *(float *)((u8 *)chr + 0x120));
+            func_001AC3D0(pos, pos, vel);
+            if ((double)*(float *)((u8 *)chr + 0x12C) != 0.0) {
+                register float res __asm__("$f0");
+
+                ang = MsNearRag(*(float *)((u8 *)chr + 0x150), *(float *)((u8 *)chr + 0x130));
+                d = ang - *(float *)((u8 *)chr + 0x150);
+                if (d > *(float *)((u8 *)chr + 0x12C)) {
+                    d = *(float *)((u8 *)chr + 0x12C);
+                }
+                if (d < -*(float *)((u8 *)chr + 0x12C)) {
+                    d = -*(float *)((u8 *)chr + 0x12C);
+                }
+                res = *(float *)((u8 *)chr + 0x150) + d;
+                *(float *)((u8 *)chr + 0x150) = res;
+                Ch_SetDirF(*(void **)chr, res);
+            }
+            *(u16 *)((u8 *)chr + 0x112) += 1;
+            MsSetChrPos(arg0, pos);
+            {
+                register int lim __asm__("$3") = *(u16 *)((u8 *)chr + 0x11A);
+                if (*(u16 *)((u8 *)chr + 0x112) > lim * 2) {
+                    float dist = (((s8 *)chr)[0x34] != 0) ? func_001AC348(pos, tp) : func_001AC388(pos, tp);
+                    register int f0 __asm__("$2") = (int)(dist / *(float *)((u8 *)chr + 0x124));
+                    int frames = f0 | 1;
+
+                    MsSetChrDirTarget(arg0, 8, 0, 0, frames / 4, 1);
+                    MsSetMove(arg0, ((u8 *)chr)[0xD5] & 0x7F, ((u8 *)chr)[0xD6], frames, 0, 0x20, *(float *)((u8 *)chr + 0x120), *(float *)((u8 *)chr + 0x148), *(float *)((u8 *)chr + 0x14C), *(float *)((u8 *)chr + 0x158), *(float *)((u8 *)chr + 0x168));
+                }
+            }
+        } else {
+            int cnt;
+            register float r __asm__("$f12") = ret;
+
+            *(u16 *)((u8 *)chr + 0x112) += 1;
+            cnt = *(u16 *)((u8 *)chr + 0x112);
+            if (func_001D34B0(chr, cnt, tp, pos, r) != 0) {
+                MsSetChrPos(arg0, pos);
+            }
+            if (cnt >= *(u16 *)((u8 *)chr + 0x11A)) {
+                ((u8 *)chr)[0xD5] = 0;
+                ((u8 *)chr)[0xD8] = 0;
+            }
+        }
+        if (((s8 *)chr)[0xD9] != 0) {
+            int t_int = *(u16 *)((u8 *)chr + 0x11A);
+            float t_total = t_int;
+            float v0 = ((target_pos[1] - *(float *)((u8 *)chr + 0x54)) - *(float *)((u8 *)chr + 0x168) * t_total * t_total * 0.5f) / t_total;
+            float t;
+
+            t_int = *(u16 *)((u8 *)chr + 0x112);
+            func_001B6790(arg0, pos);
+            t = t_int;
+            pos[1] = *(float *)((u8 *)chr + 0x54) + v0 * t + *(float *)((u8 *)chr + 0x168) * t * t * 0.5f;
+            MsSetChrPos(arg0, pos);
+        }
+        break;
+    }
+    }
+    if (((u8 *)chr)[0xEE] != 0) {
+        fade.h4 = 0;
+        fade.mode = 2;
+        fade.t0 = ((u8 *)chr)[0xEF];
+        fade.t1 = ((u8 *)chr)[0xF0];
+        fade.t2 = ((u8 *)chr)[0xEF];
+        fade.total = ((u8 *)chr)[0xEF] + (((u8 *)chr)[0xEF] + ((u8 *)chr)[0xF0]);
+        fade.time = fade.total - ((u8 *)chr)[0xEE];
+        ((u8 *)chr)[0xEE] -= 1;
+        ang = MsGetDirMode(arg0, chr, target_pos, 1, &out_ok, &out_ang_flag);
+        *(float *)((u8 *)chr + 0x1B4) = ang;
+        if (out_ok != 0) {
+            MsCameraMoveCalc(out_ang_flag, &ang, &fade, *(float *)((u8 *)chr + 0x150));
+            Ch_SetDirF(obj, ang);
+        }
+    }
+}
 
 typedef struct {
     u8 pad00[0xA0];

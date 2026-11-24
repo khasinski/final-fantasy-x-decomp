@@ -57,7 +57,52 @@ void func_001E0A18(BtlChr *c, int a, int b) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E08F0", func_001E0A40);
+void func_001E0C30(int a, int b, int c);
+
+void func_001E0A40(int id, int slot, int item) {
+    BtlChr *c;
+
+    id &= 0xFF;
+    c = MsGetChr(id);
+    item &= 0xFFF;
+    if (c->fABB == 9) {
+        u8 *wp = (u8 *)c + 0x252;
+        int old_mdl;
+        int new_mdl;
+        BtlChr *w;
+
+        wp += slot;
+        old_mdl = MsGetSaveWeaponModel(*wp);
+        new_mdl = MsGetSaveWeaponModel(item);
+
+        MsEquipSaveWeapon(id, slot, item);
+        *wp = item;
+        w = MsGetWeapon(id, slot);
+        *(s32 *)((u8 *)c + 0xC4C) = 0;
+        c->fABB = 10;
+        MsSetSaveParam(id);
+        if (old_mdl != new_mdl) {
+            *((s8 *)c + 0xABD) = 1;
+            MsWeaponDispose(id, slot, 7, w);
+            if (slot == 0) {
+                MsEffectWeaponFree(id);
+                MsSEPchrClear(c, 1);
+                if (*(s32 *)((u8 *)c + 0x48) != 0) {
+                    func_0011D590(*(s32 *)((u8 *)c + 0x48), 5);
+                    *(s32 *)((u8 *)c + 0x48) = 0;
+                }
+            }
+            w->f04 = new_mdl;
+            func_001B1490(id, 1 << slot);
+            if (slot == 0) {
+                MsBtlReadCueRegist(3, id, id, 0, 9);
+            }
+        } else {
+            *((s8 *)c + 0xABD) = 0;
+            func_001E0C30(id, slot, 8);
+        }
+    }
+}
 
 void func_001E0BF0(int id, int a, int b) {
     BtlChr *c = MsGetWeapon(id, a);

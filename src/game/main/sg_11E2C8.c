@@ -215,7 +215,26 @@ void func_0011E8D8(float *v, float r)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E980);
+void func_0011E980(float *v, float r)
+{
+    float p[4];
+    float r2;
+    float h;
+    float nr;
+
+    func_0011E788(v, r);
+    func_0011E830(v, r);
+    func_0011E8D8(v, r);
+    r2 = r * r;
+    h = r * 0.5f;
+    nr = sqrtf((r2 * r2 - r2 * (h * h)) / r2);
+    p[0] = v[0];
+    p[1] = v[1] - h;
+    p[2] = v[2];
+    func_0011E788(p, nr);
+    p[1] = v[1] + h;
+    func_0011E788(p, nr);
+}
 
 void func_0011EA68(s32 f)
 {

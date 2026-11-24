@@ -368,7 +368,198 @@ void pppInitEnv(HeapMgr *m, HeapCfg *cfg, void *buf, int size)
 void func_00267AC0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", func_00267AC8);
+extern s32 D_0036F20C;
+extern char D_00573FD0[];
+
+typedef struct PppOps {
+    u8 pad0[4];
+    void (*fn4)(void *, void *, void *, int);
+    void (*fn8)(void *, void *, void *);
+    void (*fnC)(void *, void *, void *);
+} PppOps;
+
+typedef struct PppPrEnt {
+    PppOps *ops;
+    u16 h4;
+    u8 pad6[10];
+} PppPrEnt;
+
+typedef struct PppDefFull {
+    u8 pad0[0xC];
+    s32 flag : 1;
+    u8 pad10[4];
+    s32 w14;
+    s32 w18;
+    s32 w1C;
+    s32 ofs;
+    s16 prio;
+    s16 n;
+    PppPrEnt ent[1];
+} PppDefFull;
+
+typedef struct PppClsFull {
+    PppDefFull *def;
+    PppObj *first;
+    s32 w8;
+    u16 count;
+    u16 padE;
+} PppClsFull;
+
+typedef struct PppMgrFull {
+    u8 pad0[0x18];
+    s32 count;
+    u8 b1C;
+    u8 b1D;
+    u8 pad1E[0x12];
+    PppObj *list;
+    u8 pad34[8];
+    PppClsFull *cls;
+} PppMgrFull;
+
+void func_00267AC8(void *arg0)
+{
+    PppMgrFull *m = (PppMgrFull *)arg0;
+    int i;
+    int j;
+    u32 mask;
+    PppObj *obj;
+    PppObj **prev;
+
+    for (i = 0; i < m->count; i++) {
+        PppClsFull *cls = &m->cls[i];
+        PppDefFull *def;
+
+        if (cls == 0) {
+            continue;
+        }
+        def = cls->def;
+        if (def == 0) {
+            continue;
+        }
+        D_0036F20C += cls->count;
+        if (cls->count == 0) {
+            continue;
+        }
+        for (j = 0; j < def->n; j++) {
+            PppPrEnt *pr = &def->ent[j];
+            PppOps *ops = pr->ops;
+            void (*fn8)(void *, void *, void *);
+            void (*fnC)(void *, void *, void *);
+            PppObj *cur;
+            int cnt;
+
+            if (ops != 0) {
+                if (ops->fn4 != 0) {
+                    ops->fn4(cls, def, pr, j);
+                } else {
+                    fn8 = ops->fn8;
+                    fnC = ops->fnC;
+                    cur = cls->first;
+                    if (fn8 != 0) {
+                        if (fnC == 0) {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+                                PppObj *next;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                next = cur->next;
+                                fn8(cur, p, pr);
+                                cur = next;
+                            } while (--cnt != 0);
+                        } else {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+                                PppObj *next;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                next = cur->next;
+                                fn8(cur, p, pr);
+                                if (!def->flag) {
+                                    fnC(cur, p, pr);
+                                }
+                                cur = next;
+                            } while (--cnt != 0);
+                        }
+                    } else if (fnC != 0) {
+                        if (!def->flag) {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                fnC(cur, p, pr);
+                                cur = cur->next;
+                            } while (--cnt != 0);
+                        }
+                    }
+                }
+            } else {
+                func_002EF240(D_00573FD0);
+            }
+        }
+        if (D_006A3BC4 == 0) {
+            PppObj *cur = cls->first;
+            int cnt = cls->count;
+
+            do {
+                cur->wC += 0x1000;
+                cur = cur->next;
+            } while (--cnt != 0);
+        }
+    }
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    mask = 0;
+    obj = m->list;
+    prev = &m->list;
+    while (obj != 0) {
+        PppObj *next = obj->next;
+        PppDefFull *def = ((PppClsFull *)obj->cls)->def;
+
+        if (m->b1D == 0 && obj->wC >= def->w1C) {
+            obj->wC = def->w18;
+            func_002671C0((T6_PrObj *)obj);
+        } else {
+            u32 lim = def->w14;
+            mask |= lim;
+            if ((u32)obj->wC >= lim) {
+                *prev = next;
+                pppDeletePObject((T6_PrObj *)obj);
+                goto next_obj;
+            }
+        }
+        prev = &obj->next;
+    next_obj:
+        obj = next;
+    }
+    if (m->b1D != 0 && mask == 0x70000000) {
+        obj = m->list;
+        while (obj != 0) {
+            PppObj *del = obj;
+            obj = obj->next;
+            pppDeletePObject((T6_PrObj *)del);
+        }
+        m->list = 0;
+    }
+}
 
 void func_00267F10(T6_ColMgr *m)
 {
@@ -437,9 +628,167 @@ int _pppRunPart(void *a, int flags)
     return m->w8 >= m->w4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", func_00268080);
-
 extern s32 D_0036F204;
+
+void func_00268080(void *arg0)
+{
+    PppMgrFull *m = (PppMgrFull *)arg0;
+    int i;
+    int j;
+    u32 mask;
+    PppObj *obj;
+    PppObj **prev;
+
+    for (i = 0; i < m->count; i++) {
+        PppClsFull *cls = &m->cls[i];
+        PppDefFull *def;
+
+        if (m->cls == 0) {
+            continue;
+        }
+        if (cls == 0) {
+            continue;
+        }
+        def = cls->def;
+        if (def == 0) {
+            continue;
+        }
+        D_0036F20C += cls->count;
+        if (cls->count == 0) {
+            continue;
+        }
+        for (j = 0; j < def->n; j++) {
+            PppPrEnt *pr = &def->ent[j];
+            PppOps *ops = pr->ops;
+            void (*fn8)(void *, void *, void *);
+            void (*fnC)(void *, void *, void *);
+            PppObj *cur;
+            int cnt;
+
+            if (ops != 0) {
+                if (ops->fn4 != 0) {
+                    ops->fn4(cls, def, pr, j);
+                } else {
+                    fn8 = ops->fn8;
+                    fnC = ops->fnC;
+                    cur = cls->first;
+                    if (fn8 != 0) {
+                        if (fnC == 0) {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+                                PppObj *next;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                next = cur->next;
+                                fn8(cur, p, pr);
+                                if (D_0036F204 != 0) {
+                                    return;
+                                }
+                                cur = next;
+                            } while (--cnt != 0);
+                        } else {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+                                PppObj *next;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                next = cur->next;
+                                fn8(cur, p, pr);
+                                if (D_0036F204 != 0) {
+                                    return;
+                                }
+                                if (!def->flag) {
+                                    fnC(cur, p, pr);
+                                }
+                                if (D_0036F204 != 0) {
+                                    return;
+                                }
+                                cur = next;
+                            } while (--cnt != 0);
+                        }
+                    } else if (fnC != 0) {
+                        if (!def->flag) {
+                            cnt = cls->count;
+                            do {
+                                u8 **pp = (u8 **)((u8 *)cur + def->ofs) + j;
+                                u8 *p = *pp;
+                                u8 *np = p + pr->h4;
+
+                                if (*(s32 *)np == cur->wC) {
+                                    p = np;
+                                    *pp = p;
+                                }
+                                fnC(cur, p, pr);
+                                if (D_0036F204 != 0) {
+                                    return;
+                                }
+                                cur = cur->next;
+                            } while (--cnt != 0);
+                        }
+                    }
+                }
+            } else {
+                func_002EF240(D_00573FD0);
+            }
+        }
+        if (D_006A3BC4 == 0) {
+            PppObj *cur = cls->first;
+            int cnt = cls->count;
+
+            do {
+                cur->wC += 0x1000;
+                cur = cur->next;
+            } while (--cnt != 0);
+        }
+    }
+    if (D_006A3BC4 != 0) {
+        return;
+    }
+    mask = 0;
+    obj = m->list;
+    prev = &m->list;
+    while (obj != 0) {
+        PppObj *next = obj->next;
+        PppDefFull *def = ((PppClsFull *)obj->cls)->def;
+
+        if (m->b1D == 0 && obj->wC >= def->w1C) {
+            obj->wC = def->w18;
+            func_002671C0((T6_PrObj *)obj);
+        } else {
+            u32 lim = def->w14;
+            mask |= lim;
+            if ((u32)obj->wC >= lim) {
+                *prev = next;
+                pppDeletePObject((T6_PrObj *)obj);
+                goto next_obj;
+            }
+        }
+        prev = &obj->next;
+    next_obj:
+        obj = next;
+    }
+    if (m->b1D != 0 && mask == 0x70000000) {
+        obj = m->list;
+        while (obj != 0) {
+            PppObj *del = obj;
+            obj = obj->next;
+            pppDeletePObject((T6_PrObj *)del);
+        }
+        m->list = 0;
+    }
+}
 void func_00268080(void *m);
 
 int _pppRunPartFp(void *a, int flags)

@@ -6,7 +6,53 @@
 #include "ffx/s4.h"
 #include "ffx/t4.h"
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F3280", TOBtlDrawWeaponAbilityWindow);
+void TODrawScissorXYWH(int x, int y, int w, int h);
+void func_001FA7D0(int x, int y, int w, int h);
+int MsMenuGetText(int a, int b, int c);
+void *TOAddPktMenuIcon(void *list, int x, int y, u8 icon);
+void func_001F37C8(void *a, int b, int c);
+
+void TOBtlDrawWeaponAbilityWindow(int id, int x, int y)
+{
+    s16 w_val;
+    s16 h_val;
+    s32 base;
+    SlotRec *w = (SlotRec *)MsGetSaveWeapon(id, &base);
+    int maxW;
+    int i;
+
+    if (w->count == 0) {
+        return;
+    }
+    maxW = 0;
+    for (i = 0; i < w->count; i++) {
+        if (w->slots[i] != 0xFF) {
+            u16 *ab = (u16 *)MsGetRomAbility(w->slots[i], &base);
+            _TOGetMessageWH(0, (u8 *)(base + ab[0]), &w_val, &h_val, 0, 0);
+            if (maxW < w_val) {
+                maxW = w_val;
+            }
+        }
+    }
+    if (maxW <= 0x69) {
+        maxW = 0x6A;
+    }
+    y -= 3;
+    y -= w->count * 10;
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    func_001FA7D0(x, y, maxW + 0x2A, w->count * 20 + 6);
+    for (i = 0; i < w->count; i++) {
+        if (w->slots[i] == 0xFF) {
+            func_001F37C8((void *)MsMenuGetText(1, 0x1005, 0), x + 0xD, i * 20 + y + 7);
+        } else {
+            u8 *ab = (u8 *)MsGetRomAbility(w->slots[i], &base);
+            void *str = (void *)(base + *(u16 *)ab);
+
+            InvokedFromSelectCursor = TOAddPktMenuIcon(InvokedFromSelectCursor, x + 0xD, i * 20 + y + 5, ab[0x68]);
+            InvokedFromSelectCursor = func_001F41C0(InvokedFromSelectCursor, str, x + 0x20, i * 20 + y + 4, 0);
+        }
+    }
+}
 
 void func_001F34A8(int a, int b, int c, int d)
 {
@@ -254,7 +300,83 @@ void *func_001F4388(void *list, int a, void *b, int c, int d, int e, int f, int 
     return TOAddPktBaseMesFontLClutTypeRGBA(list, a, b, c, d, e, 0, f, g, h, i);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F3280", TOAddPktBaseMesFontLClutTypeRGBA);
+extern R4CharInfo D_00323930;
+extern TextItem D_00323918;
+int func_00204CA8(u8 *s, R4CharInfo *glyph);
+void func_001F1630(TextItem *it, R4CharInfo *glyph);
+void func_001F11E0(TextItem *it, R4CharInfo *glyph);
+void func_001F0EC0(TextItem *it, R4CharInfo *glyph);
+void TOAddPktChangeMacro(int win, u8 *s, TextItem *it);
+
+void *TOAddPktBaseMesFontLClutTypeRGBA(void *list, int win, void *str_arg, int x, int y, int clut, int f12, int r, int g, int b, int a)
+{
+    u8 *str = (u8 *)str_arg;
+    R4CharInfo *glyph = &D_00323930;
+    TextItem *it = &D_00323918;
+
+    func_002EF0D0(glyph, 0, 0x20);
+    func_002EF0D0(it, 0, 0x14);
+    InvokedFromSelectCursor = list;
+    it->x = x;
+    it->y = y;
+    it->col[0] = r;
+    it->col[1] = g;
+    it->col[2] = b;
+    it->col[3] = a;
+    it->f12 = f12;
+    it->f13 = clut;
+    while (*str != 0) {
+        switch (TOGetGroup(*str)) {
+        case 4:
+            func_00204CA8(str, glyph);
+            if (it->f12 == 1) {
+                func_001F1630(it, glyph);
+                func_001F0EC0(it, glyph);
+                it->x += glyph->h10 + 4;
+            } else {
+                func_001F11E0(it, glyph);
+                func_001F0EC0(it, glyph);
+                it->x += glyph->h10 + 2;
+            }
+            break;
+        case 1:
+            it->x = x;
+            if (it->f12 == 0) {
+                it->y += 0x14;
+            } else {
+                it->y += 0x16;
+            }
+            break;
+        case 2:
+            if (*str == 7) {
+                if ((u8)(str[1] + 0x1F) < 0xF) {
+                    it->x += str[1] + 0xFF20;
+                }
+            } else {
+                if (*str == 0xA) {
+                    if ((str[1] & 0xF) != 0) {
+                        it->f13 = (it->f13 & 0xF0) | ((str[1] & 0xF) - 1);
+                    }
+                    if ((str[1] & 0xF0) >= 0x40) {
+                        it->f13 = (it->f13 & 0xF) | ((str[1] & 0xF0) - 0x40);
+                    }
+                }
+                if (*str == 0xB) {
+                    InvokedFromSelectCursor = func_001F9D78(InvokedFromSelectCursor, str[1], it->x, it->y, (u8)r, (u8)g, (u8)b, (u8)a);
+                    it->x += func_002083E8(str[1]);
+                }
+            }
+            break;
+        case 3:
+            if (win != -1) {
+                TOAddPktChangeMacro(win, str, it);
+            }
+            break;
+        }
+        str = TOSkipCode(str);
+    }
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F46A0(void *list, int a, int b, int c, int d, int e)
 {

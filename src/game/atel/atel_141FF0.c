@@ -110,6 +110,26 @@ void AtelDeleteSignal(int id, NodeQ *n) {
     func_00142218(AtelGetBasicWork(id), n);
 }
 
+typedef struct ObjNodeR_Bits2 {
+    struct ObjNodeR_Bits2 *next;
+    struct ObjNodeR_Bits2 *prev;
+    u16 h08;
+    u16 h0A;
+    union {
+        u32 w0C;
+        struct {
+            unsigned h0C : 16;
+            unsigned level : 4;
+            unsigned kind : 3;
+            unsigned flag : 1;
+            unsigned b0F : 8;
+        } b;
+    } u0C;
+    u16 h10;
+    u16 h12;
+    u16 h14;
+} ObjNodeR_Bits2;
+
 INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", func_001422A0);
 
 int AtelRegistSignal2(Req142 *r) {
@@ -228,7 +248,60 @@ int func_001427A8(int id, int x) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_141FF0", AtelDecodeSignal);
+void AtelDecodeSignal(int id, int level)
+{
+    Actor *a = AtelGetBasicWork(id);
+    ObjNodeR *head;
+    ObjNodeR *pick;
+
+    if (!(a->flags34.w & 2)) {
+        return;
+    }
+    if (a->flags34.w & 4) {
+        goto check_b3;
+    }
+    if (a->flags34.w & 0x400000) {
+        goto check_b3;
+    }
+    if (MsBattleCheck() != 0) {
+        return;
+    }
+check_b3:
+    if (!(a->flags34.w & 8)) {
+        return;
+    }
+    pick = 0;
+    {
+        int cur = a->slotIdx;
+        if (level < 0) {
+            level = cur;
+        }
+    }
+    if (level >= 10) {
+        level = -1;
+    }
+    head = OBJR(a)->head80;
+    if (head != 0 && head->u0E.b.hi != 3 && (head->u0E.h & 0xF) > level) {
+        pick = head;
+    }
+    if (pick != 0) {
+        if ((((ObjNodeR_Bits2 *)pick)->u0C.w0C & 0x700000) == 0x100000) {
+            func_00142070(a, pick);
+            func_001426B8(a, pick);
+            ((ObjNodeR_Bits2 *)pick)->u0C.b.kind = 2;
+        } else {
+            a->slotIdx = ((ObjNodeR_Bits2 *)pick)->u0C.b.level;
+            func_00141FF0(a, func_0013C9C8(a, a->slotIdx));
+        }
+        a->node90 = pick;
+    }
+    head = OBJR(a)->head80;
+    while (head != 0) {
+        ObjNodeR *next = head->next;
+        ((ObjNodeR_Bits2 *)head)->u0C.w0C &= ~0x800000;
+        head = next;
+    }
+}
 
 typedef struct ObjNodeR_Bits {
     struct ObjNodeR_Bits *next;

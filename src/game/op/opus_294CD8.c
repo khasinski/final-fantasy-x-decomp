@@ -445,7 +445,61 @@ found_blk:
 
 INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295E28);
 
-INCLUDE_ASM("build/ee_asm/game/op/opus_294CD8", func_00295EB8);
+void func_00295EB8(void *obj300, s16 id, ScriptSub *sub_arg, u16 *pc)
+{
+    OpusPool *o;
+    s16 *p;
+    int v;
+
+    if (D_0054D5E0 != 0) {
+        o = (OpusPool *)((u8 *)D_0054D5E0 + 0x300);
+    } else {
+        o = (OpusPool *)obj300;
+    }
+    p = o->lists[1];
+    while ((v = *p) >= 0) {
+        if (v == id) {
+            goto found;
+        }
+        p++;
+    }
+    p = o->lists[0];
+    while ((v = *p) >= 0) {
+        if (v == id) {
+            goto found;
+        }
+        p++;
+    }
+    p = o->lists[2];
+    while ((v = *p) >= 0) {
+        if (v == id) {
+            goto found;
+        }
+        p++;
+    }
+    return;
+found:
+    {
+        ScriptSub *sub;
+        while ((v = p[1]) >= 0) {
+            *p = v;
+            p++;
+        }
+        *p = -1;
+        sub = (ScriptSub *)(o->subs + (id << 8));
+        *(u_long128 *)sub = 0;
+        if (sub->pBC != 0) {
+            if (sub->bBB != 3) {
+                op_free(o->pA8, sub->pBC);
+                sub->pBC = 0;
+            } else {
+                o->vt50->f54(sub);
+            }
+            sub->pBC = 0;
+        }
+    }
+    o->cur_used--;
+}
 
 void opus_draw_on(IdList *o, s16 id)
 {

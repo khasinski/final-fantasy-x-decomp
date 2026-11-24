@@ -273,8 +273,71 @@ INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", ope_anm_sippo);
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1A60);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", func_002A1C90);
-INCLUDE_RODATA("build/ee_asm/game/op/opu/opu_2A0820/rodata", jtbl_005755D0);
+u16 *func_002A1C90(ScriptThread *th, s16 *pc) {
+    register ScriptThread *s1 __asm__("$17") = th;
+    register s16 *s0 __asm__("$16") = pc;
+    u8 *obj300 = (u8 *)s1 + 0x300;
+    ScriptSub *sub = s1->sub;
+    register ScriptSub *p __asm__("$3");
+    u32 rgba;
+
+    switch (s1->flags >> 12) {
+    case 0:
+        p = opus_no_get(obj300, sub, s0[1]);
+        VU0_LQC2(31, 0x40, p);
+        s0 += 2;
+        break;
+    case 1:
+        p = opus_no_get(obj300, sub, s0[1]);
+        VU0_CTC2_NI(21, 0x3C000000);
+        VU0_LQC2(31, 0x40, p);
+        VU0_OP("vmulw.xyz $vf31, $vf31, $vf31w");
+        VU0_OP("vmuli.xyz $vf31, $vf31, I");
+        *(u32 *)((u8 *)s1 + 0xC) = 0x43000000;
+        VU0_LQC2(30, 0, s1);
+        VU0_OP("vmove.w $vf31, $vf30");
+        s0 += 2;
+        break;
+    case 2:
+        ((s32 *)s1)[0] = s0[1];
+        ((s32 *)s1)[1] = s0[2];
+        ((s32 *)s1)[2] = s0[3];
+        ((s32 *)s1)[3] = s0[4];
+        VU0_LQC2(31, 0, s1);
+        VU0_OP("vitof0.xyzw $vf31, $vf31");
+        s0 += 5;
+        break;
+    case 3:
+        VU0_LQC2(31, 0x30, sub);
+        s0 += 1;
+        break;
+    case 4:
+        p = opus_no_get(obj300, sub, s0[1]);
+        VU0_LQC2(31, 0x30, p);
+        s0 += 2;
+        break;
+    case 5:
+        ((s32 *)s1)[0] = ((u8 *)sub)[0xC8];
+        ((s32 *)s1)[1] = ((u8 *)sub)[0xC9];
+        ((s32 *)s1)[2] = ((u8 *)sub)[0xCA];
+        ((s32 *)s1)[3] = s0[1];
+        VU0_LQC2(31, 0, s1);
+        VU0_OP("vitof0.xyzw $vf31, $vf31");
+        s0 += 2;
+        break;
+    }
+
+    VU0_CTC2_NI(21, 0x437F0000);
+    VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+    VU0_OP("vminii.xyzw $vf31, $vf31, I");
+    VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+    VU0_OP("vftoi0.xyzw $vf31, $vf31");
+    VU0_QMFC2_NI(rgba, 31);
+    MMI_OP2Z("ppach", rgba, rgba);
+    MMI_OP2Z("ppacb", rgba, rgba);
+    *(u32 *)((u8 *)sub + 0xC8) = rgba;
+    return (u16 *)s0;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_rgba_map);
 

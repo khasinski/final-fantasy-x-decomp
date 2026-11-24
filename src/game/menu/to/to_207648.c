@@ -40,6 +40,8 @@ void func_00207648(int val, void *out, int width)
     *dst = 0;
 }
 
+extern s32 D_003236E0[];
+
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOIntToMes);
 
 void func_00207988(int id, int count, int x, int y, int width)
@@ -101,7 +103,63 @@ s32 TOFuncPadMessageSelect(int id)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOFuncPadMessageInputValue);
+void TOFuncPadMessageInputValue(int id)
+{
+    s8 digits[16];
+    int val;
+    int i;
+
+    func_002EF0D0(digits, 0, 16);
+    val = D_00669AE0[id]->wC;
+    for (i = 7; i >= 0; i--) {
+        digits[i] = val / D_003236E0[i];
+        val %= D_003236E0[i];
+    }
+    if (D_003238D0.h16 & 0x2000) {
+        D_00669AE0[id]->b2++;
+        func_002D70D8(1);
+    }
+    if (D_003238D0.h16 & 0x8000) {
+        D_00669AE0[id]->b2--;
+        func_002D70D8(1);
+    }
+    if (D_003238D0.h16 & 0x1000) {
+        int pos = D_00669AE0[id]->b2 + 1;
+        int idx = D_00669AE0[id]->b5 - pos;
+
+        if (digits[idx] == 9) {
+            D_00669AE0[id]->wC -= D_003236E0[idx] * 9;
+        } else {
+            D_00669AE0[id]->wC += D_003236E0[idx];
+        }
+        func_002D70D8(1);
+    }
+    if (D_003238D0.h16 & 0x4000) {
+        int pos = D_00669AE0[id]->b2 + 1;
+        int idx = D_00669AE0[id]->b5 - pos;
+
+        if (digits[idx] == 0) {
+            D_00669AE0[id]->wC += D_003236E0[idx] * 9;
+        } else {
+            D_00669AE0[id]->wC -= D_003236E0[idx];
+        }
+        func_002D70D8(1);
+    }
+    D_00669AE0[id]->b2 = D_00669AE0[id]->b2 > D_00669AE0[id]->b5 - 1
+        ? (s8)(D_00669AE0[id]->b2 - (D_00669AE0[id]->b5 - D_00669AE0[id]->b4))
+        : (D_00669AE0[id]->b2 < D_00669AE0[id]->b4
+            ? (s8)(D_00669AE0[id]->b2 + (D_00669AE0[id]->b5 - D_00669AE0[id]->b4))
+            : D_00669AE0[id]->b2);
+    if (D_003238D0.h14 & 0x40) {
+        D_00669AE0[id]->b2 = D_00669AE0[id]->b3;
+        D_00669AE0[id]->wC = D_00669AE0[id]->w10;
+        func_002D70D8(4);
+    }
+    if (D_003238D0.h14 & 0x20) {
+        D_00669AE0[id]->b1 = 2;
+        func_002D70D8(1);
+    }
+}
 
 int func_00207EE0(int a)
 {

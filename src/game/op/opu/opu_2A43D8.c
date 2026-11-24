@@ -443,7 +443,61 @@ u32 func_002A5488(char *a) {
     return *(u32 *)(a + 0x14) > 0xFFFFF; /* DEBT(CAST): record type unknown, word at +0x14 */
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opu_motion);
+int func_002A7620(int id, int seq, int flag);
+int MsEffectCheckMotion2(int chrid);
+void Ch_MotionSetNextHokan(Chr *chr, int v);
+void Ch_ClothReset2(Chr *chr);
+
+u16 *opu_motion(ScriptThread *th, u16 *pc)
+{
+    ScriptSub *sub = th->sub;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0x0000:
+        func_002A7620(sub->b18, pc[2], 0);
+        pc += 3;
+        break;
+    case 0x1000:
+        func_002A7620(sub->b18, pc[1], 0);
+        pc += 2;
+        break;
+    case 0x2000: {
+        int wait;
+        if (*((s8 *)th + 0x21E) != 0 && sub->b18 < 0x20) {
+            if (MsEffectCheckMotion2(sub->b18) == 0) {
+                __asm__("");
+                wait = 1;
+            } else {
+                wait = 0;
+            }
+        } else {
+            wait = Ch_GetWaitMotion(owu_chr_hd[sub->b18]);
+        }
+        if (wait == 0) {
+            pc += 1;
+        } else {
+            th->f210 = 1;
+        }
+        break;
+    }
+    case 0x3000:
+        *(float *)((u8 *)sub + (s16)pc[2]) = (float)func_002A7620(sub->b18, pc[1], 0);
+        pc += 3;
+        break;
+    case 0x4000:
+        func_002A7620(sub->b18, (pc[2] << 16) | pc[1], 1);
+        pc += 3;
+        break;
+    case 0x5000: {
+        Chr *chr = owu_chr_hd[sub->b18];
+        pc += 1;
+        Ch_MotionSetNextHokan(chr, 0);
+        Ch_ClothReset2(chr);
+        break;
+    }
+    }
+    return pc;
+}
 
 extern int D_003736A0[];
 

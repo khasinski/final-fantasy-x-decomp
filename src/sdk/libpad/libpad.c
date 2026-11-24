@@ -18,7 +18,48 @@ typedef struct SndSlotFull {
 
 extern SndSlotFull D_0078BC90[][4];
 
-INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDB48);
+extern int D_00566344;
+extern char D_00576A08[];
+int func_002F8780(int id);
+int func_002F87A0(void *dma, int n);
+
+typedef struct PadDma {
+    void *src;
+    void *dst;
+    int size;
+    int attr;
+} PadDma;
+
+void func_002DDB48(int port, int slot)
+{
+    PadDma dma[16];
+    s32 *p = D_0078BC90[port][slot].p04;
+    void *dst;
+    int cnt;
+    int id;
+
+    if (func_002F8780(D_0078BC90[port][slot].w0C) >= 0) {
+        if (D_00566344 != 0) {
+            func_002EF240(D_00576A08);
+        }
+        return;
+    }
+    cnt = p[0] + 1;
+    dst = (void *)(D_0078BC90[port][slot].w08 + ((cnt & 1) << 5));
+    p[0] = cnt;
+    func_002F8C30((SndVoice *)p, (SndVoice *)(p + 8));
+    dma[0].dst = dst;
+    dma[0].src = p;
+    dma[0].size = 0x20;
+    dma[0].attr = 0;
+    id = func_002F87A0(dma, 1);
+    if (id == 0) {
+        if (D_00566344 != 0) {
+            func_002EF240(D_00576A08);
+        }
+    }
+    D_0078BC90[port][slot].w0C = id;
+}
 
 INCLUDE_ASM("build/ee_asm/sdk/libpad/libpad", func_002DDC78);
 

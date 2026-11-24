@@ -443,7 +443,37 @@ INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00196640);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", rcbgGuideUpdateWalk);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgGuide", func_00197868);
+typedef struct GuideOff13 {
+    s8 b[13];
+} GuideOff13;
+
+extern GuideOff13 D_0056DA48;
+extern GuideOff13 D_0056DA58;
+
+void func_00197868(void *arg0, float fx, float fz) {
+    GuideOff13 ox = D_0056DA48;
+    GuideOff13 oz = D_0056DA58;
+    float v[4];
+    float *m = (float *)func_00197C90(arg0);
+    int gx, gz, i;
+
+    v[0] = m[0x24] * 10.0f;
+    v[1] = 0.0f;
+    v[2] = m[0x2A] * 10.0f;
+    v[3] = 1.0f;
+    gx = (int)((fx - v[0]) / 40.0f);
+    gz = (int)((v[2] - fz) / 40.0f);
+    for (i = 0; i < 13; i++) {
+        int x = gx + ox.b[i];
+        int z;
+        int idx;
+        x = (x < 0) ? 0 : (x > 63 ? 63 : x);
+        z = gz + oz.b[i];
+        z = (z < 0) ? 0 : (z > 63 ? 63 : z);
+        idx = x + (z << 6);
+        (*(u8 **)((u8 *)arg0 + 0x70))[idx >> 3] |= 1 << (idx & 7);
+    }
+}
 
 void func_00197A00(void *unused, float *scale, float *pos) {
     *scale = D_00313728 * (1.0f / 256.0f);

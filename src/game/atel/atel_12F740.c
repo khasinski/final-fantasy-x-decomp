@@ -1,6 +1,5 @@
 /* tu_060 0x12f740-0x135510: low; unk_12F740 (config/tu_map.tsv) */
 #define func_00133BB8 _hdr_func_00133BB8
-#define func_002D4410 _hdr_func_002D4410
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -9,9 +8,6 @@
 #include "ffx/q1.h"
 #include "ffx/s0.h"
 #undef func_00133BB8
-#undef func_002D4410
-
-float func_002D4410(float y, float x);
 
 int func_0012F740(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
@@ -32,7 +28,71 @@ u8 *func_0012F788(Actor *a, void *op, ScriptCtx *ctx)
     return (u8 *)t + t[k];
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_0012F808);
+extern char D_0056A3E0[];
+extern char D_0056A3E8[];
+extern char D_0056A3F0[];
+extern char D_0056A3F8[];
+extern char D_0056A400[];
+
+int func_0012F808(Actor *a, void *op, ScriptCtx *ctx)
+{
+    char buf[16];
+    int mask;
+    int prev;
+    int dst_var;
+    int *arr;
+    int count;
+    int id;
+    char *dst;
+    u16 *tab;
+    int i;
+    int n_on = 0;
+
+    dst_var = AtelPopStackInteger(a, ctx);
+    prev = -1;
+    arr = (int *)AtelPopStackInteger(a, ctx);
+    mask = AtelPopStackInteger(a, ctx);
+    count = AtelPopStackInteger(a, ctx);
+    AtelPopStackInteger(a, ctx);
+    id = AtelPopStackInteger(a, ctx);
+    dst = (char *)AtelGetRealVarAdrs(a, dst_var);
+    arr = (int *)AtelGetRealVarAdrs(a, (int)arr);
+    dst[0] = 0;
+    tab = (u16 *)func_00206EB0(id, func_00138240());
+    func_002F032C(dst, D_0056A400);
+    for (i = 0; i < count; i++) {
+        int k = *arr++ * 2;
+        int bit;
+        char *s;
+
+        if (((int (*)(void))func_0013A398)()) {
+            k++;
+        }
+        s = (char *)tab + tab[k];
+        bit = (mask >> i) & 1;
+        if (bit != prev) {
+            if (bit != 0) {
+                func_002F032C(dst, D_0056A3E0);
+            } else {
+                func_002F032C(dst, D_0056A3E8);
+            }
+        }
+        prev = bit;
+        if (bit != 0) {
+            buf[0] = 0x10;
+            buf[1] = n_on + 0x30;
+            buf[2] = 0;
+            func_002F032C(dst, buf);
+            n_on++;
+        }
+        func_002F032C(dst, s);
+        if (i < count - 1) {
+            func_002F032C(dst, D_0056A3F0);
+        }
+    }
+    func_002F032C(dst, D_0056A3F8);
+    return n_on << 8;
+}
 
 int func_0012FA00(Actor *a, void *op, ScriptCtx *ctx)
 {

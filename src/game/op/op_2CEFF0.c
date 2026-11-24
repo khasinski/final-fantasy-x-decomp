@@ -176,7 +176,70 @@ INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CF8F8);
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CFA20);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CFC70);
+void func_002B2B30(void *pkt, int a1, int a2, int a3);
+
+void *func_002CFC70(u8 *arg0, int a1, OpTim2 *tim2, s16 tbp, s16 cbp)
+{
+    register u8 *pkt __asm__("$21") = arg0;
+    OpTim2Pic *pic = &tim2->pic;
+    u8 *cur = pkt;
+    u8 *data;
+    register u8 *clut __asm__("$20");
+    int x;
+    int y;
+    int bw;
+    u16 w;
+    u16 h;
+
+    if (tbp == 0) {
+        tbp = pic->gsTex0Lo & 0x3FFF;
+    }
+    if (cbp == 0) {
+        cbp = (pic->gsTex0Hi >> 5) & 0x3FFF;
+    }
+    data = tim2->data;
+    {
+        register u32 imgSize __asm__("$3") = pic->imageSize;
+        clut = data + imgSize;
+    }
+    if (pic->clutSize != 0) {
+        register u32 tag __asm__("$3");
+
+        func_002DA928(cur + 0x10, cbp, 1, 0, 0, 0, 16, 16);
+        tag = (*(u32 *)(cur + 0x60) & 0x7FFF) | 0x30000000;
+        MMI_SQ_ZERO(0x70, cur);
+        *(u32 *)(cur + 0x70) = tag;
+        *(u32 *)(cur + 0x74) = (u32)clut;
+        cur += 0x80;
+    }
+    if (tim2->bF != 0) {
+        x = pic->b2A << 4;
+        y = pic->b2B << 4;
+        bw = pic->b28 << 4;
+        w = (u16)pic->width;
+        h = (u16)pic->height;
+    } else {
+        x = 0;
+        y = 0;
+        w = (u16)pic->width;
+        h = (u16)pic->height;
+        bw = w;
+    }
+    *(u32 *)cur = 0x10000006;
+    func_002DA928(cur + 0x10, tbp, bw / 64, D_004F4600[pic->imageType], x, y, (s16)w, (s16)h);
+    {
+        register u32 tag __asm__("$3") = (*(u32 *)(cur + 0x60) & 0x7FFF) | 0x30000000;
+        MMI_SQ_ZERO(0x70, cur);
+        *(u32 *)(cur + 0x74) = (u32)data;
+        *(u32 *)(cur + 0x70) = tag;
+    }
+    func_002B2B30(pkt, 1, a1, 0);
+    cur += 0x80;
+    MMI_SQ_ZERO(0, pkt);
+    *(u32 *)pkt = 0x10000006;
+    func_002B2B30(cur, 1, a1, 0);
+    return cur + 0x10;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2CEFF0", func_002CFE38);
 

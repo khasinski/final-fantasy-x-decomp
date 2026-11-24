@@ -1,5 +1,6 @@
 /* tu_327 0x2b1e08-0x2b33f8: low; ~op (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: wrappers (see w10.h). */
+#define func_002B1F90 _hdr_func_002B1F90
 #include "common.h"
 #include "vu0.h"
 #include "ffx/q7.h"
@@ -7,6 +8,7 @@
 #include "ffx/r6.h"
 #include "ffx/v6.h"
 #include "ffx/g4.h"
+#undef func_002B1F90
 
 void func_002B1E08(void)
 {
@@ -15,12 +17,94 @@ void func_002B1E08(void)
     func_002B37C0();
 }
 
+extern u_long128 D_006F2CE0[];
+extern u64 D_006F2F58;
+extern u64 D_006F2D90[];
+extern s32 D_006F2E60[6];
+void func_002B2970(void);
+void func_002B29D8(void);
+void _call_func_002B2B30(void *, s32, s32, s32) __asm__("func_002B2B30");
+
 INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B1E30);
 
 void func_002B1F88(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2B1E08", func_002B1F90);
+void func_002B1F90(a0, a1)
+    u8 *a0;
+    int a1;
+{
+    u64 *src = (u64 *)(a0 + ((a1 & 1) ? 0x150 : 0x60));
+    u64 *dst;
+
+    register u64 mask __asm__("$6");
+
+    func_00293E70();
+    mask = 0xFFFFFFFFULL;
+    dst = (u64 *)D_006F2CE0;
+    dst[2] = 0x9000000000008001ULL;
+    dst[3] = 0x00000EEEEEEEEEEEULL;
+    dst[4] = src[0];
+    dst[5] = 0x4C;
+    {
+        register u64 s2 __asm__("$8") = src[2];
+        register u64 a __asm__("$2") = s2 & mask;
+        register u64 o __asm__("$3") = s2 | (1ULL << 32);
+        D_006F2F58 = a;
+        dst[6] = o;
+    }
+    dst[7] = 0x4E;
+    dst[8] = src[4];
+    dst[9] = 0x18;
+    dst[10] = src[6];
+    dst[11] = 0x40;
+    dst[12] = 0x5000D;
+    dst[13] = 0x47;
+    dst[14] = 0x21;
+    dst[15] = 0x14;
+    dst[19] = 8;
+    dst[16] = 0x8000000000ULL;
+    dst[17] = 0x3B;
+    dst[18] = 0;
+    dst[20] = (u64)((u8 *)&D_00703FA0)[0] | ((u64)((u8 *)&D_00703FA0)[1] << 8) | ((u64)((u8 *)&D_00703FA0)[2] << 16);
+    dst[21] = 0x3D;
+
+    dst = D_006F2D90;
+    dst[2] = 0x9000000000008001ULL;
+    dst[3] = 0x00000EEEEEEEEEEEULL;
+    dst[4] = src[0];
+    dst[5] = 0x4C;
+    {
+        register u64 s2 __asm__("$8") = src[2];
+        mask &= s2;
+        dst[6] = mask;
+    }
+    dst[7] = 0x4E;
+    dst[8] = src[4];
+    dst[9] = 0x18;
+    dst[10] = src[6];
+    dst[11] = 0x40;
+    dst[12] = 0x5000D;
+    dst[13] = 0x47;
+    dst[14] = 0x21;
+    dst[15] = 0x14;
+    dst[19] = 8;
+    dst[16] = 0x8000000000ULL;
+    dst[17] = 0x3B;
+    dst[18] = 0;
+    dst[20] = (u64)((u8 *)&D_00703FA0)[0] | ((u64)((u8 *)&D_00703FA0)[1] << 8) | ((u64)((u8 *)&D_00703FA0)[2] << 16);
+    dst[21] = 0x3D;
+
+    func_002B2970();
+    _call_func_002B2B30(D_006F2CE0, 0xB, 0, 0);
+    _call_func_002B2B30(D_006F2D90, 0xB, 0x103A, 0);
+    D_006F2E60[0] = 0;
+    D_006F2E60[1] = 0;
+    D_006F2E60[2] = 0;
+    D_006F2E60[3] = 0;
+    D_006F2E60[4] = 0;
+    D_006F2E60[5] = 0;
+}
 
 void func_002B21E0(s32 a) {
     func_002B1F90(a);

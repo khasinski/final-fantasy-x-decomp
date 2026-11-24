@@ -192,7 +192,69 @@ u16 *func_002A3600(W10Ctx *c, u16 *pc) {
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A3678);
+extern int func_002CFA20(int, void *, int, int, int, int, int, int, int, int);
+extern void func_002A38A0(AnimCtx *, u8 *, int);
+extern void func_002B2E50(void *, int, int, int);
+extern void func_002CF040(void *, int);
+extern void func_002CF1D0(void *, int);
+
+s16 *func_002A3678(AnimCtx *o, s16 *p)
+{
+    u8 *t = o->p220;
+
+    switch ((s16)o->h21A & 0xF000) {
+    case 0: {
+        u32 v = ((u16 *)p)[2];
+        void *tex;
+        u16 *q;
+        u16 lo;
+        u16 hi;
+
+        if (v & 0x8000) {
+            v = (v & 0x3FFF) + 0x1A00;
+        }
+        tex = op_oef2_a_get(*(int *)((u32)o + (t[0x1E] << 2) + 0x360), 2, p[1]);
+        q = (u16 *)((u8 *)p + ((u16 *)p)[3]);
+        lo = q[0];
+        hi = q[1];
+        *(int *)((u8 *)o + 0x354) = func_002CFA20(*(int *)((u8 *)o + 0x354), tex, v, (hi << 16) | lo, p[4],
+                                                  (int)*(float *)(t + 0x40), (int)*(float *)(t + 0x44),
+                                                  *(int *)(t + 0xC8), t[0xC2], t[0xC3]);
+        p += 5;
+        break;
+    }
+    case 0x1000:
+        func_002A38A0(o, t, p[1]);
+        p += 2;
+        break;
+    case 0x2000:
+        func_002A3B38();
+        p += 1;
+        break;
+    case 0x3000:
+        func_002B2730(0);
+        func_002A2C68();
+        p += 1;
+        break;
+    case 0x6000:
+        func_002B2E50((void *)func_002B2730, 0, 0, 1);
+        p += 1;
+        break;
+    case 0x7000:
+        func_002B2730((int)*(float *)(t + p[1]) << 8);
+        p += 2;
+        break;
+    case 0x4000:
+        func_002CF040(&p[2], p[1] << 16);
+        p += 9;
+        break;
+    case 0x5000:
+        func_002CF1D0(&p[2], p[1] << 16);
+        p += 9;
+        break;
+    }
+    return p;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A38A0);
 

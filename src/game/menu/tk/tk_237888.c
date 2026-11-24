@@ -178,7 +178,74 @@ void func_00237E28(int x, int y, WeaponRec *w)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_237888", func_00237F28);
+void func_00237F28(Task *t, int is_buy)
+{
+    s32 buf0;
+    s32 buf1;
+    WeaponRec *cur;
+    WeaponRec *eq;
+    U4IdList *list;
+    int eq_idx;
+
+    if ((u32)D_00694084 >= 7) {
+        return;
+    }
+    list = func_00228220(D_00694080, D_0069408C);
+    if (is_buy != 0) {
+        cur = func_00237E00(list->ids[t->x48]);
+    } else {
+        register int idx __asm__("$3") = t->x48;
+        register u32 ptr __asm__("$2") = 0x1D57300;
+        ptr = (u32)(idx * 4) + ptr;
+        __asm__("" : "+r"(ptr));
+        cur = (WeaponRec *)MsGetSaveWeapon(*(u16 *)ptr, &buf0);
+    }
+    if (cur->b5 != 0) {
+        eq_idx = TkMenuGetArmor(D_00694084);
+    } else {
+        eq_idx = TkMenuGetWeapon(D_00694084);
+    }
+    if (eq_idx != 0xFF) {
+        eq = (WeaponRec *)MsGetSaveWeapon(eq_idx, &buf1);
+    } else {
+        eq = 0;
+    }
+    if (is_buy != 0) {
+        func_00226E90(&D_00326098);
+        func_00226210(D_00326078[0], D_00326078[1], 0x12);
+        if (eq != 0) {
+            func_00237E28(D_00326080[0], D_00326080[1], eq);
+            func_00226A40(eq, D_00326070[0] + D_00326098.rect[0], D_00326070[1] + D_00326098.rect[1], 0);
+        } else {
+            int bx = D_00326098.rect[0] + 0x1D;
+            int by = D_00326098.rect[1] + 1;
+            register int gx __asm__("$6") = D_00326070[0];
+            register int gy __asm__("$7") = D_00326070[1];
+            int x = gx + bx;
+            int y = gy + by;
+            func_00226350(x, y, func_00220A78(0x17), 0);
+        }
+        func_00226210(D_00326088[0], D_00326088[1], 0x13);
+        func_00237E28(D_00326090[0], D_00326090[1], cur);
+    } else {
+        func_00226E90(&D_00326098);
+        func_00226210(D_00326078[0], D_00326078[1], 0x12);
+        if (eq != 0) {
+            func_00237E28(D_00326080[0], D_00326080[1], eq);
+            func_00226A40(eq, D_00326070[0] + D_00326098.rect[0], D_00326070[1] + D_00326098.rect[1], 0);
+        } else {
+            int bx = D_00326098.rect[0] + 0x1D;
+            int by = D_00326098.rect[1] + 1;
+            register int gx __asm__("$6") = D_00326070[0];
+            register int gy __asm__("$7") = D_00326070[1];
+            int x = gx + bx;
+            int y = gy + by;
+            func_00226350(x, y, func_00220A78(0x17), 0);
+        }
+        func_00226210(D_00326088[0], D_00326088[1], 0x13);
+        func_00237E28(D_00326090[0], D_00326090[1], cur);
+    }
+}
 
 /* DEBT(TYPE): old-style definition; func_002383F8 calls with 0 args */
 int func_002381F0(w)

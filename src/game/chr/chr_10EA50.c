@@ -194,7 +194,71 @@ extern u64 D_0057EB90[2];
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F1A0);
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F308);
+s32 func_0010F308(QwPkt *pkt, s32 mode)
+{
+    s32 ret = 0;
+
+    if (mode == 0 && D_0057EB70 != 0) {
+        D_0057EB70 = 0;
+        mode = 1;
+    } else {
+        D_0057EB70 = mode;
+    }
+    if (mode == 1) {
+        pkt->d[0] = 0;
+        pkt->w[2] = 0;
+        pkt->w[3] = 0x6C010027;
+        pkt++;
+        pkt->d[0] = D_0057EB90[0];
+        pkt->d[1] = D_0057EB90[1];
+        pkt++;
+        {
+            register s32 p78 __asm__("$3") = D_0057EB78;
+            if (p78 != 0) {
+                register u_long128 z __asm__("$4") = 0;
+                register u8 *p __asm__("$5") = (u8 *)p78;
+                register u64 c17 __asm__("$7") = 0x17;
+                register u32 tag2 __asm__("$2");
+                pkt->q = z;
+                pkt->w[3] = 0x6C0100DF;
+                pkt++;
+                pkt->d[0] = *(u64 *)(p + 0x18);
+                pkt->d[1] = c17;
+                pkt++;
+                tag2 = 0x6C0102CB;
+                pkt->q = z;
+                pkt->w[3] = tag2;
+                pkt++;
+                pkt->d[0] = *(u64 *)(p + 0x18);
+                pkt->d[1] = c17;
+            } else {
+                pkt->q = 0;
+                pkt->w[3] = 0x6C0100DF;
+                pkt++;
+                pkt->d[0] = 0;
+                pkt->d[1] = 1;
+                pkt++;
+                pkt->q = 0;
+                pkt->w[3] = 0x6C0102CB;
+                pkt++;
+                pkt->d[0] = 0;
+                pkt->d[1] = 1;
+            }
+        }
+        ret = 6;
+    } else if (mode == 2) {
+        u8 *p = (u8 *)D_0057EB78;
+        if (p != 0) {
+            pkt->q = 0;
+            pkt->w[3] = 0x6C010027;
+            pkt++;
+            pkt->d[0] = *(u64 *)(p + 0x18);
+            pkt->d[1] = 0x17;
+            ret = 2;
+        }
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010F468);
 

@@ -588,8 +588,56 @@ void func_002746F0(char *base, ScriptCtx *ctx) {
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274740);
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00274A30);
-INCLUDE_RODATA("build/ee_asm/game/particle/eiProg/pppYanagi/rodata", jtbl_005743D0);
+void func_00274A30(char *m, void *k, void *buf, int a) {
+    float *out = (float *)m;
+    float *key = (float *)k;
+    float *pos = (float *)buf;
+    float *p1;
+    float *p2;
+    float f;
+    s32 v;
+
+    out[0] = pos[0] + func_002B3DB0(key[1]);
+    out[1] = pos[1] + func_002B3DB0(key[1]);
+    out[2] = pos[2] + func_002B3DB0(key[1]);
+    out[3] = 1.0f;
+    switch (a) {
+    case 1:
+        out[0] = pos[0] - key[1];
+        break;
+    case 2:
+        out[0] = pos[0] + key[1];
+        break;
+    case 3:
+        out[1] = pos[1] - key[1];
+        break;
+    case 4:
+        out[1] = pos[1] + key[1];
+        break;
+    case 5:
+        out[2] = pos[2] - key[1];
+        break;
+    case 6:
+        out[2] = pos[2] + key[1];
+        break;
+    }
+    p1 = out + 4;
+    p2 = out + 8;
+    out[4] = key[4];
+    out[5] = key[5];
+    out[6] = key[6];
+    out[7] = 0.0f;
+    func_00270E40(p1, key + 8, 0);
+    VU0_LQC2(31, 0, p1);
+    VU0_SQC2(31, 0, p2);
+    func_002DCEC8(p2, p2);
+    f = -(key[12] + func_002B3DB0(key[13]));
+    MIPS_MFC1(v, f);
+    VU0_LQC2(31, 0, p2);
+    VU0_QMTC2_NI(30, v);
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, p2);
+}
 
 int func_00274BC8(void *k, int *w)
 {
