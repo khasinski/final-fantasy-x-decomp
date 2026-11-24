@@ -136,7 +136,109 @@ int MsApUp(int idx, BtlChr *c, int v, int r) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1DC7A0", MsGetItem);
+float sqrtf(float x);
+
+typedef struct {
+    u8 pad0[0x3A];
+    s8 f3A;
+    u8 pad3B[6];
+    s8 f41;
+    s8 f42;
+    s8 f43;
+} ItemGS;
+
+typedef struct {
+    u8 pad0[0xCC];
+    s32 fCC;
+} W5BufGil;
+
+typedef struct {
+    u16 gil;
+    u16 ap;
+    u16 ap_ok;
+    u8 pad6[2];
+    u8 rate[2];
+    u8 padA;
+    u8 wep_rate;
+    u16 item[4];
+    u8 cnt[4];
+    u16 item_ok[4];
+    u8 cnt_ok[4];
+    u8 pad24[6];
+    u16 bribe_item;
+    u8 bribe_cnt;
+} MonDropData;
+
+void MsGetItem(int a0, BtlChr *a1, MonDropData *a2, int a3, int a4) {
+    u16 *item_id;
+    u8 *item_cnt;
+    int ap;
+    int gil;
+    int r;
+    int i;
+
+    if (a2 != 0) {
+        if (a3 != 0) {
+            ap = a2->ap_ok;
+            item_id = a2->item_ok;
+            item_cnt = a2->cnt_ok;
+        } else {
+            ap = a2->ap;
+            item_id = a2->item;
+            item_cnt = a2->cnt;
+        }
+        if (((ItemGS *)&D_003172F0)->f42 != 0) {
+            ap *= 100;
+        }
+        gil = a2->gil;
+        r = 1;
+        if (((ItemGS *)&D_003172F0)->f43 != 0) {
+            gil *= 100;
+        }
+        for (i = 0; i < 18; i++) {
+            r = MsApUp(i, MsGetChr(i), ap, r);
+        }
+        if (((u8 *)a1)[0x3C1] == 2) {
+            int r1 = brnd(MsGetRndChr(a0, 0));
+            int r2 = brnd(MsGetRndChr(a0, 0));
+            int cnt = MsCheckRange((int)((a2->bribe_cnt * sqrtf((float)*(s32 *)((u8 *)a1 + 0x3C8)) * 0.0625f * ((r1 % 11) + 20)) / 25.0f + (r2 & 1)), 1, 99);
+            func_001DC968(a2->bribe_item, cnt, &btlgetdata);
+        } else {
+            W5BufGil *bg = (W5BufGil *)&btlgetdata;
+            bg->fCC = MsCheckRange(bg->fCC + gil * r, 0, 999999999);
+            for (i = 0; i < 2; i++) {
+                if (brnd(10) % 255 < a2->rate[i] || (((ItemGS *)&D_003172F0)->f3A != 0 && a2->rate[i] != 0)) {
+                    int rare;
+                    int idx;
+                    u16 id;
+                    int cnt;
+                    if ((brnd(11) & 0xFF) < 0x20 || ((ItemGS *)&D_003172F0)->f41 != 0) {
+                        rare = 1;
+                    } else {
+                        rare = 0;
+                    }
+                    idx = i * 2 + rare;
+                    id = item_id[idx];
+                    cnt = item_cnt[idx];
+                    if ((a4 >> 1) & 1) {
+                        id = 0x2046;
+                    } else if ((a4 >> 2) & 1) {
+                        id = 0x2047;
+                    } else if ((a4 >> 3) & 1) {
+                        id = 0x2048;
+                    } else if ((a4 >> 4) & 1) {
+                    } else if ((a4 >> 5) & 1) {
+                        id = 0x2049;
+                    }
+                    func_001DC968(id, cnt, &btlgetdata);
+                }
+            }
+        }
+        if (brnd(10) % 255 < a2->wep_rate || (((ItemGS *)&D_003172F0)->f3A != 0 && a2->wep_rate != 0)) {
+            func_001DCAD8(a0, (u8 *)a2, &btlgetdata);
+        }
+    }
+}
 
 s32 func_001DD2D0(s32 arg0, s32 arg1, s32 arg2) {
     W5Ent16 *var_16;

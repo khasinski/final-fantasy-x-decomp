@@ -19,6 +19,7 @@ dptofp = func_002EC440;
 fptoui = 0x2ECF38;
 fptodp = func_002ED038;
 sqrtf = 0x2E9708;
+__fixdfdi = 0x300350;
 SECTIONS
 {
     . = 0x100000;
@@ -815,6 +816,10 @@ SECTIONS
         build/src/game/battle/ms_1D48D0.c.o(.rodata.cjt3)
         . = 0x56f6a8 - 0x568f00;
         build/asm/data/rodata/piece_0056F6A8.s.o(.rodata)
+        . = 0x56f6c0 - 0x568f00;
+        build/src/game/battle/ms_1D8C28.c.o(.rodata)
+        . = 0x56f710 - 0x568f00;
+        build/asm/data/rodata/piece_0056F710.s.o(.rodata)
         . = 0x56f720 - 0x568f00;
         build/src/game/battle/ms_1DBB50.c.o(.rodata.cjt0)
         . = 0x56f770 - 0x568f00;
@@ -1259,10 +1264,20 @@ SECTIONS
         build/src/game/platform/ffx_2DC650.c.o(.rodata.cjt0)
         . = 0x576a08 - 0x568f00;
         build/asm/data/rodata/piece_00576A08.s.o(.rodata)
+        . = 0x576e60 - 0x568f00;
+        build/src/sdk/newlib/libm/libm_2E2830.c.o(.rodata)
+        . = 0x577030 - 0x568f00;
+        build/asm/data/rodata/piece_00577030.s.o(.rodata)
+        . = 0x5773f0 - 0x568f00;
+        build/src/sdk/newlib/libm/libm_2E4250.c.o(.rodata)
+        . = 0x577468 - 0x568f00;
+        build/asm/data/rodata/piece_00577468.s.o(.rodata)
         . = 0x5781e0 - 0x568f00;
-        build/src/sdk/newlib/libc/libc_2F0840.c.o(.rodata.jtbl_005781E0)
+        build/src/sdk/newlib/libc/libc_2F0840.c.o(.rodata.cjt0)
         . = 0x578298 - 0x568f00;
-        build/asm/data/rodata/piece_00578298.s.o(.rodata)
+        build/src/sdk/newlib/libc/libc_2F0840.c.o(.rodata)
+        . = 0x5782b0 - 0x568f00;
+        build/asm/data/rodata/piece_005782B0.s.o(.rodata)
         . = 0x578350 - 0x568f00;
         build/src/sdk/newlib/libc/vfprintf.c.o(.rodata.jtbl_00578350)
         . = 0x5784c0 - 0x568f00;
@@ -1276,9 +1291,9 @@ SECTIONS
         . = 0x578840 - 0x568f00;
         build/src/sdk/newlib/libc/libc_2F3A70.c.o(.rodata.cjt3)
         . = 0x578930 - 0x568f00;
-        build/asm/data/rodata/piece_00578930.s.o(.rodata)
+        build/src/sdk/newlib/libc/libc_2F3A70.c.o(.rodata)
         . = 0x578970 - 0x568f00;
-        build/src/sdk/newlib/libc/libc_2F3A70.c.o(.rodata.jtbl_00578970)
+        build/src/sdk/newlib/libc/libc_2F3A70.c.o(.rodata.cjt4)
         . = 0x578988 - 0x568f00;
         build/asm/data/rodata/piece_00578988.s.o(.rodata)
         . = 0x578bc0 - 0x568f00;
@@ -1316,3 +1331,12 @@ D_0056DF60 = 0x56df60;
 D_0056DF68 = 0x56df68;
 D_0056DF70 = 0x56df70;
 D_0056DF78 = 0x56df78;
+D_0056F6C0 = 0x56f6c0;
+D_0056F6C8 = 0x56f6c8;
+D_0056F6D0 = 0x56f6d0;
+D_0056F6D8 = 0x56f6d8;
+D_0056F6E0 = 0x56f6e0;
+D_0056F6E8 = 0x56f6e8;
+D_0056F6F0 = 0x56f6f0;
+D_0056F6F8 = 0x56f6f8;
+D_0056F700 = 0x56f700;

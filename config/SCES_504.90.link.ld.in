@@ -19,6 +19,7 @@ dptofp = func_002EC440;
 fptoui = 0x2ECF38;
 fptodp = func_002ED038;
 sqrtf = 0x2E9708;
+__fixdfdi = 0x300350;
 SECTIONS
 {
     . = 0x100000;

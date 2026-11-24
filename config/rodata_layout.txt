@@ -192,6 +192,8 @@ jtbl jtbl_0056F0E0 game/battle/ms_1D48D0 0x56f0e0
 jtbl jtbl_0056F650 game/battle/ms_1D48D0 0x56f650
 jtbl jtbl_0056F680 game/battle/ms_1D48D0 0x56f680
 piece piece_0056F6A8 0x56f6a8
+piece piece_0056F6C0 0x56f6c0
+piece piece_0056F710 0x56f710
 jtbl jtbl_0056F720 game/battle/ms_1DBB50 0x56f720
 jtbl jtbl_0056F770 game/battle/ms_1DBB50 0x56f770
 piece piece_0056F7B8 0x56f7b8
@@ -414,8 +416,13 @@ piece piece_005769B0 0x5769b0
 jtbl jtbl_005769D0 game/platform/platform_2DC1A0 0x5769d0
 jtbl jtbl_005769F0 game/platform/ffx_2DC650 0x5769f0
 piece piece_00576A08 0x576a08
+piece piece_00576E60 0x576e60
+piece piece_00577030 0x577030
+piece piece_005773F0 0x5773f0
+piece piece_00577468 0x577468
 jtbl jtbl_005781E0 sdk/newlib/libc/libc_2F0840 0x5781e0
 piece piece_00578298 0x578298
+piece piece_005782B0 0x5782b0
 jtbl jtbl_00578350 sdk/newlib/libc/vfprintf 0x578350
 piece piece_005784C0 0x5784c0
 jtbl jtbl_005784F0 sdk/newlib/libc/libc_2F3A70 0x5784f0

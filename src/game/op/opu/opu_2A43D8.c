@@ -969,7 +969,100 @@ u16 *func_002A6878(ScriptThread *s2, u16 *s3)
     return s3;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A43D8", opu_mdc_break);
+void op_mdc_mem_transfer_cue_free(Chr *a);
+float MsGetChrGround(int a);
+void opus_mdc_break_make_VitaSafe(void *a, void *b, void *c, void *d, void *e, float f);
+void func_002A7BA8(void *a, void *b, void *c, void *d, int e);
+void MsEffectWaitFlag(int a);
+
+u16 *opu_mdc_break(ScriptThread *th, u16 *pc)
+{
+    s8 *s6 = (s8 *)th + 0x300;
+    ScriptSub *sub = th->sub;
+    Chr *chr = owu_chr_hd[sub->b18];
+    void *s7;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0:
+        {
+            s8 bit;
+            int i;
+            void *s0;
+            void *s1;
+
+            func_002967E8(th, pc);
+            bit = 1;
+            for (i = 0; i < 3; i++) {
+                if ((bit & s6[0x3B]) == 0) {
+                    goto found;
+                }
+                bit <<= 1;
+            }
+            *(s8 *)((u8 *)th + 0x210) = 1;
+            return pc;
+        found:
+            s7 = (void *)(0x1B00000 + (i << 20));
+            s6[0x3B] |= bit;
+            Ch_TextureSetImageBase(chr, -1, 0x3C00);
+            s1 = (u8 *)th + 0x40;
+            Ch_TextureSetClutBase(chr, -1, 0x2EE0);
+            func_002A7308((void *)0x1E00000, chr, 0, *(void **)(s6 + 0x28));
+            op_mdc_mem_transfer_cue_free(chr);
+            s0 = (u8 *)pc + (s16)pc[1];
+            *(void **)((u8 *)sub + 0xA8) = s7;
+            opus_rt_m_chara(th, sub->b18, *(float *)((u8 *)sub + 0x3C), (u8 *)sub + 0x30, (u8 *)sub + 0x90, *(s8 *)((u8 *)th + 0x21E));
+            pc += 2;
+            opus_get_bone_vertex(s1, chr, 0x8010);
+            opus_mdc_break_make_VitaSafe((void *)0x1E00000, s7, s0, th, s1, MsGetChrGround(sub->b18));
+        }
+        break;
+    case 0x1000:
+        s7 = *(void **)((u8 *)sub + 0xA8);
+        Ch_TextureLoadImage(chr, -1);
+        pc += 1;
+        func_0010D4D8(chr, -1);
+        func_002A7BA8(s7, sub, (u8 *)th + 0x280, (u8 *)th + 0x2C0, *(s16 *)((u8 *)th + 0x212));
+        MsEffectWaitFlag(1);
+        ((u8 *)sub)[0xB2] |= 1;
+        break;
+    case 0x2000:
+        {
+            register s32 bit __asm__("$3");
+            register int n __asm__("$4");
+
+            func_002967E8(th, pc);
+            Ch_TextureSetImageBase(chr, -1, -1);
+            Ch_TextureSetClutBase(chr, -1, -1);
+            n = *(s32 *)((u8 *)sub + 0xA8);
+            __asm__("" : "+r"(n));
+            n = (n - 0x1B00000) / 0x100000;
+            bit = 1;
+            while (n > 0) {
+                register s32 t __asm__("$2") = (s32)((u32)bit << 25);
+                __asm__("" : "+r"(t));
+                bit = t >> 24;
+                n--;
+            }
+            {
+                register u32 ub __asm__("$2") = (u8)bit;
+                register s32 inv __asm__("$3");
+                __asm__("" : "+r"(ub));
+                ub = (~ub) << 24;
+                __asm__("" : "+r"(ub));
+                inv = (s32)ub >> 24;
+                __asm__("" : "+r"(inv));
+                s6[0x3B] = inv & s6[0x3B];
+            }
+            ((u8 *)sub)[0xB2] &= ~1;
+            if (s6[0x3B] == 0) {
+                MsEffectWaitFlag(0);
+            }
+            pc += 1;
+        }
+        break;
+    }
+    return pc;
+}
 
 #include "vu0.h"
 

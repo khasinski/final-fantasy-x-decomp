@@ -2,7 +2,10 @@
 #include "common.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
+#define D_005789E0 D_005789E0_v7
 #include "ffx/v7.h"
+#undef D_005789E0
+extern const double D_005789E0[];
 
 extern const short D_005784C0[17]; /* basefix */
 char *func_002F4578(char *tab, char *fmt);
@@ -767,5 +770,489 @@ int func_002F48D0(W11Bigint *b, W11Bigint *S)
     return q;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libc/libc_2F3A70", func_002F4AE8);
-INCLUDE_RODATA("build/ee_asm/sdk/newlib/libc/libc_2F3A70/rodata", jtbl_00578970);
+extern const double D_00578AA8[]; /* bigtens */
+W11Bigint *func_002F63F8(W11Reent *ptr, int k);
+W11Bigint *func_002F6878(W11Reent *r, int i);
+W11Bigint *func_002F6AE0(W11Reent *ptr, W11Bigint *b, int k);
+W11Bigint *func_002F6BE0(W11Reent *ptr, W11Bigint *b, int k);
+W11Bigint *func_002F6DC0(W11Reent *ptr, W11Bigint *a, W11Bigint *b);
+W11Bigint *func_002F7168(W11Reent *ptr, double _d, int *e, int *bits);
+
+#define dtoa_word0(x) ((x).parts.msw)
+#define dtoa_word1(x) ((x).parts.lsw)
+#define dtoa_dval(x) ((x).value)
+#define dtoa_Bcopy(x, y) func_002EEF1C((char *)&(x)->_sign, (char *)&(y)->_sign, (y)->_wds * sizeof(u32) + 2 * sizeof(int))
+
+char *func_002F4AE8(W11Reent *ptr, double _d, int mode, int ndigits, int *decpt, int *sign, char **rve)
+{
+    int bbits, b2, b5, be, dig, i, ieps, ilim, ilim0, ilim1,
+        j, j1, k, k0, k_check, leftright, m2, m5, s2, s5,
+        spec_case, try_quick;
+    ieee_double_shape_type d, d2, eps;
+    int L;
+    int denorm;
+    u32 x;
+    W11Bigint *b, *b1, *delta, *mlo, *mhi, *S;
+    double ds;
+    char *s, *s0;
+
+    d.value = _d;
+    if (ptr->_result) {
+        ptr->_result->_k = ptr->_result_k;
+        ptr->_result->_maxwds = 1 << ptr->_result_k;
+        func_002F64A0(ptr, ptr->_result);
+        ptr->_result = 0;
+    }
+
+    if (dtoa_word0(d) & 0x80000000) {
+        *sign = 1;
+        dtoa_word0(d) &= ~0x80000000;
+    } else {
+        *sign = 0;
+    }
+
+    if ((dtoa_word0(d) & 0x7ff00000) == 0x7ff00000) {
+        *decpt = 9999;
+        s = !dtoa_word1(d) && !(dtoa_word0(d) & 0xfffff) ? "Infinity" : "NaN";
+        if (rve) {
+            *rve = s[3] ? s + 8 : s + 3;
+        }
+        return s;
+    }
+    if (!dtoa_dval(d)) {
+        *decpt = 1;
+        s = "0";
+        if (rve) {
+            *rve = s + 1;
+        }
+        return s;
+    }
+
+    b = func_002F7168(ptr, dtoa_dval(d), &be, &bbits);
+    if ((i = (int)(dtoa_word0(d) >> 20 & (0x7ff00000 >> 20)))) {
+        dtoa_dval(d2) = dtoa_dval(d);
+        dtoa_word0(d2) &= 0xfffff;
+        dtoa_word0(d2) |= 0x3ff00000;
+        i -= 1023;
+        denorm = 0;
+    } else {
+        i = bbits + be + (1023 + (53 - 1) - 1);
+        x = i > 32 ? dtoa_word0(d) << (64 - i) | dtoa_word1(d) >> (i - 32)
+                   : dtoa_word1(d) << (32 - i);
+        dtoa_dval(d2) = x;
+        dtoa_word0(d2) -= 31 * 0x100000;
+        i -= (1023 + (53 - 1) - 1) + 1;
+        denorm = 1;
+    }
+    ds = (dtoa_dval(d2) - 1.5) * 0.289529654602168 + 0.1760912590558 + i * 0.301029995663981;
+    k = (int)ds;
+    if (ds < 0. && ds != k) {
+        k--;
+    }
+    k_check = 1;
+    if (k >= 0 && k <= 22) {
+        if (dtoa_dval(d) < D_005789E0[k]) {
+            k--;
+        }
+        k_check = 0;
+    }
+    j = bbits - i - 1;
+    if (j >= 0) {
+        b2 = 0;
+        s2 = j;
+    } else {
+        b2 = -j;
+        s2 = 0;
+    }
+    if (k >= 0) {
+        b5 = 0;
+        s5 = k;
+        s2 += k;
+    } else {
+        b2 -= k;
+        b5 = -k;
+        s5 = 0;
+    }
+    if (mode < 0 || mode > 9) {
+        mode = 0;
+    }
+    try_quick = 1;
+    if (mode > 5) {
+        mode -= 4;
+        try_quick = 0;
+    }
+    leftright = 1;
+    switch (mode) {
+    case 0:
+    case 1:
+        ilim = ilim1 = -1;
+        i = 18;
+        ndigits = 0;
+        break;
+    case 2:
+        leftright = 0;
+        /* no break */
+    case 4:
+        if (ndigits <= 0) {
+            ndigits = 1;
+        }
+        ilim = ilim1 = i = ndigits;
+        break;
+    case 3:
+        leftright = 0;
+        /* no break */
+    case 5:
+        i = ndigits + k + 1;
+        ilim = i;
+        ilim1 = i - 1;
+        if (i <= 0) {
+            i = 1;
+        }
+    }
+    j = sizeof(u32);
+    for (ptr->_result_k = 0; sizeof(W11Bigint) - sizeof(u32) + j <= i; j <<= 1) {
+        ptr->_result_k++;
+    }
+    ptr->_result = func_002F63F8(ptr, ptr->_result_k);
+    s = s0 = (char *)ptr->_result;
+
+    if (ilim >= 0 && ilim <= 14 && try_quick) {
+        i = 0;
+        dtoa_dval(d2) = dtoa_dval(d);
+        k0 = k;
+        ilim0 = ilim;
+        ieps = 2;
+        if (k > 0) {
+            ds = D_005789E0[k & 0xf];
+            j = k >> 4;
+            if (j & 0x10) {
+                j &= 0x10 - 1;
+                dtoa_dval(d) /= D_00578AA8[4];
+                ieps++;
+            }
+            for (; j; j >>= 1, i++) {
+                if (j & 1) {
+                    ieps++;
+                    ds *= D_00578AA8[i];
+                }
+            }
+            dtoa_dval(d) /= ds;
+        } else if ((j1 = -k)) {
+            dtoa_dval(d) *= D_005789E0[j1 & 0xf];
+            for (j = j1 >> 4; j; j >>= 1, i++) {
+                if (j & 1) {
+                    ieps++;
+                    dtoa_dval(d) *= D_00578AA8[i];
+                }
+            }
+        }
+        if (k_check && dtoa_dval(d) < 1. && ilim > 0) {
+            if (ilim1 <= 0) {
+                goto fast_failed;
+            }
+            ilim = ilim1;
+            k--;
+            dtoa_dval(d) *= 10.;
+            ieps++;
+        }
+        dtoa_dval(eps) = ieps * dtoa_dval(d) + 7.;
+        dtoa_word0(eps) -= (53 - 1) * 0x100000;
+        if (ilim == 0) {
+            S = mhi = 0;
+            dtoa_dval(d) -= 5.;
+            if (dtoa_dval(d) > dtoa_dval(eps)) {
+                goto one_digit;
+            }
+            if (dtoa_dval(d) < -dtoa_dval(eps)) {
+                goto no_digits;
+            }
+            goto fast_failed;
+        }
+        if (leftright) {
+            dtoa_dval(eps) = 0.5 / D_005789E0[ilim - 1] - dtoa_dval(eps);
+            for (i = 0;;) {
+                L = dtoa_dval(d);
+                dtoa_dval(d) -= L;
+                *s++ = '0' + (int)L;
+                if (dtoa_dval(d) < dtoa_dval(eps)) {
+                    goto ret1;
+                }
+                if (1. - dtoa_dval(d) < dtoa_dval(eps)) {
+                    goto bump_up;
+                }
+                if (++i >= ilim) {
+                    break;
+                }
+                dtoa_dval(eps) *= 10.;
+                dtoa_dval(d) *= 10.;
+            }
+        } else {
+            dtoa_dval(eps) *= D_005789E0[ilim - 1];
+            for (i = 1;; i++, dtoa_dval(d) *= 10.) {
+                L = dtoa_dval(d);
+                dtoa_dval(d) -= L;
+                *s++ = '0' + (int)L;
+                if (i == ilim) {
+                    if (dtoa_dval(d) > 0.5 + dtoa_dval(eps)) {
+                        goto bump_up;
+                    } else if (dtoa_dval(d) < 0.5 - dtoa_dval(eps)) {
+                        while (*--s == '0') {
+                        }
+                        s++;
+                        goto ret1;
+                    }
+                    break;
+                }
+            }
+        }
+    fast_failed:
+        s = s0;
+        dtoa_dval(d) = dtoa_dval(d2);
+        k = k0;
+        ilim = ilim0;
+    }
+
+    if (be >= 0 && k <= 14) {
+        ds = D_005789E0[k];
+        if (ndigits < 0 && ilim <= 0) {
+            S = mhi = 0;
+            if (ilim < 0 || dtoa_dval(d) <= 5 * ds) {
+                goto no_digits;
+            }
+            goto one_digit;
+        }
+        for (i = 1;; i++) {
+            L = dtoa_dval(d) / ds;
+            dtoa_dval(d) -= L * ds;
+            *s++ = '0' + (int)L;
+            if (i == ilim) {
+                dtoa_dval(d) += dtoa_dval(d);
+                if (dtoa_dval(d) > ds || (dtoa_dval(d) == ds && (L & 1))) {
+                bump_up:
+                    while (*--s == '9') {
+                        if (s == s0) {
+                            k++;
+                            *s = '0';
+                            break;
+                        }
+                    }
+                    ++*s++;
+                }
+                break;
+            }
+            if (!(dtoa_dval(d) *= 10.)) {
+                break;
+            }
+        }
+        goto ret1;
+    }
+
+    m2 = b2;
+    m5 = b5;
+    mhi = mlo = 0;
+    if (leftright) {
+        if (mode < 2) {
+            i = denorm ? be + (1023 + (53 - 1) - 1 + 1) : 1 + 53 - bbits;
+        } else {
+            j = ilim - 1;
+            if (m5 >= j) {
+                m5 -= j;
+            } else {
+                s5 += j -= m5;
+                b5 += j;
+                m5 = 0;
+            }
+            if ((i = ilim) < 0) {
+                m2 -= i;
+                i = 0;
+            }
+        }
+        mhi = func_002F6878(ptr, 1);
+        b2 += i;
+        s2 += i;
+    }
+    if (m2 > 0 && s2 > 0) {
+        i = m2 < s2 ? m2 : s2;
+        b2 -= i;
+        m2 -= i;
+        s2 -= i;
+    }
+    if (b5 > 0) {
+        if (leftright) {
+            if (m5 > 0) {
+                mhi = func_002F6AE0(ptr, mhi, m5);
+                b1 = func_002F68B0(ptr, mhi, b);
+                func_002F64A0(ptr, b);
+                b = b1;
+            }
+            if ((j = b5 - m5)) {
+                b = func_002F6AE0(ptr, b, j);
+            }
+        } else {
+            b = func_002F6AE0(ptr, b, b5);
+        }
+    }
+    S = func_002F6878(ptr, 1);
+    if (s5 > 0) {
+        S = func_002F6AE0(ptr, S, s5);
+    }
+
+    if (mode < 2) {
+        if (!dtoa_word1(d) && !(dtoa_word0(d) & 0xfffff) && (dtoa_word0(d) & 0x7ff00000)) {
+            b2 += 1;
+            s2 += 1;
+            spec_case = 1;
+        } else {
+            spec_case = 0;
+        }
+    }
+
+    if ((i = ((s5 ? 32 - func_002F6730(S->_x[S->_wds - 1]) : 1) + s2) & 0x1f)) {
+        i = 32 - i;
+    }
+    if (i > 4) {
+        i -= 4;
+        b2 += i;
+        m2 += i;
+        s2 += i;
+    } else if (i < 4) {
+        i += 28;
+        b2 += i;
+        m2 += i;
+        s2 += i;
+    }
+    if (b2 > 0) {
+        b = func_002F6BE0(ptr, b, b2);
+    }
+    if (s2 > 0) {
+        S = func_002F6BE0(ptr, S, s2);
+    }
+    if (k_check) {
+        if (func_002F6D58(b, S) < 0) {
+            k--;
+            b = func_002F64D0(ptr, b, 10, 0);
+            if (leftright) {
+                mhi = func_002F64D0(ptr, mhi, 10, 0);
+            }
+            ilim = ilim1;
+        }
+    }
+    if (ilim <= 0 && mode > 2) {
+        if (ilim < 0 || func_002F6D58(b, S = func_002F64D0(ptr, S, 5, 0)) <= 0) {
+        no_digits:
+            k = -1 - ndigits;
+            goto ret;
+        }
+    one_digit:
+        *s++ = '1';
+        k++;
+        goto ret;
+    }
+    if (leftright) {
+        if (m2 > 0) {
+            mhi = func_002F6BE0(ptr, mhi, m2);
+        }
+
+        mlo = mhi;
+        if (spec_case) {
+            mhi = func_002F63F8(ptr, mhi->_k);
+            dtoa_Bcopy(mhi, mlo);
+            mhi = func_002F6BE0(ptr, mhi, 1);
+        }
+
+        for (i = 1;; i++) {
+            dig = func_002F48D0(b, S) + '0';
+            j = func_002F6D58(b, mlo);
+            delta = func_002F6DC0(ptr, S, mhi);
+            j1 = delta->_sign ? 1 : func_002F6D58(b, delta);
+            func_002F64A0(ptr, delta);
+            if (j1 == 0 && !mode && !(dtoa_word1(d) & 1)) {
+                if (dig == '9') {
+                    goto round_9_up;
+                }
+                if (j > 0) {
+                    dig++;
+                }
+                *s++ = dig;
+                goto ret;
+            }
+            if (j < 0 || (j == 0 && !mode && !(dtoa_word1(d) & 1))) {
+                if (j1 > 0) {
+                    b = func_002F6BE0(ptr, b, 1);
+                    j1 = func_002F6D58(b, S);
+                    if ((j1 > 0 || (j1 == 0 && (dig & 1))) && dig++ == '9') {
+                        goto round_9_up;
+                    }
+                }
+                *s++ = dig;
+                goto ret;
+            }
+            if (j1 > 0) {
+                if (dig == '9') {
+                round_9_up:
+                    *s++ = '9';
+                    goto roundoff;
+                }
+                *s++ = dig + 1;
+                goto ret;
+            }
+            *s++ = dig;
+            if (i == ilim) {
+                break;
+            }
+            b = func_002F64D0(ptr, b, 10, 0);
+            if (mlo == mhi) {
+                mlo = mhi = func_002F64D0(ptr, mhi, 10, 0);
+            } else {
+                mlo = func_002F64D0(ptr, mlo, 10, 0);
+                mhi = func_002F64D0(ptr, mhi, 10, 0);
+            }
+        }
+    } else {
+        for (i = 1;; i++) {
+            *s++ = dig = func_002F48D0(b, S) + '0';
+            if (i >= ilim) {
+                break;
+            }
+            b = func_002F64D0(ptr, b, 10, 0);
+        }
+    }
+
+    b = func_002F6BE0(ptr, b, 1);
+    j = func_002F6D58(b, S);
+    if (j > 0 || (j == 0 && (dig & 1))) {
+    roundoff:
+        while (*--s == '9') {
+            if (s == s0) {
+                k++;
+                *s++ = '1';
+                goto ret;
+            }
+        }
+        ++*s++;
+    } else {
+        while (*--s == '0') {
+        }
+        s++;
+    }
+ret:
+    func_002F64A0(ptr, S);
+    if (mhi) {
+        if (mlo && mlo != mhi) {
+            func_002F64A0(ptr, mlo);
+        }
+        func_002F64A0(ptr, mhi);
+    }
+ret1:
+    func_002F64A0(ptr, b);
+    *s = 0;
+    *decpt = k + 1;
+    if (rve) {
+        *rve = s;
+    }
+    return s0;
+}
+#undef dtoa_word0
+#undef dtoa_word1
+#undef dtoa_dval
+#undef dtoa_Bcopy

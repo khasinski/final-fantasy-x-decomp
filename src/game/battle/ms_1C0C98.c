@@ -56,7 +56,147 @@ void func_001C0D00(Unk1C0D00 *dst, Unk1C0D00 *src, Unk1C0D00Chr *c) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", MsCalcCommand);
+typedef struct {
+    u8 pad0[0x2115];
+    u8 b2115;
+} BtlWork2115;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 b6;
+    u8 b7;
+    u16 h8;
+    u16 hA;
+    u8 bC;
+    u8 padD[3];
+    s32 f10;
+    u8 b14;
+    u8 pad15[2];
+    u8 b17;
+} CmdSlot;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    u8 pad4[4];
+    struct {
+        u8 b0[8];
+        u8 b8[4];
+        s32 f0C;
+    } ent[1];
+} CmdWork;
+
+int func_001C14F0(int a0, u8 *a1, u8 *a2, OfsTbl *a3, int a4, int *a5, int *a6);
+int MsCalcDamage(int a0, BtlChr *a1, int a2, BtlChr *a3, OfsTbl *a4, int a5, u8 *a6, void *a7, int *a8, int *a9, int count);
+int func_001C55D0();
+int func_001C5798(BtlChr *a0, BtlChr *a1, void *a2, u8 *a3, int a4);
+void MsCalcDrainResult(int a0, BtlChr *a1, OfsTbl *a2, u8 *a3, int *a4, int a5);
+
+int MsCalcCommand(CmdWork *a0, int a1) {
+    int ret = 0;
+
+    if (a0 != 0) {
+        int caster_id = a0->b0;
+        BtlChr *caster = MsGetChr(caster_id);
+        int cmd_id;
+        OfsTbl *cmd = MsGetCommand(caster_id, 0, -1, &a0->ent[a1], &cmd_id);
+
+        *(u16 *)((u8 *)caster + 0xC1C) = cmd_id;
+        *((u8 *)caster + 0xAA8) = MsCalcCostCTB(a0);
+        if (a1 < a0->b3 && cmd != 0) {
+            u8 target_flag[0x20];
+            u8 reflect_flag[0x20];
+            int drain_vals[3];
+            int hit_cnt = 0;
+            int last_tgt = -1;
+            int self_cnt = 0;
+            u8 *drain_slot;
+            int i;
+
+            for (i = 0; i < 3; i++) {
+                drain_vals[i] = 0;
+            }
+            drain_slot = 0;
+            if ((*(u32 *)((u8 *)cmd + 0x1C) >> 8) & 1) {
+                drain_slot = (u8 *)func_001C0C98((Obj436 *)caster);
+                if (drain_slot != 0) {
+                    drain_slot[2] = caster_id;
+                    drain_slot[3] = a1;
+                }
+            }
+            a0->ent[a1].f0C = func_001C14F0(caster_id, target_flag, reflect_flag, cmd, cmd_id, (int *)a0->ent[a1].b8, &ret);
+            for (i = 0; i < 0x1F; i++) {
+                if (target_flag[i] != 0) {
+                    if (drain_slot == 0 || i != caster_id) {
+                        int dmg_flag = 0;
+                        BtlChr *tgt;
+                        CmdSlot *slot;
+
+                        last_tgt = i;
+                        tgt = MsGetChr(last_tgt);
+                        slot = (CmdSlot *)func_001C0C98((Obj436 *)tgt);
+                        if (slot != 0) {
+                            *(s32 *)((u8 *)tgt + 0xC20) = *(s32 *)((u8 *)tgt + 0x264);
+                            MsCalcDamage(caster_id, caster, last_tgt, tgt, cmd, cmd_id, (u8 *)slot, drain_vals, &hit_cnt, &dmg_flag, reflect_flag[last_tgt]);
+                            slot->b14 = *((u8 *)cmd + 0x58);
+                            slot->b2 = caster_id;
+                            slot->b3 = a1;
+                            if (((*(u32 *)((u8 *)cmd + 0x1C) >> 25) & 1) && *((s8 *)tgt + 0xA8E) == 0) {
+                                slot->b4 |= 1;
+                            }
+                            if ((*(u32 *)((u8 *)cmd + 0x1C) >> 24) & 1) {
+                                slot->b6 = 1;
+                            }
+                            if ((*(u32 *)((u8 *)cmd + 0x1C) >> 9) & 1) {
+                                func_001C55D0(caster, tgt, *(void **)((u8 *)tgt + 0xC48), slot, dmg_flag);
+                            } else {
+                                slot->b7 = 0;
+                                slot->h8 = 0;
+                                slot->hA = 0;
+                            }
+                            if ((*(u16 *)((u8 *)cmd + 0x20) >> 8) & 1) {
+                                func_001C5798(caster, tgt, *(void **)((u8 *)tgt + 0xC48), (u8 *)slot, dmg_flag);
+                            } else {
+                                slot->bC = 0;
+                                slot->f10 = 0;
+                            }
+                            if (((*(u32 *)((u8 *)cmd + 0x1C) >> 18) & 1) && ((*(u16 *)((u8 *)caster + 0x380) >> 2) & 1) && ((BtlWork2115 *)&D_003172F0)->b2115 == 0) {
+                                *((u8 *)tgt + 0xA90) = 1;
+                            } else {
+                                *((u8 *)tgt + 0xA90) = 0;
+                            }
+                        }
+                    } else {
+                        self_cnt++;
+                    }
+                }
+            }
+            if (drain_slot != 0) {
+                if (hit_cnt != 0) {
+                    MsCalcDrainResult(caster_id, caster, cmd, drain_slot, drain_vals, 0);
+                } else if (self_cnt != 0) {
+                    MsCalcDrainResult(caster_id, caster, cmd, drain_slot, drain_vals, 1);
+                } else {
+                    drain_slot[3] = 0;
+                    drain_slot[2] = 0xFF;
+                }
+                if (cmd_id == 0x3020 && last_tgt >= 0) {
+                    drain_slot[0x17] = last_tgt;
+                    drain_slot[4] |= 2;
+                }
+            }
+        }
+        *((u8 *)caster + 0x39B) = ret;
+    }
+    return ret;
+}
 
 int func_001C1908(int a0, BtlChr *a1, int a2, BtlChr *a3, OfsTbl *a4, int a5, Obj436Ent *a6, void *a7, int *a8, int *a9, u8 *a10);
 int func_001C7D60(int id);

@@ -38,5 +38,45 @@
       "D_0056DF70": 24,
       "D_0056DF78": 32
     }
+  },
+  "game/battle/ms_1D8C28": {
+    "piece": "piece_0056F6C0",
+    "address": 5699264,
+    "size": 72,
+    "symbols": {
+      "D_0056F6C0": 0,
+      "D_0056F6C8": 8,
+      "D_0056F6D0": 16,
+      "D_0056F6D8": 24,
+      "D_0056F6E0": 32,
+      "D_0056F6E8": 40,
+      "D_0056F6F0": 48,
+      "D_0056F6F8": 56,
+      "D_0056F700": 64
+    }
+  },
+  "sdk/newlib/libm/libm_2E2830": {
+    "piece": "piece_00576E60",
+    "address": 5729888,
+    "size": 464,
+    "symbols": {}
+  },
+  "sdk/newlib/libm/libm_2E4250": {
+    "piece": "piece_005773F0",
+    "address": 5731312,
+    "size": 120,
+    "symbols": {}
+  },
+  "sdk/newlib/libc/libc_2F0840": {
+    "piece": "piece_00578298",
+    "address": 5735064,
+    "size": 24,
+    "symbols": {}
+  },
+  "sdk/newlib/libc/libc_2F3A70": {
+    "piece": "piece_00578930",
+    "address": 5736752,
+    "size": 56,
+    "symbols": {}
   }
 }

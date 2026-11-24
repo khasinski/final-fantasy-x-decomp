@@ -1,9 +1,15 @@
 /* tu_356 0x2e4250-0x2e7c68: medium; unk_2E4250 (config/tu_map.tsv) */
 #include "common.h"
 #define D_00577A10 D_00577A10_r7
+#define D_00577218 D_00577218_r7
+#define D_00577320 D_00577320_r7
 #include "ffx/r7.h"
+#undef D_00577320
+#undef D_00577218
 #undef D_00577A10
 extern const int D_00577A10[];
+extern const int D_00577218[];
+extern const int D_00577320[];
 
 #define zero 0.0f
 #define half 5.0000000000e-01f
@@ -18,12 +24,154 @@ extern const int D_00577A10[];
 #include "ffx/q7.h"
 #include "ffx/w11.h"
 
-INCLUDE_ASM("build/ee_asm/sdk/newlib/libm/libm_2E4250", func_002E4250);
+double func_002E7C30(double x);
+int func_002E5B48(double *x, double *y, int e0, int nx, int prec, const int *ipio2);
+
+#define GET_HIGH_WORD(i, d) \
+    do { ieee_double_shape_type gh_u; gh_u.value = (d); (i) = gh_u.parts.msw; } while (0)
+#define GET_LOW_WORD(i, d) \
+    do { ieee_double_shape_type gl_u; gl_u.value = (d); (i) = gl_u.parts.lsw; } while (0)
+#define SET_HIGH_WORD(d, v) \
+    do { ieee_double_shape_type sh_u; sh_u.value = (d); sh_u.parts.msw = (v); (d) = sh_u.value; } while (0)
+#define SET_LOW_WORD(d, v) \
+    do { ieee_double_shape_type sl_u; sl_u.value = (d); sl_u.parts.lsw = (v); (d) = sl_u.value; } while (0)
+#define INSERT_WORDS(d, ix0, ix1) \
+    do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
+
+#define d_zero 0.0
+#define d_half 0.5
+#define d_two24 1.67772160000000000000e+07
+#define d_invpio2 6.36619772367581382433e-01
+#define d_pio2_1 1.57079632673412561417e+00
+#define d_pio2_1t 6.07710050650619224932e-11
+#define d_pio2_2 6.07710050630396597660e-11
+#define d_pio2_2t 2.02226624879595063154e-21
+#define d_pio2_3 2.02226624871116645580e-21
+#define d_pio2_3t 8.47842766036889956997e-32
+
+int func_002E4250(double x, double *y)
+{
+    double z, w, t, r, fn;
+    double tx[3];
+    s32 e0, i, j, nx, n, ix, hx;
+    u32 low;
+
+    GET_HIGH_WORD(hx, x);
+    ix = hx & 0x7fffffff;
+    if (ix <= 0x3fe921fb) {
+        y[0] = x;
+        y[1] = 0;
+        return 0;
+    }
+    if (ix < 0x4002d97c) {
+        if (hx > 0) {
+            z = x - d_pio2_1;
+            if (ix != 0x3ff921fb) {
+                y[0] = z - d_pio2_1t;
+                y[1] = (z - y[0]) - d_pio2_1t;
+            } else {
+                z -= d_pio2_2;
+                y[0] = z - d_pio2_2t;
+                y[1] = (z - y[0]) - d_pio2_2t;
+            }
+            return 1;
+        } else {
+            z = x + d_pio2_1;
+            if (ix != 0x3ff921fb) {
+                y[0] = z + d_pio2_1t;
+                y[1] = (z - y[0]) + d_pio2_1t;
+            } else {
+                z += d_pio2_2;
+                y[0] = z + d_pio2_2t;
+                y[1] = (z - y[0]) + d_pio2_2t;
+            }
+            return -1;
+        }
+    }
+    if (ix <= 0x413921fb) {
+        t = func_002E7C30(x);
+        n = (s32)(t * d_invpio2 + d_half);
+        fn = (double)n;
+        r = t - fn * d_pio2_1;
+        w = fn * d_pio2_1t;
+        if (n < 32 && ix != D_00577320[n - 1]) {
+            y[0] = r - w;
+        } else {
+            u32 high;
+            j = ix >> 20;
+            y[0] = r - w;
+            GET_HIGH_WORD(high, y[0]);
+            i = j - ((high >> 20) & 0x7ff);
+            if (i > 16) {
+                t = r;
+                w = fn * d_pio2_2;
+                r = t - w;
+                w = fn * d_pio2_2t - ((t - r) - w);
+                y[0] = r - w;
+                GET_HIGH_WORD(high, y[0]);
+                i = j - ((high >> 20) & 0x7ff);
+                if (i > 49) {
+                    t = r;
+                    w = fn * d_pio2_3;
+                    r = t - w;
+                    w = fn * d_pio2_3t - ((t - r) - w);
+                    y[0] = r - w;
+                }
+            }
+        }
+        y[1] = (r - y[0]) - w;
+        if (hx < 0) {
+            y[0] = -y[0];
+            y[1] = -y[1];
+            return -n;
+        } else {
+            return n;
+        }
+    }
+    if (ix >= 0x7ff00000) {
+        y[0] = y[1] = x - x;
+        return 0;
+    }
+    GET_LOW_WORD(low, x);
+    SET_LOW_WORD(z, low);
+    e0 = (ix >> 20) - 1046;
+    SET_HIGH_WORD(z, ix - (e0 << 20));
+    for (i = 0; i < 2; i++) {
+        tx[i] = (double)((s32)z);
+        z = (z - tx[i]) * d_two24;
+    }
+    tx[2] = z;
+    nx = 3;
+    while (tx[nx - 1] == d_zero) {
+        nx--;
+    }
+    n = func_002E5B48(tx, y, e0, nx, 2, D_00577218);
+    if (hx < 0) {
+        y[0] = -y[0];
+        y[1] = -y[1];
+        return -n;
+    }
+    return n;
+}
+#undef d_zero
+#undef d_half
+#undef d_two24
+#undef d_invpio2
+#undef d_pio2_1
+#undef d_pio2_1t
+#undef d_pio2_2
+#undef d_pio2_2t
+#undef d_pio2_3
+#undef d_pio2_3t
 
 double func_002EBC70(double arg_a, double arg_b);
 int func_002EC198(double arg_a, double arg_b);
 float func_002E57C0(float x);
 
+#define SET_HIGH_WORD(d, v) \
+    do { ieee_double_shape_type sh_u; sh_u.value = (d); sh_u.parts.msw = (v); (d) = sh_u.value; } while (0)
+#define SET_LOW_WORD(d, v) \
+    do { ieee_double_shape_type sl_u; sl_u.value = (d); sl_u.parts.lsw = (v); (d) = sl_u.value; } while (0)
 #define INSERT_WORDS(d, ix0, ix1) \
     do { ieee_double_shape_type iw_u; iw_u.parts.msw = (ix0); iw_u.parts.lsw = (ix1); (d) = iw_u.value; } while (0)
 

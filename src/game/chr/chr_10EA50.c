@@ -107,14 +107,180 @@ void func_0010EBC0(void)
     D_00303714 = (D_00303714 + 1) & 1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr_10EA50", func_0010EBD8);
-
 typedef union {
     u_long128 q;
     u64 d[2];
     u32 w[4];
     float f[4];
 } QwPkt;
+
+typedef union {
+    u_long128 q;
+    struct {
+        u64 NLOOP : 15;
+        u64 EOP   : 1;
+        u64 pad16 : 16;
+        u64 id    : 14;
+        u64 PRE   : 1;
+        u64 PRIM  : 11;
+        u64 FLG   : 2;
+        u64 NREG  : 4;
+        u64 REGS0 : 4;
+        u64 REGS1 : 4;
+        u64 REGS2 : 4;
+        u64 REGS3 : 4;
+        u64 REGS4 : 4;
+        u64 REGS5 : 4;
+        u64 REGS6 : 4;
+        u64 REGS7 : 4;
+        u64 REGS8 : 4;
+        u64 REGS9 : 4;
+        u64 REGS10: 4;
+        u64 REGS11: 4;
+        u64 REGS12: 4;
+        u64 REGS13: 4;
+        u64 REGS14: 4;
+        u64 REGS15: 4;
+    } bf;
+} GifTagBF;
+
+extern u64 D_0057EB90[2];
+void func_00173828(float *a, float *b, float *c);
+
+void *func_0010EBD8(QwPkt *pkt)
+{
+    GifTagBF tag0;
+    GifTagBF tag1;
+    float f0, f1, f2;
+    u8 *p;
+
+    pkt->d[1] = 0;
+    pkt->d[0] = 0x1000001A;
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0x11000000;
+    pkt->w[3] = 0x51000008;
+    pkt++;
+
+    pkt->d[0] = 0x1000000000008007ULL;
+    pkt->d[1] = 0xE;
+    pkt++;
+
+    pkt->d[0] = 0x5000F;
+    pkt->d[1] = 0x47;
+    pkt++;
+
+    pkt->d[0] = 0x0000008000000068ULL;
+    pkt->d[1] = 0x42;
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->d[1] = 0x49;
+    pkt++;
+
+    pkt->d[0] = 5;
+    pkt->d[1] = 0x14;
+    pkt++;
+
+    pkt->d[1] = 0x3F;
+    pkt++;
+
+    pkt->d[0] = 5;
+    pkt->d[1] = 0x8;
+    p = (u8 *)func_001176F0();
+    pkt++;
+
+    pkt->d[0] = *(u64 *)(p + 0x18);
+    pkt->d[1] = 6;
+    D_0057EB90[0] = 0x1000000000000001ULL;
+    D_0057EB90[1] = (D_0057EB44 != 0) ? 0xE : 0xF;
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C010027;
+    pkt++;
+    pkt->d[0] = D_0057EB90[0];
+    pkt->d[1] = D_0057EB90[1];
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C010213;
+    pkt++;
+    pkt->d[0] = D_0057EB90[0];
+    pkt->d[1] = D_0057EB90[1];
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C0100DE;
+    pkt++;
+    pkt->d[0] = D_0057EB90[0];
+    pkt->d[1] = D_0057EB90[1];
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C0102CA;
+    pkt++;
+    pkt->d[0] = D_0057EB90[0];
+    pkt->d[1] = D_0057EB90[1];
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C010028;
+    pkt++;
+    pkt->d[0] = *(u64 *)(p + 0x18);
+    pkt->d[1] = 0x16;
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C010214;
+    pkt++;
+    pkt->d[0] = *(u64 *)(p + 0x18);
+    pkt->d[1] = 0x16;
+    pkt++;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C010026;
+    func_00173828(&f0, &f1, &f2);
+    pkt++;
+
+    pkt->f[0] = -(255.0f / (f1 - f0));
+    pkt->f[1] = 255.0f - f2;
+    pkt->f[2] = -f0;
+    pkt->w[3] = 0;
+    pkt++;
+
+    tag0.bf.NLOOP = 0;
+    tag0.bf.EOP = 0;
+    tag0.bf.PRE = 1;
+    tag0.bf.PRIM = 0x50;
+    tag0.bf.FLG = 0;
+    tag0.bf.NREG = 3;
+    tag0.bf.REGS0 = 2;
+    tag0.bf.REGS1 = 1;
+    tag0.bf.REGS2 = 4;
+
+    tag1 = tag0;
+    tag0.bf.PRIM |= 4;
+    tag1.bf.PRIM |= 3;
+
+    pkt->d[0] = 0;
+    pkt->w[2] = 0;
+    pkt->w[3] = 0x6C020024;
+    pkt++;
+
+    pkt->q = tag0.q;
+    pkt++;
+    pkt->q = tag1.q;
+    return pkt + 1;
+}
 
 void *func_0010EF98(QwPkt *pkt)
 {

@@ -1,25 +1,18 @@
 /* tu_203 0x1d8c28-0x1dbb50: low; ~Ms (config/tu_map.tsv) */
 #define MsInsertInputCue _hdr_MsInsertInputCue
 #define MsInsertCommandCue _hdr_MsInsertCommandCue
+#define D_00662D28 _hdr_D_00662D28
 #include "common.h"
 #include "ffx/s3.h"
 #include "ffx/q4.h"
 #include "ffx/r3.h"
 #include "ffx/v3.h"
 #include "ffx/u2.h"
+#undef D_00662D28
 #undef MsInsertCommandCue
 #undef MsInsertInputCue
 
 extern char D_0056F6B0[];
-extern const double D_0056F6C0;
-extern const double D_0056F6C8;
-extern const double D_0056F6D0;
-extern const double D_0056F6D8;
-extern const double D_0056F6E0;
-extern const double D_0056F6E8;
-extern const double D_0056F6F0;
-extern const double D_0056F6F8;
-extern const double D_0056F700;
 extern s8 D_00317306;
 void yiDisposeAnimDObj(int a, int b);
 void yiSetRotTransDObj(int id, float *rot, float *tr);
@@ -64,6 +57,7 @@ typedef struct Blk662D28Full {
     s32 f860;
     float f864;
 } Blk662D28Full; /* DEBT(NAME): full layout of Blk662D28 (0x870 bytes) */
+extern Blk662D28Full *D_00662D28;
 
 int MsCheckCommandCue(int id, int sub)
 {
@@ -566,7 +560,7 @@ void func_001D9F58(int mode)
         func_0019D0B0();
         func_0019D0B8();
         p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1); /* DEBT(CAST): Blk662D28Full view of Blk662D28 */
-        D_00662D28 = (Blk662D28 *)p;
+        D_00662D28 = p;
         p->f838 = 0.002f;
         p->f810 = 0;
         p->f854 = 0;
@@ -593,13 +587,13 @@ void func_001D9F58(int mode)
         break;
     case 2:
         p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1);
-        D_00662D28 = (Blk662D28 *)p;
+        D_00662D28 = p;
         p->f810 = 0;
         p->f844 = 0;
         break;
     case 3:
         p = (Blk662D28Full *)user_malloc(0x870, 5, D_0056F6B0, -1);
-        D_00662D28 = (Blk662D28 *)p;
+        D_00662D28 = p;
         p->f810 = 0;
         p->f844 = 0;
         break;
@@ -634,7 +628,186 @@ void MsBattleSpecialFree(void) {
     D_003172F0.f16 = 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", MsBattleSpecial);
+#define SP D_00662D28
+
+void MsBattleSpecial(void)
+{
+    float pos0[4];
+    float v1[4];
+    float rot[4];
+    float tr[4];
+    float mat[16];
+    float ang;
+    int handle;
+    Chr *ch;
+    int n;
+    int i;
+    float f22, f23, f21, f25;
+
+    switch (D_00317306) {
+    case 1:
+        ch = MsGetChrHandle(0x17);
+        handle = func_0019D070(0);
+        ang = 1.569738f;
+        if (ch != 0) {
+            pos0[0] = 63.0f;
+            pos0[1] = -60.0f;
+            pos0[2] = 267.0f;
+            Ch_OptposGet(ch, 0xE, v1);
+            func_0019D090((void *)handle, 1, v1);
+            Ch_GetPos(ch, &v1[0], &v1[1], &v1[2]);
+            MsVectorRect2Polar(v1, 0, (s32)&ang, 0, 0);
+            ang = MsNearRag(0.0f, ang);
+        }
+        f25 = ang;
+        n = (int)((f25 - 1.569738) * 100.0);
+        f22 = (float)n;
+        f23 = f22 * 0.001953125f;
+        f21 = (float)(5 - SP->f854) / 5.0f;
+        if (f23 < SP->f830) {
+            SP->f838 = (float)(SP->f838 - 0.00013);
+            ang = SP->f830 - f23;
+        } else if (f23 > SP->f830) {
+            SP->f838 = (float)(SP->f838 + 0.00013);
+            ang = f23 - SP->f830;
+        }
+        SP->f838 = (float)(SP->f838 * 0.96);
+        if (SP->f850 == n) {
+            if ((SP->f83C < 0.0f && SP->f838 > 0.0f) || (SP->f83C > 0.0f && SP->f838 < 0.0f)) {
+                if (SP->f854 <= 0) {
+                    SP->f854++;
+                }
+            }
+        } else {
+            SP->f854 = 0;
+        }
+        SP->f838 *= f21;
+        SP->f820 += SP->f838;
+        SP->f830 += (MsNearRag(SP->f830, SP->f820) - SP->f830) * 0.0625f;
+        SP->f830 = MsNearRag(0.0f, SP->f830);
+        SP->f83C = SP->f838;
+        SP->f850 = n;
+        if (--SP->f858 < 0) {
+            SP->f858 = (brnd(3) & 0x1F) + 0x78;
+            SP->f85C = SP->f860 = (brnd(3) & 7) + 0x14;
+            SP->f84C = 0.0f;
+        }
+        SP->f84C += 3.14;
+        SP->f834 = MsNearRag(0.0f, (float)(SP->f834 + 0.0004));
+        SP->f848 += 0.04;
+        {
+            Blk662D28Full *q = SP;
+            q->f844 = (func_002E89C0(q->f848) + 1.0) * 3.0;
+        }
+        {
+            Blk662D28Full *q = SP;
+            if (q->f85C > 0) {
+                double tmp;
+                q->f85C--;
+                tmp = q->f844;
+                q->f844 = tmp + (func_002E8648(SP->f84C) + 1.0) * SP->f85C / SP->f860 * 0.0625;
+            }
+        }
+        f21 = f22 / 100.0f;
+        for (i = 0; i < 3; i++) {
+            SP->f814[i] += f21 / (float)(0x100 - i * 0x20);
+            SP->f824[i] += (MsNearRag(SP->f824[i], SP->f814[i]) - SP->f824[i]) * 0.25f;
+            SP->f824[i] = MsNearRag(0.0f, SP->f824[i]);
+            rot[0] = 0.0f;
+            rot[1] = MsNearRag(0.0f, SP->f824[i] + SP->f834);
+            rot[2] = SP->f830;
+            rot[3] = 1.0f;
+            tr[0] = 0.0f;
+            tr[1] = 0.0f;
+            tr[2] = 0.0f;
+            tr[3] = 1.0f;
+            yiSetRotTransDObj(i + 0x1C, rot, tr);
+        }
+        f23 = SP->f840 - ang;
+        SP->f840 = ang;
+        if (f23 < 0.0f) {
+            f23 = -f23;
+        }
+        f23 = 6.0f - f23 * 200.0f;
+        if (f23 < 0.0f) {
+            f23 = 0.0f;
+        }
+        SP->f800 = 0.0f;
+        SP->f804 = SP->f824[1];
+        SP->f808 = SP->f830;
+        SP->f80C = 1.0f;
+        tr[0] = 0.0f;
+        tr[1] = 0.0f;
+        tr[2] = 0.0f;
+        tr[3] = 1.0f;
+        func_0019D150((s32)tr);
+        func_0019D0E8((s32)&SP->f800);
+        func_0019D1E8(-func_002E89C0(SP->f804) * f23, -func_002E8648(SP->f804) * f23);
+        SP->f864 = (float)(SP->f864 - f23 * 0.03);
+        rot[0] = MsNearRag(0.0f, SP->f864);
+        rot[1] = 0.0f;
+        rot[2] = 0.0f;
+        rot[3] = 1.0f;
+        tr[0] = 0.0f;
+        tr[1] = -20.0f;
+        tr[2] = -140.0f;
+        tr[3] = 1.0f;
+        yiSetRotTransDObj(2, rot, tr);
+        rot[0] = 0.0f;
+        rot[1] = 3.1415927f;
+        rot[2] = 0.0f;
+        rot[3] = 1.0f;
+        tr[0] = pos0[0];
+        tr[1] = pos0[1];
+        tr[2] = pos0[2];
+        tr[3] = 1.0f;
+        yiSetRotTransDObj(0x15, rot, tr);
+        rot[1] = -1.5707964f - f25;
+        rot[1] = MsNearRag(0.0f, rot[1]);
+        yiSetRotTransDObj(0x14, rot, tr);
+        tr[0] = 0.0f;
+        tr[1] = -13.3f;
+        tr[2] = -12.0f;
+        tr[3] = 1.0f;
+        func_002DD128(mat);
+        func_001AC5E0(mat, mat, -rot[1]);
+        func_001AC698(mat, mat, -rot[2]);
+        func_001AC528(mat, mat, -rot[0]);
+        func_001AC200(tr, mat, tr);
+        func_001AC3D0(tr, tr, pos0);
+        func_0019D090((void *)handle, 0, tr);
+        rot[0] = 0.0f;
+        rot[1] = 3.1415927f;
+        rot[2] = 0.0f;
+        rot[3] = 1.0f;
+        tr[0] = -61.0f;
+        tr[1] = -60.0f;
+        tr[2] = 267.0f;
+        tr[3] = 1.0f;
+        yiSetRotTransDObj(0x18, rot, tr);
+        yiSetRotTransDObj(0x19, rot, tr);
+        yiSetRotTransDObj(0x1A, rot, tr);
+        func_001DAB90(&SP->f800, 0.0f);
+        break;
+    case 2:
+        MsGetChr(0x14);
+        ch = MsGetChrHandle(0x14);
+        if (ch != 0) {
+            func_001DAB28(ch, 0xE, (BtlChr *)D_00662D28);
+        }
+        func_0019D1E8(0.0f, 6.0f);
+        break;
+    case 3:
+        MsGetChr(0x14);
+        ch = MsGetChrHandle(0x14);
+        if (ch != 0) {
+            func_001DAB28(ch, 5, (BtlChr *)D_00662D28);
+        }
+        func_0019D1E8(0.0f, 6.0f);
+        break;
+    }
+}
+#undef SP
 
 void func_001DAB28(Chr *a, int b, BtlChr *c)
 {
@@ -645,7 +818,44 @@ void func_001DAB28(Chr *a, int b, BtlChr *c)
     func_0019D1B8(c->f7C0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D8C28", func_001DAB90);
+void func_001DAB90(float *rot, float unused)
+{
+    float pos[4];
+    float tmp[16];
+    float ang;
+    int i;
+
+    if (D_00662D28 != 0) {
+        for (i = 0; i < 31; i++) {
+            BtlChr *c = MsGetChr(i);
+            Chr *ch = *(Chr **)c;
+            float *m;
+
+            if (ch == 0 || ((s8 *)c)[0x32] != 0 || ((s8 *)c)[0x12] != 0) {
+                continue;
+            }
+            Ch_GetPos(ch, &pos[0], &pos[1], &pos[2]);
+            m = (float *)((u8 *)D_00662D28 + (i << 6));
+            func_002DD128(tmp);
+            func_001AC698(tmp, tmp, rot[2]);
+            func_001AC528(tmp, tmp, rot[0]);
+            func_001AC200(pos, tmp, pos);
+            func_002DD128(m);
+            m[0] = (float)(*(float *)((u8 *)c + 0x60) * 0.01);
+            m[5] = (float)(*(float *)((u8 *)c + 0x64) * 0.01);
+            m[10] = (float)(*(float *)((u8 *)c + 0x68) * 0.01);
+            func_001B6E48(i, &ang);
+            ang += 1.5707964f;
+            func_001AC5E0(m, m, ang);
+            func_001AC698(m, m, rot[2]);
+            func_001AC528(m, m, rot[0]);
+            m[12] = pos[0];
+            m[13] = pos[1];
+            m[14] = pos[2];
+            Ch_SetOrgMatrix(ch, m);
+        }
+    }
+}
 
 typedef struct Blk662D28_Sp {
     u8 pad0[0x7C0];

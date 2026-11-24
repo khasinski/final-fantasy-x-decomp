@@ -989,4 +989,174 @@ void func_0028D250(T6_MtxNode *o)
     func_002DD0B0(o->m[3], &pos);
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_28B480", func_0028D2F0);
+typedef struct ClutGradWork {
+    float f0;
+    float f4;
+    float f8;
+} ClutGradWork;
+
+typedef struct ClutGradMsg {
+    s32 id;
+    u32 idx;
+    float f8;
+    float fC;
+    float f10;
+    u32 col1;
+    u32 col0;
+} ClutGradMsg;
+
+typedef struct ClutTexEntry {
+    u8 pad0[0xC];
+    s32 lo;
+    s32 hi;
+    u8 pad14[0xC];
+} ClutTexEntry;
+
+typedef struct ClutTex0 {
+    u64 tbp0 : 14;
+    u64 tbw : 6;
+    u64 psm : 6;
+    u64 tw : 4;
+    u64 th : 4;
+    u64 tcc : 1;
+    u64 tfx : 2;
+    u64 cbp : 14;
+    u64 cpsm : 4;
+    u64 csm : 1;
+    u64 csa : 5;
+    u64 cld : 3;
+} ClutTex0;
+
+extern s32 D_006A3BC4;
+extern u_long128 D_00373060[2];
+extern s8 D_00373080[32];
+void *func_002B3888(s32 size);
+void func_002B39C0(s32 size);
+void func_002DCFB8(void *dst, void *a, float s);
+u32 func_002ECF38(float v);
+void func_002F8660(s32 mode);
+
+typedef union ClutTbl32 {
+    u_long128 q[2];
+    s8 b[32];
+} ClutTbl32;
+
+typedef struct ClutBuf {
+    u32 clut[256];
+    ClutTbl32 tbl;
+} ClutBuf;
+
+void func_0028D2F0(ScriptWork *base, void *p_v, ScriptCtx *ctx)
+{
+    register ClutGradMsg *msg __asm__("$17") = (ClutGradMsg *)p_v;
+    ClutGradWork *w = SLOT_WORK(ClutGradWork, base, ctx, 0);
+    ClutBuf *buf;
+    u32 *dst;
+    s32 pos;
+    s32 i;
+    u32 col1;
+    register u32 col0 __asm__("$6");
+    float span;
+    float delta[4];
+    float cur[4];
+    u8 gs_img[0x60];
+    ClutTex0 tex0;
+    ClutTexEntry *ent;
+
+    if (D_006A3BC4 == 0) {
+        __asm__("" : "+r"(msg));
+        w->f4 += w->f8;
+        w->f0 += w->f4;
+        if (base->owner == msg->id) {
+            w->f0 += msg->f8;
+            w->f4 += msg->fC;
+            w->f8 += msg->f10;
+        }
+    }
+    if (msg->idx == 0xFFFF) {
+        return;
+    }
+    buf = (ClutBuf *)func_002B3888(0x420);
+    {
+        register u_long128 *src __asm__("$3") = D_00373060;
+        register u_long128 q __asm__("$2");
+        register u32 idx_off __asm__("$4");
+        register u8 *g __asm__("$3");
+        register ClutTexEntry *e __asm__("$2");
+        float f0;
+        u32 idx;
+
+        f0 = w->f0;
+        q = src[0];
+        __asm__("" : "+r"(msg) : "f"(f0), "r"(q));
+        idx = msg->idx;
+        buf->tbl.q[0] = q;
+        idx_off = idx << 5;
+        col1 = msg->col1;
+        __asm__("" : "+r"(src) : "r"(col1), "r"(idx_off));
+        q = src[1];
+        __asm__("" : "+f"(f0) : "r"(q));
+        pos = (s32)f0;
+        __asm__("" : "+r"(msg) : "r"(pos));
+        col0 = msg->col0;
+        __asm__("" : "+r"(q) : "r"(col0));
+        buf->tbl.q[1] = q;
+        __asm__("" : "+r"(col0) : "r"(q), "r"(pos) : "memory");
+        g = (u8 *)D_006A3924;
+        __asm__("" : "+r"(g));
+        e = (ClutTexEntry *)(*(u8 **)(g + 0x20) + idx_off);
+        __asm__("" : "+r"(e));
+        *(u64 *)&tex0 = ((u64)e->hi << 32) | (u64)e->lo;
+    }
+    if (pos < 0) {
+        if (pos < -0x100) {
+            pos = -0x100;
+        }
+        pos += 0x100;
+        dst = buf->clut + ((pos & 0xE0) + D_00373080[pos & 0x1F]);
+        for (i = pos; i < 0x100; i++) {
+            *dst = col1;
+            dst += buf->tbl.b[i & 0x1F];
+        }
+        span = (float)pos;
+        i = 0;
+        dst = buf->clut;
+    } else {
+        if (pos >= 0x100) {
+            pos = 0xFF;
+        }
+        dst = buf->clut;
+        for (i = 0; i < pos; i++) {
+            *dst = col0;
+            dst += buf->tbl.b[i & 0x1F];
+        }
+        span = 256.0f - (float)pos;
+        pos = 0x100;
+    }
+    cur[0] = (float)(s32)(col0 & 0xFF);
+    cur[1] = (float)(s32)((col0 >> 8) & 0xFF);
+    cur[2] = (float)(s32)((col0 >> 16) & 0xFF);
+    cur[3] = (float)(s32)(col0 >> 24);
+    delta[0] = (float)(s32)(col1 & 0xFF);
+    delta[1] = (float)(s32)((col1 >> 8) & 0xFF);
+    delta[2] = (float)(s32)((col1 >> 16) & 0xFF);
+    delta[3] = (float)(s32)(col1 >> 24);
+    func_002DD038((void *)delta, (void *)delta, (void *)cur);
+    func_002DCFB8(delta, delta, span);
+    for (; i < pos; i++) {
+        u32 c = func_002ECF38(cur[3]) << 24;
+        u32 gb;
+
+        c |= func_002ECF38(cur[0]);
+        gb = func_002ECF38(cur[1]) << 8;
+        gb |= func_002ECF38(cur[2]) << 16;
+        *dst = c | gb;
+        func_002DD020((void *)cur, (void *)cur, (void *)delta);
+        dst += buf->tbl.b[i & 0x1F];
+    }
+    func_002DA928(gs_img, (u16)tex0.cbp, 4, (u16)tex0.cpsm, 0, 0, 16, 16);
+    func_002F8660(0);
+    func_002DAC50(gs_img, (int)buf);
+    func_002DA610(0, 0);
+    func_002B39C0(0x420);
+}
