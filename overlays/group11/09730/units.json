@@ -501,5 +501,24 @@
       "-O2",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09730_43a0.c",
+    "containers": [
+      9730
+    ],
+    "text_start": "0x01B043A0",
+    "text_end": "0x01B04424",
+    "functions": 1,
+    "discovered_code_bytes": 132,
+    "syms": {
+      "D_01B007B8": "0x01B007B8"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]
