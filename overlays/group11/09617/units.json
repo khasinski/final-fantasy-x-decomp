@@ -1,0 +1,15 @@
+[
+  {
+    "containers": [
+      9617
+    ],
+    "discovered_code_bytes": 216,
+    "functions": 1,
+    "src": "ovl_09617_01b02cd8.c",
+    "syms": {
+      "func_01B0EA88": "0x01B0EA88"
+    },
+    "text_end": "0x01B02DB0",
+    "text_start": "0x01B02CD8"
+  }
+]

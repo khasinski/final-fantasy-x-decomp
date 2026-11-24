@@ -1,0 +1,162 @@
+[
+  {
+    "src": "ovl_09314_0dd8.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B00DD8",
+    "text_end": "0x01B0113C",
+    "functions": 1,
+    "discovered_code_bytes": 868,
+    "syms": {
+      "D_01B00040": "0x01B00040",
+      "D_01B00680": "0x01B00680",
+      "D_01B00878": "0x01B00878",
+      "D_01B01298": "0x01B01298",
+      "D_01B012C8": "0x01B012C8",
+      "D_01B01720": "0x01B01720",
+      "D_01B08400": "0x01B08400",
+      "D_01B08468": "0x01B08468",
+      "D_01B08490": "0x01B08490",
+      "D_01B08530": "0x01B08530",
+      "D_01B085F0": "0x01B085F0",
+      "D_01B085F8": "0x01B085F8",
+      "D_01B08640": "0x01B08640",
+      "D_01B089D0": "0x01B089D0",
+      "D_01B089D4": "0x01B089D4",
+      "D_01B0E110": "0x01B0E110",
+      "D_01BF8B80": "0x01BF8B80",
+      "func_01B01140": "0x01B01140",
+      "func_01B01940": "0x01B01940",
+      "func_01B01BD8": "0x01B01BD8",
+      "func_01B02EE8": "0x01B02EE8",
+      "func_01B035C0": "0x01B035C0",
+      "func_01B03A08": "0x01B03A08",
+      "func_01B03C80": "0x01B03C80",
+      "func_01B04198": "0x01B04198",
+      "func_01B04360": "0x01B04360",
+      "func_01B04420": "0x01B04420",
+      "func_01B044F8": "0x01B044F8",
+      "func_01B07BA8": "0x01B07BA8",
+      "func_01B08000": "0x01B08000",
+      "func_01B081B8": "0x01B081B8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09314_1140.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B01140",
+    "text_end": "0x01B01298",
+    "functions": 1,
+    "discovered_code_bytes": 344,
+    "syms": {
+      "D_01B006A8": "0x01B006A8",
+      "D_01B006D8": "0x01B006D8",
+      "D_01B00758": "0x01B00758",
+      "D_01B007D8": "0x01B007D8",
+      "D_01B008D4": "0x01B008D4",
+      "D_01B08408": "0x01B08408",
+      "func_01B01BD8": "0x01B01BD8",
+      "func_01B05228": "0x01B05228",
+      "func_01B07A88": "0x01B07A88"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09314_12c8.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B012C8",
+    "text_end": "0x01B01364",
+    "functions": 1,
+    "discovered_code_bytes": 156,
+    "syms": {
+      "D_01B00DB8": "0x01B00DB8",
+      "D_01B08408": "0x01B08408",
+      "D_01B08468": "0x01B08468",
+      "D_01B085F8": "0x01B085F8",
+      "D_01B089D4": "0x01B089D4",
+      "func_01B03678": "0x01B03678",
+      "func_01B045D8": "0x01B045D8",
+      "func_01B07AA8": "0x01B07AA8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09314_1368.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B01368",
+    "text_end": "0x01B01574",
+    "functions": 1,
+    "discovered_code_bytes": 524,
+    "syms": {
+      "D_01B0E110": "0x01B0E110",
+      "func_01B01AB0": "0x01B01AB0",
+      "func_01B01BD8": "0x01B01BD8",
+      "func_01B04218": "0x01B04218",
+      "func_01B05330": "0x01B05330",
+      "func_01B058C0": "0x01B058C0",
+      "func_01B07C40": "0x01B07C40"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09314_1578.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B01578",
+    "text_end": "0x01B0171C",
+    "functions": 1,
+    "discovered_code_bytes": 420,
+    "syms": {
+      "D_01B0E110": "0x01B0E110",
+      "func_01B01BD8": "0x01B01BD8",
+      "func_01B04218": "0x01B04218",
+      "func_01B05330": "0x01B05330",
+      "func_01B058C0": "0x01B058C0",
+      "func_01B07C40": "0x01B07C40"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09314_1720.c",
+    "containers": [
+      9314
+    ],
+    "text_start": "0x01B01720",
+    "text_end": "0x01B01814",
+    "functions": 4,
+    "discovered_code_bytes": 240,
+    "syms": {
+      "D_01B01368": "0x01B01368",
+      "D_01B01578": "0x01B01578",
+      "D_01B085B0": "0x01B085B0",
+      "func_01B01988": "0x01B01988",
+      "func_01B01AB0": "0x01B01AB0",
+      "func_01B02EE8": "0x01B02EE8",
+      "func_01B02F38": "0x01B02F38",
+      "func_01B04198": "0x01B04198",
+      "func_01B04360": "0x01B04360"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

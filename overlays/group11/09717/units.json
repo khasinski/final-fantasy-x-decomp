@@ -1,0 +1,80 @@
+[
+  {
+    "src": "ovl_09717_1850.c",
+    "containers": [
+      9717
+    ],
+    "text_start": "0x01B01850",
+    "text_end": "0x01B018C8",
+    "functions": 1,
+    "discovered_code_bytes": 120,
+    "syms": {
+      "func_01B03FE0": "0x01B03FE0",
+      "func_01B04710": "0x01B04710",
+      "func_01B048A8": "0x01B048A8",
+      "func_01B04DF8": "0x01B04DF8",
+      "func_01B05878": "0x01B05878",
+      "g_ovl_9880": "0x01B09880",
+      "g_ovl_9884": "0x01B09884",
+      "g_ovl_f140": "0x01B0F140"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09717_1a20.c",
+    "containers": [
+      9717
+    ],
+    "text_start": "0x01B01A20",
+    "text_end": "0x01B025A8",
+    "functions": 32,
+    "discovered_code_bytes": 2896,
+    "syms": {
+      "func_01B02618": "0x01B02618",
+      "func_01B02E08": "0x01B02E08",
+      "func_01B04038": "0x01B04038",
+      "func_01B04F28": "0x01B04F28",
+      "func_01B04FA8": "0x01B04FA8",
+      "func_01B050F0": "0x01B050F0",
+      "func_01B051B0": "0x01B051B0",
+      "func_01B05288": "0x01B05288",
+      "func_01B05368": "0x01B05368",
+      "func_01B056F8": "0x01B056F8",
+      "func_01B05758": "0x01B05758",
+      "func_01B06610": "0x01B06610",
+      "func_01B06650": "0x01B06650",
+      "func_01B074A0": "0x01B074A0",
+      "func_01B08818": "0x01B08818",
+      "func_01B08838": "0x01B08838",
+      "func_01B08938": "0x01B08938",
+      "func_01B08AA8": "0x01B08AA8",
+      "func_01B08BB0": "0x01B08BB0",
+      "func_01B08E48": "0x01B08E48",
+      "func_01B08EE0": "0x01B08EE0",
+      "func_01B093E0": "0x01B093E0",
+      "g_data_0040": "0x01B00040",
+      "g_data_0f40": "0x01B00F40",
+      "g_data_0f90": "0x01B00F90",
+      "g_ovl_1540": "0x01B01540",
+      "g_ovl_1754": "0x01B01754",
+      "g_ovl_9880": "0x01B09880",
+      "g_ovl_9888": "0x01B09888",
+      "g_ovl_98c8": "0x01B098C8",
+      "g_ovl_98cc": "0x01B098CC",
+      "g_ovl_98d0": "0x01B098D0",
+      "g_ovl_9930": "0x01B09930",
+      "g_ovl_998c": "0x01B0998C",
+      "g_ovl_9990": "0x01B09990",
+      "g_ovl_f140": "0x01B0F140",
+      "g_tbl_0660": "0x01B00660",
+      "g_tbl_0c20": "0x01B00C20",
+      "g_tbl_0d00": "0x01B00D00",
+      "g_work_1beb540": "0x01BEB540"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  }
+]

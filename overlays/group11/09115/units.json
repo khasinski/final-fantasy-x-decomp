@@ -1,0 +1,21 @@
+[
+  {
+    "src": "ovl_09115_01b05fc0.c",
+    "containers": [
+      9115
+    ],
+    "text_start": "0x01B05FC0",
+    "text_end": "0x01B0605C",
+    "discovered_code_bytes": 156,
+    "functions": 1,
+    "syms": {
+      "D_01B00A70": "0x01B00A70",
+      "D_01B00A88": "0x01B00A88",
+      "D_01B04BF0": "0x01B04BF0",
+      "func_01B05698": "0x01B05698",
+      "func_01B07D70": "0x01B07D70",
+      "func_01B12748": "0x01B12748",
+      "func_01B12B50": "0x01B12B50"
+    }
+  }
+]
