@@ -907,7 +907,123 @@ void yiRender_setupparamVU1(Sys597F00 *s0)
     *(YiBlk10 *)p = s->v68240;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yirender_174FF8", yiRender_setupparamGS);
+static inline void yi_set_gs_reg(R2Qw *p, s64 val, int reg)
+{
+    p->w[0] = (u32)(val & 0xFFFFFFFFULL);
+    p->w[1] = (u32)(val >> 32);
+    p->w[2] = reg;
+    p->w[3] = 0;
+}
+
+void yiRender_setupparamGS(Sys597F00 *s0)
+{
+    YiSys5468 *s = (YiSys5468 *)s0;
+    R2Qw *p;
+    float col[4];
+    int i;
+
+    p = (R2Qw *)((u8 *)s + 0x677C0);
+    p->w[0] = 0x2000000C;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+    p++;
+    p->w[0] = 0x11000000;
+    p->w[3] = 0x5100000B;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p++;
+    p->w[0] = 0x800A;
+    p->w[1] = 0x10000000;
+    p->w[2] = 0xE;
+    p->w[3] = 0;
+    p++;
+    yi_set_gs_reg(p++, 0, 0x3F);
+    yi_set_gs_reg(p++, 0x7000D, 0x48);
+    yi_set_gs_reg(p++, 0x60, 0x15);
+    yi_set_gs_reg(p++, 0x44, 0x43);
+    yi_set_gs_reg(p++, 0, 0x4B);
+    yi_set_gs_reg(p++, 0x2000000000000000ULL, 0xA);
+    if (s->w67F20 & 4) {
+        col[0] = (float)s->b68370[0];
+        col[1] = (float)s->b68370[1];
+        col[2] = (float)s->b68370[2];
+        col[3] = (float)s->b68370[3];
+        for (i = 0; i < 4; i++) {
+            col[i] = col[i] * s->f68230[i] + s->f68240[i];
+            if (col[i] < 0.0f) {
+                col[i] = 0.0f;
+            }
+            if (col[i] > 255.0f) {
+                col[i] = 255.0f;
+            }
+        }
+        yi_set_gs_reg(p++, (u64)col[0] | ((u64)col[1] << 8) | ((u64)col[2] << 16), 0x3D);
+    } else {
+        yi_set_gs_reg(p++, (u64)s->b68370[0] | ((u64)s->b68370[1] << 8) | ((u64)s->b68370[2] << 16), 0x3D);
+    }
+    yi_set_gs_reg(p++, 0x0000008000000080ULL, 0x3B);
+    yi_set_gs_reg(p++, 0, 0x49);
+    if (s->w67F20 & 0x2000000) {
+        p->w[0] = 0;
+        p->w[1] = 0;
+        p->w[2] = 0;
+        p->w[3] = 0;
+    } else {
+        yi_set_gs_reg(p++, ((u32)s->w9F1F8 >> 11) | 0x1000000, 0x4F);
+    }
+
+    p = (R2Qw *)((u8 *)s + 0x678C0);
+    p->w[0] = 0x2000000C;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+    p++;
+    p->w[0] = 0x11000000;
+    p->w[3] = 0x5100000B;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p++;
+    p->w[0] = 0x800A;
+    p->w[1] = 0x10000000;
+    p->w[2] = 0xE;
+    p->w[3] = 0;
+    p++;
+    yi_set_gs_reg(p++, 0, 0x3F);
+    yi_set_gs_reg(p++, 0x5000D, 0x48);
+    yi_set_gs_reg(p++, 0x60, 0x15);
+    yi_set_gs_reg(p++, 0x44, 0x43);
+    yi_set_gs_reg(p++, 0, 0x4B);
+    yi_set_gs_reg(p++, 0x2000000000000000ULL, 0xA);
+    if (s->w67F20 & 4) {
+        col[0] = (float)s->b68370[0];
+        col[1] = (float)s->b68370[1];
+        col[2] = (float)s->b68370[2];
+        col[3] = (float)s->b68370[3];
+        for (i = 0; i < 4; i++) {
+            col[i] = col[i] * s->f68230[i] + s->f68240[i];
+            if (col[i] < 0.0f) {
+                col[i] = 0.0f;
+            }
+            if (col[i] > 255.0f) {
+                col[i] = 255.0f;
+            }
+        }
+        yi_set_gs_reg(p++, (u64)col[0] | ((u64)col[1] << 8) | ((u64)col[2] << 16), 0x3D);
+    } else {
+        yi_set_gs_reg(p++, (u64)s->b68370[0] | ((u64)s->b68370[1] << 8) | ((u64)s->b68370[2] << 16), 0x3D);
+    }
+    yi_set_gs_reg(p++, 0x0000008000000080ULL, 0x3B);
+    yi_set_gs_reg(p++, 0, 0x49);
+    if (s->w67F20 & 0x2000000) {
+        p->w[0] = 0;
+        p->w[1] = 0;
+        p->w[2] = 0;
+        p->w[3] = 0;
+    } else {
+        yi_set_gs_reg(p++, ((u32)s->w9F1F8 >> 11) | 0x1000000, 0x4F);
+    }
+}
 
 void func_00178520(V2Blk40 *src, R2Qw *p, int addr) {
     p->w[1] = 0;

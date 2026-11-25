@@ -1,5 +1,7 @@
 /* tu_266 0x23cbd0-0x2414f0: medium; ~Tk (config/tu_map.tsv) */
 #define TkMenuCtrlSelFileWindow _hdr_TkMenuCtrlSelFileWindow
+#define TOMenuCloseYesNoWindow _hdr_TOMenuCloseYesNoWindow
+#define func_002D9030 _hdr_func_002D9030
 #include "common.h"
 #include "ffx/r5.h"
 #include "ffx/w7.h"
@@ -8,7 +10,11 @@
 #include "ffx/u4.h"
 #include "ffx/v5.h"
 #undef TkMenuCtrlSelFileWindow
+#undef TOMenuCloseYesNoWindow
+#undef func_002D9030
 void TkMenuCtrlSelFileWindow(Task *t);
+int TOMenuCloseYesNoWindow(void);
+int func_002D9030(int);
 
 void func_0023CBD0(char *dst, int n)
 {
@@ -1087,9 +1093,1392 @@ loop:
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023F298);
+extern char D_0030B180[];
+extern u8 D_0030B280[];
+extern char D_0030B2A0[];
+extern s32 D_0069A7D0;
+extern s32 D_0069A75C;
+extern s32 D_0069A680;
+void func_00242620(int);
+void func_002D9208(char *, char *);
+int func_002D8EC8(void);
+int func_002D8D90(char *);
+int func_002510A0(int, void *);
+void TOMenuHelpSetExtMode(int, int);
+int TkMn2GetMenuMode(void);
+int TkMn2GetMainFrameRatio(void);
+void TOSwapInternationalEnvInit(int);
 
-INCLUDE_RODATA("build/ee_asm/game/menu/tk/tk_23CBD0/rodata", jtbl_00572DB0);
+void func_0023F298(Task *t)
+{
+    s32 *state = &t->x1C;
+    u32 pad = func_00220318();
+    u32 rep = TOMenuGetControlPadRep();
+    u32 trg = TOMenuGetControlPadTrg();
+    int st = *state;
+
+loop:
+    switch (st) {
+    case 0:
+        func_0023ED40();
+        func_0023DB98();
+        *state = 1;
+        D_0069A65C = 0;
+        D_0069A660[0] = 0;
+        D_0069A660[1] = 0;
+        break;
+    case 1:
+        *state = 3;
+    case 3:
+        func_0023EB20();
+        if (D_0069A686 != 0) {
+            *state = 4;
+        }
+        break;
+    case 4:
+        func_0023EB20();
+        if (D_0069A686 == 0) {
+            *state = 5;
+        }
+        break;
+    case 5:
+        func_0023EB20();
+        if (D_0069A686 != 0) {
+            *state = 6;
+        }
+        break;
+    case 6:
+        func_0023EB20();
+        if (D_0069A686 == 0) {
+            func_0023DD60(0);
+            *state = 8;
+        }
+        break;
+    case 7:
+        func_0023ED40();
+        D_0069A660[0] = 0;
+        D_0069A660[1] = 0;
+        func_00242620(-0x200);
+        *state = 8;
+        break;
+    case 8:
+        GetCD();
+        *state = 9;
+        st = 9;
+        goto loop;
+    case 9:
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2000));
+        *state = 10;
+        func_0023DA90((int)t);
+        break;
+    case 10:
+        func_0023EB20();
+        if (trg & 0x20) {
+            if (D_0069A660[D_0069A65C] != 0) {
+                PLAY_SE(0x80000001);
+                func_002D9030(D_0069A65C);
+                *state = 0x10;
+            } else {
+                PLAY_SE(0x80000003);
+            }
+        } else if (trg & 0x40) {
+            PLAY_SE(0x80000004);
+            func_0023DB10();
+            if (D_0069A688 != 0 && D_0069A7CC == 0) {
+                st = 0xB;
+                goto loop;
+            }
+            st = 0x6D;
+            goto loop;
+        } else if (rep & 0x5000) {
+            PLAY_SE(0x80000001);
+            D_0069A65C = (D_0069A65C == 0);
+        }
+        break;
+    case 0xB: {
+        int a = func_002493D0(0x202F);
+        int b = func_002493D0(0x2006);
+        int c = func_002493D0(0x2007);
+
+        TkMenuSetHelpMessage(0);
+        func_00236940(a, b, c);
+        *state = 0xC;
+        break;
+    }
+    case 0xC: {
+        Task *w = TOMenuGetYesNoWindow();
+
+        if (w->b45 < 0) {
+            TOMenuCloseYesNoWindow();
+            st = 7;
+            goto loop;
+        }
+        if (w->b45 != 0) {
+            int sel = w->x48;
+            TOMenuCloseYesNoWindow();
+            st = (sel == 0) ? 0x6D : 7;
+            goto loop;
+        }
+        break;
+    }
+    case 0xD: {
+        int msg;
+
+        func_0023ED40();
+        func_0023EA48();
+        TkMenuSetHelpMessage(0);
+        TOMenuCloseYesNoWindow();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        if (D_0069A65C != 0) {
+            msg = func_002493D0(0x202D);
+        } else {
+            msg = func_002493D0(0x200A);
+        }
+        func_00242620(-0x200);
+        func_00236960(msg, 0, 0);
+        *state = 0xF;
+        break;
+    }
+    case 0xE: {
+        int msg;
+
+        func_0023ED40();
+        TkMenuSetHelpMessage(0);
+        func_0023EA48();
+        TOMenuCloseYesNoWindow();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        if (D_0069A65C != 0) {
+            msg = func_002493D0(0x2030);
+        } else {
+            msg = func_002493D0(0x2012);
+        }
+        func_00236960(msg, 0, 0);
+        *state = 0xF;
+        break;
+    }
+    case 0xF:
+        func_0023EB20();
+        if (trg != 0) {
+            TOMenuCloseYesNoWindow();
+            func_00242620(-0x200);
+            PLAY_SE(0x80000001);
+            *state = 7;
+        }
+        break;
+    case 0x10: {
+        s32 *p_d0 = &D_0069A7D0;
+
+        *p_d0 = func_002369A0(func_002493D0(0x2010), 0, 0);
+        func_00242620(0x200);
+        func_0023ED58(D_0069A65C);
+        func_0023DB10();
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2011));
+        *state = 0x14;
+        break;
+    }
+    case 0x11:
+        func_00242620(0x200);
+        func_0023ED58(D_0069A65C);
+        func_0023DB10();
+        func_0023EA48();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2011));
+        *state = 0x12;
+        break;
+    case 0x12: {
+        int r = func_002D9050(D_0069A65C, &D_0069A664, 0, 0);
+
+        if (r == 0) {
+            *state = 0x13;
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        break;
+    }
+    case 0x13: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= -2 && D_0069A664 == 2) {
+                *state = 0x14;
+            } else {
+                *state = 0xE;
+            }
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        break;
+    }
+    case 0x14:
+        *state = 0x15;
+    case 0x15: {
+        int res;
+
+        if (func_002D8AC8(1, 0, &res) != 0) {
+            *state = 0x16;
+            st = 0x16;
+            goto loop;
+        }
+        break;
+    }
+    case 0x16: {
+        int i;
+
+        for (i = 3; i >= 0; i--) {
+            D_0030B170[i] = 0;
+        }
+        func_002D9208(D_0030B180, D_00326F58);
+        if (func_002D8E40(D_0030B180, 0, 1, D_0030B280) == 0) {
+            *state = 0x18;
+            st = 0x18;
+            goto loop;
+        }
+        *state = 0xE;
+        break;
+    }
+    case 0x17:
+        if (func_002D8E40(D_0030B180, 1, 1, D_0030B280) == 0) {
+            *state = 0x18;
+            st = 0x18;
+            goto loop;
+        }
+        *state = 0xE;
+        /* fallthrough? No, look at line 491: sw $2, 0($19) falls through to case 0x18! */
+    case 0x18: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 0) {
+            break;
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        if (res == 1) {
+            int n = func_002D9270(D_0030B2A0);
+
+            D_0030B170[n / 32] |= 1 << n;
+            *state = 0x17;
+            st = 0x17;
+            goto loop;
+        }
+        if (res == 0 || res == -2) {
+            *state = 0x19;
+            st = 0x19;
+            goto loop;
+        }
+        *state = 0xE;
+        break;
+    }
+    case 0x19: {
+        int r = func_002D9050(D_0069A65C, 0, 0, 0);
+
+        if (r == 0) {
+            *state = 0x1A;
+            st = 0x1A;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        break;
+    }
+    case 0x1A: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res == 0 || res == -2) {
+                *state = 0x1B;
+            } else {
+                *state = 0xE;
+            }
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        /* fallthrough to case 0x1B! */
+    }
+    case 0x1B: {
+        int r = func_0023ED88(D_0069A65C);
+
+        if (r < 0) {
+            *state = 0xE;
+            break;
+        }
+        if (func_00242630() == 0x1000 && r != 0 && TOMenuGetFirstReadEndFlag() == 1) {
+            *state = 0x1E;
+        }
+        break;
+    }
+    case 0x1C:
+        func_00242620(-0x200);
+        *state = 0x1D;
+        break;
+    case 0x1D:
+        if (func_00242630() == 0) {
+            *state = 7;
+        }
+        break;
+    case 0x1E: {
+        int r;
+
+        TOMenuCloseYesNoWindow();
+        if (func_002D8A00(D_0069A65C) < 0) {
+            D_0069A680 = D_0069A67C;
+        } else {
+            D_0069A680 = func_002D8A00(D_0069A65C);
+        }
+        r = func_002D9050(D_0069A65C, 0, 0, 0);
+        if (r == 0) {
+            *state = 0x1F;
+            st = 0x1F;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        break;
+    }
+    case 0x1F: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res == 0) {
+                *state = 0x20;
+                st = 0x20;
+                goto loop;
+            }
+            *state = 0xE;
+        }
+        if (r < 0) {
+            *state = 0xE;
+        }
+        break;
+    }
+    case 0x20:
+        if (D_0069A688 != 0) {
+            if (D_0069A670 != 0 || D_0069A66C >= D_0069A7C8) {
+                *state = 0x21;
+                st = 0x21;
+                goto loop;
+            }
+            PLAY_SE(0x80000003);
+            {
+                int msg = (D_0069A65C != 0) ? func_002493D0(0x202E) : func_002493D0(0x202B);
+
+                func_00242620(-0x200);
+                func_00236940(msg, 0, 0);
+                TkMenuSetHelpMessage(0);
+                *state = 0x22;
+            }
+        } else {
+            if (D_0069A670 == 0) {
+                int msg;
+
+                PLAY_SE(0x80000003);
+                msg = (D_0069A65C != 0) ? func_002493D0(0x2031) : func_002493D0(0x2013);
+                func_00236940(msg, 0, 0);
+                TkMenuSetHelpMessage(0);
+                *state = 0x22;
+            } else {
+                *state = 0x21;
+                st = 0x21;
+                goto loop;
+            }
+        }
+        break;
+    case 0x22:
+        func_0023ED40();
+        *state = 0x23;
+        break;
+    case 0x23:
+        func_0023EB20();
+        if (D_0069A660[D_0069A65C] == 0) {
+            TOMenuCloseYesNoWindow();
+            func_00242620(-0x200);
+            *state = 0xD;
+        } else if (D_00326038->b45 != 0) {
+            TOMenuCloseYesNoWindow();
+            func_00242620(-0x200);
+            *state = 7;
+        }
+        break;
+    case 0x21: {
+        Task *w;
+
+        PLAY_SE(0x80000010);
+        func_0023E938((int)t);
+        w = D_0069A644;
+        w->x48 = D_0069A680;
+        w->x32 = (u16)D_0069A680 - ((u16)w->x3A >> 1);
+        if (w->x32 >= (u16)w->x30 - (u16)w->x3A) {
+            w->x32 = (u16)w->x30 - (u16)w->x3A;
+        }
+        if (D_0069A644->x32 < 0) {
+            D_0069A644->x32 = 0;
+        }
+        D_0069A644->x34 = D_0069A644->x32;
+        func_0023ED40();
+        *state = 0x25;
+        break;
+    }
+    case 0x24:
+        func_002433B8(D_0069A644);
+        func_0023ED40();
+        if (D_0069A688 != 0) {
+            TkMenuSetHelpMessage((u8 *)func_002493D0(0x2004));
+        } else {
+            TkMenuSetHelpMessage((u8 *)func_002493D0(0x201F));
+        }
+        *state = 0x25;
+    case 0x25:
+        func_0023EB20();
+        if (D_0069A660[D_0069A65C] == 0) {
+            *state = 0xD;
+        } else if (D_0069A644->b45 > 0) {
+            D_0069A75C = *(s16 *)((u8 *)D_0069A644 + 0x2C);
+            if (D_0069A688 != 0) {
+                *state = 0x27;
+            } else {
+                *state = 0x60;
+            }
+        } else if (D_0069A644->b45 < 0) {
+            func_0023EA48();
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+            *state = 0x1C;
+        }
+        break;
+    case 0x27:
+        if (D_0069A690[D_0069A75C] != 1 && D_0069A690[D_0069A75C] != 2) {
+            *state = 0x2B;
+            st = 0x2B;
+            goto loop;
+        }
+        {
+            int need = D_0069A7C8 - D_0069A6F8[D_0069A75C];
+
+            if (D_0069A690[D_0069A75C] == 2 && D_0069A66C < need) {
+                int msg;
+
+                PLAY_SE(0x80000003);
+                msg = (D_0069A65C != 0) ? func_002493D0(0x202E) : func_002493D0(0x202B);
+                func_00236940(msg, 0, 0);
+                TkMenuSetHelpMessage(0);
+                *state = 0x26;
+            } else {
+                int a = func_002493D0(0x2005);
+                int b = func_002493D0(0x2006);
+                int c = func_002493D0(0x2007);
+
+                func_00236940(a, b, c);
+                *state = 0x28;
+            }
+        }
+        break;
+    case 0x26:
+        func_0023EB20();
+        if (D_0069A660[D_0069A65C] == 0) {
+            TOMenuCloseYesNoWindow();
+            func_0023EA48();
+            func_00242620(-0x200);
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+            TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+            *state = 0xD;
+        } else if (D_00326038->b45 != 0) {
+            TOMenuCloseYesNoWindow();
+            *state = 0x29;
+            st = 0x29;
+            goto loop;
+        }
+        break;
+    case 0x28:
+        func_0023EB20();
+        if (D_0069A660[D_0069A65C] == 0) {
+            TOMenuCloseYesNoWindow();
+            *state = 0xD;
+        } else if (D_00326038->b45 != 0) {
+            if (D_00326038->x48 != 0 || D_00326038->b45 < 0) {
+                TOMenuCloseYesNoWindow();
+                *state = 0x29;
+                st = 0x29;
+                goto loop;
+            }
+            TOMenuCloseYesNoWindow();
+            *state = 0x3F;
+            st = 0x3F;
+            goto loop;
+        }
+        break;
+    case 0x29:
+        *state = 0x2A;
+        goto L_2A;
+    case 0x2B:
+        *state = 0x2C;
+    case 0x2C:
+        if (func_0023EC50() != 0) {
+            *state = 0x2D;
+            st = 0x2D;
+            goto loop;
+        }
+        break;
+    case 0x2D: {
+        int r = func_002D9050(D_0069A65C, &D_0069A664, 0, &D_0069A668);
+
+        if (r == 0) {
+            *state = 0x2E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x2E: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res != 0 || D_0069A664 != 2) {
+                *state = 0x5E;
+            }
+            if (D_0069A668 != 0) {
+                *state = 0x3F;
+            } else {
+                *state = 0x2F;
+                st = 0x2F;
+                goto loop;
+            }
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x2F: {
+        int r = func_002D9050(D_0069A65C, &D_0069A664, 0, &D_0069A668);
+
+        if (r == 0) {
+            *state = 0x30;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x30: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res != 0 || D_0069A664 != 2) {
+                *state = 0x5E;
+            }
+            if (D_0069A668 != 0) {
+                *state = 0x3F;
+            } else {
+                *state = 0x31;
+                st = 0x31;
+                goto loop;
+            }
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x31:
+        *state = 0x32;
+    case 0x32:
+        if (func_0023EC50() != 0) {
+            *state = 0x33;
+            st = 0x33;
+            goto loop;
+        }
+        break;
+    case 0x33: {
+        int a = func_002493D0(D_0069A65C + 0x200B);
+        int b = func_002493D0(0x2006);
+        int c = func_002493D0(0x2007);
+
+        func_00236940(a, b, c);
+        *state = 0x34;
+        break;
+    }
+    case 0x34:
+        func_0023EB20();
+        if (D_0069A660[D_0069A65C] == 0) {
+            TOMenuCloseYesNoWindow();
+            *state = 0xD;
+        } else if (D_00326038->b45 != 0) {
+            if (D_00326038->x48 != 0 || D_00326038->b45 < 0) {
+                TOMenuCloseYesNoWindow();
+                *state = 0x35;
+                st = 0x35;
+                goto loop;
+            }
+            TOMenuCloseYesNoWindow();
+            *state = 0x37;
+            st = 0x37;
+            goto loop;
+        }
+        break;
+    case 0x35:
+        *state = 0x36;
+        goto L_2A;
+    case 0x37:
+        *state = 0x38;
+    case 0x38:
+        if (func_0023EC50() != 0) {
+            *state = 0x39;
+            st = 0x39;
+            goto loop;
+        }
+        break;
+    case 0x39: {
+        s32 *p_d0 = &D_0069A7D0;
+        int r = func_002D8EC8();
+
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x200D));
+        *p_d0 = func_002369A0(func_002493D0(0x2010), 0, 0);
+        if (r == 0) {
+            *state = 0x3A;
+        }
+        break;
+    }
+    case 0x3A: {
+        int res;
+
+        if (func_002D8AC8(1, 0, &res) == 1) {
+            if (res != 0) {
+                *state = 0x3D;
+                st = 0x3D;
+                goto loop;
+            }
+            *state = 0x3B;
+            st = 0x3B;
+            goto loop;
+        }
+        break;
+    }
+    case 0x3B:
+        TOMenuCloseYesNoWindow();
+        *state = 0x3C;
+        st = 0x3C;
+        goto loop;
+    case 0x3C:
+        *state = 0x3F;
+        st = 0x3F;
+        goto loop;
+    case 0x3D:
+        TOMenuCloseYesNoWindow();
+        func_00236940(func_002493D0(0x200F), 0, 0);
+        func_0023EA48();
+        TkMenuSetHelpMessage(0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        *state = 0x3E;
+        break;
+    case 0x3F: {
+        s32 *p_d0 = &D_0069A7D0;
+
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2009));
+        *p_d0 = func_002369A0(func_002493D0(0x2010), 0, 0);
+        func_0023EC50();
+        *state = 0x40;
+        break;
+    }
+    case 0x40:
+        if (func_0023EC50() != 0) {
+            *state = 0x41;
+            st = 0x41;
+            goto loop;
+        }
+        break;
+    case 0x41: {
+        char buf[0x80];
+        int r;
+
+        func_0023CDB0(buf, D_0069A75C);
+        r = func_002D8E40(buf, 0, 1, D_0069A780);
+        if (r == 0) {
+            *state = 0x42;
+            st = 0x42;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x42: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res > 0) {
+                *state = 0x45;
+                st = 0x45;
+                goto loop;
+            }
+            if (res == -4 || res == 0) {
+                *state = 0x43;
+                st = 0x43;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x43: {
+        char buf[0x80];
+        int r;
+
+        func_0023CDB0(buf, D_0069A75C);
+        r = func_002D8D90(buf);
+        if (r == 0) {
+            *state = 0x44;
+            st = 0x44;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x44: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res == -4 || res == 0) {
+                *state = 0x45;
+                st = 0x45;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x45: {
+        char buf[0x80];
+        int r;
+
+        func_0023CC50(buf, D_0069A75C);
+        r = func_002D8E40(buf, 0, 1, D_0069A780);
+        if (r == 0) {
+            *state = 0x46;
+            st = 0x46;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x46: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res > 0) {
+                if ((D_0069A790 + 0x3FF) / 1024 == (D_0032648C + 0x3FF) / 1024) {
+                    *state = 0x4D;
+                    st = 0x4D;
+                    goto loop;
+                }
+                *state = 0x47;
+                st = 0x47;
+                goto loop;
+            }
+            if (res == -4 || res == 0) {
+                *state = 0x47;
+                st = 0x47;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x47: {
+        char buf[0x80];
+        int r;
+
+        func_0023CC50(buf, D_0069A75C);
+        r = func_002D8D28(buf, 0x202);
+        if (r == 0) {
+            *state = 0x48;
+            st = 0x48;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x48: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                D_0069A7C4 = res;
+                *state = 0x49;
+                st = 0x49;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x49: {
+        int sz = D_0032648C;
+        int r = func_002D8C78(D_0069A7C4, 0x01D60000, sz);
+
+        if (r == 0) {
+            *state = 0x4A;
+            st = 0x4A;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4A: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x4B;
+                st = 0x4B;
+                goto loop;
+            }
+            break;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4B: {
+        int r = func_002D8FA0(D_0069A7C4);
+
+        if (r == 0) {
+            *state = 0x4C;
+            st = 0x4C;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4C: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x4D;
+                st = 0x4D;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4D: {
+        char buf[0x80];
+        int r;
+
+        func_0023CD30(buf, D_0069A75C);
+        r = func_002D8D28(buf, 0x202);
+        if (r == 0) {
+            *state = 0x4E;
+            st = 0x4E;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4E: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                D_0069A7C4 = res;
+                *state = 0x4F;
+                st = 0x4F;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x4F: {
+        int area = func_001487D0();
+        void *save = func_00124828();
+        int secs = func_0023D268((void *)0x01D57B00, save, D_0069A75C);
+        int r;
+
+        func_0023D4B8(D_0069A75C, secs, area);
+        r = func_002D8C78(D_0069A7C4, 0x01D5E000, 0x3C4);
+        if (r == 0) {
+            *state = 0x50;
+            st = 0x50;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x50: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x51;
+                st = 0x51;
+                goto loop;
+            }
+            break;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x51: {
+        int r = func_002D8FA0(D_0069A7C4);
+
+        if (r == 0) {
+            *state = 0x52;
+            st = 0x52;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x52: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x53;
+                st = 0x53;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x53: {
+        char buf[0x80];
+        int r;
+
+        func_0023CBD0(buf, D_0069A75C);
+        r = func_002D8D28(buf, 0x202);
+        if (r == 0) {
+            *state = 0x54;
+            st = 0x54;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x54: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                D_0069A7C4 = res;
+                *state = 0x55;
+                st = 0x55;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x55: {
+        int r = func_002D8C78(D_0069A7C4, 0x01D57B00, 0x64F8);
+
+        if (r == 0) {
+            *state = 0x56;
+            st = 0x56;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x56: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x57;
+                st = 0x57;
+                goto loop;
+            }
+            break;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x57: {
+        int r = func_002D8FA0(D_0069A7C4);
+
+        if (r == 0) {
+            *state = 0x58;
+            st = 0x58;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x58: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x59;
+                st = 0x59;
+                goto loop;
+            }
+            *state = 0x5E;
+        }
+        if (r < 0) {
+            *state = 0x5E;
+        }
+        break;
+    }
+    case 0x59:
+        *state = 0x5A;
+        break;
+    case 0x5A:
+        if (func_002D9050(D_0069A65C, 0, &D_0069A66C, 0) == 0) {
+            *state = 0x5B;
+            st = 0x5B;
+            goto loop;
+        }
+        break;
+    case 0x5B: {
+        int res;
+
+        if (func_002D8AC8(1, 0, &res) == 1) {
+            if (res == 0) {
+                *state = 0x5C;
+            } else if (res != -2) {
+                *state = 0x5E;
+            } else {
+                D_0069A66C = 0x2000;
+                *state = 0x5E;
+            }
+            func_0023EA68(D_0069A66C, D_0069A7C8);
+        }
+        break;
+    }
+    case 0x5C:
+        TOMenuCloseYesNoWindow();
+        memcpy(func_0023CE08(D_0069A75C), (void *)0x01D57B00, 0x40);
+        D_0069A690[D_0069A75C] = 1;
+        D_0069A7CC = 1;
+        func_002D89E8(D_0069A65C, D_0069A75C);
+        PLAY_SE(0x8000002B);
+        *state = 0x5D;
+    case 0x5D:
+        func_0023EA68(D_0069A66C, D_0069A7C8);
+    case 0x2A:
+    case 0x36:
+    L_2A:
+        *state = 0x24;
+        break;
+    case 0x5E:
+        TOMenuCloseYesNoWindow();
+        func_00236940(func_002493D0(0x2015), 0, 0);
+        func_0023EA48();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        TkMenuSetHelpMessage(0);
+        *state = 0x5F;
+        break;
+    case 0x60:
+        *state = 0x61;
+    case 0x61:
+        if (func_0023EC50() != 0) {
+            *state = 0x62;
+        }
+        break;
+    case 0x62: {
+        s32 *p_d0 = &D_0069A7D0;
+        char buf[0x80];
+        int r;
+
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2008));
+        *p_d0 = func_002369A0(func_002493D0(0x2010), 0, 0);
+        func_0023CBD0(buf, D_0069A75C);
+        r = func_002D8D28(buf, 1);
+        if (r == 0) {
+            *state = 0x63;
+            st = 0x63;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x63: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                D_0069A7C4 = res;
+                *state = 0x64;
+                st = 0x64;
+                goto loop;
+            }
+            *state = 0x6A;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x64: {
+        int r = func_002D8CD0(D_0069A7C4, 0x01D57B00, 0x64F8);
+
+        if (r == 0) {
+            *state = 0x65;
+            st = 0x65;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x65: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x66;
+                st = 0x66;
+                goto loop;
+            }
+            break;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x66: {
+        int r = func_002D8FA0(D_0069A7C4);
+
+        if (r == 0) {
+            *state = 0x67;
+            st = 0x67;
+            goto loop;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x67: {
+        int res;
+        int r = func_002D8AC8(1, 0, &res);
+
+        if (r == 1) {
+            if (res >= 0) {
+                *state = 0x68;
+                st = 0x68;
+                goto loop;
+            }
+            *state = 0x6A;
+        }
+        if (r < 0) {
+            *state = 0x6A;
+        }
+        break;
+    }
+    case 0x68: {
+        typedef struct { u8 pad[4]; s32 x; } Off4;
+        u8 *rec = func_0023CE08(D_0069A75C);
+
+        if (*(u16 *)(rec + 0x1A) != 0) {
+            u16 crc = *(u16 *)0x01D5DFF4;
+
+            ((Off4 *)0x01D5DFF0)->x = 0;
+            if (*(u16 *)(rec + 0x1A) != (u16)func_002510A0(0x64B8, (void *)0x01D57B40) || *(u16 *)(rec + 0x1A) != crc) {
+                *state = 0x6B;
+                break;
+            }
+        } else {
+            if (*(u16 *)0x01D5DFF4 != 0) {
+                *state = 0x6B;
+                break;
+            }
+        }
+        PLAY_SE(0x8000006A);
+        D_0069A7CC = 1;
+        func_002D89E8(D_0069A65C, D_0069A75C);
+        func_0023EA48();
+        TOMenuCloseYesNoWindow();
+        func_0023D190((SaveDataBody *)func_00124828(), (u8 *)0x01D57B00);
+        TkMenuSetHelpMessage((u8 *)func_002493D0(0x2008));
+        TkRefreshSoundMode();
+        TkRefreshHDD();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        func_00242668();
+        *state = 0x69;
+        break;
+    }
+    case 0x69:
+        D_003263E0 = 1;
+        *state = 0x6D;
+        break;
+    case 0x6A:
+        TOMenuCloseYesNoWindow();
+        func_00236940(func_002493D0(0x2016), 0, 0);
+        func_0023EA48();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        TkMenuSetHelpMessage(0);
+        PLAY_SE(0x80000003);
+        *state = 0x6C;
+        break;
+    case 0x6B:
+        TOMenuCloseYesNoWindow();
+        func_00236940(func_002493D0(0x201D), 0, 0);
+        func_0023EA48();
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE0);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CE8);
+        TOSeqStopScene(1, &_m2c_func_0023E938_D_00572CF0);
+        TkMenuSetHelpMessage(0);
+        PLAY_SE(0x80000003);
+        *state = 0x6C;
+        break;
+    case 0x3E:
+    case 0x5F:
+    case 0x6C:
+        if (D_00326038->b45 != 0) {
+            TOMenuCloseYesNoWindow();
+            *state = 7;
+        }
+        break;
+    case 0x6D:
+        TOMenuHelpSetExtMode(0, D_0069A7CC);
+        if ((TkMn2GetMenuMode() & 0xFFFF0000) != 0) {
+            TkMn2SetMainFrameRatioDiff(0x10);
+        }
+        *state = 0x6E;
+    case 0x6E:
+        if ((TkMn2GetMenuMode() & 0xFFFF0000) != 0) {
+            if (TkMn2GetMainFrameRatio() < 0x80) {
+                break;
+            }
+            *state = 0x6F;
+            break;
+        }
+        *state = 0x6F;
+    case 0x6F:
+        if (TOGetFFXLangSwapFlag() == 1 && D_003263E0 == 1) {
+            TOSwapInternationalEnvInit(func_001BD360());
+            *state = 0x70;
+        } else {
+            *state = 0x71;
+        }
+        break;
+    case 0x70:
+        if (TOSwapInternationalEnvExecNonBlock() == 1) {
+            D_003263E0 = 0;
+            *state = 0x71;
+        }
+        break;
+    case 0x71: {
+        int _pad;
+        __asm__("" : : "m"(_pad));
+        func_0023DDD0();
+        if (D_0069A688 != 0) {
+            TkMenuMainSleepMenu(0xF);
+            TkMenuMainActiveMenu(1, 0);
+        } else {
+            TkMenuMainSleepMenu(0x10);
+        }
+        break;
+    }
+    case 2:
+        break;
+    }
+}
+
 
 void func_00241240(void) {
 }

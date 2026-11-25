@@ -930,7 +930,89 @@ int func_001D1510(int id, int cmd, int mode, int *out_a, int *out_b) {
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D00D8", MsInsertChrCommand);
+typedef struct {
+    u8 pad0[0x10];
+    u16 h10;
+    u16 h12;
+    u8 pad14;
+    u8 b15;
+    u8 pad16[4];
+    u16 h1A;
+    u32 f1C;
+} InsCmdRom;
+
+int MsInsertChrCommand(int id, int target, int mode) {
+    GsEnt48 e;
+    int val_a;
+    int val_b;
+    BtlChr *c;
+    int ret;
+    InsCmdRom *cmd;
+    register int flag __asm__("$22");
+
+    c = MsGetChr(id);
+    ret = func_001D1510(id, 0x3100, mode, &val_a, &val_b);
+    if (mode == 0) {
+        if ((_u64_D_00317320 & 0x000000FF000000FFULL) != 0 || ret == 0) {
+            ret = 0;
+            ((ExChr *)c)->f1E = 1;
+        }
+    }
+    c->fAB2 = 0;
+    e.f3 = 1;
+    __asm__("" : : "m"(e.f3));
+    {
+        register int v1_mask __asm__("$3") = 1 << target;
+        register int v0_cmd __asm__("$2");
+        register int a0_cmd __asm__("$4");
+        register int a1_zero __asm__("$5");
+        __asm__ volatile("" : "+r"(v1_mask));
+        v0_cmd = 0x3100;
+        __asm__ volatile("" : "+r"(v0_cmd));
+        a0_cmd = 0x3100;
+        __asm__ volatile("" : "+r"(a0_cmd));
+        e.f8[0].h0 = v0_cmd;
+        __asm__ volatile("" : : "m"(e.f8[0].h0));
+        a1_zero = 0;
+        __asm__ volatile("" : "+r"(a1_zero));
+        e.f8[0].targets = v1_mask;
+        __asm__ volatile("" : : "m"(e.f8[0].targets));
+        e.f2 = 0;
+        __asm__ volatile("" : : "m"(e.f2));
+        flag = 0;
+        __asm__ volatile("" : "+r"(flag));
+        e.f8[0].h2 = 0;
+        cmd = (InsCmdRom *)MsGetRomPlyCommand(a0_cmd, (void *)a1_zero);
+    }
+    cmd->f1C = (cmd->f1C & ~0x40000000U) | ((val_b & 1) << 30);
+    cmd->f1C = (cmd->f1C & ~0x08000000U) | 0x08000000U;
+    cmd->h1A |= 0x40;
+    cmd->h10 = ret;
+    cmd->h12 = ret;
+    switch (mode) {
+    case 1:
+        cmd->b15 = 2;
+        break;
+    case 2: {
+        register int v16 __asm__("$3") = 0x16;
+        cmd->b15 = v16;
+        flag = 0x40;
+        if (((u8 *)c)[0xB9] == 0) {
+            flag = 0;
+        }
+        break;
+    }
+    case 0:
+        MsExchangeParty();
+        /* fallthrough */
+    default:
+        cmd->b15 = 0x11;
+        break;
+    }
+    MsInsertInputCue(id, flag, 0, 1, target, 1);
+    MsInsertCommandCue(id, &e, val_a, flag, 1, 0, target);
+    return ret;
+}
 
 /* DEBT(ORDER): independent reset fields are ordered to retain the original schedule. */
 void MsReturnSummon(s32 reset)

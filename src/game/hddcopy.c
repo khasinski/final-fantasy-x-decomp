@@ -1085,7 +1085,42 @@ void func_00168608(int idx, int tbp)
     func_002DA610(0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168760);
+extern s16 D_0030E038[];
+extern s16 D_0030E048[];
+extern u8 *D_0030E0D4;
+
+void func_00168760(int idx, int tbp)
+{
+    u8 buf[0x60];
+    int sum = 0;
+    register int i __asm__("$6");
+    u8 *pal;
+    u8 *src;
+    int y;
+    int x;
+
+    for (i = 0; i < idx; i++) {
+        register int a __asm__("$5") = D_0030E038[i];
+        __asm__("" : "+r"(a));
+        sum += a * D_0030E048[i];
+    }
+    pal = D_0030E0D4 + (idx << 10);
+    src = D_0030E0D4 + (sum + 0x1400);
+    func_002EF0D0(D_0030E0BC, 0, 0x40000);
+    for (y = 0; y < D_0030E048[idx]; y++) {
+        for (x = 0; x < D_0030E038[idx]; x++) {
+            D_0030E0BC[(y << 9) + x] = *src++;
+        }
+    }
+    func_002DA928(buf, tbp, 1, 0, 0, 0, 0x10, 0x10);
+    func_002F8660(0);
+    func_002DAC50(buf, pal);
+    func_002DA610(0, 0);
+    func_002DA928(buf, tbp + 4, 8, 0x13, 0, 0, 0x200, 0x200);
+    func_002F8660(0);
+    func_002DAC50(buf, D_0030E0BC);
+    func_002DA610(0, 0);
+}
 
 void func_00168968(void)
 {

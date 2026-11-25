@@ -1187,9 +1187,202 @@ void func_001AEC30(int flag) {
     D_00317317 = flag & 1;
 }
 
+typedef struct {
+    void *chr;
+    s32 f04;
+    u8 pad08[4];
+    u8 b0C;
+    u8 b0D;
+    u8 pad0E[2];
+    s8 f10;
+    u8 pad11;
+    s8 f12;
+    u8 pad13[8];
+    u8 b1B;
+    u8 b1C;
+    u8 pad1D[4];
+    u8 b21;
+    u8 b22;
+} BridgeChr;
+
+extern int _br_func_001489F0(void) __asm__("func_001489F0");
+extern int _br_AtelGetEventBindIdFromID(int) __asm__("AtelGetEventBindIdFromID");
+extern int _br_AtelGetEventCharIDFromID(int) __asm__("AtelGetEventCharIDFromID");
+extern void *_br_AtelGetEventCharHandleFromID(int) __asm__("AtelGetEventCharHandleFromID");
+extern int _br_AtelGetEventActorLinkWork(int) __asm__("AtelGetEventActorLinkWork");
+extern int _br_AtelGetBindPCFromID(int) __asm__("AtelGetBindPCFromID");
+extern int _br_AtelGetHideStatusFromID(int) __asm__("AtelGetHideStatusFromID");
+extern int _br_AtelGetKeepBattlePartyFromID(int) __asm__("AtelGetKeepBattlePartyFromID");
+extern void _br_AtelSetEventActorLinkWork(int, int) __asm__("AtelSetEventActorLinkWork");
+extern BridgeChr *_br_MsGetWeapon(int, int) __asm__("MsGetWeapon");
+extern int _br_func_00148D78(int, int) __asm__("func_00148D78");
+extern void *_br_AtelGetEventElemHandleFromID(int, int) __asm__("AtelGetEventElemHandleFromID");
+extern int _br_func_00148CB0(int, int) __asm__("func_00148CB0");
+extern void _br_MsStatusEffectClear(int) __asm__("MsStatusEffectClear");
+extern void _br_Ch_SetThickness(void *, float) __asm__("Ch_SetThickness");
+extern void _br_func_00117D58(void *, int) __asm__("func_00117D58");
+extern void _br_Ch_ClutEnable(void *, int) __asm__("Ch_ClutEnable");
+extern void _br_Ch_ClutDispose(void *) __asm__("Ch_ClutDispose");
+extern void _br_func_00110738(void *, int) __asm__("func_00110738");
+extern void _br_func_00110718(void *, int) __asm__("func_00110718");
+extern void _br_func_001B51A0(int, int) __asm__("func_001B51A0");
+extern int _br_AtelGetEventElemStatus(int, int) __asm__("AtelGetEventElemStatus");
+extern void _br_AtelSetEventElemHandleFromID(int, int, void *) __asm__("AtelSetEventElemHandleFromID");
+extern void _br_AtelSetEventElemPosFromID(int, int, int) __asm__("AtelSetEventElemPosFromID");
+extern void _br_AtelSetEventElemCharIDFromID(int, int, int) __asm__("AtelSetEventElemCharIDFromID");
+extern void _br_AtelSetEventElemStatus(int, int, int) __asm__("AtelSetEventElemStatus");
+extern void _br_func_001B4538(void *) __asm__("func_001B4538");
+extern void _br_graphicLevelGetNameHash(void *, int) __asm__("graphicLevelGetNameHash");
+extern void _br_AtelSetEventCharHandleFromID(int, void *) __asm__("AtelSetEventCharHandleFromID");
+
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBtlBridgeEvent2Btl);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBtlBridgeBtl2Event);
+void MsBtlBridgeBtl2Event(void) {
+    int flag;
+    int count;
+    int i;
+
+    for (i = 0; i < 0x1F; i++) {
+        _br_MsStatusEffectClear(i);
+    }
+    for (i = 0; i < 0x5D; i++) {
+        register BridgeChr *c __asm__("$3") = (BridgeChr *)MsGetChr(i);
+        register void *h __asm__("$17");
+        __asm__("" : "+r"(c));
+        h = c->chr;
+        if (h != 0 && c->f12 == 0) {
+            _br_Ch_SetThickness(h, -1.0f);
+            _br_func_00117D58(h, 1);
+            _br_Ch_ClutEnable(h, 0);
+            _br_Ch_ClutDispose(h);
+            _br_func_00110738(h, 0);
+            _br_func_00110718(h, 0);
+        }
+    }
+    _br_func_001B51A0(6, 0);
+    count = _br_func_001489F0();
+    for (i = 0; i < count; i++) {
+        int bind_id;
+        int chr_idx;
+        int char_id;
+        register void *handle __asm__("$17");
+        int link;
+        register int pc __asm__("$18");
+        int hide;
+        int keep;
+
+        flag = -1;
+        bind_id = _br_AtelGetEventBindIdFromID(i);
+        chr_idx = 0xFF;
+        char_id = _br_AtelGetEventCharIDFromID(i);
+        handle = _br_AtelGetEventCharHandleFromID(i);
+        link = _br_AtelGetEventActorLinkWork(i);
+        pc = _br_AtelGetBindPCFromID(i);
+        hide = _br_AtelGetHideStatusFromID(i);
+        keep = _br_AtelGetKeepBattlePartyFromID(i);
+
+        if (bind_id == 1 && handle != 0) {
+            BridgeChr *c = 0;
+            int j;
+            if ((u32)pc != 0xFFFFFFFFU) {
+                if (pc >= 0) {
+                    if (pc < 0x1C) {
+                        BridgeChr *tmp = (BridgeChr *)MsGetChr(pc);
+                        void *th = tmp->chr;
+                        int tid = tmp->f04;
+                        if (th != 0 && tid == char_id) {
+                            chr_idx = pc;
+                            c = tmp;
+                        }
+                    }
+                }
+            }
+            if (c == 0) {
+                for (j = 0; j < 0x1F; j++) {
+                    BridgeChr *tmp = (BridgeChr *)MsGetChr(j);
+                    void *th = tmp->chr;
+                    int tid = tmp->f04;
+                    if (th != 0 && tid == char_id) {
+                        chr_idx = j;
+                        c = tmp;
+                        break;
+                    }
+                }
+            }
+            if (c != 0) {
+                int k;
+                if (keep != 0) {
+                    register int found __asm__("$19") = 0;
+                    for (j = 0; j < 3; j++) {
+                        if (D_003172F0.f1FC5[j] == c->b0C) {
+                            found = 1;
+                            break;
+                        }
+                    }
+                    hide = -2;
+                    if (found != 0) {
+                        hide = 0;
+                    }
+                }
+                if (c->b1C != 0) {
+                    hide = 0;
+                }
+                if (c->b1B == 0) {
+                    hide = -1;
+                }
+                for (k = 0; k < 2; k++) {
+                    if (_br_AtelGetEventElemStatus(i, k) != 0) {
+                        BridgeChr *w = _br_MsGetWeapon(chr_idx, k);
+                        void *wh = w->chr;
+                        int wid = w->f04;
+                        int pos = w->b0D;
+                        if (wh != 0 && wid != 0) {
+                            _br_AtelSetEventElemHandleFromID(i, k, wh);
+                            _br_AtelSetEventElemPosFromID(i, k, pos);
+                            _br_AtelSetEventElemCharIDFromID(i, k, wid);
+                            _br_AtelSetEventElemStatus(i, k, 1);
+                            _br_func_001B4538(w);
+                            if (hide != 0) {
+                                _br_graphicLevelGetNameHash(wh, 1);
+                            } else {
+                                _br_graphicLevelGetNameHash(wh, 0);
+                            }
+                            w->b22 = 0;
+                            __asm__("" : : "m"(w->b22));
+                            w->chr = 0;
+                        } else {
+                            _br_AtelSetEventElemHandleFromID(i, k, 0);
+                            _br_AtelSetEventElemPosFromID(i, k, 0);
+                            _br_AtelSetEventElemCharIDFromID(i, k, 0);
+                            _br_AtelSetEventElemStatus(i, k, 0);
+                        }
+                    }
+                }
+                _br_AtelSetEventCharHandleFromID(i, c->chr);
+                _br_func_001B4538(c);
+                {
+                    void *h = c->chr;
+                    c->chr = 0;
+                    c->b22 = 0;
+                    if (hide != 0) {
+                        link |= 0x40;
+                        _br_graphicLevelGetNameHash(h, 1);
+                    } else {
+                        _br_graphicLevelGetNameHash(h, 0);
+                    }
+                    flag = 0;
+                }
+                if (link & 0x80) {
+                    c->b21 = 0;
+                }
+            }
+            if (flag != 0) {
+                link |= 4;
+            }
+        }
+        _br_AtelSetEventActorLinkWork(i, link & 0xFF);
+    }
+}
 
 int MsBattleGetChrDisposeFlag(void) {
     return 1;

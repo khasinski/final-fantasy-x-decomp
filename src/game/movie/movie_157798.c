@@ -741,8 +741,27 @@ int func_00159120(void) {
 
 extern s8 _mov_D_0030D3E8 __asm__("D_0030D3E8");
 extern char D_0056B7B0[];
+extern u8 D_0056B778[];
+extern s8 D_0030D404;
+extern s8 D_0030D405;
+extern s8 D_0030D406;
+extern s8 D_0030D407;
+extern s32 D_0030D40C;
 void func_0015FCA8(void);
 void func_001596C8(int id, int flags);
+int func_0015C5B8(char *, char *, void *, int);
+void func_0015CAE0(void);
+
+typedef struct {
+    u8 pad0[0x4];
+    int (*f04)(int);
+    u8 pad8[0x8];
+    void (*f10)(int);
+    int (*f14)(int);
+    int w18;
+    u8 pad1C[0x3C];
+    char *(*f58)(int);
+} MovCdObj;
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159148);
 
@@ -760,7 +779,101 @@ void func_00159650(void) {
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", rcuiSceneInit);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_001596C8);
+void func_00159E80(int, int *, int *);
+int func_0015C718(int, int, int, int, void *, int);
+
+void func_001596C8(int a0, int a1)
+{
+    char buf0[0x40];
+    char buf1[0x40];
+    int v80;
+    int v84;
+    s32 s0;
+    MovCdObj *cd;
+
+    if (D_0058FE50 != 0) {
+        func_001577A8(D_0056B778, D_0056B5C0, 0x5FF);
+    }
+    if (_mov_D_0030D3E8 != 0) {
+        func_001577A8(D_0056B7B0, D_0056B5C0, 0x601);
+    }
+    D_0030D405 = 0;
+    D_0030D407 = 0;
+    D_0030D404 = 1;
+    D_0030D40C = 0;
+    D_0030D406 = 0;
+    s0 = sa_task_buff_size_get(1);
+    D_0030D418 = (void *)sa_task_init2(1, (void *)0x1B00000, 0);
+    s0 += 0x1B00000;
+    D_0058FE50 = s0;
+    D_0058FE54 = (void *)s0;
+    cd = (MovCdObj *)GetCD();
+    func_00159E80(a0, &v80, &v84);
+    cd->f10(v80);
+    D_0058FE68 = 0;
+    D_0058FE6C = 0;
+    if (cd->w18 == 0 && *(s8 *)&D_005661F4 == 0) {
+        u8 *str = (u8 *)cd->f58(v84);
+        int i = 0;
+        while (1) {
+            buf0[i] = str[i];
+            buf1[i] = str[i];
+            if (str[i] == 0) {
+                break;
+            }
+            i++;
+        }
+        i--;
+        if ((u8)buf1[i] != '.') {
+            register u8 *bp __asm__("$4") = (u8 *)buf1;
+            __asm__("" : "+r"(bp));
+            do {
+                i--;
+            } while (bp[i] != '.');
+        }
+        buf1[i + 1] = 'd';
+        buf1[i + 2] = 'a';
+        buf1[i + 3] = 't';
+        buf1[i + 4] = '\0';
+        func_0015C5B8(buf1, buf0, D_0058FE54, D_0030D400);
+    } else {
+        int id1 = v84 + 1;
+        int p0 = cd->f04(id1);
+        register int (*f14)(int) __asm__("$3") = cd->f14;
+        int p1 = f14(id1);
+        int p2 = cd->f04(v84);
+        int p3 = cd->f14(v84);
+        func_0015C718(p0, p1, p2, p3, D_0058FE54, D_0030D400);
+    }
+    if (a0 == 0x2E) {
+        ((MovWork58FE54 *)D_0058FE54)->b50773 = 1;
+    } else {
+        ((MovWork58FE54 *)D_0058FE54)->b50773 = 0;
+    }
+    ((MovWork58FE54 *)D_0058FE54)->b50764 = v80;
+    ((MovWork58FE54 *)D_0058FE54)->w505C0 |= (a1 & 0x12000);
+    ((MovWork58FE54 *)D_0058FE54)->b5075F = D_0030D400;
+    ((MovWork58FE54 *)D_0058FE54)->b50760 = -1;
+    ((MovWork58FE54 *)D_0058FE54)->b50761 = 0;
+    if (a0 == 0x20) {
+        ((MovWork58FE54 *)D_0058FE54)->b5076C = 0;
+    } else {
+        ((MovWork58FE54 *)D_0058FE54)->b5076C = 1;
+    }
+    ((MovWork58FE54 *)D_0058FE54)->b5076E = (a1 >> 11) & 1;
+    {
+        typedef struct {
+            void (*f0)(void);
+            void *f4;
+            void (*f8)(void (*)(void), int, int);
+        } MovTaskObj;
+        register void (*fn)(void (*)(void), int, int) __asm__("$2") = ((MovTaskObj *)D_0030D418)->f8;
+        fn(func_0015CAE0, 1, 0);
+    }
+    func_00158508(0x100);
+    D_0030D410 = 1;
+    D_0030D3EC = 1;
+}
 
 void func_00159A88(Actor *a, int *out, ScriptCtx *ctx)
 {

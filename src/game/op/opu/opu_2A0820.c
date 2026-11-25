@@ -155,7 +155,149 @@ s16 *opu_et_eff(ScriptThread *th, s16 *pc)
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_unit_etc);
+extern void func_00295E28(void *, int, int);
+extern void func_002B2DF0(void *, int, int, int);
+extern void func_002B2E10(void *, int, int, int);
+extern void func_002B2E30(void *, int, int, int);
+extern void func_002B2E50(void *, void *, void *, s32);
+
+s16 *opu_unit_etc(ScriptThread *th, s16 *pc)
+{
+    u8 *obj300 = (u8 *)th + 0x300;
+    register ScriptSub *sub __asm__("$20") = th->sub;
+    s16 flags = th->flags;
+
+    switch (flags & 0xF000) {
+    case 0: {
+        register int id __asm__("$18") = pc[1];
+        register int off __asm__("$16") = pc[2];
+        u8 *p = (u8 *)opus_no_get(obj300, sub, id);
+        register u8 *p20 __asm__("$3") = *(u8 **)(obj300 + 0x20);
+
+        if (p == p20) {
+            if (id != 0) {
+                pc += 3;
+            } else if ((u8 *)sub == p) {
+                pc += 3;
+            } else if (*(u16 *)(p + 0x1A) == 0) {
+                pc = (s16 *)((u8 *)pc + off);
+                break;
+            } else {
+                pc += 3;
+            }
+        } else {
+            if ((u8 *)sub != p) {
+                pc = (s16 *)((u8 *)pc + off);
+            } else {
+                pc += 3;
+            }
+        }
+        break;
+    }
+    case 0x1000: {
+        register u8 *p20 __asm__("$2") = *(u8 **)(obj300 + 0x20);
+        s16 *tbl = *(s16 **)(obj300 + 0x10);
+        int idx = (s16)(((u8 *)sub - p20) >> 8);
+        int v = *tbl;
+
+        if (v >= 0) {
+            pc += 1;
+            do {
+                if (v == idx) {
+                    goto case1_found;
+                }
+                v = *++tbl;
+            } while (v >= 0);
+            return pc;
+        }
+        pc += 1;
+        break;
+    case1_found:
+        ((void (*)(void *, int))func_00295EB8)(obj300, v);
+        func_00295E28(obj300, v, 1);
+        *(u8 *)((u8 *)th + 0x210) = 1;
+        *(s16 *)((u8 *)th + 0x216) = 0;
+        *(u16 *)((u8 *)th + 0x218) -= 1;
+        break;
+    }
+    case 0x2000: {
+        u8 *p = (u8 *)opus_no_get(obj300, sub, pc[1]);
+        register int off __asm__("$16") = pc[2];
+
+        *(u16 *)(p + off) = *(u16 *)((u8 *)th + 0x214);
+        pc += 3;
+        break;
+    }
+    case 0x3000: {
+        register int idx __asm__("$16") = pc[1];
+        {
+            register u8 *ptr __asm__("$2") = (u8 *)sub + idx;
+            __asm__("" : "+r"(ptr));
+            idx = *(s16 *)ptr;
+        }
+
+        if (idx != 0) {
+            register int sh __asm__("$5") = idx << 8;
+            register int pc2 __asm__("$2") = (u16)pc[2];
+            register u8 *p20 __asm__("$4") = *(u8 **)(obj300 + 0x20);
+            register u32 mask __asm__("$7") = 0x80000000;
+            register int slot __asm__("$16") = pc2 & 3;
+            register int off __asm__("$8") = pc[3];
+            register u8 *base __asm__("$2") = p20 + sh;
+            register u32 *wp __asm__("$3") = &((u32 *)base)[slot];
+            register u8 *bp __asm__("$6");
+            register u32 old __asm__("$4");
+            register int one __asm__("$5");
+            register u32 nv __asm__("$2");
+            __asm__("" : "+r"(wp));
+            bp = base + slot;
+            __asm__("" : "+r"(wp), "+r"(bp), "+r"(mask), "+r"(off));
+            old = *wp;
+            __asm__ volatile("" : "+r"(old));
+            one = 1;
+            __asm__("" : "+r"(old), "+r"(one));
+            nv = old & mask;
+            nv = (u32)pc + nv + off;
+            *wp = nv;
+            bp[0x10] = one;
+        }
+        pc += 4;
+        break;
+    }
+    case 0x4000: {
+        void *fn = *(void **)(*(u8 **)(obj300 + 0x50) + 0x74);
+        register int mode __asm__("$16") = pc[1];
+
+        if (mode == 0) {
+            __asm__("" : "+r"(mode));
+            func_002B2DF0(fn, 0, 0, 1);
+        }
+        if (mode == 1) {
+            __asm__("" : "+r"(mode));
+            func_002B2E10(fn, 0, 0, 1);
+        }
+        if (mode == 2) {
+            func_002B2E30(fn, 0, 0, 1);
+        }
+        if (mode == 3) {
+            func_002B2E50(fn, 0, 0, 1);
+        }
+        pc += 2;
+        break;
+    }
+    case 0x5000:
+        {
+            u32 trig = th->flags & 0x800;
+            __asm__("" : "+r"(trig));
+            trig <<= 16;
+            __asm__("" : "+r"(trig));
+            op_wot_triger(trig >> 16);
+        }
+        pc += 1;
+        break;
+    }
+    return pc;
+}
 
 u16 *func_002A0FF0(ScriptThread *th, u16 *pc)
 {
@@ -184,7 +326,64 @@ u16 *func_002A0FF0(ScriptThread *th, u16 *pc)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_spl);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", ope_anm);
+typedef struct OpeAnmSub {
+    u8 pad00[0x1E];
+    u8 b1E;
+    u8 pad1F[0xA8 - 0x1F];
+    u8 bA8[3];
+    u8 padAB[0xBB - 0xAB];
+    u8 bBB;
+    u8 padBC[4];
+    s16 hC0;
+    s16 hC2;
+    s32 wC4;
+    u8 padC8[0xE0 - 0xC8];
+    u8 *pE0;
+    u8 *pE4;
+    u8 *pE8;
+    u16 hEC;
+    s16 hEE;
+    s16 hF0;
+    s16 hF2;
+    s16 hF4;
+} OpeAnmSub;
+
+u16 *ope_anm(ScriptThread *th, u16 *pc)
+{
+    OpeAnmSub *sub = (OpeAnmSub *)th->sub;
+    u8 *a = (u8 *)op_oef2_a_get(*(int *)((u8 *)th + (sub->b1E << 2) + 0x360), 4, pc[1]);
+    register int c80 __asm__("$3") = 0x80;
+    register int c1 __asm__("$2") = 1;
+    register int c48 __asm__("$4") = 0x48;
+    register int c100 __asm__("$5") = 0x100;
+    register u8 *p __asm__("$6");
+    register u8 *o300 __asm__("$4");
+
+    __asm__ volatile("" : "+r"(c80), "+r"(c1), "+r"(c48), "+r"(c100));
+    *(volatile s16 *)&sub->hC2 = c48;
+    *(u8 * volatile *)&sub->pE0 = a;
+    __asm__ volatile("" : : : "memory");
+    p = sub->bA8;
+    __asm__ volatile("" : "+r"(p));
+    *(volatile u8 *)&sub->bBB = c1;
+    __asm__ volatile("" : : : "memory");
+    o300 = (u8 *)th + 0x300;
+    __asm__ volatile("" : "+r"(o300));
+    *(volatile s16 *)&sub->hC0 = c80;
+    *(volatile s16 *)&sub->hF2 = c100;
+    *(volatile s16 *)&sub->hF4 = 0;
+    *(volatile s32 *)&sub->wC4 = 0;
+    sub->bA8[0] = ((s16)th->flags & 0xE000) >> 13;
+    p[1] = (th->flags & 0xE00) >> 9;
+    p[2] = *(u8 *)&th->flags - 0x24;
+    ((void (*)(void *, s32, void *))opus_draw_on)(o300, *(s16 *)((u8 *)th + 0x214), p);
+    sub->pE4 = a + 0x10;
+    sub->pE8 = (u8 *)(*(s16 *)(a + 0x10) + (s32)a);
+    sub->hEC = 0xFFFF;
+    sub->hEE = 0x200;
+    sub->hF0 = 0x200;
+    return pc + 2;
+}
 
 u16 *func_002A1538(ScriptThread *th, u16 *pc)
 {

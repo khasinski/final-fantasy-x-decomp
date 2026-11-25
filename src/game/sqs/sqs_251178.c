@@ -1,5 +1,6 @@
 /* tu_276 0x251178-0x254028: medium; ~Sqs (config/tu_map.tsv) */
 #define func_00252AB8 _hdr_func_00252AB8
+#define SqsIopCommandSend _hdr_SqsIopCommandSend
 #include "common.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
@@ -12,6 +13,9 @@
 #include "ffx/g4.h"
 #undef func_00252AB8
 #undef func_00252AB8
+#undef SqsIopCommandSend
+
+int SqsIopCommandSend(void);
 
 int func_00251178(int cmd, int nowait)
 {
@@ -102,7 +106,46 @@ void func_00251360(int cmd, int a, int b, int c, int d, int e, int f, int g)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", SqsIopCommandSend);
+extern S6Q4 _s_C910 __asm__("D_0069C910");
+extern S6Q4 _s_C920 __asm__("D_0069C920");
+extern S6Q4 _s_C930 __asm__("D_0069C930");
+extern u32 D_0069C880[];
+extern u8 D_0069C940[];
+extern s32 D_0069BFCC;
+
+int SqsIopCommandSend(void)
+{
+    int i;
+    int size;
+
+    while (func_002FB6B8(D_0069BF20) != 0) {
+        for (i = 0x10000; i != -1; i--) {
+        }
+    }
+    size = (((int)_pkt_D_0032702C - (int)D_00327028) >> 5) << 5;
+    while (func_002FB4C8(D_0069BF20, 0, 1, D_0069C940, size, D_0069C880, 0x40, 0, 0) < 0) {
+        for (i = 0x10000; i != -1; i--) {
+        }
+    }
+    _pkt_D_0032702C = (SqsCmdPkt *)D_00327028;
+    D_0069C900.w0 = D_0069C900.w4;
+    D_0069C900.w4 = D_0069C900.w8;
+    D_0069C900.w8 = D_0069C900.wC;
+    _s_C910.w0 = _s_C910.w4;
+    _s_C910.w4 = _s_C910.w8;
+    _s_C910.w8 = _s_C910.wC;
+    _s_C920.w0 = _s_C920.w4;
+    _s_C920.w4 = _s_C920.w8;
+    _s_C920.w8 = _s_C920.wC;
+    _s_C930.w0 = _s_C930.w4;
+    _s_C930.w4 = _s_C930.w8;
+    _s_C930.w8 = _s_C930.wC;
+    D_0069C900.wC = D_0069C880[4];
+    _s_C910.wC = D_0069C880[6];
+    _s_C920.wC = D_0069C880[12];
+    _s_C930.wC = D_0069C880[13];
+    return D_00327010[1];
+}
 
 int func_00251720(int unused, int a, int b, int c)
 {
@@ -834,7 +877,133 @@ int *func_002531B0(void)
     return p;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", SqsStraightStreamingDataSend);
+extern int D_00327004;
+extern int D_0069BF70;
+extern int D_0069BF90;
+extern int D_0069C8C8;
+extern s16 D_0069CD80[];
+extern char D_005737D0[];
+
+void SqsStraightStreamingDataSend(int a0, int a1, int a2, int a3)
+{
+    int dst = D_0069BFC4;
+    int buf_addr = D_0069BFC0 + 0x8000;
+    register int half __asm__("$22") = 0;
+    register int mode __asm__("$23");
+    int n;
+    S6Rpc *rpc;
+    register int d04 __asm__("$10") = D_00327004;
+
+    if (d04 != 0) {
+        a1 = 0;
+    }
+    if (D_0069C8CC == 0 && D_0069C8EC == 3) {
+        int *p3180 = D_006A3180;
+        __asm__("" : "+r"(p3180));
+        *(volatile int *)(p3180 + 1) = 0;
+        *(volatile int *)&D_006A3180[0] = 0;
+        *(volatile int *)&D_0069C8C8 = 0;
+        *(volatile int *)(p3180 + 3) = 0;
+        *(volatile int *)(p3180 + 2) = 0;
+        D_0069BF70 = 0;
+        __asm__("" : "+r"(half));
+        mode = half;
+        D_0069C8C4 = 0;
+        if (a0 != 0) {
+            D_0069BF70 = 1;
+        }
+        if (d04 == 0 && a1 != 0) {
+            D_0069BF70 |= 2;
+        }
+        if (a2 != 0) {
+            D_0069BF70 |= 1;
+        }
+        D_0069BF90 = 0;
+    } else {
+        register int c4 __asm__("$3");
+        mode = 1;
+        c4 = D_0069C8C4;
+        half = (c4 & 1) ^ 1;
+        dst += half * (D_0069BFC8 / 2);
+    }
+    D_0069C8EC &= ~(1 << half);
+    func_002F8660(0);
+    if (a2 != 0) {
+        s16 *out = D_0069CD80;
+        func_00252D00((u8 *)a2, out);
+        a0 = (int)out;
+        if (mode == 0) {
+            *(int *)a2 = a0;
+        }
+    }
+    if (a0 != 0 && D_00327004 == 2) {
+        register int len __asm__("$3") = D_0069BFC8;
+        register int half_sz __asm__("$16") = len / 2;
+        s16 *p = (s16 *)a0;
+        register s16 *end __asm__("$5") = (s16 *)(a0 + half_sz);
+
+        do {
+            register s16 *next __asm__("$7") = p + 0x200;
+            register s16 *blk_end __asm__("$6") = p + 0x100;
+
+            do {
+                int avg = (u32)(p[0] + p[0x100]) >> 1;
+                *(volatile s16 *)&p[0] = avg;
+                *(volatile s16 *)&p[0x100] = avg;
+                p++;
+            } while (p < blk_end);
+            p = next;
+        } while (p < end);
+    }
+    n = 0;
+    rpc = &D_0069BF00;
+    if (a1 != 0) {
+        D_0069BF00.w0 = a1;
+        rpc->w4 = buf_addr;
+        n = 1;
+        if (D_0069BFC8 % 0x3000 != 0) {
+            rpc->w8 = (a3 % 6 == 0) ? 0x2300 : 0x1C00;
+        } else {
+            rpc->w8 = (D_0069BFC8 / 0x3000) * 0x700;
+        }
+        rpc->wC = 0;
+        rpc++;
+    }
+    if (a0 != 0) {
+        rpc->w0 = a0;
+        rpc->w4 = dst;
+        n++;
+        rpc->w8 = D_0069BFC8 / 2;
+        rpc->wC = 0;
+    } else if (a2 != 0) {
+        rpc->w0 = a2;
+        rpc->w4 = D_0069BFC0;
+        n++;
+        rpc->w8 = 0x5000;
+        rpc->wC = 0;
+    }
+    if (n != 0) {
+        int r;
+        do {
+            r = func_002F87A0(&D_0069BF00, n);
+        } while (r == 0);
+        D_0069C8C0 = r;
+    }
+    func_002517A8(0, 1);
+    if (a1 != 0) {
+        func_00252EF0(mode, a3);
+    }
+    if (a0 != 0) {
+        if (D_00327008 & 2) {
+            func_002EF240(D_005737D0, D_005736D8, half, D_0069C8C8, D_0069C8C4, *(int *)a0);
+        }
+        _arr_D_0069C8D0[1] = half;
+        _arr_D_0069C8D0[2] = a3;
+        _arr_D_0069C8D0[3] = D_0069C8C4;
+        _arr_D_0069C8D0[4] = *(int *)a0;
+    }
+    D_0069C8C8++;
+}
 
 void func_00253580(void)
 {
@@ -1139,4 +1308,45 @@ void SqsSetStraightStreamAreaSize(int a)
     func_00251360(0x40, a, 0, 0, 0, 0, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/sqs_251178", func_00253E98);
+int func_00253E98(int a)
+{
+    int i;
+    int *p;
+    u8 *cd = (u8 *)D_0069BF20;
+
+retry:
+    if (func_002FB2F8(cd, 0x1000, 0) < 0) {
+        return 0;
+    }
+    if (func_002FB2F8(cd + 0x28, 0x1001, 0) < 0) {
+        return 0;
+    }
+    if (*(int *)(cd + 0x24) != 0 && *(int *)(cd + 0x4C) != 0) {
+        goto ready;
+    }
+    for (i = 0x10000; i != -1; i--) {
+    }
+    goto retry;
+ready:
+    func_002F8660(0);
+    D_0069BF74 = D_0069BF78 = 0;
+    D_0069C8CC = 0;
+    D_0069C8EC = 3;
+    D_00327000 = a;
+    D_00327018[0] = a;
+    D_0069C8F4 = 0;
+    D_00327018[1] = (int)D_0069BF80;
+    func_00251178(1, 1);
+    D_0069BFC0 = D_00327020[0];
+    D_0069CD40 = D_00327020[1];
+    D_0069CD44 = D_00327020[2];
+    D_0069BFC4 = D_00327020[3];
+    D_0069BFCC = D_00327020[4];
+    D_0069BFC8 = 0xC800;
+    D_00327008 = 1;
+    p = &D_0069BF80[15];
+    for (i = 16; i != 0; i--) {
+        *p-- = 0;
+    }
+    return D_0069BFC0;
+}

@@ -85,7 +85,87 @@ char *func_0011BAB8(AllocHdr *p)
     return (char *)(off | v);
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011BB08);
+extern char D_00569B60[];
+extern char D_00569B68[];
+extern char D_00569B70[];
+extern char D_00569BE8[];
+extern char D_00569C28[];
+
+void func_0011BB08(void *p, u8 *name, s32 line)
+{
+    char buf[0x30];
+    char linebuf[0x10];
+    register AllocHdr *hdr __asm__("$20") = (AllocHdr *)p - 1;
+    register u8 *rname __asm__("$19") = name;
+    s32 idx = 0;
+    char (*table)[0x20] = (char (*)[0x20])0x05FB0000;
+
+    if (ffx_debugmode == 0 || p == 0) {
+        return;
+    }
+    __asm__("" : "+r"(hdr));
+    if (rname != 0) {
+        register int sep __asm__("$18") = ' ';
+        register int col __asm__("$3") = ':';
+
+        __asm__("" : "+r"(sep));
+        if (line >= 1) {
+            sep = col;
+        }
+        if (line > 0) {
+            func_002F0008(linebuf, D_00569B60, line);
+        } else {
+            linebuf[0] = 0;
+        }
+        if (rname != 0) {
+            int off = func_002F0840(rname) + func_002F0840(linebuf) - 0x1E;
+
+            if (off < 0) {
+                off = 0;
+            }
+            func_002F0008(buf, D_00569B68, rname + off, sep, linebuf);
+            if (off != 0) {
+                buf[0] = '*';
+            }
+        } else {
+            func_002F0008(buf, D_00569B70, linebuf);
+        }
+        if ((hdr->w8 & 0x07FF0000) != 0) {
+            func_002EF0D0((void *)((((u32)hdr->w8 >> 11) & 0xFFE0) | (u32)table), 0, 0x20);
+            func_002F0C10((void *)((u32)table | (((MemBlk *)hdr)->name_idx << 5)), buf, 0x1F);
+            table[((MemBlk *)hdr)->name_idx][0x1F] = 0;
+            idx = ((u32)hdr->w8 >> 16) & 0x7FF;
+        } else {
+            register char *slot __asm__("$16");
+            register int i __asm__("$18");
+            register char *cur __asm__("$5");
+
+            __asm__("" : "+r"(table));
+            slot = (char *)table + 0x20;
+            __asm__ volatile("" : "+r"(slot));
+            i = 1;
+            cur = slot;
+            do {
+                if (*cur == 0) {
+                    func_002EF0D0(slot, 0, 0x20);
+                    idx = i;
+                    func_002F0C10(slot, buf, 0x1F);
+                    slot[0x1F] = 0;
+                    break;
+                }
+                {
+                    register char *t3 __asm__("$3") = slot;
+                    __asm__("" : "+r"(t3));
+                    i++;
+                    slot = t3 + 0x20;
+                }
+                __asm__("" : "+r"(i), "+r"(cur) : "r"(slot));
+                cur += 0x20;
+            } while (i < 0x800);
+        }
+    }
+    hdr->w8 = (hdr->w8 & 0xF800FFFF) | ((idx & 0x7FF) << 16);
+}
 
 void Sg_MemSetCurrentAddr(int a)
 {

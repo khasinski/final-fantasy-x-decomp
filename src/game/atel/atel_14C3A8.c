@@ -80,7 +80,121 @@ u64 *func_0014C4E0(int a, u64 *p)
     return next;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_14C3A8", AtelExecDrawShape);
+typedef struct {
+    float m[4][4];
+} __attribute__((aligned(8))) ShapeMat;
+
+typedef struct {
+    s16 h00;
+    s16 h02;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+    s16 h08;
+    s16 h0A;
+    s16 h0C;
+    s16 h0E;
+    void *p10;
+    void *p14;
+    u8 b18;
+    u8 pad19[3];
+    s32 w1C;
+    u8 pad20[0x10];
+} ShapeCtx;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    s16 h4;
+    s16 h6;
+    u16 h8;
+    u16 hA;
+    u16 hC;
+    u16 hE;
+    u8 b10;
+    u8 b11;
+    u8 b12;
+    u8 b13;
+    u8 *p14;
+    s32 w18;
+} ShapeEnt;
+
+extern ShapeMat _ds_D_0030BA40 __asm__("D_0030BA40");
+extern ShapeEnt _ds_IsAtelTextureLoaded[] __asm__("IsAtelTextureLoaded");
+extern volatile u32 _ds_D_0058F7EC __asm__("D_0058F7EC");
+extern u64 *_ds_func_002CFC70(u64 *, int, int, int, int) __asm__("func_002CFC70");
+extern int _ds_func_002CEF70(void *) __asm__("func_002CEF70");
+extern u64 *_ds_func_002CD590(void *, ShapeCtx *) __asm__("func_002CD590");
+
+void AtelExecDrawShape(void) {
+    ShapeMat mat;
+    ShapeCtx ctx;
+    u64 *ptr;
+    ShapeEnt *e;
+    int mode;
+    int i;
+
+    if (D_0058F7E8 == 0) {
+        return;
+    }
+    if (MsBattleCheck() != 0) {
+        return;
+    }
+    if (D_0058F7F4 == 0) {
+        return;
+    }
+    e = _ds_IsAtelTextureLoaded;
+    ptr = (u64 *)D_0058F7E8;
+    ctx.h02 = 0x70;
+    mode = 1;
+    ctx.h00 = 0;
+    ctx.p10 = &mat;
+    ctx.w1C = 0;
+    ctx.h08 = 0;
+    ctx.h0A = 0;
+    ctx.b18 = 0;
+    ctx.h0E = 0;
+    if (D_0058F7F0 != 0) {
+        ptr = _ds_func_002CFC70(ptr, 8, D_0058F7F0, 0x1A00, 0x1B00);
+    }
+    for (i = 0; i < 0x80; i++, e++) {
+        if (e->b0 != 0 && e->p14 != 0) {
+            u8 *base = e->p14;
+            u8 *shape;
+            mat = _ds_D_0030BA40;
+            mat.m[0][0] = (float)e->h8 * (1.0f / 256.0f);
+            mat.m[1][1] = (float)e->hA * (1.0f / 256.0f);
+            mat.m[3][0] += (float)e->h4;
+            mat.m[3][1] += (float)e->h6;
+            shape = base + *(s16 *)(base + e->hC * 8 + 0x10);
+            ctx.r = (u32)(e->b1 * e->b10) / 0xFFU;
+            ctx.g = (u32)(e->b1 * e->b11) / 0xFFU;
+            ctx.b = (u32)(e->b1 * e->b12) / 0xFFU;
+            ctx.a = e->b13;
+            ctx.h0C = 0x1030;
+            if (e->b3 != mode) {
+                if (e->b3 != 0) {
+                    ptr = func_0014C4E0(0x1030, ptr);
+                } else {
+                    ptr = func_0014C478(0x1030, ptr);
+                }
+                mode = e->b3;
+            }
+            ctx.p14 = ptr;
+            if (_ds_D_0058F7EC > (u32)ptr + _ds_func_002CEF70(shape)) {
+                ptr = _ds_func_002CD590(shape, &ctx);
+            } else {
+                break;
+            }
+        }
+    }
+    if (mode == 0) {
+        func_0014C4E0(ctx.h0C, ptr);
+    }
+}
 
 void func_0014C7F8(s32 a, s32 b, s32 c)
 {

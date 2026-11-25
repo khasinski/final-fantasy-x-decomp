@@ -38,7 +38,90 @@ int func_0012A1B8(Actor *a, void *op, ScriptCtx *ctx) {
     return id;
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12A0B8", func_0012A238);
+typedef struct {
+    s16 h00;
+    s16 h02;
+    s16 h04;
+    s16 h06;
+    s32 w08;
+    s32 w0C;
+    union {
+        u32 w;
+        u8 c[4];
+    } col;
+    s16 h14;
+    s16 h16;
+    u32 w18;
+    u8 b1C;
+    u8 b1D;
+    s8 b1E;
+    s8 b1F;
+    s8 b20;
+    s8 b21;
+    u8 b22;
+    u8 b23;
+    s32 w24;
+    u32 w28;
+} MesWin238;
+
+extern int AtelSetUpMesWin(void *, int);
+extern void _w238_TOInitMessageWindow(int) __asm__("TOInitMessageWindow");
+extern void func_00209760(int, int, int, int, int);
+extern void _w238_func_0020AEB8(int, int, u32) __asm__("func_0020AEB8");
+extern void func_0020B478(int, int, int, int);
+extern void _w238_TOSetMessageAuto(int, int, int) __asm__("TOSetMessageAuto");
+extern void TOSetMessageWindowPositionRect(int, int, int, int, int, int);
+extern void TOSetMessageWindowPosition(int, int, int, int);
+extern void TOSetMessageWindowPriority(int, int);
+extern void _w238_func_0020B6A8(int) __asm__("func_0020B6A8");
+extern void TOSetSelectMessageWindow(int, int, int, int);
+extern void _w238_TOOpenMessageWindow(int) __asm__("TOOpenMessageWindow");
+
+int func_0012A238(Actor *a, void *op, ScriptCtx *ctx) {
+    register Actor *c_a0 __asm__("$4") = a;
+    register ScriptCtx *c_a1 __asm__("$5") = ctx;
+    int flags;
+    int id;
+    MesWin238 *e;
+    int has40;
+    u32 w;
+    int al, b, r, g;
+
+    __asm__("" : "+r"(c_a0), "+r"(c_a1));
+    flags = AtelPopStackInteger(c_a0, c_a1);
+    id = AtelPopStackInteger(a, ctx);
+    e = (MesWin238 *)AtelGetMesWinWork(id);
+
+    e->h14 = 1;
+    flags = AtelSetUpMesWin(e, flags);
+    w = e->col.w;
+    e->b21 = 1;
+    e->b1D = flags;
+    b = e->col.c[2];
+    g = e->col.c[1];
+    r = w & 0xFF;
+    al = w >> 24;
+    has40 = flags & 0x40;
+    _w238_TOInitMessageWindow(id);
+    func_00209760(id, b, g, r, al);
+    _w238_func_0020AEB8(id, e->b20, e->w18 | e->w28);
+    if (has40) {
+        func_0020B478(id, e->b22, e->b23, e->w24);
+    }
+    _w238_TOSetMessageAuto(id, e->w08, e->w0C);
+    if (flags & 8) {
+        TOSetMessageWindowPositionRect(id, e->b1C, e->h00, e->h02, e->h04, e->h06);
+    } else {
+        TOSetMessageWindowPosition(id, e->b1C, e->h00, e->h02);
+    }
+    TOSetMessageWindowPriority(id, id);
+    _w238_func_0020B6A8(id);
+    if (!has40 && (flags & 2)) {
+        TOSetSelectMessageWindow(id, e->b1E, e->b1F, e->b21);
+    }
+    _w238_TOOpenMessageWindow(id);
+    return id;
+}
 
 int func_0012A3D0(Actor *a, void *op, ScriptCtx *ctx) {
     int id = AtelPopStackInteger(a, ctx);

@@ -950,7 +950,126 @@ int func_002AA6C8(int res, int start, int n)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_encount4_init);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", opus_encount4_calc);
+extern float func_002B3DB0(float);
+extern float eff_sin_t[];
+
+int opus_encount4_calc(void *p_arg, ScriptThread *th, void *obj300, ScriptSub *sub, void *no_arg, s16 *pc)
+{
+    u8 unused_mat[0x40];
+    u8 *a0 = (u8 *)p_arg;
+    u8 *no = (u8 *)no_arg;
+    u8 *p;
+    int i;
+    int ret;
+    int n;
+
+    (void)unused_mat;
+    if ((*(u16 *)((u8 *)sub + 0xB0) & 1) != 0 && *(s16 *)((u8 *)th + 0x212) == 0) {
+        float f21 = *(float *)(a0 + 0xF0) * 1.2f;
+        float f20 = *(float *)(a0 + 0xE0) * 1.2f;
+        register float diff __asm__("$f9") = f20 - f21;
+        u32 mode = *(u32 *)(a0 + 0);
+
+        if (mode < 2) {
+            register float c256 __asm__("$f1") = 0.00390625f;
+            register float t0 __asm__("$f0") = *(float *)(no + 0x40);
+            t0 = diff * t0;
+            t0 = t0 * c256;
+            f20 = f21 + t0;
+        }
+        if (mode - 2 < 2) {
+            register float c256 __asm__("$f1") = 0.00390625f;
+            register float t0 __asm__("$f0") = *(float *)(no + 0x40);
+            t0 = diff * t0;
+            t0 = t0 * c256;
+            f21 = f20 - t0;
+        }
+        p = a0 + 0x110;
+        for (i = 0; i < *(u16 *)(a0 + 6); i++, p += 0x70) {
+            if (*p != 0) {
+                if ((p[1] & 1) == 0) {
+                    float x = *(float *)(p + 0x10);
+                    if (x >= f21 && x <= f20) {
+                        switch (*(s32 *)(a0 + 0)) {
+                        case 0:
+                        case 2:
+                            p[1] |= 1;
+                            *(float *)(p + 0x40) = -48.0f;
+                            *(float *)(p + 0x40) += func_002B3DB0(16.0f);
+                            *(float *)(p + 0x34) = -512.0f;
+                            *(float *)(p + 0x34) += func_002B3DB0(128.0f);
+                            *(float *)(p + 0x38) = func_002B3DB0(64.0f);
+                            break;
+                        case 1:
+                        case 3:
+                            p[1] |= 1;
+                            *(float *)(p + 0x40) = 48.0f;
+                            *(float *)(p + 0x40) += func_002B3DB0(16.0f);
+                            *(float *)(p + 0x34) = -512.0f;
+                            *(float *)(p + 0x34) += func_002B3DB0(128.0f);
+                            *(float *)(p + 0x38) = func_002B3DB0(64.0f);
+                            break;
+                        }
+                    }
+                }
+                if ((p[1] & 1) != 0) {
+                    *(float *)(p + 0x30) += *(float *)(p + 0x40);
+                    *(float *)(p + 0x34) += *(float *)(p + 0x44);
+                    *(float *)(p + 0x38) += *(float *)(p + 0x48);
+                    *(float *)(p + 0x20) += *(float *)(p + 0x30);
+                    *(float *)(p + 0x24) += *(float *)(p + 0x34);
+                    *(float *)(p + 0x28) += *(float *)(p + 0x38);
+                    *(u16 *)(p + 2) += 1;
+                }
+            }
+        }
+    }
+    p = a0 + 0x110;
+    for (i = 0; i < *(u16 *)(a0 + 6); i++, p += 0x70) {
+        int ang = (int)*(float *)(p + 0x64) & 0x3FFF;
+        register float r __asm__("$f7") = *(float *)(p + 0x60);
+        register float f2 __asm__("$f2") = *(float *)(no + 0x3C);
+        register float sc __asm__("$f8") = 0.000244140625f;
+        register float f1 __asm__("$f1") = *(float *)(p + 0x24);
+        register float f3 __asm__("$f3") = *(float *)(p + 0x68);
+        register float f6 __asm__("$f6") = *(float *)(p + 0x20);
+        register float f5 __asm__("$f5") = *(float *)(p + 0x28);
+        register float f9 __asm__("$f9");
+
+        {
+            register float s0 __asm__("$f0") = eff_sin_t[ang];
+            register float c20000 __asm__("$f4");
+            f3 += f1;
+            f9 = s0 * r;
+            c20000 = 20000.0f;
+            f2 = f9 * f2;
+            f2 = f2 * sc;
+            *(volatile float *)(p + 0x10) = f2;
+            f6 = f2 + f6;
+            {
+                register float c1 __asm__("$f1") = eff_sin_t[(ang + 0x400) & 0xFFF];
+                register float f0 __asm__("$f0") = *(float *)(no + 0x3C);
+                f9 = c1 * r;
+                *(float *)(p + 0x14) = f3;
+                *(float *)(p + 0x10) = f6;
+                f0 = f9 * f0;
+                f0 = f0 * sc;
+                f0 = f0 + f5;
+                *(float *)(p + 0x18) = f0;
+            }
+            if (f6 > c20000 || f6 < -20000.0f) {
+                *p = 0;
+            }
+        }
+    }
+    p = a0 + 0x110;
+    n = *(u16 *)(a0 + 6);
+    ret = 0;
+    for (i = 0; i < n; i++, p += 0x70) {
+        ret |= *p;
+    }
+    return ret;
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002AAF30);
 

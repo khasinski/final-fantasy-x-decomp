@@ -412,7 +412,42 @@ INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229D58);
 
 INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_00229F98);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", func_0022A3F8);
+extern s16 _s16_D_006938B8[2] __asm__("D_006938B8");
+extern s16 _s16_D_00693960[2] __asm__("D_00693960");
+
+void func_0022A3F8(int x, int y, int idx)
+{
+    int dx = x + (D_00693A70[0] - _s16_D_00693960[0]);
+    int dy = y + (D_00693A70[1] - _s16_D_00693960[1]);
+    FlagRec r0 = D_00693948;
+    FlagRec r1 = *(FlagRec *)_s16_D_00693960;
+    FlagRec r2 = *(FlagRec *)D_00693978;
+    FlagRec r3 = D_006939D8;
+
+    r0.rect[0] += dx;
+    r1.rect[0] += dx;
+    r2.rect[0] += dx;
+    r3.rect[0] += dx;
+    r0.rect[1] += dy;
+    r1.rect[1] += dy;
+    r2.rect[1] += dy;
+    r3.rect[1] += dy;
+    func_00226FE0((DrawArgs *)&r0);
+    func_00226E90((DrawArgs *)&r1);
+    func_00226FC0((DrawArgs *)&r2);
+    func_00226F28((DrawArgs *)&r3);
+    func_00226E10(r2.rect[0] + 0x58, r2.rect[1], 0xD7);
+    func_00226350(r1.rect[0] + _s16_D_006938B8[0], r1.rect[1] + _s16_D_006938B8[1],
+                  idx < D_00693A98 ? func_00220A78(0x15) : func_00220A78(0x16), 0);
+    {
+        u16 cmd = D_00693A78[idx];
+        register int ox __asm__("$6") = _s16_D_006938B8[0];
+        register int oy __asm__("$7") = _s16_D_006938B8[1];
+        register int tx __asm__("$2") = r2.rect[0];
+        register int ty __asm__("$5") = r2.rect[1];
+        func_00226350(tx + ox, ty + oy, TkMn2GetCommandName(cmd), 0);
+    }
+}
 
 void func_0022A688(int unused, int a)
 {
@@ -718,7 +753,103 @@ void TkMenuFlushSummonCommand(int chr)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_228B08", TkMenuGetDispCommand);
+int TkMenuGetDispCommand(int a0, int a1, int a2, int chr, int *out)
+{
+    s32 dummy;
+    s32 dummy2;
+    int count = 0;
+    TkCmdRec *tbl;
+    int n;
+    int off;
+    int ret;
+    int i;
+
+    tbl = (TkCmdRec *)MsMenuStatusNum(0, &dummy);
+    n = TkMenuGetCommandMax((R5Rec4 *)tbl, a0, a1, a2);
+    off = TkMenuGetCommandOffset((R5Rec4 *)tbl, a0, a1, a2);
+    ret = n;
+    for (i = 0; i < ret; i++) {
+        out[i] = 0;
+    }
+    if (a1 == 1) {
+        for (i = 0; i < n; i++) {
+            register int c64 __asm__("$3") = 0x64;
+            u16 id;
+            int arg;
+
+            __asm__("" : "+r"(c64));
+            id = (tbl + i)[off].h2;
+            arg = 0xF;
+            if (id != c64) {
+                __asm__("");
+                arg = id;
+            }
+            if (MsGetSavePlyJoin(arg)) {
+                *out = id;
+            }
+            out++;
+        }
+        return n;
+    }
+    if (a0 == 0) {
+        int w = TkMenuGetWeapon(chr);
+        int a = TkMenuGetArmor(chr);
+
+        if (w != 0xFF) {
+            u16 *p = (u16 *)((u8 *)MsGetSaveWeapon(w, &dummy2) + 0xE);
+            for (i = 0; i < 4; i++) {
+                u16 v = p[i];
+                if (v != 0 && v != 0xFF) {
+                    *out++ = v;
+                }
+            }
+        }
+        if (a != 0xFF) {
+            u16 *p = (u16 *)((u8 *)MsGetSaveWeapon(a, &dummy2) + 0xE);
+            for (i = 0; i < 4; i++) {
+                u16 v = p[i];
+                if (v != 0 && v != 0xFF) {
+                    *out++ = v;
+                }
+            }
+        }
+    } else if (a1 < 0x48) {
+        if (a1 < 0x40) {
+            goto other_cmd;
+        }
+        MsGetSavePlayerPtr(chr);
+        for (i = 0; i < n; i++) {
+            u16 id = (tbl + i)[off].h2;
+            if (MsGetSaveCommand(chr, id)) {
+                *out++ = id;
+                count++;
+            } else if (chr < 8) {
+                if (!MsGetSaveCommandMenuPanel(id)) {
+                    ret--;
+                } else {
+                    out++;
+                }
+            }
+        }
+    } else {
+    other_cmd:
+        ((void (*)(void))func_002423F0)();
+        for (i = 0; i < n; i++) {
+            u16 id = (tbl + i)[off].h2;
+            if (MsGetSaveCommand(chr, id)) {
+                *out++ = id;
+                count++;
+            } else if (chr < 8) {
+                if (!MsGetSaveCommandMenuPanel(id)) {
+                    ret--;
+                } else {
+                    out++;
+                }
+            }
+        }
+    }
+    return chr < 8 ? ret : count;
+}
 
 s32 _m2c_func_0022B598_TkMenuGetCurrentPlayer() __asm__("TkMenuGetCurrentPlayer");
 s32 _m2c_func_0022B598_TkMenuGetDispCommand(s32, s32, s32, s32, s32 *) __asm__("TkMenuGetDispCommand");

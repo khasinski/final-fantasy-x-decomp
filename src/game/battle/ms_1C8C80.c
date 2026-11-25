@@ -1932,7 +1932,101 @@ int MsSetDeathSentence(int id, BtlChr *c, GsEnt48 *e, int arg) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C8C80", MsSetChrMimic);
+typedef struct {
+    u8 pad0[0x1568];
+    GsEnt48 mimic_ent;
+    u8 pad15B0[0x10];
+    s32 w15C0;
+    s32 w15C4;
+} MimicGS;
+
+extern MimicGS _mim_D_003172F0 __asm__("D_003172F0");
+extern OfsTbl *_mim_MsGetComData(int, int) __asm__("MsGetComData");
+extern int _mim_MsUseItem(int, GsEnt48 *, int) __asm__("MsUseItem");
+extern OfsTbl *_mim_MsGetCommand(int, int, int, void *, int *) __asm__("MsGetCommand");
+extern int _mim_func_001CC648(int, OfsTbl *) __asm__("func_001CC648");
+extern int _mim_func_001CC728(int, int) __asm__("func_001CC728");
+extern int _mim_MsGetCommandTarget(int, int, int, int) __asm__("MsGetCommandTarget");
+extern int _mim_MsGetGIL(void) __asm__("MsGetGIL");
+
+int MsSetChrMimic(int id, BtlChr *c, GsEnt48 *ent) {
+    int cmd_id;
+    int ret = 0;
+    int flag = 0;
+    int idx = ent->f2;
+    int i;
+
+    if (((u8 *)ent)[1] == 0 && idx == 0 && id < 8) {
+        for (i = 0; i < 2; i++) {
+            cmd_id = *(u16 *)((u8 *)ent + (idx * 16 + i * 2) + 8);
+            if (cmd_id == 0x3028) {
+                flag = -1;
+                break;
+            }
+            if (cmd_id != 0xFF) {
+                OfsTbl *cd = _mim_MsGetComData(cmd_id, 0);
+                flag |= (*(u32 *)((u8 *)cd + 0x1C) >> 28) & 1;
+            }
+        }
+    }
+    if (flag < 0) {
+        *ent = _mim_D_003172F0.mimic_ent;
+        {
+            register int one __asm__("$16") = 1;
+            register int a0_id __asm__("$4");
+            register GsEnt48 *a1_ent __asm__("$5");
+            register int a2_m1 __asm__("$6");
+            int f3;
+            __asm__("" : "+r"(one) : "m"(*ent));
+            ret = one;
+            __asm__("" : "+r"(ret) : : "memory");
+            f3 = ent->f3;
+            __asm__("" : "+r"(id) : "r"(f3));
+            a0_id = id;
+            __asm__("" : : "r"(a0_id) : "memory");
+            ent->id = id;
+            __asm__("" : "+r"(ent) : "m"(ent->id));
+            a1_ent = ent;
+            __asm__("" : : "r"(a1_ent));
+            if (f3 != 0) {
+                ret = 0;
+            }
+            __asm__("" : : "r"(ret));
+            a2_m1 = -1;
+            if (_mim_MsUseItem(a0_id, a1_ent, a2_m1) != 0) {
+                ret = one;
+            }
+        }
+        if (ret == 0) {
+            for (i = 0; i < ent->f3; i++) {
+                struct { u16 h0; u16 h2; u8 pad4[4]; u32 targets; u8 padC[4]; } *sub = (void *)&ent->f8[i];
+                u32 targets = sub->targets;
+                OfsTbl *cmd = _mim_MsGetCommand(id, 0, -1, sub, &cmd_id);
+                if (((cmd->h1A >> 2) & 3) == 3) {
+                    targets = 1 << id;
+                }
+                if (_mim_func_001CC648(targets, cmd) != 0) {
+                    targets = _mim_MsGetCommandTarget(id, cmd_id, _mim_func_001CC728(id, targets), 1);
+                }
+                sub->targets = targets;
+            }
+            ((u8 *)c)[0x39E] = 1;
+            {
+                int w = _mim_D_003172F0.w15C4;
+                int g = _mim_MsGetGIL();
+                if (g < w) {
+                    w = g;
+                }
+                _mim_D_003172F0.w15C0 = w;
+            }
+        }
+    }
+    if (flag != 0) {
+        _mim_D_003172F0.mimic_ent = *ent;
+        _mim_D_003172F0.w15C4 = _mim_D_003172F0.w15C0;
+    }
+    return ret;
+}
 
 int func_001CC648(int mask, OfsTbl *command)
 {

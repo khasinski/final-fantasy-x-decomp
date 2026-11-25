@@ -1,4 +1,8 @@
 /* tu_277 0x254028-0x254a38: medium; decode (config/tu_map.tsv) */
+#define TkMtCalcSpline _hdr_TkMtCalcSpline
+#define func_002D5448 _hdr_func_002D5448
+#define spline_get_near_point _hdr_spline_get_near_point
+#define spline_get_near_point_init _hdr_spline_get_near_point_init
 #include "common.h"
 #include "ffx/r6.h"
 #include "ffx/w8.h"
@@ -6,15 +10,176 @@
 #include "ffx/s6.h"
 #include "ffx/u4.h"
 #include "ffx/v6.h"
+#undef spline_get_near_point_init
+#undef spline_get_near_point
+#undef func_002D5448
+#undef TkMtCalcSpline
 
 int func_00254028(Actor *a, int b, ScriptCtx *ctx) {
     AtelPopStackInteger(a, ctx);
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/sqs/decode", spline_get_near_point);
+extern float D_00327068;
+extern float D_0032706C;
+void TkMtCalcSpline(void *, void *, int, float);
+void func_002D5448(void *, void *, int, float);
 
-INCLUDE_ASM("build/ee_asm/game/sqs/decode", spline_get_near_point_init);
+typedef struct {
+    int count;
+    int pad[3];
+    float pts[1][4];
+} DecodeSpline;
+
+float spline_get_near_point(DecodeSpline *sp, float x, float y, float z, float *ox, float *oy, float *oz, int flag)
+{
+    float p0[4];
+    float p1[4];
+    float p2[4];
+    float *pp1 = p1;
+    float *pp2 = p2;
+    int i;
+    register void *pts __asm__("$21") = sp->pts;
+    register int count __asm__("$19") = sp->count;
+    float step = 10.0f / D_0032706C;
+
+    for (i = 0; i < 40; i++) {
+        float dt = step / (float)(i * i + 1);
+        float d0, d1, d2;
+        float dx, dy, dz;
+
+        if (flag == 0) {
+            TkMtCalcSpline(pp1, pts, count, D_00327068 - dt);
+        } else {
+            func_002D5448(pp1, pts, count, D_00327068 - dt);
+        }
+        dx = p1[0] - x;
+        dy = p1[1] - y;
+        dz = p1[2] - z;
+        d1 = dx * dx + dy * dy + dz * dz;
+
+        if (flag == 0) {
+            TkMtCalcSpline(pp2, pts, count, D_00327068 + dt);
+        } else {
+            func_002D5448(pp2, pts, count, D_00327068 + dt);
+        }
+        dx = p2[0] - x;
+        dy = p2[1] - y;
+        dz = p2[2] - z;
+        d2 = dx * dx + dy * dy + dz * dz;
+
+        if (flag == 0) {
+            TkMtCalcSpline(p0, pts, count, D_00327068);
+        } else {
+            func_002D5448(p0, pts, count, D_00327068);
+        }
+        dx = p0[0] - x;
+        dy = p0[1] - y;
+        dz = p0[2] - z;
+        d0 = dx * dx + dy * dy + dz * dz;
+
+        if (d1 == d2) {
+            *ox = p0[0];
+            *oy = p0[1];
+            *oz = p0[2];
+            break;
+        }
+        if (d1 < d2) {
+            if (d1 < d0) {
+                D_00327068 -= dt;
+                if (D_00327068 < 0.0f) {
+                    *ox = p0[0];
+                    *oy = p0[1];
+                    *oz = p0[2];
+                    return D_00327068 + dt;
+                }
+                *ox = p1[0];
+                *oy = p1[1];
+                *oz = p1[2];
+            } else {
+                *ox = p0[0];
+                *oy = p0[1];
+                *oz = p0[2];
+            }
+        } else {
+            if (d2 < d0) {
+                D_00327068 += dt;
+                if (D_00327068 > 1.0f) {
+                    *ox = p0[0];
+                    *oy = p0[1];
+                    *oz = p0[2];
+                    return D_00327068 - dt;
+                }
+                *ox = p2[0];
+                *oy = p2[1];
+                *oz = p2[2];
+            } else {
+                *ox = p0[0];
+                *oy = p0[1];
+                *oz = p0[2];
+            }
+        }
+    }
+    return D_00327068;
+}
+
+float sqrtf(float);
+
+float spline_get_near_point_init(DecodeSpline *sp, int flag, float x, float y, float z)
+{
+    float p[4];
+    float prev[4];
+    float diff[4];
+    register float rx __asm__("$f23") = x;
+    register float rz __asm__("$f22") = z;
+    register float ry __asm__("$f21") = y;
+    int count;
+    void *pts;
+    float t;
+    float step;
+    float min_d2;
+
+    *(s32 *)&D_0032706C = 0;
+    t = D_0032706C;
+    D_00327068 = t;
+    pts = sp->pts;
+    count = sp->count;
+    step = 1.0f / (float)(count * 10);
+    min_d2 = 999999.0f;
+    if (flag == 0) {
+        TkMtCalcSpline(prev, pts, count, t);
+    } else {
+        func_002D5448(prev, pts, count, t);
+    }
+    for (;;) {
+        float d2;
+        if (flag == 0) {
+            TkMtCalcSpline(p, pts, count, t);
+        } else {
+            func_002D5448(p, pts, count, t);
+        }
+        diff[0] = p[0] - prev[0];
+        diff[1] = p[1] - prev[1];
+        diff[2] = p[2] - prev[2];
+        D_0032706C += sqrtf(diff[0] * diff[0] + diff[1] * diff[1] + diff[2] * diff[2]);
+        diff[0] = p[0] - rx;
+        diff[1] = p[1] - ry;
+        diff[2] = p[2] - rz;
+        d2 = diff[0] * diff[0] + diff[1] * diff[1] + diff[2] * diff[2];
+        if (d2 < min_d2) {
+            min_d2 = d2;
+            D_00327068 = t;
+        }
+        t += step;
+        prev[0] = p[0];
+        prev[1] = p[1];
+        prev[2] = p[2];
+        if (t > 1.0f) {
+            break;
+        }
+    }
+    return spline_get_near_point(sp, rx, ry, rz, &diff[0], &diff[1], &diff[2], flag);
+}
 
 typedef struct {
     u8 pad0[0x503E0];

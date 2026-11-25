@@ -1100,4 +1100,46 @@ void MsSetRamChrAbility(int id, BtlChr *chr) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B89D8", func_001BA720);
+typedef struct {
+    u8 pad0[2];
+    u8 b2;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 pad6[0x16 - 6];
+} EquipItem16;
+
+extern EquipItem16 _arr_D_0031D96C[] __asm__("D_0031D96C");
+
+typedef struct {
+    u8 pad0[0x158];
+    u16 h158[0xC8];
+    u16 h2E8[0xC8];
+} PlyWin478;
+
+extern PlyWin478 *_pw_btl_ply_win __asm__("btl_ply_win");
+
+void func_001BA720(int id) {
+    register PlyWin478 *win __asm__("$5") = _pw_btl_ply_win;
+    int k;
+
+    __asm__("" : "+r"(win));
+    win = &win[id];
+    for (k = 0; k < 2; k++) {
+        u16 *h2 = win->h2E8;
+        u16 *dst = win->h158;
+        int i;
+
+        if (k != 0) {
+            dst = h2;
+        }
+
+        for (i = 0; i < 0xC8; i++) {
+            EquipItem16 *p = &_arr_D_0031D96C[i];
+            if (p->b2 != 0 && p->b5 == k && p->b4 == id && !((p->b3 >> 1) & 1)) {
+                *dst++ = i + 0x5000;
+            }
+        }
+        __asm__("" : "+r"(win));
+    }
+}

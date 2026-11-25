@@ -281,15 +281,6 @@ int func_001C1368(int id1, int id2) {
     return (best_id < 0) ? id2 : best_id;
 }
 
-typedef struct OfsTbl_64 {
-    u8 pad0[0x1A];
-    u16 h1A;
-    u64 flags64 __attribute__((packed));
-    u16 h20;
-    u8 pad22[0x2B - 0x22];
-    u8 b2B;
-} OfsTbl_64;
-
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C14F0);
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C1908);
@@ -1254,7 +1245,129 @@ int func_001C4EF0(int x) {
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C4F40);
+extern int _c4f40_MsGetRndChr(int, int) __asm__("MsGetRndChr");
+extern int _c4f40_brnd(int) __asm__("brnd");
+extern int _c4f40_MsCheckStat2(int) __asm__("MsCheckStat2");
+extern int _c4f40_func_001C2800(int, void *, int, int) __asm__("func_001C2800");
+
+typedef struct {
+    u8 pad0[0x4F];
+    s8 f4F;
+} C4F40GS;
+
+extern C4F40GS _c4f40_D_003172F0 __asm__("D_003172F0");
+
+int func_001C4F40(int id, int arg1, int arg2, BtlChr *c, u8 *cmd, s32 *stat_a, s32 *stat_b, u8 *out,
+                  int ret_val, int arg9, int mask) {
+    register BtlChr *c_r __asm__("$19") = c;
+    int i;
+    int st;
+    int resisted;
+    int m8;
+    int m1;
+    int m2;
+
+    if ((*(u16 *)(out + 0x14) >> 2) & 1) {
+        if ((_c4f40_brnd(_c4f40_MsGetRndChr(id, 2)) % 0x65) < cmd[0x2C]) {
+            mask |= 0x100;
+            *(u16 *)(out + 0x14) |= 1;
+        }
+    }
+    {
+        register int t8 __asm__("$3") = (mask >> 8) & 1;
+        register int t1 __asm__("$2") = (mask >> 1) & 1;
+        __asm__("" : "+r"(t8), "+r"(t1));
+        m8 = t8;
+        __asm__ volatile("");
+        i = 0;
+        __asm__ volatile("");
+        m1 = t1;
+    }
+    {
+        register int t2 __asm__("$3") = mask >> 2;
+        __asm__("" : "+r"(t2));
+        m2 = t2 & 1;
+    }
+    for (; i < 16; i++) {
+        int bit = 1 << i;
+        register int mb __asm__("$2") = mask & bit;
+        __asm__("" : "+r"(mb));
+        if (mb) {
+            int added = 0;
+            int removed = 0;
+            st = _c4f40_MsCheckStat2(i);
+            resisted = 0;
+
+            if (_c4f40_D_003172F0.f4F == 0) {
+                __asm__("" : "+r"(mask));
+                if (!((*(u16 *)(out + 0x14) >> 2) & 1) ||
+                    m8 || (mask & 1) || m1 || m2 ||
+                    ((mask >> 3) & 1) || ((mask >> 4) & 1) || ((mask >> 5) & 1)) {
+                    if ((*(u16 *)(cmd + 0x20) >> 5) & 1) {
+                        if ((*(u16 *)(out + 0x16) & bit) && !(*(u16 *)((u8 *)c_r + 0x2EE) & bit)) {
+                            if ((bit >> 9) & 1) {
+                                ((u8 *)c_r)[0x28A] = 0;
+                            }
+                            removed = 1;
+                            *(u16 *)(out + 0x16) &= ~bit;
+                        }
+                    } else if (*(u16 *)((u8 *)c_r + 0x31A) & bit) {
+                        resisted = 1;
+                    } else if (!((*(u16 *)((u8 *)c_r + 0x2D6) & bit) && !(bit & 1))) {
+                        if (func_001C4EF0(*(u16 *)((u8 *)c_r + 0x2EE)) == 0 || func_001C4EF0(bit) == 0) {
+                            added = 1;
+                            if ((bit >> 1) & 1) {
+                                *(u16 *)(out + 0x16) &= 0xFFC3;
+                            } else if ((bit >> 2) & 1) {
+                                *(u16 *)(out + 0x16) &= 0xFFC5;
+                            } else if ((bit >> 3) & 1) {
+                                *(u16 *)(out + 0x16) &= 0xFFC9;
+                            } else if ((bit >> 4) & 1) {
+                                *(u16 *)(out + 0x16) &= 0xFFD1;
+                            } else if ((bit >> 5) & 1) {
+                                *(u16 *)(out + 0x16) &= 0xFFE1;
+                            } else if ((bit >> 14) & 1) {
+                                ((u8 *)c_r)[0x288] = ((u8 *)c_r)[0x289];
+                            } else if ((bit >> 8) & 1) {
+                                *(u16 *)(out + 0x14) &= 0xF7FF;
+                            } else if ((bit >> 9) & 1) {
+                                if (_c4f40_func_001C2800(arg1, cmd, 0, 0) != 0) {
+                                    register int one __asm__("$3") = 1;
+                                    __asm__("" : "+r"(one));
+                                    ((u8 *)c_r)[0x28A] = one;
+                                }
+                            }
+                            *(u16 *)(out + 0x16) |= bit;
+                        }
+                    }
+                }
+            }
+            if (added == 0 && removed == 0) {
+                register int res_r __asm__("$2") = resisted;
+                __asm__("" : "+r"(res_r));
+                if (res_r != 0) {
+                    stat_a[5]++;
+                } else {
+                    stat_a[6]++;
+                }
+            } else {
+                stat_a[4]++;
+            }
+            if (st & 0x40) {
+                stat_a[1] += added;
+                stat_b[1] += removed;
+            } else {
+                stat_a[0] += added;
+                stat_b[0] += removed;
+            }
+            if (st & 0x80) {
+                stat_a[7] += added;
+                stat_b[7] += removed;
+            }
+        }
+    }
+    return ret_val;
+}
 
 /* DEBT(CAST) */
 s32 func_001C5340(s32 arg0, void *arg1, void *arg2, void *arg3, void *arg4) {
@@ -1395,7 +1508,40 @@ int func_001C55D0(BtlChr *a0, BtlChr *a1, Unk1C55D0_A2 *a2, Unk1C55D0_A3 *a3, in
 int func_001C5B10(int a0, int a1, int a2, int a3, int a4, int a5, int *a6, int *a7, int *a8, OfsTbl *a9, int a10, int a11, int a12, int a13, int *a14);
 int func_001C5E60(int a, int *p);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C5798);
+typedef struct {
+    u8 pad0[0x3A];
+    s8 b3A;
+    u8 pad3B[0x2115 - 0x3B];
+    u8 b2115;
+} GS5798;
+
+extern GS5798 _gs5798_D_003172F0 __asm__("D_003172F0");
+
+int func_001C5798(BtlChr *a0, BtlChr *a1, void *a2_p, u8 *a3, int a4) {
+    u8 *a2 = (u8 *)a2_p;
+    if (a2 != 0) {
+        a3[0x0C] = 1;
+        if (a2[0x113] == 0 || _gs5798_D_003172F0.b2115 == 2) {
+            *(s32 *)(a3 + 0x10) = -1;
+        } else {
+            s16 r = *(u16 *)((u8 *)a1 + 0x3D2);
+            *(s32 *)(a3 + 0x10) = 0;
+            if (((brnd(10) % 255) < r || _gs5798_D_003172F0.b3A != 0) && a4 == 0) {
+                int tmp = brnd(10);
+                int b113 = a2[0x113];
+                int pct = ((tmp % 101) + 100) * 100;
+                int val = (b113 * pct / 200) * *(s16 *)((u8 *)a1 + 0x3D2) / 255;
+                r = r / 2;
+                if (r <= 0) {
+                    r = 1;
+                }
+                *(s16 *)((u8 *)a1 + 0x3D2) = r;
+                *(s32 *)(a3 + 0x10) = val;
+            }
+        }
+    }
+    return 0;
+}
 
 void MsCalcDrainResult(int a0, BtlChr *a1, OfsTbl *a2, u8 *a3, int *a4, int a5) {
     if (a3[1] < 0x10) {

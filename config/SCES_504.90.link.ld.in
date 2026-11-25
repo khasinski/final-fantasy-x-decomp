@@ -22,6 +22,7 @@ fptoui = 0x2ECF38;
 fptodp = func_002ED038;
 sqrtf = 0x2E9708;
 __fixdfdi = 0x300350;
+__fixunssfdi = func_002EA358;
 __udivdi3 = func_002EAC90;
 __umoddi3 = func_002EB260;
 __muldi3 = func_002EAC30;

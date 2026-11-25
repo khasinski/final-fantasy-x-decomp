@@ -766,7 +766,51 @@ float MsGetSummonDir(int id) {
     return dir;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsSetMove);
+void MsSetMove(int id, int mode, int a2, int frames, int d0, int d1,
+               float f12, float f13, float f14, float f15, float f16)
+{
+    float pos[4];
+    float target[4];
+    BtlChr *chr = MsGetChr(id);
+    int v0 = (frames * d0) / 128;
+    int v1 = (frames * d1) / 128;
+
+    ((u8 *)chr)[0xD5] = mode & 0x3F;
+    ((u8 *)chr)[0xD7] = 0;
+    *(u16 *)((u8 *)chr + 0x112) = 0;
+    *(u16 *)((u8 *)chr + 0x114) = v0;
+    *(u16 *)((u8 *)chr + 0x118) = v1;
+    *(u16 *)((u8 *)chr + 0x116) = frames - v0 - v1;
+    if (mode & 0x40) {
+        *(float *)((u8 *)chr + 0x11C) = *(float *)((u8 *)chr + 0x120);
+    } else {
+        *(float *)((u8 *)chr + 0x11C) = f12;
+    }
+    ((u8 *)chr)[0xD6] = a2;
+    *(u16 *)((u8 *)chr + 0x11A) = frames;
+    *(float *)((u8 *)chr + 0x148) = f13;
+    *(float *)((u8 *)chr + 0x14C) = f14;
+    *(float *)((u8 *)chr + 0x158) = f15;
+    func_001B6790(id, pos);
+    *(float *)((u8 *)chr + 0x50) = pos[0];
+    *(float *)((u8 *)chr + 0x54) = pos[1];
+    *(float *)((u8 *)chr + 0x58) = pos[2];
+    if ((double)f16 != 0.0) {
+        *(float *)((u8 *)chr + 0x168) = f16;
+        ((s8 *)chr)[0xD9] = -1;
+    } else {
+        ((s8 *)chr)[0xD9] = 0;
+        *(float *)((u8 *)chr + 0x168) = 0.0f;
+    }
+    MsGetMoveTargetPos(id, (TargetChr *)chr, ((u8 *)chr)[0xD5], target, 0);
+    func_001AC3E8(pos, target, pos);
+    if (((s8 *)chr)[0x34] == 0) {
+        *(float *)((u8 *)chr + 0x164) = func_001AC2D0(pos);
+    } else {
+        *(float *)((u8 *)chr + 0x164) = func_001AC310(pos);
+    }
+    *(float *)((u8 *)chr + 0x160) = 0.0f;
+}
 
 void MsMoveSplineSet(u32 i) {
     if (i < 3) {
@@ -838,7 +882,70 @@ void MsSetChrHeight(int id) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1D27C0", MsGetChrPredictPos);
+void MsGetChrPredictPos(int id, float *out)
+{
+    float tmp[4];
+    int flag;
+    BtlChr *chr = MsGetChr(id);
+    int mode;
+    int cnt;
+
+    if (((u8 *)chr)[0xE5] != 0) {
+        MMI_COPY_LQ_T0(out, (u8 *)chr + 0x80);
+        MMI_COPY_SQ_T0(out);
+        return;
+    }
+    func_001B6790(id, out);
+    mode = ((u8 *)chr)[0xD5] & 0x7F;
+    cnt = *(u16 *)((u8 *)chr + 0x112);
+    if (mode == 7) {
+        BtlCommandWork *sp;
+        cnt += D_00662CB0;
+        if (cnt > *(u16 *)((u8 *)chr + 0x11A)) {
+            cnt = *(u16 *)((u8 *)chr + 0x11A);
+        }
+        sp = &D_00662670[*(u16 *)((u8 *)chr + 0x114)];
+        TkMtCalcSpline((s32)tmp, (u8 *)sp + 0x10, sp->count, (float)cnt / (float)*(u16 *)((u8 *)chr + 0x11A));
+        func_001AC3D0(out, out, tmp);
+    } else if (mode != 0) {
+        float ret = MsGetMoveTargetPos(id, (TargetChr *)chr, ((u8 *)chr)[0xD5], tmp, &flag);
+        if (flag == 0) {
+            if (((u8 *)chr)[0xD5] & 0x80) {
+                register float max_spd __asm__("$f1") = *(float *)((u8 *)chr + 0x124);
+                int n = D_00662CB0;
+                register float dist __asm__("$f21") = 0.0f;
+                register float spd __asm__("$f0") = *(float *)((u8 *)chr + 0x120);
+                register float accel __asm__("$f2");
+                __asm__ volatile("" : "+f"(spd), "+f"(max_spd), "+f"(dist));
+                accel = *(float *)((u8 *)chr + 0x128);
+                if (n > 0) {
+                    do {
+                        spd += accel;
+                        if (spd > max_spd) {
+                            spd = max_spd;
+                        }
+                        dist += spd;
+                    } while (--n != 0);
+                }
+                {
+                    register float d __asm__("$f20") = func_001AC388(out, tmp);
+                    if (dist > d) {
+                        dist = d;
+                    }
+                }
+                func_001AC258(tmp, tmp, out, dist);
+                func_001AC3D0(out, out, tmp);
+            } else {
+                float s164 = *(float *)((u8 *)chr + 0x164);
+                register float r __asm__("$f12") = ret;
+                float s160 = *(float *)((u8 *)chr + 0x160);
+                func_001D34B0(chr, cnt + D_00662CB0, tmp, out, r);
+                *(float *)((u8 *)chr + 0x164) = s164;
+                *(float *)((u8 *)chr + 0x160) = s160;
+            }
+        }
+    }
+}
 
 int MsGetChrMoveFrameRest(int id) {
     BtlChr *c = MsGetChr(id);

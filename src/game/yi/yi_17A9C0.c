@@ -1063,8 +1063,103 @@ void func_0017C778(void *a0, YiTex17C778 *a1, YiCopy80 *a2, void *a3)
     _m2c_func_0017B390_func_002DA610(0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_17A9C0", func_0017CA18);
-INCLUDE_RODATA("build/ee_asm/game/yi/yi_17A9C0/rodata", jtbl_0056C530);
+typedef struct {
+    u64 d[12];
+} YiCopy60;
+
+typedef struct {
+    u8 pad[1];
+    u8 x;
+} YiOff1;
+
+extern u32 D_0065F790[];
+void func_002DBD98(void *ch, void *buf, u32 qwc);
+
+void func_0017CA18(u8 *a0, void *a1)
+{
+    void *ch;
+    u32 *p;
+    u32 *q;
+    u32 size;
+    u64 v20, v40;
+    s32 psm, w, h;
+
+    u8 *csr = (u8 *)0x12001000;
+
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    *csr &= 0xFD;
+    p = D_0065F790;
+    ch = (void *)_m2c_func_0017B390_func_002DB6D8(2);
+    *(YiCopy60 *)p = *(YiCopy60 *)(a0 + 0x10);
+    *(volatile u8 *)ch |= 1;
+    *(volatile u8 *)ch &= 0xBF;
+    *(volatile u8 *)ch &= 0x7F;
+    *(u8 *)ch &= 0xF3;
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    _m2c_func_0017B390_func_002F8660(0);
+    _m2c_func_0017B390_func_002DBB00(ch, (int)p, 6);
+wait_finish:
+    if (((*(u8 *)0x12001000 >> 1) & 1) == 0) {
+        goto wait_finish;
+    }
+    ((YiOff1 *)0x1200103F)->x = *(u8 *)0x12001040 | 1;
+    {
+        typedef struct { u64 w : 12; u64 pad : 20; u64 h : 12; } YiTrxreg;
+        typedef struct { u64 pad : 24; u64 psm : 6; } YiBitblt;
+        YiTrxreg *tr = (YiTrxreg *)(a0 + 0x40);
+        YiBitblt *bb = (YiBitblt *)(a0 + 0x20);
+        size = (s32)tr->h * (s32)tr->w;
+        psm = (s32)bb->psm;
+    }
+    switch (psm) {
+    case 0x14:
+    case 0x24:
+    case 0x2C:
+        size >>= 1;
+        break;
+    case 2:
+        size <<= 1;
+        break;
+    case 1:
+        size *= 3;
+        break;
+    case 0:
+        size <<= 2;
+        break;
+    }
+    size >>= 4;
+    *(volatile u8 *)ch &= 0xFE;
+    *(volatile u8 *)ch &= 0xBF;
+    *(volatile u8 *)ch &= 0x7F;
+    *(u8 *)ch &= 0xF3;
+    _m2c_func_0017B390_func_002F8660(0);
+    func_002DBD98(ch, a1, size);
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    ((YiOff1 *)0x1200103F)->x = *(u8 *)0x12001040 & 0xFE;
+    p = D_0065F790;
+    p[0] = 0x8001;
+    p[1] = 0x10000000;
+    p[2] = 0xE;
+    p[3] = 0;
+    {
+        u32 *qv = p + 4;
+        qv[2] = 0x53;
+        qv[3] = 0;
+        __asm__("" : "+r"(qv));
+        qv[1] = 0;
+        qv[0] = 0;
+    }
+    *(volatile u8 *)ch |= 1;
+    *(volatile u8 *)ch &= 0xBF;
+    *(volatile u8 *)ch &= 0x7F;
+    *(u8 *)ch &= 0xF3;
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    _m2c_func_0017B390_func_002F8660(0);
+    _m2c_func_0017B390_func_002DBB00(ch, (int)p, 2);
+    _m2c_func_0017B390_func_002DBF78((int)ch, 0, 0x100);
+    _m2c_func_0017B390_func_002DA610(0, 0);
+    _m2c_func_0017B390_func_002F8660(0);
+}
 
 void _m2c_func_0017CCF8_func_002DAB10(void *ctx, int a, int b, int c, int d, int e, int f, int g) __asm__("func_002DAB10");
 void func_0017CCF8(s32 arg0) {
