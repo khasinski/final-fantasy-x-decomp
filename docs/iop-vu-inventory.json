@@ -1,0 +1,905 @@
+{
+  "disc": {
+    "volume_id": "FINAL_FANTASY_X",
+    "sces_sha1": "ea6422ddfd803836701a38ae3cc8cc6420a70363",
+    "iso9660_file_count": 13
+  },
+  "iop": {
+    "summary": {
+      "standalone_total_count": 10,
+      "standalone_total_file_bytes": 417554,
+      "standalone_total_text_bytes": 286576,
+      "standalone_game_count": 1,
+      "standalone_game_file_bytes": 141425,
+      "standalone_game_text_bytes": 90240,
+      "standalone_sdk_count": 9,
+      "standalone_sdk_file_bytes": 276129,
+      "standalone_sdk_text_bytes": 196336,
+      "ioprp_image_count": 1,
+      "ioprp_image_file_bytes": 247641,
+      "ioprp_module_count": 15,
+      "ioprp_modules_file_bytes": 246619,
+      "ioprp_modules_text_bytes": 152816,
+      "all_sdk_iop_count": 24,
+      "all_sdk_iop_file_bytes": 522748,
+      "all_sdk_iop_text_bytes": 349152,
+      "all_iop_module_count": 25,
+      "all_iop_modules_file_bytes": 664173,
+      "all_iop_modules_text_bytes": 439392
+    },
+    "standalone_irx": [
+      {
+        "name": "IOPSOUND.IRX",
+        "iso_path": "/IOPSOUND.IRX",
+        "lba": 2706,
+        "classification": "game",
+        "description": "Square custom FFX IOP sound driver (SPU2/BGM/SE/voice/streaming)",
+        "iopmod_name": "IopSoundDriver",
+        "version": "2.20",
+        "file_bytes": 141425,
+        "text_bytes": 90240,
+        "rodata_bytes": 3120,
+        "data_bytes": 9792,
+        "bss_bytes": 1086324,
+        "imports": [
+          "libsd 1.4",
+          "cdvdman 1.1",
+          "sysmem 1.1",
+          "intrman 1.2",
+          "ioman 1.4",
+          "loadcore 1.3",
+          "sifcmd 1.1",
+          "sifman 1.1",
+          "sysclib 1.3",
+          "thbase 1.1",
+          "thsemap 1.1",
+          "timrman 1.2"
+        ],
+        "sha256": "2d70ed6a16d44a2ed9916bbb46c992a8fb83015d797ca7c2ffa211bfcf3541d9"
+      },
+      {
+        "name": "ATAD.IRX",
+        "iso_path": "/ATAD.IRX",
+        "lba": 2821,
+        "classification": "sdk",
+        "description": "Sony SDK ATA hard disk driver",
+        "iopmod_name": "atad",
+        "version": "1.3",
+        "file_bytes": 11781,
+        "text_bytes": 7712,
+        "rodata_bytes": 752,
+        "data_bytes": 32,
+        "bss_bytes": 576,
+        "imports": [
+          "stdio 1.3",
+          "sysclib 1.3",
+          "loadcore 1.3",
+          "thbase 1.1",
+          "thevent 1.1",
+          "intrman 1.2",
+          "dev9 1.2"
+        ],
+        "sha256": "021b7d845900b7ed69e43ecb5e6fc1ed49e931d9d3d752f9c57ddc96b083f333"
+      },
+      {
+        "name": "DEV9.IRX",
+        "iso_path": "/DEV9.IRX",
+        "lba": 2816,
+        "classification": "sdk",
+        "description": "Sony SDK DEV9 expansion bay driver (HDD/network adapter)",
+        "iopmod_name": "dev9",
+        "version": "1.3",
+        "file_bytes": 9197,
+        "text_bytes": 5456,
+        "rodata_bytes": 640,
+        "data_bytes": 176,
+        "bss_bytes": 96,
+        "imports": [
+          "stdio 1.3",
+          "loadcore 1.3",
+          "thbase 1.1",
+          "thsemap 1.1",
+          "ioman 1.4",
+          "intrman 1.2"
+        ],
+        "sha256": "07628b00f0d2dda35365d7342ac842e241bc7dad1a0362d2ebc0c58f65666dbc"
+      },
+      {
+        "name": "HDD.IRX",
+        "iso_path": "/HDD.IRX",
+        "lba": 2827,
+        "classification": "sdk",
+        "description": "Sony SDK APA hard disk partition driver",
+        "iopmod_name": "hdd",
+        "version": "1.4",
+        "file_bytes": 30405,
+        "text_bytes": 20432,
+        "rodata_bytes": 1488,
+        "data_bytes": 1248,
+        "bss_bytes": 576,
+        "imports": [
+          "stdio 1.3",
+          "sysclib 1.3",
+          "thsemap 1.1",
+          "intrman 1.2",
+          "sysmem 1.1",
+          "ioman 1.4",
+          "cdvdman 1.1",
+          "dev9 1.2",
+          "atad 1.1"
+        ],
+        "sha256": "6b86ed1c1ffb98073460f8b2e9904a7812ba29f828251e607325ba24f9ebec92"
+      },
+      {
+        "name": "LIBSD.IRX",
+        "iso_path": "/LIBSD.IRX",
+        "lba": 2776,
+        "classification": "sdk",
+        "description": "Sony SDK SPU2 Sound Device Library",
+        "iopmod_name": "Sound_Device_Library",
+        "version": "1.4",
+        "file_bytes": 27173,
+        "text_bytes": 16912,
+        "rodata_bytes": 544,
+        "data_bytes": 2288,
+        "bss_bytes": 68,
+        "imports": [
+          "intrman 1.2",
+          "loadcore 1.3",
+          "sifman 1.1",
+          "stdio 1.3",
+          "thbase 1.1",
+          "thevent 1.1"
+        ],
+        "sha256": "e9f67bbab64a1be44ca6673d8c8880c0680beaf790919e03463c9f2b44bbd5fb"
+      },
+      {
+        "name": "MCMAN.IRX",
+        "iso_path": "/MCMAN.IRX",
+        "lba": 2661,
+        "classification": "sdk",
+        "description": "Sony SDK memory card low-level driver",
+        "iopmod_name": "mcman",
+        "version": "2.26",
+        "file_bytes": 90533,
+        "text_bytes": 68624,
+        "rodata_bytes": 272,
+        "data_bytes": 512,
+        "bss_bytes": 83532,
+        "imports": [
+          "loadcore 1.3",
+          "intrman 1.2",
+          "sio2man 2.3",
+          "sysclib 1.2",
+          "stdio 1.3",
+          "thbase 1.1",
+          "thsemap 1.1",
+          "modload 1.3",
+          "ioman 1.4",
+          "secrman 1.3",
+          "cdvdman 1.1"
+        ],
+        "sha256": "9d0416820ca0f6c11055be26c3769ff0381063c628920f26bf9355a841d97e4b"
+      },
+      {
+        "name": "MCSERV.IRX",
+        "iso_path": "/MCSERV.IRX",
+        "lba": 2657,
+        "classification": "sdk",
+        "description": "Sony SDK memory card RPC server",
+        "iopmod_name": "mcserv",
+        "version": "2.14",
+        "file_bytes": 7353,
+        "text_bytes": 4656,
+        "rodata_bytes": 64,
+        "data_bytes": 32,
+        "bss_bytes": 9376,
+        "imports": [
+          "loadcore 1.3",
+          "intrman 1.2",
+          "sysclib 1.2",
+          "stdio 1.3",
+          "sifman 1.1",
+          "sifcmd 1.1",
+          "thbase 1.1",
+          "thsemap 1.1",
+          "mcman 2.6"
+        ],
+        "sha256": "1ebd7f42a38478daee2f7651ad2906433d992867711240f28795eae04311157e"
+      },
+      {
+        "name": "PADMAN.IRX",
+        "iso_path": "/PADMAN.IRX",
+        "lba": 2790,
+        "classification": "sdk",
+        "description": "Sony SDK DualShock 2 controller driver",
+        "iopmod_name": "padman",
+        "version": "4.2",
+        "file_bytes": 43861,
+        "text_bytes": 31376,
+        "rodata_bytes": 656,
+        "data_bytes": 64,
+        "bss_bytes": 7120,
+        "imports": [
+          "sysmem 1.1",
+          "loadcore 1.2",
+          "intrman 1.2",
+          "stdio 1.3",
+          "sio2man 2.3",
+          "thbase 1.1",
+          "thevent 1.1",
+          "sifman 1.1",
+          "sifcmd 1.1",
+          "vblank 1.1",
+          "sysclib 1.2"
+        ],
+        "sha256": "68eb256ee12649c95fde1ec33a18f185cf1f0f551021589d40d7df57face52c5"
+      },
+      {
+        "name": "PFS.IRX",
+        "iso_path": "/PFS.IRX",
+        "lba": 2842,
+        "classification": "sdk",
+        "description": "Sony SDK PlayStation File System driver",
+        "iopmod_name": "pfs",
+        "version": "1.4",
+        "file_bytes": 49665,
+        "text_bytes": 37536,
+        "rodata_bytes": 1936,
+        "data_bytes": 576,
+        "bss_bytes": 1104,
+        "imports": [
+          "stdio 1.3",
+          "sysclib 1.3",
+          "thsemap 1.1",
+          "intrman 1.2",
+          "sysmem 1.1",
+          "ioman 1.4",
+          "cdvdman 1.1"
+        ],
+        "sha256": "8cf9e353dedb30221a18ebb3a955327a204506174080846dab0aed6ff6b00680"
+      },
+      {
+        "name": "SIO2MAN.IRX",
+        "iso_path": "/SIO2MAN.IRX",
+        "lba": 2812,
+        "classification": "sdk",
+        "description": "Sony SDK SIO2 serial I/O manager (controller/memcard bus)",
+        "iopmod_name": "sio2man",
+        "version": "2.4",
+        "file_bytes": 6161,
+        "text_bytes": 3632,
+        "rodata_bytes": 96,
+        "data_bytes": 32,
+        "bss_bytes": 48,
+        "imports": [
+          "loadcore 1.2",
+          "intrman 1.2",
+          "stdio 1.3",
+          "dmacman 1.2",
+          "thbase 1.1",
+          "thevent 1.1",
+          "sysclib 1.2"
+        ],
+        "sha256": "b18b1b41db311eb0de5d46266ca26f3c2dc82ad2f45af3c9c6263bd4c5387e41"
+      }
+    ],
+    "ioprp_images": [
+      {
+        "name": "IOPRP234.IMG",
+        "iso_path": "/IOPRP234.IMG",
+        "lba": 2867,
+        "file_bytes": 247641,
+        "sha256": "8fc286a2f18af07184c104511e481a56b7ca4efd937f924f0fe314c46f5155b9",
+        "classification": "sdk",
+        "romdir_entries_total": 18,
+        "metadata_entries": [
+          {
+            "name": "RESET",
+            "offset": 0,
+            "file_bytes": 0,
+            "extinfo_bytes": 8
+          },
+          {
+            "name": "ROMDIR",
+            "offset": 0,
+            "file_bytes": 304,
+            "extinfo_bytes": 92
+          },
+          {
+            "name": "EXTINFO",
+            "offset": 304,
+            "file_bytes": 580,
+            "extinfo_bytes": 0
+          }
+        ],
+        "module_count": 15,
+        "modules_file_bytes": 246619,
+        "modules_text_bytes": 152816,
+        "modules": [
+          {
+            "name": "LOADCORE",
+            "iopmod_name": "Module_Manager",
+            "version": "2.2",
+            "classification": "sdk",
+            "offset": 896,
+            "file_bytes": 9717,
+            "text_bytes": 7344,
+            "rodata_bytes": 48,
+            "data_bytes": 32,
+            "bss_bytes": 100,
+            "sha256": "fb84e4f9fd1a1d958d0b09f2c7e9c45c9aff98dff4c04ab499038d2b5c79d0ac"
+          },
+          {
+            "name": "SIFCMD",
+            "iopmod_name": "IOP_SIF_rpc_interface",
+            "version": "2.7",
+            "classification": "sdk",
+            "offset": 10624,
+            "file_bytes": 10105,
+            "text_bytes": 6960,
+            "rodata_bytes": 80,
+            "data_bytes": 48,
+            "bss_bytes": 6832,
+            "sha256": "01e2e82f760db7c486c0d3bac2d1bf97985beaf35c84192f02ca7127376a2315"
+          },
+          {
+            "name": "SIFMAN",
+            "iopmod_name": "IOP_SIF_manager",
+            "version": "2.1",
+            "classification": "sdk",
+            "offset": 20736,
+            "file_bytes": 6009,
+            "text_bytes": 4176,
+            "rodata_bytes": 160,
+            "data_bytes": 32,
+            "bss_bytes": 1600,
+            "sha256": "825aa677d68940e239a58b3615db1d907506e51306bf5efba8bfa603afa727fe"
+          },
+          {
+            "name": "THREADMAN",
+            "iopmod_name": "Multi_Thread_Manager",
+            "version": "2.2",
+            "classification": "sdk",
+            "offset": 26752,
+            "file_bytes": 36945,
+            "text_bytes": 26080,
+            "rodata_bytes": 944,
+            "data_bytes": 32,
+            "bss_bytes": 1228,
+            "sha256": "0f051b6f492a8b1cf59c549118706330ef72a8b24230fbac8604c0cb7beea72d"
+          },
+          {
+            "name": "IOMAN",
+            "iopmod_name": "IO/File_Manager",
+            "version": "2.2",
+            "classification": "sdk",
+            "offset": 63712,
+            "file_bytes": 12025,
+            "text_bytes": 7488,
+            "rodata_bytes": 160,
+            "data_bytes": 272,
+            "bss_bytes": 656,
+            "sha256": "e5f0a62689b36c327f47ce92b35b8cfbac80148c069ceab6a6a5e697eac2ab0d"
+          },
+          {
+            "name": "MODLOAD",
+            "iopmod_name": "Moldule_File_loader",
+            "version": "2.5",
+            "classification": "sdk",
+            "offset": 75744,
+            "file_bytes": 17589,
+            "text_bytes": 12576,
+            "rodata_bytes": 832,
+            "data_bytes": 64,
+            "bss_bytes": 36,
+            "sha256": "2fc9770b3c9ed4f3f81e33f12a59c52d76f95319897342a649dbdae4a8808cca"
+          },
+          {
+            "name": "FILEIO",
+            "iopmod_name": "FILEIO_service",
+            "version": "2.11",
+            "classification": "sdk",
+            "offset": 93344,
+            "file_bytes": 18325,
+            "text_bytes": 11312,
+            "rodata_bytes": 816,
+            "data_bytes": 192,
+            "bss_bytes": 3956,
+            "sha256": "2f6a3f58b3863283b9083c25dee751020ed1f988beba9c46abba16f29d9f3306"
+          },
+          {
+            "name": "CDVDMAN",
+            "iopmod_name": "cdvd_driver",
+            "version": "2.22",
+            "classification": "sdk",
+            "offset": 111680,
+            "file_bytes": 60893,
+            "text_bytes": 33552,
+            "rodata_bytes": 4208,
+            "data_bytes": 320,
+            "bss_bytes": 51896,
+            "sha256": "0f50d81f82e4caa6dbf5a80c86a8e9b9b1f252e30333e266f425b6dc01aace7f"
+          },
+          {
+            "name": "CDVDFSV",
+            "iopmod_name": "cdvd_ee_driver",
+            "version": "2.22",
+            "classification": "sdk",
+            "offset": 172576,
+            "file_bytes": 38597,
+            "text_bytes": 21568,
+            "rodata_bytes": 1840,
+            "data_bytes": 96,
+            "bss_bytes": 45184,
+            "sha256": "ca96667cfc6c2202a83d4ea47d0e46a3da099f5ea79671063d03956fd0438c64"
+          },
+          {
+            "name": "LOADFILE",
+            "iopmod_name": "LoadModuleByEE",
+            "version": "2.1",
+            "classification": "sdk",
+            "offset": 211184,
+            "file_bytes": 11617,
+            "text_bytes": 7168,
+            "rodata_bytes": 944,
+            "data_bytes": 128,
+            "bss_bytes": 656,
+            "sha256": "f11028eaf8f814882625d367670e67bc8621d916eef177312af96b06e52ea81d"
+          },
+          {
+            "name": "TIMEMANI",
+            "iopmod_name": "Timer_Manager",
+            "version": "2.1",
+            "classification": "sdk",
+            "offset": 222816,
+            "file_bytes": 5813,
+            "text_bytes": 3584,
+            "rodata_bytes": 48,
+            "data_bytes": 320,
+            "bss_bytes": 0,
+            "sha256": "548e8e07880ca61f2adfaa3e0c758e18daca11813570d2db68ce3aaf37735eef"
+          },
+          {
+            "name": "ROMDRV",
+            "iopmod_name": "ROM_file_driver",
+            "version": "2.1",
+            "classification": "sdk",
+            "offset": 228640,
+            "file_bytes": 3881,
+            "text_bytes": 2128,
+            "rodata_bytes": 32,
+            "data_bytes": 160,
+            "bss_bytes": 208,
+            "sha256": "62f2ae6b687b34a96c4fd6bc8b12ef05dc2f7eaa0fcdad99babb40cee5b8eb79"
+          },
+          {
+            "name": "EESYNC",
+            "iopmod_name": "SyncEE",
+            "version": "2.1",
+            "classification": "sdk",
+            "offset": 232528,
+            "file_bytes": 1545,
+            "text_bytes": 640,
+            "rodata_bytes": 16,
+            "data_bytes": 32,
+            "bss_bytes": 0,
+            "sha256": "bf1377e939042bf6cbfd45f0b4192eee94d7f1bec4c726a1bbb1a86fff39d184"
+          },
+          {
+            "name": "SYSCLIB",
+            "iopmod_name": "System_C_lib",
+            "version": "2.2",
+            "classification": "sdk",
+            "offset": 234080,
+            "file_bytes": 10205,
+            "text_bytes": 6400,
+            "rodata_bytes": 560,
+            "data_bytes": 192,
+            "bss_bytes": 0,
+            "sha256": "e10f703fc388997be2fd1b4b2c4ba9f2964dfb5edd835001740b57e3b803a035"
+          },
+          {
+            "name": "STDIO",
+            "iopmod_name": "Stdio",
+            "version": "2.2",
+            "classification": "sdk",
+            "offset": 244288,
+            "file_bytes": 3353,
+            "text_bytes": 1840,
+            "rodata_bytes": 48,
+            "data_bytes": 32,
+            "bss_bytes": 4,
+            "sha256": "1541a2cc50326f4f4d7921b57d5af87b9e7a23a5ad2cfaf4022874066d49fac1"
+          }
+        ]
+      }
+    ],
+    "fat_scan": {
+      "total_fat_slots": 16227,
+      "present_fat_slots": 7338,
+      "elf_slots": [
+        {
+          "fat_index": 0,
+          "group": 1,
+          "group_index": 0,
+          "lba": 345,
+          "fat_size": 4731160,
+          "compressed": false,
+          "e_type": "0x2",
+          "e_machine": 8,
+          "iso_path": "/SCES_504.90"
+        },
+        {
+          "fat_index": 2,
+          "group": 0,
+          "group_index": 1,
+          "lba": 2657,
+          "fat_size": 7360,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/MCSERV.IRX"
+        },
+        {
+          "fat_index": 3,
+          "group": 0,
+          "group_index": 2,
+          "lba": 2661,
+          "fat_size": 90536,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/MCMAN.IRX"
+        },
+        {
+          "fat_index": 4,
+          "group": 0,
+          "group_index": 3,
+          "lba": 2706,
+          "fat_size": 141432,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/IOPSOUND.IRX"
+        },
+        {
+          "fat_index": 5,
+          "group": 0,
+          "group_index": 4,
+          "lba": 2776,
+          "fat_size": 27176,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/LIBSD.IRX"
+        },
+        {
+          "fat_index": 6,
+          "group": 0,
+          "group_index": 5,
+          "lba": 2790,
+          "fat_size": 43864,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/PADMAN.IRX"
+        },
+        {
+          "fat_index": 7,
+          "group": 0,
+          "group_index": 6,
+          "lba": 2812,
+          "fat_size": 6168,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/SIO2MAN.IRX"
+        },
+        {
+          "fat_index": 8,
+          "group": 0,
+          "group_index": 7,
+          "lba": 2816,
+          "fat_size": 9200,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/DEV9.IRX"
+        },
+        {
+          "fat_index": 9,
+          "group": 0,
+          "group_index": 8,
+          "lba": 2821,
+          "fat_size": 11784,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/ATAD.IRX"
+        },
+        {
+          "fat_index": 10,
+          "group": 0,
+          "group_index": 9,
+          "lba": 2827,
+          "fat_size": 30408,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/HDD.IRX"
+        },
+        {
+          "fat_index": 11,
+          "group": 0,
+          "group_index": 10,
+          "lba": 2842,
+          "fat_size": 49672,
+          "compressed": false,
+          "e_type": "0xff80",
+          "e_machine": 8,
+          "iso_path": "/PFS.IRX"
+        }
+      ],
+      "romdir_slots": [
+        {
+          "fat_index": 12,
+          "group": 0,
+          "group_index": 11,
+          "lba": 2867,
+          "fat_size": 247648,
+          "compressed": false,
+          "iso_path": "/IOPRP234.IMG"
+        }
+      ],
+      "embedded_non_iso_count": 0
+    }
+  },
+  "vu": {
+    "elf_vutext_section": {
+      "vma_start": "0x578e00",
+      "vma_end": "0x57c650",
+      "file_offset": "0x479e00",
+      "section_bytes": 14416,
+      "sha256": "e1d95186dccad4b4a5998c9335c566b429c8565835de304a206c18838ba0b530"
+    },
+    "elf_vudata_bytes": 0,
+    "elf_vubss_bytes": 0,
+    "assets_vutext_bin": {
+      "path": "assets/vutext.bin",
+      "file_bytes": 14464,
+      "matches_vutext_prefix": true,
+      "trailing_zero_padding_bytes": 48,
+      "trailing_padding_all_zero": true,
+      "sha256": "f69478f81de13637c66f9ae803dc8cd83fcafeb3acc69d300f94899309805f6c"
+    },
+    "program_count": 2,
+    "total_vif_mpg_chunks": 8,
+    "total_instructions": 1788,
+    "total_code_bytes": 14304,
+    "dma_vif_overhead_and_trailer_bytes": 112,
+    "trailing_zero_bytes_in_vutext": 16,
+    "programs": [
+      {
+        "index": 1,
+        "target_vu": "VU1",
+        "vma_start": "0x578e00",
+        "vma_end": "0x579b00",
+        "vutext_offset": "0x0",
+        "dma_tag": {
+          "id": "ref",
+          "qwc": 207,
+          "addr": "0x578e10"
+        },
+        "packet_bytes": 3328,
+        "vif_mpg_chunks": 2,
+        "instructions": 412,
+        "code_bytes": 3296,
+        "vu_addr_range": "0x0..0xce0",
+        "sha256": "e886909b0ca4dbf3cba9eda93003fd4cca12da18940803f3c9aa1da564b14cb8",
+        "chunks": [
+          {
+            "lma": "0x578e18",
+            "vutext_offset": "0x18",
+            "vu_dest_addr": "0x0",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x579620",
+            "vutext_offset": "0x820",
+            "vu_dest_addr": "0x800",
+            "instructions": 156,
+            "code_bytes": 1248
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "target_vu": "VU1",
+        "vma_start": "0x579b00",
+        "vma_end": "0x57c640",
+        "vutext_offset": "0xd00",
+        "dma_tag": {
+          "id": "next",
+          "qwc": 691,
+          "addr": "0x0"
+        },
+        "packet_bytes": 11072,
+        "vif_mpg_chunks": 6,
+        "instructions": 1376,
+        "code_bytes": 11008,
+        "vu_addr_range": "0x0..0x2b00",
+        "sha256": "e26c55520a04480add95af24b8fb35bb77c4b86e44e5e7a62157c6abad04c48d",
+        "chunks": [
+          {
+            "lma": "0x579b18",
+            "vutext_offset": "0xd18",
+            "vu_dest_addr": "0x0",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x57a320",
+            "vutext_offset": "0x1520",
+            "vu_dest_addr": "0x800",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x57ab28",
+            "vutext_offset": "0x1d28",
+            "vu_dest_addr": "0x1000",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x57b330",
+            "vutext_offset": "0x2530",
+            "vu_dest_addr": "0x1800",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x57bb38",
+            "vutext_offset": "0x2d38",
+            "vu_dest_addr": "0x0",
+            "instructions": 256,
+            "code_bytes": 2048
+          },
+          {
+            "lma": "0x57c340",
+            "vutext_offset": "0x3540",
+            "vu_dest_addr": "0x800",
+            "instructions": 96,
+            "code_bytes": 768
+          }
+        ]
+      }
+    ],
+    "dvp_overlay_table": {
+      "total_entries": 10,
+      "in_vutext_entries": 8,
+      "non_resident_metadata_entries": [
+        {
+          "index": 8,
+          "name": ".DVP.overlay..0x0.224275.922.0",
+          "lma": "0x20ae3a8",
+          "vma": "0x0",
+          "size_bytes": 608,
+          "instructions": 76,
+          "in_vutext": false
+        },
+        {
+          "index": 9,
+          "name": ".DVP.overlay..0x0.27203.11.0",
+          "lma": "0x2132630",
+          "vma": "0x0",
+          "size_bytes": 912,
+          "instructions": 114,
+          "in_vutext": false
+        }
+      ],
+      "entries": [
+        {
+          "index": 0,
+          "name": ".DVP.overlay..0x0.28179459.8.0",
+          "lma": "0x578e18",
+          "vma": "0x0",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 1,
+          "name": ".DVP.overlay..unknvma.225449915.447.1",
+          "lma": "0x579620",
+          "vma": "0x800",
+          "size_bytes": 1248,
+          "instructions": 156,
+          "in_vutext": true
+        },
+        {
+          "index": 2,
+          "name": ".DVP.overlay..0x0.112749495.15.0",
+          "lma": "0x579b18",
+          "vma": "0x0",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 3,
+          "name": ".DVP.overlay..unknvma.129250975.343.1",
+          "lma": "0x57a320",
+          "vma": "0x800",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 4,
+          "name": ".DVP.overlay..unknvma.258804895.95.2",
+          "lma": "0x57ab28",
+          "vma": "0x1000",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 5,
+          "name": ".DVP.overlay..unknvma.16164255.146.3",
+          "lma": "0x57b330",
+          "vma": "0x1800",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 6,
+          "name": ".DVP.overlay..unknvma.64687263.165.4",
+          "lma": "0x57bb38",
+          "vma": "0x2000",
+          "size_bytes": 2048,
+          "instructions": 256,
+          "in_vutext": true
+        },
+        {
+          "index": 7,
+          "name": ".DVP.overlay..unknvma.64687263.619.5",
+          "lma": "0x57c340",
+          "vma": "0x2800",
+          "size_bytes": 768,
+          "instructions": 96,
+          "in_vutext": true
+        },
+        {
+          "index": 8,
+          "name": ".DVP.overlay..0x0.224275.922.0",
+          "lma": "0x20ae3a8",
+          "vma": "0x0",
+          "size_bytes": 608,
+          "instructions": 76,
+          "in_vutext": false
+        },
+        {
+          "index": 9,
+          "name": ".DVP.overlay..0x0.27203.11.0",
+          "lma": "0x2132630",
+          "vma": "0x0",
+          "size_bytes": 912,
+          "instructions": 114,
+          "in_vutext": false
+        }
+      ]
+    },
+    "additional_scans": {
+      "sces_data_vif_mpg_hits": 0,
+      "group11_overlays": {
+        "scanned_containers": 584,
+        "vif_mpg_hits": 0
+      },
+      "embedded_elfs_in_sces": 0
+    }
+  }
+}
