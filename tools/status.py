@@ -106,6 +106,34 @@ report = {
     },
     "debt_markers": dict(sorted(debt.items())),
 }
+iop_vu_path = Path(root)/"docs/iop-vu-inventory.json"
+if iop_vu_path.exists():
+    iv = json.loads(iop_vu_path.read_text())
+    isum = iv["iop"]["summary"]
+    vu = iv["vu"]
+    report["other_scopes"] = {
+        "IOP": {
+            "status": "inventoried (tools/inventory_iop_vu.py)",
+            "coverage_percent": 0.0,
+            "total_modules": isum["all_iop_module_count"],
+            "game_modules": isum["standalone_game_count"],
+            "sdk_modules": isum["all_sdk_iop_count"],
+            "total_text_bytes": isum["all_iop_modules_text_bytes"],
+            "game_text_bytes": isum["standalone_game_text_bytes"],
+            "sdk_text_bytes": isum["all_sdk_iop_text_bytes"],
+            "total_file_bytes": isum["all_iop_modules_file_bytes"],
+            "game_file_bytes": isum["standalone_game_file_bytes"],
+        },
+        "VU": {
+            "status": "inventoried (tools/inventory_iop_vu.py)",
+            "coverage_percent": 0.0,
+            "program_count": vu["program_count"],
+            "vif_mpg_chunks": vu["total_vif_mpg_chunks"],
+            "instructions": vu["total_instructions"],
+            "code_bytes": vu["total_code_bytes"],
+            "vutext_section_bytes": vu["elf_vutext_section"]["section_bytes"],
+        },
+    }
 estimate_path = Path(root)/"docs/ee-overlay-code-size.json"
 audit_path = Path(root)/"docs/ee-overlay-audit.json"
 if estimate_path.exists() and audit_path.exists():
@@ -190,7 +218,14 @@ else:
         print(f"  code-span scenario: ~{overall['span_scenario_percent']:.2f}% (includes gaps/data; not a confidence interval)")
     else:
         print("known EE estimate: unavailable (overlay audit missing)")
-    print("whole-game coverage: unknown (IOP/VU and undiscovered EE code not inventoried)")
+    if iop_vu_path.exists():
+        iop_s = report["other_scopes"]["IOP"]
+        vu_s = report["other_scopes"]["VU"]
+        print(f"  IOP (IRX + IOPRP234): {iop_s['total_modules']} modules ({iop_s['game_modules']} game = {iop_s['game_text_bytes']} B .text, "
+              f"{iop_s['sdk_modules']} SDK = {iop_s['sdk_text_bytes']} B .text; 0.00% decompiled)")
+        print(f"  VU1 (.vutext): {vu_s['program_count']} microprograms, {vu_s['instructions']} insns ({vu_s['code_bytes']} B microcode; 0.00% decompiled)")
+    else:
+        print("whole-game coverage: unknown (IOP/VU and undiscovered EE code not inventoried)")
     print("debt markers: " + (", ".join(f"{k}={v}" for k, v in sorted(debt.items())) or "none") +
           f"   (per C-body KB: {sum(debt.values())/max(dbytes/1024,1):.2f})")
 if "--debt" in sys.argv and not json_output:
