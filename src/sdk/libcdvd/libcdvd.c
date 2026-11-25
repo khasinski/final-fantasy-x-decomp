@@ -171,7 +171,116 @@ s32 func_002E0C30(void)
     return 1;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E0C98);
+typedef struct CdFileInfo {
+    u32 lsn;
+    u32 size;
+    char name[16];
+    u8 date[8];
+    u32 flag;
+} CdFileInfo;
+
+typedef struct CdFileBuf {
+    CdFileInfo info;
+    char path[0x100];
+    void *self;
+} CdFileBuf;
+
+extern int D_005663DC;
+extern int D_005663F8;
+extern int D_00566400;
+extern int D_00566404;
+extern int D_0056640C;
+extern int D_00566410;
+extern CdFileBuf D_0078D680;
+extern int D_0078D7C0[];
+extern int D_0078D800[];
+extern int D_0078D828[];
+extern int D_0078D850[];
+extern int D_0078D880[];
+extern int D_0078D890[];
+extern char D_00576BF0[];
+extern char D_00576C10[];
+extern char D_00576C28[];
+extern char D_00576C38[];
+extern char D_00576C48[];
+extern char D_00576D00[];
+extern char D_00576D20[];
+extern char D_00576D30[];
+extern char D_00576D40[];
+extern char D_00576D60[];
+void func_002FAC88(int mode);
+int func_002F8430(int sid);
+int func_002FB2F8(void *cd, u32 sid, int mode);
+
+int func_002E0C98(CdFileInfo *fp, const u8 *name)
+{
+    int i;
+    int j;
+    int ret;
+
+    func_002E0A68();
+    ret = func_002F8430(*(volatile int *)&D_005663E8);
+    if (*(volatile int *)&D_005663E8 != ret) {
+        return 0;
+    }
+    D_005663DC = 1;
+    func_002F82E0(D_0078D610, &D_0078D618);
+    if (func_002E11A0(1) != 0) {
+        func_002F8400(*(volatile int *)&D_005663E8);
+        return 0;
+    }
+    func_002FAC88(0);
+    if (D_00566400 < 0) {
+        while (1) {
+            if (func_002FB2F8(D_0078D800, 0x80000597, 0) < 0) {
+                if (D_005663D0 > 0) {
+                    func_002FA4E0(D_00576BF0);
+                }
+                i = 0x100000;
+                while (i--) {
+                }
+                continue;
+            }
+            if (D_0078D800[9] != 0) {
+                D_00566400 = 0;
+                break;
+            }
+            i = 0x100000;
+            while (i--) {
+            }
+        }
+    }
+    for (j = 0; j < 0x100; j++) {
+        if ((D_0078D680.path[j] = name[j]) == '\0') {
+            break;
+        }
+    }
+    if (j == 0x100) {
+        D_0078D680.path[0xFF] = '\0';
+    }
+    D_0078D680.self = &D_0078D680;
+    if (D_005663D0 > 0) {
+        func_002FA4E0(D_00576C10, D_0078D680.path);
+    }
+    func_002FABD8(&D_0078D680, sizeof(D_0078D680));
+    if (func_002FB4C8(D_0078D800, 0, 0, &D_0078D680, sizeof(D_0078D680), D_0078D7C0, 4, 0, 0) < 0) {
+        func_002F8400(*(volatile int *)&D_005663E8);
+        return 0;
+    }
+    __builtin_memcpy(fp, UNCACHED(&D_0078D680), sizeof(CdFileInfo));
+    if (D_005663D0 > 0) {
+        ((void (*)(const char *, ...))func_002FA4E0)(D_00576C28, fp->name);
+    }
+    if (D_005663D0 > 0) {
+        ((void (*)(const char *, ...))func_002FA4E0)(D_00576C38, fp->size);
+    }
+    if (D_005663D0 > 0) {
+        ((void (*)(const char *, ...))func_002FA4E0)(D_00576C48, fp->lsn);
+    }
+    ret = *(int *)UNCACHED(D_0078D7C0);
+    func_002F8400(*(volatile int *)&D_005663E8);
+    return ret;
+}
 
 extern int D_005663DC;
 extern int D_005663F8;
@@ -321,7 +430,59 @@ int func_002E12B0(int cmd)
 
 INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1420);
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1700);
+int func_002E1700(int mode)
+{
+    int i;
+    int ret;
+    int *recv;
+
+    if (D_005663D0 > 0) {
+        func_002FA4E0(D_00576D30);
+    }
+    func_002E0A68();
+    ret = func_002F8430(*(volatile int *)&D_005663EC);
+    if (*(volatile int *)&D_005663EC != ret) {
+        return 6;
+    }
+    if (func_002E1240(1) != 0) {
+        func_002F8400(*(volatile int *)&D_005663EC);
+        return (mode != 8) ? 6 : -1;
+    }
+    func_002FAC88(0);
+    if (D_00566404 < 0) {
+        while (1) {
+            if (func_002FB2F8(D_0078D850, 0x8000059A, 0) < 0) {
+                if (D_005663D0 > 0) {
+                    func_002FA4E0(D_00576D40);
+                }
+                i = 0x100000;
+                while (i--) {
+                }
+                continue;
+            }
+            if (D_0078D850[9] != 0) {
+                D_00566404 = 0;
+                break;
+            }
+            i = 0x100000;
+            while (i--) {
+            }
+        }
+    }
+    D_0078D890[0] = mode;
+    func_002FABD8(D_0078D890, 4);
+    recv = D_005675C0;
+    if (func_002FB4C8(D_0078D850, 0, 0, D_0078D890, 4, recv, 4, 0, 0) < 0) {
+        func_002F8400(*(volatile int *)&D_005663EC);
+        return (mode != 8) ? 6 : -1;
+    }
+    if (D_005663D0 > 0) {
+        func_002FA4E0(D_00576D60);
+    }
+    ret = *(int *)UNCACHED(recv);
+    func_002F8400(*(volatile int *)&D_005663EC);
+    return ret;
+}
 
 int func_002E18F8(int a)
 {
@@ -344,9 +505,102 @@ int func_002E18F8(int a)
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E19C0);
+int func_002E19C0(int lbn, int sectors, void *buf, R7CdMode *mode)
+{
+    R7CdRead *req = &D_005664C0;
+    int size;
 
-INCLUDE_ASM("build/ee_asm/sdk/libcdvd/libcdvd", func_002E1BA0);
+    if ((D_005663F4 & 1) == 0) {
+        if (func_002E1108() == 6) {
+            return 0;
+        }
+    }
+    if (func_002E0F98(4) == 0) {
+        return 0;
+    }
+    req->lbn = lbn;
+    req->sectors = sectors;
+    req->buf = buf;
+    req->mode.trycount = mode->trycount;
+    req->mode.spindlctrl = mode->spindlctrl;
+    req->mode.datapattern = mode->datapattern;
+    req->p10 = D_005674C0;
+    req->p14 = &D_00567580;
+    switch (mode->datapattern) {
+    case 0:
+        size = sectors * 0x800;
+        break;
+    case 1:
+        size = sectors * 0x918;
+        break;
+    case 2:
+        size = sectors * 0x924;
+        break;
+    default:
+        size = sectors * 0x800;
+        break;
+    }
+    D_00567580 = 0;
+    if ((*(volatile s32 *)&D_005663F4 & 2) == 0) {
+        func_002FABD8(buf, size);
+    }
+    func_002FABD8(D_005674C0, 0x90);
+    func_002FABD8(req, sizeof(D_005664C0));
+    func_002FABD8(&D_00567580, 4);
+    if (D_005663D0 > 0) {
+        func_002FA4E0(D_00576D78);
+    }
+    {
+        register s32 one __asm__("$2") = 1;
+        __asm__("" : "+r"(one));
+        D_00566414 = one;
+        __asm__ volatile("" : : : "memory");
+        *(volatile s32 *)&D_005663F0 = one;
+    }
+    {
+        register void *p74c0 __asm__("$19") = D_005674C0;
+        __asm__("" : "+r"(p74c0));
+        if (func_002FB4C8(D_00567590, 1, 1, req, sizeof(D_005664C0), 0, 0, func_002E09C8, p74c0) < 0) {
+            D_00566414 = 0;
+            __asm__ volatile("" : : : "$2");
+            __asm__ volatile("" : : : "$3");
+            D_005663F0 = 0;
+            func_002F8400(D_005663E8);
+            return 0;
+        }
+    }
+    if (D_005663D0 > 0) {
+        func_002FA4E0(D_00576D90);
+    }
+    return 1;
+}
+
+int func_002E1BA0(int lbn)
+{
+    R7CdRead *req = &D_005664C0;
+
+    if (func_002E1108() == 6) {
+        return 0;
+    }
+    if (func_002E0F98(9) == 0) {
+        return 0;
+    }
+    req->lbn = lbn;
+    func_002FABD8(req, 4);
+    {
+        *(volatile s32 *)&D_00566414 = 4;
+        *(volatile s32 *)&D_005663F0 = 1;
+        if (func_002FB4C8(D_00567590, 5, 1, req, 4, 0, 0, func_002E0790, &D_00566414) < 0) {
+            D_00566414 = 0;
+            __asm__ volatile("" : : : "$2");
+            __asm__ volatile("" : : : "$3");
+            D_005663F0 = 0;
+            func_002F8400(D_005663E8);
+            return 0;
+        }
+    }
+    return 1;
+}
 
 /* DEBT(FAKE) */ /* DEBT(GOTO) */
 s32 func_002E1C70(void) {

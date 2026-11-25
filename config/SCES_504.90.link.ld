@@ -5,6 +5,8 @@ INCLUDE config/undefined_funcs_auto.txt
 /* Projection work backing view starts inside an existing BSS allocation. */
 D_00600110 = 0x00600110;
 D_0069247A = 0x0069247a;
+D_0057CB88 = 0x0057cb88;
+D_0057CB8C = 0x0057cb8c;
 /* data inside .text that splat folds into padding: absolute aliases */
 func_0017A540 = 0x17A540;
 /* ee-gcc soft-float libcall names (what the compiler emits for double arithmetic/conversions) */
@@ -20,6 +22,7 @@ fptoui = 0x2ECF38;
 fptodp = func_002ED038;
 sqrtf = 0x2E9708;
 __fixdfdi = 0x300350;
+__fixunssfdi = func_002EA358;
 __udivdi3 = func_002EAC90;
 __umoddi3 = func_002EB260;
 __muldi3 = func_002EAC30;
@@ -510,19 +513,19 @@ SECTIONS
         . = 0x56a960 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt6)
         . = 0x56a980 - 0x568f00;
-        build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056A980)
-        . = 0x56a9a0 - 0x568f00;
-        build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056A9A0)
-        . = 0x56a9d0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt7)
-        . = 0x56a9f0 - 0x568f00;
+        . = 0x56a9a0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt8)
-        . = 0x56aa50 - 0x568f00;
+        . = 0x56a9d0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt9)
-        . = 0x56aac0 - 0x568f00;
+        . = 0x56a9f0 - 0x568f00;
         build/src/game/atel/atel_13CA80.c.o(.rodata.cjt10)
+        . = 0x56aa50 - 0x568f00;
+        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt11)
+        . = 0x56aac0 - 0x568f00;
+        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt12)
         . = 0x56ab10 - 0x568f00;
-        build/src/game/atel/atel_13CA80.c.o(.rodata.jtbl_0056AB10)
+        build/src/game/atel/atel_13CA80.c.o(.rodata.cjt13)
         . = 0x56ad00 - 0x568f00;
         build/src/game/atel/atel_143BD0.c.o(.rodata.cjt0)
         . = 0x56ad20 - 0x568f00;
@@ -622,7 +625,7 @@ SECTIONS
         . = 0x56c118 - 0x568f00;
         build/asm/data/rodata/piece_0056C118.s.o(.rodata)
         . = 0x56c160 - 0x568f00;
-        build/src/game/menu/to/to_1691C8.c.o(.rodata.jtbl_0056C160)
+        build/src/game/menu/to/to_1691C8.c.o(.rodata.cjt4)
         . = 0x56c178 - 0x568f00;
         build/asm/data/rodata/piece_0056C178.s.o(.rodata)
         . = 0x56c1e0 - 0x568f00;
@@ -630,15 +633,15 @@ SECTIONS
         . = 0x56c238 - 0x568f00;
         build/asm/data/rodata/piece_0056C238.s.o(.rodata)
         . = 0x56c420 - 0x568f00;
-        build/src/game/yi/yi_17A9C0.c.o(.rodata.jtbl_0056C420)
-        . = 0x56c448 - 0x568f00;
-        build/asm/data/rodata/piece_0056C448.s.o(.rodata)
-        . = 0x56c470 - 0x568f00;
         build/src/game/yi/yi_17A9C0.c.o(.rodata.cjt0)
+        . = 0x56c448 - 0x568f00;
+        build/src/game/yi/yi_17A9C0.c.o(.rodata)
+        . = 0x56c470 - 0x568f00;
+        build/src/game/yi/yi_17A9C0.c.o(.rodata.cjt1)
         . = 0x56c530 - 0x568f00;
-        build/src/game/yi/yi_17A9C0.c.o(.rodata.jtbl_0056C530)
+        build/src/game/yi/yi_17A9C0.c.o(.rodata.cjt2)
         . = 0x56c5f0 - 0x568f00;
-        build/src/game/yi/yi_17A9C0.c.o(.rodata.jtbl_0056C5F0)
+        build/src/game/yi/yi_17A9C0.c.o(.rodata.cjt3)
         . = 0x56c6a8 - 0x568f00;
         build/asm/data/rodata/piece_0056C6A8.s.o(.rodata)
         . = 0x56c840 - 0x568f00;
@@ -1076,11 +1079,11 @@ SECTIONS
         . = 0x572d50 - 0x568f00;
         build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.cjt1)
         . = 0x572d70 - 0x568f00;
-        build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.jtbl_00572D70)
-        . = 0x572db0 - 0x568f00;
-        build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.jtbl_00572DB0)
-        . = 0x572f80 - 0x568f00;
         build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.cjt2)
+        . = 0x572db0 - 0x568f00;
+        build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.cjt3)
+        . = 0x572f80 - 0x568f00;
+        build/src/game/menu/tk/tk_23CBD0.c.o(.rodata.cjt4)
         . = 0x572fd0 - 0x568f00;
         build/asm/data/rodata/piece_00572FD0.s.o(.rodata)
         . = 0x572ff0 - 0x568f00;
@@ -1120,7 +1123,7 @@ SECTIONS
         . = 0x573670 - 0x568f00;
         build/asm/data/rodata/piece_00573670.s.o(.rodata)
         . = 0x573a10 - 0x568f00;
-        build/src/game/abm/abm_25AEB0.c.o(.rodata.jtbl_00573A10)
+        build/src/game/abm/abm_25AEB0.c.o(.rodata.cjt0)
         . = 0x573a24 - 0x568f00;
         build/asm/data/rodata/piece_00573A24.s.o(.rodata)
         . = 0x573a40 - 0x568f00;
@@ -1269,12 +1272,8 @@ SECTIONS
         build/asm/data/rodata/piece_00576A08.s.o(.rodata)
         . = 0x576e60 - 0x568f00;
         build/src/sdk/newlib/libm/libm_2E2830.c.o(.rodata)
-        . = 0x577030 - 0x568f00;
-        build/asm/data/rodata/piece_00577030.s.o(.rodata)
         . = 0x5773f0 - 0x568f00;
         build/src/sdk/newlib/libm/libm_2E4250.c.o(.rodata)
-        . = 0x577468 - 0x568f00;
-        build/asm/data/rodata/piece_00577468.s.o(.rodata)
         . = 0x577c70 - 0x568f00;
         build/src/sdk/newlib/libm/libm_2E7E60.c.o(.rodata)
         . = 0x577c80 - 0x568f00;
@@ -1286,7 +1285,7 @@ SECTIONS
         . = 0x5782b0 - 0x568f00;
         build/asm/data/rodata/piece_005782B0.s.o(.rodata)
         . = 0x578350 - 0x568f00;
-        build/src/sdk/newlib/libc/vfprintf.c.o(.rodata.jtbl_00578350)
+        build/src/sdk/newlib/libc/vfprintf.c.o(.rodata.cjt0)
         . = 0x5784c0 - 0x568f00;
         build/asm/data/rodata/piece_005784C0.s.o(.rodata)
         . = 0x5784f0 - 0x568f00;
@@ -1326,6 +1325,8 @@ D_005699AC = 0x005699AC;
 dpmul = func_002EBC70;
 __floatdidf = func_002EA450;
 
+D_0056C448 = 0x56c448;
+D_0056C450 = 0x56c450;
 D_00572370 = 0x572370;
 D_00572378 = 0x572378;
 D_0056EAF8 = 0x56eaf8;
@@ -1347,3 +1348,51 @@ D_0056F6E8 = 0x56f6e8;
 D_0056F6F0 = 0x56f6f0;
 D_0056F6F8 = 0x56f6f8;
 D_0056F700 = 0x56f700;
+D_00577218 = 0x577218;
+D_00577320 = 0x577320;
+D_00577468 = 0x577468;
+D_005774C8 = 0x5774c8;
+D_005774D8 = 0x5774d8;
+D_005774E0 = 0x5774e0;
+D_005777F8 = 0x5777f8;
+D_005778E0 = 0x5778e0;
+D_005778E8 = 0x5778e8;
+D_005778F0 = 0x5778f0;
+D_005778F8 = 0x5778f8;
+D_00577900 = 0x577900;
+D_00577908 = 0x577908;
+D_00577910 = 0x577910;
+D_00577920 = 0x577920;
+D_005779B8 = 0x5779b8;
+D_005779C0 = 0x5779c0;
+D_005779C8 = 0x5779c8;
+D_005779D0 = 0x5779d0;
+D_005779D8 = 0x5779d8;
+D_005779E0 = 0x5779e0;
+D_005779E8 = 0x5779e8;
+D_00577A10 = 0x577a10;
+D_00577A20 = 0x577a20;
+D_00577A88 = 0x577a88;
+D_00577AC0 = 0x577ac0;
+D_00577AD8 = 0x577ad8;
+D_00577AE0 = 0x577ae0;
+D_00577AF8 = 0x577af8;
+D_00577B00 = 0x577b00;
+D_00577B68 = 0x577b68;
+D_00577B78 = 0x577b78;
+D_00577B80 = 0x577b80;
+D_00577B88 = 0x577b88;
+D_00577B90 = 0x577b90;
+D_00577BC0 = 0x577bc0;
+D_00577BC8 = 0x577bc8;
+D_00577BD0 = 0x577bd0;
+D_00577BDC = 0x577bdc;
+D_00577BE0 = 0x577be0;
+D_00577BEC = 0x577bec;
+D_00577BF0 = 0x577bf0;
+D_00577C40 = 0x577c40;
+D_00577C48 = 0x577c48;
+D_00577C50 = 0x577c50;
+D_00577C58 = 0x577c58;
+D_00577C60 = 0x577c60;
+D_00577C68 = 0x577c68;

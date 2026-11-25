@@ -1,6 +1,7 @@
 /* tu_320 0x2a2220-0x2a43d8: medium; ~opu_rgba_en (config/tu_map.tsv) */
 /* DEBT(NAME): module and names guessed: misc. engine helpers (see w10.h). */
 #include "common.h"
+#include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w10.h"
 #include "ffx/t6.h"
@@ -8,14 +9,279 @@
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A2220);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A2558);
+void Ch_SetShadeCol(Chr *, int, float, float, float);
+void func_00110540(Chr *, int, float);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", func_002A26B0);
+void func_002A2558(Chr *a0, int a1, s32 a2)
+{
+    float vec[0x100];
+    register float *vp __asm__("$16") = vec;
+    int idx;
+    u8 *st;
+    int h0e;
+    register u32 t __asm__("$2");
 
-/* DEBT(NAME): module and names guessed: script-op handlers (see w10.h). */
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", opus_chara_status_rgb_set);
+    __asm__("" : "+r"(vp));
+    idx = opus_get_chr_status_index(a0, 0, 0);
+    st = (u8 *)owu_chr_status + (idx << 5);
+    h0e = *(u16 *)(st + 0xE);
+    MMI_OP2Z("pextlb", t, a1);
+    MMI_OP2Z("pextlh", t, t);
+    VU0_QMTC2_NI(31, t);
+    VU0_OP("vitof0.xyzw $vf31, $vf31");
+    VU0_SQC2(31, 0, vp);
+    {
+        register u32 cmax __asm__("$2") = 0x437F0000U;
+        register u32 cscale __asm__("$3");
+        __asm__("" : "+r"(cmax));
+        cscale = 0x3C000000U;
+        VU0_CTC2_NI(21, cmax);
+        VU0_QMTC2_NI(29, cscale);
+    }
+    VU0_LQC2(31, 0, vp);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf29x");
+    VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+    VU0_OP("vminii.xyzw $vf31, $vf31, I");
+    VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+    VU0_SQC2(31, 0, vp);
+    Ch_SetShadeCol(a0, 0, vec[0], vec[1], vec[2]);
+    func_00110540(a0, 0, vec[3]);
+    if (a2 != 0 && h0e < 0x20) {
+        a0 = (Chr *)MsGetWeaponHandle(h0e, 0);
+        if (a0 != 0) {
+            Ch_SetShadeCol(a0, 0, vec[0], vec[1], vec[2]);
+            func_00110540(a0, 0, vec[3]);
+        }
+        a0 = (Chr *)MsGetWeaponHandle(h0e, 1);
+        if (a0 != 0) {
+            Ch_SetShadeCol(a0, 0, vec[0], vec[1], vec[2]);
+            func_00110540(a0, 0, vec[3]);
+        }
+    }
+}
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2A2220", opu_ffxlight);
+void func_002A26B0(Chr *a0, int a1, s32 a2)
+{
+    float vec[0x100];
+    register float *vp __asm__("$16") = vec;
+    int idx;
+    u8 *st;
+    int h0e;
+    register u32 t __asm__("$2");
+    Chr *h;
+
+    idx = opus_get_chr_status_index(a0, 0, 0);
+    st = (u8 *)owu_chr_status + (idx << 5);
+    h0e = *(u16 *)(st + 0xE);
+    MMI_OP2Z("pextlb", t, a1);
+    MMI_OP2Z("pextlh", t, t);
+    VU0_QMTC2_NI(31, t);
+    VU0_OP("vitof0.xyzw $vf31, $vf31");
+    VU0_SQC2(31, 0, vp);
+    {
+        register u32 cmax __asm__("$2") = 0x437F0000U;
+        register u32 cscale __asm__("$3") = 0x3C000000U;
+        VU0_CTC2_NI(21, cmax);
+        VU0_QMTC2_NI(29, cscale);
+    }
+    VU0_LQC2(31, 0, vp);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf29x");
+    VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+    VU0_OP("vminii.xyzw $vf31, $vf31, I");
+    VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+    VU0_SQC2(31, 0, vp);
+    if (a2 != 0 && h0e < 0x20) {
+        h = (Chr *)MsGetWeaponHandle(h0e, 0);
+        if (h != 0) {
+            Ch_SetShadeCol(h, 0, vec[0], vec[1], vec[2]);
+            func_00110540(h, 0, vec[3]);
+        }
+        h = (Chr *)MsGetWeaponHandle(h0e, 1);
+        if (h != 0) {
+            Ch_SetShadeCol(h, 0, vec[0], vec[1], vec[2]);
+            func_00110540(h, 0, vec[3]);
+        }
+    }
+}
+
+void opus_chara_status_rgb_set(Chr *a0, s32 a1)
+{
+    float vec[0x100];
+    register float *vp __asm__("$16") = vec;
+    int idx;
+    u8 *st;
+    u16 h0e;
+    register u32 c1 __asm__("$2");
+    register u32 c2 __asm__("$3");
+    register u32 cscale __asm__("$2");
+
+    idx = opus_get_chr_status_index(a0, 0, 0);
+    st = (u8 *)owu_chr_status + (idx << 5);
+    h0e = *(u16 *)(st + 0xE);
+    c1 = *(u32 *)(st + 0x10);
+    MMI_OP2Z("pextlb", c1, c1);
+    MMI_OP2Z("pextlh", c1, c1);
+    VU0_QMTC2_NI(31, c1);
+    VU0_OP("vitof0.xyzw $vf31, $vf31");
+    c2 = *(u32 *)(st + 0x18);
+    MMI_OP2Z("pextlb", c2, c2);
+    MMI_OP2Z("pextlh", c2, c2);
+    VU0_QMTC2_NI(30, c2);
+    VU0_OP("vitof0.xyzw $vf30, $vf30");
+    cscale = 0x38800000U;
+    VU0_QMTC2_NI(29, cscale);
+    VU0_OP("vmul.xyz $vf31, $vf30, $vf31");
+    VU0_OP("vmulx.xyz $vf31, $vf31, $vf29x");
+    VU0_SQC2(31, 0, vp);
+    func_00110530(a0, vec[0], vec[1], vec[2]);
+    if (a1 != 0) {
+        a0 = (Chr *)MsGetWeaponHandle(h0e, 0);
+        if (a0 != 0) {
+            func_00110530(a0, vec[0], vec[1], vec[2]);
+        }
+        a0 = (Chr *)MsGetWeaponHandle(h0e, 1);
+        if (a0 != 0) {
+            func_00110530(a0, vec[0], vec[1], vec[2]);
+        }
+    }
+}
+
+void *op_malloc(void *, int);
+void op_free(void *, void *);
+void Sg_LightGetDir(int, void *);
+void Sg_LightGetColor(int, void *);
+s32 Sg_LightSetDir(int, void *);
+s32 Sg_LightSetColor(int, void *);
+
+s16 *opu_ffxlight(AnimCtx *o, s16 *p)
+{
+    void *obj300 = (u8 *)o + 0x300;
+    register u8 *t __asm__("$20") = o->p220;
+    register u8 *buf __asm__("$16");
+
+    switch (o->h21A & 0xF000) {
+    case 0x0000: {
+        u8 *m = op_malloc(*(void **)((u8 *)o + 0x3A8), 0x80);
+        *(u8 **)(t + 0xBC) = m;
+        buf = m;
+        Sg_LightGetDir(0, buf + 0x00);
+        Sg_LightGetDir(1, buf + 0x20);
+        Sg_LightGetDir(2, buf + 0x40);
+        Sg_LightGetColor(0, buf + 0x10);
+        Sg_LightGetColor(1, buf + 0x30);
+        Sg_LightGetColor(2, buf + 0x50);
+        Sg_LightGetColor(3, buf + 0x70);
+        p += 1;
+        break;
+    }
+    case 0x1000:
+        buf = *(u8 **)(t + 0xBC);
+        Sg_LightSetDir(0, buf + 0x00);
+        Sg_LightSetDir(1, buf + 0x20);
+        Sg_LightSetDir(2, buf + 0x40);
+        Sg_LightSetColor(0, buf + 0x10);
+        Sg_LightSetColor(1, buf + 0x30);
+        Sg_LightSetColor(2, buf + 0x50);
+        Sg_LightSetColor(3, buf + 0x70);
+        op_free(*(void **)((u8 *)o + 0x3A8), *(void **)(t + 0xBC));
+        *(void **)(t + 0xBC) = 0;
+        p += 1;
+        break;
+    case 0x2000:
+        buf = *(u8 **)(t + 0xBC);
+        if (buf != 0) {
+            u8 *volatile lp[6];
+            u8 *dst = (u8 *)o;
+            s16 *sp = p;
+            u8 *src;
+            int i;
+
+            {
+                register u8 *v __asm__("$2");
+                v = (u8 *)o + 0x10; lp[5] = v;
+                v = (u8 *)o + 0x20; lp[0] = v;
+                v = (u8 *)o + 0x30; lp[2] = v;
+                v = (u8 *)o + 0x40; lp[3] = v;
+                v = (u8 *)o + 0x50; lp[4] = v;
+                v = (u8 *)o + 0x70; lp[1] = v;
+            }
+            for (i = 0; i < 4; i++) {
+                if (sp[1] != 0) {
+                    register u32 sc __asm__("$3");
+                    src = (u8 *)opus_no_get(obj300, (ScriptSub *)t, sp[1]);
+                    VU0_LQC2(16, 0x90, t);
+                    VU0_LQC2(17, 0x90, src);
+                    VU0_OP("vsub.xyzw $vf31, $vf16, $vf17");
+                    VU0_SQC2(31, 0x0, dst);
+                    sc = 0x38000000U;
+                    VU0_QMTC2_NI(12, sc);
+                    VU0_LQC2(31, 0x30, src);
+                    VU0_OP("vmulw.xyz $vf31, $vf31, $vf31w");
+                    VU0_OP("vmulx.xyz $vf31, $vf31, $vf12x");
+                    VU0_SQC2(31, 0x10, dst);
+                } else {
+                    register u_long128 qv __asm__("$2");
+                    qv = *(u_long128 *)(buf + 0x00);
+                    *(u_long128 *)((u8 *)sp + 0x00) = qv;
+                    qv = *(u_long128 *)(buf + 0x10);
+                    *(u_long128 *)((u8 *)sp + 0x10) = qv;
+                }
+                func_002DCEC8(dst, dst);
+                {
+                    float f = *(float *)(src + 0x4C);
+                    u32 sc1 = 0x3B800000U;
+                    register u32 fi __asm__("$3");
+                    u32 c1;
+                    VU0_QMTC2_NI(12, sc1);
+                    MIPS_MFC1(fi, f);
+                    VU0_QMTC2_NI(13, fi);
+                    VU0_LQC2(16, 0x0, dst);
+                    VU0_LQC2(17, 0x0, buf);
+                    VU0_OP("vsub.xyzw $vf31, $vf16, $vf17");
+                    VU0_OP("vmulx.xyz $vf31, $vf31, $vf13x");
+                    VU0_OP("vmulx.xyz $vf31, $vf31, $vf12x");
+                    VU0_OP("vadd.xyz $vf31, $vf31, $vf17");
+                    VU0_OP("vmove.w $vf31, $vf0");
+                    VU0_SQC2(31, 0x0, dst);
+                    c1 = 0x3F800000U;
+                    VU0_CTC2_NI(21, c1);
+                    VU0_OP("vsub.xyzw $vf30, $vf0, $vf0");
+                    VU0_LQC2(16, 0x10, dst);
+                    VU0_LQC2(17, 0x10, buf);
+                    VU0_OP("vsub.xyzw $vf31, $vf16, $vf17");
+                    VU0_OP("vmulx.xyz $vf31, $vf31, $vf13x");
+                    VU0_OP("vmulx.xyz $vf31, $vf31, $vf12x");
+                    VU0_OP("vadd.xyz $vf31, $vf31, $vf17");
+                    VU0_OP("vminii.xyzw $vf31, $vf31, I");
+                    VU0_OP("vmax.xyzw $vf31, $vf31, $vf30");
+                    VU0_OP("vmove.w $vf31, $vf0");
+                    VU0_SQC2(31, 0x10, dst);
+                }
+                sp += 1;
+                dst += 0x20;
+                buf += 0x20;
+            }
+            Sg_LightSetDir(0, (u8 *)o + 0x00);
+            Sg_LightSetColor(0, lp[5]);
+            Sg_LightSetDir(1, lp[0]);
+            Sg_LightSetColor(1, lp[2]);
+            Sg_LightSetDir(2, lp[3]);
+            Sg_LightSetColor(2, lp[4]);
+            Sg_LightSetColor(3, lp[1]);
+        }
+        p += 5;
+        break;
+    case 0x3000:
+        func_002A2C68();
+        p += 1;
+        break;
+    case 0x4000:
+        opus_ffxfocus_free();
+        p += 1;
+        break;
+    }
+    return p;
+}
 
 void opus_ffxfocus_free(void) {
     if (D_00703FF0.flag8) {

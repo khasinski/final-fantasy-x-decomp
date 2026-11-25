@@ -3,9 +3,12 @@
 #include "vu0.h"
 #include "ffx/q7.h"
 #include "ffx/w11.h"
+#define func_002F98E8 func_002F98E8_orig
 #define func_002F9C00 func_002F9C00_orig
 #include "ffx/v7.h"
+#undef func_002F98E8
 #undef func_002F9C00
+int func_002F98E8(const char *src, int len);
 void func_002F9C00(int c);
 #include "ffx/r7.h"
 #include "ffx/g4.h"
@@ -237,9 +240,54 @@ void func_002F9750(int type, int len, TtyState *st)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/sdk/libkernl/tty", func_002F98E8);
-
 extern TtyState D_00791F90;
+extern u8 D_00791FC0[];
+extern u8 D_00792100[];
+
+int func_002F98E8(const char *src, int len)
+{
+    TtyState *st = &D_00791F90;
+    int out = 0;
+    int sent = 0;
+    u8 *pkt;
+    u8 *dst;
+
+    if (st->busy != 0) {
+        return -1;
+    }
+    func_00300280();
+    pkt = (u8 *)((u32)D_00791FC0 | 0x20000000);
+    st->busy = 1;
+    st->tx_ptr = pkt;
+    dst = pkt + 0xC;
+    while (len-- != 0) {
+        if (*src == '\n') {
+            *dst++ = '\r';
+            out++;
+            if (out >= 0x100) {
+                break;
+            }
+        }
+        *dst++ = *src++;
+        out++;
+        sent++;
+        if (out >= 0x100) {
+            break;
+        }
+    }
+    D_00791F90.tx_rem = out + 0xC;
+    *(u16 *)pkt = D_00791F90.tx_rem;
+    if (func_002F9538(D_00791F90.sid, (s8)pkt[7]) < 0) {
+        *(int *)&D_00791F90.busy = 0;
+        func_003002C8();
+        return -1;
+    }
+    while (D_00791F90.busy != 0) {
+        ((void (*)(int))func_002F9568)(D_00791F90.sid);
+    }
+    func_003002C8();
+    return sent;
+}
 
 int func_002F9A38(void *buf, int n)
 {
