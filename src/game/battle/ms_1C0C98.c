@@ -281,7 +281,122 @@ int func_001C1368(int id1, int id2) {
     return (best_id < 0) ? id2 : best_id;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C14F0);
+typedef struct {
+    u8 pad0[0x1FF8];
+    s32 w1FF8;
+    u8 pad1FFC[0x212A - 0x1FFC];
+    u8 b212A;
+    u8 b212B;
+} BtlWork14F0;
+
+int func_001C14F0(int a0, u8 *a1, u8 *a2, OfsTbl *a3, int a4, int *a5, int *a6) {
+    int sp0;
+    int hit_total = *a6;
+    int tgt_mask = *a5;
+    int hits;
+    int reflect_mask;
+    int new_mask;
+    int can_reflect;
+    int is_monster;
+    int i;
+    int sub;
+    BtlChr *chr;
+
+    for (i = 0; i < 0x1F; i++) {
+        a1[i] = 0;
+    }
+
+    hits = *((u8 *)a3 + 0x2B);
+    if ((*(u32 *)((u8 *)a3 + 0x1C) >> 15) & 1) {
+        int tmp_total = hit_total + hits;
+        for (i = 0; i < 0x1F; i++) {
+            a2[i] = 0;
+        }
+        for (i = 0; i < hits; i++) {
+            MsActTargetSearch(a0, tgt_mask, 0x5C, 0, 5, 0, 1, &sp0);
+            if (sp0 != 0xFF) {
+                a2[sp0]++;
+            }
+        }
+        hit_total = tmp_total;
+    } else {
+        for (i = 0; i < 0x1F; i++) {
+            if ((tgt_mask >> i) & 1) {
+                a2[i] = hits;
+                hit_total += hits;
+            } else {
+                a2[i] = 0;
+            }
+        }
+    }
+
+    sub = (*(u16 *)((u8 *)a3 + 0x1A) >> 2) & 3;
+    if ((*(u16 *)((u8 *)a3 + 0x20) & 3) == 1 && sub == 0) {
+        new_mask = 0;
+        for (i = 0; i < 0x1F; i++) {
+            if ((tgt_mask >> i) & 1) {
+                int cover_id;
+                if (i == a0) {
+                    cover_id = i;
+                } else {
+                    cover_id = func_001C1368(a0, i);
+                }
+                new_mask |= 1 << cover_id;
+                if (i != cover_id) {
+                    ((BtlWork14F0 *)&D_003172F0)->b212B = 1;
+                    chr = MsGetChr(cover_id);
+                    chr->f393 = a0;
+                    chr->f394 = i;
+                    a2[cover_id] += a2[i];
+                    a2[i] = 0;
+                    MsGetChr(i)->f39D = 0;
+                    if (cover_id == 0 && i < 8 && MsGetRamChrMonster(a0) == 1) {
+                        MsAddLoveParam(i, 1);
+                    }
+                }
+            }
+        }
+        tgt_mask = new_mask;
+    }
+
+    reflect_mask = 0;
+    new_mask = 0;
+    can_reflect = ((*(u32 *)((u8 *)a3 + 0x1C) >> 7) & 1);
+    is_monster = MsGetRamChrMonster(a0);
+    for (i = 0; i < 0x1F; i++) {
+        if ((tgt_mask >> i) & 1) {
+            sp0 = i;
+            chr = MsGetChr(i);
+            if (can_reflect != 0 && (*((u8 *)chr + 0x2CD) != 0 || ((*(u16 *)((u8 *)chr + 0x2EC) >> 5) & 1))) {
+                reflect_mask |= 1 << i;
+                if (is_monster != MsGetRamChrMonster(i)) {
+                    sp0 = a0;
+                    a2[sp0] += a2[i];
+                    a2[i] = 0;
+                } else {
+                    int cursor = MsGetCursorTarget(a0, is_monster == 0 ? -0xF : -0xE, a3, a4, 1);
+                    MsActTargetSearch(a0, cursor, 0x5C, 0, 6, 0, 1, &sp0);
+                    if (sp0 != 0xFF) {
+                        a2[sp0] += a2[i];
+                    }
+                    a2[i] = 0;
+                }
+            }
+            if (sp0 != 0xFF) {
+                new_mask |= 1 << sp0;
+                a1[sp0]++;
+                *((u8 *)MsGetChr(sp0) + 0xAAD) = a0;
+            }
+        }
+    }
+    if (reflect_mask != 0) {
+        ((BtlWork14F0 *)&D_003172F0)->b212A = 1;
+    }
+    ((BtlWork14F0 *)&D_003172F0)->w1FF8 = new_mask;
+    *a5 = new_mask;
+    *a6 = hit_total;
+    return reflect_mask;
+}
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C1908);
 

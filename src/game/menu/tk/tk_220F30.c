@@ -1295,9 +1295,128 @@ void func_00223228(int y)
     TOMenuDrawKickTmp();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223468);
+extern s32 D_00693334;
+extern s32 D_00693340;
+extern s32 D_0069333C;
+extern u16 *D_003257B4;
+extern s32 D_00693328;
+void func_001F4EB0(int, int, int);
+void func_001F55C8(int, int, int, int);
+void func_001F5610(int, int, int, int);
+int func_00242040(void);
+void func_001FE7F8(int, int, int);
+void func_002243C0(int, int, int);
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_220F30", func_00223620);
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 f0 : 1;
+    u8 f1 : 1;
+    u8 f2 : 1;
+    u8 f3 : 1;
+    u8 f4 : 4;
+    u8 pad4[7];
+    u8 bB;
+    u8 padC[2];
+    u16 hE[4];
+} WepInfo223;
+
+void func_00223468(int x)
+{
+    register int px __asm__("$18");
+    int y;
+    int i;
+    s32 buf;
+
+    px = x + 0x118;
+    y = 0x46;
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOMenuDrawKickTmp();
+    {
+        register int a0 __asm__("$4") = 0xE;
+        __asm__("" : "+r"(a0));
+        func_002243C0(a0, x + 0x117, 0x2D);
+    }
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    if (D_00693334 == 1) {
+        if (D_00693340 == 0 || ((func_00242040() / 2) & 1)) {
+            func_001FE7F8(0, px, D_0069333C * 32 + 0x46);
+        }
+    } else if (D_00693340 != 0) {
+        func_001FE7F8(0, px, D_0069333C * 32 + 0x46);
+    }
+    for (i = 0; i < 8; i++, y += 0x20) {
+        Unk1BFED8 *w = MsGetSaveWeapon(btlgetdata.h[i], &buf);
+        if (w->b2 != 0) {
+            int col = 0;
+            if (((w->b3 >> 2) & 1) || (w->b3 & 1) || ((w->b3 >> 3) & 1)) {
+                col = 1;
+            }
+            func_001F4EB0(px, y, 1);
+            func_001F55C8(btlgetdata.h[i], px, y, col);
+        }
+    }
+    TOMenuDrawKickTmp();
+}
+
+void func_00223620(int x)
+{
+    int i;
+    int y;
+    int px;
+    int side;
+    int id;
+    WepInfo223 *w;
+    s32 buf;
+
+    px = x + 0x1E;
+    y = 0x123;
+    TOMenuOpenPktBuffTmp();
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    TOMenuDrawKickTmp();
+    {
+        register int a0 __asm__("$4") = 7;
+        __asm__("" : "+r"(a0));
+        func_002243C0(a0, x + 0x1C, 0x10A);
+    }
+    TOMenuOpenPktBuffTmp();
+    {
+        register int s __asm__("$5") = D_00693334;
+        int f = D_00693340;
+        int ns = !s;
+        if (f != 0) {
+            s = ns;
+        }
+        __asm__("" : "+r"(s));
+        side = s;
+    }
+    {
+        register int rid __asm__("$5");
+        if (side == 0) {
+            rid = D_003257B4[D_00693328 + D_00693338[0]];
+        } else {
+            rid = btlgetdata.h[D_0069333C];
+        }
+        __asm__("" : "+r"(rid));
+        w = (WepInfo223 *)MsGetSaveWeapon(rid, &buf);
+    }
+    if (w->b2 != 0) {
+        for (i = 0; i < w->bB; i++) {
+            u16 ab = w->hE[i];
+            if (ab == 0 || ab == 0xFF) {
+                func_001F4EB0(px, y, 0x11);
+            } else {
+                func_001F4EB0(px, y, 0x11);
+                func_001F5610(ab, px, y, 0);
+            }
+            y += 0x20;
+        }
+    }
+    TOMenuDrawKickTmp();
+}
 
 void func_002237B0(void)
 {

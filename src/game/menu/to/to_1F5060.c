@@ -698,7 +698,56 @@ void *func_001F78F8(void *list, int a, int b, int c, int d, int e)
     return func_001F7920(list, a, b, c, d, 0x80, 0x80, 0x80, e);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F5060", func_001F7920);
+u8 *func_00204CA8(u8 *s, R4CharInfo *glyph);
+void func_001F1630(TextItem *it, R4CharInfo *glyph);
+void func_001F0EC0(TextItem *it, R4CharInfo *glyph);
+void func_001F11E0(TextItem *it, R4CharInfo *glyph);
+
+void *func_001F7920(void *list, int s_, int x, int y, int style, int r, int g, int b, int a)
+{
+    register int rx __asm__("$21") = x;
+    u8 *s = (u8 *)s_;
+    R4CharInfo *glyph = &D_00323930;
+    TextItem *it = &D_00323918;
+
+    func_002EF0D0(glyph, 0, 0x20);
+    func_002EF0D0(it, 0, 0x14);
+    InvokedFromSelectCursor = list;
+    it->x = rx;
+    it->y = y;
+    it->col[0] = r;
+    it->col[1] = g;
+    it->col[2] = b;
+    it->col[3] = a;
+    it->f12 = 0;
+    it->f13 = style;
+    while (*s != 0) {
+        switch (TOGetGroup(*s)) {
+        case 4:
+            func_00204CA8(s, glyph);
+            func_001F11E0(it, glyph);
+            func_001F0EC0(it, glyph);
+            it->x += glyph->h10 + 2;
+            break;
+        case 2:
+            if (*s == 10) {
+                if ((s[1] & 0xF) != 0) {
+                    it->f13 = (it->f13 & 0xF0) | ((s[1] & 0xF) - 1);
+                }
+                if ((s[1] & 0xF0) >= 0x40) {
+                    it->f13 = (it->f13 & 0xF) | ((s[1] & 0xF0) - 0x40);
+                }
+            }
+            if (*s == 11) {
+                *(void *volatile *)&InvokedFromSelectCursor = func_001F9D50(InvokedFromSelectCursor, s[1], it->x, it->y);
+                it->x += 0x16;
+            }
+            break;
+        }
+        s = TOSkipCode(s);
+    }
+    return InvokedFromSelectCursor;
+}
 
 void *func_001F7B38(void *list, int a, int b, int c, int d)
 {

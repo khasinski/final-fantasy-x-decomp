@@ -76,10 +76,9 @@ void func_00110260(Chr *chr, float v)
     chr->f14 += v;
 }
 
-/* DEBT(CAST) */ /* DEBT(FAKE) */
-void func_00110270(void *arg0, float fparg0) {
-    register u8 *saved_reg_gp __asm__("$28");
-    (*(float *)((u8 *)(arg0) + (0x54))) = (float) (fparg0 * (*(float *)((u8 *)(saved_reg_gp) + (-0x7DF8))));
+void func_00110270(Chr *chr, float v)
+{
+    *(float *)((u8 *)chr + 0x54) = v * 0.05f;
 }
 
 float func_00110280(Chr *chr)
@@ -87,7 +86,18 @@ float func_00110280(Chr *chr)
     return chr->f160;
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_110158", func_00110288);
+float func_00110288(Chr *chr)
+{
+    float f = chr->f164;
+
+    while (f > 3.141592f) {
+        f -= 6.283184f;
+    }
+    while (f < -3.141592f) {
+        f += 6.283184f;
+    }
+    return f;
+}
 
 float func_001102F8(Chr *chr)
 {

@@ -16,7 +16,157 @@ BtlChr *MsGetMon(int id);
 int func_001BE258(int id);
 u8 *MsGetSaveInParty(int *n);
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSaveStartGame);
+extern u8 D_0056E500[];
+extern u8 D_0056E508[];
+extern u8 D_0056E518[];
+extern u8 D_0056E528[];
+extern u8 D_0056E538[];
+extern u8 D_0031B6BC[];
+extern void func_001ACE18(s32);
+extern void *func_001BFEB8(void);
+extern void MsInitSaveWeaponEquipFlag(void);
+extern void TkInitSaveWork(void);
+extern void func_00265B58(void *);
+
+typedef struct { u32 d[7]; } Blk1C;
+typedef struct { u32 d[0x21]; } Blk84;
+typedef struct { u16 d[0xB]; } Blk16;
+typedef struct { u32 d[0x25]; } Blk94;
+typedef struct { u32 d[8]; } Blk20;
+
+typedef struct {
+    u8 pad00[0x3D0C];
+    Blk1C b3D0C;
+    Blk20 b3D28;
+    Blk84 b3D48;
+} SaveDataStart1;
+
+typedef struct {
+    u8 pad00[0x3D4C];
+    s32 w3D4C;
+    u8 pad3D50[0x3D8C - 0x3D50];
+    u16 h3D8C[8];
+    u8 b3D9C[8];
+    u8 pad3DA4[0x3ECC - 0x3DA4];
+    u16 h3ECC[0x100];
+    u8 b40CC[0x100];
+    u8 pad41CC[0x55CC - 0x41CC];
+    Blk94 slot[18];
+    u8 pad6034[0x634C - 0x6034];
+    u8 name[18][0x14];
+} SaveDataStart2;
+
+typedef struct {
+    u16 h00;
+    u16 h02;
+    u8 b04;
+    u8 pad05[7];
+    u8 b0C[10];
+} WpnStartEnt;
+
+#define SAVE1 ((SaveDataStart1 *)&D_003194D0)
+#define SAVE2 ((SaveDataStart2 *)&D_003194D0)
+
+void MsSetSaveStartGame(void)
+{
+    void *buf;
+    int sz;
+    int i, j;
+    u8 *str_tbl;
+
+    MsStructClear(&D_003194D0, 0x64B8);
+    GetCD()->f10(0xD);
+
+    sz = GetCD()->f14(3);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E500, -1);
+    GetCD()->f0(3, buf, 0, 0);
+    GetCD()->f8(0);
+    SAVE1->b3D0C = *(Blk1C *)MsGetExcelData(0, buf, 0);
+    func_0011D590((s32)buf, 5);
+
+    sz = GetCD()->f14(4);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E508, -1);
+    GetCD()->f0(4, buf, 0, 0);
+    GetCD()->f8(0);
+    SAVE1->b3D48 = *(Blk84 *)MsGetExcelData(0, buf, 0);
+    func_0011D590((s32)buf, 5);
+
+    sz = GetCD()->f14(5);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E518, -1);
+    GetCD()->f0(5, buf, 0, 0);
+    GetCD()->f8(0);
+    {
+        void *first = 0;
+        for (i = 0; i < 0xC8; i++) {
+            WpnStartEnt *dst = &((WpnStartEnt *)D_0031D96C)[i];
+            register void *p __asm__("$4") = MsGetExcelData(i, buf, (s32 *)&str_tbl);
+            if (first == 0) {
+                first = p;
+            } else if (first == p) {
+                break;
+            }
+            if (i >= 0x23 && ((struct { u8 pad[0x50]; s8 f50; } *)&D_003172F0)->f50 == 0) {
+                break;
+            }
+            *(Blk16 *)dst = *(Blk16 *)p;
+            if (dst->b04 < 7) {
+                dst->h00 = ((int (*)(void))MsWeaponNameNum)();
+                MsWeaponName(dst->h00, dst->b04, 0, dst->b0C);
+            }
+        }
+    }
+    func_0011D590((s32)buf, 5);
+
+    sz = GetCD()->f14(1);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E528, -1);
+    GetCD()->f0(1, buf, 0, 0);
+    GetCD()->f8(0);
+    for (i = 0; i < 0x12; i++) {
+        u8 *p = MsGetExcelData(i, buf, (s32 *)&str_tbl);
+        u8 *name_dst;
+        u8 *name_src;
+        SAVE2->slot[i] = *(Blk94 *)p;
+        name_dst = SAVE2->name[i];
+        name_src = str_tbl + *(u16 *)p;
+        for (j = 0; j < 0x14; j++) {
+            *name_dst++ = name_src[j];
+        }
+    }
+    func_0011D590((s32)buf, 5);
+
+    sz = GetCD()->f14(0x1F);
+    func_0011C348(0x40);
+    buf = user_malloc(sz, 5, D_0056E538, -1);
+    GetCD()->f0(0x1F, buf, 0, 0);
+    GetCD()->f8(0);
+    SAVE1->b3D28 = *(Blk20 *)MsGetExcelData(0, buf, 0);
+    func_0011D590((s32)buf, 5);
+
+    func_001ACE18(SAVE2->w3D4C + (s32)func_002D4138());
+
+    j = 0;
+    for (i = 0; i < 8; i++) {
+        if (SAVE2->h3D8C[i] != 0xFFFF && SAVE2->b3D9C[i] != 0) {
+            D_003194D0.h3ECC[j] = SAVE2->h3D8C[i];
+            D_003194D0.b40CC[j] = SAVE2->b3D9C[i];
+            j++;
+            MsSetItemCheck(SAVE2->h3D8C[i], func_001BFEB8());
+        }
+    }
+    for (; j < 0x100; j++) {
+        D_003194D0.h3ECC[j] = 0xFF;
+        D_003194D0.b40CC[j] = 0;
+    }
+
+    MsSetSaveConfigEnglish(0);
+    MsInitSaveWeaponEquipFlag();
+    TkInitSaveWork();
+    func_00265B58(D_0031B6BC);
+}
 
 void func_001BCBA8(void) {
     int i;
@@ -524,7 +674,64 @@ void func_001BDE20(u8 id, int on) {
     D_0031EA9C[id].flags2C = (D_0031EA9C[id].flags2C & ~0x10) | ((on & 1) << 4);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSetSavePlyJoin);
+u8 *MsGetSaveOutParty(int *n);
+
+void MsSetSavePlyJoin(int id, int join)
+{
+    int i;
+    u8 *p;
+
+    id &= 0xFF;
+    if (join != 0) {
+        MsChangeWeaponInvisible(id, 0);
+        D_0031EA9C[id].flags2C = (D_0031EA9C[id].flags2C & ~1) | (join & 1);
+        D_0031EA9C[id].flags2C = (D_0031EA9C[id].flags2C & ~0x10) | ((join & 1) << 4);
+        if (id < 8) {
+            register int not_in __asm__("$4");
+            p = MsGetSaveInParty(0);
+            not_in = 1;
+            {
+                register int c __asm__("$3") = p[0];
+                i = 0;
+                goto chk_in;
+                do {
+                    if (++i >= 0x14) {
+                        goto not_found;
+                    }
+                    c = p[i];
+chk_in:;
+                } while (c != id);
+            }
+            not_in = 0;
+not_found:;
+            if (not_in != 0) {
+                int cnt;
+                p = MsGetSaveOutParty(&cnt);
+                for (i = 0; i < cnt; i++) {
+                    register int v __asm__("$3") = p[i];
+                    if (v == 0xFF) {
+                        p[i] = id;
+                        break;
+                    }
+                }
+            }
+        }
+    } else {
+        if (func_001BE1F8(id) == 0) {
+            D_0031EA9C[id].flags2C &= ~1;
+            p = MsGetSaveInParty(0);
+            for (i = 0; i < 0x14; i++) {
+                register u8 *q __asm__("$4") = &p[i];
+                register int v __asm__("$3") = *q;
+                if (v == id) {
+                    *q = 0xFF;
+                    break;
+                }
+            }
+        }
+    }
+    MsSaveEncountCheck();
+}
 
 int MsExchangeSaveParty(int a, int b) {
     int idx = -1;

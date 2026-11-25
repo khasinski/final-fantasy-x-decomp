@@ -324,7 +324,145 @@ u16 *func_002A0FF0(ScriptThread *th, u16 *pc)
     return pc + 4;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", opu_spl);
+typedef struct {
+    s16 n;
+    u8 pad2[5];
+    u8 b7;
+    float *p8;
+    float *pC;
+} OpuSplBuf;
+
+typedef struct {
+    u8 pad00[0x40];
+    float v40[3];
+    float f4C;
+    u8 pad50[0x1C];
+    float f6C;
+    u8 pad70[0x20];
+    float v90[3];
+    u8 pad9C[4];
+    u16 hA0;
+    u16 hA2;
+    u8 padA4[0x16];
+    u8 bBA;
+    u8 padBB;
+    OpuSplBuf *pBC;
+    u8 fC0[4];
+} OpuSplSub;
+
+extern void op_free(void *, void *);
+extern void *op_malloc(void *, int);
+extern void op_spline_xyz_table(float *, float *, int);
+extern void op_spline_xyz(void *, float *, float *, int, float);
+extern void func_002B6358(void *, void *, void *);
+extern void func_002B56D8(void *, void *, void *);
+
+s16 *opu_spl(ScriptThread *th, s16 *pc)
+{
+    OpuSplSub *sub = (OpuSplSub *)th->sub;
+    OpuSplBuf *buf;
+    s16 i;
+
+    switch ((s16)th->flags & 0xF000) {
+    case 0x0000: {
+        OpuSplBuf *b;
+        s16 n;
+        s16 mode;
+        s16 *tbl;
+        float *dst;
+
+        n = pc[1];
+        op_free(*(void **)((u8 *)th + 0x3A8), sub->pBC);
+        b = (OpuSplBuf *)op_malloc(*(void **)((u8 *)th + 0x3A8), (n << 5) | 0x10);
+        sub->pBC = b;
+        buf = b;
+        buf->n = n;
+        buf->p8 = (float *)(buf + 1);
+        buf->pC = (float *)((u8 *)buf->p8 + (n << 4));
+        dst = buf->p8;
+        tbl = (s16 *)((u8 *)pc + pc[2]);
+        mode = pc[3];
+        for (i = 0; i < n; i++, tbl++) {
+            OpuSplSub *t = (OpuSplSub *)opus_no_get((u8 *)th + 0x300, (void *)sub, *tbl);
+            if (mode == 0) {
+                dst[0] = t->v40[0];
+                dst[1] = t->v40[1];
+                dst[2] = t->v40[2];
+            } else {
+                dst[0] = t->v90[0];
+                dst[1] = t->v90[1];
+                dst[2] = t->v90[2];
+            }
+            dst += 4;
+        }
+        pc += 4;
+        op_spline_xyz_table(b->pC, b->p8, n);
+        if (mode == 0) {
+            b->b7 = 1;
+        } else {
+            b->b7 = 0;
+        }
+        break;
+    }
+    case 0x1000: {
+        OpuSplSub *t;
+        i = pc[1];
+        if (i != 0) {
+            t = (OpuSplSub *)opus_no_get((u8 *)th + 0x300, (void *)sub, i);
+        } else {
+            t = sub;
+        }
+        buf = t->pBC;
+        op_spline_xyz(th, buf->p8, buf->pC, buf->n, sub->f4C * (1.0f / 256.0f));
+        if (pc[2] == 0) {
+            func_002B5978(sub->v40, th, 1.0f);
+        } else {
+            func_002B5978(sub->v40, th, 16.0f);
+        }
+        func_002B5978(sub->v90, sub->v40, 0.0625f);
+        pc += 3;
+        break;
+    }
+    case 0x2000: {
+        OpuSplSub *t;
+        float f;
+        i = pc[1];
+        if (i != 0) {
+            t = (OpuSplSub *)opus_no_get((u8 *)th + 0x300, (void *)sub, i);
+        } else {
+            t = sub;
+        }
+        buf = t->pBC;
+        f = sub->f4C;
+        op_spline_xyz(th, buf->p8, buf->pC, buf->n, f * (1.0f / 256.0f));
+        if (sub->f6C == 0.0f) {
+            f += 0.000001f;
+        } else {
+            f += sub->f6C;
+        }
+        op_spline_xyz((u8 *)th + 0x10, buf->p8, buf->pC, buf->n, f * (1.0f / 256.0f));
+        if (pc[2] == 0) {
+            func_002B5978(sub->v40, th, 1.0f);
+        } else {
+            func_002B5978(sub->v40, th, 16.0f);
+            func_002B5978((u8 *)th + 0x10, (u8 *)th + 0x10, 16.0f);
+        }
+        func_002B5978(sub->v90, sub->v40, 0.0625f);
+        func_002B5978((u8 *)th + 0x10, (u8 *)th + 0x10, 0.0625f);
+        func_002B6358((u8 *)th + 0x40, sub->v90, (u8 *)th + 0x10);
+        func_002B56D8(sub->fC0, (u8 *)th + 0x280, (u8 *)th + 0x40);
+        pc += 3;
+        break;
+    }
+    case 0x3000:
+        sub->bBA = 10;
+        sub->hA0 = pc[1];
+        sub->hA2 = pc[2];
+        pc += 3;
+        break;
+    }
+    return pc;
+}
 
 typedef struct OpeAnmSub {
     u8 pad00[0x1E];
@@ -500,7 +638,101 @@ void func_002A1778(u8 *a, u8 *b)
     func_002B2FF0(rgba, b[2], b[3]);
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A0820", ope_anm_sippo);
+extern u8 owu_chr_drawoff_back[];
+void func_002B3EA8(void *, s32, s32, s32);
+void func_002B3ED0(void *, void *, s32);
+
+u16 *ope_anm_sippo(ScriptThread *th, u16 *pc)
+{
+    u8 *sub = (u8 *)th->sub;
+    u8 *a = (u8 *)op_oef2_a_get(*(int *)((u8 *)th + (sub[0x1E] << 2) + 0x360), 4, pc[1]);
+    int i;
+    int cnt;
+    int extra;
+    int base_sz;
+
+    opus_draw_on((u8 *)th + 0x300, *(s16 *)((u8 *)th + 0x214));
+    *(s16 *)(sub + 0xC0) = 0x80;
+    *(s16 *)(sub + 0xC2) = 0x48;
+    *(s32 *)(sub + 0xC4) = 0;
+    *(s16 *)(sub + 0xE8) = 0;
+
+    {
+        register s16 *p __asm__("$6") = (s16 *)(a + 0x10);
+        s16 *p0 = p;
+        register int sum __asm__("$5") = 0;
+        register int tmp __asm__("$3");
+        register int n __asm__("$5");
+        register int mask __asm__("$4");
+        int sz;
+
+        for (i = 0; i < *(s16 *)(a + 6); i++) {
+            sum += p[1];
+            p += 4;
+        }
+        {
+            register int m1 __asm__("$2") = -1;
+            tmp = sum + 255;
+            if (m1 < sum) {
+                tmp = sum;
+            }
+        }
+        mask = 0x7FFFFFF0;
+        n = tmp >> 8;
+        *(s16 *)(sub + 0xE8) = n;
+        sz = (n * 4 + 0xF) & mask;
+        cnt = (s16)pc[2];
+        extra = cnt << 4;
+        base_sz = extra + 0x10;
+        if ((*(u16 *)((u8 *)th + 0x21A) & 0x1000) == 0) {
+            extra = 0;
+        }
+        *(void **)(sub + 0xBC) = op_malloc(*(void **)((u8 *)th + 0x3A8), base_sz + sz + extra);
+        func_002B3EA8(*(void **)(sub + 0xBC), 0, 0x8001, cnt);
+        {
+            register u8 *base __asm__("$2") = *(u8 **)(sub + 0xBC);
+            register u8 **dst __asm__("$8");
+            p = p0;
+            i = 0;
+            dst = (u8 **)((base + base_sz) + extra);
+            ((union { u8 **p; s16 h; } *)(sub + 0xE0))->p = dst;
+            for (; i < *(s16 *)(a + 6); i++) {
+                u8 *ent = a + p[0];
+                int j;
+                for (j = 0; j < p[1]; j += 0x100) {
+                    *dst++ = ent;
+                }
+                p += 4;
+            }
+        }
+    }
+
+    switch (*(u16 *)((u8 *)th + 0x21A) & 0xF000) {
+    case 0x0000:
+        sub[0xBB] = 10;
+        pc += 3;
+        break;
+    case 0x1000: {
+        register u8 *base __asm__("$3");
+        register u_long128 *q __asm__("$8");
+        sub[0xBB] = 17;
+        func_002B3ED0(*(void **)(sub + 0xBC), sub + 0x90, 0);
+        base = *(u8 **)(sub + 0xBC);
+        q = (u_long128 *)(base + base_sz);
+        for (i = 0; i < cnt; i++) {
+            *q++ = *(u_long128 *)(sub + 0x90);
+        }
+        *(u16 *)(sub + 0xA8) = pc[3];
+        *(u16 *)(sub + 0xAA) = pc[4];
+        if (owu_chr_drawoff_back[sub[0x18]] & sub[0xB3]) {
+            *(u16 *)(sub + 0xB0) |= 1;
+        }
+        pc += 5;
+        break;
+    }
+    }
+    return pc;
+}
 
 u16 *func_002A1A60(ScriptThread *th, u16 *pc)
 {

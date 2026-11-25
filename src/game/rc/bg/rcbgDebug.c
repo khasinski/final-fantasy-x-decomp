@@ -267,7 +267,57 @@ void func_00190120(void *, void *, float, float, float, float);
 void func_00190230(void *, void *, int, void *, void *);
 void func_00191A70(s32 a0, s32 a1);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_001914C0);
+typedef struct DbgAng4 {
+    u32 a[4];
+} DbgAng4;
+typedef struct DbgVec4 {
+    float x;
+    float y;
+    float z;
+    float w;
+} DbgVec4;
+extern DbgAng4 D_0056D7B0;
+extern float eff_sin_t[];
+
+void func_001914C0(R2Pkt *pkt, void *item)
+{
+    DbgAng4 angs = D_0056D7B0;
+    float mtx[16];
+    DbgVec4 verts[33];
+    R2DbgWorkFull *dbg = R2_DBGWORK_FULL;
+    float r;
+    int i;
+    int col;
+
+    Ch_GetRootGlobalMatrix(item, mtx);
+    func_00192618((u32)mtx);
+    r = func_001109E0(item) * 10.0f;
+    func_002EF0D0(verts, 0, sizeof(verts));
+    {
+        u32 *ap = angs.a;
+        DbgVec4 *v = verts;
+        for (i = 0; i < 4; i++, ap++, v++) {
+            u32 a = *ap;
+            v->x = eff_sin_t[(a >> 4) & 0xFFF] * r;
+            v->z = -eff_sin_t[((a + 0x4000) >> 4) & 0xFFF] * r;
+        }
+    }
+    VU0_LQC2(31, 0, &verts[0]);
+    VU0_SQC2(31, 0, &verts[4]);
+    verts[2].x = verts[2].y = verts[2].z = verts[2].w = 0.0f;
+    col = (dbg->arr874[dbg->w8B4] == item) ? 1 : 6;
+    func_00190230(pkt, verts, 5, D_003135C0[col], mtx);
+    {
+        DbgVec4 *v;
+        u32 ang2;
+        for (i = 0, ang2 = 0x4000, v = verts; i < 33; i++, ang2 += 0x800, v++) {
+            u32 a = i * 0x800;
+            v->x = eff_sin_t[(a >> 4) & 0xFFF] * r;
+            v->z = -eff_sin_t[(ang2 >> 4) & 0xFFF] * r;
+        }
+    }
+    func_00190230(pkt, verts, 33, D_003135C0[col], mtx);
+}
 
 void func_001916D0(R2Pkt *pkt, void *item)
 {
@@ -921,7 +971,109 @@ u64 func_002EA358(float x);
 
 INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192BC0);
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00192E00);
+void func_002F8660(int a);
+
+void func_00192E00(W3Voice *v, W3Pool *pool, float *rect)
+{
+    int tw;
+    int th;
+    int tbw;
+    u32 flags = *(u32 *)v;
+    int b5;
+    int b2;
+    W3Img *img1;
+    W3Img *img2;
+    R2Qw *base;
+    R2Qw *q;
+    u64 tex0;
+    u64 clamp;
+    int minu;
+    int minv;
+    void *ch;
+
+    if ((flags & 3) != 0) {
+        return;
+    }
+    b2 = (s32)flags >> 2;
+    b5 = (s32)flags >> 5;
+    img1 = ((R2Anim *)&v->sub90)->img;
+    img2 = v->subB0.img;
+    rcCalcTex0Prm(v->i04, v->i08, &tw, &th, &tbw);
+    b5 &= 1;
+    *(u64 *)((u8 *)img1 + 0x18) = 0x13003C0000000000ULL | ((u64)tbw << 48);
+    *(u64 *)((u8 *)img2 + 0x18) = 0x00012E0000000000ULL;
+    tex0 = SCE_GS_SET_TEX0(0x3C00, tbw, 0x13, tw, th, 1, 0, 0x2E00, 0, 0, 0, 1);
+    b2 &= 1;
+    base = func_0019A1F8(img1, *(R2Qw **)((u8 *)pool + 0x114));
+    base = func_0019A1F8(img2, base);
+    q = base + 1;
+    minu = (int)rect[4];
+    minv = (int)rect[5];
+    q->d.lo = 6 | ((u64)1 << 60);
+    q->d.hi = 0xE;
+    q++;
+    q->d.hi = 0x3F;
+    q++;
+    q->d.lo = tex0;
+    q->d.hi = 6;
+    q++;
+    if (minu < 0) {
+        minu = 0;
+    }
+    if (minv < 0) {
+        minv = 0;
+    }
+    q->d.lo = v->d38;
+    q->d.hi = 0x42;
+    q++;
+    q->d.lo = (u64)v->rgba[0] | ((u64)v->rgba[1] << 8) | ((u64)v->rgba[2] << 16) | ((u64)v->b43 << 24);
+    q->d.hi = 1;
+    q++;
+    clamp = (u64)minu << 4;
+    {
+        float h = rect[7];
+        clamp |= func_002EA358(rect[5] + h - 1.0f) << 34;
+    }
+    {
+        float w = rect[6];
+        u64 t = func_002EA358(rect[4] + w - 1.0f);
+        register u64 ten __asm__("$3") = 0xA;
+        __asm__ volatile("" : "+r"(ten));
+        t = (t << 14) | ten;
+        clamp |= t;
+        __asm__ volatile("" : "+r"(clamp));
+        clamp |= (u64)minv << 24;
+        __asm__ volatile("" : "+r"(clamp));
+    }
+    {
+        register u64 r8 __asm__("$2") = 8;
+        u64 b5s;
+        __asm__ volatile("" : "+r"(r8));
+        q->d.lo = clamp;
+        b5s = (u64)b5 << 32;
+        __asm__ volatile("" : "+r"(b5s));
+        q->d.hi = r8;
+        q++;
+        q->d.lo = 0x31000108ULL | b5s;
+        q->d.hi = 0x4E;
+        q++;
+    }
+    if (b2 == 0) {
+        q = func_001933D0(q, rect, (float *)((u8 *)v + 0x14), *(float *)((u8 *)pool + 0xB4), *(float *)((u8 *)pool + 0xB8), *(float *)((u8 *)pool + 0xBC));
+    } else {
+        q = func_00193728(q, rect, (float *)((u8 *)v + 0x14), *(float *)((u8 *)pool + 0xB4), *(float *)((u8 *)pool + 0xB8), *(float *)((u8 *)pool + 0xBC));
+    }
+    q->d.lo = 0x8000 | ((u64)1 << 60);
+    q->d.hi = 0;
+    q++;
+    *(u_long128 *)base = 0;
+    base->w[0] = (((u32)((u8 *)q - (u8 *)base) >> 4) - 1) | 0x70000000;
+    ch = func_002DB6D8(2);
+    func_002F8660(0);
+    func_002DBA28(ch, *(void **)((u8 *)pool + 0x114));
+    func_002DBF78(ch, 0, 0);
+    *(R2Qw **)((u8 *)pool + 0x114) = q;
+}
 
 void func_00193110(W3Voice *v, W3Pool *pool, float *rect)
 {

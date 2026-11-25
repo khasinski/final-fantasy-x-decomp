@@ -173,9 +173,78 @@ void func_001F26B0(R4Quad *q)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F1EB8", func_001F2840);
+void func_001F2840(int x, int y, int w)
+{
+    GIF_CUR()->ul64[0] = 0x1000000000008005UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(0, 0x3F);
+    GIF_AD(GS_SET_SCISSOR(0, 0x1FF, 0, 0x19F), 0x40);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x2005D48621313F00UL, 6);
+    GIF_CUR()->ul64[0] = 0x30AF400000008006UL;
+    GIF_CUR()->ul64[1] = 0x431;
+    GIF_NEXT();
+    w -= 0x87;
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0, 0x42);
+    func_001FB678(x, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x55, 0x83);
+    func_001FB678(x + 0x55, y + 0x41);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x55, 0x42);
+    func_001FB678(x + 0x55, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x5B, 0x83);
+    func_001FB678(x + 0x55 + w, y + 0x41);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0x5B, 0x42);
+    func_001FB678(x + 0x55 + w, y);
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550(0xB2, 0x83);
+    func_001FB678(x + 0x55 + w + 0x57, y + 0x41);
+    func_001EFA30();
+}
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1F1EB8", func_001F2A98);
+void func_001F2A98(int x, int y, int w, int r, int g, int b, int a)
+{
+    GIF_CUR()->ul64[0] = 0x1000000000008005UL;
+    GIF_CUR()->ul64[1] = 0xE;
+    GIF_NEXT();
+    GIF_AD(0, 0x3F);
+    GIF_AD(GS_SET_SCISSOR(0, 0x1FF, 0, 0x19F), 0x40);
+    GIF_AD(0x8000000044UL, 0x42);
+    GIF_AD(0xF, 0x47);
+    GIF_AD(0x2005D48621313F00UL, 6);
+    GIF_CUR()->ul64[0] = 0x30AF400000008006UL;
+    GIF_CUR()->ul64[1] = 0x431;
+    GIF_NEXT();
+    if (w <= 0xB2) {
+        w = 0xB2;
+    }
+    w -= 0xAC;
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0, 0);
+    func_001FB678(x, y);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x55, 0x41);
+    func_001FB678(x + 0x55, y + 0x41);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x55, 0);
+    func_001FB678(x + 0x55, y);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x5B, 0x41);
+    func_001FB678(x + 0x55 + w, y + 0x41);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0x5B, 0);
+    func_001FB678(x + 0x55 + w, y);
+    locNameTmpSetLanguage(r, g, b, a);
+    func_001FB550(0xB2, 0x41);
+    func_001FB678(x + 0x55 + w + 0x57, y + 0x41);
+    func_001EFA30();
+}
 
 void ToMakeBtlEasyEdgeFontChrName(int x0, int y0, int x1, int y1, u32 c0, u32 c1)
 {

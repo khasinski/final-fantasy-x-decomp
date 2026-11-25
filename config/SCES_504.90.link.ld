@@ -1319,6 +1319,10 @@ SECTIONS
         build/src/game/main/sg_106440.c.o(.lit4)
         . = 0x57c70c - 0x57c680;
         build/build/lit4_gap_57c70c.s.o(.data)
+        . = 0x57c878 - 0x57c680;
+        build/src/game/chr/ch_110158.c.o(.lit4)
+        . = 0x57c88c - 0x57c680;
+        build/build/lit4_gap_57c88c.s.o(.data)
         . = 0x57c93c - 0x57c680;
         build/src/game/main/sg_1194E0.c.o(.lit4)
         . = 0x57c984 - 0x57c680;

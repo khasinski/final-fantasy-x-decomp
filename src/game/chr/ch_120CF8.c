@@ -207,7 +207,9 @@ void func_00121418(float v)
 }
 
 typedef struct ChrColView {
-    u8 pad00[0x10];
+    u8 pad00[2];
+    s8 b02;
+    u8 pad03[0xD];
     float f10;
     float f14;
     float f18;
@@ -247,12 +249,24 @@ typedef struct ChrColView {
     float f160;
     u8 pad164[0x14];
     float f178;
-    u8 pad17C[0x24];
+    u8 pad17C[0x10];
+    s8 b18C;
+    s8 b18D;
+    u8 pad18E[0x12];
     union {
         s64 raw;
         struct {
             u32 pad0 : 5;
             u32 b5 : 1;
+            u32 pad6 : 1;
+            u32 b7 : 1;
+            u32 b8 : 1;
+            u32 b9 : 1;
+            u32 pad10 : 4;
+            u32 b14 : 1;
+            u32 b15 : 1;
+            u32 pad16 : 14;
+            u32 b30 : 1;
         } bf;
     } flg;
     u8 pad1A8[0x348];
@@ -270,6 +284,7 @@ typedef struct ChrColView {
     u8 pad6B8[0x176];
     s16 h82E;
     s32 w830;
+    u8 pad834[0xC];
 } ChrColView;
 
 extern s32 D_00580B88;
@@ -636,4 +651,91 @@ void func_00122430(s32 a, s32 b)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_120CF8", func_00122450);
+extern s32 D_00580C48;
+void func_0014B838(Chr *chr, s32 v);
+
+void func_00122450(void)
+{
+    ChrColView *c;
+    s32 iter;
+    s32 moved;
+    s32 i;
+    s32 j;
+
+    for (c = (ChrColView *)D_00300664; c != (ChrColView *)D_00300664 + D_00300668; c++) {
+        if (c->b02 != 0 && (c->b18C == 0 || c->b18D != 0)) {
+            c->flg.raw &= ~0x4000ULL;
+        }
+    }
+    iter = 0;
+    do {
+        D_00580C48 = 0;
+        for (c = (ChrColView *)D_00300664; c != (ChrColView *)D_00300664 + D_00300668; c++) {
+            if (c->b02 != 0 && (c->b18C == 0 || c->b18D != 0)) {
+                if (c->flg.bf.b8 == 0) {
+                    D_00580BA8[D_00580C48++] = (SortEnt22380 *)c;
+                }
+                if (c->flg.bf.b7 != 0) {
+                    c->f10 += c->f50;
+                    c->f14 += c->f54;
+                    c->f18 += c->f58;
+                } else {
+                    func_00121D20((Chr *)c);
+                    c->f14 += c->f54;
+                }
+                {
+                    float *v = &c->f50;
+                    v[0] = v[1] = v[2] = 0.0f;
+                }
+                c->f4F4 = c->f4F0 * ((c->f60 + c->f68) * 0.5f);
+                if (c->f528 != 0.0f) {
+                    c->f52C = c->f14 - c->f528;
+                } else {
+                    c->f52C = c->f6B4;
+                }
+            }
+        }
+        func_00122380(D_00580C48);
+        moved = 0;
+        for (i = 0; i < D_00580C48; i++) {
+            ChrColView *b;
+            c = (ChrColView *)D_00580BA8[i];
+            for (j = i + 1; j < D_00580C48 && (b = (ChrColView *)D_00580BA8[j], !(c->f18 + c->f4F4 * 2.0f < b->f18 - b->f4F4 * 2.0f)); j++) {
+                float rsum;
+                float dist;
+                if (c->f10 + c->f4F4 * 2.0f < b->f10 - b->f4F4 * 2.0f) {
+                    continue;
+                }
+                if (c->f10 - c->f4F4 * 2.0f > b->f10 + b->f4F4 * 2.0f) {
+                    continue;
+                }
+                if (c->flg.bf.b30 != 0 && b->flg.bf.b30 != 0) {
+                    if (c->f52C > b->f6A4 || c->f6A4 < b->f52C) {
+                        continue;
+                    }
+                }
+                rsum = c->f4F4 + b->f4F4;
+                dist = func_00121FE8(&c->f10, &b->f10);
+                if (rsum <= dist) {
+                    continue;
+                }
+                moved += func_00122050((Chr *)c, (Chr *)b, rsum, dist);
+                if (c->flg.bf.b9 != 0 && c->f160 != 0.0f) {
+                    b->flg.raw |= 0x4000;
+                }
+                if (b->flg.bf.b9 != 0 && b->f160 != 0.0f) {
+                    c->flg.raw |= 0x4000;
+                }
+            }
+        }
+        iter++;
+    } while (moved != 0 && iter < 2);
+    for (c = (ChrColView *)D_00300664; c != (ChrColView *)D_00300664 + D_00300668; c++) {
+        if (c->b02 != 0 && (c->b18C == 0 || c->b18D != 0)) {
+            if ((c->flg.raw & 0xC000) == 0x4000) {
+                func_0014B838((Chr *)c, 2);
+            }
+            c->flg.bf.b15 = c->flg.bf.b14;
+        }
+    }
+}

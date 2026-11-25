@@ -1,5 +1,6 @@
 {
   "game/main/sg_106440": {"address": 5752508, "size": 80},
+  "game/chr/ch_110158": {"address": 5752952, "size": 20},
   "game/main/sg_1194E0": {"address": 5753148, "size": 72},
   "game/main/sg_11E2C8": {"address": 5753220, "size": 4},
   "game/main/sg_1201B0": {"address": 5753224, "size": 80}
