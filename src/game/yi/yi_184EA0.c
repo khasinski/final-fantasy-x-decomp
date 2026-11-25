@@ -120,7 +120,192 @@ int func_001854D8(YiMesh1854D8 *m, float *min, float *max)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_184EA0", func_001855C0);
+typedef struct {
+    u64 fbp : 9;
+    u64 pad0 : 7;
+    u64 fbw : 6;
+    u64 pad1 : 2;
+    u64 psm : 6;
+    u64 pad2 : 34;
+} YiFrameBits;
+
+typedef struct {
+    u8 b00;
+    s8 b01;
+    s16 h02;
+    u32 w04;
+    u32 w08;
+    u32 w0C;
+    u32 w10;
+    u32 w14;
+    u64 q18;
+} YiOmdBlk;
+
+typedef struct {
+    u8 c[12];
+    u16 idx[3];
+    u16 pad;
+    s16 uv[3][2];
+} YiOmdTexTri;
+
+typedef struct {
+    u8 c[12];
+    u16 idx[3];
+    u16 pad;
+} YiOmdFlatTri;
+
+static inline int yi_log2_16(int v)
+{
+    int r = -1;
+    int i;
+
+    for (i = 0; i < 16; i++) {
+        if ((v >> i) & 1) {
+            r = i;
+        }
+    }
+    return r;
+}
+
+void func_001855C0(void *mesh_p, float *min, float *max, void *h_arg_p, float scale, u64 frame, u64 scissor)
+{
+    YiMesh1854D8 *mesh = (YiMesh1854D8 *)mesh_p;
+    int h_arg = (int)h_arg_p;
+    float uv[3][4];
+    float size[4];
+    u64 clamp;
+    YiFrameBits *fb;
+    int tw;
+    int th;
+    float u_off;
+    float v_off;
+    float u_scale;
+    float v_scale;
+    float du;
+    float dv;
+    u64 tex0;
+    int i;
+    int j;
+    float *verts;
+    u8 *cur;
+    int blk_cnt;
+
+    fb = (YiFrameBits *)&frame;
+    if (scissor == 0) {
+        tw = 0x100;
+        th = 0x100;
+        clamp = 0x000003FC003FC00AULL;
+        u_off = 0.0f;
+        v_off = 0.0f;
+        u_scale = 1.0f;
+        v_scale = 1.0f;
+    } else {
+        YiScissorBits *sb = (YiScissorBits *)&scissor;
+        int sw = (int)((float)sb->x1 - (float)sb->x0 + 1.0f);
+        int sh = (int)((float)sb->y1 - (float)sb->y0 + 1.0f);
+
+        tw = (u32)fb->fbw << 6;
+        clamp = ((((u64)(u32)sb->x0 << 4) | ((u64)(u32)sb->y0 << 24)) | (((u64)(u32)sb->x1 << 14) | 0xAULL)) | ((u64)(u32)sb->y1 << 34);
+        th = h_arg;
+        u_off = (float)sb->x0 / (float)tw;
+        v_off = (float)sb->y0 / (float)th;
+        u_scale = (float)sw / (float)tw;
+        v_scale = (float)sh / (float)th;
+    }
+
+    du = 0.5f / (float)tw;
+    dv = 0.5f / (float)th;
+
+    if (frame == 0) {
+        int lw = yi_log2_16(tw);
+        int lh = yi_log2_16(th);
+        u64 t1 = ((u64)lw << 26) | (1ULL << 52);
+        u64 t2 = ((u64)lh << 30) | 0x00221A00U;
+        tex0 = (t1 | t2) | 0x6000000400000000ULL;
+    } else {
+        int lh = yi_log2_16(th);
+        int lw = yi_log2_16(tw);
+        u32 tbp = (u32)fb->fbp << 5;
+        u32 tbw = (u32)fb->fbw << 14;
+        u32 psm = (u32)fb->psm << 20;
+        u64 t1 = (u64)(psm | (tbp | tbw)) | (1ULL << 52);
+        u64 t2 = ((u64)lh << 30) | ((u64)lw << 26);
+        tex0 = (t1 | t2) | 0x6000000400000000ULL;
+    }
+
+    for (j = 0; j < 3; j++) {
+        size[j] = max[j] - min[j];
+    }
+
+    verts = (float *)((u8 *)mesh + mesh->v_ofs);
+    {
+        u16 h10 = mesh->h10;
+        YiMesh1854D8 *hdr;
+        cur = (u8 *)mesh;
+        hdr = (YiMesh1854D8 *)cur;
+        cur += 0x20;
+        if ((s16)h10 > 0) {
+            YiOmdBlk *blk;
+            blk = (YiOmdBlk *)cur;
+            blk_cnt = 1;
+            cur += 0x20;
+            while (blk->b01 != -1) {
+                blk->w08 = tex0 & 0xFFFFFFFFULL;
+                blk->w0C = tex0 >> 32;
+                blk->w10 = tex0 & 0xFFFFFFFFULL;
+                blk->w14 = tex0 >> 32;
+                blk->q18 = clamp;
+                for (i = 0; i < blk->h02; i++) {
+                    switch (blk->b01) {
+                    case 0x20:
+                        {
+                            YiOmdFlatTri *t = (YiOmdFlatTri *)cur;
+                            t->c[0] = t->c[1] = t->c[2] = t->c[3] =
+                            t->c[4] = t->c[5] = t->c[6] = t->c[7] =
+                            t->c[8] = t->c[9] = t->c[10] = t->c[11] = 0x80;
+                            cur += 0x14;
+                            blk_cnt++;
+                        }
+                        break;
+                    case 0x22:
+                        {
+                            YiOmdTexTri *t = (YiOmdTexTri *)cur;
+                            cur += 0x20;
+                            t->c[0] = t->c[1] = t->c[2] = t->c[3] =
+                            t->c[4] = t->c[5] = t->c[6] = t->c[7] =
+                            t->c[8] = t->c[9] = t->c[10] = t->c[11] = 0x80;
+                            uv[0][0] = (verts[t->idx[0] * 4 + 0] - min[0]) / size[0];
+                            uv[0][1] = (-verts[t->idx[0] * 4 + 2] - min[2]) / size[2];
+                            uv[1][0] = (verts[t->idx[1] * 4 + 0] - min[0]) / size[0];
+                            uv[1][1] = (-verts[t->idx[1] * 4 + 2] - min[2]) / size[2];
+                            uv[2][0] = (verts[t->idx[2] * 4 + 0] - min[0]) / size[0];
+                            uv[2][1] = (-verts[t->idx[2] * 4 + 2] - min[2]) / size[2];
+                            for (j = 0; j < 3; j++) {
+                                float *p = uv[j];
+                                p[0] = p[0] * u_scale + u_off + du;
+                                p[1] = p[1] * v_scale + v_off + dv;
+                            }
+                            t->uv[0][0] = (s16)(uv[0][0] * 4096.0f);
+                            t->uv[0][1] = (s16)(uv[0][1] * 4096.0f);
+                            t->uv[1][0] = (s16)(uv[1][0] * 4096.0f);
+                            t->uv[1][1] = (s16)(uv[1][1] * 4096.0f);
+                            t->uv[2][0] = (s16)(uv[2][0] * 4096.0f);
+                            t->uv[2][1] = (s16)(uv[2][1] * 4096.0f);
+                            blk_cnt++;
+                        }
+                        break;
+                    }
+                }
+                if (blk_cnt >= (s16)hdr->h10) {
+                    break;
+                }
+                blk = (YiOmdBlk *)cur;
+                blk_cnt++;
+                cur += 0x20;
+            }
+        }
+    }
+}
 
 void op_gs1_transfer(void);
 void func_00184F50(u64, u64, int, int);

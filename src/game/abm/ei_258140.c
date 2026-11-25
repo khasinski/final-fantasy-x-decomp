@@ -150,7 +150,48 @@ typedef struct EiGlobalWork {
     EiWorkEnt ents[100];
 } EiGlobalWork;
 
-INCLUDE_ASM("build/ee_asm/game/abm/ei_258140", func_002584C0);
+int func_002584C0_(u16 id, u16 dist) __asm__("func_002584C0");
+int func_002584C0_(u16 id, u16 dist)
+{
+    u16 next_dist = (u16)(D_006A3914 + dist);
+    WorkEnt2 **links;
+    int i;
+
+    if (next_dist > D_006A3910) {
+        return 1;
+    }
+    if (next_dist >= ((EiGlobalWork *)lpamng)->ents[id].f24) {
+        return 1;
+    }
+    ((EiGlobalWork *)lpamng)->ents[id].f24 = next_dist;
+    links = ((EiGlobalWork *)lpamng)->ents[id].links;
+    i = 5;
+    do {
+        WorkEnt2 *e = *links++;
+        if (e == 0) {
+            break;
+        }
+        if ((e->f0E & 3) == 0) {
+            u16 next_id;
+            if (*((u8 *)e + 0xC) & D_006A3918) {
+                D_006A3914 = 1;
+            } else {
+                D_006A3914 = 4;
+            }
+            e->f0E |= 5;
+            if (e->h0 == id) {
+                next_id = e->h2;
+            } else {
+                next_id = e->h0;
+            }
+            if (func_002584C0_(next_id, next_dist) != 0) {
+                e->f0E &= ~4;
+            }
+            e->f0E &= ~1;
+        }
+    } while (--i != 0);
+    return 0;
+}
 
 void func_00258618(u16 id, u16 n, int bit)
 {

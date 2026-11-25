@@ -954,7 +954,111 @@ int hdd_install_check(int a)
     return ret;
 }
 
-INCLUDE_ASM("build/ee_asm/game/hddcopy", func_00168090);
+typedef struct {
+    u8 b[31];
+} HddPatch31;
+
+typedef struct {
+    char magic[12];
+    s32 unk0C;
+    struct {
+        s32 off;
+        s32 sz;
+    } ent[3];
+    s32 off28;
+    s32 sz2C;
+    u8 pad30[0x1D0];
+} HddMetaHdr;
+
+extern char D_0056C010[];
+extern s32 D_0030E05C;
+extern char D_0030DEB8[];
+extern s32 D_0057CB90;
+extern void *dvd_hdd_copy_system_cnf_buff;
+extern HddPatch31 D_0030DE98;
+extern void *D_0030E0D8;
+int func_002FCD90(int, void *, int);
+int func_002FC8E8(int, int, int);
+
+int func_00168090(int fd)
+{
+    HddMetaHdr hdr;
+    u8 *buf = (u8 *)D_0030DE84;
+    register int len __asm__("$17");
+    int off2;
+    int ret;
+    int i;
+
+    func_002F0C10(hdr.magic, D_0056C010, 9);
+    func_002EF0D0(hdr.magic + 9, 0, 3);
+    hdr.ent[0].off = 0x200;
+    len = D_0030E05C;
+    hdr.ent[0].sz = len;
+    hdr.unk0C = 0;
+    hdr.ent[1].off = ((len + 0x1FF) / 0x200) * 0x200 + 0x200;
+    len = func_002F0840(D_0030DEB8);
+    hdr.ent[1].sz = len;
+    off2 = hdr.ent[1].off + ((len + 0x1FF) / 0x200) * 0x200;
+    len = D_0057CB90;
+    hdr.ent[2].off = off2;
+    hdr.ent[2].sz = len;
+    hdr.off28 = off2;
+    hdr.sz2C = len;
+    func_002EF0D0(hdr.pad30, 0, 0x1D0);
+    ret = func_002FCD90(fd, &hdr, 0x200);
+    if (ret < 0) {
+        return ret;
+    }
+    for (i = 0; i < 3; i++) {
+        int off = hdr.ent[i].off;
+        int sz = hdr.ent[i].sz;
+        {
+            register int tmp __asm__("$3") = (sz + 0x1FF) / 0x200;
+            __asm__("" : "+r"(tmp));
+            len = tmp * 0x200;
+        }
+
+        func_002EF0D0(buf, 0, len);
+        {
+            register int one __asm__("$2") = 1;
+            if (i == one) {
+                goto case1;
+            }
+            if (i < 2) {
+                if (i == 0) {
+                    goto case0;
+                }
+                goto sw_done;
+            }
+            if (i == 2) {
+                goto case2;
+            }
+            goto sw_done;
+        case0:
+            func_002EEF1C(buf, dvd_hdd_copy_system_cnf_buff, sz);
+            goto sw_done;
+        case1:
+            {
+                void *r = (void *)func_002EEF1C(buf, D_0030DEB8, sz);
+                *(HddPatch31 *)(buf + 0xE) = D_0030DE98;
+                __asm__ volatile("" : : "r"(r));
+                goto sw_done;
+            }
+        case2:
+            func_002EEF1C(buf, D_0030E0D8, sz);
+        sw_done:;
+        }
+        ret = func_002FC8E8(fd, off, 0);
+        if (ret < 0) {
+            return ret;
+        }
+        ret = func_002FCD90(fd, buf, len);
+        if (ret < 0) {
+            return ret;
+        }
+    }
+    return 0;
+}
 
 extern s8 D_0030DE51;
 extern s32 D_0030DE58;

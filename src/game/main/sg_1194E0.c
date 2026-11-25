@@ -46,7 +46,12 @@ void func_001195E8(s32 x, s32 y)
 void func_00119628(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_CalcScreenMatrix);
+void MsSetScreen(s32, float, float, float, float, float, float, float, float, float);
+
+void Sg_CalcScreenMatrix(void)
+{
+    MsSetScreen(0, MsCameraGetScrDpt(), 0.8f, 14.0f / 15.0f, D_0058046C, D_00580470, 1.0f, 16770000.0f, 1.0f, 65536.0f);
+}
 
 void Sg_CalcCameraMatrix(void)
 {
@@ -64,8 +69,43 @@ extern float D_00307EE0[];
 extern float D_00307EF0[];
 extern s32 D_00307F00;
 extern s32 D_00307F04;
+extern s32 D_003038F4;
+extern s32 D_003038F8;
+extern u8 D_003038FC;
+extern u8 D_003038FD;
+void Sg_CaptureEnable(void);
+int Sg_GetPlayerPos(float *);
+double func_002E8278(double);
+double func_002E7B28(double);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_CalcViewClipMatrix);
+void Sg_CalcViewClipMatrix(float (*m)[4], s32 mode)
+{
+    float dpt;
+    float near;
+    float far;
+    float w;
+    float hw;
+    float s;
+
+    dpt = MsCameraGetScrDpt();
+    far = 16770000.0f;
+    if (mode != 0) {
+        near = 1.0f;
+        w = 3000.0f;
+    } else {
+        near = 1.0f;
+        w = 500.0f;
+    }
+    func_002DD128(m);
+    hw = (near * w) / dpt;
+    s = (near * 2.0f) / (hw * 2.0f);
+    m[2][3] = 1.0f;
+    m[3][3] = 0.0f;
+    m[2][2] = (far + near) / (far - near);
+    m[3][2] = (far * near * -2.0f) / (far - near);
+    m[0][0] = s;
+    m[1][1] = s;
+}
 
 void Sg_InitCamera(void)
 {
@@ -134,7 +174,117 @@ void func_00119840(void)
     D_00307EE0[2] += v1[2];
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_ControlCamera);
-INCLUDE_RODATA("build/ee_asm/game/main/sg_1194E0/rodata", jtbl_00569A30);
+void Sg_ControlCamera(void)
+{
+    s32 ry;
+    s32 rx;
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1194E0", Sg_CameraSetPlayer);
+    ry = D_003038FD;
+    if (ry > 80 && ry < 176) {
+        ry = 128;
+    }
+    D_00307EF0[0] += (float)D_00307F04 * (3.141592f / 180.0f) / 60.0f;
+    D_00307F04 = 0;
+    D_00307EF0[0] -= (float)(ry - 128) * (3.141592f / 180.0f) / 12.0f;
+    rx = D_003038FC;
+    if (rx > 80 && rx < 176) {
+        rx = 128;
+    }
+    D_00307EF0[1] += (float)D_00307F00 * (3.141592f / 180.0f) / 60.0f;
+    D_00307EF0[1] -= (float)(rx - 128) * (3.141592f / 180.0f) / 12.0f;
+    if (D_00307EF0[0] > 3.141592f) {
+        D_00307EF0[0] -= 3.141592f * 2.0f;
+    }
+    if (D_00307EF0[0] < -3.141592f) {
+        D_00307EF0[0] += 3.141592f * 2.0f;
+    }
+    if (D_00307EF0[1] > 3.141592f) {
+        D_00307EF0[1] -= 3.141592f * 2.0f;
+    }
+    if (D_00307EF0[1] < -3.141592f) {
+        D_00307EF0[1] += 3.141592f * 2.0f;
+    }
+    if (ffx_debugmode && (D_003038F4 & 0x100) && Sg_CaptureGetSelect()) {
+        Sg_CaptureEnable();
+    }
+    if (Sg_GetLRButtonMode() != 0) {
+        if (D_003038F4 & 2) {
+            D_00307EE0[1] += 0.2f;
+        }
+        if (D_003038F4 & 8) {
+            D_00307EE0[1] -= 0.2f;
+        }
+        if (D_003038F4 & 1) {
+            D_00580468 += 0.4f;
+        }
+        if (D_003038F4 & 4) {
+            D_00580468 -= 0.4f;
+        }
+    }
+    if (D_003038F8 & 0x400) {
+        D_00580460++;
+        switch ((D_00580460 & 0xFF) % 6) {
+        case 0:
+            D_00580468 = 50.0f;
+            break;
+        case 1:
+            D_00580468 = 100.0f;
+            break;
+        case 2:
+            D_00580468 = 180.0f;
+            break;
+        case 3:
+            D_00580468 = 250.0f;
+            break;
+        case 4:
+            D_00580468 = 1000.0f;
+            break;
+        case 5:
+            D_00580468 = 30.0f;
+            break;
+        }
+    }
+}
+
+void Sg_CameraSetPlayer(void)
+{
+    float v[4];
+    float unused[4];
+    float c;
+    s32 p;
+
+    D_00580464 -= (D_00580464 - D_00580468) * 0.125f;
+    if (Sg_GetPlayerPos(D_00307ED0) != 0) {
+        D_00307ED0[0] = 0.0f;
+        D_00307ED0[1] = 0.0f;
+        D_00307ED0[2] = 0.0f;
+    }
+    p = Sg_GetPlayer();
+    if (p != 0) {
+        func_00110560((Chr *)p);
+    }
+    D_00307ED0[1] -= 10.0f;
+    D_00307ED0[0] += D_00307EE0[0];
+    D_00307ED0[1] += D_00307EE0[1];
+    D_00307ED0[2] += D_00307EE0[2];
+    if (D_00307EF0[0] > 3.141592f / 2.0f) {
+        D_00307EF0[0] = 3.141592f / 2.0f;
+    }
+    if (D_00307EF0[0] < -3.141592f / 2.0f) {
+        D_00307EF0[0] = -3.141592f / 2.0f;
+    }
+    if (D_00580464 < 1.0f) {
+        D_00580464 = 1.0f;
+    }
+    v[1] = (float)func_002E8278((double)D_00307EF0[0]);
+    c = (float)func_002E7B28((double)D_00307EF0[0]);
+    v[0] = (float)(func_002E8278((double)D_00307EF0[1]) * (double)c);
+    v[2] = (float)(func_002E7B28((double)D_00307EF0[1]) * (double)c);
+    v[0] *= -D_00580464;
+    v[1] *= -D_00580464;
+    v[2] *= -D_00580464;
+    D_00307EC0[0] = D_00307ED0[0] + v[0];
+    D_00307EC0[1] = D_00307ED0[1] + v[1];
+    D_00307EC0[2] = D_00307ED0[2] + v[2];
+    Sg_CalcCameraMatrix();
+}

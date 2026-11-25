@@ -148,7 +148,20 @@ void func_00122CC8(char *, int);
 void Sg_MapInit(void);
 void Sg_GsXYZF2L(int arg0, int arg1, int arg2);
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_11E2C8", func_0011E618);
+extern float func_002E8648(float);
+extern float func_002E89C0(float);
+
+void func_0011E618(void)
+{
+    int i;
+    float a;
+
+    for (i = 0; i < 13; i++) {
+        a = (float)i * (3.141592f * 2.0f) / 12.0f;
+        D_00580970[i] = func_002E8648(a);
+        D_00580938[i] = func_002E89C0(a);
+    }
+}
 
 void func_0011E6C0(float *v, float r)
 {

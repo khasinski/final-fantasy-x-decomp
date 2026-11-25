@@ -109,7 +109,41 @@ void func_002455C0(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00245658);
+void func_00247640(void *a, int b, int c, int d);
+void func_00247A20(int a, int b, int c, int d);
+void func_00247490(int a, int b, int c, int d);
+void func_00247408(int a, int b, int c);
+int func_00242040(void);
+
+void func_00245658(int x, int y, int h, int top, int page, int total)
+{
+    register int rx __asm__("$20") = x;
+    register int ry __asm__("$18") = y;
+    void *spr = func_00247F48(0x2C, D_003264A0);
+    int bar_h = h - 0x18;
+    int alpha = func_00242040() << 3;
+
+    alpha &= 0xFF;
+    alpha = (alpha > 0x7F) ? 0 : 0x80;
+    if (page < total) {
+        if (top != 0) {
+            func_00247A20(rx, ry - 7, 0x2E, alpha);
+        }
+        if (top + page < total) {
+            func_00247490(rx, ry + h - 9, 0x2E, alpha);
+        }
+        func_00247408(rx + 3, ry + 9, 0x2C);
+        __asm__("" : "+r"(ry));
+        func_00247408(rx + 3, h + ry - 0xD, 0x2D);
+        func_00247640(spr, rx + 3, ry + 0x11, h - 0x20);
+        {
+            register int y0 __asm__("$2") = ry + 0xD;
+            int ty = (bar_h * top) / total;
+            int th = (bar_h * page) / total - 1;
+            TkMenuDrawRect(rx + 5, y0 + ty, 5, th, 0x80DFA6AD, 0x80DFA6AD);
+        }
+    }
+}
 
 void func_002457F8(int id, int x, int y, int w, int h)
 {
@@ -1460,11 +1494,13 @@ GsAdPacket *func_00248ED8(GsAdPacket *q, int n1, int n, u8 *src, int x, int y)
         int v1 = (p[1] + *(u16 *)(p + 6) - 1) << 4;
         int u1 = (src[4] << 4) + 8;
         int w1 = *(u16 *)(p + 4) << 4;
+        u64 v1s;
         v1 += 8;
         y0 <<= 4;
         y1 <<= 4;
         x0 <<= 4;
         x1 <<= 4;
+        v1s = (u64)v1 << 16;
 
         q[0].data = 0x6400000000008001UL;
         q[0].reg = 0xF53530UL;

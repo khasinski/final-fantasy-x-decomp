@@ -229,4 +229,48 @@ INCLUDE_ASM("build/ee_asm/game/movie/audio_15A560", func_0015AF88);
 
 INCLUDE_ASM("build/ee_asm/game/movie/audio_15A560", func_0015B008);
 
-INCLUDE_ASM("build/ee_asm/game/movie/audio_15A560", null_ac3_data_ten);
+typedef struct {
+    u8 b[0x700];
+} Ac3NullBlk;
+
+extern Ac3NullBlk D_0030D5E0;
+void func_0015C808(void);
+
+void null_ac3_data_ten(int frames, S58FE54 *s0)
+{
+    AudioDmaCtx *s = (AudioDmaCtx *)s0;
+    s16 *pcm = (s16 *)((u8 *)s + 0x2DDC0);
+    Ac3NullBlk *ac3;
+    int i;
+
+    i = 0;
+    if (s->w50758 / 2 > 0) {
+        do {
+            ((volatile s16 *)pcm)[i] = -(i & 1);
+            i++;
+        } while (i < ((volatile AudioDmaCtx *)s)->w50758 / 2);
+    }
+    ac3 = (Ac3NullBlk *)((u8 *)s + 0x4BDC0);
+    for (i = 0; i < 5; i++) {
+        __builtin_memcpy(&ac3[i], &D_0030D5E0, 0x700);
+    }
+    s->w50720 = 0;
+    ((S58FE54 *)s)->w5072C = -1;
+    frames /= 4;
+    frames = ((frames + 5) / 6) * 6;
+    i = 0;
+    while (i < frames) {
+        if (SqsStraightStreamingDataEnableStatus() != 0) {
+            func_0015A790((int)pcm, (int)ac3, 0, s->w50720, s0);
+            i++;
+            SndDataSendSync(1);
+            {
+                register int t __asm__("$3") = s->w50720;
+                s->w50720 = t + 1;
+            }
+        }
+        func_0015A828((int)s);
+        func_0015A858(s0);
+        func_0015C808();
+    }
+}

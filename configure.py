@@ -32,6 +32,37 @@ for _unit, _v in C_RODATA.items():
     C_PIECES[_plist[0]] = (_unit, _v)
     C_SKIP_PIECES.update(_plist[1:])
 
+# Explicit ownership of compiler-emitted .lit4 blocks (-G4/-G8), verified by ccwrap.
+C_LIT4 = json.load(open("config/c_lit4.json")) if os.path.exists("config/c_lit4.json") else {}
+LIT4_START, LIT4_END = 0x57C680, 0x57CB0C
+LIT4_GAPS = []
+
+
+def lit4_objs():
+    if not C_LIT4:
+        return "        build/asm/data/lit4.data.s.o(.data)"
+    items = sorted(((v["address"], v["size"], unit) for unit, v in C_LIT4.items()))
+    out, cur = [], LIT4_START
+    for addr, size, unit in items:
+        assert addr >= cur, f"configure.py: overlapping c_lit4 at {addr:#x} for {unit}"
+        if addr > cur:
+            gap_s = f"build/lit4_gap_{cur:06x}.s"
+            os.makedirs("build", exist_ok=True)
+            with open(gap_s, "w") as gf:
+                gf.write(f'.section .data, "wa"\n.incbin "baserom/SCES_504.90", {cur - 0xFF000:#x}, {addr - cur:#x}\n')
+            LIT4_GAPS.append(gap_s)
+            out.append(f"        . = {cur:#x} - 0x57c680;\n        build/{gap_s}.o(.data)")
+        out.append(f"        . = {addr:#x} - 0x57c680;\n        build/src/{unit}.c.o(.lit4)")
+        cur = addr + size
+    if cur < LIT4_END:
+        gap_s = f"build/lit4_gap_{cur:06x}.s"
+        os.makedirs("build", exist_ok=True)
+        with open(gap_s, "w") as gf:
+            gf.write(f'.section .data, "wa"\n.incbin "baserom/SCES_504.90", {cur - 0xFF000:#x}, {LIT4_END - cur:#x}\n')
+        LIT4_GAPS.append(gap_s)
+        out.append(f"        . = {cur:#x} - 0x57c680;\n        build/{gap_s}.o(.data)")
+    return "\n".join(out)
+
 
 def rodata_objs():
     """.rodata in original order: blob pieces, and each jump table either from its INCLUDE_RODATA
@@ -62,7 +93,8 @@ def rodata_objs():
 
 open("config/SCES_504.90.link.ld", "w").write(
     open("config/SCES_504.90.link.ld.in").read().replace("@TEXT_OBJS@", text_objs)
-    .replace("@RODATA_OBJS@", rodata_objs()) + "\n" + "\n".join(
+    .replace("@RODATA_OBJS@", rodata_objs())
+    .replace("@LIT4_OBJS@", lit4_objs()) + "\n" + "\n".join(
         f"{symbol} = {literal['address'] + offset:#x};"
         for literal in C_RODATA.values() for symbol, offset in literal["symbols"].items()))
 
@@ -91,9 +123,13 @@ objs = []
 for s in sorted(glob.glob("asm/**/*.s", recursive=True)):
     if s in {f"asm/data/rodata/{piece}.s" for piece in (set(C_PIECES) | C_SKIP_PIECES)}:
         continue  # this exact block now comes from the compiler
+    if C_LIT4 and s == "asm/data/lit4.data.s":
+        continue  # replaced by c_lit4.json slices + gap blobs
     if s.startswith("asm/nonmatchings/"):
         continue  # pulled into src/*.c through INCLUDE_ASM
     o = f"build/{s}.o"; n.build(o, "as", s); objs.append(o)
+for gap_s in LIT4_GAPS:
+    o = f"build/{gap_s}.o"; n.build(o, "as", gap_s, implicit=["baserom/SCES_504.90"]); objs.append(o)
 for c in sorted(glob.glob("src/**/*.c", recursive=True)):
     o = f"build/{c}.o"
     stem = os.path.relpath(c, "src")[:-2]          # unit name, the key of config/cflags.txt

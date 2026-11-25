@@ -984,7 +984,47 @@ int MsGetSaveCommand(int id, int cmd) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1BC440", MsSaveAddInfoData);
+typedef struct {
+    u8 pad0[0x50];
+    s32 f50;
+    s32 f54;
+    s32 f58;
+    s32 f5C;
+    u8 pad60[0x34];
+} PartySlotInfo;
+
+typedef struct {
+    u8 pad0[0x55CC];
+    PartySlotInfo slot[18];
+} SaveDataInfoView;
+
+extern SaveDataInfoView _sd_info_view __asm__("D_003194D0");
+
+int MsSaveAddInfoData(int id, int kind) {
+    register int ret __asm__("$4") = 0;
+
+    if (id < 0x12 && (u8)D_00319405 != 2) {
+        switch (kind) {
+        case 0:
+            ret = MsCheckRange(_sd_info_view.slot[id].f50 + 1, 0, 999999999);
+            _sd_info_view.slot[id].f50 = ret;
+            break;
+        case 1:
+            ret = MsCheckRange(_sd_info_view.slot[id].f54 + 1, 0, 999999999);
+            _sd_info_view.slot[id].f54 = ret;
+            break;
+        case 2:
+            ret = MsCheckRange(_sd_info_view.slot[id].f58 + 1, 0, 999999999);
+            _sd_info_view.slot[id].f58 = ret;
+            break;
+        case 3:
+            ret = MsCheckRange(_sd_info_view.slot[id].f5C + 1, 0, 999999999);
+            _sd_info_view.slot[id].f5C = ret;
+            break;
+        }
+    }
+    return ret;
+}
 
 typedef struct {
     u16 a[6];

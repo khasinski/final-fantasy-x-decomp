@@ -41,7 +41,8 @@ SECTIONS
     . = 0x578e00;
     .vutext : { build/assets/vutext.bin.o(.data) }
     . = 0x57c680;
-    .lit4 : SUBALIGN(4) { build/asm/data/lit4.data.s.o(.data) }
+    _gp = 0x00584670;
+    .lit4 : SUBALIGN(4) { @LIT4_OBJS@ }
     . = 0x57cb80;
     .bss (NOLOAD) : { build/asm/data/47DB0C.bss.s.o(.bss) }
     /DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.gnu.attributes) *(.comment) *(.pdr) *(.mdebug*) }
@@ -53,3 +54,4 @@ D_005699AC = 0x005699AC;
 /* EE compiler helpers used by unsigned double-to-integer conversion. */
 dpmul = func_002EBC70;
 __floatdidf = func_002EA450;
+__floatdisf = func_002EA4E8;

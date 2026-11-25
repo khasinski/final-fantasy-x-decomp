@@ -7,7 +7,28 @@
 #include "ffx/v0.h"
 #undef func_00120958
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_1201B0", func_001201B0);
+extern float func_002E8648(float);
+extern float func_002E89C0(float);
+
+static inline float sg_1201B0_deg2rad(float deg)
+{
+    float rad = deg * 3.141592f / 180.0f;
+    while (rad > 3.141592f) {
+        rad -= 3.141592f * 2.0f;
+    }
+    while (rad < -3.141592f) {
+        rad += 3.141592f * 2.0f;
+    }
+    return rad;
+}
+
+void func_001201B0(float *v, float a, float b)
+{
+    v[1] = func_002E89C0(sg_1201B0_deg2rad(b));
+    v[0] = func_002E89C0(sg_1201B0_deg2rad(a)) * func_002E8648(sg_1201B0_deg2rad(b));
+    v[2] = func_002E8648(sg_1201B0_deg2rad(a)) * func_002E8648(sg_1201B0_deg2rad(b));
+    v[3] = 1.0f;
+}
 
 void func_002DCE80(void *a, void *b, void *c);
 

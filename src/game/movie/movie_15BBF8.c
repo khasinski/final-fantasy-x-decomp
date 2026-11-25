@@ -66,7 +66,100 @@ void func_0015C068(int a)
     *(volatile int *)0x1000A000 = 0x105;
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_15BBF8", func_0015C098);
+void func_0015C098(u32 tag, u32 data, int stride, int w, int h, int tbp, int psm, int flag)
+{
+    int mbh = h >> 4;
+    int mbw = w >> 4;
+    int tbw;
+    int qwc;
+    u8 *p;
+    int y;
+    int x;
+    int eop;
+
+    func_002F8660(0);
+    qwc = 0x20;
+    tbw = (w + 0x3F) / 64;
+    p = (u8 *)(tag | 0x20000000);
+    if (psm == 0) {
+        qwc = 0x40;
+    }
+    func_0015BF00((u64 *)p, 0, 0, 0, 1, 0, 3);
+    p += 0x10;
+    func_0015BF50(p, 0xE, 1, 0, 0, 0, 0, 2);
+    p += 0x10;
+    {
+        register int *a4 __asm__("$4") = (int *)p;
+        register int a5 __asm__("$5") = tbp;
+        __asm__("" : "+r"(a4), "+r"(a5));
+        func_0015BFD0(a4, a5, tbw, psm, flag);
+    }
+    p += 0x10;
+    func_0015C040((int *)p, 16, 16);
+    p += 0x10;
+    {
+        u8 *p2 = p + 0x10;
+        for (y = 0; y < mbh; y++) {
+            for (x = 0; x < mbw; p2 += 0x60) {
+                eop = 0;
+                if (y == mbh - 1) {
+                    eop = (x == mbw - 1);
+                }
+                func_0015BF00((u64 *)p, 0, 0, 0, 1, 0, 4);
+                p = p2 + 0x50;
+                func_0015BF50(p2, 0xE, 1, 0, 0, 0, 0, 2);
+                {
+                    int xx = x << 4;
+                    register int *a4 __asm__("$4") = (int *)(p2 + 0x10);
+                    register int z5 __asm__("$5");
+                    __asm__("" : "+r"(xx));
+                    __asm__ volatile("" : "+r"(a4));
+                    z5 = 0;
+                    __asm__ volatile("" : "+r"(z5));
+                    func_0015C020(a4, z5, xx, y << 4);
+                }
+                __asm__ volatile("" : : : "memory");
+                x++;
+                __asm__ volatile("" : "+r"(x));
+                func_0015C058((int *)(p2 + 0x20), 0);
+                {
+                    int qw = qwc;
+                    register int e __asm__("$10");
+                    __asm__ volatile("" : "+r"(qw));
+                    e = eop;
+                    __asm__("" : "+r"(e));
+                    func_0015BF50(p2 + 0x30, 0, 0, 2, 0, 0, e, qw);
+                }
+                {
+                    register int st __asm__("$3") = stride;
+                    u32 d = data;
+                    register int a10 __asm__("$10");
+                    register u64 *a4 __asm__("$4");
+                    register int a5 __asm__("$5");
+                    register int a7 __asm__("$7");
+                    register int a8 __asm__("$8");
+                    register int a9 __asm__("$9");
+                    __asm__ volatile("" : "+r"(st));
+                    __asm__ volatile("" : "+r"(d));
+                    a10 = qwc;
+                    __asm__ volatile("" : "+r"(a10));
+                    a4 = (u64 *)(p2 + 0x40);
+                    a5 = 0;
+                    a7 = 0;
+                    a8 = 3;
+                    a9 = 0;
+                    __asm__ volatile("" : "+r"(a4), "+r"(a5), "+r"(a7));
+                    __asm__ volatile("" : "+r"(a8), "+r"(a9), "+r"(st));
+                    data += st;
+                    func_0015BF00(a4, a5, d, a7, a8, a9, a10);
+                }
+                __asm__ volatile("" : "+r"(p2));
+            }
+        }
+    }
+    func_0015BF00((u64 *)p, 0, 0, 0, 7, 0, 0);
+    func_002F8660(0);
+}
 
 void func_0015C328(u32 tag_addr, u32 data_addr, int size)
 {

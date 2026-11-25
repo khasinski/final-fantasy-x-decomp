@@ -765,7 +765,104 @@ typedef struct {
 
 INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159148);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159368);
+extern char D_0056B7C0[];
+extern char D_0056B7E0[];
+extern char D_0056B7F0[];
+void func_00159148(char *, char *, int);
+void func_0015FC20(void);
+
+int func_00159368(int unused, int *arg1)
+{
+    char buf0[0x40];
+    char buf1[0x40];
+    register MovCdObj *cd __asm__("$18");
+    s32 s0;
+    u8 *str;
+    register int flags __asm__("$19");
+    register int *a1 __asm__("$17") = arg1;
+    register int *p __asm__("$19") = a1;
+    int i;
+    int j;
+
+    __asm__("" : "+r"(p));
+    cd = (MovCdObj *)GetCD();
+    __asm__("" : "+r"(cd));
+    if (D_0058FE50 != 0) {
+        func_001577A8(D_0056B778, D_0056B5C0, 0x5A0);
+    }
+    if (cd->w18 != 0) {
+        func_001577A8(D_0056B7C0, D_0056B5C0, 0x5A1);
+    }
+    if (_mov_D_0030D3E8 != 0) {
+        func_001577A8(D_0056B7B0, D_0056B5C0, 0x5A2);
+    }
+    D_0030D405 = 0;
+    D_0030D407 = 0;
+    D_0030D404 = 1;
+    D_0030D40C = 0;
+    D_0030D406 = 0;
+    s0 = sa_task_buff_size_get(1);
+    {
+        void *t = (void *)sa_task_init2(1, (void *)0x1B00000, 0);
+        s0 += 0x1B00000;
+        *(void *volatile *)&D_0030D418 = t;
+    }
+    *(volatile s32 *)&D_0058FE50 = s0;
+    *(void *volatile *)&D_0058FE54 = (void *)s0;
+    str = (u8 *)a1[1];
+    flags = *p;
+    if (str == 0) {
+        func_001577A8(D_0056B7E0, D_0056B5C0, 0x5BC);
+    }
+    {
+        register void (*f10)(int) __asm__("$2");
+        if (str[0] == 0) {
+            func_001577A8(D_0056B7F0, D_0056B5C0, 0x5BD);
+            f10 = cd->f10;
+        } else {
+            f10 = cd->f10;
+        }
+        __asm__("" : "+r"(f10));
+        D_0058FE68 = 0;
+        D_0058FE6C = 0;
+        f10(0x15);
+    }
+    ((MovWork58FE54 *)D_0058FE54)->b50764 = 0x15;
+    i = 0;
+    while (1) {
+        buf0[i] = str[i];
+        buf1[i] = str[i];
+        if (str[i] == 0) {
+            break;
+        }
+        i++;
+    }
+    j = i;
+    if (j != 0) {
+        j--;
+        if (j > 0 && (u8)buf1[j] != '/' && (u8)buf1[j] != '.') {
+            register u8 *bp __asm__("$3") = (u8 *)buf1;
+            __asm__("" : "+r"(bp));
+            do {
+                j--;
+            } while (j > 0 && bp[j] != '/' && bp[j] != '.');
+        }
+        if ((u8)buf1[j] != '.') {
+            buf1[i] = '.';
+            buf0[i] = '.';
+            j = i;
+        }
+    }
+    buf1[j + 1] = 'd';
+    buf1[j + 2] = 'a';
+    buf1[j + 3] = 't';
+    buf1[j + 4] = '\0';
+    buf0[j + 1] = 's';
+    buf0[j + 2] = 'z';
+    buf0[j + 3] = '\0';
+    func_00159148(buf0, buf1, flags);
+    return 0;
+}
 
 void func_00159640(int v) {
     D_0030D400 = v;
@@ -997,7 +1094,89 @@ void func_00159E80(int c, int *a, int *b)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", func_00159EC8);
+int func_00159EC8(Actor *a0, int unused, ScriptCtx *a2)
+{
+    int v0;
+    int v4;
+    int flags;
+    int id;
+    MovCdObj *cd;
+    int size;
+    void **task;
+    MovWork58FE60 *p;
+    register int one __asm__("$20");
+
+    flags = AtelPopStackInteger(a0, a2);
+    id = AtelPopStackInteger(a0, a2);
+    if (_mov_D_0030D3E8 != 0) {
+        func_001577A8(D_0056B7B0, D_0056B5C0, 0x773);
+    }
+    one = 1;
+    _mov_D_0030D3E8 = one;
+    cd = (MovCdObj *)GetCD();
+    func_00159E80(id, &v0, &v4);
+    cd->f10(v0);
+    size = cd->f14(v4);
+    D_0030D418 = (void *)sa_task_init(1);
+    D_0058FE58 = (s32)user_malloc(0xF71A3, 10, D_0056B5C0, 0x781);
+    D_0058FE5C = (s32)user_malloc(size + 0x3F, 10, D_0056B5C0, 0x782);
+    {
+        s32 buf = D_0058FE5C;
+        register MovWork58FE60 *p3 __asm__("$3") = (MovWork58FE60 *)((D_0058FE58 + 0x3F) & 0xFFFFFFC0U);
+        D_0058FE60 = p3;
+        p3->bF715D = 0;
+        p3->wF7124 = size;
+        p3->pF7160 = (void *)((buf + 0x3F) & 0xFFFFFFC0U);
+    }
+    {
+        register MovWork58FE60 *p3b __asm__("$3") = (MovWork58FE60 *)D_0058FE60;
+        register int keep5 __asm__("$5");
+        __asm__("" : "=r"(keep5) : "r"(p3b));
+        p3b->bF715C = one;
+        {
+            typedef struct { u8 pad[0x7138]; s32 w7138; } MovOff7138;
+            register MovOff7138 *p2 __asm__("$2") = (MovOff7138 *)((u8 *)D_0058FE60 + 0xF0000);
+            register int vv __asm__("$7") = v0;
+            __asm__("" : "+r"(p2) : "r"(keep5));
+            p2->w7138 = vv;
+        }
+    }
+    {
+        register void **t3 __asm__("$3") = (void **)D_0030D418;
+        register void **(*fn)(void *, int, int) __asm__("$2") = (void **(*)(void *, int, int))t3[2];
+        task = fn(func_0015FC20, 0, 0);
+    }
+    p = (MovWork58FE60 *)D_0058FE60;
+    *task = p;
+    if (flags & 0x400) {
+        D_0058FE64 = p->wF7128 = 0;
+        D_0058FE64 = p->wF712C = 0xD00;
+    } else {
+        D_0058FE64 = p->wF7128 = 0x2F00;
+        D_0058FE64 = p->wF712C = 0x2F00;
+    }
+    {
+        register MovWork58FE60 *p3 __asm__("$3") = (MovWork58FE60 *)D_0058FE60;
+        int tmp4;
+        *(volatile s32 *)&p3->wF7144 = 0;
+        tmp4 = v4;
+        *(volatile s32 *)&p3->wF7140 = flags & 0x480;
+        *(volatile s32 *)&p3->wF7120 = tmp4;
+        *(volatile s32 *)&p3->wF713C = 0;
+        p3->wF7134 = 0;
+        if (flags & 0x800) {
+            p3->wF7130 = 1;
+            if (flags & 0x1000) {
+                p3->wF7134 = 1;
+            }
+        } else {
+            p3->wF7130 = 0;
+        }
+    }
+    D_0030D408 = 1;
+    D_0030D410 = 2;
+    return 0;
+}
 
 int func_0015A120(void)
 {

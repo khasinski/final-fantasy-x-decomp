@@ -175,4 +175,40 @@ void func_00106810(SgLight106810 *p)
     );
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_106440", func_00106A08);
+extern float func_002E8648(float);
+extern float func_002E89C0(float);
+void func_20271A0(s32, s32, s32, s32, s32, s32);
+void sg_Sg_LightSetDir(int, void *) __asm__("Sg_LightSetDir");
+
+static inline float sg_106440_deg2rad(float deg)
+{
+    float rad = deg * 3.141592f / 180.0f;
+    while (rad > 3.141592f) {
+        rad -= 3.141592f * 2.0f;
+    }
+    while (rad < -3.141592f) {
+        rad += 3.141592f * 2.0f;
+    }
+    return rad;
+}
+
+void func_00106A08(s32 idx, s32 r, s32 g, s32 b, s32 a, s32 e)
+{
+    float v[4];
+    float fa;
+    float fe;
+
+    v[0] = (float)r / 255.0f;
+    v[1] = (float)g / 255.0f;
+    v[2] = (float)b / 255.0f;
+    Sg_LightSetColor(idx, v);
+    fe = (float)e;
+    fa = (float)a;
+    v[1] = func_002E89C0(sg_106440_deg2rad(fe));
+    v[0] = func_002E89C0(sg_106440_deg2rad(fa)) * func_002E8648(sg_106440_deg2rad(fe));
+    v[2] = func_002E8648(sg_106440_deg2rad(fa)) * func_002E8648(sg_106440_deg2rad(fe));
+    sg_Sg_LightSetDir(idx, v);
+    if (ffx_debugmode != 0) {
+        func_20271A0(idx, r, g, b, a, e);
+    }
+}

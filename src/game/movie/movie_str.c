@@ -289,8 +289,8 @@ typedef struct MovieStrView { /* DEBT(NAME): overlay of D_0030DDF0 for func_0015
 } MovieStrView;
 
 extern MovieStrView *_mov2_D_0030DDF0 __asm__("D_0030DDF0"); /* DEBT(TYPE): local view of D_0030DDF0 */
-void func_0015DE90(void);
-void func_0015E1D0(void);
+int func_0015DE90(void);
+int func_0015E1D0(void);
 
 void func_0015D730(void)
 {
@@ -501,9 +501,356 @@ void func_0015F2C8(int a, int b, int c);
 void func_0015F028(int a, int b, int c, int d);
 void func_00170DC4(void *p);
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015DE90);
+static inline int mov_ipu_not_eof(void)
+{
+    u32 b15;
+    if (((*(volatile u32 *)0x10002010 >> 14) & 1) != 0) {
+        return 0;
+    }
+    b15 = (*(volatile u32 *)0x10002010 >> 15) & 1;
+    __asm__("" : "+r"(b15));
+    return b15 ^ 1;
+}
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_str", func_0015E1D0);
+int func_0015DE90(void)
+{
+    register u8 *hdr __asm__("$4") = *(u8 **)(D_0030DDF0 + 0x5059C);
+    volatile int sz;
+    register u32 bE __asm__("$7");
+    register u32 ctrl_flags __asm__("$19");
+    register u32 p9 __asm__("$21");
+    volatile u32 ipu_ctrl;
+    int idx;
+    int mb;
+
+    sz = *(s32 *)hdr;
+    {
+        register u32 bF2 __asm__("$2") = hdr[0xF];
+        register u32 f0 __asm__("$3");
+        bE = hdr[0xE];
+        f0 = bF2 & 1;
+        __asm__("" : "+r"(f0), "+r"(bF2));
+        bF2 >>= 1;
+        f0 <<= 22;
+        bF2 <<= 16;
+        __asm__("" : "+r"(f0), "+r"(bF2), "+r"(bE));
+        ctrl_flags = bE << 20;
+        __asm__("" : "+r"(f0) : "r"(ctrl_flags));
+        f0 += bF2;
+        ctrl_flags += f0;
+    }
+    {
+        register volatile u32 *p5 __asm__("$5") = (volatile u32 *)0x10002010;
+        register u32 b9 __asm__("$2");
+        register u32 v6 __asm__("$6");
+        register u32 r2 __asm__("$2");
+        register u32 v3 __asm__("$3");
+        __asm__("" : "+r"(hdr) : "r"(ctrl_flags));
+        b9 = hdr[9];
+        __asm__("" : "+r"(ctrl_flags) : "r"(b9));
+        v6 = ctrl_flags + 0x01200000;
+        *p5 = v6;
+        __asm__("" : "+r"(b9) : : "memory");
+        p9 = b9 << 16;
+        r2 = *p5 | 0x40000000;
+        v3 = r2 + ctrl_flags;
+        *p5 = v3;
+    }
+    while (*(volatile s32 *)0x10002010 < 0)
+        ;
+    idx = -1;
+    mb = 0;
+    func_0015F198((int)(*(u8 **)(D_0030DDF0 + 0x5059C) += 0x10), sz);
+    {
+        register u32 ic __asm__("$2") = ctrl_flags + 0x01200000;
+        ipu_ctrl = ic;
+    }
+    while (1) {
+        register int next_mb __asm__("$16");
+        idx++;
+        *(volatile u32 *)0x10002000 = 0x30000000;
+        next_mb = mb + 1;
+        __asm__ volatile("" : "+r"(next_mb));
+        while (*(volatile s32 *)0x10002010 < 0)
+            ;
+        func_0015F1F8((int)(D_0030DDF4 + 0x70), 0x300);
+        {
+            register u32 ic5 __asm__("$5") = ipu_ctrl;
+            *(volatile u32 *)0x10002010 = ic5;
+        }
+        *(volatile u32 *)0x10002000 = p9 | (mb == 0 ? 0x2C000000 : 0x28000000);
+        mb = next_mb;
+        while (*(volatile s32 *)0x10002010 < 0)
+            ;
+        while ((*(volatile u32 *)0x1000B000 >> 8) & 1)
+            ;
+        func_0015F2C8(*(s32 *)(D_0030DDF0 + 0x503C8) + idx * 0x300, (int)(D_0030DDF4 + 0x70), 0x300);
+        while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+            ;
+        func_0015F028(idx, 0, 0, 2);
+        while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+            ;
+        if (!mov_ipu_not_eof()) {
+            break;
+        }
+    }
+    {
+        register volatile u32 *p3 __asm__("$3") = (volatile u32 *)0x10002010;
+        register u32 v4 __asm__("$4");
+        register u32 c5 __asm__("$5") = 0x40000000;
+        register volatile s32 *p8 __asm__("$8") = (volatile s32 *)0x10002010;
+        register u32 v2 __asm__("$2");
+        *(volatile u32 *)0x1000B400 = 0;
+        v4 = *p3;
+        v2 = (v4 | c5) + ctrl_flags;
+        *p3 = v2;
+        while (*p8 < 0)
+            ;
+    }
+    while ((*(volatile u32 *)0x1000B400 >> 8) & 1)
+        ;
+    {
+        typedef struct {
+            u8 pad[0x59C];
+            u8 *p59C;
+        } MovOff59C;
+        register int off5 __asm__("$5") = 0x50000;
+        register MovOff59C *base __asm__("$3") = (MovOff59C *)(D_0030DDF0 + off5);
+        register u8 *cur __asm__("$4") = base->p59C;
+        register int s5 __asm__("$5");
+        __asm__("" : "+r"(cur));
+        s5 = sz;
+        base->p59C = cur + s5;
+    }
+    return 0;
+}
+
+void func_0015ED58(int idx, int mvx, int mvy);
+void func_0015F028(int idx, int mvx, int mvy, int type);
+
+int func_0015E1D0(void)
+{
+    register u8 *hdr __asm__("$4") = *(u8 **)(D_0030DDF0 + 0x5059C);
+    volatile int b9;
+    int sz;
+    register u32 bE __asm__("$7");
+    int bA;
+    register u32 ctrl_flags __asm__("$18");
+    register int first __asm__("$22") = 1;
+    int mvx;
+    int mvy;
+    register int mb __asm__("$21");
+    int idx;
+    u32 val;
+    int type;
+
+    sz = *(s32 *)hdr;
+    b9 = hdr[9];
+    {
+        register u32 bF2 __asm__("$2") = hdr[0xF];
+        register u32 f0 __asm__("$3");
+        bE = hdr[0xE];
+        f0 = bF2 & 1;
+        __asm__("" : "+r"(f0), "+r"(bF2));
+        bA = hdr[0xA];
+        bF2 >>= 1;
+        f0 <<= 22;
+        bF2 <<= 16;
+        __asm__("" : "+r"(f0), "+r"(bF2), "+r"(bE));
+        ctrl_flags = bE << 20;
+        __asm__("" : "+r"(f0) : "r"(ctrl_flags));
+        f0 += bF2;
+        ctrl_flags += f0;
+    }
+    {
+        register volatile u32 *p5 __asm__("$5") = (volatile u32 *)0x10002010;
+        register u32 v6 __asm__("$6");
+        register u32 r2 __asm__("$2");
+        register u32 v3 __asm__("$3");
+        v6 = ctrl_flags + 0x01200000;
+        *p5 = v6;
+        r2 = *p5 | 0x40000000;
+        v3 = r2 + ctrl_flags;
+        *p5 = v3;
+    }
+    while (*(volatile s32 *)0x10002010 < 0)
+        ;
+    mvx = 0;
+    mvy = 0;
+    func_0015F198((int)(*(u8 **)(D_0030DDF0 + 0x5059C) += 0x10), sz);
+    __asm__ volatile("" : : : "memory");
+    mb = 0;
+    goto check_mb;
+
+    while (1) {
+        mb++;
+        do {
+            *(volatile u32 *)0x10002000 = 0x30000000;
+            while (*(volatile s32 *)0x10002010 < 0)
+                ;
+        } while ((*(volatile u32 *)0x10002000 & 0xFFFF) == 0x23);
+        if (val & 1) {
+            *(volatile u32 *)0x10002000 = 0x38000000;
+            {
+                register volatile s32 *p4 __asm__("$4") = (volatile s32 *)0x10002010;
+                __asm__ volatile("" : "+r"(p4));
+                while (*p4 < 0)
+                    ;
+            }
+            mvx = ((s32)(*(volatile u32 *)0x10002000 << 20)) >> 16;
+            *(volatile u32 *)0x10002000 = 0x38000000;
+            {
+                register volatile s32 *p6 __asm__("$6") = (volatile s32 *)0x10002010;
+                __asm__ volatile("" : "+r"(p6));
+                while (*p6 < 0)
+                    ;
+            }
+            mvy = ((s32)(*(volatile u32 *)0x10002000 << 20)) >> 16;
+            *(volatile u32 *)0x10002000 = 0x38000000;
+            {
+                register volatile s32 *p6b __asm__("$6") = (volatile s32 *)0x10002010;
+                __asm__ volatile("" : "+r"(p6b));
+                while (*p6b < 0)
+                    ;
+            }
+            {
+                u32 t = *(volatile u32 *)0x10002000;
+                mvx = (s16)(mvx + t);
+            }
+            *(volatile u32 *)0x10002000 = 0x38000000;
+            {
+                register volatile s32 *p5b __asm__("$5") = (volatile s32 *)0x10002010;
+                __asm__ volatile("" : "+r"(p5b));
+                while (*p5b < 0)
+                    ;
+            }
+            {
+                u32 t = *(volatile u32 *)0x10002000;
+                mvy = (s16)(mvy + t);
+            }
+        }
+        switch (type) {
+        case 1:
+            func_0015F1F8(D_0030DDF4 + 0x70, 0x300);
+            {
+                register volatile u32 *p6 __asm__("$6") = (volatile u32 *)0x10002010;
+                register u32 c3 __asm__("$3") = 0x01000000;
+                register u32 c5 __asm__("$5");
+                register volatile u32 *p4 __asm__("$4");
+                register u32 v2 __asm__("$2");
+                __asm__ volatile("" : "+r"(p6), "+r"(c3));
+                c3 = ctrl_flags + c3;
+                __asm__ volatile("" : "+r"(c3));
+                c5 = 0x20000000;
+                __asm__ volatile("" : "+r"(c5));
+                p4 = (volatile u32 *)0x10000000;
+                __asm__ volatile("" : "+r"(p4));
+                v2 = bA << 16;
+                __asm__ volatile("" : "+r"(v2));
+                *p6 = c3;
+                v2 |= c5;
+                p4 = (volatile u32 *)((u32)p4 | 0x2000);
+                __asm__ volatile("" : "+r"(p4), "+r"(v2));
+                *p4 = v2;
+            }
+            {
+                register int a5 __asm__("$5") = mvx;
+                __asm__ volatile("" : "+r"(a5));
+                func_0015ED58(idx, a5, mvy);
+            }
+            while (*(volatile s32 *)0x10002010 < 0)
+                ;
+            while ((*(volatile u32 *)0x1000B000 >> 8) & 1)
+                ;
+            while ((*(volatile u32 *)0x1000D400 >> 8) & 1)
+                ;
+            while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+                ;
+            func_0015F028(idx, mvx, mvy, type);
+            if (!((*(volatile u32 *)0x10002010 >> 14) & 1)) {
+                (void)*(volatile u32 *)0x10002010;
+            }
+            break;
+        case 2:
+            func_0015F1F8(D_0030DDF4 + 0x70, 0x300);
+            {
+                register int v9 __asm__("$2") = b9;
+                register volatile u32 *p6 __asm__("$6") = (volatile u32 *)0x10000000;
+                register u32 c4 __asm__("$4") = 0x01200000;
+                register u32 v3 __asm__("$3");
+                register u32 v5 __asm__("$5");
+                __asm__ volatile("" : "+r"(v9), "+r"(p6), "+r"(c4));
+                v3 = first << 26;
+                v5 = v9 << 16;
+                c4 = ctrl_flags + c4;
+                __asm__ volatile("" : "+r"(c4), "+r"(v3), "+r"(v5));
+                p6 = (volatile u32 *)((u32)p6 | 0x2010);
+                v5 |= 0x28000000;
+                __asm__ volatile("" : "+r"(p6), "+r"(c4), "+r"(v5));
+                *p6 = c4;
+                __asm__ volatile("" : : : "memory");
+                v3 |= v5;
+                {
+                    register volatile u32 *p2 __asm__("$2") = (volatile u32 *)0x10002000;
+                    __asm__ volatile("" : "+r"(p2), "+r"(v3));
+                    first = 0;
+                    __asm__ volatile("" : "+r"(first));
+                    *p2 = v3;
+                }
+            }
+            while (*(volatile s32 *)0x10002010 < 0)
+                ;
+            while ((*(volatile u32 *)0x1000B000 >> 8) & 1)
+                ;
+            while ((*(volatile u32 *)0x1000D400 >> 8) & 1)
+                ;
+            while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+                ;
+            func_0015F028(idx, 0, 0, type);
+            if (!((*(volatile u32 *)0x10002010 >> 14) & 1)) {
+                (void)*(volatile u32 *)0x10002010;
+            }
+            break;
+        case 3:
+            func_0015ED58(idx, mvx, mvy);
+            while ((*(volatile u32 *)0x1000D400 >> 8) & 1)
+                ;
+            func_0015F028(idx, mvx, mvy, type);
+            while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+                ;
+            break;
+        }
+    check_mb:
+        *(volatile u32 *)0x10002000 = 0x30000000;
+        idx = mb;
+        while (*(volatile s32 *)0x10002010 < 0)
+            ;
+        val = *(volatile u32 *)0x10002000;
+        type = val & 0xFFFF;
+        if (type == 4) {
+            break;
+        }
+    }
+    {
+        register volatile u32 *p3 __asm__("$3") = (volatile u32 *)0x10002010;
+        register u32 v4 __asm__("$4");
+        register u32 c5 __asm__("$5") = 0x40000000;
+        register volatile s32 *p8 __asm__("$8") = (volatile s32 *)0x10002010;
+        register u32 v2 __asm__("$2");
+        *(volatile u32 *)0x1000B400 = 0;
+        v4 = *p3;
+        v2 = (v4 | c5) + ctrl_flags;
+        *p3 = v2;
+        while (*p8 < 0)
+            ;
+    }
+    while ((*(volatile u32 *)0x1000B400 >> 8) & 1)
+        ;
+    while ((*(volatile u32 *)0x1000D000 >> 8) & 1)
+        ;
+    *(u8 **)(D_0030DDF0 + 0x5059C) += sz;
+    return 0;
+}
 
 void func_0015E858(void)
 {

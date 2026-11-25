@@ -690,7 +690,120 @@ u32 func_0017FA08(void *unused, char *name, YiImgLoadRec *img)
     return 0;
 }
 
-INCLUDE_ASM("build/ee_asm/game/yi/yiimage_17DC98", func_0017FC80);
+typedef struct {
+    u16 r : 5;
+    u16 g : 5;
+    u16 b : 5;
+    u16 a : 1;
+} YiTimColor;
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} YiTimRgba;
+
+typedef struct {
+    u32 id;
+    u32 pmode : 3;
+    u32 cf : 1;
+    u32 pad : 28;
+} YiTimHdr;
+
+extern YiTimRgba D_0065F810[256];
+extern char D_0056CCB8[];
+extern char D_0056CCC8[];
+
+u32 func_0017FC80(void *unused, char *name, YiImgLoadRec *img)
+{
+    YiTimHdr hdr;
+    u8 clutHdr[0x10];
+    u8 imgHdr[0x10];
+    char path[0x100];
+    YiTimColor clutBuf[0x100];
+    YiTimRgba tmp[8];
+    int fd;
+    int clutSize;
+    int allocSize;
+    int imgSize;
+    int i;
+    int j;
+
+    func_0017EA28(img);
+    func_002F0008(path, D_0056CBE8, name);
+    fd = func_002FC4E0(path, 1);
+    if (fd < 0) {
+        img->flags |= 2;
+        yiAssert(0, D_0056CBF8, D_0056CC08, path);
+        return 0xFFFFFFFFU;
+    }
+    func_002FCB20(fd, &hdr, 8);
+    if (hdr.id == 0x324D4954) {
+        func_002FC768(fd);
+        return 0xFFFFFFFFU;
+    }
+    if (hdr.cf == 1) {
+        func_002FCB20(fd, clutHdr, 0xC);
+        func_002F8660(0);
+        clutSize = *(s32 *)clutHdr - 0xC;
+        func_002FCB20(fd, clutBuf, clutSize);
+        func_002F8660(0);
+        for (i = 0; i < clutSize / 2; i++) {
+            D_0065F810[i].r = clutBuf[i].r << 3;
+            D_0065F810[i].g = clutBuf[i].g << 3;
+            D_0065F810[i].b = clutBuf[i].b << 3;
+            if (clutBuf[i].a == 1) {
+                D_0065F810[i].a = 0;
+                img->flags |= 1;
+            } else {
+                D_0065F810[i].a = 0x80;
+            }
+        }
+        for (i = 0; i < clutSize / 64; i++) {
+            for (j = 0; j < 8; j++) {
+                tmp[j] = D_0065F810[i * 32 + 8 + j];
+            }
+            for (j = 0; j < 8; j++) {
+                D_0065F810[i * 32 + 8 + j] = D_0065F810[i * 32 + 16 + j];
+            }
+            for (j = 0; j < 8; j++) {
+                D_0065F810[i * 32 + 16 + j] = tmp[j];
+            }
+        }
+    }
+    allocSize = clutSize * 2;
+    img->clutData = func_0017DBA0(allocSize);
+    func_002EEF1C(img->clutData, D_0065F810, allocSize);
+    func_002FCB20(fd, imgHdr, 0xC);
+    imgSize = *(s32 *)imgHdr - 0xC;
+    img->texData = func_0017DBA0(imgSize);
+    func_002FCB20(fd, img->texData, imgSize);
+    func_002FC768(fd);
+    img->w = *(u16 *)(imgHdr + 8);
+    img->h = *(u16 *)(imgHdr + 10);
+    switch (hdr.pmode) {
+    case 0:
+        img->psm = 0x14;
+        img->w *= 4;
+        break;
+    case 1:
+        img->psm = 0x13;
+        img->w *= 2;
+        break;
+    case 2:
+        img->psm = 2;
+        break;
+    case 3:
+        img->psm = 1;
+        img->w = (img->w / 3) * 2;
+        break;
+    default:
+        yiAssert(0, D_0056CCB8, D_0056CCC8);
+        break;
+    }
+    return 0;
+}
 
 typedef struct YiImgRec {
     u32 flags;

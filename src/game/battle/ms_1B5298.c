@@ -169,7 +169,92 @@ int MsSetChrVisibleCamera(int a, int b) {
     return func_001B5860(a, 3, b);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1B5298", func_001B5860);
+extern void op_et_bindeff(Chr *);
+
+int func_001B5860(int id, int idx, int v) {
+    int r = 0;
+    int vis = 1;
+    int i;
+    BtlChr *c;
+    Chr *chr;
+
+    id &= 0xFF;
+    c = MsGetChr(id);
+
+    c->f16[idx] = v;
+    chr = c->chr;
+    for (i = 0; i < 4; i++) {
+        if (c->f16[i] == 0) {
+            vis = 0;
+        }
+    }
+    {
+        register Chr *chr2 __asm__("$16") = chr;
+        ((s8 *)c)[0x15] = vis;
+        if (vis != 0 && ((s8 *)c)[0x36] != 0) {
+            if (chr2 == 0) {
+                goto after_chr;
+            }
+            ((s8 *)c)[0x36] = 0;
+            ((s8 *)c)[0x1F] = 1;
+            op_et_bindeff(chr2);
+        }
+    }
+    if (chr != 0) {
+        if (vis != 0) {
+            func_00110738(chr, 0);
+            func_00110718(chr, 0);
+            Ch_EnMapID(chr, ((s8 *)c)[0x32]);
+            Ch_SetCalcNorm(chr, ((s8 *)c)[0x33]);
+            func_001B6310(c, 1, -1);
+        } else {
+            func_00110738(chr, 1);
+            func_00110718(chr, 1);
+            Ch_EnMapID(chr, 0);
+            Ch_SetCalcNorm(chr, 0);
+            func_001B6310(c, 1, 0);
+        }
+        msSetChrBodyHit(c, 1, vis);
+        r = 1;
+    }
+after_chr:
+    if (((u8 *)c)[0x13] != 0xFF) {
+        func_001B5860(((u8 *)c)[0x13], idx, v);
+    }
+    if (((u8 *)c)[0x100] != 0) {
+        for (i = 0; i < 0x1F; i++) {
+            if (((u8 *)MsGetChr(i))[0xFF] == id) {
+                func_001B5860(i, idx, v);
+            }
+        }
+    }
+    if (((s8 *)c)[0x1D] == 0) {
+        vis = 0;
+    }
+    for (i = 0; i < 2; i++) {
+        BtlChr *s = MsGetWeapon(id, i);
+        if (s != 0) {
+            Chr *wchr = s->chr;
+            if (wchr != 0) {
+                if (vis != 0) {
+                    func_00110738(wchr, 0);
+                    func_00110718(wchr, 0);
+                    Ch_EnMapID(wchr, ((s8 *)s)[0x32]);
+                    Ch_SetCalcNorm(wchr, ((s8 *)s)[0x33]);
+                    func_001B6310(s, 1, -1);
+                } else {
+                    func_00110738(wchr, 1);
+                    func_00110718(wchr, 1);
+                    Ch_EnMapID(wchr, 0);
+                    Ch_SetCalcNorm(wchr, 0);
+                    func_001B6310(s, 1, 0);
+                }
+                msSetChrBodyHit(s, 1, vis);
+            }
+        }
+    }
+    return r;
+}
 
 int MsSetChrVisibleBtl2Event(u8 id, int idx, int v) {
     int r = 0;

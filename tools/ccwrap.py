@@ -53,7 +53,9 @@ if other and literal is None:
     sys.exit(1)
 open(s, "w").write("\n".join(res))
 r = subprocess.run([cc, "-c", *[f for f in flags if not f.startswith("-I") and not f.startswith("-D")], s, "-o", out])
-if r.returncode == 0 and literal is not None:
+lit4_layout = json.load(open("config/c_lit4.json")) if os.path.exists("config/c_lit4.json") else {}
+lit4 = lit4_layout.get(unit)
+if r.returncode == 0 and (literal is not None or lit4 is not None):
     # Refuse unplanned literals or padding changes before linking other units.
     blob = open(out, "rb").read()
     shoff = struct.unpack_from("<I", blob, 32)[0]
@@ -61,15 +63,27 @@ if r.returncode == 0 and literal is not None:
     sections = [struct.unpack_from("<10I", blob, shoff + i * stride) for i in range(count)]
     names = sections[names_index]
     names = blob[names[4]:names[4] + names[5]]
-    contents = []
-    for section in sections:
-        name = names[section[0]:].split(b"\0", 1)[0]
-        if name == b".rodata":
-            contents.append(blob[section[4]:section[4] + section[5]])
     original = open("baserom/SCES_504.90", "rb").read()
-    start = literal["address"] - 0xff000
-    expected = original[start:start + literal["size"]]
-    if contents != [expected]:
-        os.unlink(out)
-        sys.exit(f"ccwrap: {src}: literal block differs from its original {literal['piece']}")
+    if literal is not None:
+        contents = []
+        for section in sections:
+            name = names[section[0]:].split(b"\0", 1)[0]
+            if name == b".rodata":
+                contents.append(blob[section[4]:section[4] + section[5]])
+        start = literal["address"] - 0xff000
+        expected = original[start:start + literal["size"]]
+        if contents != [expected]:
+            os.unlink(out)
+            sys.exit(f"ccwrap: {src}: literal block differs from its original {literal['piece']}")
+    if lit4 is not None:
+        l4 = []
+        for section in sections:
+            name = names[section[0]:].split(b"\0", 1)[0]
+            if name == b".lit4":
+                l4.append(blob[section[4]:section[4] + section[5]])
+        start = lit4["address"] - 0xff000
+        expected = original[start:start + lit4["size"]]
+        if l4 != [expected]:
+            os.unlink(out)
+            sys.exit(f"ccwrap: {src}: .lit4 block differs from original {lit4['address']:#x} ({lit4['size']} B)")
 sys.exit(r.returncode)

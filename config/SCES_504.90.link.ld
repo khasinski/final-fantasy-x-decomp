@@ -473,7 +473,7 @@ SECTIONS
         . = 0x569a00 - 0x568f00;
         build/src/game/main/sg_117D78.c.o(.rodata.cjt0)
         . = 0x569a30 - 0x568f00;
-        build/src/game/main/sg_1194E0.c.o(.rodata.jtbl_00569A30)
+        build/src/game/main/sg_1194E0.c.o(.rodata.cjt0)
         . = 0x569a48 - 0x568f00;
         build/asm/data/rodata/piece_00569A48.s.o(.rodata)
         . = 0x569c90 - 0x568f00;
@@ -1312,7 +1312,21 @@ SECTIONS
     . = 0x578e00;
     .vutext : { build/assets/vutext.bin.o(.data) }
     . = 0x57c680;
-    .lit4 : SUBALIGN(4) { build/asm/data/lit4.data.s.o(.data) }
+    _gp = 0x00584670;
+    .lit4 : SUBALIGN(4) {         . = 0x57c680 - 0x57c680;
+        build/build/lit4_gap_57c680.s.o(.data)
+        . = 0x57c6bc - 0x57c680;
+        build/src/game/main/sg_106440.c.o(.lit4)
+        . = 0x57c70c - 0x57c680;
+        build/build/lit4_gap_57c70c.s.o(.data)
+        . = 0x57c93c - 0x57c680;
+        build/src/game/main/sg_1194E0.c.o(.lit4)
+        . = 0x57c984 - 0x57c680;
+        build/src/game/main/sg_11E2C8.c.o(.lit4)
+        . = 0x57c988 - 0x57c680;
+        build/src/game/main/sg_1201B0.c.o(.lit4)
+        . = 0x57c9d8 - 0x57c680;
+        build/build/lit4_gap_57c9d8.s.o(.data) }
     . = 0x57cb80;
     .bss (NOLOAD) : { build/asm/data/47DB0C.bss.s.o(.bss) }
     /DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.gnu.attributes) *(.comment) *(.pdr) *(.mdebug*) }
@@ -1324,6 +1338,7 @@ D_005699AC = 0x005699AC;
 /* EE compiler helpers used by unsigned double-to-integer conversion. */
 dpmul = func_002EBC70;
 __floatdidf = func_002EA450;
+__floatdisf = func_002EA4E8;
 
 D_0056C448 = 0x56c448;
 D_0056C450 = 0x56c450;
