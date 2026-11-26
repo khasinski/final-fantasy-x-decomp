@@ -5870,5 +5870,43 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09609_d8b0.c",
+    "containers": [
+      9609
+    ],
+    "text_start": "0x01B0D8B0",
+    "text_end": "0x01B0D948",
+    "functions": 1,
+    "discovered_code_bytes": 152,
+    "syms": {
+      "g_pool": "0x01B132B0",
+      "g_pool_idx": "0x01B132B4",
+      "g_pool_max": "0x01B132B8",
+      "g_pool_cnt": "0x01B132BC",
+      "ovl_9bb8": "0x01B09BB8",
+      "ovl_9d80": "0x01B09D80",
+      "ovl_d9f8": "0x01B0D9F8"
+    },
+    "cflags": [
+      "-O2"
+    ]
+  },
+  {
+    "src": "ovl_09609_d9e8.c",
+    "containers": [
+      9609
+    ],
+    "text_start": "0x01B0D9E8",
+    "text_end": "0x01B0D9F4",
+    "functions": 1,
+    "discovered_code_bytes": 12,
+    "syms": {
+      "g_pool_cnt": "0x01B132BC"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

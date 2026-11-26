@@ -139,5 +139,21 @@
       "func_01B004E0": "0x01B004E0",
       "func_01B00660": "0x01B00660"
     }
+  },
+  {
+    "src": "ovl_09228_0468.c",
+    "containers": [
+      9228
+    ],
+    "text_start": "0x01B00468",
+    "text_end": "0x01B004A4",
+    "functions": 1,
+    "discovered_code_bytes": 60,
+    "syms": {
+      "D_01D01BC0": "0x01D01BC0"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

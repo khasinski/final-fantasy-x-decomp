@@ -22,5 +22,28 @@
       "D_01B0D040": "0x01B0D040",
       "D_01B006E8": "0x01B006E8"
     }
+  },
+  {
+    "src": "ovl_09192_1470.c",
+    "containers": [
+      9192,
+      9613
+    ],
+    "text_start": "0x01B01470",
+    "text_end": "0x01B014EC",
+    "functions": 1,
+    "discovered_code_bytes": 124,
+    "syms": {
+      "D_00704014": "0x00704014",
+      "D_0054D5EC": "0x0054D5EC",
+      "D_00764990": "0x00764990",
+      "MsGetEff2Chr": "0x001CE048",
+      "MsGetChrBtlDir": "0x001B6EA8",
+      "MsSetChrDirF": "0x001B6F58",
+      "func_0206C3B8": "0x0206C3B8"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

@@ -63,5 +63,24 @@
       "func_01B01418": "0x01B01418",
       "func_01B01498": "0x01B01498"
     }
+  },
+  {
+    "src": "ovl_09652_1498.c",
+    "containers": [
+      9652
+    ],
+    "text_start": "0x01B01498",
+    "text_end": "0x01B01578",
+    "functions": 1,
+    "discovered_code_bytes": 224,
+    "syms": {
+      "D_01B0D110": "0x01B0D110",
+      "D_01C54610": "0x01C54610",
+      "D_01BAB4F0": "0x01BAB4F0",
+      "func_01B00A58": "0x01B00A58"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

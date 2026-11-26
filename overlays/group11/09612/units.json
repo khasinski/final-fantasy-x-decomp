@@ -36,5 +36,31 @@
     },
     "text_end": "0x01B02FCC",
     "text_start": "0x01B02E00"
+  },
+  {
+    "src": "ovl_09612_2018.c",
+    "containers": [
+      9612,
+      9632
+    ],
+    "text_start": "0x01B02018",
+    "text_end": "0x01B02040",
+    "functions": 1,
+    "discovered_code_bytes": 40,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9612,
+        "text_start": "0x01B02018",
+        "text_end": "0x01B02040",
+        "syms": {}
+      },
+      {
+        "cid": 9632,
+        "text_start": "0x01B01DC0",
+        "text_end": "0x01B01DE8",
+        "syms": {}
+      }
+    ]
   }
 ]

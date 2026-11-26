@@ -33,5 +33,91 @@
     "functions": 1,
     "discovered_code_bytes": 128,
     "syms": {}
+  },
+  {
+    "src": "ovl_09433_3d98.c",
+    "containers": [
+      9433
+    ],
+    "text_start": "0x01B03D98",
+    "text_end": "0x01B03E24",
+    "functions": 1,
+    "discovered_code_bytes": 140,
+    "syms": {
+      "D_01B02E00": "0x01B02E00"
+    }
+  },
+  {
+    "src": "ovl_09433_3e28.c",
+    "containers": [
+      9433
+    ],
+    "text_start": "0x01B03E28",
+    "text_end": "0x01B03F58",
+    "functions": 1,
+    "discovered_code_bytes": 304,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09433_3e28.c",
+    "containers": [
+      9433
+    ],
+    "text_start": "0x01B041C8",
+    "text_end": "0x01B042F8",
+    "functions": 1,
+    "discovered_code_bytes": 304,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09433_4110.c",
+    "containers": [
+      9433
+    ],
+    "text_start": "0x01B04110",
+    "text_end": "0x01B041C4",
+    "functions": 1,
+    "discovered_code_bytes": 180,
+    "syms": {
+      "D_01B02E20": "0x01B02E20"
+    }
+  },
+  {
+    "src": "ovl_09433_3458.c",
+    "containers": [
+      9433
+    ],
+    "text_start": "0x01B03458",
+    "text_end": "0x01B03874",
+    "functions": 1,
+    "discovered_code_bytes": 1052,
+    "syms": {
+      "g_500": "0x01B00500",
+      "g_690": "0x01B00690",
+      "g_6c0": "0x01B006C0",
+      "g_8e8": "0x01B008E8",
+      "g_908": "0x01B00908",
+      "g_930": "0x01B00930",
+      "g_29a0": "0x01B029A0",
+      "g_2a40": "0x01B02A40",
+      "g_2aa0": "0x01B02AA0",
+      "g_2bf0": "0x01B02BF0",
+      "g_2cf0": "0x01B02CF0",
+      "g_e8d0": "0x01B0E8D0",
+      "g_e8fc": "0x01B0E8FC",
+      "func_1B08D60": "0x01B08D60",
+      "func_1B05FC0": "0x01B05FC0",
+      "func_1B08E90": "0x01B08E90",
+      "func_1B05B60": "0x01B05B60",
+      "func_1B09A18": "0x01B09A18",
+      "func_1B05E38": "0x01B05E38",
+      "func_1B0ABA0": "0x01B0ABA0",
+      "func_1B0C538": "0x01B0C538",
+      "func_1B04110": "0x01B04110",
+      "func_1B08F70": "0x01B08F70",
+      "func_1B05A80": "0x01B05A80",
+      "func_1B06060": "0x01B06060",
+      "func_1B0D590": "0x01B0D590"
+    }
   }
 ]

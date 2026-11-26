@@ -121,5 +121,101 @@
     "cflags": [
       "-O0"
     ]
+  },
+  {
+    "src": "ovl_09222_2690.c",
+    "containers": [
+      9222,
+      9223,
+      9464
+    ],
+    "text_start": "0x01B02690",
+    "text_end": "0x01B026F0",
+    "discovered_code_bytes": 96,
+    "functions": 1,
+    "syms": {
+      "D_01B007E0": "0x01B007E0",
+      "D_01B016C0": "0x01B016C0",
+      "D_01B016D8": "0x01B016D8",
+      "D_01B02588": "0x01B02588",
+      "func_01B0E2E0": "0x01B0E2E0",
+      "func_01B0E6E8": "0x01B0E6E8"
+    },
+    "container_layouts": [
+      {
+        "cid": 9222,
+        "text_start": "0x01B02690",
+        "text_end": "0x01B026F0",
+        "syms": {
+          "D_01B007E0": "0x01B007E0",
+          "D_01B016C0": "0x01B016C0",
+          "D_01B016D8": "0x01B016D8",
+          "D_01B02588": "0x01B02588",
+          "func_01B0E2E0": "0x01B0E2E0",
+          "func_01B0E6E8": "0x01B0E6E8"
+        }
+      },
+      {
+        "cid": 9223,
+        "text_start": "0x01B04C48",
+        "text_end": "0x01B04CA8",
+        "syms": {
+          "D_01B007E0": "0x01B008B0",
+          "D_01B016C0": "0x01B03D40",
+          "D_01B016D8": "0x01B03D58",
+          "D_01B02588": "0x01B04AE0",
+          "func_01B0E2E0": "0x01B0BDC0",
+          "func_01B0E6E8": "0x01B0C1C8"
+        }
+      },
+      {
+        "cid": 9464,
+        "text_start": "0x01B02720",
+        "text_end": "0x01B02780",
+        "syms": {
+          "D_01B007E0": "0x01B007E0",
+          "D_01B016C0": "0x01B016C0",
+          "D_01B016D8": "0x01B016D8",
+          "D_01B02588": "0x01B025C8",
+          "func_01B0E2E0": "0x01B0E370",
+          "func_01B0E6E8": "0x01B0E778"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09222_2a58.c",
+    "containers": [
+      9222,
+      9464
+    ],
+    "text_start": "0x01B02A58",
+    "text_end": "0x01B02A9C",
+    "discovered_code_bytes": 68,
+    "functions": 1,
+    "syms": {
+      "D_01B00D40": "0x01B00D40",
+      "func_01B04088": "0x01B04088"
+    },
+    "container_layouts": [
+      {
+        "cid": 9222,
+        "text_start": "0x01B02A58",
+        "text_end": "0x01B02A9C",
+        "syms": {
+          "D_01B00D40": "0x01B00D40",
+          "func_01B04088": "0x01B04088"
+        }
+      },
+      {
+        "cid": 9464,
+        "text_start": "0x01B02AE8",
+        "text_end": "0x01B02B2C",
+        "syms": {
+          "D_01B00D40": "0x01B00D40",
+          "func_01B04088": "0x01B04118"
+        }
+      }
+    ]
   }
 ]
