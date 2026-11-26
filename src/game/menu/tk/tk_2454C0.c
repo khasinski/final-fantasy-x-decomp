@@ -1450,7 +1450,80 @@ GsAdPacket *func_00248910(GsAdPacket *q, int x, int y, int id, int w, int flag)
     return (GsAdPacket *)func_00248558(cur, flag != 0 ? x + 8 : x, y, id + 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_2454C0", func_00248B30);
+/* DEBT(FAKE): register pin fixes s2/s3 swap between q/p and src */
+GsAdPacket *func_00248B30(GsAdPacket *q, int x, int y, int id, int w, int flag)
+{
+    u8 *p;
+    GsAdPacket *cur;
+    register u8 *src __asm__("$19") = func_00247F48(id, D_003264A0);
+
+    func_00247F48(id + 1, D_003264A0);
+    if (flag == 0) {
+        goto sub_w;
+    }
+    if (flag == 1) {
+    sub_w:
+        w -= 0x24;
+    }
+    if (w < 0) {
+        w = 0;
+    }
+    cur = q;
+    if (w > 0) {
+        u64 tex = func_001F6EA0();
+        int x0;
+        int x1;
+        int y0;
+        int y1;
+        int u1;
+        int v0;
+        int h1;
+
+        cur[0].data = 0x1000000000000001UL;
+        cur[0].reg = 0xE;
+        cur[1].data = 1;
+        cur[1].reg = 0x14;
+        cur[2].data = 0x2400000000008001UL;
+        {
+            GsAdPacket *p2 = cur + 2;
+            cur += 4;
+            p2[0].reg = 0x16;
+            p2[1].data = tex;
+            p2[1].reg = 0x80808080UL;
+        }
+
+        p = src + 4;
+        x0 = x - *(u16 *)(p + 8);
+        if (flag != 0) {
+            x0 -= 6;
+        }
+        x0 += 0x700;
+        y0 = y + 0x730;
+        y1 = y0 + *(u16 *)(p + 10);
+        x1 = x0 - w;
+        u1 = (src[4] + *(u16 *)(p + 8) - 1) << 4;
+        v0 = (p[1] << 4) + 8;
+        h1 = *(u16 *)(p + 6) << 4;
+        u1 -= 8;
+        y0 <<= 4;
+        y1 <<= 4;
+        x0 <<= 4;
+        x1 <<= 4;
+        cur[0].data = 0x6400000000008001UL;
+        cur[0].reg = 0xF53530UL;
+        cur[1].data = 0x156;
+        cur[1].reg = u1 | ((u64)v0 << 16);
+        cur[2].data = x0 | ((u64)y0 << 16);
+        cur[2].reg = u1 | ((u64)(v0 + h1) << 16);
+        cur[3].data = x1 | ((u64)y1 << 16);
+        cur += 4;
+    } else {
+        p = src + 4;
+    }
+    cur = (GsAdPacket *)func_00248738(cur, x, y, id);
+    x -= *(u16 *)(p + 8) + w;
+    return (GsAdPacket *)func_00248738(cur, flag != 0 ? x - 8 : x, y, id + 1);
+}
 
 GsAdPacket *func_00248D50(GsAdPacket *q, int n, u8 *src, int x, int y)
 {

@@ -910,7 +910,90 @@ int MsCheckRikkuLimit(int id, BtlChr *c, GsEnt48 *e) {
     return r;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1E2360", MsSetRikkuLimit);
+int MsSetRikkuLimit(int id, BtlChr *c, GsEnt48 *e)
+{
+    int items[2];
+    int i;
+    int j;
+    int cmd;
+    int tgt;
+    int ret;
+
+    if (c->fABD != 0) {
+        ret = 1;
+    } else if (c->pad3D7[0] != 0) {
+        ret = (s8)c->fF5 != 0;
+    } else {
+        register struct GsEnt48Sub *sub __asm__("s0");
+        int cnt;
+        register u32 n __asm__("$11") = e->f3;
+        register int ff __asm__("$2") = 0xFF;
+        items[1] = ff;
+        cnt = 0;
+        __asm__("" : : "r"(cnt), "r"(n));
+        items[0] = ff;
+        for (i = 0; i != (int)n;) {
+            u16 *p = &e->f8[i].h0;
+            for (j = 0; j < 2; j++, p++) {
+                u16 v = *p;
+                if (v != 0xFF && v != 0x311E && v != 0x3001 && cnt < 2) {
+                    items[cnt] = v;
+                    cnt++;
+                }
+            }
+            i++;
+            if (i >= (int)n) {
+                break;
+            }
+        }
+        sub = &e->f8[0];
+        if (cnt < 2) {
+            MsSaveItemUse(items[0], -1);
+            cmd = items[0];
+        } else {
+            MsSaveItemUse(items[0], -1);
+            MsSaveItemUse(items[1], -1);
+            items[0] &= 0xFFF;
+            if (items[0] < 0) {
+                items[0] = 0;
+            }
+            items[1] &= 0xFFF;
+            if (items[1] < 0) {
+                items[1] = 0;
+            }
+            {
+                int x = items[0];
+                int y = items[1];
+                if (x > y) {
+                    register int tmp __asm__("$2") = x;
+                    items[0] = y;
+                    items[1] = tmp;
+                    y = *(volatile int *)&items[1];
+                }
+                cmd = *(u16 *)((u8 *)MsGetExcelData(y, (void *)0x1EF0000, 0) + (items[0] << 1));
+            }
+        }
+        {
+            register int one __asm__("$2") = 1;
+            register int ff __asm__("$3") = 0xFF;
+            register int a0 __asm__("$4");
+            e->f8[0].h0 = cmd;
+            e->f3 = one;
+            a0 = id;
+            __asm__("" : "+r"(a0));
+            sub->h2 = ff;
+            tgt = MsGetCommandTarget(a0, cmd, -1, 1);
+        }
+        sub->targets = tgt;
+        MsSetTargetDir(id, tgt);
+        if (tgt != 0 && cnt >= 2) {
+            MsSetSaveCommand(id, cmd, 1);
+        }
+        ret = tgt == 0;
+        c->pad3D7[0] = 1;
+    }
+    return ret;
+}
 
 void MsCheckLimitUp(int a, BtlChr *c)
 {

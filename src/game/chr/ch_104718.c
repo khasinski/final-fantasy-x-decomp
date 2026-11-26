@@ -1,4 +1,5 @@
 /* tu_004 0x104718-0x106380: low; ~Ch (config/tu_map.tsv) */
+#define Ch_SetSysMotion _hdr_Ch_SetSysMotion
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -6,6 +7,7 @@
 #include "ffx/u0.h"
 #include "ffx/v0.h"
 #include "ffx/g0.h"
+#undef Ch_SetSysMotion
 
 void func_00104718(void)
 {
@@ -377,7 +379,78 @@ typedef struct SysMotNewTbl {
 extern s8 D_003035A8[];
 int func_00117D38(Chr *chr, int a, int b);
 
-INCLUDE_ASM("build/ee_asm/game/chr/ch_104718", Ch_SetSysMotion);
+typedef struct {
+    s32 w0;
+    u8 pad04[0x68];
+    SysMotNewTbl *p6C;
+    s32 w70;
+    u8 pad74[0x108 - 0x74];
+    MotionTblOld1 *p108;
+} SysMotModel;
+
+typedef struct {
+    u8 pad000[0x1A0];
+    u64 d1A0;
+    u8 pad1A8[0x1D0 - 0x1A8];
+    SysMotModel *p1D0;
+} SysMotChr;
+
+void _sys_Ch_SetSequence(Chr *chr, int seq) __asm__("Ch_SetSequence");
+
+void Ch_SetSysMotion(int chr_i, int grp, int idx)
+{
+    SysMotChr *chr = (SysMotChr *)chr_i;
+    SysMotModel *m;
+
+    __asm__("" : "+r"(idx));
+    m = chr->p1D0;
+
+    if (m->w70 & 1) {
+        s32 seq;
+        register SysMotModel *m2 __asm__("$3") = m;
+    retry:
+        {
+            s32 *seqs = *(s32 **)((D_003035A8[grp] << 3) + (u32)m2->p6C + 0x10);
+            if (seqs == 0) {
+                return;
+            }
+            if (((int)(chr->d1A0 >> 41) & 1) && grp == 1 && idx == 0x10) {
+                func_00117D38((Chr *)chr, 4, 1);
+            }
+            seq = seqs[idx];
+            if (seq != 0) {
+                _sys_Ch_SetSequence((Chr *)chr, seq);
+                return;
+            }
+            if (grp != 0) {
+                grp = 0;
+                idx = 0;
+                m2 = chr->p1D0;
+                goto retry;
+            }
+        }
+    } else {
+        register MotionTblOld1 *old __asm__("$2") = m->p108;
+        if (old != 0) {
+        retry_old:
+            {
+                SysMotOldPair *p = old->entries[grp].ptr;
+                u32 count = old->entries[grp].count;
+                u32 i;
+                for (i = 0; i < count; i++) {
+                    if (idx == p[i].id) {
+                        Ch_SetSequence((Chr *)chr, p[i].seq | (m->w0 << 16));
+                        return;
+                    }
+                }
+                if (grp != 0) {
+                    grp = 0;
+                    goto retry_old;
+                }
+            }
+        }
+    }
+}
 
 void func_00105320(Chr *c)
 {

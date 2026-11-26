@@ -1314,7 +1314,7 @@ SECTIONS
     . = 0x57c680;
     _gp = 0x00584670;
     .lit4 : SUBALIGN(4) {         . = 0x57c680 - 0x57c680;
-        build/build/lit4_gap_57c680.s.o(.data)
+        build/src/game/chr/chr.c.o(.lit4)
         . = 0x57c6bc - 0x57c680;
         build/src/game/main/sg_106440.c.o(.lit4)
         . = 0x57c70c - 0x57c680;

@@ -70,7 +70,44 @@ void func_001FA6C0(int x, int y, int w, int h, int c0, int c1)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1FA0E8", func_001FA7D0);
+void func_001FA7D0(int x, int y, int w, int h)
+{
+    register int x_r __asm__("$16") = x;
+    register u32 c1 __asm__("$9");
+
+    func_001FE298(0x194, x_r, y, w, h, 0x80808080, 0x80808080);
+    {
+        register u32 c2 __asm__("$10");
+        register int a1 __asm__("$5");
+        c1 = 0x80800000;
+        c2 = 0x80800000;
+        __asm__("" : "+r"(c1), "+r"(c2));
+        a1 = x_r;
+        __asm__("" : "+r"(a1));
+        func_001FE298(0x190, a1, y, 0, 0, c1 | 0x8080, c2 | 0x8080);
+    }
+    {
+        register u32 c2 __asm__("$10");
+        register int a1 __asm__("$5");
+        c1 = 0x80800000;
+        c2 = 0x80800000;
+        __asm__("" : "+r"(c1), "+r"(c2));
+        a1 = x_r;
+        __asm__("" : "+r"(a1));
+        func_001FE298(0x191, a1, y, 0, h, c1 | 0x8080, c2 | 0x8080);
+    }
+    func_001FE298(0x192, x_r, y + h, 0, 0, 0x80808080, 0x80808080);
+    c1 = 0x80800000;
+    __asm__("" : "+r"(y) : "r"(c1));
+    func_001FE298(0x193, x_r, y, w, 0, c1 | 0x8080, 0x80808080);
+    func_001FE298(0x195, x_r, y + h, w, 0, 0x80808080, 0x80808080);
+    c1 = 0x80800000;
+    __asm__("" : "+r"(y) : "r"(c1));
+    func_001FE298(0x196, x_r + w, y, 0, 0, c1 | 0x8080, 0x80808080);
+    func_001FE298(0x197, x_r + w, y, 0, h, 0x80808080, 0x80808080);
+    func_001FE298(0x198, x_r + w, y + h, 0, 0, 0x80808080, 0x80808080);
+    func_001EFA30();
+}
 
 /* GS display-list helpers: wrappers appending SCE_GS_SET_* packets at the cursor InvokedFromSelectCursor.
  * Module name unknown (no source-file string found nearby). */

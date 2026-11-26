@@ -874,7 +874,19 @@ void func_00159650(void) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/movie/movie_157798", rcuiSceneInit);
+int yiGetRenderStatus(void);
+void yiRenderDisable(int);
+
+void rcuiSceneInit(void)
+{
+    int r = yiGetRenderStatus();
+    register int m __asm__("$3");
+    D_0030D3FC = r;
+    m = r & 0x1000000;
+    if (m != 0) {
+        yiRenderDisable(0x1000000);
+    }
+}
 
 void func_00159E80(int, int *, int *);
 int func_0015C718(int, int, int, int, void *, int);

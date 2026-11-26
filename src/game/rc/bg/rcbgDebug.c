@@ -408,7 +408,51 @@ void func_00191A70(s32 a0, s32 a1)
     _m2c_func_00191A70_func_00191A78(a0, a1, 1);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/bg/rcbgDebug", func_00191A78);
+extern u8 D_003135D0[];
+extern u8 D_00313640[];
+extern u8 D_00313670[];
+extern u8 D_003136A0[];
+void func_0018FFD8(R2Pkt *a0, float *a1, float x, float y, float z);
+
+void func_00191A78(R2Pkt *a0, void *a1, int a2)
+{
+    float v0[4];
+    float v1[4];
+    float s = (float)a2;
+    u8 *w = (u8 *)R2_DBGWORK_FULL;
+    register u8 *tbl __asm__("$17") = D_003135D0;
+    float fmod;
+
+    VU0_LQC2_INPUTS(31, tbl, v1, tbl);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v1);
+    func_00190230(a0, D_00313640, 3, v1, a1);
+
+    VU0_LQC2(31, 0, tbl + 0x10);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v1);
+    func_00190230(a0, D_00313670, 3, v1, a1);
+
+    VU0_LQC2(31, 0, tbl + 0x30);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v1);
+    func_00190230(a0, D_003136A0, 3, v1, a1);
+
+    func_001925D8(a1, a1);
+    VU0_SQC2(0, 0, v0);
+    func_002DCE08(v0, a1, v0);
+    func_002DCFD8(v0, v0, v0[3]);
+
+    fmod = (float)(*(s32 *)(w + 0x58) % 8);
+    VU0_LQC2(31, 0, tbl + 0x60);
+    VU0_QMTC2_NI(30, s);
+    VU0_OP("vmulx.xyzw $vf31, $vf31, $vf30x");
+    VU0_SQC2(31, 0, v1);
+    func_0018FFD8(a0, v1, v0[0], v0[1], fmod);
+}
 
 void func_00191BF0(void)
 {

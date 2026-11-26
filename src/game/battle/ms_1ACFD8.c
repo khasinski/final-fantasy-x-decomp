@@ -1235,7 +1235,92 @@ extern void _br_func_001B4538(void *) __asm__("func_001B4538");
 extern void _br_graphicLevelGetNameHash(void *, int) __asm__("graphicLevelGetNameHash");
 extern void _br_AtelSetEventCharHandleFromID(int, void *) __asm__("AtelSetEventCharHandleFromID");
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1ACFD8", MsBtlBridgeEvent2Btl);
+void MsBtlBridgeEvent2Btl(void)
+{
+    int not_found;
+    int n = _br_func_001489F0();
+    int i;
+
+    for (i = 0; i < n; i++) {
+        int bind_id;
+        void *handle;
+        int chr_idx;
+        int char_id;
+        int link;
+        int pc;
+
+        not_found = -1;
+        bind_id = _br_AtelGetEventBindIdFromID(i);
+        chr_idx = 0xFF;
+        char_id = _br_AtelGetEventCharIDFromID(i);
+        handle = _br_AtelGetEventCharHandleFromID(i);
+        link = _br_AtelGetEventActorLinkWork(i);
+        pc = _br_AtelGetBindPCFromID(i);
+
+        if (bind_id == 1 && handle != 0) {
+            BridgeChr *found;
+            link |= 2;
+            found = 0;
+            if ((u32)pc != 0xFFFFFFFFU) {
+                if (pc >= 0) {
+                    if (pc < 0x1C) {
+                        BridgeChr *c = (BridgeChr *)MsGetChr(pc);
+                        int cid = c->f04;
+                        if (c->f10 != 0 && c->chr == 0 && cid == char_id) {
+                            chr_idx = pc;
+                            found = c;
+                        }
+                    }
+                }
+            }
+            if (found == 0) {
+                int j;
+                for (j = 0; j < 0x1F; j++) {
+                    BridgeChr *c = (BridgeChr *)MsGetChr(j);
+                    int cid = c->f04;
+                    if (c->f10 != 0 && c->chr == 0 && cid == char_id) {
+                        chr_idx = j;
+                        found = c;
+                        break;
+                    }
+                }
+            }
+            if (found != 0) {
+                int w;
+                for (w = 0; w < 2; w++) {
+                    register BridgeChr *wp __asm__("$17") = _br_MsGetWeapon(chr_idx, w);
+                    register int wid __asm__("$21") = _br_func_00148D78(i, w);
+                    register void *wh __asm__("$16") = _br_AtelGetEventElemHandleFromID(i, w);
+                    if (wid != 0 && wh != 0) {
+                        int ok = 0;
+                        int st = _br_func_00148CB0(i, w);
+                        if (wp->chr == 0) {
+                            *(volatile s8 *)&wp->b0D = st;
+                            ok = 1;
+                            *(void * volatile *)&wp->chr = wh;
+                            *(volatile int *)&wp->f04 = wid;
+                        }
+                        if (!ok) {
+                            if (w == 0) {
+                                link |= 0x10;
+                            } else {
+                                link |= 0x20;
+                            }
+                        }
+                    }
+                }
+                not_found = 0;
+                found->chr = handle;
+            }
+            if (not_found != 0) {
+                link |= 0x01;
+                link |= 0x10;
+                link |= 0x20;
+            }
+        }
+        _br_AtelSetEventActorLinkWork(i, link & 0xFF);
+    }
+}
 
 void MsBtlBridgeBtl2Event(void) {
     int flag;

@@ -655,7 +655,77 @@ void Sg_MemSetMoveHeapStartAddr(s32 p)
 }
 
 /* DEBT(CAST): defrag-grows the current allocation into preceding free space. */
-INCLUDE_ASM("build/ee_asm/game/main/mem", func_0011CDE8);
+/* DEBT(CAST): defrag-grows the current allocation into preceding free space. */
+s32 func_0011CDE8(void **ptr, s32 *moved_bytes)
+{
+    void *orig = *ptr;
+    R0Blk *cur = (R0Blk *)D_00580918;
+    R0Blk *blk;
+    R0Blk *end_blk;
+    R0Blk *prev_blk;
+    u32 data_sz;
+    s32 blk_sz;
+    s32 ret;
+
+    if (orig == 0) {
+        return 0;
+    }
+    blk = (R0Blk *)orig - 1;
+    {
+        R0Blk *end = blk->end;
+        u32 sz = (u32)end - (u32)blk;
+        data_sz = sz - 0x10;
+        while ((cur->flags & 0xF) != 0xF && (s32)cur < (s32)blk->next) {
+            R0Blk *next = cur->end;
+            if ((cur->flags & 0xF) == 0 && (u32)((u8 *)next - (u8 *)cur - 0x10) > data_sz) {
+                R0Blk *new_end;
+                end_blk = next;
+                prev_blk = cur->next;
+                func_002EEFCC(cur, blk, data_sz + 0x10);
+                {
+                    register R0Blk *p1 __asm__("$3") = cur + 1;
+                    *ptr = p1;
+                }
+                func_0011C838(blk);
+                cur->next = prev_blk;
+                {
+                    register R0Blk *ne __asm__("$3") = (R0Blk *)((u8 *)cur + (data_sz + 0x10));
+                    new_end = ne;
+                }
+                cur->end = new_end;
+                func_0011C950(0, new_end, cur, end_blk);
+                func_0011C8B8(blk);
+                ret = (u8 *)*ptr - (u8 *)orig;
+                if (moved_bytes != 0) {
+                    *moved_bytes += data_sz;
+                }
+                return ret;
+            }
+            cur = next;
+        }
+    }
+    if ((blk->next->flags & 0xF) != 0) {
+        return 0;
+    }
+    blk_sz = data_sz + 0x10;
+    cur = (R0Blk *)func_0011C8B8(blk->next);
+    end_blk = blk->end;
+    prev_blk = cur->next;
+    func_002EEFCC(cur, blk, blk_sz);
+    {
+        register R0Blk *new_end __asm__("$3") = (R0Blk *)((u8 *)cur + blk_sz);
+        *ptr = cur + 1;
+        cur->next = prev_blk;
+        cur->end = new_end;
+        func_0011C950(0, new_end, cur, end_blk);
+    }
+    ret = (u8 *)*ptr - (u8 *)orig;
+    if (moved_bytes != 0) {
+        *moved_bytes += data_sz;
+    }
+    return ret;
+}
+
 
 int func_0011CFB8(int a, int v)
 {

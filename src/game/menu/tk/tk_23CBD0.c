@@ -650,7 +650,103 @@ int func_0023E310(int sel, int a) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_23CBD0", func_0023E390);
+extern char D_00572CD0[];
+void _tk_sprintf_d(char *, char *, int) __asm__("func_002F0008");
+int _tk_1F5D08(char *, int, int, int) __asm__("func_001F5D08");
+
+void func_0023E390(Task *o, int x, int y, int idx, int mode)
+{
+    char unused[0x20];
+    char buf[0x10];
+    u8 state;
+    register int gray __asm__("$22");
+    u8 *rec;
+    int title;
+    int x92;
+    register int x5a __asm__("$18");
+
+    switch (mode) {
+    case 0:
+        idx += o->x32;
+        y -= (o->x46 * 0x30) / 0x1000;
+        break;
+    case 1:
+        idx += o->x34;
+        break;
+    case 2:
+        idx += o->x32;
+        break;
+    }
+    if (idx < 0 || idx >= (u16)o->x30) {
+        return;
+    }
+    state = D_0069A690[idx];
+    if (D_0069A688 == 1) {
+        switch (state) {
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+            gray = 0;
+            break;
+        default:
+            gray = 1;
+            break;
+        }
+    } else {
+        register int tmp __asm__("$2") = state ^ 1;
+        gray = (tmp != 0);
+    }
+    func_001FA6C0(x, y, 0x7A, 0x27, 0x80372D22, 0x80524641);
+    x5a = x + 0x5A;
+    {
+        register int a0 __asm__("$4") = 0x10F;
+        __asm__("" : "+r"(a0));
+        TOMkpShapeXY(a0, x, y);
+    }
+    func_001F0328(x + 0x7A, y, 0x143, 0x27, 0x8048211D, 0x805C393C);
+    {
+        register int a0 __asm__("$4") = 0x10C;
+        __asm__("" : "+r"(a0));
+        TOMkpShapeXY(a0, x + 0x1BD, y);
+    }
+    _tk_sprintf_d(buf, D_00572CD0, idx + 1);
+    {
+        register int a1 __asm__("$5") = x5a;
+        int r;
+        __asm__("" : "+r"(a1));
+        r = _tk_1F5D08(buf, a1, y + 2, 0x25);
+        __asm__("" : "+r"(x) : "r"(r));
+        x5a = x + 0x92;
+    }
+    {
+        register int a0 __asm__("$4");
+        __asm__("" : "+r"(x5a) : : "$4");
+        a0 = idx;
+        x92 = x5a;
+        rec = (u8 *)func_0023CE08(a0);
+    }
+    title = func_0023E310(state, (int)rec);
+    if (func_0020B850() == 0) {
+        if (state == 1) {
+            func_001F3B10(title, x5a, y, gray, 1);
+        } else {
+            func_001F3808(title, x5a, y, gray);
+        }
+    } else {
+        func_001F3808(title, x + 0x88, y, gray);
+    }
+    if (state == 1) {
+        int y11 = y + 0x11;
+        if (func_0020B850() == 0) {
+            __asm__("" : "+r"(x92));
+            func_001F3B10(AtelGetSaveDicName(*(u16 *)(rec + 0x18), rec[0x1F]), x92, y11, gray, rec[0x1F]);
+        } else {
+            func_001F3808(AtelGetSaveDicName(*(u16 *)(rec + 0x18), func_001BD360()), x + 0x88, y11, gray);
+        }
+        func_0024AD20(*(u32 *)(rec + 0x10), x + 0x1B3, y + 5, 0, 0);
+    }
+}
 
 void func_0023E660(Task *o, int a1, int a2) { func_00246210(a1, a2 + (o->x48 - o->x32) * 15, 0x1B8); }
 

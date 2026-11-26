@@ -316,7 +316,77 @@ again:
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_2362B8", func_00236E60);
+void func_00236E60(Task *o)
+{
+    int spc;
+    int cnt;
+    int x0;
+    int y0;
+    int ratio;
+    int base_x;
+    int curx;
+    int sc_w;
+    int sc_x;
+    int sc_w2;
+    int ty;
+    int sum;
+    int i;
+
+    func_00124F08();
+    TOMenuOpenPktBuffTmp();
+    x0 = o->x4A;
+    y0 = o->x4C;
+    spc = *(u16 *)o->pad3C;
+    ratio = o->x46;
+    sum = 0;
+    sc_w = (o->x4E * ratio + (o->ext[o->x48 * 3 + 2] + 0x18) * (0x1000 - ratio)) / 0x1000;
+    cnt = (u16)o->x30 - 1;
+    for (i = 0; i < o->x48; i++) {
+        sum += o->ext[i * 3 + 2] + spc;
+    }
+    sc_w2 = sc_w - 0x18;
+    sc_x = x0 + 0xC;
+    ty = y0 + 2;
+    base_x = (x0 * ratio + (x0 - sum - 0x24) * (0x1000 - ratio)) / 0x1000;
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    if (o->ext[15] != 1) {
+        func_001FF1D8(0xD8, 0xD9, x0, y0, o->x4E, 0x80101010, 0x80101010);
+    }
+    TODrawScissorXYWH(0, 0, 0x1FF, 0x19F);
+    curx = base_x + 0x30;
+    for (i = 0; i <= cnt; i++) {
+        int w;
+        int txt;
+        int ok;
+        int col;
+
+        w = o->ext[i * 3 + 2];
+        txt = o->ext[i * 3];
+        if (o->x1C != 0) {
+            ok = ((int (*)(Task *, int, int))o->x1C)(o, i, 0);
+        } else {
+            ok = 1;
+        }
+        col = (ok == 0);
+        TODrawScissorXYWH(sc_x, 0, sc_w2, 0x19F);
+        func_001F3808(txt, curx, ty, col);
+        ((int (*)(int, int, int, int))TODrawScissorXYWH)(0, 0, 0x1FF, 0x19F);
+        if (i == o->x48) {
+            if (o->b45 <= 0) {
+                func_001FE7F8(0, curx, ty);
+                func_00201F20(o->ext[14] + 0xF);
+            } else {
+                int tw = func_00226AD0((u8 *)txt);
+                func_00201D48(o->ext[14] + 0xF, curx, ty, tw);
+                func_00201D20(o->ext[14] + 0xF, 1);
+                func_002020A0(o->ext[14] + 0xF);
+            }
+        }
+        curx += w + spc;
+    }
+    TOMenuDrawKickTmp();
+    func_00124F08();
+}
 
 void func_00237180(Task *o)
 {

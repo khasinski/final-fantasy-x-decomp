@@ -61,7 +61,91 @@ void func_0024B8C0(u32 *base, int i, int j) {
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/tk/tk_24B828", func_0024B900);
+extern char D_00573320[];
+extern char D_00573338[];
+extern char D_00573348[];
+extern char D_00573358[];
+extern char D_00573368[];
+extern char D_00573380[];
+int func_002EF240();
+
+typedef struct {
+    u8 pad00[0x0B];
+    u8 slots;
+    u8 pad0C[0x02];
+    u16 abil[4];
+} SaveWep24B900;
+
+void func_0024B900(int base, int ofs, int count)
+{
+    u32 masks[200 * 8];
+    s32 tmp;
+    SysEntry *tbl = (SysEntry *)base;
+    int i;
+    int j;
+
+    for (i = 0; i < count; i++) {
+        SaveWep24B900 *w;
+
+        for (j = 0; j < 8; j++) {
+            masks[i * 8 + j] = 0;
+        }
+        w = (SaveWep24B900 *)MsGetSaveWeapon((tbl + ofs)[i].h0, &tmp);
+        func_002EF240(D_00573320, (tbl + ofs)[i].h0, ofs + i);
+        for (j = 0; j < w->slots; j++) {
+            u16 ab = w->abil[j];
+            if (ab != 0xFF) {
+                int idx;
+                int bit;
+                func_002EF240(D_00573338, ab);
+                ab &= 0xFF;
+                idx = ab >> 5;
+                bit = 31 - (ab & 0x1F);
+                masks[i * 8 + idx] |= 1 << bit;
+                func_002EF240(D_00573348, idx);
+                func_002EF240(D_00573358, bit);
+            }
+        }
+    }
+    for (i = 0; i < count - 1; i++) {
+        int best = i;
+        for (j = i + 1; j < count; j++) {
+            int cmp = func_0024B860(masks, best, j);
+            if (cmp < 0) {
+                func_002EF240(D_00573368, best, i);
+                best = j;
+            } else if (cmp == 0) {
+                SaveWep24B900 *wb = (SaveWep24B900 *)MsGetSaveWeapon((tbl + ofs)[best].h0, &tmp);
+                SaveWep24B900 *wj = (SaveWep24B900 *)MsGetSaveWeapon((tbl + ofs)[j].h0, &tmp);
+                int sb = wb->slots;
+                int sj = wj->slots;
+                if (sb < sj) {
+                    best = j;
+                } else if (sb == sj) {
+                    int k;
+                    for (k = 0; k < sb; k++) {
+                        int a = wb->abil[k];
+                        int b = wj->abil[k];
+                        if (a < b) {
+                            best = j;
+                            break;
+                        }
+                        if (b < a) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (best != i) {
+            u16 a = (tbl + ofs)[i].h0;
+            u16 b = (tbl + ofs)[best].h0;
+            func_002EF240(D_00573380, ofs + i, ofs + best);
+            func_001C03B0(a, b);
+            func_0024B8C0(masks, i, best);
+        }
+    }
+}
 
 void func_0024BC48(void)
 {

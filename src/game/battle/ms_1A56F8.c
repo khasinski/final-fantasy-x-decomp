@@ -26,7 +26,141 @@ void func_001A56F8(int a, int b) {
     D_00314254 = b;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraInit);
+typedef struct {
+    u8 pad00[0x11C];
+    float f11C;
+    float f120;
+    u8 pad124[0xC];
+} CamAreaInit;
+
+typedef struct {
+    u8 pad00[0x30];
+    s8 b30;
+    u8 pad31[0x8B];
+    void *other;
+    u8 padC0[0x60];
+    CamAreaInit area[4];
+    u8 pad5E0[0x40];
+} CamRecInit;
+
+typedef struct {
+    u8 pad00[0x4];
+    float f04;
+    u8 pad08[0x28];
+    struct {
+        s8 b00;
+        u8 pad01[0x4F];
+        float v50[4];
+        u8 pad60[0x2C];
+        void *other;
+        u8 pad90[0x8C];
+        struct {
+            u8 pad00[0x11C];
+            float f11C;
+            float f120;
+            u8 pad124[0xC];
+        } area[4];
+        u8 pad5DC[0x44];
+    } rec[2];
+    u8 padC70[0x24];
+    s8 bC94;
+    u8 padC95[0x33];
+    struct {
+        float f00;
+        u8 pad04[0x2C];
+    } subCC8[4];
+    u8 padD88[0x18];
+} CamSlotInit;
+
+typedef struct {
+    u8 pad00[0x38];
+    float f38;
+    float f3C;
+    u8 pad40[0x8];
+    struct {
+        float x;
+        float y;
+        u8 pad08[0x8];
+    } v48[2];
+    u8 pad68[0x20];
+    struct {
+        float x;
+        float y;
+        u8 pad08[0x8];
+    } v88[2];
+    u8 padA8[0x18];
+    s8 bC0;
+    s8 bC1;
+    u8 padC2[0xE];
+    s32 wD0;
+    u8 padD4[0xEC];
+} ScrSlotInit;
+
+extern CamSlotInit _cam_init_arr[3] __asm__("D_00314840");
+extern ScrSlotInit _scr_init_arr[3] __asm__("ms_screen");
+extern float D_0065FDC0;
+extern s32 D_003142E0;
+extern s32 D_0031712C;
+void func_2037E98(void);
+void MsEffectCameraInit(void);
+void MsSplineInit(void);
+void MsSetScreen(int, float, float, float, float, float, float, float, float, float);
+void MsAtelCameraInit(void);
+
+void MsCameraInit(void)
+{
+    int i, j, k;
+
+    if (FFXIsDebug() != 0) {
+        func_2037E98();
+    }
+    ms_camera_now = (void *)&_cam_init_arr[0];
+    ms_screen_now = (void *)&_scr_init_arr[0];
+    D_003142E0 = 0;
+    D_0065FDC0 = 1024.0f;
+    D_0031712C = 0;
+    MsEffectCameraInit();
+    MsSplineInit();
+    for (i = 0; i < 3; i++) {
+        CamSlotInit *cam = &_cam_init_arr[i];
+        MsStructClear(cam, sizeof(CamSlotInit));
+        cam->f04 = -1.0f;
+        cam->bC94 = -1;
+        for (j = 0; j < 2; j++) {
+            CamSlotInit *r0 = &_cam_init_arr[i];
+            u8 *r = (u8 *)r0 + j * 0x620;
+            r[0x30] = j;
+            *(void **)(r + 0xBC) = _cam_init_arr[i].rec[1 - j].v50;
+        }
+        for (k = 0; k < 4; k++) {
+            _cam_init_arr[i].subCC8[k].f00 = 1024.0f;
+            for (j = 0; j < 2; j++) {
+                u8 *a = (u8 *)&_cam_init_arr[i] + k * 0x130 + j * 0x620;
+                *(float *)(a + 0x150) = 1.0f;
+                *(float *)(a + 0x14C) = 1.0f;
+            }
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        ScrSlotInit *scr = &_scr_init_arr[i];
+        MsStructClear(scr, sizeof(ScrSlotInit));
+        scr->bC1 = i;
+        scr->wD0 = -1;
+        scr->f38 = (float)D_00314250;
+        scr->f3C = (float)D_00314254;
+        for (k = 0; k < 2; k++) {
+            u8 *p = (u8 *)&_scr_init_arr[i] + k * 0x10;
+            *(float *)(p + 0x48) = (float)D_00314250;
+            *(float *)(p + 0x4C) = (float)D_00314254;
+            *(float *)(p + 0x88) = (float)D_00314250;
+            *(float *)(p + 0x8C) = (float)D_00314254;
+        }
+        MsSetScreen(i, 512.0f, 0.8f, 14.0f / 15.0f, 2048.0f, 2048.0f, 1.0f, 16770000.0f, 1.0f, 65536.0f);
+    }
+    _scr_init_arr[0].bC0 = 1;
+    MsAtelCameraInit();
+}
+
 
 INCLUDE_ASM("build/ee_asm/game/battle/ms_1A56F8", MsCameraProcess);
 INCLUDE_RODATA("build/ee_asm/game/battle/ms_1A56F8/rodata", jtbl_0056DE80);

@@ -10,7 +10,183 @@
 #include "ffx/u0.h"
 #include "ffx/v0.h"
 
-INCLUDE_ASM("build/ee_asm/game/chr/chr", func_001008D8);
+extern char D_00568F28[];
+extern char D_00568F30[];
+extern char D_00568F38[];
+extern char D_00568F40[];
+void func_00100108(void *);
+
+typedef struct {
+    u16 h00;
+    s16 h02;
+    s16 h04;
+    s16 h06;
+    s16 h08;
+    s16 h0A;
+    s16 h0C;
+    s16 h0E;
+    s16 h10;
+    s16 h12;
+} ChrBoneInit;
+
+typedef struct {
+    u8 pad00[0x4];
+    u16 h04;
+    u16 h06;
+    u8 pad08[0x2];
+    u16 h0A;
+    u8 pad0C[0x4];
+    s32 w10;
+    u8 pad14[0x8];
+    ChrBoneInit *p1C;
+    u8 pad20[0xC];
+    u16 h2C;
+} ChrHdrFull;
+
+typedef struct {
+    void *parent;
+    s32 idx;
+    u8 pad08[0xE8];
+    float fF0;
+    float fF4;
+    float fF8;
+    float fFC;
+    float f100;
+    float f104;
+    float f108;
+    float f10C;
+    float f110;
+    float f114;
+    float f118;
+    u8 pad11C[0x24];
+} ChrBoneObj;
+
+typedef struct {
+    void *p00;
+    u8 pad04[0x10];
+    float f14;
+    u8 pad18[0x18];
+} ChrPartObj;
+
+typedef struct {
+    u8 pad00[0x4];
+    s32 w04;
+    u8 pad08[0x198];
+    union {
+        s64 flags;
+    } u1A0;
+    u8 pad1A8[0x20];
+    ChrPartObj *p1C8;
+    ChrHdrFull *hdr;
+    u8 pad1D0[0x10];
+    ChrBoneObj rootBone;
+    ChrBoneObj *p320;
+    void *p324;
+    u8 pad328[0x42C];
+    void *p754;
+} ChrSetupView;
+
+void func_001008D8(Chr *chr_in)
+{
+    char buf[0x20];
+    ChrSetupView *chr = (ChrSetupView *)chr_in;
+    ChrHdrFull *hdr = chr->hdr;
+    s32 i;
+
+    chr->p320 = user_malloc(hdr->h0A * sizeof(ChrBoneObj), 6, D_00568F00, 0xE1);
+    func_002F0008(buf, D_00568F28, chr->w04);
+    func_0011BB08(chr->p320, buf, -1);
+    func_0011CFB8(chr->p320, 1);
+    CALL_func_002ED0E0_INT(chr->p320, hdr->h0A * sizeof(ChrBoneObj));
+
+    chr->p754 = user_malloc(hdr->h0A * 0x168, 6, D_00568F00, 0xE7);
+    func_002F0008(buf, D_00568F30, chr->w04);
+    func_0011BB08(chr->p754, buf, -1);
+    func_0011CFB8(chr->p754, 1);
+    CALL_func_002ED0E0_INT(chr->p754, hdr->h0A * 0x168);
+
+    chr->p1C8 = user_malloc(hdr->h06 * sizeof(ChrPartObj), 6, D_00568F00, 0xED);
+    func_002F0008(buf, D_00568F38, chr->w04);
+    func_0011BB08(chr->p1C8, buf, -1);
+    func_0011CFB8(chr->p1C8, 1);
+    CALL_func_002ED0E0_INT(chr->p1C8, hdr->h06 * sizeof(ChrPartObj));
+
+    if (hdr->h2C != 0) {
+        chr->p324 = user_malloc(hdr->h2C * 0x60, 6, D_00568F00, 0xF4);
+        func_002F0008(buf, D_00568F40, chr->w04);
+        func_0011BB08(chr->p324, buf, -1);
+        func_0011CFB8(chr->p324, 1);
+        CALL_func_002ED0E0_INT(chr->p324, hdr->h2C * 0x30);
+    }
+
+    for (i = 0; i < hdr->h0A; i++) {
+        func_00100108(&chr->p320[i]);
+    }
+    func_00100108(&chr->rootBone);
+    chr->rootBone.idx = -1;
+
+    for (i = 0; i < hdr->h0A; i++) {
+        ChrBoneInit *bi = &hdr->p1C[i];
+        ChrBoneObj *b = &chr->p320[i];
+        float rx, ry, rz;
+
+        b->idx = i;
+        if (bi->h00 == i) {
+            b->parent = &chr->rootBone;
+        } else {
+            b->parent = &chr->p320[bi->h00];
+        }
+
+        rx = ((float)bi->h02 / 100.0f) * 3.141592f / 180.0f;
+        while (rx > 3.141592f) {
+            rx -= 6.283184f;
+        }
+        while (rx < -3.141592f) {
+            rx += 6.283184f;
+        }
+        b->fF0 = rx;
+
+        ry = ((float)bi->h04 / 100.0f) * 3.141592f / 180.0f;
+        while (ry > 3.141592f) {
+            ry -= 6.283184f;
+        }
+        while (ry < -3.141592f) {
+            ry += 6.283184f;
+        }
+        b->fF4 = ry;
+
+        rz = ((float)bi->h06 / 100.0f) * 3.141592f / 180.0f;
+        while (rz > 3.141592f) {
+            rz -= 6.283184f;
+        }
+        while (rz < -3.141592f) {
+            rz += 6.283184f;
+        }
+        b->fF8 = rz;
+
+        b->f100 = (float)bi->h08;
+        b->f104 = (float)bi->h0A;
+        b->f108 = (float)bi->h0C;
+        b->f110 = (float)(bi->h0E / 4096);
+        b->f114 = (float)(bi->h10 / 4096);
+        b->f118 = (float)(bi->h12 / 4096);
+    }
+
+    for (i = 0; i < chr->hdr->h06; i++) {
+        ChrPartObj *p = &chr->p1C8[i];
+        ChrSlotData *res;
+        s32 flag;
+
+        p->p00 = res = func_00100178(i, hdr->w10, hdr->h04);
+        p->f14 = 1.0f;
+        flag = FLAGS_BIT(&chr->u1A0, 21);
+        if (*(u16 *)((u8 *)res + 0x18) != 0) {
+            flag |= 1;
+        }
+        FLAGS_SET(&chr->u1A0, 21, flag);
+    }
+    Ch_ModelCreatePacket(chr);
+}
 
 typedef struct {
     s32 ptr;
@@ -264,7 +440,6 @@ Rec12C *func_00101210(s32 id, s32 arc)
 
 Rec12C *func_00101368(s32 id, s32 a1, s32 a2)
 {
-    register u8 *gp __asm__("$28");
     Rec12C *r = 0;
     s32 i;
 
@@ -278,20 +453,11 @@ Rec12C *func_00101368(s32 id, s32 a1, s32 a2)
     r->w0 = id;
     r->w4 = a1;
     func_001001B8(a1);
-    {
-        register float f1 __asm__("$f1") = 1.0f;
-        register Rec12C *ret __asm__("$2") = r;
-        register float f0 __asm__("$f0");
-        __asm__ volatile("" : "+f"(f1), "+r"(ret));
-        f0 = *(float *)(gp - 0x7FC0);
-        r->w14 = a2;
-        *(float *)((u8 *)r + 0x34) = f1;
-        __asm__ volatile("" : "+f"(f0) :: "memory");
-        *(float *)((u8 *)r + 0x38) = f0;
-        __asm__ volatile("" ::: "memory");
-        *(float *)((u8 *)r + 0x30) = f1;
-        return ret;
-    }
+    r->w14 = a2;
+    ((CbRecView *)r)->f30 = 1.0f;
+    ((CbRecView *)r)->f34 = 1.0f;
+    ((CbRecView *)r)->f38 = 0.1f;
+    return r;
 }
 
 char *sg_getdbname(int a)
@@ -1035,7 +1201,6 @@ void func_0010A250(Chr *chr, float v);
 
 Chr *func_00102B98(s32 id)
 {
-    register u8 *gp __asm__("$28");
     u8 pad[0x40];
     Chr *chr = 0;
     Rec12C *blk;
@@ -1081,7 +1246,7 @@ Chr *func_00102B98(s32 id)
     func_001109B8(chr, -1.0f);
     Ch_SetThickness(chr, -1.0f);
     func_00110958(chr, -1.0f);
-    func_0010AF88(chr, *(float *)(gp - 0x7FBC));
+    func_0010AF88(chr, 0.6f);
     func_00112F10(chr, 1);
     func_00110850(chr, 0, 0);
     func_00110850(chr, 1, 1);
@@ -1526,8 +1691,6 @@ void _chr_func_00106A08(s32, s32, s32, s32, s32, s32) __asm__("func_00106A08");
 
 void func_00103AA8(s32 n)
 {
-    register u8 *gp __asm__("$28");
-
     if (n < 10) {
         n = 10;
     }
@@ -1546,11 +1709,7 @@ void func_00103AA8(s32 n)
     Sg_PlayerSetDirFix(0, 0);
     func_0010C780(0);
     _chr_func_00107888(1000000);
-    {
-        float f = *(float *)(gp - 0x7FB8);
-        __asm__ volatile("" : "+f"(f));
-        func_001078B0(f);
-    }
+    func_001078B0(1000000.0f);
     _chr_func_00106A08(0, 0x53, 0x53, 0x53, 0x82, 0x4C);
     _chr_func_00106A08(1, 0x37, 0x37, 0x37, 0x136, 0xE);
     _chr_func_00106A08(2, 0x12, 0x12, 0xD, 0x82, 0x11C);

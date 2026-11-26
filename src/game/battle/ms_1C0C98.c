@@ -398,7 +398,318 @@ int func_001C14F0(int a0, u8 *a1, u8 *a2, OfsTbl *a3, int a4, int *a5, int *a6) 
     return reflect_mask;
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1C0C98", func_001C1908);
+int func_001C3688();
+int func_001C3578();
+int func_001C4008();
+void func_001C3828();
+int func_001C2758();
+int func_001C38A8();
+int func_001C38E8();
+int func_001C3930();
+int func_001C27C0();
+int func_001C2800();
+int func_001C2898();
+int func_001C3F58();
+int func_001C3A38();
+int func_001C3A88();
+int func_001C3AD0();
+int func_001C3C90();
+int func_001C3D00();
+int func_001C3DC0();
+int func_001C3E20();
+int func_001C3EA0();
+u32 func_001C4290();
+int func_001C4320();
+int func_001C4368();
+int func_001C4F40();
+void func_001C3EE8();
+int func_001C54A0();
+u32 func_001C54F8();
+void func_001C5538();
+s32 func_001C5340();
+int func_001C5B10();
+int func_001C5E60();
+int func_001C2500(int unused, BtlChr *c, Q4Act *act, int *q, int force);
+
+typedef struct {
+    u8 pad0[0x36];
+    s8 b36;
+    s8 b37;
+    s8 b38;
+    s8 b39;
+    u8 pad3A[4];
+    s8 b3E;
+    s8 b3F;
+    s8 b40;
+} BtlWork1908;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 b6;
+    u8 b7;
+    u8 pad8[0xC];
+    u16 h14;
+    u16 h16;
+    u16 h18;
+    u16 h1A;
+    s32 w1C;
+    s32 w20[3];
+} Res1908;
+
+int func_001C1908(int a0, BtlChr *caster, int a2, BtlChr *target, OfsTbl *cmd, int a5, Obj436Ent *a6, void *a7_, int *a8, int *a9, u8 *a10_) {
+    u8 *res = (u8 *)a6;
+    int *a7 = (int *)a7_;
+    int *a10 = (int *)a10_;
+    int dmg_arr[3];
+    int arr50[8];
+    int arr70[8];
+    int cnt[2];
+    int t4_val;
+    int t0_val;
+    int hit_flags;
+    int mode_flag;
+    int dmg;
+    int eff_flags;
+    int crit_flag;
+    int varBC;
+    int param_cc;
+    int param_d0;
+    int param_d4;
+    int status_mask;
+    int tmp_mask;
+    int var_dc;
+    int orig_hit_flags;
+    int ret_b0;
+    int orig_hp;
+    int max_dmg;
+    int i;
+    int flag18;
+    int *p_dmg;
+
+    for (i = 0; i < 8; i++) {
+        arr50[i] = 0;
+        arr70[i] = 0;
+    }
+    for (i = 0; i < 2; i++) {
+        cnt[i] = 0;
+    }
+    p_dmg = dmg_arr;
+    orig_hp = *(s32 *)((u8 *)target + 0x264);
+    t4_val = *((u8 *)target + 0x269);
+    t0_val = *((u8 *)target + 0x26B);
+    flag18 = (*(u32 *)((u8 *)cmd + 0x1C) >> 18) & 1;
+    tmp_mask = *(u16 *)((u8 *)cmd + 0x54);
+    varBC = 0;
+    orig_hit_flags = 0;
+    hit_flags = 0;
+    eff_flags = 0;
+    crit_flag = 0;
+    dmg_arr[0] = 0;
+    dmg_arr[1] = 0;
+    dmg_arr[2] = 0;
+    mode_flag = 0;
+    if (flag18) {
+        u32 w_stat;
+        param_cc = *((u8 *)caster + 0x281);
+        param_d4 = *((u8 *)cmd + 0x2D) | *((u8 *)caster + 0x299);
+        param_d0 = *((u8 *)caster + 0x287);
+        w_stat = *(u16 *)((u8 *)caster + 0x2C4);
+        if (((tmp_mask >> 1) & 1) || ((tmp_mask >> 2) & 1) || ((tmp_mask >> 3) & 1) || ((tmp_mask >> 4) & 1) || ((tmp_mask >> 5) & 1)) {
+            w_stat &= ~2U;
+            w_stat &= ~4U;
+            w_stat &= ~8U;
+            w_stat &= ~0x10U;
+            w_stat &= ~0x20U;
+        }
+        status_mask = tmp_mask | w_stat;
+    } else {
+        status_mask = tmp_mask;
+        param_cc = *((u8 *)cmd + 0x28);
+        param_d0 = *((u8 *)cmd + 0x2A);
+        param_d4 = *((u8 *)cmd + 0x2D);
+    }
+
+    var_dc = func_001C3688(0, a0, caster, a2, target, cmd, 0);
+    if (func_001C3578(cmd, param_d4, res) != 0) {
+        cnt[0]++;
+        mode_flag = 2;
+        hit_flags = *((u8 *)cmd + 0x23);
+        ret_b0 = func_001C5B10(a0, a2, *(u16 *)((u8 *)cmd + 0x20) & 3, 0, 0, 0, dmg_arr, arr50, arr70, cmd, 0, res[7], hit_flags, eff_flags, cnt);
+    } else {
+        int r = func_001C4008(caster, target, cmd, res, var_dc);
+        var_dc = 1;
+        if (r == var_dc) {
+            mode_flag = var_dc;
+            (*a9)++;
+            if (a0 == a2) {
+                ret_b0 = ((*(u16 *)((u8 *)cmd + 0x20) & 3) != 2) ? 0x11 : 1;
+            } else {
+                ret_b0 = 1;
+            }
+            cnt[1]++;
+        } else if (r == 2) {
+            (*a9)++;
+            ret_b0 = 0;
+            var_dc = 0;
+            cnt[1]++;
+        } else {
+            int res14;
+            (*a8)++;
+            hit_flags = *((u8 *)cmd + 0x23);
+            orig_hit_flags = hit_flags;
+            eff_flags = hit_flags;
+            if (param_d0 != 0) {
+                if (hit_flags & 1) {
+                    dmg = 0;
+                    func_001C3828(a2, target, cmd, arr50, arr70, res);
+                    dmg = MsCalcDamageCommand(caster, target, (int)cmd, param_cc, param_d0, *(u16 *)(res + 0x14), 1, var_dc - ((BtlWork1908 *)&D_003172F0)->b38, (int)&t4_val, (int)&t0_val, dmg);
+                    dmg = func_001C2758(target, &hit_flags, dmg);
+                    dmg = func_001C38A8(cmd, &hit_flags, &mode_flag, res, dmg);
+                    dmg = func_001C38E8(cmd, &hit_flags, &mode_flag, res, dmg);
+                    if (((BtlWork1908 *)&D_003172F0)->b39 == 0) {
+                        dmg = func_001C3930(caster, target, cmd, &hit_flags, dmg);
+                    }
+                    dmg = func_001C27C0(caster, dmg);
+                    func_001C2800(caster, cmd, a5, &dmg);
+                    dmg = func_001C2898(caster, cmd, a5, param_cc, dmg);
+                    dmg = func_001C3F58(a0, a2, cmd, dmg);
+                    dmg = func_001C3A38(target, param_cc, &eff_flags, 1, cnt, dmg);
+                    dmg = func_001C3A88(caster, cmd, res, dmg);
+                    dmg = func_001C3AD0(target, cmd, param_d4, dmg);
+                    dmg = func_001C3C90(caster, target, cmd, res, &crit_flag, dmg);
+                    dmg = func_001C3D00(target, cmd, &hit_flags, res, dmg);
+                    dmg = func_001C3DC0(caster, cmd, dmg);
+                    dmg = func_001C3E20(target, cmd, &eff_flags, 1, cnt, dmg);
+                    dmg = func_001C3EA0(caster, dmg);
+                    dmg_arr[0] = dmg;
+                }
+                if (hit_flags & 2) {
+                    dmg = 0;
+                    dmg = MsCalcDamageCommand(caster, target, (int)cmd, param_cc, param_d0, *(u16 *)(res + 0x14), 2, 1 - ((BtlWork1908 *)&D_003172F0)->b38, 0, 0, 0);
+                    func_001C2800(caster, cmd, a5, &dmg);
+                    dmg = func_001C2898(caster, cmd, a5, param_cc, dmg);
+                    if (dmg > 0 && dmg > *(s32 *)((u8 *)target + 0x3A8)) {
+                        dmg = *(s32 *)((u8 *)target + 0x3A8);
+                    }
+                    dmg = func_001C3A88(caster, cmd, res, dmg);
+                    dmg_arr[1] = dmg;
+                }
+                if (hit_flags & 4) {
+                    eff_flags &= ~4U;
+                    dmg = 0;
+                    dmg = MsCalcDamageCommand(caster, target, (int)cmd, param_cc, param_d0, *(u16 *)(res + 0x14), 4, 1 - ((BtlWork1908 *)&D_003172F0)->b38, 0, 0, 0);
+                    dmg = func_001C3A88(caster, cmd, res, dmg);
+                    dmg_arr[2] = dmg;
+                }
+            }
+            hit_flags = func_001C4290(target, cmd, hit_flags, dmg_arr);
+            hit_flags = func_001C4320(target, res, &eff_flags, 4, hit_flags, cnt, dmg_arr);
+            res14 = *(u16 *)(res + 0x14);
+            if (((BtlWork1908 *)&D_003172F0)->b36 == 0) {
+                hit_flags = func_001C4368(a0, caster, a2, target, cmd, arr50, arr70, res, hit_flags, p_dmg, &varBC);
+                hit_flags = func_001C4F40(a0, caster, a2, target, cmd, arr50, arr70, res, hit_flags, p_dmg, status_mask);
+                if (!((*(u16 *)(res + 0x14) >> 2) & 1)) {
+                    res[6] |= *((u8 *)cmd + 0x5A);
+                }
+            }
+            func_001C3EE8(target, res, res14, &eff_flags, arr50, dmg_arr);
+            func_001C54A0(target, dmg_arr, arr50, arr70, hit_flags, varBC);
+            orig_hit_flags = hit_flags;
+            hit_flags = func_001C54F8(target, res, res14, orig_hit_flags, dmg_arr);
+            func_001C5538(caster, target, cmd);
+            func_001C5340(a2, target, cmd, arr50, res);
+            ret_b0 = func_001C5B10(a0, a2, *(u16 *)((u8 *)cmd + 0x20) & 3, crit_flag, t4_val, t0_val, dmg_arr, arr50, arr70, cmd, *(u16 *)(res + 0x14), res[7], hit_flags, eff_flags, cnt);
+        }
+    }
+
+    if (var_dc != 0) {
+        func_001C3688(1, a0, caster, a2, target, cmd, dmg_arr);
+    }
+    if (((BtlWork1908 *)&D_003172F0)->b3E != 0) {
+        for (i = 0; i < 2; i++) {
+            if ((hit_flags >> i) & 1) {
+                p_dmg[i] = 1;
+            }
+        }
+    }
+    if (((BtlWork1908 *)&D_003172F0)->b3F != 0) {
+        for (i = 0; i < 2; i++) {
+            if ((hit_flags >> i) & 1) {
+                p_dmg[i] = 10000;
+            }
+        }
+    }
+    if (((BtlWork1908 *)&D_003172F0)->b40 != 0) {
+        for (i = 0; i < 2; i++) {
+            if ((hit_flags >> i) & 1) {
+                p_dmg[i] = 100000;
+            }
+        }
+    }
+    max_dmg = ((*(u16 *)((u8 *)caster + 0x37E) >> 11) & 1) ? 99999 : 9999;
+    if ((*(u16 *)((u8 *)cmd + 0x20) >> 7) & 1) {
+        max_dmg = 99999;
+    } else if ((*(u16 *)((u8 *)cmd + 0x20) >> 6) & 1) {
+        max_dmg = 9999;
+    }
+    if (((*((u8 *)caster + 0x300) >> 3) & 1) && (hit_flags & 1)) {
+        dmg = dmg_arr[0];
+        if (dmg > 0 && dmg < 9999) {
+            dmg_arr[0] = 9999;
+        } else if (dmg < 0 && dmg > -9999) {
+            dmg_arr[0] = -9999;
+        }
+    }
+    {
+        s32 *p_9f4 = (s32 *)((u8 *)target + 0x9F4);
+        s32 *p_3a4 = (s32 *)((u8 *)target + 0x3A4);
+        s32 *p_res = (s32 *)(res + 0x20);
+        for (i = 0; i < 3; i++) {
+            dmg = p_dmg[i];
+            if (dmg < -max_dmg) {
+                dmg = -max_dmg;
+            } else if (dmg > max_dmg) {
+                dmg = max_dmg;
+            }
+            p_res[i] = dmg;
+            p_9f4[i] += dmg;
+            p_3a4[i] -= dmg;
+            if (a7 != 0) {
+                a7[i] -= dmg;
+            }
+            if (p_3a4[i] < 0) {
+                p_3a4[i] = 0;
+            }
+        }
+    }
+    if (orig_hp - *(s32 *)(res + 0x20) <= 0) {
+        hit_flags |= 0x80;
+    }
+    {
+        Res1908 *rp = (Res1908 *)res;
+        rp->b0 = ret_b0;
+        rp->b1 = func_001C5E60(eff_flags, cnt);
+        rp->h18 = hit_flags;
+        rp->b2 = eff_flags;
+        rp->b3 = mode_flag;
+        rp->h1A = orig_hit_flags;
+    }
+    *(s32 *)(res + 0x1C) = MsCalcDamageCommand(caster, target, (int)cmd, param_cc, param_d0, 0, 1, 0, 0, 0, 0);
+    res[4] = arr50[7];
+    func_001C2500(a0, caster, (Q4Act *)cmd, (int *)(res + 0x20), arr50[4]);
+    if (arr70[3] != 0) {
+        *((u8 *)caster + 0xAAA) = 7;
+    }
+    if (a10 != 0) {
+        *a10 = arr50[4];
+    }
+    return *(s32 *)(res + 0x20);
+}
 
 int func_001C2500(int unused, BtlChr *c, Q4Act *act, int *q, int force) {
     int r = 0;

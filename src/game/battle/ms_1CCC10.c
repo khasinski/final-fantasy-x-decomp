@@ -389,7 +389,68 @@ void func_001CD538(int a, BtlChr *c) {
     MsAtelRequestMagicCamera(0, a, c->fC1C, c->fAC4, c->fAC8, 1, 1, 0, 0);
 }
 
-INCLUDE_ASM("build/ee_asm/game/battle/ms_1CCC10", MsEffectProcess);
+typedef struct {
+    u8 pad0[0xC];
+    void (*fC)(int);
+    void (*f10)(int);
+} EffProcObj;
+
+extern void (*D_003737AC)(int);
+extern void (*D_003737B0)(int);
+
+void MsEffectProcess(int mode) {
+    int i;
+    BtlChr *c;
+    EffProcObj *obj;
+
+    switch (mode) {
+    case 0:
+        D_003737AC(0);
+        break;
+    case 1:
+        D_003737B0(0);
+        break;
+    }
+    if (MsGetChrTop() != 0) {
+        for (i = 0; i < 0x1F; i++) {
+            c = MsGetChr(i);
+            if ((u8)c->fABB == 4 || (u8)c->fABB == 5) {
+                register int one __asm__("$19") = 1;
+                obj = (EffProcObj *)c->fC4C;
+                func_002F8660(0);
+                if (mode == 0) {
+                    goto loop_c0;
+                }
+                if (mode == one) {
+                    goto loop_c1;
+                }
+                continue;
+            loop_c0:
+                obj->fC(0);
+                continue;
+            loop_c1:
+                obj->f10(0);
+            }
+        }
+    }
+    if ((u8)D_00662618 == 4 || (u8)D_00662618 == 5) {
+        register int one __asm__("$19") = 1;
+        obj = (EffProcObj *)D_00662614;
+        func_002F8660(0);
+        if (mode == 0) {
+            goto end_c0;
+        }
+        if (mode == one) {
+            goto end_c1;
+        }
+        return;
+    end_c0:
+        obj->fC(0);
+        return;
+    end_c1:
+        obj->f10(0);
+    }
+}
 
 void MsEffectFree(int id) {
     BtlChr *c;

@@ -173,7 +173,103 @@ void func_00291C40(Vec4 *pos, Vec4 *rot, EvRef *ref)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_00291DA8);
+extern Vec4 D_006A3B30[4];
+extern Vec4 D_006A3B70[4];
+extern u8 *op1_md_draw(void *, void *);
+
+typedef struct {
+    /* 0x00 */ u32 flags;
+    /* 0x04 */ s32 x04;
+    /* 0x08 */ u16 x08;
+    /* 0x0A */ u8 x0A;
+    /* 0x0B */ u8 pad0B;
+    /* 0x0C */ u32 x0C;
+    /* 0x10 */ union {
+        u64 d;
+        struct { s32 a, b; } w;
+    } x10;
+    /* 0x18 */ u8 col[4];
+    /* 0x1C */ u32 x1C;
+    /* 0x20 */ void *x20;
+    /* 0x24 */ void *x24;
+    /* 0x28 */ void *x28;
+    /* 0x2C */ void *x2C;
+    /* 0x30 */ u32 x30;
+    /* 0x34 */ u8 *x34;
+    /* 0x38 */ u32 x38;
+    /* 0x3C */ u32 x3C;
+    /* 0x40 */ u32 x40;
+    /* 0x44 */ void *x44;
+    /* 0x48 */ u32 x48;
+    /* 0x4C */ u8 x4C;
+    /* 0x4D */ u8 x4D;
+    /* 0x4E */ u8 pad4E[0x1A];
+} MdDrawParam;
+
+#define PPP_MUL_COL(dst_p, src_p, mng_p) { \
+        void *_s = (src_p); \
+        void *_m = (mng_p); \
+        void *_d = (dst_p); \
+        __asm__ volatile("ld $8, 0(%0)" : : "r"(_s), "r"(_m), "r"(_d) : "$8", "memory"); \
+        __asm__ volatile("ld $9, 0(%0)" : : "r"(_m), "r"(_s) : "$9", "memory"); \
+        __asm__ volatile("pextlh $8, $0, $8" : : : "$8"); \
+        __asm__ volatile("pextlh $9, $0, $9" : : : "$9"); \
+        __asm__ volatile("pmulth $8, $8, $9" : : : "$8"); \
+        __asm__ volatile("psrlw $8, $8, 19" : : : "$8"); \
+        __asm__ volatile("ppach $8, $0, $8" : : : "$8"); \
+        __asm__ volatile("ppacb $8, $0, $8" : : : "$8"); \
+        __asm__ volatile("sw $8, 0(%0)" : : "r"(_d), "r"(_s), "r"(_m) : "memory"); \
+    }
+
+void func_00291DA8(u8 *base, u8 *param, ScriptCtx *ctx)
+{
+    MdDrawParam draw;
+    u8 *mdl;
+    u32 idx;
+
+    if (*(u32 *)(param + 4) == 0xFFFF) {
+        return;
+    }
+    PPP_MUL_COL(draw.col, base + (ctx->info->slot[0] + 0xA0), (u8 *)ppvMng + 0x70);
+    if (draw.col[3] == 0) {
+        return;
+    }
+    mdl = *(u8 **)(*(u8 **)((u8 *)D_006A3924 + 0x20) + (*(u32 *)(param + 4) << 5) + 0x1C);
+    if (*(u32 *)mdl & 1) {
+        draw.flags = 0xC0;
+    } else {
+        draw.flags = 0x4C;
+    }
+    if (!(*(u32 *)mdl & 2)) {
+        draw.flags |= 0x10;
+    }
+    draw.x08 = *(u16 *)(mdl + 0x16);
+    draw.x0A = 0;
+    draw.x1C = *(u32 *)((u8 *)ppvMng + 0x78);
+    draw.x38 = *(u32 *)(base + 0x90);
+    draw.x3C = *(u32 *)(base + 0x94);
+    idx = *(u32 *)(param + 0x28);
+    if (idx != 0xFFFFFFFFU) {
+        u8 *p = ppvMng->p3C[idx].base + (*(s32 *)(param + 0x2C) + 0xA0);
+        draw.x4D = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 8)), 128.0));
+        draw.x4C = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 0x14)), 128.0));
+        func_00291C40(&D_006A3B30[0], &D_006A3B70[0], (EvRef *)(param + 0x8));
+        func_00291C40(&D_006A3B30[1], &D_006A3B70[1], (EvRef *)(param + 0x10));
+        func_00291C40(&D_006A3B30[2], &D_006A3B70[2], (EvRef *)(param + 0x18));
+        func_00291C40(&D_006A3B30[3], &D_006A3B70[3], (EvRef *)(param + 0x20));
+    }
+    draw.x04 = D_00303550;
+    draw.x20 = base + 0x50;
+    draw.x24 = D_006A3B70;
+    draw.x28 = D_006A3B30;
+    draw.x2C = base + 0x10;
+    draw.x34 = D_006A3BCC;
+    draw.x0C = 0;
+    draw.x10.d = 0;
+    draw.x40 = 0;
+    draw.x44 = 0;
+    D_006A3BCC = op1_md_draw(mdl, &draw);
+}
 
 void func_00292008(Vec4 *pos, Vec4 *rot, EvRef *ref)
 {
@@ -198,7 +294,51 @@ void func_00292008(Vec4 *pos, Vec4 *rot, EvRef *ref)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_00292170);
+void func_00292170(u8 *base, u8 *param, ScriptCtx *ctx)
+{
+    MdDrawParam draw;
+    u8 *mdl;
+    u32 idx;
+
+    if (*(u32 *)(param + 4) == 0xFFFF) {
+        return;
+    }
+    PPP_MUL_COL(draw.col, base + (ctx->info->slot[0] + 0xA0), (u8 *)ppvMng + 0x70);
+    if (draw.col[3] == 0) {
+        return;
+    }
+    draw.flags = 0xC0;
+    mdl = *(u8 **)(*(u8 **)((u8 *)D_006A3924 + 0x20) + (*(u32 *)(param + 4) << 5) + 0x1C);
+    if (!(*(u32 *)mdl & 2)) {
+        draw.flags |= 0x10;
+    }
+    draw.x0A = 0;
+    draw.x08 = *(u16 *)(param + 8);
+    draw.x1C = *(u32 *)((u8 *)ppvMng + 0x78);
+    draw.x38 = *(u32 *)(base + 0x90);
+    draw.x3C = *(u32 *)(base + 0x94);
+    idx = *(u32 *)(param + 0x2C);
+    if (idx != 0xFFFFFFFFU) {
+        u8 *p = ppvMng->p3C[idx].base + (*(s32 *)(param + 0x30) + 0xA0);
+        draw.x4D = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 8)), 128.0));
+        draw.x4C = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 0x14)), 128.0));
+        func_00292008(&D_006A3B30[0], &D_006A3B70[0], (EvRef *)(param + 0xC));
+        func_00292008(&D_006A3B30[1], &D_006A3B70[1], (EvRef *)(param + 0x14));
+        func_00292008(&D_006A3B30[2], &D_006A3B70[2], (EvRef *)(param + 0x1C));
+        func_00292008(&D_006A3B30[3], &D_006A3B70[3], (EvRef *)(param + 0x24));
+    }
+    draw.x0C = 0;
+    draw.x10.d = 0;
+    draw.x40 = 0;
+    draw.x04 = D_00303550;
+    draw.x20 = base + 0x50;
+    draw.x44 = base + 0x50;
+    draw.x24 = D_006A3B70;
+    draw.x28 = D_006A3B30;
+    draw.x2C = base + 0x10;
+    draw.x34 = D_006A3BCC;
+    D_006A3BCC = op1_md_draw(mdl, &draw);
+}
 
 void func_002923C0(char *base, ScriptCtx *ctx)
 {
@@ -230,7 +370,71 @@ void func_002923F0(Vec4 *pos, Vec4 *rot, EvRef *ref)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_291120", func_00292558);
+void func_00292558(u8 *base, u8 *param, ScriptCtx *ctx)
+{
+    MdDrawParam draw;
+    float *work = (float *)(base + (ctx->info->slot[2] + 0xA0));
+    u8 *mdl;
+    u32 idx;
+
+    if (D_006A3BC4 == 0) {
+        work[1] += work[2];
+        work[4] += work[5];
+        work[0] += work[1];
+        work[3] += work[4];
+        if (*(s32 *)param == *(s32 *)(base + 0xC)) {
+            work[0] += *(float *)(param + 0x8);
+            work[1] += *(float *)(param + 0xC);
+            work[2] += *(float *)(param + 0x10);
+            work[3] += *(float *)(param + 0x14);
+            work[4] += *(float *)(param + 0x18);
+            work[5] += *(float *)(param + 0x1C);
+        }
+    }
+    if (*(u32 *)(param + 4) == 0xFFFF) {
+        return;
+    }
+    PPP_MUL_COL(draw.col, base + (ctx->info->slot[0] + 0xA0), (u8 *)ppvMng + 0x70);
+    if (draw.col[3] == 0) {
+        return;
+    }
+    mdl = *(u8 **)(*(u8 **)((u8 *)D_006A3924 + 0x20) + (*(u32 *)(param + 4) << 5) + 0x1C);
+    if (*(u32 *)mdl & 1) {
+        draw.flags = 0xC0;
+    } else {
+        draw.flags = 0x4C;
+    }
+    if (!(*(u32 *)mdl & 2)) {
+        draw.flags |= 0x10;
+    }
+    draw.x08 = *(u16 *)(mdl + 0x16);
+    draw.x0A = 0;
+    draw.x1C = *(u32 *)((u8 *)ppvMng + 0x78);
+    draw.x38 = *(u32 *)(base + 0x90);
+    draw.x3C = *(u32 *)(base + 0x94);
+    idx = *(u32 *)(param + 0x40);
+    if (idx != 0xFFFFFFFFU) {
+        u8 *p = ppvMng->p3C[idx].base + (*(s32 *)(param + 0x44) + 0xA0);
+        draw.x4D = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 8)), 128.0));
+        draw.x4C = func_002EC338(func_002EBC70(func_002ED038(*(float *)(p + 0x14)), 128.0));
+        func_002923F0(&D_006A3B30[0], &D_006A3B70[0], (EvRef *)(param + 0x20));
+        func_002923F0(&D_006A3B30[1], &D_006A3B70[1], (EvRef *)(param + 0x28));
+        func_002923F0(&D_006A3B30[2], &D_006A3B70[2], (EvRef *)(param + 0x30));
+        func_002923F0(&D_006A3B30[3], &D_006A3B70[3], (EvRef *)(param + 0x38));
+    }
+    draw.x04 = D_00303550;
+    draw.x20 = base + 0x50;
+    draw.x24 = D_006A3B70;
+    draw.x10.w.a = (s32)(work[0] * 65536.0f);
+    draw.x28 = D_006A3B30;
+    draw.x10.w.b = (s32)(work[3] * 65536.0f);
+    draw.x2C = base + 0x10;
+    draw.x34 = D_006A3BCC;
+    draw.x0C = 0;
+    draw.x40 = 0;
+    draw.x44 = 0;
+    D_006A3BCC = op1_md_draw(mdl, &draw);
+}
 
 void func_00292880(char *base, ScriptCtx *ctx) {
     Wkh0h2 *w = SLOT_WORK(Wkh0h2, base, ctx, 0);
