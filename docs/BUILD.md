@@ -16,8 +16,16 @@ make image
 make build
 ```
 
-The build compares the main executable with the original.
+The build compares the main executable with the original (including VU1 microcode
+assembled from `vu/*.vsm` via `tools/vu1asm.py`).
 For overlays, see the [overlay guide](../overlays/README.md).
+
+## IOP (`IOPSOUND.IRX`)
+
+To verify the IOP sound driver (`IopSoundDriver v2.20`, R3000A MIPS-I), download
+`iop-gcc2.8.1` from [decompme/compilers](https://github.com/decompme/compilers/releases)
+and unpack it into `tools/cc/iop-gcc2.8.1/`. See [iop/README.md](../iop/README.md)
+and run `python3 iop/verify_iopsound.py`.
 
 ## Checking a change
 

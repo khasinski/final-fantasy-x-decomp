@@ -206,12 +206,25 @@ def build_svg():
         svg.append(f'<text x="{cx+18}" y="40" class="small">{html.escape(lbl)}</text>')
         cx += 28 + len(lbl) * 6.5
 
+    # IOP & VU1 live progress
+    iop_prog_path = ROOT / "docs/iopsound-progress.json"
+    iop_prog = json.loads(iop_prog_path.read_text()) if iop_prog_path.exists() else None
+    iop_mbytes = iop_prog["matched_bytes"] if iop_prog else 0
+    iop_cbytes = iop_prog["code_bytes"] if iop_prog else isum["standalone_game_text_bytes"]
+    iop_stub_bytes = iop_prog["import_stub_bytes"] if iop_prog else 0
+    iop_mfuncs = iop_prog["matched_functions"] if iop_prog else 0
+    iop_tfuncs = iop_prog["total_functions"] if iop_prog else 0
+    iop_decomp = 100.0 * iop_mbytes / iop_cbytes if iop_cbytes else 0.0
+    vu_from_src = (ROOT / "vu/vu1_prog1.vsm").exists() and (ROOT / "vu/vu1_prog2.vsm").exists()
+    vu_done = vu["total_code_bytes"] if vu_from_src else 0
+    vu_pct = 100.0 if vu_from_src else 0.0
+
     # KPI Cards
     cards = [
         ("Main ELF (SCES_504.90)", f"{elf_decomp:.2f}%", f"decompilable C ({elf_raw:.2f}% raw)", f"{stats['c_funcs']:,} / {stats['total_funcs']:,} funcs  |  {stats['open_bytes']/1024:.1f} KB open", C_MATCH),
         ("584 EE Overlays", f"{ovl_decomp:.2f}%", f"decompilable C ({ovl_raw:.2f}% raw)", f"{ovl_full} / {ovl_tot} full containers ({100*ovl_full/ovl_tot:.1f}%)", C_CYAN),
         ("Combined Known EE", f"~{comb_decomp:.2f}%", f"decompilable C (~{comb_raw:.2f}% raw)", f"15.59 MB matched / 19.41 MB total EE", "#38bdf8"),
-        ("IOP & VU1 (Inventoried)", f"1 IRX + 2 VU1", f"game: 88.1 KB IOP + 14.0 KB VU1", f"+ 24 Sony SDK IRX (341.0 KB .text)  |  0% decomp", C_PURPLE),
+        ("IOP & VU1", f"VU1 {vu_pct:.0f}% · IOP {iop_decomp:.1f}%", f"VU1: {vu['total_instructions']:,} insns | IOP: {iop_mfuncs}/{iop_tfuncs} funcs", f"IOPSOUND {iop_mbytes/1024:.1f}/{iop_cbytes/1024:.1f} KB C89  |  + 24 SDK IRX", C_MATCH if vu_from_src else C_PURPLE),
     ]
     cw = 322
     for idx, (title, val, sub1, sub2, accent) in enumerate(cards):
@@ -372,9 +385,9 @@ def build_svg():
     scopes = [
         ("Main ELF (.text)", stats["c_bytes"], stats["open_bytes"], stats["policy_bytes"], "EE Resident Executable"),
         ("EE Overlays (distinct)", ovl["distinct_matched_bytes"], ovl["distinct_function_bytes"] - ovl["distinct_matched_bytes"] - ovl["distinct_policy_assembly_bytes"], ovl["distinct_policy_assembly_bytes"], "4,220 unique functions across 584 containers"),
-        ("IOP Game (IOPSOUND.IRX)", 0, isum["standalone_game_text_bytes"], 0, "1 Square custom sound driver (.text)"),
+        ("IOP Game (IOPSOUND.IRX)", iop_mbytes, max(iop_cbytes - iop_mbytes, 0), iop_stub_bytes, f"IopSoundDriver v2.20 ({iop_decomp:.1f}% C89, {iop_mfuncs}/{iop_tfuncs} funcs)"),
         ("IOP Sony SDK (24 IRX)", 0, 0, isum["all_sdk_iop_text_bytes"], "9 standalone + 15 in IOPRP234.IMG (.text)"),
-        ("VU1 Microcode (.vutext)", 0, vu["total_code_bytes"], 0, "2 microprograms, 1,788 64-bit instructions"),
+        ("VU1 Microcode (.vutext)", vu_done, vu["total_code_bytes"] - vu_done, 0, f"2 microprograms, 1,788 insns ({vu_pct:.0f}% built from .vsm)"),
     ]
     max_scope = max(c + o + p for _, c, o, p, _ in scopes)
     sx = 250

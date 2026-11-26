@@ -1,9 +1,812 @@
 [
   {
+    "name": "iop_s1_000824",
+    "src": "iop_s1_000824.c",
+    "text_start": "0x000824",
+    "text_end": "0x000914",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_000bcc",
+    "src": "iop_s1_000bcc.c",
+    "text_start": "0x000bcc",
+    "text_end": "0x000cd0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_0012d8",
+    "src": "iop_s1_0012d8.c",
+    "text_start": "0x0012d8",
+    "text_end": "0x0013e4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_0019d0",
+    "src": "iop_s1_0019d0.c",
+    "text_start": "0x0019d0",
+    "text_end": "0x001d20",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_001d20",
+    "src": "iop_s1_001d20.c",
+    "text_start": "0x001d20",
+    "text_end": "0x002468",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_002468",
+    "src": "iop_s1_002468.c",
+    "text_start": "0x002468",
+    "text_end": "0x0025e8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_0025e8",
+    "src": "iop_s1_0025e8.c",
+    "text_start": "0x0025e8",
+    "text_end": "0x002bec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_002d20",
+    "src": "iop_s1_002d20.c",
+    "text_start": "0x002d20",
+    "text_end": "0x002d50",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_002fa0",
+    "src": "iop_s1_002fa0.c",
+    "text_start": "0x002fa0",
+    "text_end": "0x0033bc",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_0035b4",
+    "src": "iop_s1_0035b4.c",
+    "text_start": "0x0035b4",
+    "text_end": "0x003778",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_0037b8",
+    "src": "iop_s1_0037b8.c",
+    "text_start": "0x0037b8",
+    "text_end": "0x003830",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_003944",
+    "src": "iop_s1_003944.c",
+    "text_start": "0x003944",
+    "text_end": "0x003ae4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_003b68",
+    "src": "iop_s1_003b68.c",
+    "text_start": "0x003b68",
+    "text_end": "0x003bf0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_003c40",
+    "src": "iop_s1_003c40.c",
+    "text_start": "0x003c40",
+    "text_end": "0x003cb0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_003d00",
+    "src": "iop_s1_003d00.c",
+    "text_start": "0x003d00",
+    "text_end": "0x003d70",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_003dc4",
+    "src": "iop_s1_003dc4.c",
+    "text_start": "0x003dc4",
+    "text_end": "0x003fa8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s1_00404c",
+    "src": "iop_s1_00404c.c",
+    "text_start": "0x00404c",
+    "text_end": "0x00460c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_00460c",
+    "src": "iop_s2_00460c.c",
+    "text_start": "0x00460c",
+    "text_end": "0x00511c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_005190",
+    "src": "iop_s2_005190.c",
+    "text_start": "0x005190",
+    "text_end": "0x0052b0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_005370",
+    "src": "iop_s2_005370.c",
+    "text_start": "0x005370",
+    "text_end": "0x005630",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_0056fc",
+    "src": "iop_s2_0056fc.c",
+    "text_start": "0x0056fc",
+    "text_end": "0x00579c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_0057a0",
+    "src": "iop_s2_0057a0.c",
+    "text_start": "0x0057a0",
+    "text_end": "0x006118",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_006cc0",
+    "src": "iop_s2_006cc0.c",
+    "text_start": "0x006cc0",
+    "text_end": "0x0075fc",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_0079a0",
+    "src": "iop_s2_0079a0.c",
+    "text_start": "0x0079a0",
+    "text_end": "0x007c30",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_007d38",
+    "src": "iop_s2_007d38.c",
+    "text_start": "0x007d38",
+    "text_end": "0x007eec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s2_007ff8",
+    "src": "iop_s2_007ff8.c",
+    "text_start": "0x007ff8",
+    "text_end": "0x00810c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_008e60",
+    "src": "iop_s3_008e60.c",
+    "text_start": "0x008e60",
+    "text_end": "0x009148",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_0091e4",
+    "src": "iop_s3_0091e4.c",
+    "text_start": "0x0091e4",
+    "text_end": "0x009298",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_009330",
+    "src": "iop_s3_009330.c",
+    "text_start": "0x009330",
+    "text_end": "0x009358",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_009360",
+    "src": "iop_s3_009360.c",
+    "text_start": "0x009360",
+    "text_end": "0x009d50",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_009edc",
+    "src": "iop_s3_009edc.c",
+    "text_start": "0x009edc",
+    "text_end": "0x00a200",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00a680",
+    "src": "iop_s3_00a680.c",
+    "text_start": "0x00a680",
+    "text_end": "0x00a7a0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00b160",
+    "src": "iop_s3_00b160.c",
+    "text_start": "0x00b160",
+    "text_end": "0x00b1e0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00b4a8",
+    "src": "iop_s3_00b4a8.c",
+    "text_start": "0x00b4a8",
+    "text_end": "0x00b5ec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00b7c8",
+    "src": "iop_s3_00b7c8.c",
+    "text_start": "0x00b7c8",
+    "text_end": "0x00b8d4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00b9c4",
+    "src": "iop_s3_00b9c4.c",
+    "text_start": "0x00b9c4",
+    "text_end": "0x00ba1c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00bb10",
+    "src": "iop_s3_00bb10.c",
+    "text_start": "0x00bb10",
+    "text_end": "0x00c348",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00c7a4",
+    "src": "iop_s3_00c7a4.c",
+    "text_start": "0x00c7a4",
+    "text_end": "0x00c8a8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00c8b0",
+    "src": "iop_s3_00c8b0.c",
+    "text_start": "0x00c8b0",
+    "text_end": "0x00c938",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00cbb4",
+    "src": "iop_s3_00cbb4.c",
+    "text_start": "0x00cbb4",
+    "text_end": "0x00cccc",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s3_00cfb4",
+    "src": "iop_s3_00cfb4.c",
+    "text_start": "0x00cfb4",
+    "text_end": "0x00d014",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00d3a0",
+    "src": "iop_s4_00d3a0.c",
+    "text_start": "0x00d3a0",
+    "text_end": "0x00d5ec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00d6b4",
+    "src": "iop_s4_00d6b4.c",
+    "text_start": "0x00d6b4",
+    "text_end": "0x00d818",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00dac4",
+    "src": "iop_s4_00dac4.c",
+    "text_start": "0x00dac4",
+    "text_end": "0x00dda0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00e308",
+    "src": "iop_s4_00e308.c",
+    "text_start": "0x00e308",
+    "text_end": "0x00e394",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00e394",
+    "src": "iop_s4_00e394.c",
+    "text_start": "0x00e394",
+    "text_end": "0x00e54c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00e858",
+    "src": "iop_s4_00e858.c",
+    "text_start": "0x00e858",
+    "text_end": "0x00e9a0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00ee2c",
+    "src": "iop_s4_00ee2c.c",
+    "text_start": "0x00ee2c",
+    "text_end": "0x00ee60",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00f038",
+    "src": "iop_s4_00f038.c",
+    "text_start": "0x00f038",
+    "text_end": "0x00f188",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00f34c",
+    "src": "iop_s4_00f34c.c",
+    "text_start": "0x00f34c",
+    "text_end": "0x00f520",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00f520",
+    "src": "iop_s4_00f520.c",
+    "text_start": "0x00f520",
+    "text_end": "0x00f5e4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00f5e4",
+    "src": "iop_s4_00f5e4.c",
+    "text_start": "0x00f5e4",
+    "text_end": "0x00f714",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00fa24",
+    "src": "iop_s4_00fa24.c",
+    "text_start": "0x00fa24",
+    "text_end": "0x00fbd0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00fd60",
+    "src": "iop_s4_00fd60.c",
+    "text_start": "0x00fd60",
+    "text_end": "0x00fe3c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00fe3c",
+    "src": "iop_s4_00fe3c.c",
+    "text_start": "0x00fe3c",
+    "text_end": "0x00ff00",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00ff00",
+    "src": "iop_s4_00ff00.c",
+    "text_start": "0x00ff00",
+    "text_end": "0x00ff08",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00ff08",
+    "src": "iop_s4_00ff08.c",
+    "text_start": "0x00ff08",
+    "text_end": "0x00ff94",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_00ff94",
+    "src": "iop_s4_00ff94.c",
+    "text_start": "0x00ff94",
+    "text_end": "0x00ffcc",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_010028",
+    "src": "iop_s4_010028.c",
+    "text_start": "0x010028",
+    "text_end": "0x010100",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_0105cc",
+    "src": "iop_s4_0105cc.c",
+    "text_start": "0x0105cc",
+    "text_end": "0x0105f4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_0105f4",
+    "src": "iop_s4_0105f4.c",
+    "text_start": "0x0105f4",
+    "text_end": "0x010754",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_0107cc",
+    "src": "iop_s4_0107cc.c",
+    "text_start": "0x0107cc",
+    "text_end": "0x0108f0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_010a58",
+    "src": "iop_s4_010a58.c",
+    "text_start": "0x010a58",
+    "text_end": "0x010af4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_010e94",
+    "src": "iop_s4_010e94.c",
+    "text_start": "0x010e94",
+    "text_end": "0x010f90",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_010fe4",
+    "src": "iop_s4_010fe4.c",
+    "text_start": "0x010fe4",
+    "text_end": "0x0110ac",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_011128",
+    "src": "iop_s4_011128.c",
+    "text_start": "0x011128",
+    "text_end": "0x0111b4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s4_0111f4",
+    "src": "iop_s4_0111f4.c",
+    "text_start": "0x0111f4",
+    "text_end": "0x011594",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_011a40",
+    "src": "iop_s5_011a40.c",
+    "text_start": "0x011a40",
+    "text_end": "0x012580",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_0125c0",
+    "src": "iop_s5_0125c0.c",
+    "text_start": "0x0125c0",
+    "text_end": "0x012698",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_0126b4",
+    "src": "iop_s5_0126b4.c",
+    "text_start": "0x0126b4",
+    "text_end": "0x0127b0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_0127e4",
+    "src": "iop_s5_0127e4.c",
+    "text_start": "0x0127e4",
+    "text_end": "0x0129b4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_012b14",
+    "src": "iop_s5_012b14.c",
+    "text_start": "0x012b14",
+    "text_end": "0x012b70",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_012fb8",
+    "src": "iop_s5_012fb8.c",
+    "text_start": "0x012fb8",
+    "text_end": "0x013900",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_013b80",
+    "src": "iop_s5_013b80.c",
+    "text_start": "0x013b80",
+    "text_end": "0x013e94",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_013ef0",
+    "src": "iop_s5_013ef0.c",
+    "text_start": "0x013ef0",
+    "text_end": "0x014004",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_014004",
+    "src": "iop_s5_014004.c",
+    "text_start": "0x014004",
+    "text_end": "0x014088",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_0143d8",
+    "src": "iop_s5_0143d8.c",
+    "text_start": "0x0143d8",
+    "text_end": "0x014490",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_014788",
+    "src": "iop_s5_014788.c",
+    "text_start": "0x014788",
+    "text_end": "0x01499c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_014e90",
+    "src": "iop_s5_014e90.c",
+    "text_start": "0x014e90",
+    "text_end": "0x01554c",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_s5_0157c8",
+    "src": "iop_s5_0157c8.c",
+    "text_start": "0x0157c8",
+    "text_end": "0x015b20",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_015c94",
     "src": "iop_015c94.c",
     "text_start": "0x015c94",
     "text_end": "0x015d10",
-    "cflags": ["-O2", "-G0"]
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
   }
 ]

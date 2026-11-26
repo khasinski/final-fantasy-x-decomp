@@ -429,10 +429,11 @@ def _decode_hex_fields(obj):
     return obj
 
 
-def load_units() -> list[dict]:
-    if not UNITS_JSON.is_file():
+def load_units(units_path: Path | None = None) -> list[dict]:
+    path = units_path if units_path is not None else UNITS_JSON
+    if not path.is_file():
         return []
-    raw = _decode_hex_fields(json.loads(UNITS_JSON.read_text()))
+    raw = _decode_hex_fields(json.loads(path.read_text()))
     units = []
     for u in raw:
         src = Path(u["src"])
@@ -712,6 +713,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     ap.add_argument("--scan", action="store_true", help="Scan baserom/IOPSOUND.IRX and write iop/iopsound/funcs.tsv")
     ap.add_argument("--disasm", metavar="ADDR_OR_NAME", help="Disassemble a function by name or hex address")
     ap.add_argument("--list", action="store_true", help="List registered units in iop/iopsound/units.json")
+    ap.add_argument("--units-file", metavar="PATH", help="Alternate units JSON file (for isolated worker runs)")
     ap.add_argument("--unit", action="append", default=[], help="Verify only units matching this name/stem (repeatable)")
     ap.add_argument("--diff", metavar="UNIT", help="Compile a unit and print side-by-side disassembly diff")
     ap.add_argument("--write-progress", action="store_true", help="Write docs/iopsound-progress.json")
@@ -729,7 +731,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.disasm:
         return cmd_disasm(args.disasm)
 
-    units = load_units()
+    units_path = Path(args.units_file) if args.units_file else None
+    units = load_units(units_path)
     if args.list:
         for u in units:
             name = u.get("name", Path(u["src"]).stem)
@@ -815,7 +818,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     print(f"\nOK: {len(matched_units)}/{len(selected)} IOPSOUND.IRX unit(s) matched ({total_bytes:,} B .text byte-identical).")
-    if not args.unit or args.write_progress:
+    if (not args.unit and not args.units_file) or args.write_progress:
         _write_progress(irx, funcs, matched_units)
     return 0
 

@@ -111,26 +111,41 @@ if iop_vu_path.exists():
     iv = json.loads(iop_vu_path.read_text())
     isum = iv["iop"]["summary"]
     vu = iv["vu"]
+    iop_prog_path = Path(root)/"docs/iopsound-progress.json"
+    iop_prog = json.loads(iop_prog_path.read_text()) if iop_prog_path.exists() else None
+    vu_from_src = (Path(root)/"vu/vu1_prog1.vsm").exists() and (Path(root)/"vu/vu1_prog2.vsm").exists()
+    iop_matched_bytes = iop_prog["matched_bytes"] if iop_prog else 0
+    iop_code_bytes = iop_prog["code_bytes"] if iop_prog else isum["standalone_game_text_bytes"]
+    iop_game_pct = round(100.0 * iop_matched_bytes / max(isum["standalone_game_text_bytes"], 1), 2)
+    iop_decomp_pct = round(100.0 * iop_matched_bytes / max(iop_code_bytes, 1), 2)
     report["other_scopes"] = {
         "IOP": {
-            "status": "inventoried (tools/inventory_iop_vu.py)",
-            "coverage_percent": 0.0,
+            "status": "in progress (iop/verify_iopsound.py)" if iop_prog else "inventoried (tools/inventory_iop_vu.py)",
+            "coverage_percent": iop_game_pct,
+            "decompilable_game_coverage_percent": iop_decomp_pct,
+            "matched_bytes": iop_matched_bytes,
+            "matched_functions": iop_prog["matched_functions"] if iop_prog else 0,
+            "total_game_functions": iop_prog["total_functions"] if iop_prog else 0,
+            "matched_units": len(iop_prog.get("units", [])) if iop_prog else 0,
             "total_modules": isum["all_iop_module_count"],
             "game_modules": isum["standalone_game_count"],
             "sdk_modules": isum["all_sdk_iop_count"],
             "total_text_bytes": isum["all_iop_modules_text_bytes"],
             "game_text_bytes": isum["standalone_game_text_bytes"],
+            "game_code_bytes": iop_code_bytes,
             "sdk_text_bytes": isum["all_sdk_iop_text_bytes"],
             "total_file_bytes": isum["all_iop_modules_file_bytes"],
             "game_file_bytes": isum["standalone_game_file_bytes"],
         },
         "VU": {
-            "status": "inventoried (tools/inventory_iop_vu.py)",
-            "coverage_percent": 0.0,
+            "status": "100% built from source (vu/*.vsm -> build/vu/vutext.bin)" if vu_from_src else "inventoried (tools/inventory_iop_vu.py)",
+            "coverage_percent": 100.0 if vu_from_src else 0.0,
             "program_count": vu["program_count"],
             "vif_mpg_chunks": vu["total_vif_mpg_chunks"],
             "instructions": vu["total_instructions"],
+            "matched_instructions": vu["total_instructions"] if vu_from_src else 0,
             "code_bytes": vu["total_code_bytes"],
+            "matched_code_bytes": vu["total_code_bytes"] if vu_from_src else 0,
             "vutext_section_bytes": vu["elf_vutext_section"]["section_bytes"],
         },
     }
@@ -221,9 +236,12 @@ else:
     if iop_vu_path.exists():
         iop_s = report["other_scopes"]["IOP"]
         vu_s = report["other_scopes"]["VU"]
-        print(f"  IOP (IRX + IOPRP234): {iop_s['total_modules']} modules ({iop_s['game_modules']} game = {iop_s['game_text_bytes']} B .text, "
-              f"{iop_s['sdk_modules']} SDK = {iop_s['sdk_text_bytes']} B .text; 0.00% decompiled)")
-        print(f"  VU1 (.vutext): {vu_s['program_count']} microprograms, {vu_s['instructions']} insns ({vu_s['code_bytes']} B microcode; 0.00% decompiled)")
+        print(f"  IOP (IRX + IOPRP234): {iop_s['total_modules']} modules ({iop_s['game_modules']} game = {iop_s['matched_bytes']}/{iop_s['game_code_bytes']} B = "
+              f"{iop_s['decompilable_game_coverage_percent']:.2f}% decompilable [{iop_s['matched_functions']}/{iop_s['total_game_functions']} funcs], "
+              f"{iop_s['sdk_modules']} SDK = {iop_s['sdk_text_bytes']} B .text)")
+        vu_state = "built from source" if vu_s["coverage_percent"] >= 100.0 else "decompiled"
+        print(f"  VU1 (.vutext): {vu_s['program_count']} microprograms, {vu_s['matched_instructions']}/{vu_s['instructions']} insns "
+              f"({vu_s['code_bytes']} B microcode; {vu_s['coverage_percent']:.2f}% {vu_state})")
     else:
         print("whole-game coverage: unknown (IOP/VU and undiscovered EE code not inventoried)")
     print("debt markers: " + (", ".join(f"{k}={v}" for k, v in sorted(debt.items())) or "none") +

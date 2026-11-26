@@ -49,24 +49,32 @@
   "whole_game_coverage_percent": null,
   "other_scopes": {
     "IOP": {
-      "status": "inventoried (tools/inventory_iop_vu.py)",
-      "coverage_percent": 0.0,
+      "status": "in progress (iop/verify_iopsound.py)",
+      "coverage_percent": 51.23,
+      "decompilable_game_coverage_percent": 51.74,
+      "matched_bytes": 46232,
+      "matched_functions": 301,
+      "total_game_functions": 422,
+      "matched_units": 81,
       "total_modules": 25,
       "game_modules": 1,
       "sdk_modules": 24,
       "total_text_bytes": 439392,
       "game_text_bytes": 90240,
+      "game_code_bytes": 89360,
       "sdk_text_bytes": 349152,
       "total_file_bytes": 664173,
       "game_file_bytes": 141425
     },
     "VU": {
-      "status": "inventoried (tools/inventory_iop_vu.py)",
-      "coverage_percent": 0.0,
+      "status": "100% built from source (vu/*.vsm -> build/vu/vutext.bin)",
+      "coverage_percent": 100.0,
       "program_count": 2,
       "vif_mpg_chunks": 8,
       "instructions": 1788,
+      "matched_instructions": 1788,
       "code_bytes": 14304,
+      "matched_code_bytes": 14304,
       "vutext_section_bytes": 14416
     }
   },
