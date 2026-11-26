@@ -2,14 +2,14 @@
   "metric": "C-body byte coverage; full-game completion is not yet measurable",
   "resident_elf": {
     "catalogued_functions": 11612,
-    "c_functions": 10751,
+    "c_functions": 10808,
     "catalogued_function_bytes": 2071120,
-    "c_function_bytes": 1554176,
-    "coverage_percent": 75.04036463362819,
-    "policy_assembly_bytes": 323696,
+    "c_function_bytes": 1595120,
+    "coverage_percent": 77.0172660203175,
+    "policy_assembly_bytes": 319152,
     "inline_asm_wrapper_functions": 219,
     "inline_asm_wrapper_bytes": 7360,
-    "decompilable_coverage_percent": 88.94097826286007
+    "decompilable_coverage_percent": 91.047325065298
   },
   "ee_overlays": {
     "containers": 584,
@@ -33,11 +33,11 @@
     "inventory_is_heuristic": true
   },
   "known_ee_estimate": {
-    "c_or_matched_bytes": 15586828,
+    "c_or_matched_bytes": 15627772,
     "estimated_total_bytes": 19413792,
-    "coverage_percent": 80.2873956824097,
-    "decompilable_coverage_percent": 94.97464227671604,
-    "span_scenario_percent": 79.53868989907195,
+    "coverage_percent": 80.49829729297605,
+    "decompilable_coverage_percent": 95.19776668190373,
+    "span_scenario_percent": 79.74762478429861,
     "span_scenario_is_confidence_interval": false,
     "basis": "Resident catalogued function bytes plus overlay function bytes, with repeated code counted in both scopes. Span scenario also counts gaps/data within identified code spans; neither is an exact whole-game percentage.",
     "excluded_scopes": [
@@ -49,12 +49,25 @@
   "whole_game_coverage_percent": null,
   "other_scopes": {
     "IOP": {
-      "coverage_percent": null,
-      "status": "not inventoried"
+      "status": "inventoried (tools/inventory_iop_vu.py)",
+      "coverage_percent": 0.0,
+      "total_modules": 25,
+      "game_modules": 1,
+      "sdk_modules": 24,
+      "total_text_bytes": 439392,
+      "game_text_bytes": 90240,
+      "sdk_text_bytes": 349152,
+      "total_file_bytes": 664173,
+      "game_file_bytes": 141425
     },
     "VU": {
-      "coverage_percent": null,
-      "status": "not inventoried"
+      "status": "inventoried (tools/inventory_iop_vu.py)",
+      "coverage_percent": 0.0,
+      "program_count": 2,
+      "vif_mpg_chunks": 8,
+      "instructions": 1788,
+      "code_bytes": 14304,
+      "vutext_section_bytes": 14416
     }
   },
   "debt_markers": {

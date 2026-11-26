@@ -114,7 +114,42 @@ typedef struct KeTh4138Ev {
 void KeThBP_Update(KeThBPUpdateArg *a);
 int func_00281010(KeThDrawArg *a);
 
-INCLUDE_ASM("build/ee_asm/game/particle/ke_2803C0", func_00281ED0);
+typedef union {
+    u32 w[4];
+    u8 b[16];
+} KeThTailTag;
+
+void func_00281ED0(KeThBPInitArg *a)
+{
+    KeThBP *o = a->p;
+    KeThTailTag *tail;
+
+    o->h3E = 0;
+    o->p10 = o;
+    o->b37 = a->n;
+    o->f4C = 1.0f;
+    o->h20 = ((u32)o->b37 * 0x30 >> 4) + 2;
+    o->b23 = 0x70;
+    o->w28 = 0x040000B0;
+    o->h1C = 0;
+    o->w18 = 0;
+    o->h34 = 0;
+    o->b36 = 0;
+    o->h3C = 0;
+    o->h38 = 0;
+    o->b1E = 0;
+    o->w14 = 0;
+    o->pprev = 0;
+    o->next = 0;
+    o->wC = 0;
+    o->w8 = 0;
+    o->w58 = 0;
+    tail = (KeThTailTag *)((u8 *)o + (o->b37 * 0x30 + 0x40));
+    tail->w[0] = 0;
+    tail->w[1] = 0x11000000;
+    tail->w[2] = 0x14000000;
+    tail->w[3] = 0x11000000;
+}
 
 void KeThBP_Quit(PoolNode *n)
 {

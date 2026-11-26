@@ -25,9 +25,9 @@
 <rect x="32" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="32" y="84" width="322" height="4" rx="2" fill="#22c55e"/>
 <text x="48" y="110" class="kpi-lbl">Main ELF (SCES_504.90)</text>
-<text x="48" y="142" class="kpi-val" style="fill:#22c55e">93.51%</text>
-<text x="48" y="162" class="kpi-sub">decompilable C (79.16% raw)</text>
-<text x="48" y="178" class="tiny muted">10,910 / 11,612 funcs  |  111.2 KB open</text>
+<text x="48" y="142" class="kpi-val" style="fill:#22c55e">91.77%</text>
+<text x="48" y="162" class="kpi-sub">decompilable C (77.70% raw)</text>
+<text x="48" y="178" class="tiny muted">10,876 / 11,612 funcs  |  140.8 KB open</text>
 <rect x="370" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="370" y="84" width="322" height="4" rx="2" fill="#06b6d4"/>
 <text x="386" y="110" class="kpi-lbl">584 EE Overlays</text>
@@ -37,8 +37,8 @@
 <rect x="708" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="708" y="84" width="322" height="4" rx="2" fill="#38bdf8"/>
 <text x="724" y="110" class="kpi-lbl">Combined Known EE</text>
-<text x="724" y="142" class="kpi-val" style="fill:#38bdf8">~95.46%</text>
-<text x="724" y="162" class="kpi-sub">decompilable C (~80.73% raw)</text>
+<text x="724" y="142" class="kpi-val" style="fill:#38bdf8">~95.28%</text>
+<text x="724" y="162" class="kpi-sub">decompilable C (~80.57% raw)</text>
 <text x="724" y="178" class="tiny muted">15.59 MB matched / 19.41 MB total EE</text>
 <rect x="1046" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="1046" y="84" width="322" height="4" rx="2" fill="#a855f7"/>
@@ -183,7 +183,8 @@
 <rect x="360.29" y="278" width="6.41" height="13" fill="#22c55e"><title>func_00103AA8 (+1 more) | chr | 0x103AA8 (404 B) | C</title></rect>
 <rect x="366.77" y="278" width="1.08" height="13" fill="#22c55e"><title>func_00103C40 (+1 more) | chr | 0x103C40 (68 B) | C</title></rect>
 <rect x="367.91" y="278" width="1.97" height="13" fill="#22c55e"><title>func_00103C88 | chr | 0x103C88 (124 B) | C</title></rect>
-<rect x="369.94" y="278" width="19.30" height="13" fill="#22c55e"><title>func_00103D08 (+3 more) | chr | 0x103D08 (1,216 B) | C</title></rect>
+<rect x="369.94" y="278" width="17.52" height="13" fill="#ef4444"><title>func_00103D08 | chr | 0x103D08 (1,104 B) | OPEN</title></rect>
+<rect x="387.46" y="278" width="1.78" height="13" fill="#22c55e"><title>func_00104158 (+2 more) | chr | 0x104158 (112 B) | C</title></rect>
 <rect x="389.24" y="278" width="1.97" height="13" fill="#22c55e"><title>func_001041C8 | main | 0x1041C8 (124 B) | C</title></rect>
 <rect x="391.27" y="278" width="2.48" height="13" fill="#22c55e"><title>func_00104248 (+1 more) | main | 0x104248 (156 B) | C</title></rect>
 <rect x="393.81" y="278" width="4.51" height="13" fill="#22c55e"><title>func_001042E8 (+1 more) | main | 0x1042E8 (284 B) | C</title></rect>
@@ -629,7 +630,8 @@
 <rect x="904.79" y="293" width="1.21" height="13" fill="#22c55e"><title>Sg_MemCheckPtr | main | 0x11C0B0 (76 B) | C</title></rect>
 <rect x="906.06" y="293" width="3.36" height="13" fill="#22c55e"><title>_Sg_MemCheckMCBerr (+2 more) | main | 0x11C100 (212 B) | C</title></rect>
 <rect x="909.49" y="293" width="5.27" height="13" fill="#22c55e"><title>Sg_MemCheckHeap | main | 0x11C1D8 (332 B) | C</title></rect>
-<rect x="914.82" y="293" width="15.04" height="13" fill="#22c55e"><title>func_0011C328 (+3 more) | main | 0x11C328 (948 B) | C</title></rect>
+<rect x="914.82" y="293" width="0.80" height="13" fill="#22c55e"><title>func_0011C328 (+2 more) | main | 0x11C328 (48 B) | C</title></rect>
+<rect x="915.58" y="293" width="14.28" height="13" fill="#ef4444"><title>Sg_MemGet | main | 0x11C358 (900 B) | OPEN</title></rect>
 <rect x="929.93" y="293" width="7.43" height="13" fill="#22c55e"><title>func_0011C6E0 (+2 more) | main | 0x11C6E0 (468 B) | C</title></rect>
 <rect x="937.42" y="293" width="8.70" height="13" fill="#22c55e"><title>func_0011C8B8 (+3 more) | main | 0x11C8B8 (548 B) | C</title></rect>
 <rect x="946.18" y="293" width="0.80" height="13" fill="#22c55e"><title>func_0011CAE0 | main | 0x11CAE0 (36 B) | C</title></rect>
@@ -734,7 +736,9 @@
 <rect x="305.83" y="308" width="0.80" height="13" fill="#22c55e"><title>func_00122D40 | main | 0x122D40 (12 B) | C</title></rect>
 <rect x="306.08" y="308" width="8.70" height="13" fill="#22c55e"><title>func_00122D50 (+1 more) | main | 0x122D50 (548 B) | C</title></rect>
 <rect x="314.84" y="308" width="2.35" height="13" fill="#22c55e"><title>func_00122F78 | main | 0x122F78 (148 B) | C</title></rect>
-<rect x="317.25" y="308" width="33.33" height="13" fill="#22c55e"><title>func_00123010 (+3 more) | main | 0x123010 (2,100 B) | C</title></rect>
+<rect x="317.25" y="308" width="0.80" height="13" fill="#22c55e"><title>func_00123010 | main | 0x123010 (24 B) | C</title></rect>
+<rect x="317.63" y="308" width="27.68" height="13" fill="#ef4444"><title>func_00123028 (+1 more) | main | 0x123028 (1,744 B) | OPEN</title></rect>
+<rect x="345.31" y="308" width="5.27" height="13" fill="#22c55e"><title>Sg_IdDrawMain | main | 0x1236F8 (332 B) | C</title></rect>
 <rect x="350.58" y="308" width="0.80" height="13" fill="#475569"><title>func_00123844 | main | 0x123844 (48 B) | POLICY</title></rect>
 <rect x="351.40" y="308" width="0.80" height="13" fill="#ef4444"><title>func_00123878 | main | 0x123878 (20 B) | OPEN</title></rect>
 <rect x="351.79" y="308" width="0.80" height="13" fill="#ef4444"><title>sg_getvtex | main | 0x123890 (12 B) | OPEN</title></rect>
@@ -1558,7 +1562,8 @@
 <rect x="859.98" y="338" width="10.35" height="13" fill="#22c55e"><title>AtelEventSystemRequestDirectMain (+5 more) | atel | 0x14B5A8 (652 B) | C</title></rect>
 <rect x="870.39" y="338" width="19.87" height="13" fill="#22c55e"><title>func_0014B838 (+9 more) | atel | 0x14B838 (1,252 B) | C</title></rect>
 <rect x="890.32" y="338" width="9.58" height="13" fill="#22c55e"><title>AtelActorSetUp2 (+4 more) | atel | 0x14BD20 (604 B) | C</title></rect>
-<rect x="899.97" y="338" width="20.12" height="13" fill="#22c55e"><title>AtelBattleSetUp (+2 more) | atel | 0x14BF80 (1,268 B) | C</title></rect>
+<rect x="899.97" y="338" width="12.82" height="13" fill="#ef4444"><title>AtelBattleSetUp | atel | 0x14BF80 (808 B) | OPEN</title></rect>
+<rect x="912.79" y="338" width="7.30" height="13" fill="#22c55e"><title>AtelActorRemove (+1 more) | atel | 0x14C2A8 (460 B) | C</title></rect>
 <rect x="920.15" y="338" width="3.36" height="13" fill="#22c55e"><title>func_0014C478 (+1 more) | atel | 0x14C478 (212 B) | C</title></rect>
 <rect x="923.58" y="338" width="10.73" height="13" fill="#22c55e"><title>AtelExecDrawShape | atel | 0x14C550 (676 B) | C</title></rect>
 <rect x="934.37" y="338" width="0.95" height="13" fill="#22c55e"><title>func_0014C7F8 (+1 more) | atel | 0x14C7F8 (60 B) | C</title></rect>
@@ -1913,7 +1918,9 @@
 <rect x="322.46" y="368" width="2.09" height="13" fill="#22c55e"><title>func_00163158 (+2 more) | libmscd | 0x163158 (132 B) | C</title></rect>
 <rect x="324.62" y="368" width="0.80" height="13" fill="#22c55e"><title>func_001631E0 | libmscd | 0x1631E0 (12 B) | C</title></rect>
 <rect x="324.87" y="368" width="30.02" height="13" fill="#22c55e"><title>func_001631F0 (+5 more) | libmscd | 0x1631F0 (1,892 B) | C</title></rect>
-<rect x="354.96" y="368" width="21.65" height="13" fill="#22c55e"><title>func_00163958 (+2 more) | libmscd | 0x163958 (1,364 B) | C</title></rect>
+<rect x="354.96" y="368" width="0.80" height="13" fill="#22c55e"><title>func_00163958 | libmscd | 0x163958 (24 B) | C</title></rect>
+<rect x="355.34" y="368" width="15.49" height="13" fill="#ef4444"><title>func_00163970 | libmscd | 0x163970 (976 B) | OPEN</title></rect>
+<rect x="370.83" y="368" width="5.78" height="13" fill="#22c55e"><title>func_00163D40 | libmscd | 0x163D40 (364 B) | C</title></rect>
 <rect x="376.67" y="368" width="5.01" height="13" fill="#22c55e"><title>func_00163EB0 | libmscd | 0x163EB0 (316 B) | C</title></rect>
 <rect x="381.75" y="368" width="41.58" height="13" fill="#22c55e"><title>func_00163FF0 (+6 more) | libmscd | 0x163FF0 (2,620 B) | C</title></rect>
 <rect x="423.39" y="368" width="0.80" height="13" fill="#22c55e"><title>func_00164A30 | libmscd | 0x164A30 (12 B) | C</title></rect>
@@ -1950,7 +1957,8 @@
 <rect x="577.51" y="368" width="10.60" height="13" fill="#22c55e"><title>func_00167020 | hddcopy | 0x167020 (668 B) | C</title></rect>
 <rect x="588.17" y="368" width="2.35" height="13" fill="#22c55e"><title>func_001672C0 | hddcopy | 0x1672C0 (148 B) | C</title></rect>
 <rect x="590.58" y="368" width="4.76" height="13" fill="#22c55e"><title>func_00167358 | hddcopy | 0x167358 (300 B) | C</title></rect>
-<rect x="595.41" y="368" width="25.07" height="13" fill="#22c55e"><title>func_00167488 (+3 more) | hddcopy | 0x167488 (1,580 B) | C</title></rect>
+<rect x="595.41" y="368" width="18.66" height="13" fill="#ef4444"><title>func_00167488 | hddcopy | 0x167488 (1,176 B) | OPEN</title></rect>
+<rect x="614.07" y="368" width="6.41" height="13" fill="#22c55e"><title>func_00167920 (+2 more) | hddcopy | 0x167920 (404 B) | C</title></rect>
 <rect x="620.54" y="368" width="10.47" height="13" fill="#22c55e"><title>func_00167AB8 (+3 more) | hddcopy | 0x167AB8 (660 B) | C</title></rect>
 <rect x="631.08" y="368" width="0.80" height="13" fill="#22c55e"><title>func_00167D50 | hddcopy | 0x167D50 (12 B) | C</title></rect>
 <rect x="631.34" y="368" width="0.80" height="13" fill="#22c55e"><title>hdd_install_end | hddcopy | 0x167D60 (36 B) | C</title></rect>
@@ -1959,8 +1967,8 @@
 <rect x="633.75" y="368" width="5.52" height="13" fill="#22c55e"><title>hdd_format_sub (+1 more) | hddcopy | 0x167DF8 (348 B) | C</title></rect>
 <rect x="639.33" y="368" width="27.10" height="13" fill="#22c55e"><title>get_hdd_inst_info (+5 more) | hddcopy | 0x167F58 (1,708 B) | C</title></rect>
 <rect x="666.50" y="368" width="15.17" height="13" fill="#22c55e"><title>func_00168608 (+2 more) | hddcopy | 0x168608 (956 B) | C</title></rect>
-<rect x="681.74" y="368" width="7.11" height="13" fill="#22c55e"><title>func_001689C8 (+1 more) | hddcopy | 0x1689C8 (448 B) | C</title></rect>
-<rect x="688.85" y="368" width="25.39" height="13" fill="#ef4444"><title>func_00168B88 | hddcopy | 0x168B88 (1,600 B) | OPEN</title></rect>
+<rect x="681.74" y="368" width="2.41" height="13" fill="#22c55e"><title>func_001689C8 | hddcopy | 0x1689C8 (152 B) | C</title></rect>
+<rect x="684.15" y="368" width="30.09" height="13" fill="#ef4444"><title>func_00168A60 (+1 more) | hddcopy | 0x168A60 (1,896 B) | OPEN</title></rect>
 <rect x="714.24" y="368" width="0.80" height="13" fill="#22c55e"><title>func_001691C8 | menu/to | 0x1691C8 (28 B) | C</title></rect>
 <rect x="714.74" y="368" width="2.22" height="13" fill="#22c55e"><title>func_001691E8 | menu/to | 0x1691E8 (140 B) | C</title></rect>
 <rect x="717.03" y="368" width="9.84" height="13" fill="#22c55e"><title>func_00169278 | menu/to | 0x169278 (620 B) | C</title></rect>
@@ -1974,8 +1982,9 @@
 <rect x="877.62" y="368" width="10.35" height="13" fill="#22c55e"><title>func_0016BA00 (+3 more) | menu/to | 0x16BA00 (652 B) | C</title></rect>
 <rect x="888.04" y="368" width="1.21" height="13" fill="#22c55e"><title>func_0016BC90 (+1 more) | menu/to | 0x16BC90 (76 B) | C</title></rect>
 <rect x="889.30" y="368" width="25.45" height="13" fill="#22c55e"><title>func_0016BCE0 (+1 more) | menu/to | 0x16BCE0 (1,604 B) | C</title></rect>
-<rect x="914.82" y="368" width="13.65" height="13" fill="#22c55e"><title>func_0016C328 | menu/to | 0x16C328 (860 B) | C</title></rect>
-<rect x="928.53" y="368" width="17.20" height="13" fill="#22c55e"><title>func_0016C688 (+1 more) | menu/to | 0x16C688 (1,084 B) | C</title></rect>
+<rect x="914.82" y="368" width="13.65" height="13" fill="#ef4444"><title>func_0016C328 | menu/to | 0x16C328 (860 B) | OPEN</title></rect>
+<rect x="928.53" y="368" width="10.54" height="13" fill="#ef4444"><title>func_0016C688 | menu/to | 0x16C688 (664 B) | OPEN</title></rect>
+<rect x="939.07" y="368" width="6.67" height="13" fill="#22c55e"><title>func_0016C920 | menu/to | 0x16C920 (420 B) | C</title></rect>
 <rect x="945.80" y="368" width="0.80" height="13" fill="#22c55e"><title>func_0016CAC8 | menu/to | 0x16CAC8 (28 B) | C</title></rect>
 <rect x="946.31" y="368" width="1.21" height="13" fill="#22c55e"><title>func_0016CAE8 (+1 more) | menu/to | 0x16CAE8 (76 B) | C</title></rect>
 <rect x="947.58" y="368" width="1.97" height="13" fill="#22c55e"><title>func_0016CB38 (+3 more) | menu/to | 0x16CB38 (124 B) | C</title></rect>
@@ -2358,8 +2367,7 @@
 <rect x="667.52" y="383" width="5.14" height="13" fill="#22c55e"><title>func_00178648 (+2 more) | yi | 0x178648 (324 B) | C</title></rect>
 <rect x="672.72" y="383" width="1.33" height="13" fill="#22c55e"><title>func_00178790 | yi | 0x178790 (84 B) | C</title></rect>
 <rect x="674.12" y="383" width="0.80" height="13" fill="#22c55e"><title>func_001787E8 | yi | 0x1787E8 (20 B) | C</title></rect>
-<rect x="674.50" y="383" width="16.38" height="13" fill="#22c55e"><title>func_00178800 | yi | 0x178800 (1,032 B) | C</title></rect>
-<rect x="690.88" y="383" width="85.38" height="13" fill="#ef4444"><title>func_00178C08 (+2 more) | yi | 0x178C08 (5,380 B) | OPEN</title></rect>
+<rect x="674.50" y="383" width="101.75" height="13" fill="#ef4444"><title>func_00178800 (+3 more) | yi | 0x178800 (6,412 B) | OPEN</title></rect>
 <rect x="776.32" y="383" width="6.41" height="13" fill="#22c55e"><title>func_0017A110 (+1 more) | yi | 0x17A110 (404 B) | C</title></rect>
 <rect x="782.79" y="383" width="2.98" height="13" fill="#22c55e"><title>func_0017A2A8 | yi | 0x17A2A8 (188 B) | C</title></rect>
 <rect x="785.84" y="383" width="0.80" height="13" fill="#22c55e"><title>func_0017A368 | yi | 0x17A368 (44 B) | C</title></rect>
@@ -2416,7 +2424,7 @@
 <rect x="172.15" y="398" width="16.00" height="13" fill="#ef4444"><title>func_00180C58 | yi | 0x180C58 (1,008 B) | OPEN</title></rect>
 <rect x="188.14" y="398" width="15.68" height="13" fill="#22c55e"><title>yiExecVIFpacket (+3 more) | yi | 0x181048 (988 B) | C</title></rect>
 <rect x="203.88" y="398" width="3.11" height="13" fill="#22c55e"><title>func_00181428 | yi | 0x181428 (196 B) | C</title></rect>
-<rect x="207.06" y="398" width="25.71" height="13" fill="#22c55e"><title>yiPacketConvToOMD | yi | 0x1814F0 (1,620 B) | C</title></rect>
+<rect x="207.06" y="398" width="25.71" height="13" fill="#ef4444"><title>yiPacketConvToOMD | yi | 0x1814F0 (1,620 B) | OPEN</title></rect>
 <rect x="232.83" y="398" width="1.97" height="13" fill="#22c55e"><title>func_00181B48 | yi | 0x181B48 (124 B) | C</title></rect>
 <rect x="234.86" y="398" width="1.46" height="13" fill="#22c55e"><title>func_00181BC8 | yi | 0x181BC8 (92 B) | C</title></rect>
 <rect x="236.38" y="398" width="108.48" height="13" fill="#475569"><title>func_00181C28 | yi | 0x181C28 (6,836 B) | POLICY</title></rect>
@@ -2447,7 +2455,8 @@
 <rect x="703.19" y="398" width="4.82" height="13" fill="#22c55e"><title>func_00188F10 (+1 more) | yi | 0x188F10 (304 B) | C</title></rect>
 <rect x="708.02" y="398" width="83.92" height="13" fill="#ef4444"><title>func_00189040 | yi | 0x189040 (5,288 B) | OPEN</title></rect>
 <rect x="791.93" y="398" width="3.87" height="13" fill="#22c55e"><title>func_0018A4E8 | yi | 0x18A4E8 (244 B) | C</title></rect>
-<rect x="795.87" y="398" width="19.87" height="13" fill="#22c55e"><title>func_0018A5E0 (+2 more) | yi | 0x18A5E0 (1,252 B) | C</title></rect>
+<rect x="795.87" y="398" width="17.01" height="13" fill="#ef4444"><title>func_0018A5E0 | yi | 0x18A5E0 (1,072 B) | OPEN</title></rect>
+<rect x="812.88" y="398" width="2.86" height="13" fill="#22c55e"><title>func_0018AA10 (+1 more) | yi | 0x18AA10 (180 B) | C</title></rect>
 <rect x="815.80" y="398" width="3.49" height="13" fill="#22c55e"><title>func_0018AAC8 | yi | 0x18AAC8 (220 B) | C</title></rect>
 <rect x="819.35" y="398" width="8.32" height="13" fill="#22c55e"><title>func_0018ABA8 | yi | 0x18ABA8 (524 B) | C</title></rect>
 <rect x="827.73" y="398" width="17.20" height="13" fill="#22c55e"><title>func_0018ADB8 (+1 more) | yi | 0x18ADB8 (1,084 B) | C</title></rect>
@@ -3074,7 +3083,7 @@
 <rect x="689.86" y="443" width="1.33" height="13" fill="#22c55e"><title>MsBtlFreeItemMem | battle | 0x1B8BC8 (84 B) | C</title></rect>
 <rect x="691.26" y="443" width="2.86" height="13" fill="#22c55e"><title>MsGetChrID | battle | 0x1B8C20 (180 B) | C</title></rect>
 <rect x="694.18" y="443" width="2.22" height="13" fill="#22c55e"><title>MsCheckRange (+1 more) | battle | 0x1B8CD8 (140 B) | C</title></rect>
-<rect x="696.46" y="443" width="25.07" height="13" fill="#22c55e"><title>MsSetRamChrData | battle | 0x1B8D68 (1,580 B) | C</title></rect>
+<rect x="696.46" y="443" width="25.07" height="13" fill="#ef4444"><title>MsSetRamChrData | battle | 0x1B8D68 (1,580 B) | OPEN</title></rect>
 <rect x="721.60" y="443" width="1.21" height="13" fill="#22c55e"><title>MsSetRamMonData | battle | 0x1B9398 (76 B) | C</title></rect>
 <rect x="722.87" y="443" width="12.12" height="13" fill="#22c55e"><title>func_001B93E8 (+4 more) | battle | 0x1B93E8 (764 B) | C</title></rect>
 <rect x="735.06" y="443" width="4.13" height="13" fill="#22c55e"><title>func_001B96E8 (+1 more) | battle | 0x1B96E8 (260 B) | C</title></rect>
@@ -3298,7 +3307,9 @@
 <rect x="274.47" y="473" width="1.33" height="13" fill="#22c55e"><title>MsSetBtlPosReset | battle | 0x1D2588 (84 B) | C</title></rect>
 <rect x="275.87" y="473" width="7.55" height="13" fill="#22c55e"><title>func_001D25E0 (+2 more) | battle | 0x1D25E0 (476 B) | C</title></rect>
 <rect x="283.48" y="473" width="46.91" height="13" fill="#22c55e"><title>MsCheckStartEffect (+3 more) | battle | 0x1D27C0 (2,956 B) | C</title></rect>
-<rect x="330.46" y="473" width="28.88" height="13" fill="#22c55e"><title>func_001D3350 (+5 more) | battle | 0x1D3350 (1,820 B) | C</title></rect>
+<rect x="330.46" y="473" width="5.59" height="13" fill="#22c55e"><title>func_001D3350 (+3 more) | battle | 0x1D3350 (352 B) | C</title></rect>
+<rect x="336.04" y="473" width="13.58" height="13" fill="#ef4444"><title>func_001D34B0 | battle | 0x1D34B0 (856 B) | OPEN</title></rect>
+<rect x="349.63" y="473" width="9.71" height="13" fill="#22c55e"><title>MsSetMotion | battle | 0x1D3808 (612 B) | C</title></rect>
 <rect x="359.40" y="473" width="1.08" height="13" fill="#22c55e"><title>MsGetMotionNum (+1 more) | battle | 0x1D3A70 (68 B) | C</title></rect>
 <rect x="360.54" y="473" width="0.80" height="13" fill="#22c55e"><title>MsSetMotionAttackWait | battle | 0x1D3AB8 (36 B) | C</title></rect>
 <rect x="361.18" y="473" width="3.36" height="13" fill="#22c55e"><title>MsTerminateMotion (+1 more) | battle | 0x1D3AE0 (212 B) | C</title></rect>
@@ -3367,7 +3378,8 @@
 <rect x="936.66" y="473" width="3.49" height="13" fill="#22c55e"><title>MsBtlGetTerm | battle | 0x1DC888 (220 B) | C</title></rect>
 <rect x="940.21" y="473" width="3.24" height="13" fill="#22c55e"><title>func_001DC968 | battle | 0x1DC968 (204 B) | C</title></rect>
 <rect x="943.51" y="473" width="1.59" height="13" fill="#22c55e"><title>func_001DCA38 | battle | 0x1DCA38 (100 B) | C</title></rect>
-<rect x="945.16" y="473" width="13.65" height="13" fill="#22c55e"><title>func_001DCAA0 (+1 more) | battle | 0x1DCAA0 (860 B) | C</title></rect>
+<rect x="945.16" y="473" width="0.89" height="13" fill="#22c55e"><title>func_001DCAA0 | battle | 0x1DCAA0 (56 B) | C</title></rect>
+<rect x="946.05" y="473" width="12.76" height="13" fill="#ef4444"><title>func_001DCAD8 | battle | 0x1DCAD8 (804 B) | OPEN</title></rect>
 <rect x="958.88" y="473" width="19.49" height="13" fill="#22c55e"><title>MsSetWeaponName (+2 more) | battle | 0x1DCE00 (1,228 B) | C</title></rect>
 <rect x="978.43" y="473" width="4.63" height="13" fill="#22c55e"><title>func_001DD2D0 | battle | 0x1DD2D0 (292 B) | C</title></rect>
 <rect x="983.12" y="473" width="4.63" height="13" fill="#22c55e"><title>MsFieldItemRead | battle | 0x1DD3F8 (292 B) | C</title></rect>
@@ -4213,12 +4225,13 @@
 <rect x="688.72" y="548" width="0.80" height="13" fill="#22c55e"><title>func_00228B80 | menu/tk | 0x228B80 (12 B) | C</title></rect>
 <rect x="688.97" y="548" width="29.01" height="13" fill="#22c55e"><title>func_00228B90 (+2 more) | menu/tk | 0x228B90 (1,828 B) | C</title></rect>
 <rect x="718.04" y="548" width="21.90" height="13" fill="#22c55e"><title>func_002292B8 (+2 more) | menu/tk | 0x2292B8 (1,380 B) | C</title></rect>
-<rect x="740.01" y="548" width="6.16" height="13" fill="#22c55e"><title>func_00229820 | menu/tk | 0x229820 (388 B) | C</title></rect>
+<rect x="740.01" y="548" width="6.16" height="13" fill="#ef4444"><title>func_00229820 | menu/tk | 0x229820 (388 B) | OPEN</title></rect>
 <rect x="746.23" y="548" width="4.51" height="13" fill="#22c55e"><title>func_002299A8 | menu/tk | 0x2299A8 (284 B) | C</title></rect>
 <rect x="750.80" y="548" width="4.51" height="13" fill="#22c55e"><title>func_00229AC8 | menu/tk | 0x229AC8 (284 B) | C</title></rect>
 <rect x="755.37" y="548" width="5.78" height="13" fill="#22c55e"><title>func_00229BE8 (+1 more) | menu/tk | 0x229BE8 (364 B) | C</title></rect>
-<rect x="761.21" y="548" width="9.08" height="13" fill="#22c55e"><title>func_00229D58 | menu/tk | 0x229D58 (572 B) | C</title></rect>
-<rect x="770.35" y="548" width="40.69" height="13" fill="#22c55e"><title>func_00229F98 (+4 more) | menu/tk | 0x229F98 (2,564 B) | C</title></rect>
+<rect x="761.21" y="548" width="9.08" height="13" fill="#ef4444"><title>func_00229D58 | menu/tk | 0x229D58 (572 B) | OPEN</title></rect>
+<rect x="770.35" y="548" width="17.77" height="13" fill="#ef4444"><title>func_00229F98 | menu/tk | 0x229F98 (1,120 B) | OPEN</title></rect>
+<rect x="788.12" y="548" width="22.92" height="13" fill="#22c55e"><title>func_0022A3F8 (+3 more) | menu/tk | 0x22A3F8 (1,444 B) | C</title></rect>
 <rect x="811.10" y="548" width="9.71" height="13" fill="#22c55e"><title>func_0022A9A0 (+2 more) | menu/tk | 0x22A9A0 (612 B) | C</title></rect>
 <rect x="820.88" y="548" width="2.09" height="13" fill="#22c55e"><title>func_0022AC08 | menu/tk | 0x22AC08 (132 B) | C</title></rect>
 <rect x="823.04" y="548" width="1.33" height="13" fill="#22c55e"><title>func_0022AC90 | menu/tk | 0x22AC90 (84 B) | C</title></rect>
@@ -4279,7 +4292,9 @@
 <rect x="318.52" y="563" width="19.11" height="13" fill="#22c55e"><title>func_00233060 (+10 more) | menu/tk | 0x233060 (1,204 B) | C</title></rect>
 <rect x="337.69" y="563" width="6.03" height="13" fill="#22c55e"><title>func_00233518 (+4 more) | menu/tk | 0x233518 (380 B) | C</title></rect>
 <rect x="343.79" y="563" width="1.21" height="13" fill="#22c55e"><title>func_00233698 | menu/tk | 0x233698 (76 B) | C</title></rect>
-<rect x="345.06" y="563" width="61.89" height="13" fill="#22c55e"><title>func_002336E8 (+6 more) | menu/tk | 0x2336E8 (3,900 B) | C</title></rect>
+<rect x="345.06" y="563" width="44.69" height="13" fill="#22c55e"><title>func_002336E8 (+4 more) | menu/tk | 0x2336E8 (2,816 B) | C</title></rect>
+<rect x="389.74" y="563" width="9.14" height="13" fill="#ef4444"><title>func_002341E8 | menu/tk | 0x2341E8 (576 B) | OPEN</title></rect>
+<rect x="398.88" y="563" width="8.06" height="13" fill="#22c55e"><title>func_00234428 | menu/tk | 0x234428 (508 B) | C</title></rect>
 <rect x="407.01" y="563" width="2.60" height="13" fill="#22c55e"><title>func_00234628 | menu/tk | 0x234628 (164 B) | C</title></rect>
 <rect x="409.68" y="563" width="8.19" height="13" fill="#22c55e"><title>func_002346D0 (+1 more) | menu/tk | 0x2346D0 (516 B) | C</title></rect>
 <rect x="417.93" y="563" width="0.89" height="13" fill="#22c55e"><title>func_002348D8 | menu/tk | 0x2348D8 (56 B) | C</title></rect>
@@ -4381,7 +4396,9 @@
 <rect x="949.99" y="563" width="1.97" height="13" fill="#22c55e"><title>func_0023CBD0 | menu/tk | 0x23CBD0 (124 B) | C</title></rect>
 <rect x="952.02" y="563" width="2.48" height="13" fill="#22c55e"><title>func_0023CC50 | menu/tk | 0x23CC50 (156 B) | C</title></rect>
 <rect x="954.56" y="563" width="5.14" height="13" fill="#22c55e"><title>func_0023CCF0 (+3 more) | menu/tk | 0x23CCF0 (324 B) | C</title></rect>
-<rect x="959.76" y="563" width="36.75" height="13" fill="#22c55e"><title>func_0023CE38 (+4 more) | menu/tk | 0x23CE38 (2,316 B) | C</title></rect>
+<rect x="959.76" y="563" width="17.01" height="13" fill="#22c55e"><title>func_0023CE38 (+2 more) | menu/tk | 0x23CE38 (1,072 B) | C</title></rect>
+<rect x="976.78" y="563" width="9.39" height="13" fill="#ef4444"><title>func_0023D268 | menu/tk | 0x23D268 (592 B) | OPEN</title></rect>
+<rect x="986.17" y="563" width="10.35" height="13" fill="#22c55e"><title>func_0023D4B8 | menu/tk | 0x23D4B8 (652 B) | C</title></rect>
 <rect x="996.58" y="563" width="17.33" height="13" fill="#22c55e"><title>func_0023D748 (+6 more) | menu/tk | 0x23D748 (1,092 B) | C</title></rect>
 <rect x="1013.97" y="563" width="9.08" height="13" fill="#22c55e"><title>func_0023DB90 (+4 more) | menu/tk | 0x23DB90 (572 B) | C</title></rect>
 <rect x="1023.11" y="563" width="0.83" height="13" fill="#22c55e"><title>func_0023DDD0 (+1 more) | menu/tk | 0x23DDD0 (52 B) | C</title></rect>
@@ -4524,7 +4541,9 @@
 <rect x="595.54" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00247490 | menu/tk | 0x247490 (140 B) | C</title></rect>
 <rect x="597.82" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00247520 | menu/tk | 0x247520 (140 B) | C</title></rect>
 <rect x="600.11" y="578" width="2.22" height="13" fill="#22c55e"><title>func_002475B0 | menu/tk | 0x2475B0 (140 B) | C</title></rect>
-<rect x="602.39" y="578" width="11.24" height="13" fill="#22c55e"><title>func_00247640 (+4 more) | menu/tk | 0x247640 (708 B) | C</title></rect>
+<rect x="602.39" y="578" width="6.60" height="13" fill="#22c55e"><title>func_00247640 (+2 more) | menu/tk | 0x247640 (416 B) | C</title></rect>
+<rect x="608.99" y="578" width="2.54" height="13" fill="#ef4444"><title>func_002477E0 | menu/tk | 0x2477E0 (160 B) | OPEN</title></rect>
+<rect x="611.53" y="578" width="2.09" height="13" fill="#22c55e"><title>func_00247880 | menu/tk | 0x247880 (132 B) | C</title></rect>
 <rect x="613.69" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00247908 | menu/tk | 0x247908 (140 B) | C</title></rect>
 <rect x="615.97" y="578" width="2.09" height="13" fill="#22c55e"><title>func_00247998 | menu/tk | 0x247998 (132 B) | C</title></rect>
 <rect x="618.13" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00247A20 | menu/tk | 0x247A20 (140 B) | C</title></rect>
@@ -4533,9 +4552,10 @@
 <rect x="624.86" y="578" width="9.71" height="13" fill="#22c55e"><title>func_00247BC8 (+1 more) | menu/tk | 0x247BC8 (612 B) | C</title></rect>
 <rect x="634.64" y="578" width="2.09" height="13" fill="#22c55e"><title>func_00247E30 | menu/tk | 0x247E30 (132 B) | C</title></rect>
 <rect x="636.79" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00247EB8 | menu/tk | 0x247EB8 (140 B) | C</title></rect>
-<rect x="639.08" y="578" width="8.57" height="13" fill="#22c55e"><title>func_00247F48 (+1 more) | menu/tk | 0x247F48 (540 B) | C</title></rect>
-<rect x="647.71" y="578" width="7.68" height="13" fill="#22c55e"><title>func_00248168 | menu/tk | 0x248168 (484 B) | C</title></rect>
-<rect x="655.46" y="578" width="8.19" height="13" fill="#22c55e"><title>func_00248350 | menu/tk | 0x248350 (516 B) | C</title></rect>
+<rect x="639.08" y="578" width="0.80" height="13" fill="#22c55e"><title>func_00247F48 | menu/tk | 0x247F48 (40 B) | C</title></rect>
+<rect x="639.71" y="578" width="7.93" height="13" fill="#ef4444"><title>func_00247F70 | menu/tk | 0x247F70 (500 B) | OPEN</title></rect>
+<rect x="647.71" y="578" width="7.68" height="13" fill="#ef4444"><title>func_00248168 | menu/tk | 0x248168 (484 B) | OPEN</title></rect>
+<rect x="655.46" y="578" width="8.19" height="13" fill="#ef4444"><title>func_00248350 | menu/tk | 0x248350 (516 B) | OPEN</title></rect>
 <rect x="663.71" y="578" width="1.84" height="13" fill="#22c55e"><title>func_00248558 (+1 more) | menu/tk | 0x248558 (116 B) | C</title></rect>
 <rect x="665.61" y="578" width="1.84" height="13" fill="#22c55e"><title>func_002485D0 (+1 more) | menu/tk | 0x2485D0 (116 B) | C</title></rect>
 <rect x="667.52" y="578" width="1.84" height="13" fill="#22c55e"><title>func_00248648 (+1 more) | menu/tk | 0x248648 (116 B) | C</title></rect>
@@ -4572,7 +4592,8 @@
 <rect x="741.40" y="578" width="4.25" height="13" fill="#22c55e"><title>func_00249878 (+2 more) | menu/tk | 0x249878 (268 B) | C</title></rect>
 <rect x="745.72" y="578" width="2.22" height="13" fill="#22c55e"><title>func_00249988 (+1 more) | menu/tk | 0x249988 (140 B) | C</title></rect>
 <rect x="748.01" y="578" width="2.22" height="13" fill="#22c55e"><title>TkMn2GetMainPos | menu/tk | 0x249A18 (140 B) | C</title></rect>
-<rect x="750.29" y="578" width="67.86" height="13" fill="#22c55e"><title>func_00249AA8 (+2 more) | menu/tk | 0x249AA8 (4,276 B) | C</title></rect>
+<rect x="750.29" y="578" width="40.50" height="13" fill="#22c55e"><title>func_00249AA8 (+1 more) | menu/tk | 0x249AA8 (2,552 B) | C</title></rect>
+<rect x="790.79" y="578" width="27.36" height="13" fill="#ef4444"><title>func_0024A4A0 | menu/tk | 0x24A4A0 (1,724 B) | OPEN</title></rect>
 <rect x="818.21" y="578" width="7.05" height="13" fill="#22c55e"><title>func_0024AB60 (+4 more) | menu/tk | 0x24AB60 (444 B) | C</title></rect>
 <rect x="825.32" y="578" width="4.38" height="13" fill="#22c55e"><title>func_0024AD20 | menu/tk | 0x24AD20 (276 B) | C</title></rect>
 <rect x="829.76" y="578" width="0.95" height="13" fill="#22c55e"><title>func_0024AE38 (+2 more) | menu/tk | 0x24AE38 (60 B) | C</title></rect>
@@ -4602,7 +4623,8 @@
 <rect x="983.00" y="578" width="1.46" height="13" fill="#22c55e"><title>func_0024D3F0 | menu/tk | 0x24D3F0 (92 B) | C</title></rect>
 <rect x="984.52" y="578" width="5.14" height="13" fill="#22c55e"><title>func_0024D450 | menu/tk | 0x24D450 (324 B) | C</title></rect>
 <rect x="989.72" y="578" width="11.87" height="13" fill="#22c55e"><title>func_0024D598 (+1 more) | menu/tk | 0x24D598 (748 B) | C</title></rect>
-<rect x="1001.66" y="578" width="37.13" height="13" fill="#22c55e"><title>func_0024D888 (+3 more) | menu/tk | 0x24D888 (2,340 B) | C</title></rect>
+<rect x="1001.66" y="578" width="17.39" height="13" fill="#22c55e"><title>func_0024D888 (+2 more) | menu/tk | 0x24D888 (1,096 B) | C</title></rect>
+<rect x="1019.05" y="578" width="19.74" height="13" fill="#ef4444"><title>func_0024DCD0 | menu/tk | 0x24DCD0 (1,244 B) | OPEN</title></rect>
 <rect x="1038.86" y="578" width="14.41" height="13" fill="#22c55e"><title>func_0024E1B0 (+4 more) | menu/tk | 0x24E1B0 (908 B) | C</title></rect>
 <rect x="1053.33" y="578" width="30.28" height="13" fill="#22c55e"><title>func_0024E540 (+6 more) | menu/tk | 0x24E540 (1,908 B) | C</title></rect>
 <rect x="1083.67" y="578" width="0.80" height="13" fill="#22c55e"><title>func_0024ECB8 | menu/tk | 0x24ECB8 (36 B) | C</title></rect>
@@ -4708,7 +4730,8 @@
 <rect x="421.74" y="593" width="1.71" height="13" fill="#22c55e"><title>func_002549C8 | sqs | 0x2549C8 (108 B) | C</title></rect>
 <rect x="423.51" y="593" width="1.21" height="13" fill="#22c55e"><title>func_00254A38 | sqs | 0x254A38 (76 B) | C</title></rect>
 <rect x="424.78" y="593" width="3.49" height="13" fill="#22c55e"><title>set_read_chgname | sqs | 0x254A88 (220 B) | C</title></rect>
-<rect x="428.34" y="593" width="12.63" height="13" fill="#22c55e"><title>func_00254B68 (+2 more) | sqs | 0x254B68 (796 B) | C</title></rect>
+<rect x="428.34" y="593" width="1.14" height="13" fill="#22c55e"><title>func_00254B68 (+1 more) | sqs | 0x254B68 (72 B) | C</title></rect>
+<rect x="429.48" y="593" width="11.49" height="13" fill="#ef4444"><title>func_00254BB0 | sqs | 0x254BB0 (724 B) | OPEN</title></rect>
 <rect x="441.03" y="593" width="5.78" height="13" fill="#22c55e"><title>CDfileName_PC (+3 more) | sqs | 0x254E88 (364 B) | C</title></rect>
 <rect x="446.87" y="593" width="0.80" height="13" fill="#22c55e"><title>func_00254FF8 | sqs | 0x254FF8 (36 B) | C</title></rect>
 <rect x="447.51" y="593" width="8.44" height="13" fill="#22c55e"><title>func_00255020 (+1 more) | sqs | 0x255020 (532 B) | C</title></rect>
@@ -5418,7 +5441,8 @@
 <rect x="794.09" y="653" width="5.78" height="13" fill="#22c55e"><title>op_et_astatus_effect_change | op | 0x29A570 (364 B) | C</title></rect>
 <rect x="799.93" y="653" width="3.36" height="13" fill="#22c55e"><title>op_et_astatus_effect_off | op | 0x29A6E0 (212 B) | C</title></rect>
 <rect x="803.36" y="653" width="1.33" height="13" fill="#22c55e"><title>func_0029A7B8 | op | 0x29A7B8 (84 B) | C</title></rect>
-<rect x="804.75" y="653" width="54.02" height="13" fill="#22c55e"><title>op_get_chr_status_stone (+6 more) | op | 0x29A810 (3,404 B) | C</title></rect>
+<rect x="804.75" y="653" width="8.76" height="13" fill="#22c55e"><title>op_get_chr_status_stone (+5 more) | op | 0x29A810 (552 B) | C</title></rect>
+<rect x="813.51" y="653" width="45.26" height="13" fill="#ef4444"><title>opu_debug_check | op | 0x29AA38 (2,852 B) | OPEN</title></rect>
 <rect x="858.84" y="653" width="1.46" height="13" fill="#22c55e"><title>func_0029B560 | op | 0x29B560 (92 B) | C</title></rect>
 <rect x="860.36" y="653" width="4.38" height="13" fill="#22c55e"><title>opd_target_handle_by_index (+1 more) | op | 0x29B5C0 (276 B) | C</title></rect>
 <rect x="864.80" y="653" width="4.76" height="13" fill="#22c55e"><title>func_0029B6D8 (+2 more) | op | 0x29B6D8 (300 B) | C</title></rect>
@@ -5483,12 +5507,15 @@
 <rect x="287.93" y="668" width="13.39" height="13" fill="#22c55e"><title>opu_ffxlight | op | 0x2A28D8 (844 B) | C</title></rect>
 <rect x="301.38" y="668" width="0.95" height="13" fill="#22c55e"><title>opus_ffxfocus_free | op | 0x2A2C28 (60 B) | C</title></rect>
 <rect x="302.40" y="668" width="0.95" height="13" fill="#22c55e"><title>func_002A2C68 | op | 0x2A2C68 (60 B) | C</title></rect>
-<rect x="303.42" y="668" width="48.62" height="13" fill="#22c55e"><title>opu_tc_load (+4 more) | op | 0x2A2CA8 (3,064 B) | C</title></rect>
+<rect x="303.42" y="668" width="17.65" height="13" fill="#ef4444"><title>opu_tc_load | op | 0x2A2CA8 (1,112 B) | OPEN</title></rect>
+<rect x="321.06" y="668" width="30.98" height="13" fill="#22c55e"><title>opu_clut_load (+3 more) | op | 0x2A3100 (1,952 B) | C</title></rect>
 <rect x="352.04" y="668" width="10.47" height="13" fill="#475569"><title>func_002A38A0 | op | 0x2A38A0 (660 B) | POLICY</title></rect>
 <rect x="362.58" y="668" width="0.80" height="13" fill="#22c55e"><title>func_002A3B38 | op | 0x2A3B38 (12 B) | C</title></rect>
 <rect x="362.83" y="668" width="9.08" height="13" fill="#22c55e"><title>op_chara_hsv_size_get (+2 more) | op | 0x2A3B48 (572 B) | C</title></rect>
-<rect x="371.97" y="668" width="9.58" height="13" fill="#22c55e"><title>func_002A3D88 (+1 more) | op | 0x2A3D88 (604 B) | C</title></rect>
-<rect x="381.62" y="668" width="13.14" height="13" fill="#22c55e"><title>op_hsv_to_rgba (+1 more) | op | 0x2A3FE8 (828 B) | C</title></rect>
+<rect x="371.97" y="668" width="5.08" height="13" fill="#22c55e"><title>func_002A3D88 | op | 0x2A3D88 (320 B) | C</title></rect>
+<rect x="377.05" y="668" width="4.51" height="13" fill="#ef4444"><title>func_002A3EC8 | op | 0x2A3EC8 (284 B) | OPEN</title></rect>
+<rect x="381.62" y="668" width="12.95" height="13" fill="#ef4444"><title>op_hsv_to_rgba | op | 0x2A3FE8 (816 B) | OPEN</title></rect>
+<rect x="394.57" y="668" width="0.80" height="13" fill="#22c55e"><title>func_002A4318 | op | 0x2A4318 (12 B) | C</title></rect>
 <rect x="394.82" y="668" width="1.33" height="13" fill="#22c55e"><title>opus_all_clut_dispose | op | 0x2A4328 (84 B) | C</title></rect>
 <rect x="396.22" y="668" width="1.33" height="13" fill="#22c55e"><title>func_002A4380 | op | 0x2A4380 (84 B) | C</title></rect>
 <rect x="397.62" y="668" width="10.73" height="13" fill="#22c55e"><title>opu_world (+1 more) | op | 0x2A43D8 (676 B) | C</title></rect>
@@ -5695,7 +5722,7 @@
 <rect x="1090.65" y="698" width="1.27" height="13" fill="#475569"><title>func_002CEE70 | op | 0x2CEE70 (80 B) | POLICY</title></rect>
 <rect x="1091.92" y="698" width="0.80" height="13" fill="#22c55e"><title>func_002CEEC0 | op | 0x2CEEC0 (20 B) | C</title></rect>
 <rect x="1092.30" y="698" width="5.65" height="13" fill="#22c55e"><title>func_002CEED8 (+5 more) | op | 0x2CEED8 (356 B) | C</title></rect>
-<rect x="1098.02" y="698" width="6.28" height="13" fill="#22c55e"><title>func_002CF040 | op | 0x2CF040 (396 B) | C</title></rect>
+<rect x="1098.02" y="698" width="6.28" height="13" fill="#ef4444"><title>func_002CF040 | op | 0x2CF040 (396 B) | OPEN</title></rect>
 <rect x="1104.36" y="698" width="6.92" height="13" fill="#22c55e"><title>func_002CF1D0 (+1 more) | op | 0x2CF1D0 (436 B) | C</title></rect>
 <rect x="1111.35" y="698" width="6.54" height="13" fill="#475569"><title>func_002CF388 | op | 0x2CF388 (412 B) | POLICY</title></rect>
 <rect x="1117.95" y="698" width="11.81" height="13" fill="#475569"><title>op_oef2_texture_load | op | 0x2CF528 (744 B) | POLICY</title></rect>
@@ -5703,8 +5730,9 @@
 <rect x="1132.42" y="698" width="0.95" height="13" fill="#22c55e"><title>func_002CF8B8 (+1 more) | op | 0x2CF8B8 (60 B) | C</title></rect>
 <rect x="1133.44" y="698" width="4.63" height="13" fill="#475569"><title>func_002CF8F8 | op | 0x2CF8F8 (292 B) | POLICY</title></rect>
 <rect x="1138.13" y="698" width="9.33" height="13" fill="#475569"><title>func_002CFA20 | op | 0x2CFA20 (588 B) | POLICY</title></rect>
-<rect x="1147.53" y="698" width="14.47" height="13" fill="#22c55e"><title>func_002CFC70 (+1 more) | op | 0x2CFC70 (912 B) | C</title></rect>
-<rect x="122.00" y="713" width="6.03" height="13" fill="#22c55e"><title>func_002CFE38 | op | 0x2D0000 (380 B) | C</title></rect>
+<rect x="1147.53" y="698" width="7.24" height="13" fill="#22c55e"><title>func_002CFC70 | op | 0x2CFC70 (456 B) | C</title></rect>
+<rect x="1154.76" y="698" width="7.24" height="13" fill="#ef4444"><title>func_002CFE38 | op | 0x2CFE38 (456 B) | OPEN</title></rect>
+<rect x="122.00" y="713" width="6.03" height="13" fill="#ef4444"><title>func_002CFE38 | op | 0x2D0000 (380 B) | OPEN</title></rect>
 <rect x="128.09" y="713" width="2.86" height="13" fill="#22c55e"><title>func_002D0180 | op | 0x2D0180 (180 B) | C</title></rect>
 <rect x="131.01" y="713" width="7.30" height="13" fill="#22c55e"><title>func_002D0238 (+1 more) | op | 0x2D0238 (460 B) | C</title></rect>
 <rect x="138.38" y="713" width="5.65" height="13" fill="#22c55e"><title>func_002D0408 | op | 0x2D0408 (356 B) | C</title></rect>
@@ -6251,27 +6279,27 @@
 <text x="48" y="850" class="small muted">Sorted by total code size. Percentage shown is decompilable C coverage (excl. policy-asm).</text>
 <text x="168" y="884" text-anchor="end" class="small mono">battle</text>
 <rect x="178" y="872" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="872" width="324.02" height="15" fill="#22c55e"/>
-<rect x="502.02" y="872" width="2.21" height="15" fill="#ef4444"/>
+<rect x="178" y="872" width="320.52" height="15" fill="#22c55e"/>
+<rect x="498.52" y="872" width="5.71" height="15" fill="#ef4444"/>
 <rect x="504.23" y="872" width="13.77" height="15" fill="#475569"/>
-<text x="528" y="884" class="tiny mono muted"> 99.3%  ( 2.0 KB open / 307.4 KB)</text>
+<text x="528" y="884" class="tiny mono muted"> 98.3%  ( 5.2 KB open / 307.4 KB)</text>
 <text x="168" y="911" text-anchor="end" class="small mono">op</text>
 <rect x="178" y="899" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="899" width="140.58" height="15" fill="#22c55e"/>
-<rect x="318.58" y="899" width="14.90" height="15" fill="#ef4444"/>
+<rect x="178" y="899" width="132.21" height="15" fill="#22c55e"/>
+<rect x="310.21" y="899" width="23.27" height="15" fill="#ef4444"/>
 <rect x="333.48" y="899" width="184.52" height="15" fill="#475569"/>
-<text x="528" y="911" class="tiny mono muted"> 90.4%  (10.9 KB open / 249.6 KB)</text>
+<text x="528" y="911" class="tiny mono muted"> 85.0%  (17.1 KB open / 249.6 KB)</text>
 <text x="168" y="938" text-anchor="end" class="small mono">menu/to</text>
 <rect x="178" y="926" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="926" width="329.49" height="15" fill="#22c55e"/>
-<rect x="507.49" y="926" width="9.77" height="15" fill="#ef4444"/>
+<rect x="178" y="926" width="326.97" height="15" fill="#22c55e"/>
+<rect x="504.97" y="926" width="12.29" height="15" fill="#ef4444"/>
 <rect x="517.26" y="926" width="0.74" height="15" fill="#475569"/>
-<text x="528" y="938" class="tiny mono muted"> 97.1%  ( 5.8 KB open / 200.7 KB)</text>
+<text x="528" y="938" class="tiny mono muted"> 96.4%  ( 7.3 KB open / 200.7 KB)</text>
 <text x="168" y="965" text-anchor="end" class="small mono">menu/tk</text>
 <rect x="178" y="953" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="953" width="334.03" height="15" fill="#22c55e"/>
-<rect x="512.03" y="953" width="5.97" height="15" fill="#ef4444"/>
-<text x="528" y="965" class="tiny mono muted"> 98.2%  ( 3.3 KB open / 187.2 KB)</text>
+<rect x="178" y="953" width="320.06" height="15" fill="#22c55e"/>
+<rect x="498.06" y="953" width="19.94" height="15" fill="#ef4444"/>
+<text x="528" y="965" class="tiny mono muted"> 94.1%  (11.0 KB open / 187.2 KB)</text>
 <text x="168" y="992" text-anchor="end" class="small mono">particle</text>
 <rect x="178" y="980" width="340" height="15" rx="2" fill="#0b0f14"/>
 <rect x="178" y="980" width="179.90" height="15" fill="#22c55e"/>
@@ -6280,22 +6308,22 @@
 <text x="528" y="992" class="tiny mono muted"> 93.9%  ( 6.1 KB open / 176.3 KB)</text>
 <text x="168" y="1019" text-anchor="end" class="small mono">atel</text>
 <rect x="178" y="1007" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1007" width="333.01" height="15" fill="#22c55e"/>
-<rect x="511.01" y="1007" width="3.59" height="15" fill="#ef4444"/>
+<rect x="178" y="1007" width="331.32" height="15" fill="#22c55e"/>
+<rect x="509.32" y="1007" width="5.28" height="15" fill="#ef4444"/>
 <rect x="514.60" y="1007" width="3.40" height="15" fill="#475569"/>
-<text x="528" y="1019" class="tiny mono muted"> 98.9%  ( 1.7 KB open / 158.6 KB)</text>
+<text x="528" y="1019" class="tiny mono muted"> 98.4%  ( 2.5 KB open / 158.6 KB)</text>
 <text x="168" y="1046" text-anchor="end" class="small mono">yi</text>
 <rect x="178" y="1034" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1034" width="217.34" height="15" fill="#22c55e"/>
-<rect x="395.34" y="1034" width="63.21" height="15" fill="#ef4444"/>
+<rect x="178" y="1034" width="206.42" height="15" fill="#22c55e"/>
+<rect x="384.42" y="1034" width="74.12" height="15" fill="#ef4444"/>
 <rect x="458.55" y="1034" width="59.45" height="15" fill="#475569"/>
-<text x="528" y="1046" class="tiny mono muted"> 77.5%  (21.1 KB open / 113.2 KB)</text>
+<text x="528" y="1046" class="tiny mono muted"> 73.6%  (24.7 KB open / 113.2 KB)</text>
 <text x="168" y="1073" text-anchor="end" class="small mono">chr</text>
 <rect x="178" y="1061" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1061" width="256.17" height="15" fill="#22c55e"/>
-<rect x="434.17" y="1061" width="52.42" height="15" fill="#ef4444"/>
+<rect x="178" y="1061" width="252.93" height="15" fill="#22c55e"/>
+<rect x="430.93" y="1061" width="55.67" height="15" fill="#ef4444"/>
 <rect x="486.60" y="1061" width="31.40" height="15" fill="#475569"/>
-<text x="528" y="1073" class="tiny mono muted"> 83.0%  (17.4 KB open / 113.0 KB)</text>
+<text x="528" y="1073" class="tiny mono muted"> 82.0%  (18.5 KB open / 113.0 KB)</text>
 <text x="168" y="1100" text-anchor="end" class="small mono">rc</text>
 <rect x="178" y="1088" width="340" height="15" rx="2" fill="#0b0f14"/>
 <rect x="178" y="1088" width="260.76" height="15" fill="#22c55e"/>
@@ -6316,10 +6344,10 @@
 <text x="528" y="1154" class="tiny mono muted"> 91.7%  ( 3.6 KB open /  65.9 KB)</text>
 <text x="168" y="1181" text-anchor="end" class="small mono">main</text>
 <rect x="178" y="1169" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1169" width="303.79" height="15" fill="#22c55e"/>
-<rect x="481.79" y="1169" width="24.17" height="15" fill="#ef4444"/>
+<rect x="178" y="1169" width="287.39" height="15" fill="#22c55e"/>
+<rect x="465.39" y="1169" width="40.57" height="15" fill="#ef4444"/>
 <rect x="505.96" y="1169" width="12.04" height="15" fill="#475569"/>
-<text x="528" y="1181" class="tiny mono muted"> 92.6%  ( 3.8 KB open /  53.5 KB)</text>
+<text x="528" y="1181" class="tiny mono muted"> 87.6%  ( 6.4 KB open /  53.5 KB)</text>
 <text x="168" y="1208" text-anchor="end" class="small mono">movie</text>
 <rect x="178" y="1196" width="340" height="15" rx="2" fill="#0b0f14"/>
 <rect x="178" y="1196" width="262.73" height="15" fill="#22c55e"/>
@@ -6344,14 +6372,15 @@
 <text x="528" y="1289" class="tiny mono muted"> 98.6%  ( 0.4 KB open /  27.7 KB)</text>
 <text x="168" y="1316" text-anchor="end" class="small mono">sqs</text>
 <rect x="178" y="1304" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1304" width="279.70" height="15" fill="#22c55e"/>
-<rect x="457.70" y="1304" width="38.90" height="15" fill="#ef4444"/>
+<rect x="178" y="1304" width="267.32" height="15" fill="#22c55e"/>
+<rect x="445.32" y="1304" width="51.28" height="15" fill="#ef4444"/>
 <rect x="496.60" y="1304" width="21.40" height="15" fill="#475569"/>
-<text x="528" y="1316" class="tiny mono muted"> 87.8%  ( 2.2 KB open /  19.4 KB)</text>
+<text x="528" y="1316" class="tiny mono muted"> 83.9%  ( 2.9 KB open /  19.4 KB)</text>
 <text x="168" y="1343" text-anchor="end" class="small mono">libmscd</text>
 <rect x="178" y="1331" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1331" width="340.00" height="15" fill="#22c55e"/>
-<text x="528" y="1343" class="tiny mono muted">100.0%  ( 0.0 KB open /  14.0 KB)</text>
+<rect x="178" y="1331" width="316.88" height="15" fill="#22c55e"/>
+<rect x="494.88" y="1331" width="23.12" height="15" fill="#ef4444"/>
+<text x="528" y="1343" class="tiny mono muted"> 93.2%  ( 1.0 KB open /  14.0 KB)</text>
 <text x="168" y="1370" text-anchor="end" class="small mono">sdk/libgcc</text>
 <rect x="178" y="1358" width="340" height="15" rx="2" fill="#0b0f14"/>
 <rect x="178" y="1358" width="181.34" height="15" fill="#22c55e"/>
@@ -6359,9 +6388,9 @@
 <text x="528" y="1370" class="tiny mono muted"> 53.3%  ( 6.5 KB open /  14.0 KB)</text>
 <text x="168" y="1397" text-anchor="end" class="small mono">hddcopy</text>
 <rect x="178" y="1385" width="340" height="15" rx="2" fill="#0b0f14"/>
-<rect x="178" y="1385" width="298.01" height="15" fill="#22c55e"/>
-<rect x="476.01" y="1385" width="41.99" height="15" fill="#ef4444"/>
-<text x="528" y="1397" class="tiny mono muted"> 87.7%  ( 1.6 KB open /  12.7 KB)</text>
+<rect x="178" y="1385" width="259.38" height="15" fill="#22c55e"/>
+<rect x="437.38" y="1385" width="80.62" height="15" fill="#ef4444"/>
+<text x="528" y="1397" class="tiny mono muted"> 76.3%  ( 3.0 KB open /  12.7 KB)</text>
 <text x="168" y="1424" text-anchor="end" class="small mono">snd</text>
 <rect x="178" y="1412" width="340" height="15" rx="2" fill="#0b0f14"/>
 <rect x="178" y="1412" width="330.90" height="15" fill="#22c55e"/>
@@ -6973,8 +7002,8 @@
 <text x="48" y="1550" class="small muted">Proportional view of all known executable code across EE, deduplicated battle-effect overlays, IOP IRX modules, and VU1 microcode.</text>
 <text x="238" y="1594" text-anchor="end" class="small" style="font-weight:600">Main ELF (.text)</text>
 <rect x="250" y="1578" width="760.00" height="24" rx="3" fill="#0b0f14"/>
-<rect x="250" y="1578" width="601.65" height="24" fill="#22c55e"/>
-<rect x="851.65" y="1578" width="41.77" height="24" fill="#ef4444"/>
+<rect x="250" y="1578" width="590.49" height="24" fill="#22c55e"/>
+<rect x="840.49" y="1578" width="52.92" height="24" fill="#ef4444"/>
 <rect x="893.42" y="1578" width="116.58" height="24" fill="#475569"/>
 <text x="1022.0" y="1594" class="small mono muted">2,022.6 KB — EE Resident Executable</text>
 <text x="238" y="1642" text-anchor="end" class="small" style="font-weight:600">EE Overlays (distinct)</text>

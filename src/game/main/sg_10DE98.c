@@ -204,4 +204,120 @@ void func_0010E430(u16 *p)
     D_0057EB2C++;
 }
 
-INCLUDE_ASM("build/ee_asm/game/main/sg_10DE98", Ch_EffectPacketCreateMain);
+typedef struct {
+    u16 x0;
+    u16 x2;
+    u16 x4;
+    u16 x6;
+} EffVtx;
+
+typedef struct {
+    u8 f0;
+    u8 f1;
+    u8 f2;
+    u8 f3;
+    u16 f4;
+    u16 f6;
+    void *f8;
+} EffSub;
+
+typedef struct {
+    u8 pad0[6];
+    u16 count;
+    u8 pad8[8];
+    EffSub *subs;
+} EffHdr;
+
+typedef struct {
+    EffHdr *hdr;
+    void *p4;
+    void *p8;
+} EffArg;
+
+void Ch_EffectPacketCreateMain(ChrEnt *arg_p)
+{
+    EffArg *arg = (EffArg *)arg_p;
+    u8 prev[3];
+    EffVtx tri[3];
+    EffHdr *hdr;
+    s32 cur_mode;
+    s32 prev_mode;
+    EffSub *sub;
+    s32 i;
+    s32 j;
+    u16 *p;
+
+    hdr = arg->hdr;
+    prev_mode = -1;
+    cur_mode = 0;
+    sub = hdr->subs;
+    prev[1] = 0xFF;
+    prev[2] = 0xFF;
+    prev[0] = 0xFF;
+    ((int (*)(void *, void *))func_00123878)(arg->p8, arg->p4);
+    for (i = 0; i < hdr->count; i++, sub++) {
+        if (prev[1] != sub->f1) {
+            prev[1] = sub->f1;
+            prev_mode = -1;
+            func_00113948(sub->f1);
+        }
+        if (prev[2] != sub->f2) {
+            prev[2] = sub->f2;
+            prev_mode = -1;
+            func_00113938(sub->f2);
+        }
+        if (prev[0] != sub->f0) {
+            prev[0] = sub->f0;
+            func_00113968(sub->f0);
+            cur_mode = (sub->f0 >> 2) & 1;
+        }
+        if (prev_mode != cur_mode) {
+            func_00113958(cur_mode);
+            __asm__ volatile("" : : : "memory");
+            prev_mode = cur_mode;
+            __asm__ volatile("" : : : "memory");
+        }
+        j = 0;
+        if (sub->f0 & 1) {
+            u8 *s = (u8 *)sub->f8;
+
+            for (; j < sub->f4; j++) {
+                u8 *cnts = s + 4;
+                s32 k;
+
+                p = (u16 *)(s + s[1]);
+                for (k = 0; k < s[2]; k++) {
+                    s32 m;
+
+                    func_0010E430(0);
+                    for (m = 0; m < cnts[k]; m++) {
+                        func_0010E430(p);
+                        p += 4;
+                    }
+                }
+                s += s[0] * 16;
+            }
+        } else {
+            p = (u16 *)sub->f8;
+            for (; j < (s32)((u32)sub->f4 / 3); j++) {
+                tri[0].x0 = (p[0] & 0x8000) ? p[-((p[0] & 0x7FFF) * 4) / 3] : p[0];
+                tri[0].x2 = (p[1] & 0x8000) ? p[-((p[1] & 0x7FFF) * 4) / 3 - 1] : p[1];
+                tri[0].x4 = p[2];
+                tri[0].x6 = p[3];
+                p += 4;
+                tri[1].x0 = (p[0] & 0x8000) ? p[-((p[0] & 0x7FFF) * 4) / 3] : p[0];
+                tri[1].x2 = (p[1] & 0x8000) ? p[-((p[1] & 0x7FFF) * 4) / 3 - 1] : p[1];
+                tri[1].x4 = p[2];
+                tri[1].x6 = p[3];
+                p += 4;
+                tri[2].x0 = (p[0] & 0x8000) ? p[-((p[0] & 0x7FFF) * 4) / 3] : p[0];
+                tri[2].x2 = (p[1] & 0x8000) ? p[-((p[1] & 0x7FFF) * 4) / 3 - 1] : p[1];
+                tri[2].x4 = p[2];
+                tri[2].x6 = p[3];
+                p += 4;
+                ((int (*)(void *, void *, void *))Ch_EffectPacketStorePoly)(&tri[0], &tri[1], &tri[2]);
+            }
+        }
+    }
+    func_00113978();
+}

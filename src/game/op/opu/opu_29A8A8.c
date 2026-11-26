@@ -75,7 +75,37 @@ int func_0029B560(void) {
     return n;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opd_target_handle_by_index);
+Chr *opd_target_handle_by_index(idx)
+int idx;
+{
+    int base;
+    int i;
+    int j;
+
+    if (MsBattleGetStatus() != 0) {
+        base = 0;
+    } else {
+        base = 0x20;
+    }
+    j = 0;
+
+    for (i = 0; i < 0xD0; i++) {
+        if (owu_chr_hd[base + i] != 0) {
+            if (j == idx) {
+                goto found;
+            }
+            j++;
+        }
+    }
+    for (i = 0; i < 0xD0; i++) {
+        if (owu_chr_hd[base + i] != 0) {
+            goto found;
+        }
+    }
+    return 0;
+found:
+    return owu_chr_hd[base + i];
+}
 
 u16 func_0029B680(void) {
     Chr *key = opd_target_handle_by_index();

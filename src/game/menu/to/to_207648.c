@@ -42,7 +42,76 @@ void func_00207648(int val, void *out, int width)
 
 extern s32 D_003236E0[];
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_207648", TOIntToMes);
+int TOIntToMes(int val, u8 *dst_arg, int width_arg, int mode_arg)
+{
+    register int width __asm__("$19") = width_arg;
+    register u8 *dst __asm__("$17") = dst_arg;
+    register int mode __asm__("$22") = mode_arg;
+    register int len __asm__("$16");
+    char buf[16];
+    int i;
+
+    val = val < 0 ? 0 : val;
+
+    if (mode == 0) {
+        func_002F0008(buf, D_00570350, val);
+        len = func_002F0840(buf);
+        if (len > width) {
+            register int off __asm__("$3") = width << 2;
+            register int div __asm__("$3") = *(s32 *)((u8 *)D_003236E0 + off);
+            register int rem __asm__("$2");
+            __asm__("" : "+r"(mode));
+            rem = val % div;
+            __asm__("" : "+r"(rem));
+            val = rem;
+            func_002F0008(buf, D_00570350, val);
+            len = func_002F0840(buf);
+        }
+        if (len < width) {
+            register int c5d __asm__("$21") = 0x5D;
+            register int cfe __asm__("$20") = 0xFE;
+            len = width - len;
+            do {
+                if (func_0020B850() == 0) {
+                    if (func_001BD360() == 0) {
+                        *dst = c5d;
+                    } else {
+                        *dst = cfe;
+                    }
+                } else {
+                    *dst = cfe;
+                }
+                dst++;
+                len--;
+            } while (len != 0);
+            len = width;
+        }
+        for (i = len - width; i < len; i++) {
+            *dst++ = buf[i];
+        }
+    }
+    if (mode == 1) {
+        register s32 *tp __asm__("$3") = &D_003236E0[width];
+        register int raw __asm__("$4") = *tp;
+        register int max __asm__("$3") = raw - 1;
+        val = val > max ? max : val < 0 ? 0 : val;
+        func_002F0008(buf, D_00570350, val);
+        len = func_002F0840(buf);
+        if (len < width) {
+            len = width - len;
+            do {
+                *dst++ = '0';
+                len--;
+            } while (len != 0);
+            len = width;
+        }
+        for (i = 0; i < len; i++) {
+            *dst++ = buf[i];
+        }
+    }
+    *dst = 0;
+    return val;
+}
 
 void func_00207988(int id, int count, int x, int y, int width)
 {
