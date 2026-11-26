@@ -556,12 +556,18 @@ def _compile_and_link_unit(
         asm_text,
         flags=re.MULTILINE,
     )
-    if unit.get("no_split_macro") or unit.get("load_delay_nop"):
+    if (
+        unit.get("no_split_macro")
+        or unit.get("no_split_store_only")
+        or unit.get("no_split_bss_macro")
+        or unit.get("no_split_syms")
+        or unit.get("load_delay_nop")
+    ):
         _sym_store_re = re.compile(
-            r"^\s+(?:sw|sh|sb)\s+(\$[0-9a-zA-Z]+),\s*[A-Za-z_.$][A-Za-z0-9_.$+-]*\s*$"
+            r"^\s+(?:sw|sh|sb)\s+(\$[0-9a-zA-Z]+),\s*([A-Za-z_.$][A-Za-z0-9_.$+-]*)(?:\(\$[0-9a-zA-Z]+\))?\s*$"
         )
         _sym_macro_re = re.compile(
-            r"^\s+(?:sw|sh|sb|la)\s+\$[0-9a-zA-Z]+,\s*[A-Za-z_.$][A-Za-z0-9_.$+-]*\s*$"
+            r"^\s+(sw|sh|sb|la)\s+\$[0-9a-zA-Z]+,\s*([A-Za-z_.$][A-Za-z0-9_.$+-]*)(?:\(\$[0-9a-zA-Z]+\))?\s*$"
         )
         _load_re = re.compile(
             r"^\s+(?:lw|lh|lb|lhu|lbu)\s+(\$[0-9a-zA-Z]+),"
@@ -570,6 +576,9 @@ def _compile_and_link_unit(
             r"^\s+(?:jal|j|jr|b|beq|bne|beqz|bnez|bgez|bgtz|blez|bltz)\b"
         )
         no_split = bool(unit.get("no_split_macro"))
+        no_split_store = bool(unit.get("no_split_store_only"))
+        no_split_bss = bool(unit.get("no_split_bss_macro"))
+        no_split_syms = set(unit.get("no_split_syms", []))
         ld_nop = bool(unit.get("load_delay_nop"))
         out_lines: list[str] = []
         noreorder = False
@@ -598,7 +607,7 @@ def _compile_and_link_unit(
                 ms = _sym_store_re.match(line)
                 if ms and ms.group(1) == prev_load_reg:
                     out_lines.append("\tnop\n")
-            if not noreorder and no_split and prev_was_sym_macro and _branch_re.match(line):
+            if not noreorder and prev_was_sym_macro and _branch_re.match(line):
                 out_lines.append("\t.set\tnoreorder\n\t.set\tnomacro\n")
                 out_lines.append(line)
                 out_lines.append("\tnop\n\t.set\tmacro\n\t.set\treorder\n")
@@ -606,7 +615,21 @@ def _compile_and_link_unit(
                 prev_load_reg = None
                 continue
             out_lines.append(line)
-            prev_was_sym_macro = (not noreorder) and bool(_sym_macro_re.match(line))
+            prev_was_sym_macro = False
+            if not noreorder:
+                mm = _sym_macro_re.match(line)
+                if mm:
+                    op, sym = mm.group(1), mm.group(2).split("+")[0].split("-")[0]
+                    if no_split:
+                        prev_was_sym_macro = True
+                    elif no_split_store and op in ("sw", "sh", "sb"):
+                        prev_was_sym_macro = True
+                    elif sym in no_split_syms:
+                        prev_was_sym_macro = True
+                    elif no_split_bss:
+                        mhex = re.fullmatch(r"D_([0-9A-Fa-f]{6})", sym)
+                        if mhex and int(mhex.group(1), 16) >= 0x0192F0:
+                            prev_was_sym_macro = True
             ml = _load_re.match(line)
             prev_load_reg = ml.group(1) if (not noreorder and ml) else None
         asm_text = "".join(out_lines)
