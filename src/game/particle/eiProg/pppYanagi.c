@@ -462,7 +462,94 @@ void func_002725B8(PtEmitter *e, PtOwner *o)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/pppYanagi", func_00272780);
+typedef struct {
+    u8 pad00[0x40];
+    float f40;
+    float f44;
+    float f48;
+    float f4C;
+    float f50;
+    float f54;
+    float f58;
+    float f5C;
+    float f60;
+    float f64;
+    void *p68;
+    void *p6C;
+    void *p70;
+    u8 b74;
+    u8 b75;
+    u8 b76;
+    u8 b77;
+} YanagiWork272780;
+
+int func_00272780(u8 *arg0, YanagiWork272780 *arg1)
+{
+    volatile u8 pad[0x20];
+    u8 *s2;
+    void *s1;
+    void *p;
+    int i;
+    u8 *src;
+    u16 *d;
+    u16 *s;
+    float f0;
+
+    u8 b51;
+
+    (void)pad;
+    s2 = (u8 *)D_006A3924->res[*(s32 *)(arg0 + 4)].shape;
+    f0 = 0.0f;
+    arg1->f48 = f0;
+    arg1->f44 = f0;
+    arg1->f40 = f0;
+    arg1->f64 = f0;
+    arg1->f60 = f0;
+    arg1->f5C = f0;
+    arg1->f58 = f0;
+    arg1->f54 = f0;
+    arg1->f50 = f0;
+    arg1->p68 = 0;
+    arg1->p6C = 0;
+    arg1->p70 = arg0;
+    b51 = *(u8 *)(arg0 + 0x51);
+    arg1->b76 = 0;
+    arg1->b74 = b51;
+    arg1->b75 = 0;
+    s1 = (void *)func_0019CFE0(*(u8 *)(arg0 + 0x50));
+    if (s1 != 0) {
+        func_0019D030(s1, *(unsigned long *)(s2 + *(s32 *)(s2 + 4) + 8));
+        arg1->b76 = arg1->b75 = func_0019D010(s1);
+    }
+    if (*(float *)(arg0 + 0x20) == f0 && *(float *)(arg0 + 0x24) == f0 && *(float *)(arg0 + 0x28) == f0) {
+        arg1->b77 = 0;
+    } else {
+        arg1->b77 = 1;
+    }
+    if (arg1->b77 != 0) {
+        p = pppMemAlloc(D_006A3924, D_006A3924->sub, *(s16 *)(s2 + 0x12) * 6);
+        arg1->p68 = p;
+        if (p == 0) {
+            return 0;
+        }
+        p = pppMemAlloc(D_006A3924, D_006A3924->sub, *(s16 *)(s2 + 0x12));
+        arg1->p6C = p;
+        if (p == 0) {
+            return 0;
+        }
+        func_002EF0D0(p, 1, *(s16 *)(s2 + 0x12));
+        src = s2 + *(s32 *)(s2 + 8);
+        for (i = 0; i < *(s16 *)(s2 + 0x12); i++) {
+            s = (u16 *)((int)(i * 6) + (int)src);
+            d = (u16 *)((int)(i * 6) + (int)arg1->p68);
+            d[0] = s[0];
+            d[1] = s[1];
+            d[2] = s[2];
+        }
+    }
+    func_002DD128(arg1);
+    return 1;
+}
 
 void func_00272978(char *base, ScriptCtx *ctx) {
     R6Wkw68w6Cw70 *w = SLOT_WORK(R6Wkw68w6Cw70, base, ctx, 2);

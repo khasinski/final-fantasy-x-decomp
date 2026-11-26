@@ -1,5 +1,6 @@
 /* tu_171 0x1a43b0-0x1a4a38: medium; rcfxParticle (config/tu_map.tsv) */
 #define func_001A43B0 _hdr_func_001A43B0
+#define rcfxParticleAddForce _hdr_rcfxParticleAddForce
 #include "common.h"
 #include "ffx/q3.h"
 #include "ffx/s2.h"
@@ -7,6 +8,7 @@
 #include "ffx/v2.h"
 #include "ffx/r2.h"
 #include "ffx/g2.h"
+#undef rcfxParticleAddForce
 #undef func_001A43B0
 
 void func_001A43B0(void)
@@ -71,7 +73,31 @@ void func_001A4508(R2Obj1A44 *o, int n) {
     o->p24 = _rcRealloc(o->p24, n * 16, D_0056DE20, 0x49);
 }
 
-INCLUDE_ASM("build/ee_asm/game/rc/fx/rcfxParticle", rcfxParticleAddForce);
+void rcfxParticleAddForce(R2Obj1A44 *o, void *f)
+{
+    int i;
+    int j;
+
+    for (i = 0; i < o->w28; i++) {
+        if (*(s32 *)((u8 *)f + 0x18) < *(s32 *)((u8 *)o->p2C[i] + 0x18)) {
+            int n;
+            o->p2C = _rcRealloc(o->p2C, (o->w28 + 1) * 4, D_0056DE20, 0x58);
+            n = o->w28;
+            o->w28 = n + 1;
+            for (j = n; j > i; j--) {
+                o->p2C[j] = o->p2C[j - 1];
+            }
+            o->p2C[i] = f;
+            return;
+        }
+    }
+    o->p2C = _rcRealloc(o->p2C, (o->w28 + 1) * 4, D_0056DE20, 0x65);
+    {
+        int n = o->w28;
+        o->w28 = n + 1;
+        o->p2C[n] = f;
+    }
+}
 
 typedef struct RcfxForce {
     int w0;

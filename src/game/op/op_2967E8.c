@@ -4,6 +4,7 @@
 #define op_et_weapon_afterimage _hdr_op_et_weapon_afterimage
 #define func_00295EB8 _hdr_func_00295EB8
 #define func_002967E8 _hdr_func_002967E8
+#define opu_et_unit _hdr_opu_et_unit
 #include "common.h"
 #include "ffx/w9.h"
 #include "ffx/q6.h"
@@ -13,6 +14,7 @@
 #include "ffx/g4.h"
 #include "ffx/v6.h"
 #include "ffx/u5.h"
+#undef opu_et_unit
 #undef func_002967E8
 #undef func_00295EB8
 #undef op_et_bindeff2
@@ -220,7 +222,78 @@ void func_002967E8(int a0, u16 *b)
 
 INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_init);
 
-INCLUDE_ASM("build/ee_asm/game/op/op_2967E8", opu_et_unit);
+extern ScriptSub *D_00551F00;
+extern s16 D_00764B30[];
+extern s16 D_00764F30[];
+extern char D_00574AA0[];
+void _op_printf4(char *, int, int, int) __asm__("func_00120108");
+
+u32 opu_et_unit(int a0, int a1, int a2, int a3)
+{
+    u8 *obj = (u8 *)D_0054D5E8[0];
+    int idx;
+    u8 *sub;
+    u8 *p;
+    int st_idx;
+    u8 *st;
+    u8 b;
+    int id;
+    int i;
+    s16 v;
+
+    idx = func_00299E68(obj, a0, 1);
+    if (idx == 0xFF) {
+        return 0xFFFFFFFFU;
+    }
+    sub = *(u8 **)(obj + 0x20) + (func_00295D58((void *)obj, 0) << 8);
+    func_00295C50((void *)sub);
+    D_00551F00 = (ScriptSub *)sub;
+    sub[0x1E] = idx;
+    p = (u8 *)op_oef2_a_get(*(s32 *)(obj + (idx << 2) + 0x60), 1, a1);
+    *(u8 **)(sub + 0) = p + *(s32 *)((int)(a2 << 2) + (int)p) + (a2 << 2);
+    {
+        register int st_i __asm__("$5") = opus_get_eff_status_index((void *)a3, idx, 1);
+        *(s16 *)(sub + 0x14) = st_i;
+        st = (u8 *)&owu_eff_status[st_i];
+    }
+    *(u8 **)(st + 4) = sub;
+    if ((a3 & 0x70000000) != 0) {
+        sub[0xB3] = 0x7F;
+    }
+    if ((a3 & 0xFF00) == 0x300) {
+        sub[0xB3] = 0x7F;
+    }
+    b = st[0x10];
+    if (b == 0xFF) {
+        b = st[0x18];
+    }
+    sub[0x18] = b;
+    if (a3 < 0) {
+        id = func_00296538((void *)obj);
+    } else {
+        id = (s16)((a2 << 8) + 0x10);
+        for (;;) {
+            for (i = 0; (v = D_00764B30[i]) >= 0; i++) {
+                u8 *e = *(u8 **)(obj + 0x20) + (v << 8);
+                if (*(u16 *)(e + 0x1A) == id && e[0x1E] == idx) {
+                    goto bump;
+                }
+            }
+            for (i = 0; (v = D_00764F30[i]) >= 0; i++) {
+                u8 *e = *(u8 **)(obj + 0x20) + (v << 8);
+                if (*(u16 *)(e + 0x1A) == id && e[0x1E] == idx) {
+                    goto bump;
+                }
+            }
+            break;
+        bump:
+            id = (s16)(id + 0x10);
+        }
+    }
+    *(s16 *)(sub + 0x1A) = id;
+    _op_printf4(D_00574AA0, a0, a2, a3);
+    return (idx << 16) | *(u16 *)(sub + 0x1A);
+}
 
 /* DEBT(FAKE): second extern alias prevents CSE from merging the two D_00373560 arguments */
 extern char _D_00373560[] __asm__("D_00373560");

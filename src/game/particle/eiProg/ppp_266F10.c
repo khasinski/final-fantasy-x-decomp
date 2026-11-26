@@ -7,7 +7,9 @@
 #define pppSetMatrix _unused_pppSetMatrix
 #include "ffx/s6.h"
 #undef pppSetMatrix
+#define _pppStartPart _hdr__pppStartPart
 #include "ffx/t6.h"
+#undef _pppStartPart
 #include "ffx/u4.h"
 #include "ffx/v6.h"
 
@@ -277,7 +279,118 @@ void pppSetMatrix(void *arg0) {
     *(float *)(s0 + 0x38) = f1;
 }
 
-INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppStartPart);
+typedef struct PppMngFull {
+    s32 w00;
+    s32 w04;
+    s32 w08;
+    s32 w0C;
+    s32 w10;
+    s32 w14;
+    s32 w18;
+    u8 b1C;
+    u8 b1D;
+    u16 h1E;
+    u8 pad20[0xC];
+    void *p2C;
+    s32 w30;
+    void *p34;
+    void *p38;
+    void *p3C;
+    u8 pad40[0x30];
+    s16 h70;
+    s16 h72;
+    s16 h74;
+    s16 h76;
+    s32 w78;
+} PppMngFull;
+
+typedef struct PppPartNode {
+    struct PppPartNode *next;
+    u8 pad04[0xC];
+    s32 w10;
+    u8 pad14[0x12];
+    s16 h26;
+} PppPartNode;
+
+typedef struct PppClsSlot {
+    PppPartNode *node;
+    s32 w04;
+    s32 w08;
+    s16 h0C;
+    u8 b0E;
+    u8 b0F;
+} PppClsSlot;
+
+void _pppStartPart(PppMngFull *mng, s32 a1, u32 *pdt, s32 a3)
+{
+    register u8 *base __asm__("$4");
+    u32 *p34;
+    u32 *p38;
+    s32 cnt;
+    register PppPartNode *node __asm__("$4");
+    PppClsSlot *slot;
+    u8 idx;
+
+    ppvMng = (void *)mng;
+    func_00266F10();
+    mng->w78 = 0;
+    mng->h70 = 0x1000;
+    mng->h72 = 0x1000;
+    mng->h74 = 0x1000;
+    mng->h76 = 0x1000;
+    base = (u8 *)pdt;
+    mng->w04 = *pdt++;
+    mng->b1C = *(u8 *)pdt;
+    pdt++;
+    {
+        register u32 off __asm__("$2") = *pdt++;
+        p34 = (u32 *)(base + off);
+    }
+    p38 = (u32 *)(base + *pdt++);
+    mng->w14 = *p34++;
+    mng->p34 = p34;
+    cnt = *p38++;
+    mng->p38 = p38;
+    mng->w18 = cnt;
+    if (cnt != 0) {
+        void *mem = pppMemAlloc(D_006A3924, (u8 *)D_006A3924 + 0x10, cnt << 4);
+        mng->p3C = mem;
+        if (mem == 0) {
+            mng->w00 = -0x1000;
+            return;
+        }
+    } else {
+        mng->p3C = 0;
+    }
+    node = (PppPartNode *)pdt;
+    if (node->next != 0) {
+        mng->p2C = 0;
+    }
+    mng->w08 = 0;
+    mng->b1D = 0;
+    if (mng->w18 == 0) {
+        mng->p2C = 0;
+    } else {
+        mng->p2C = node;
+    }
+    mng->w10 = a1;
+    mng->w30 = 0;
+    slot = (PppClsSlot *)mng->p3C;
+    idx = 0;
+    do {
+        s32 w10 = node->w10;
+        slot->b0E = idx++;
+        slot->node = node;
+        slot->w08 = w10;
+        slot->w04 = 0;
+        slot->h0C = 0;
+        node = node->next;
+        slot++;
+    } while (node != 0);
+    if (a3 != 0) {
+        func_00267070((ObjGroup *)mng);
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/particle/eiProg/ppp_266F10", _pppInitPdt);
 

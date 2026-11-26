@@ -929,7 +929,53 @@ s16 *opu_encount(ScriptThread *th, s16 *pc_arg)
     return pc;
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A9960);
+void func_002A9960(void *p_arg)
+{
+    u8 *arg0 = (u8 *)p_arg;
+    int i;
+    int j;
+    int k;
+    float *p;
+    register float f6 __asm__("$f6");
+    float f7;
+    float f4;
+    float f3;
+    register float f9 __asm__("$f9");
+    register float f10 __asm__("$f10");
+    float step;
+
+    p = (float *)(arg0 + 0x30);
+    *(float *)(arg0 + 0x28) = 0.0f;
+    f6 = *(float *)(arg0 + 0x28);
+    f9 = f6;
+    *(float *)(arg0 + 0x20) = 16.0f;
+    f7 = f9;
+    f10 = f9;
+    *(float *)(arg0 + 0x24) = 32.0f;
+    step = 64.0f;
+    f6 = 2112.0f;
+    for (k = 0; k < *(u16 *)(arg0 + 6); k++) {
+        f4 = 0.0f;
+        for (j = 0; j < *(u16 *)(arg0 + 4); j++) {
+            f3 = 0.0f;
+            for (i = 0; i < *(u16 *)(arg0 + 2); i++) {
+                p[0] = f3;
+                p[1] = f4;
+                p[2] = f7;
+                p[3] = 1.0f;
+                p[4] = f6;
+                p[5] = f9;
+                p[6] = f10;
+                p[7] = 1.0f;
+                f3 -= step;
+                f6 += 64.0f;
+                p += 8;
+            }
+            f4 -= step;
+        }
+        f7 -= step;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A9A70);
 

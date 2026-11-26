@@ -224,7 +224,36 @@ void func_001F0458(int x0, int y0, int x1, int y1, u32 c0, u32 c1)
     func_001EFA30();
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_1EF910", func_001F0580);
+void func_001F0580(int x, int y, int w, int h, u32 c0, u32 c1, int maxw)
+{
+    int r0 = c0 & 0xFF;
+    int g0 = (c0 >> 8) & 0xFF;
+    int b0 = (c0 >> 16) & 0xFF;
+    int r1 = (int)(c1 & 0xFF) - r0;
+    int g1 = (int)((c1 >> 8) & 0xFF) - g0;
+    int b1 = (int)((c1 >> 16) & 0xFF) - b0;
+    int r = r1 * w / maxw + r0;
+    int g = g1 * w / maxw + g0;
+    int b = b1 * w / maxw + b0;
+    u32 cm;
+
+    GIF_CUR()->ul64[0] = 0xA026400000008001UL;
+    GIF_CUR()->ul64[1] = 0x41414141EEUL;
+    GIF_NEXT();
+    func_001FB2C0(0, 1, 0, 1, 0x80);
+    func_001FB358(1, 7, 0, 0, 0, 0, 0, 0);
+    func_001FB648(c0);
+    func_001FB678(x, y);
+    cm = (r | 0x80000000U);
+    cm |= (b << 16) | (g << 8);
+    func_001FB648(cm);
+    func_001FB678(x + w, y);
+    func_001FB648(c0);
+    func_001FB678(x, y + h);
+    func_001FB648(cm);
+    func_001FB678(x + w, y + h);
+    func_001EFA30();
+}
 
 void func_001F0870(TextItem *, R4CharInfo *);
 void func_001F0A20(TextItem *, R4CharInfo *);
