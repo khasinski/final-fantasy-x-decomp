@@ -42,7 +42,86 @@ void TOInitMovieMessage(int x, int y)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_20D058", TODrawMovieMessage);
+typedef struct {
+    unsigned long FBP : 9;
+    unsigned long pad09 : 7;
+    unsigned long FBW : 6;
+    unsigned long pad22 : 2;
+    unsigned long PSM : 6;
+    unsigned long pad30 : 2;
+    unsigned long FBMSK : 32;
+} ToGsFrame;
+
+typedef struct {
+    unsigned long OFX : 16;
+    unsigned long pad16 : 16;
+    unsigned long OFY : 16;
+    unsigned long pad48 : 16;
+} ToGsXyoffset;
+
+typedef struct {
+    u8 pad00[0x60];
+    ToGsFrame frame0;
+    u8 pad68[0x18];
+    ToGsXyoffset xyoffset0;
+    u8 pad88[0x148];
+    ToGsFrame frame1;
+    u8 pad1D8[0x18];
+    ToGsXyoffset xyoffset1;
+} ToDBuffDC;
+
+void _to_func_001EF940(void) __asm__("func_001EF940");
+void _to_func_002004D0(s32, s32, s32, s32, s32) __asm__("func_002004D0");
+
+void TODrawMovieMessage(void)
+{
+    s32 unused[4];
+    s32 dc;
+    ToDBuffDC *db;
+
+    Sg_GetDBuffDC(&dc);
+    if (Sg_GetDispMode() != 0) {
+        func_0020EC88();
+    }
+    if (D_003238C8 != 0 && ((*(s32 *)MsGetSaveMenu() >> 9) & 1) && Sg_GetDispMode() != 0) {
+        TOTransTexture();
+        db = (ToDBuffDC *)Sg_GetDBuffDC(&dc);
+        TOSetPktBuffAdrs(D_0068F434, D_0068F438, (D_0068F438 / 4) * 3);
+        _to_func_001EF940();
+        if (Sg_GetDispMode() == 6) {
+            TOMakePktScissor(0, 0, 0x1FF, 0x19F);
+        } else {
+            func_001F1E18(0x108, 8, 0, 0);
+            func_001F1E70(0x7000, 0x7300);
+            TOMakePktScissor(0, 0, 0x1FF, 0x7F);
+            TOMakePktDirectBoxXYWH(0, 0, 0x200, 0x80, 0, 0, 0, 0);
+        }
+        func_001EFB08();
+        TODrawWindow(0);
+        TODrawMessage(0);
+        func_001EF978();
+        TODrawKick();
+        if (Sg_GetDispMode() != 0 && Sg_GetDispMode() != 6) {
+            _to_func_001EF940();
+            if ((dc & 1) == 0) {
+                func_001F1E18(db->frame0.FBP, db->frame0.FBW, db->frame0.PSM, (s32)db->frame0.FBMSK);
+            } else {
+                func_001F1E18(db->frame1.FBP, db->frame1.FBW, db->frame1.PSM, (s32)db->frame1.FBMSK);
+            }
+            func_001F1E70(0x7000, 0x7300);
+            TOMakePktScissor(0, 0, 0x27F, 0x19F);
+            _to_func_002004D0(0x2100, 0, 0x120, 0x280, 0x80);
+            if ((dc & 1) == 0) {
+                func_001F1E70(db->xyoffset0.OFX, db->xyoffset0.OFY);
+            } else {
+                func_001F1E70(db->xyoffset1.OFX, db->xyoffset1.OFY);
+            }
+            func_001EF978();
+            TODrawKick();
+        }
+        *(s8 *)&D_003238D0 = 1;
+    }
+}
 
 INCLUDE_ASM("build/ee_asm/game/menu/to/to_20D058", func_0020D468);
 

@@ -55,6 +55,7 @@ game/menu/to/to_203FC0 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/menu/to/to_20C040 -fno-strict-aliasing
 # Assemble compiler-emitted float conversions in branch delay slots (func_0017DF98, func_0017F790).
 game/yi/yiimage_17DC98 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/menu/to/to_20D058 -Btools/cc/ee-as-delay/ -Wa,-mips4
 # Units compiled with -Wa,-G4 for .lit4 float literals.
 game/chr/chr -Wa,-G4
 game/chr/ch_110158 -Wa,-G4
