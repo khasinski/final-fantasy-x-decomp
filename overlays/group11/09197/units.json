@@ -1,0 +1,101 @@
+[
+  {
+    "src": "ovl_09197_9cd8.c",
+    "containers": [9197],
+    "text_start": "0x01B09CD8",
+    "text_end": "0x01B09E0C",
+    "discovered_code_bytes": 308,
+    "functions": 1,
+    "syms": {
+      "D_01B0004C": "0x01B0004C",
+      "D_01B00050": "0x01B00050",
+      "D_01B006E0": "0x01B006E0",
+      "D_01B00AB0": "0x01B00AB0",
+      "D_01B00AC8": "0x01B00AC8",
+      "D_01B00AE8": "0x01B00AE8",
+      "D_01B08BA0": "0x01B08BA0",
+      "D_01B14860": "0x01B14860",
+      "D_01B1488C": "0x01B1488C",
+      "D_01B9CAE0": "0x01B9CAE0",
+      "D_01C9CAE0": "0x01C9CAE0",
+      "func_01B09180": "0x01B09180",
+      "func_01B09C70": "0x01B09C70",
+      "func_01B0BE58": "0x01B0BE58",
+      "func_01B137C8": "0x01B137C8"
+    }
+  },
+  {
+    "src": "ovl_09197_9e20.c",
+    "containers": [9197, 9307],
+    "text_start": "0x01B09E20",
+    "text_end": "0x01B09EE4",
+    "discovered_code_bytes": 196,
+    "functions": 1,
+    "syms": {
+      "D_01B00044": "0x01B00044",
+      "D_01B006E4": "0x01B006E4"
+    },
+    "container_layouts": [
+      {
+        "cid": 9197,
+        "text_start": "0x01B09E20",
+        "text_end": "0x01B09EE4",
+        "syms": {
+          "D_01B00044": "0x01B00044",
+          "D_01B006E4": "0x01B006E4"
+        }
+      },
+      {
+        "cid": 9307,
+        "text_start": "0x01B03830",
+        "text_end": "0x01B038F4",
+        "syms": {
+          "D_01B00044": "0x01B00044",
+          "D_01B006E4": "0x01B00698"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09197_a000.c",
+    "containers": [9197],
+    "text_start": "0x01B0A000",
+    "text_end": "0x01B0A090",
+    "discovered_code_bytes": 144,
+    "functions": 1,
+    "syms": {
+      "D_01B08BD0": "0x01B08BD0"
+    }
+  },
+  {
+    "src": "ovl_09197_a340.c",
+    "containers": [9197],
+    "text_start": "0x01B0A340",
+    "text_end": "0x01B0A3C0",
+    "discovered_code_bytes": 128,
+    "functions": 1,
+    "syms": {
+      "D_01B08BF0": "0x01B08BF0"
+    }
+  },
+  {
+    "src": "ovl_09197_a4f8.c",
+    "containers": [9197],
+    "text_start": "0x01B0A4F8",
+    "text_end": "0x01B0A6B8",
+    "discovered_code_bytes": 444,
+    "functions": 2,
+    "syms": {
+      "D_01B08C10": "0x01B08C10"
+    }
+  },
+  {
+    "src": "ovl_09197_a928.c",
+    "containers": [9197],
+    "text_start": "0x01B0A928",
+    "text_end": "0x01B0AAD8",
+    "discovered_code_bytes": 432,
+    "functions": 2,
+    "syms": {}
+  }
+]

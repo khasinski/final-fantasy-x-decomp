@@ -1,0 +1,91 @@
+[
+  {
+    "src": "ovl_09643_0ee0.c",
+    "containers": [
+      9643
+    ],
+    "text_start": "0x01B00EE0",
+    "text_end": "0x01B00F80",
+    "functions": 1,
+    "discovered_code_bytes": 160,
+    "syms": {
+      "D_01B09358": "0x01B09358",
+      "D_01B0935C": "0x01B0935C",
+      "D_01B0EBE0": "0x01B0EBE0",
+      "D_01BDE0A0": "0x01BDE0A0",
+      "func_01B02830": "0x01B02830",
+      "func_01B04268": "0x01B04268",
+      "func_01B04998": "0x01B04998",
+      "func_01B04B30": "0x01B04B30",
+      "func_01B04B40": "0x01B04B40",
+      "func_01B05080": "0x01B05080",
+      "func_01B05B00": "0x01B05B00"
+    }
+  },
+  {
+    "src": "ovl_09643_15c8.c",
+    "containers": [
+      9643
+    ],
+    "text_start": "0x01B015C8",
+    "text_end": "0x01B01904",
+    "functions": 4,
+    "discovered_code_bytes": 828,
+    "syms": {
+      "D_01B094A8": "0x01B094A8",
+      "D_01B094AC": "0x01B094AC",
+      "func_01B02A38": "0x01B02A38",
+      "func_01B042C0": "0x01B042C0",
+      "func_01B04580": "0x01B04580",
+      "func_01B068D8": "0x01B068D8"
+    }
+  },
+  {
+    "src": "ovl_09643_1d50.c",
+    "containers": [
+      9643
+    ],
+    "text_start": "0x01B01D50",
+    "text_end": "0x01B02324",
+    "functions": 7,
+    "discovered_code_bytes": 1492,
+    "syms": {
+      "D_01B00838": "0x01B00838",
+      "D_01B09360": "0x01B09360",
+      "D_01B094A8": "0x01B094A8",
+      "func_01B01598": "0x01B01598",
+      "func_01B016D0": "0x01B016D0",
+      "func_01B01898": "0x01B01898",
+      "func_01B01908": "0x01B01908",
+      "func_01B03090": "0x01B03090",
+      "func_01B043E0": "0x01B043E0",
+      "func_01B051B0": "0x01B051B0",
+      "func_01B05378": "0x01B05378",
+      "func_01B05510": "0x01B05510",
+      "func_01B05980": "0x01B05980",
+      "func_01B05AA0": "0x01B05AA0",
+      "func_01B08BC0": "0x01B08BC0"
+    }
+  },
+  {
+    "src": "ovl_09643_2638.c",
+    "containers": [
+      9643
+    ],
+    "text_start": "0x01B02638",
+    "text_end": "0x01B02830",
+    "functions": 1,
+    "discovered_code_bytes": 504,
+    "syms": {
+      "D_01B09360": "0x01B09360",
+      "D_01B094A8": "0x01B094A8",
+      "func_01B043E0": "0x01B043E0",
+      "func_01B04A60": "0x01B04A60",
+      "func_01B05510": "0x01B05510",
+      "func_01B05980": "0x01B05980",
+      "func_01B06348": "0x01B06348",
+      "func_01B08D30": "0x01B08D30",
+      "func_01B08E38": "0x01B08E38"
+    }
+  }
+]

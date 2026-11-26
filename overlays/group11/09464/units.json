@@ -1,0 +1,21 @@
+[
+  {
+    "src": "ovl_09464_25c8.c",
+    "containers": [
+      9464
+    ],
+    "text_start": "0x01B025C8",
+    "text_end": "0x01B02720",
+    "rodata_start": "0x01B0F760",
+    "functions": 1,
+    "discovered_code_bytes": 344,
+    "syms": {
+      "D_01B00418": "0x01B00418",
+      "D_01B00E90": "0x01B00E90",
+      "D_01B016D8": "0x01B016D8",
+      "D_01B016DC": "0x01B016DC",
+      "func_01B021B0": "0x01B021B0",
+      "func_01B0E418": "0x01B0E418"
+    }
+  }
+]

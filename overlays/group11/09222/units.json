@@ -217,5 +217,23 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09222_2588.c",
+    "containers": [
+      9222
+    ],
+    "text_start": "0x01B02588",
+    "text_end": "0x01B0268C",
+    "discovered_code_bytes": 260,
+    "functions": 1,
+    "syms": {
+      "D_01B00418": "0x01B00418",
+      "D_01B00E90": "0x01B00E90",
+      "D_01B016D8": "0x01B016D8",
+      "D_01B016DC": "0x01B016DC",
+      "func_01B02188": "0x01B02188",
+      "func_01B0E388": "0x01B0E388"
+    }
   }
 ]
