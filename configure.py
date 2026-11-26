@@ -117,6 +117,7 @@ n.rule("ld", command=f"{CROSS}ld -EL -T $ld_script -Map $map --no-check-sections
 ROM_SIZE = 0x47CB0C
 n.rule("rom", command=f"{CROSS}objcopy -O binary $in $out && truncate -s {ROM_SIZE} $out",
        description="rom $out")
+n.rule("vu1asm", command="python3 tools/vu1asm.py build $in -o $out", description="vu1asm $out")
 n.rule("check", command="python3 tools/check.py $in", description="sha1 check")
 
 objs = []
@@ -141,13 +142,19 @@ for c in sorted(glob.glob("src/**/*.c", recursive=True)):
     if "-Btools/cc/ee-as-delay/" in EXTRA.get(stem, ""):
         deps.append("tools/cc/ee-as-delay/as")
     n.build(o, "cc", c, implicit=deps + ["config/cflags.txt", "tools/ccwrap.py"] + (["config/c_rodata.json"] if C_RODATA else []), variables={"extra": EXTRA.get(stem, "")}); objs.append(o)
+VU1_SRCS = ["vu/vu1_prog1.vsm", "vu/vu1_prog2.vsm"]
+HAS_VU1_SRC = all(os.path.exists(p) for p in VU1_SRCS)
+if HAS_VU1_SRC:
+    n.build("build/vu/vutext.bin", "vu1asm", VU1_SRCS, implicit=["tools/vu1asm.py"])
+
 for b in sorted(glob.glob("assets/*.bin")):
     # wrap raw blobs in a tiny .s so they get the same r5900/eabi flags as everything else
+    src_bin = "build/vu/vutext.bin" if (b == "assets/vutext.bin" and HAS_VU1_SRC) else b
     wrap = f"build/{b}.s"
     os.makedirs(os.path.dirname(wrap), exist_ok=True)
     with open(wrap, "w") as f:
-        f.write(f'.section .data\n.incbin "{b}"\n')
-    o = f"build/{b}.o"; n.build(o, "as", wrap, implicit=[b]); objs.append(o)
+        f.write(f'.section .data\n.incbin "{src_bin}"\n')
+    o = f"build/{b}.o"; n.build(o, "as", wrap, implicit=[src_bin]); objs.append(o)
 
 n.build("build/SCES_504.90.elf", "ld", objs, implicit=["config/SCES_504.90.link.ld",
         "config/undefined_syms_auto.txt", "config/undefined_funcs_auto.txt"],

@@ -5,6 +5,8 @@ asm/
 assets/
 tools/cc/ee-gcc2.9-991111-01/
 tools/cc/ee-gcc2.96/
+tools/cc/iop-gcc2.8.1/
+tools/cc/iop-gcc2.95.2-102/
 *.iso
 *.elf
 __pycache__/

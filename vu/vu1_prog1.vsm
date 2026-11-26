@@ -1,0 +1,468 @@
+; ============================================================================
+; FFX PAL (SCES_504.90) VU1 Microprogram 1 — Character Renderer
+; VMA: 0x00578e00..0x00579b00 (3,328 B packet, 412 VU1 instructions)
+; DMA tag: ref qwc=207 addr=0x00578e10 (referenced as D_00578E00 in chr_10EA50.c)
+; VIF chunks: 2x MPG (0x0000..0x0800 [256 insns], 0x0800..0x0ce0 [156 insns])
+;
+; Entry-Point Dispatch Table (invoked via VIF MSCAL <vu_addr/8>):
+;   0x0000 (MSCAL  0): Load material color scale vf08 = mem[35] and halt
+;   0x0010 (MSCAL  2): L_00a0 — Load WVP/clip/shadow/light matrices & fog params
+;   0x0020 (MSCAL  4): L_0150 (vi06=0) — Lit character pass (backface culled)
+;   0x0030 (MSCAL  6): L_0150 (vi06=1) — Lit character pass (double-sided)
+;   0x0040 (MSCAL  8): L_0500 (vi06=0) — Lit + reflection/env-map (culled)
+;   0x0050 (MSCAL 10): L_0500 (vi06=1) — Lit + reflection/env-map (double-sided)
+;   0x0060 (MSCAL 12): L_01f8 (vi06=0) — Lit + shadow projection (culled)
+;   0x0070 (MSCAL 14): L_01f8 (vi06=1) — Lit + shadow projection (double-sided)
+;   0x0080 (MSCAL 16): L_0398 (vi06=0) — Lit + shadow + reflection (culled)
+;   0x0090 (MSCAL 18): L_0398 (vi06=1) — Lit + shadow + reflection (double-sided)
+;
+; Subroutines:
+;   L_05b0: GIFtag / triangle-strip header parser
+;   L_0630: Main lit & clipped vertex transform + backface cull + XGKICK
+;           (L_0800: double-sided / no-cull branch)
+;   L_08a8: Shadow / secondary matrix projection pass + XGKICK
+;   L_0aa8: Environment / reflection-mapped UV generation pass (ERLENG/MFP) + XGKICK
+; ============================================================================
+
+.dma_ref 207, 0x00578e10
+.vif_flush
+.vif_mpg 0x0000, 256
+L_0000:
+    NOP[E]                         | LQ.xyzw vf08, 35(vi00)       ; 0000
+    NOP                            | NOP                          ; 0008
+    NOP                            | B L_00a0                     ; 0010
+    NOP                            | NOP                          ; 0018
+    NOP                            | B L_0150                     ; 0020
+    NOP                            | IADD vi06, vi00, vi00        ; 0028
+    NOP                            | B L_0150                     ; 0030
+    NOP                            | IADDI vi06, vi00, 1          ; 0038
+    NOP                            | B L_0500                     ; 0040
+    NOP                            | IADD vi06, vi00, vi00        ; 0048
+    NOP                            | B L_0500                     ; 0050
+    NOP                            | IADDI vi06, vi00, 1          ; 0058
+    NOP                            | B L_01f8                     ; 0060
+    NOP                            | IADD vi06, vi00, vi00        ; 0068
+    NOP                            | B L_01f8                     ; 0070
+    NOP                            | IADDI vi06, vi00, 1          ; 0078
+    NOP                            | B L_0398                     ; 0080
+    NOP                            | IADD vi06, vi00, vi00        ; 0088
+    NOP                            | B L_0398                     ; 0090
+    NOP                            | IADDI vi06, vi00, 1          ; 0098
+L_00a0:
+    NOP                            | LQ.xyzw vf01, 0(vi00)        ; 00a0
+    NOP                            | LQ.xyzw vf02, 1(vi00)        ; 00a8
+    NOP                            | LQ.xyzw vf03, 2(vi00)        ; 00b0
+    NOP                            | LQ.xyzw vf04, 3(vi00)        ; 00b8
+    NOP                            | LQ.xyzw vf18, 8(vi00)        ; 00c0
+    NOP                            | LQ.xyzw vf19, 9(vi00)        ; 00c8
+    NOP                            | LQ.xyzw vf20, 10(vi00)       ; 00d0
+    NOP                            | LQ.xyzw vf21, 11(vi00)       ; 00d8
+    NOP                            | LQ.xyzw vf13, 12(vi00)       ; 00e0
+    NOP                            | LQ.xyzw vf14, 13(vi00)       ; 00e8
+    NOP                            | LQ.xyzw vf15, 14(vi00)       ; 00f0
+    NOP                            | LQ.xyzw vf16, 15(vi00)       ; 00f8
+    NOP                            | LQ.xyzw vf09, 16(vi00)       ; 0100
+    NOP                            | LQ.xyzw vf10, 17(vi00)       ; 0108
+    NOP                            | LQ.xyzw vf11, 18(vi00)       ; 0110
+    NOP                            | LQ.xyzw vf12, 19(vi00)       ; 0118
+    NOP                            | LQ.xyzw vf05, 20(vi00)       ; 0120
+    NOP                            | LQ.xyzw vf06, 21(vi00)       ; 0128
+    NOP                            | LQ.xyzw vf07, 22(vi00)       ; 0130
+    NOP                            | LQ.xyzw vf17, 38(vi00)       ; 0138
+    NOP[E]                         | NOP                          ; 0140
+    NOP                            | NOP                          ; 0148
+L_0150:
+    NOP[E]                         | NOP                          ; 0150
+    NOP[I]                         | LOI 255.0                    ; 0158
+    NOP                            | XTOP vi01                    ; 0160
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0168
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 0170
+    NOP                            | BAL vi15, L_05b0             ; 0178
+    NOP                            | NOP                          ; 0180
+    NOP                            | IADDI vi14, vi13, -2         ; 0188
+    NOP                            | BAL vi15, L_0630             ; 0190
+    NOP                            | NOP                          ; 0198
+L_01a0:
+    NOP[E]                         | NOP                          ; 01a0
+    NOP[I]                         | LOI 255.0                    ; 01a8
+    NOP                            | XTOP vi01                    ; 01b0
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 01b8
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 01c0
+    NOP                            | BAL vi15, L_05b0             ; 01c8
+    NOP                            | NOP                          ; 01d0
+    NOP                            | BAL vi15, L_0630             ; 01d8
+    NOP                            | NOP                          ; 01e0
+    NOP                            | B L_01a0                     ; 01e8
+    NOP                            | NOP                          ; 01f0
+L_01f8:
+    NOP[I]                         | LOI 255.0                    ; 01f8
+    NOP                            | LQ.xyzw vf01, 0(vi00)        ; 0200
+    NOP                            | LQ.xyzw vf02, 1(vi00)        ; 0208
+    NOP                            | LQ.xyzw vf03, 2(vi00)        ; 0210
+    NOP                            | LQ.xyzw vf04, 3(vi00)        ; 0218
+    NOP[E]                         | NOP                          ; 0220
+    NOP                            | NOP                          ; 0228
+    NOP                            | XTOP vi01                    ; 0230
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0238
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 0240
+    NOP                            | BAL vi15, L_05b0             ; 0248
+    NOP                            | NOP                          ; 0250
+    NOP                            | IADDI vi14, vi13, -2         ; 0258
+    NOP                            | BAL vi15, L_0630             ; 0260
+    NOP                            | NOP                          ; 0268
+    NOP                            | LQ.xyzw vf01, 4(vi00)        ; 0270
+    NOP                            | LQ.xyzw vf02, 5(vi00)        ; 0278
+    NOP                            | LQ.xyzw vf03, 6(vi00)        ; 0280
+    NOP                            | LQ.xyzw vf04, 7(vi00)        ; 0288
+    NOP                            | XTOP vi01                    ; 0290
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0298
+    NOP                            | IADDIU vi13, vi01, 0x016e    ; 02a0
+    NOP                            | BAL vi15, L_05b0             ; 02a8
+    NOP                            | NOP                          ; 02b0
+    NOP                            | BAL vi15, L_08a8             ; 02b8
+    NOP                            | NOP                          ; 02c0
+L_02c8:
+    NOP                            | LQ.xyzw vf01, 0(vi00)        ; 02c8
+    NOP                            | LQ.xyzw vf02, 1(vi00)        ; 02d0
+    NOP                            | LQ.xyzw vf03, 2(vi00)        ; 02d8
+    NOP                            | LQ.xyzw vf04, 3(vi00)        ; 02e0
+    NOP[E]                         | NOP                          ; 02e8
+    NOP                            | NOP                          ; 02f0
+    NOP                            | XTOP vi01                    ; 02f8
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0300
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 0308
+    NOP                            | BAL vi15, L_05b0             ; 0310
+    NOP                            | NOP                          ; 0318
+    NOP                            | BAL vi15, L_0630             ; 0320
+    NOP                            | NOP                          ; 0328
+    NOP                            | LQ.xyzw vf01, 4(vi00)        ; 0330
+    NOP                            | LQ.xyzw vf02, 5(vi00)        ; 0338
+    NOP                            | LQ.xyzw vf03, 6(vi00)        ; 0340
+    NOP                            | LQ.xyzw vf04, 7(vi00)        ; 0348
+    NOP                            | XTOP vi01                    ; 0350
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0358
+    NOP                            | IADDIU vi13, vi01, 0x016e    ; 0360
+    NOP                            | BAL vi15, L_05b0             ; 0368
+    NOP                            | NOP                          ; 0370
+    NOP                            | BAL vi15, L_08a8             ; 0378
+    NOP                            | NOP                          ; 0380
+    NOP                            | B L_02c8                     ; 0388
+    NOP                            | NOP                          ; 0390
+L_0398:
+    NOP[E]                         | NOP                          ; 0398
+    NOP[I]                         | LOI 255.0                    ; 03a0
+    NOP                            | LQ.xyzw vf01, 0(vi00)        ; 03a8
+    NOP                            | LQ.xyzw vf02, 1(vi00)        ; 03b0
+    NOP                            | LQ.xyzw vf03, 2(vi00)        ; 03b8
+    NOP                            | LQ.xyzw vf04, 3(vi00)        ; 03c0
+    NOP                            | XTOP vi01                    ; 03c8
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 03d0
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 03d8
+    NOP                            | BAL vi15, L_05b0             ; 03e0
+    NOP                            | NOP                          ; 03e8
+    NOP                            | IADDI vi14, vi13, -2         ; 03f0
+    NOP                            | LQ.xyzw vf25, 39(vi00)       ; 03f8
+    NOP                            | SQ.xyzw vf25, 1(vi14)        ; 0400
+    NOP                            | BAL vi15, L_0630             ; 0408
+    NOP                            | NOP                          ; 0410
+    NOP                            | LQ.xyzw vf01, 4(vi00)        ; 0418
+    NOP                            | LQ.xyzw vf02, 5(vi00)        ; 0420
+    NOP                            | LQ.xyzw vf03, 6(vi00)        ; 0428
+    NOP                            | LQ.xyzw vf04, 7(vi00)        ; 0430
+    NOP                            | XTOP vi01                    ; 0438
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0440
+    NOP                            | IADDIU vi13, vi01, 0x016e    ; 0448
+    NOP                            | BAL vi15, L_05b0             ; 0450
+    NOP                            | NOP                          ; 0458
+    NOP                            | BAL vi15, L_08a8             ; 0460
+    NOP                            | NOP                          ; 0468
+    NOP                            | LQ.xyzw vf01, 0(vi00)        ; 0470
+    NOP                            | LQ.xyzw vf02, 1(vi00)        ; 0478
+    NOP                            | LQ.xyzw vf03, 2(vi00)        ; 0480
+    NOP                            | LQ.xyzw vf04, 3(vi00)        ; 0488
+    NOP                            | XTOP vi01                    ; 0490
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0498
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 04a0
+    NOP                            | BAL vi15, L_05b0             ; 04a8
+    NOP                            | NOP                          ; 04b0
+    NOP                            | IADDI vi14, vi13, -2         ; 04b8
+    NOP                            | LQ.xyzw vf25, 40(vi00)       ; 04c0
+    NOP                            | SQ.xyzw vf25, 1(vi14)        ; 04c8
+    NOP                            | XTOP vi05                    ; 04d0
+    NOP                            | IADDIU vi05, vi05, 0x00ba    ; 04d8
+    NOP                            | BAL vi15, L_0aa8             ; 04e0
+    NOP                            | NOP                          ; 04e8
+    NOP                            | B L_0398                     ; 04f0
+    NOP                            | NOP                          ; 04f8
+L_0500:
+    NOP[E]                         | NOP                          ; 0500
+    NOP[I]                         | LOI 255.0                    ; 0508
+    NOP                            | XTOP vi01                    ; 0510
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0518
+    NOP                            | IADDIU vi13, vi01, 0x00b9    ; 0520
+    NOP                            | BAL vi15, L_05b0             ; 0528
+    NOP                            | NOP                          ; 0530
+    NOP                            | IADDI vi14, vi13, -2         ; 0538
+    NOP                            | BAL vi15, L_0630             ; 0540
+    NOP                            | NOP                          ; 0548
+    NOP                            | XTOP vi01                    ; 0550
+    NOP                            | IADDIU vi12, vi01, 0x0002    ; 0558
+    NOP                            | IADDIU vi13, vi01, 0x0002    ; 0560
+    NOP                            | BAL vi15, L_05b0             ; 0568
+    NOP                            | NOP                          ; 0570
+    NOP                            | XTOP vi05                    ; 0578
+    NOP                            | IADDIU vi05, vi05, 0x00ba    ; 0580
+    NOP                            | IADDI vi14, vi13, -2         ; 0588
+    NOP                            | BAL vi15, L_0aa8             ; 0590
+    NOP                            | NOP                          ; 0598
+    NOP                            | B L_0500                     ; 05a0
+    NOP                            | NOP                          ; 05a8
+L_05b0:
+    MULx.xyzw vf30, vf30, vf00     | ILWR.x vi10, (vi12)          ; 05b0
+    MULx.xyzw vf31, vf31, vf00     | IADDIU vi01, vi00, 0x7fff    ; 05b8
+    NOP                            | IADDI vi11, vi01, 1          ; 05c0
+    NOP                            | IAND vi10, vi01, vi10        ; 05c8
+    NOP                            | ILWR.y vi03, (vi12)          ; 05d0
+    NOP                            | IAND vi05, vi03, vi11        ; 05d8
+    NOP                            | LQ.xyzw vf25, 0(vi12)        ; 05e0
+    NOP                            | SQ.xyzw vf25, 0(vi13)        ; 05e8
+    NOP                            | IBEQ vi05, vi11, L_0610      ; 05f0
+    NOP                            | IADD vi14, vi13, vi00        ; 05f8
+    NOP                            | JR vi15                      ; 0600
+    NOP                            | IADD vi01, vi00, vi00        ; 0608
+L_0610:
+    ADDw.z vf30, vf30, vf00        | IADD vi09, vi10, vi00        ; 0610
+    ADDw.z vf31, vf31, vf00        | IADD vi10, vi00, vi00        ; 0618
+    NOP                            | JR vi15                      ; 0620
+    NOP                            | IADDI vi01, vi00, 1          ; 0628
+L_0630:
+    NOP                            | IADDIU vi12, vi12, 0x0001    ; 0630
+    NOP                            | IADDIU vi13, vi13, 0x0001    ; 0638
+    NOP                            | IBNE vi01, vi00, L_0668      ; 0640
+    NOP                            | NOP                          ; 0648
+L_0650:
+    NOP                            | ILW.w vi09, 0(vi12)          ; 0650
+    ADDw.z vf30, vf30, vf00        | FCSET 0x000fff               ; 0658
+    SUBw.z vf31, vf31, vf00        | ISUB vi10, vi10, vi09        ; 0660
+L_0668:
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0668
+    MULAx.xyzw ACC, vf01, vf26     | LQ.xyzw vf25, 1(vi12)        ; 0670
+    MADDAy.xyzw ACC, vf02, vf26    | MOVE.xyzw vf22, vf23         ; 0678
+    MADDAz.xyzw ACC, vf03, vf26    | MOVE.xyzw vf23, vf24         ; 0680
+    MADDw.xyzw vf28, vf04, vf26    | IADD vi08, vi00, vi00        ; 0688
+    MULAx.xyzw ACC, vf05, vf25     | NOP                          ; 0690
+    MADDAy.xyzw ACC, vf06, vf25    | NOP                          ; 0698
+    MADDz.xyzw vf29, vf07, vf25    | DIV Q, vf00w, vf28w          ; 06a0
+    MULAx.xyzw ACC, vf13, vf26     | NOP                          ; 06a8
+    MADDAy.xyzw ACC, vf14, vf26    | NOP                          ; 06b0
+    MADDAz.xyzw ACC, vf15, vf26    | NOP                          ; 06b8
+    MADDw.xyzw vf26, vf16, vf26    | NOP                          ; 06c0
+    MAXx.xyzw vf29, vf29, vf00     | NOP                          ; 06c8
+    MULx.w vf28, vf28, vf17        | NOP                          ; 06d0
+    CLIPw.xyz vf26, vf26           | NOP                          ; 06d8
+    MULq.xyz vf28, vf28, Q         | NOP                          ; 06e0
+    ADDi.w vf28, vf28, I           | NOP                          ; 06e8
+    NOP                            | NOP                          ; 06f0
+    NOP                            | FCAND vi01, 0x03ffff         ; 06f8
+    MINIi.w vf28, vf28, I          | IBNE vi06, vi00, L_0800      ; 0700
+    MAXy.w vf28, vf28, vf17        | NOP                          ; 0708
+    MUL.xyzw vf30, vf30, vf31      | MOVE.xyz vf24, vf28          ; 0710
+    SUB.xyz vf27, vf23, vf22       | LQ.xyzw vf26, 0(vi12)        ; 0718
+    SUB.xyz vf25, vf28, vf22       | IADDI vi09, vi09, -1         ; 0720
+    MULAx.xyz ACC, vf09, vf29      | IADDI vi12, vi12, 3          ; 0728
+    MADDAy.xyz ACC, vf10, vf29     | NOP                          ; 0730
+    MADDAz.xyz ACC, vf11, vf29     | SQ.xyzw vf26, 0(vi13)        ; 0738
+    MADDw.xyz vf26, vf12, vf00     | IADDIU vi13, vi13, 0x0003    ; 0740
+    OPMULA.xyz ACC, vf25, vf27     | NOP                          ; 0748
+    OPMSUB.xyz vf25, vf27, vf25    | NOP                          ; 0750
+    FTOI4.xyzw vf27, vf28          | NOP                          ; 0758
+    MUL.w vf26, vf08, vf00         | NOP                          ; 0760
+    MUL.xyz vf26, vf26, vf08       | NOP                          ; 0768
+    MULz.z vf25, vf25, vf30        | IADDIU vi02, vi00, 0x0020    ; 0770
+    MULx.xyzw vf30, vf30, vf00     | SQ.xyzw vf27, -1(vi13)       ; 0778
+    MULx.xyzw vf31, vf31, vf00     | NOP                          ; 0780
+    MAX.xyz vf26, vf26, vf00       | NOP                          ; 0788
+    NOP                            | FMAND vi03, vi02             ; 0790
+    MINIi.xyz vf26, vf26, I        | IADD vi01, vi01, vi03        ; 0798
+    FTOI0.xyzw vf29, vf26          | IBEQ vi01, vi00, L_07c8      ; 07a0
+    NOP                            | NOP                          ; 07a8
+    NOP                            | ILW.w vi01, -1(vi13)         ; 07b0
+    NOP                            | IOR vi01, vi01, vi11         ; 07b8
+    NOP                            | ISW.w vi01, -1(vi13)         ; 07c0
+L_07c8:
+    NOP                            | IBNE vi09, vi00, L_0668      ; 07c8
+    NOP                            | SQ.xyzw vf29, -2(vi13)       ; 07d0
+    NOP                            | IBNE vi10, vi00, L_0650      ; 07d8
+    NOP                            | NOP                          ; 07e0
+    NOP                            | JR vi15                      ; 07e8
+    NOP                            | XGKICK vi14                  ; 07f0
+    NOP                            | NOP                          ; 07f8
+.vif_nop
+.vif_mpg 0x0100, 156
+L_0800:
+    NOP                            | LQ.xyzw vf25, 0(vi12)        ; 0800
+    FTOI4.xyzw vf27, vf28          | IBEQ vi01, vi00, L_0820      ; 0808
+    NOP                            | NOP                          ; 0810
+    NOP                            | IADD vi08, vi00, vi11        ; 0818
+L_0820:
+    MULAx.xyz ACC, vf09, vf29      | IADDI vi12, vi12, 3          ; 0820
+    MADDAy.xyz ACC, vf10, vf29     | SQ.xyzw vf27, 2(vi13)        ; 0828
+    MADDAz.xyz ACC, vf11, vf29     | ILW.w vi01, 2(vi13)          ; 0830
+    MADDw.xyz vf26, vf12, vf00     | IOR vi01, vi01, vi08         ; 0838
+    MUL.w vf26, vf08, vf00         | ISW.w vi01, 2(vi13)          ; 0840
+    MUL.xyz vf26, vf26, vf08       | SQ.xyzw vf25, 0(vi13)        ; 0848
+    MAX.xyz vf26, vf26, vf00       | IADDI vi09, vi09, -1         ; 0850
+    MINIi.xyz vf26, vf26, I        | IADDIU vi13, vi13, 0x0003    ; 0858
+    FTOI0.xyzw vf29, vf26          | NOP                          ; 0860
+    MULx.xyzw vf30, vf30, vf00     | NOP                          ; 0868
+    NOP                            | IBNE vi09, vi00, L_0668      ; 0870
+    NOP                            | SQ.xyzw vf29, -2(vi13)       ; 0878
+    NOP                            | IBNE vi10, vi00, L_0650      ; 0880
+    MULx.xyzw vf31, vf31, vf00     | NOP                          ; 0888
+    NOP                            | JR vi15                      ; 0890
+    NOP                            | XGKICK vi14                  ; 0898
+    NOP                            | NOP                          ; 08a0
+L_08a8:
+    NOP                            | IADDIU vi12, vi12, 0x0001    ; 08a8
+    NOP                            | IADDIU vi13, vi13, 0x0001    ; 08b0
+    NOP                            | IADDIU vi07, vi00, 0x7fff    ; 08b8
+    NOP                            | ILW.x vi02, -1(vi12)         ; 08c0
+    NOP                            | IAND vi02, vi02, vi07        ; 08c8
+    NOP                            | LQ.xyzw vf26, 23(vi00)       ; 08d0
+    NOP                            | SQ.xyzw vf26, -1(vi13)       ; 08d8
+    NOP                            | LQ.xyzw vf26, 24(vi00)       ; 08e0
+    NOP                            | SQ.xyzw vf26, 0(vi13)        ; 08e8
+    NOP                            | LQ.xyzw vf26, 25(vi00)       ; 08f0
+    NOP                            | SQ.xyzw vf26, 1(vi13)        ; 08f8
+    NOP                            | LQ.xyzw vf26, 28(vi00)       ; 0900
+    NOP                            | IBNE vi01, vi00, L_0920      ; 0908
+    NOP                            | NOP                          ; 0910
+    NOP                            | LQ.xyzw vf26, 27(vi00)       ; 0918
+L_0920:
+    NOP                            | SQ.xyzw vf26, 2(vi13)        ; 0920
+    NOP                            | ISW.x vi02, 2(vi13)          ; 0928
+    NOP                            | IADDI vi13, vi13, 3          ; 0930
+    NOP                            | IBNE vi01, vi00, L_0968      ; 0938
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0940
+L_0948:
+    NOP                            | ILW.w vi09, 0(vi12)          ; 0948
+    NOP                            | FCSET 0x000fff               ; 0950
+    NOP                            | ISUB vi10, vi10, vi09        ; 0958
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0960
+L_0968:
+    MULAx.xyzw ACC, vf01, vf26     | LQ.xyzw vf25, 0(vi12)        ; 0968
+    MADDAy.xyzw ACC, vf02, vf26    | NOP                          ; 0970
+    MADDAz.xyzw ACC, vf03, vf26    | NOP                          ; 0978
+    MADDw.xyzw vf28, vf04, vf26    | IADD vi08, vi00, vi00        ; 0980
+    MULAx.xyzw ACC, vf18, vf26     | IADDI vi09, vi09, -1         ; 0988
+    MADDAy.xyzw ACC, vf19, vf26    | IADDI vi12, vi12, 3          ; 0990
+    MADDAz.xyzw ACC, vf20, vf26    | SQ.xyzw vf25, 0(vi13)        ; 0998
+    MADDw.xyzw vf26, vf21, vf26    | DIV Q, vf00w, vf28w          ; 09a0
+    NOP                            | NOP                          ; 09a8
+    NOP                            | NOP                          ; 09b0
+    NOP                            | NOP                          ; 09b8
+    CLIPw.xyz vf26, vf26           | IADDI vi13, vi13, 2          ; 09c0
+    MULi.w vf28, vf00, I           | NOP                          ; 09c8
+    NOP                            | NOP                          ; 09d0
+    MULq.xyz vf28, vf28, Q         | NOP                          ; 09d8
+    FTOI4.xyzw vf27, vf28          | FCAND vi01, 0x03ffff         ; 09e0
+    NOP                            | NOP                          ; 09e8
+    NOP                            | NOP                          ; 09f0
+    NOP                            | NOP                          ; 09f8
+    NOP                            | SQ.xyzw vf27, -1(vi13)       ; 0a00
+    NOP                            | IBEQ vi01, vi00, L_0a20      ; 0a08
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0a10
+    NOP                            | ISW.w vi11, -1(vi13)         ; 0a18
+L_0a20:
+    NOP                            | IBNE vi09, vi00, L_0968      ; 0a20
+    NOP                            | NOP                          ; 0a28
+    NOP                            | IBNE vi10, vi00, L_0948      ; 0a30
+    NOP                            | NOP                          ; 0a38
+    NOP                            | LQ.xyzw vf26, 26(vi00)       ; 0a40
+    NOP                            | SQ.xyzw vf26, 0(vi13)        ; 0a48
+    NOP                            | LQ.xyzw vf26, 25(vi00)       ; 0a50
+    NOP                            | SQ.xyzw vf26, 1(vi13)        ; 0a58
+    NOP                            | ISW.x vi00, 1(vi13)          ; 0a60
+    NOP                            | NOP                          ; 0a68
+    NOP                            | NOP                          ; 0a70
+    NOP                            | NOP                          ; 0a78
+    NOP                            | NOP                          ; 0a80
+    NOP                            | XGKICK vi14                  ; 0a88
+    NOP                            | NOP                          ; 0a90
+    NOP                            | JR vi15                      ; 0a98
+    NOP                            | NOP                          ; 0aa0
+L_0aa8:
+    NOP                            | IADDIU vi12, vi12, 0x0001    ; 0aa8
+    NOP                            | IADDIU vi13, vi13, 0x0001    ; 0ab0
+    NOP                            | LQ.xyzw vf18, 30(vi00)       ; 0ab8
+    NOP                            | LQ.xyzw vf19, 31(vi00)       ; 0ac0
+    NOP                            | LQ.xyzw vf20, 32(vi00)       ; 0ac8
+    NOP                            | LQ.xyzw vf21, 33(vi00)       ; 0ad0
+    NOP                            | LQ.xyzw vf16, 34(vi00)       ; 0ad8
+    NOP                            | ILW.x vi02, -1(vi12)         ; 0ae0
+    NOP                            | LQ.xyzw vf08, 29(vi00)       ; 0ae8
+    NOP                            | LQ.xyzw vf26, 37(vi00)       ; 0af0
+    NOP                            | IBNE vi01, vi00, L_0b10      ; 0af8
+    NOP                            | NOP                          ; 0b00
+    NOP                            | LQ.xyzw vf26, 36(vi00)       ; 0b08
+L_0b10:
+    NOP                            | SQ.xyzw vf26, -1(vi13)       ; 0b10
+    NOP                            | ISW.x vi02, -1(vi13)         ; 0b18
+    NOP                            | IBNE vi01, vi00, L_0b48      ; 0b20
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0b28
+L_0b30:
+    NOP                            | ILW.w vi09, 0(vi12)          ; 0b30
+    NOP                            | ISUB vi10, vi10, vi09        ; 0b38
+    NOP                            | LQ.xyzw vf26, 2(vi12)        ; 0b40
+L_0b48:
+    SUB.xyz vf24, vf26, vf21       | LQ.xyzw vf27, 1(vi12)        ; 0b48
+    MULAx.xyzw ACC, vf01, vf26     | NOP                          ; 0b50
+    MADDAy.xyzw ACC, vf02, vf26    | ILW.w vi01, 2(vi05)          ; 0b58
+    MADDAz.xyzw ACC, vf03, vf26    | IADDI vi09, vi09, -1         ; 0b60
+    MADDw.xyzw vf28, vf04, vf26    | ERLENG P, vf24               ; 0b68
+    NOP                            | SQ.xyzw vf08, 1(vi13)        ; 0b70
+    NOP                            | IADDI vi05, vi05, 3          ; 0b78
+    MUL.xyz vf14, vf27, vf16       | NOP                          ; 0b80
+    NOP                            | DIV Q, vf00w, vf28w          ; 0b88
+    NOP                            | NOP                          ; 0b90
+    NOP                            | NOP                          ; 0b98
+    ADDy.x vf14, vf14, vf14        | NOP                          ; 0ba0
+    NOP                            | NOP                          ; 0ba8
+    NOP                            | NOP                          ; 0bb0
+    NOP                            | NOP                          ; 0bb8
+    MULq.xyzw vf28, vf28, Q        | NOP                          ; 0bc0
+    ADDz.x vf14, vf14, vf14        | NOP                          ; 0bc8
+    FTOI4.xyzw vf28, vf28          | NOP                          ; 0bd0
+    MULw.x vf14, vf14, vf16        | NOP                          ; 0bd8
+    MULz.z vf25, vf00, vf00        | NOP                          ; 0be0
+    NOP                            | SQ.xyzw vf28, 2(vi13)        ; 0be8
+    MULx.xyz vf26, vf27, vf14      | NOP                          ; 0bf0
+    ADDw.z vf25, vf25, vf00        | NOP                          ; 0bf8
+    NOP                            | ISW.w vi01, 2(vi13)          ; 0c00
+    NOP                            | EATAN P, vf00x               ; 0c08
+    NOP                            | MFP.x vf15, P                ; 0c10
+    MULx.xyz vf13, vf24, vf15      | NOP                          ; 0c18
+    SUB.xyz[I] vf13, vf13, vf26    | LOI 0.5                      ; 0c20
+    MULAx.xy ACC, vf18, vf13       | IADDI vi13, vi13, 3          ; 0c28
+    MADDAy.xy ACC, vf19, vf13      | IADDI vi12, vi12, 3          ; 0c30
+    MADDz.xy vf14, vf20, vf13      | NOP                          ; 0c38
+    MULw.xy vf25, vf14, vf21       | NOP                          ; 0c40
+    ADDi.xy vf25, vf25, I          | LQ.xyzw vf26, 2(vi12)        ; 0c48
+    MULq.xyz vf25, vf25, Q         | NOP                          ; 0c50
+    NOP                            | IBNE vi09, vi00, L_0b48      ; 0c58
+    NOP                            | SQ.xyzw vf25, -3(vi13)       ; 0c60
+    NOP                            | IBNE vi10, vi00, L_0b30      ; 0c68
+    NOP                            | NOP                          ; 0c70
+    NOP                            | XGKICK vi14                  ; 0c78
+    NOP[I]                         | LOI 255.0                    ; 0c80
+    NOP                            | LQ.xyzw vf08, 35(vi00)       ; 0c88
+    NOP                            | LQ.xyzw vf13, 12(vi00)       ; 0c90
+    NOP                            | LQ.xyzw vf14, 13(vi00)       ; 0c98
+    NOP                            | LQ.xyzw vf15, 14(vi00)       ; 0ca0
+    NOP                            | LQ.xyzw vf16, 15(vi00)       ; 0ca8
+    NOP                            | LQ.xyzw vf18, 8(vi00)        ; 0cb0
+    NOP                            | LQ.xyzw vf19, 9(vi00)        ; 0cb8
+    NOP                            | LQ.xyzw vf20, 10(vi00)       ; 0cc0
+    NOP                            | LQ.xyzw vf21, 11(vi00)       ; 0cc8
+    NOP                            | JR vi15                      ; 0cd0
+    NOP                            | NOP                          ; 0cd8
