@@ -1,0 +1,22 @@
+{
+  "module": "IopSoundDriver",
+  "irx_file": "baserom/IOPSOUND.IRX",
+  "total_text_bytes": 90240,
+  "code_bytes": 89360,
+  "import_stub_bytes": 880,
+  "matched_bytes": 124,
+  "matched_functions": 1,
+  "total_functions": 422,
+  "import_stubs": 67,
+  "matched_percent": 0.1374,
+  "decompilable_matched_percent": 0.1388,
+  "units": [
+    {
+      "name": "iop_015c94",
+      "src": "iop/iopsound/iop_015c94.c",
+      "text_start": "0x015c94",
+      "text_end": "0x015d10",
+      "bytes": 124
+    }
+  ]
+}

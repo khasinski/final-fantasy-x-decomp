@@ -1,0 +1,9 @@
+[
+  {
+    "name": "iop_015c94",
+    "src": "iop_015c94.c",
+    "text_start": "0x015c94",
+    "text_end": "0x015d10",
+    "cflags": ["-O2", "-G0"]
+  }
+]
