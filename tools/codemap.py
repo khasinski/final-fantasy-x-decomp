@@ -336,24 +336,26 @@ def build_svg():
         by += 27
 
     # Right card: 584 Battle-Effect Overlays Tile Matrix
+    ovl_100c = sum(1 for c in ovl["per_container"] if c["open_bytes"] - c["policy_asm_bytes"] <= 0)
+    ovl_pol_only = ovl_100c - ovl_full
     svg.append(f'<rect x="{right_x}" y="{y1}" width="{right_w}" height="{sec2_h}" rx="8" fill="{CARD}" stroke="{BORDER}"/>')
     svg.append(f'<text x="{right_x+16}" y="{y1+28}" class="h2">3. 584 EE Battle-Effect Overlays (group11)</text>')
-    svg.append(f'<text x="{right_x+16}" y="{y1+46}" class="small muted">Each tile = 1 overlay container (sorted by completion). 331/584 are 100% matched; 0 untouched.</text>')
+    svg.append(f'<text x="{right_x+16}" y="{y1+46}" class="small muted">Each tile = 1 container. {ovl_100c}/584 ({100*ovl_100c/ovl_tot:.1f}%) are 100% C ({ovl_full} full + {ovl_pol_only} policy-only); 0 untouched.</text>')
 
     # Tile legend
-    tleg = [(C_MATCH, "100% Complete (331)"), (C_CYAN, "90–99.9% decomp"), (C_AMBER, "70–89.9% decomp"), (C_OPEN, "<70% decomp")]
+    tleg = [(C_MATCH, f"100% Full ({ovl_full})"), ("#10b981", f"100% C ({ovl_pol_only})"), (C_CYAN, "90–99.9%"), (C_AMBER, "70–89.9%"), (C_OPEN, "<70%")]
     tx = right_x + 16
     for col, lbl in tleg:
         svg.append(f'<rect x="{tx}" y="{y1+58}" width="10" height="10" rx="2" fill="{col}"/>')
         svg.append(f'<text x="{tx+15}" y="{y1+67}" class="tiny">{html.escape(lbl)}</text>')
         tx += 24 + len(lbl) * 6.0
 
-    # Sort containers: full first, then by decompilable % descending
+    # Sort containers: full first, then 100% C, then by decompilable % descending
     def ovl_decomp_pct(c):
         dt = c["code_bytes"] - c["policy_asm_bytes"]
         return 100.0 * c["matched_bytes"] / dt if dt > 0 else 100.0
 
-    per_c = sorted(ovl["per_container"], key=lambda c: (c["state"] == "full", ovl_decomp_pct(c), -c["open_bytes"]), reverse=True)
+    per_c = sorted(ovl["per_container"], key=lambda c: (c["state"] == "full", c["open_bytes"] - c["policy_asm_bytes"] <= 0, ovl_decomp_pct(c), -c["open_bytes"]), reverse=True)
     cols = 25
     tile = 21
     gap = 4
@@ -366,6 +368,8 @@ def build_svg():
         dp = ovl_decomp_pct(c)
         if c["state"] == "full":
             fill = C_MATCH
+        elif c["open_bytes"] - c["policy_asm_bytes"] <= 0:
+            fill = "#10b981"
         elif dp >= 90.0:
             fill = C_CYAN
         elif dp >= 70.0:
