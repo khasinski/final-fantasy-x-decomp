@@ -1,5 +1,12 @@
 [
   {
+    "name": "iop_w3a_000000",
+    "src": "iop_w3a_000000.c",
+    "text_start": "0x000000",
+    "text_end": "0x0003dc",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s1_000824",
     "src": "iop_s1_000824.c",
     "text_start": "0x000824",
@@ -8,6 +15,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3a_000914",
+    "src": "iop_w3a_000914.c",
+    "text_start": "0x000914",
+    "text_end": "0x000bcc",
+    "no_split_macro": true
   },
   {
     "name": "iop_s1_000bcc",
@@ -202,6 +216,13 @@
     ]
   },
   {
+    "name": "iop_w3a_003bf0",
+    "src": "iop_w3a_003bf0.c",
+    "text_start": "0x003bf0",
+    "text_end": "0x003c40",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s1_003c40",
     "src": "iop_s1_003c40.c",
     "text_start": "0x003c40",
@@ -212,6 +233,13 @@
     ]
   },
   {
+    "name": "iop_w3a_003cb0",
+    "src": "iop_w3a_003cb0.c",
+    "text_start": "0x003cb0",
+    "text_end": "0x003d00",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s1_003d00",
     "src": "iop_s1_003d00.c",
     "text_start": "0x003d00",
@@ -220,6 +248,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3a_003d70",
+    "src": "iop_w3a_003d70.c",
+    "text_start": "0x003d70",
+    "text_end": "0x003dc4",
+    "no_split_macro": true
   },
   {
     "name": "iop_s1_003dc4",
@@ -256,6 +291,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3a_00511c",
+    "src": "iop_w3a_00511c.c",
+    "text_start": "0x00511c",
+    "text_end": "0x005190",
+    "no_split_macro": true
   },
   {
     "name": "iop_s2_005190",
@@ -354,6 +396,12 @@
     ]
   },
   {
+    "name": "iop_w3a_0075fc",
+    "src": "iop_w3a_0075fc.c",
+    "text_start": "0x0075fc",
+    "text_end": "0x0079a0"
+  },
+  {
     "name": "iop_s2_0079a0",
     "src": "iop_s2_0079a0.c",
     "text_start": "0x0079a0",
@@ -414,10 +462,28 @@
     ]
   },
   {
+    "name": "iop_w3a_008214",
+    "src": "iop_w3a_008214.c",
+    "text_start": "0x008214",
+    "text_end": "0x0086f8",
+    "no_split_macro": true,
+    "load_delay_nop": true
+  },
+  {
     "name": "iop_w2b_0086f8",
     "src": "iop_w2b_0086f8.c",
     "text_start": "0x0086f8",
     "text_end": "0x008824",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w3b_008ac4",
+    "src": "iop_w3b_008ac4.c",
+    "text_start": "0x008ac4",
+    "text_end": "0x008d48",
     "cflags": [
       "-O2",
       "-G0"
@@ -554,6 +620,17 @@
     ]
   },
   {
+    "name": "iop_w3b_00b1e0",
+    "src": "iop_w3b_00b1e0.c",
+    "text_start": "0x00b1e0",
+    "text_end": "0x00b4a8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ],
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s3_00b4a8",
     "src": "iop_s3_00b4a8.c",
     "text_start": "0x00b4a8",
@@ -634,6 +711,17 @@
     ]
   },
   {
+    "name": "iop_w3b_00c564",
+    "src": "iop_w3b_00c564.c",
+    "text_start": "0x00c564",
+    "text_end": "0x00c7a4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ],
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s3_00c7a4",
     "src": "iop_s3_00c7a4.c",
     "text_start": "0x00c7a4",
@@ -652,6 +740,17 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3b_00c938",
+    "src": "iop_w3b_00c938.c",
+    "text_start": "0x00c938",
+    "text_end": "0x00cbb4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ],
+    "no_split_macro": true
   },
   {
     "name": "iop_s3_00cbb4",
@@ -678,6 +777,16 @@
     "src": "iop_s4_00d3a0.c",
     "text_start": "0x00d3a0",
     "text_end": "0x00d5ec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w3b_00d5ec",
+    "src": "iop_w3b_00d5ec.c",
+    "text_start": "0x00d5ec",
+    "text_end": "0x00d6b4",
     "cflags": [
       "-O2",
       "-G0"
@@ -804,6 +913,20 @@
     ]
   },
   {
+    "name": "iop_w3c_00efbc",
+    "src": "iop_w3c_00efbc.c",
+    "text_start": "0x00efbc",
+    "text_end": "0x00efec",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_00efec",
+    "src": "iop_w3c_00efec.c",
+    "text_start": "0x00efec",
+    "text_end": "0x00f038",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s4_00f038",
     "src": "iop_s4_00f038.c",
     "text_start": "0x00f038",
@@ -812,6 +935,14 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3c_00f188",
+    "src": "iop_w3c_00f188.c",
+    "text_start": "0x00f188",
+    "text_end": "0x00f2a0",
+    "no_split_macro": true,
+    "load_delay_nop": true
   },
   {
     "name": "iop_w2c_00f2a0",
@@ -852,6 +983,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3c_00f714",
+    "src": "iop_w3c_00f714.c",
+    "text_start": "0x00f714",
+    "text_end": "0x00fa24",
+    "no_split_macro": true
   },
   {
     "name": "iop_s4_00fa24",
@@ -940,6 +1078,13 @@
     ]
   },
   {
+    "name": "iop_w3c_010100",
+    "src": "iop_w3c_010100.c",
+    "text_start": "0x010100",
+    "text_end": "0x0105cc",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s4_0105cc",
     "src": "iop_s4_0105cc.c",
     "text_start": "0x0105cc",
@@ -960,6 +1105,20 @@
     ]
   },
   {
+    "name": "iop_w3c_010754",
+    "src": "iop_w3c_010754.c",
+    "text_start": "0x010754",
+    "text_end": "0x010770",
+    "load_delay_nop": true
+  },
+  {
+    "name": "iop_w3c_010770",
+    "src": "iop_w3c_010770.c",
+    "text_start": "0x010770",
+    "text_end": "0x0107cc",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s4_0107cc",
     "src": "iop_s4_0107cc.c",
     "text_start": "0x0107cc",
@@ -974,6 +1133,13 @@
     "src": "iop_w2d_0108f0.c",
     "text_start": "0x0108f0",
     "text_end": "0x01097c"
+  },
+  {
+    "name": "iop_w3c_01097c",
+    "src": "iop_w3c_01097c.c",
+    "text_start": "0x01097c",
+    "text_end": "0x010a58",
+    "no_split_macro": true
   },
   {
     "name": "iop_s4_010a58",
@@ -1002,6 +1168,27 @@
     ]
   },
   {
+    "name": "iop_w3c_010f90",
+    "src": "iop_w3c_010f90.c",
+    "text_start": "0x010f90",
+    "text_end": "0x010fac",
+    "load_delay_nop": true
+  },
+  {
+    "name": "iop_w3c_010fac",
+    "src": "iop_w3c_010fac.c",
+    "text_start": "0x010fac",
+    "text_end": "0x010fc8",
+    "load_delay_nop": true
+  },
+  {
+    "name": "iop_w3c_010fc8",
+    "src": "iop_w3c_010fc8.c",
+    "text_start": "0x010fc8",
+    "text_end": "0x010fe4",
+    "load_delay_nop": true
+  },
+  {
     "name": "iop_s4_010fe4",
     "src": "iop_s4_010fe4.c",
     "text_start": "0x010fe4",
@@ -1018,6 +1205,13 @@
     "text_end": "0x0110f4"
   },
   {
+    "name": "iop_w3c_0110f4",
+    "src": "iop_w3c_0110f4.c",
+    "text_start": "0x0110f4",
+    "text_end": "0x011128",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s4_011128",
     "src": "iop_s4_011128.c",
     "text_start": "0x011128",
@@ -1026,6 +1220,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3c_0111b4",
+    "src": "iop_w3c_0111b4.c",
+    "text_start": "0x0111b4",
+    "text_end": "0x0111f4",
+    "no_split_macro": true
   },
   {
     "name": "iop_s4_0111f4",
@@ -1060,6 +1261,13 @@
     ]
   },
   {
+    "name": "iop_w3c_012580",
+    "src": "iop_w3c_012580.c",
+    "text_start": "0x012580",
+    "text_end": "0x0125c0",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s5_0125c0",
     "src": "iop_s5_0125c0.c",
     "text_start": "0x0125c0",
@@ -1068,6 +1276,13 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3c_012698",
+    "src": "iop_w3c_012698.c",
+    "text_start": "0x012698",
+    "text_end": "0x0126b4",
+    "load_delay_nop": true
   },
   {
     "name": "iop_s5_0126b4",
@@ -1080,6 +1295,13 @@
     ]
   },
   {
+    "name": "iop_w3c_0127b0",
+    "src": "iop_w3c_0127b0.c",
+    "text_start": "0x0127b0",
+    "text_end": "0x0127e4",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s5_0127e4",
     "src": "iop_s5_0127e4.c",
     "text_start": "0x0127e4",
@@ -1090,10 +1312,31 @@
     ]
   },
   {
+    "name": "iop_w3c_0129b4",
+    "src": "iop_w3c_0129b4.c",
+    "text_start": "0x0129b4",
+    "text_end": "0x012a08",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_w2d_012a08",
     "src": "iop_w2d_012a08.c",
     "text_start": "0x012a08",
     "text_end": "0x012a7c"
+  },
+  {
+    "name": "iop_w3c_012a7c",
+    "src": "iop_w3c_012a7c.c",
+    "text_start": "0x012a7c",
+    "text_end": "0x012ac8",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_012ac8",
+    "src": "iop_w3c_012ac8.c",
+    "text_start": "0x012ac8",
+    "text_end": "0x012b14",
+    "no_split_macro": true
   },
   {
     "name": "iop_s5_012b14",
@@ -1152,6 +1395,27 @@
     ]
   },
   {
+    "name": "iop_w3c_014088",
+    "src": "iop_w3c_014088.c",
+    "text_start": "0x014088",
+    "text_end": "0x014164",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_014164",
+    "src": "iop_w3c_014164.c",
+    "text_start": "0x014164",
+    "text_end": "0x014240",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_014240",
+    "src": "iop_w3c_014240.c",
+    "text_start": "0x014240",
+    "text_end": "0x0143d8",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s5_0143d8",
     "src": "iop_s5_0143d8.c",
     "text_start": "0x0143d8",
@@ -1162,6 +1426,13 @@
     ]
   },
   {
+    "name": "iop_w3c_0146c8",
+    "src": "iop_w3c_0146c8.c",
+    "text_start": "0x0146c8",
+    "text_end": "0x014788",
+    "no_split_macro": true
+  },
+  {
     "name": "iop_s5_014788",
     "src": "iop_s5_014788.c",
     "text_start": "0x014788",
@@ -1170,6 +1441,27 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w3c_01499c",
+    "src": "iop_w3c_01499c.c",
+    "text_start": "0x01499c",
+    "text_end": "0x0149f4",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_0149f4",
+    "src": "iop_w3c_0149f4.c",
+    "text_start": "0x0149f4",
+    "text_end": "0x014ba4",
+    "no_split_macro": true
+  },
+  {
+    "name": "iop_w3c_014ba4",
+    "src": "iop_w3c_014ba4.c",
+    "text_start": "0x014ba4",
+    "text_end": "0x014cc8",
+    "no_split_macro": true
   },
   {
     "name": "iop_w2d_014cc8",

@@ -543,8 +543,12 @@ def _compile_and_link_unit(
         ],
         check=True,
     )
-    # Period Sony iop-as (binutils 2.9) encoded `move rd, rs` as `addu rd, rs, $0`,
-    # whereas modern mipsel-linux-gnu-as encodes it as `or rd, rs, $0`.
+    # Period Sony iop-as (binutils 2.9) shims for modern mipsel-linux-gnu-as:
+    # 1. Always: `move rd, rs` -> `addu rd, rs, $0`.
+    # 2. Per-unit `no_split_macro`: prevent modern gas from splitting `sw/sh/sb/la reg, sym`
+    #    across a following jump/branch delay slot.
+    # 3. Per-unit `load_delay_nop`: preserve R3000A load-delay `nop` between a load into `$r`
+    #    and a `sw/sh/sb $r, sym` macro (which expands to `lui $at; sw $r, lo($at)`).
     asm_text = asm_s.read_text()
     asm_text = re.sub(
         r"^(\s+)move(\s+\$[0-9a-zA-Z]+,\s*\$[0-9a-zA-Z]+)\b",
@@ -552,6 +556,60 @@ def _compile_and_link_unit(
         asm_text,
         flags=re.MULTILINE,
     )
+    if unit.get("no_split_macro") or unit.get("load_delay_nop"):
+        _sym_store_re = re.compile(
+            r"^\s+(?:sw|sh|sb)\s+(\$[0-9a-zA-Z]+),\s*[A-Za-z_.$][A-Za-z0-9_.$+-]*\s*$"
+        )
+        _sym_macro_re = re.compile(
+            r"^\s+(?:sw|sh|sb|la)\s+\$[0-9a-zA-Z]+,\s*[A-Za-z_.$][A-Za-z0-9_.$+-]*\s*$"
+        )
+        _load_re = re.compile(
+            r"^\s+(?:lw|lh|lb|lhu|lbu)\s+(\$[0-9a-zA-Z]+),"
+        )
+        _branch_re = re.compile(
+            r"^\s+(?:jal|j|jr|b|beq|bne|beqz|bnez|bgez|bgtz|blez|bltz)\b"
+        )
+        no_split = bool(unit.get("no_split_macro"))
+        ld_nop = bool(unit.get("load_delay_nop"))
+        out_lines: list[str] = []
+        noreorder = False
+        prev_was_sym_macro = False
+        prev_load_reg: str | None = None
+        for line in asm_text.splitlines(keepends=True):
+            s = line.strip()
+            if s.startswith(".set"):
+                parts = s.split()
+                if len(parts) >= 2:
+                    if parts[1] == "noreorder":
+                        noreorder = True
+                    elif parts[1] == "reorder":
+                        noreorder = False
+                out_lines.append(line)
+                prev_was_sym_macro = False
+                prev_load_reg = None
+                continue
+            if not s or s.startswith("#") or s.startswith(".") or s.endswith(":"):
+                out_lines.append(line)
+                if s.endswith(":"):
+                    prev_was_sym_macro = False
+                    prev_load_reg = None
+                continue
+            if not noreorder and ld_nop and prev_load_reg is not None:
+                ms = _sym_store_re.match(line)
+                if ms and ms.group(1) == prev_load_reg:
+                    out_lines.append("\tnop\n")
+            if not noreorder and no_split and prev_was_sym_macro and _branch_re.match(line):
+                out_lines.append("\t.set\tnoreorder\n\t.set\tnomacro\n")
+                out_lines.append(line)
+                out_lines.append("\tnop\n\t.set\tmacro\n\t.set\treorder\n")
+                prev_was_sym_macro = False
+                prev_load_reg = None
+                continue
+            out_lines.append(line)
+            prev_was_sym_macro = (not noreorder) and bool(_sym_macro_re.match(line))
+            ml = _load_re.match(line)
+            prev_load_reg = ml.group(1) if (not noreorder and ml) else None
+        asm_text = "".join(out_lines)
     asm_s.write_text(asm_text)
 
     subprocess.run(
@@ -670,8 +728,13 @@ def _write_progress(
     matched_ranges = [(u["text_start"], u["text_end"]) for u in matched_units]
     matched_func_list = []
     for f in code_funcs:
-        f_end = f["addr"] + f["size"]
-        if any(ts <= f["addr"] and f_end <= te for ts, te in matched_ranges):
+        f_start = f["addr"]
+        f_end = f_start + f["size"]
+        # Strip trailing inter-function alignment NOP words (0x00000000) when checking unit coverage
+        eff_end = f_end
+        while eff_end - 4 > f_start and irx.text[eff_end - 4:eff_end] == b"\x00\x00\x00\x00":
+            eff_end -= 4
+        if any(ts <= f_start and eff_end <= te for ts, te in matched_ranges):
             matched_func_list.append(f)
 
     matched_bytes = sum(f["size"] for f in matched_func_list)
