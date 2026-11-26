@@ -20,6 +20,12 @@
     ]
   },
   {
+    "name": "iop_w2a_001140",
+    "src": "iop_w2a_001140.c",
+    "text_start": "0x001140",
+    "text_end": "0x0012d8"
+  },
+  {
     "name": "iop_s1_0012d8",
     "src": "iop_s1_0012d8.c",
     "text_start": "0x0012d8",
@@ -28,6 +34,18 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2a_0013e4",
+    "src": "iop_w2a_0013e4.c",
+    "text_start": "0x0013e4",
+    "text_end": "0x0014b4"
+  },
+  {
+    "name": "iop_w2a_001810",
+    "src": "iop_w2a_001810.c",
+    "text_start": "0x001810",
+    "text_end": "0x0019d0"
   },
   {
     "name": "iop_s1_0019d0",
@@ -70,6 +88,18 @@
     ]
   },
   {
+    "name": "iop_w2a_002bec",
+    "src": "iop_w2a_002bec.c",
+    "text_start": "0x002bec",
+    "text_end": "0x002cb8"
+  },
+  {
+    "name": "iop_w2a_002cc0",
+    "src": "iop_w2a_002cc0.c",
+    "text_start": "0x002cc0",
+    "text_end": "0x002d20"
+  },
+  {
     "name": "iop_s1_002d20",
     "src": "iop_s1_002d20.c",
     "text_start": "0x002d20",
@@ -78,6 +108,24 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2a_002d50",
+    "src": "iop_w2a_002d50.c",
+    "text_start": "0x002d50",
+    "text_end": "0x002e70"
+  },
+  {
+    "name": "iop_w2a_002e70",
+    "src": "iop_w2a_002e70.c",
+    "text_start": "0x002e70",
+    "text_end": "0x002f30"
+  },
+  {
+    "name": "iop_w2a_002f30",
+    "src": "iop_w2a_002f30.c",
+    "text_start": "0x002f30",
+    "text_end": "0x002fa0"
   },
   {
     "name": "iop_s1_002fa0",
@@ -90,6 +138,12 @@
     ]
   },
   {
+    "name": "iop_w2a_0033bc",
+    "src": "iop_w2a_0033bc.c",
+    "text_start": "0x0033bc",
+    "text_end": "0x0035b4"
+  },
+  {
     "name": "iop_s1_0035b4",
     "src": "iop_s1_0035b4.c",
     "text_start": "0x0035b4",
@@ -98,6 +152,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2a_003778",
+    "src": "iop_w2a_003778.c",
+    "text_start": "0x003778",
+    "text_end": "0x0037b8"
   },
   {
     "name": "iop_s1_0037b8",
@@ -110,6 +170,12 @@
     ]
   },
   {
+    "name": "iop_w2a_003830",
+    "src": "iop_w2a_003830.c",
+    "text_start": "0x003830",
+    "text_end": "0x0038b8"
+  },
+  {
     "name": "iop_s1_003944",
     "src": "iop_s1_003944.c",
     "text_start": "0x003944",
@@ -118,6 +184,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2a_003ae4",
+    "src": "iop_w2a_003ae4.c",
+    "text_start": "0x003ae4",
+    "text_end": "0x003b68"
   },
   {
     "name": "iop_s1_003b68",
@@ -160,6 +232,12 @@
     ]
   },
   {
+    "name": "iop_w2a_003fa8",
+    "src": "iop_w2a_003fa8.c",
+    "text_start": "0x003fa8",
+    "text_end": "0x00404c"
+  },
+  {
     "name": "iop_s1_00404c",
     "src": "iop_s1_00404c.c",
     "text_start": "0x00404c",
@@ -190,6 +268,18 @@
     ]
   },
   {
+    "name": "iop_w2a_0052b0",
+    "src": "iop_w2a_0052b0.c",
+    "text_start": "0x0052b0",
+    "text_end": "0x005314"
+  },
+  {
+    "name": "iop_w2a_005314",
+    "src": "iop_w2a_005314.c",
+    "text_start": "0x005314",
+    "text_end": "0x005370"
+  },
+  {
     "name": "iop_s2_005370",
     "src": "iop_s2_005370.c",
     "text_start": "0x005370",
@@ -198,6 +288,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2a_005630",
+    "src": "iop_w2a_005630.c",
+    "text_start": "0x005630",
+    "text_end": "0x0056fc"
   },
   {
     "name": "iop_s2_0056fc",
@@ -214,6 +310,34 @@
     "src": "iop_s2_0057a0.c",
     "text_start": "0x0057a0",
     "text_end": "0x006118",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2a_006118",
+    "src": "iop_w2a_006118.c",
+    "text_start": "0x006118",
+    "text_end": "0x00617c"
+  },
+  {
+    "name": "iop_w2a_00617c",
+    "src": "iop_w2a_00617c.c",
+    "text_start": "0x00617c",
+    "text_end": "0x006530"
+  },
+  {
+    "name": "iop_w2a_006530",
+    "src": "iop_w2a_006530.c",
+    "text_start": "0x006530",
+    "text_end": "0x006954"
+  },
+  {
+    "name": "iop_w2b_006954",
+    "src": "iop_w2b_006954.c",
+    "text_start": "0x006954",
+    "text_end": "0x006cbc",
     "cflags": [
       "-O2",
       "-G0"
@@ -240,10 +364,30 @@
     ]
   },
   {
+    "name": "iop_w2b_007c30",
+    "src": "iop_w2b_007c30.c",
+    "text_start": "0x007c30",
+    "text_end": "0x007d38",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s2_007d38",
     "src": "iop_s2_007d38.c",
     "text_start": "0x007d38",
     "text_end": "0x007eec",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2b_007eec",
+    "src": "iop_w2b_007eec.c",
+    "text_start": "0x007eec",
+    "text_end": "0x007ff8",
     "cflags": [
       "-O2",
       "-G0"
@@ -260,6 +404,36 @@
     ]
   },
   {
+    "name": "iop_w2b_00810c",
+    "src": "iop_w2b_00810c.c",
+    "text_start": "0x00810c",
+    "text_end": "0x008214",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2b_0086f8",
+    "src": "iop_w2b_0086f8.c",
+    "text_start": "0x0086f8",
+    "text_end": "0x008824",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2b_008d48",
+    "src": "iop_w2b_008d48.c",
+    "text_start": "0x008d48",
+    "text_end": "0x008e60",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_008e60",
     "src": "iop_s3_008e60.c",
     "text_start": "0x008e60",
@@ -270,10 +444,30 @@
     ]
   },
   {
+    "name": "iop_w2b_009148",
+    "src": "iop_w2b_009148.c",
+    "text_start": "0x009148",
+    "text_end": "0x0091e4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_0091e4",
     "src": "iop_s3_0091e4.c",
     "text_start": "0x0091e4",
     "text_end": "0x009298",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2b_009298",
+    "src": "iop_w2b_009298.c",
+    "text_start": "0x009298",
+    "text_end": "0x009324",
     "cflags": [
       "-O2",
       "-G0"
@@ -300,6 +494,16 @@
     ]
   },
   {
+    "name": "iop_w2b_009d50",
+    "src": "iop_w2b_009d50.c",
+    "text_start": "0x009d50",
+    "text_end": "0x009edc",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_009edc",
     "src": "iop_s3_009edc.c",
     "text_start": "0x009edc",
@@ -310,10 +514,30 @@
     ]
   },
   {
+    "name": "iop_w2b_00a200",
+    "src": "iop_w2b_00a200.c",
+    "text_start": "0x00a200",
+    "text_end": "0x00a4b8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_00a680",
     "src": "iop_s3_00a680.c",
     "text_start": "0x00a680",
     "text_end": "0x00a7a0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2b_00a7a0",
+    "src": "iop_w2b_00a7a0.c",
+    "text_start": "0x00a7a0",
+    "text_end": "0x00aaa8",
     "cflags": [
       "-O2",
       "-G0"
@@ -340,10 +564,30 @@
     ]
   },
   {
+    "name": "iop_w2c_00b5ec",
+    "src": "iop_w2c_00b5ec.c",
+    "text_start": "0x00b5ec",
+    "text_end": "0x00b7c8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_00b7c8",
     "src": "iop_s3_00b7c8.c",
     "text_start": "0x00b7c8",
     "text_end": "0x00b8d4",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00b8d4",
+    "src": "iop_w2c_00b8d4.c",
+    "text_start": "0x00b8d4",
+    "text_end": "0x00b9c4",
     "cflags": [
       "-O2",
       "-G0"
@@ -360,10 +604,30 @@
     ]
   },
   {
+    "name": "iop_w2c_00ba1c",
+    "src": "iop_w2c_00ba1c.c",
+    "text_start": "0x00ba1c",
+    "text_end": "0x00bb10",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s3_00bb10",
     "src": "iop_s3_00bb10.c",
     "text_start": "0x00bb10",
     "text_end": "0x00c348",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00c348",
+    "src": "iop_w2c_00c348.c",
+    "text_start": "0x00c348",
+    "text_end": "0x00c43c",
     "cflags": [
       "-O2",
       "-G0"
@@ -440,6 +704,26 @@
     ]
   },
   {
+    "name": "iop_w2c_00e0a4",
+    "src": "iop_w2c_00e0a4.c",
+    "text_start": "0x00e0a4",
+    "text_end": "0x00e260",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00e260",
+    "src": "iop_w2c_00e260.c",
+    "text_start": "0x00e260",
+    "text_end": "0x00e308",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s4_00e308",
     "src": "iop_s4_00e308.c",
     "text_start": "0x00e308",
@@ -460,10 +744,40 @@
     ]
   },
   {
+    "name": "iop_w2c_00e54c",
+    "src": "iop_w2c_00e54c.c",
+    "text_start": "0x00e54c",
+    "text_end": "0x00e858",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s4_00e858",
     "src": "iop_s4_00e858.c",
     "text_start": "0x00e858",
     "text_end": "0x00e9a0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00e9a0",
+    "src": "iop_w2c_00e9a0.c",
+    "text_start": "0x00e9a0",
+    "text_end": "0x00eb80",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00eb80",
+    "src": "iop_w2c_00eb80.c",
+    "text_start": "0x00eb80",
+    "text_end": "0x00ee2c",
     "cflags": [
       "-O2",
       "-G0"
@@ -480,10 +794,30 @@
     ]
   },
   {
+    "name": "iop_w2c_00ee60",
+    "src": "iop_w2c_00ee60.c",
+    "text_start": "0x00ee60",
+    "text_end": "0x00efa8",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
     "name": "iop_s4_00f038",
     "src": "iop_s4_00f038.c",
     "text_start": "0x00f038",
     "text_end": "0x00f188",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00f2a0",
+    "src": "iop_w2c_00f2a0.c",
+    "text_start": "0x00f2a0",
+    "text_end": "0x00f34c",
     "cflags": [
       "-O2",
       "-G0"
@@ -524,6 +858,16 @@
     "src": "iop_s4_00fa24.c",
     "text_start": "0x00fa24",
     "text_end": "0x00fbd0",
+    "cflags": [
+      "-O2",
+      "-G0"
+    ]
+  },
+  {
+    "name": "iop_w2c_00fc2c",
+    "src": "iop_w2c_00fc2c.c",
+    "text_start": "0x00fc2c",
+    "text_end": "0x00fd60",
     "cflags": [
       "-O2",
       "-G0"
@@ -580,6 +924,12 @@
     ]
   },
   {
+    "name": "iop_w2d_00ffcc",
+    "src": "iop_w2d_00ffcc.c",
+    "text_start": "0x00ffcc",
+    "text_end": "0x010028"
+  },
+  {
     "name": "iop_s4_010028",
     "src": "iop_s4_010028.c",
     "text_start": "0x010028",
@@ -620,6 +970,12 @@
     ]
   },
   {
+    "name": "iop_w2d_0108f0",
+    "src": "iop_w2d_0108f0.c",
+    "text_start": "0x0108f0",
+    "text_end": "0x01097c"
+  },
+  {
     "name": "iop_s4_010a58",
     "src": "iop_s4_010a58.c",
     "text_start": "0x010a58",
@@ -628,6 +984,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2d_010af4",
+    "src": "iop_w2d_010af4.c",
+    "text_start": "0x010af4",
+    "text_end": "0x010e94"
   },
   {
     "name": "iop_s4_010e94",
@@ -650,6 +1012,12 @@
     ]
   },
   {
+    "name": "iop_w2d_0110ac",
+    "src": "iop_w2d_0110ac.c",
+    "text_start": "0x0110ac",
+    "text_end": "0x0110f4"
+  },
+  {
     "name": "iop_s4_011128",
     "src": "iop_s4_011128.c",
     "text_start": "0x011128",
@@ -668,6 +1036,18 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2d_011594",
+    "src": "iop_w2d_011594.c",
+    "text_start": "0x011594",
+    "text_end": "0x0117d4"
+  },
+  {
+    "name": "iop_w2d_0117d4",
+    "src": "iop_w2d_0117d4.c",
+    "text_start": "0x0117d4",
+    "text_end": "0x011a40"
   },
   {
     "name": "iop_s5_011a40",
@@ -710,6 +1090,12 @@
     ]
   },
   {
+    "name": "iop_w2d_012a08",
+    "src": "iop_w2d_012a08.c",
+    "text_start": "0x012a08",
+    "text_end": "0x012a7c"
+  },
+  {
     "name": "iop_s5_012b14",
     "src": "iop_s5_012b14.c",
     "text_start": "0x012b14",
@@ -728,6 +1114,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2d_013900",
+    "src": "iop_w2d_013900.c",
+    "text_start": "0x013900",
+    "text_end": "0x013b80"
   },
   {
     "name": "iop_s5_013b80",
@@ -780,6 +1172,12 @@
     ]
   },
   {
+    "name": "iop_w2d_014cc8",
+    "src": "iop_w2d_014cc8.c",
+    "text_start": "0x014cc8",
+    "text_end": "0x014e90"
+  },
+  {
     "name": "iop_s5_014e90",
     "src": "iop_s5_014e90.c",
     "text_start": "0x014e90",
@@ -790,6 +1188,12 @@
     ]
   },
   {
+    "name": "iop_w2d_01554c",
+    "src": "iop_w2d_01554c.c",
+    "text_start": "0x01554c",
+    "text_end": "0x0157c8"
+  },
+  {
     "name": "iop_s5_0157c8",
     "src": "iop_s5_0157c8.c",
     "text_start": "0x0157c8",
@@ -798,6 +1202,12 @@
       "-O2",
       "-G0"
     ]
+  },
+  {
+    "name": "iop_w2d_015b20",
+    "src": "iop_w2d_015b20.c",
+    "text_start": "0x015b20",
+    "text_end": "0x015c94"
   },
   {
     "name": "iop_015c94",

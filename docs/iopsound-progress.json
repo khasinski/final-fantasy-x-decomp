@@ -4,12 +4,12 @@
   "total_text_bytes": 90240,
   "code_bytes": 89360,
   "import_stub_bytes": 880,
-  "matched_bytes": 46232,
-  "matched_functions": 301,
+  "matched_bytes": 64004,
+  "matched_functions": 356,
   "total_functions": 422,
   "import_stubs": 67,
-  "matched_percent": 51.2323,
-  "decompilable_matched_percent": 51.7368,
+  "matched_percent": 70.9264,
+  "decompilable_matched_percent": 71.6249,
   "units": [
     {
       "name": "iop_s1_000824",
@@ -26,11 +26,32 @@
       "bytes": 260
     },
     {
+      "name": "iop_w2a_001140",
+      "src": "iop/iopsound/iop_w2a_001140.c",
+      "text_start": "0x001140",
+      "text_end": "0x0012d8",
+      "bytes": 408
+    },
+    {
       "name": "iop_s1_0012d8",
       "src": "iop/iopsound/iop_s1_0012d8.c",
       "text_start": "0x0012d8",
       "text_end": "0x0013e4",
       "bytes": 268
+    },
+    {
+      "name": "iop_w2a_0013e4",
+      "src": "iop/iopsound/iop_w2a_0013e4.c",
+      "text_start": "0x0013e4",
+      "text_end": "0x0014b4",
+      "bytes": 208
+    },
+    {
+      "name": "iop_w2a_001810",
+      "src": "iop/iopsound/iop_w2a_001810.c",
+      "text_start": "0x001810",
+      "text_end": "0x0019d0",
+      "bytes": 448
     },
     {
       "name": "iop_s1_0019d0",
@@ -61,11 +82,46 @@
       "bytes": 1540
     },
     {
+      "name": "iop_w2a_002bec",
+      "src": "iop/iopsound/iop_w2a_002bec.c",
+      "text_start": "0x002bec",
+      "text_end": "0x002cb8",
+      "bytes": 204
+    },
+    {
+      "name": "iop_w2a_002cc0",
+      "src": "iop/iopsound/iop_w2a_002cc0.c",
+      "text_start": "0x002cc0",
+      "text_end": "0x002d20",
+      "bytes": 96
+    },
+    {
       "name": "iop_s1_002d20",
       "src": "iop/iopsound/iop_s1_002d20.c",
       "text_start": "0x002d20",
       "text_end": "0x002d50",
       "bytes": 48
+    },
+    {
+      "name": "iop_w2a_002d50",
+      "src": "iop/iopsound/iop_w2a_002d50.c",
+      "text_start": "0x002d50",
+      "text_end": "0x002e70",
+      "bytes": 288
+    },
+    {
+      "name": "iop_w2a_002e70",
+      "src": "iop/iopsound/iop_w2a_002e70.c",
+      "text_start": "0x002e70",
+      "text_end": "0x002f30",
+      "bytes": 192
+    },
+    {
+      "name": "iop_w2a_002f30",
+      "src": "iop/iopsound/iop_w2a_002f30.c",
+      "text_start": "0x002f30",
+      "text_end": "0x002fa0",
+      "bytes": 112
     },
     {
       "name": "iop_s1_002fa0",
@@ -75,11 +131,25 @@
       "bytes": 1052
     },
     {
+      "name": "iop_w2a_0033bc",
+      "src": "iop/iopsound/iop_w2a_0033bc.c",
+      "text_start": "0x0033bc",
+      "text_end": "0x0035b4",
+      "bytes": 504
+    },
+    {
       "name": "iop_s1_0035b4",
       "src": "iop/iopsound/iop_s1_0035b4.c",
       "text_start": "0x0035b4",
       "text_end": "0x003778",
       "bytes": 452
+    },
+    {
+      "name": "iop_w2a_003778",
+      "src": "iop/iopsound/iop_w2a_003778.c",
+      "text_start": "0x003778",
+      "text_end": "0x0037b8",
+      "bytes": 64
     },
     {
       "name": "iop_s1_0037b8",
@@ -89,11 +159,25 @@
       "bytes": 120
     },
     {
+      "name": "iop_w2a_003830",
+      "src": "iop/iopsound/iop_w2a_003830.c",
+      "text_start": "0x003830",
+      "text_end": "0x0038b8",
+      "bytes": 136
+    },
+    {
       "name": "iop_s1_003944",
       "src": "iop/iopsound/iop_s1_003944.c",
       "text_start": "0x003944",
       "text_end": "0x003ae4",
       "bytes": 416
+    },
+    {
+      "name": "iop_w2a_003ae4",
+      "src": "iop/iopsound/iop_w2a_003ae4.c",
+      "text_start": "0x003ae4",
+      "text_end": "0x003b68",
+      "bytes": 132
     },
     {
       "name": "iop_s1_003b68",
@@ -124,6 +208,13 @@
       "bytes": 484
     },
     {
+      "name": "iop_w2a_003fa8",
+      "src": "iop/iopsound/iop_w2a_003fa8.c",
+      "text_start": "0x003fa8",
+      "text_end": "0x00404c",
+      "bytes": 164
+    },
+    {
       "name": "iop_s1_00404c",
       "src": "iop/iopsound/iop_s1_00404c.c",
       "text_start": "0x00404c",
@@ -145,11 +236,32 @@
       "bytes": 288
     },
     {
+      "name": "iop_w2a_0052b0",
+      "src": "iop/iopsound/iop_w2a_0052b0.c",
+      "text_start": "0x0052b0",
+      "text_end": "0x005314",
+      "bytes": 100
+    },
+    {
+      "name": "iop_w2a_005314",
+      "src": "iop/iopsound/iop_w2a_005314.c",
+      "text_start": "0x005314",
+      "text_end": "0x005370",
+      "bytes": 92
+    },
+    {
       "name": "iop_s2_005370",
       "src": "iop/iopsound/iop_s2_005370.c",
       "text_start": "0x005370",
       "text_end": "0x005630",
       "bytes": 704
+    },
+    {
+      "name": "iop_w2a_005630",
+      "src": "iop/iopsound/iop_w2a_005630.c",
+      "text_start": "0x005630",
+      "text_end": "0x0056fc",
+      "bytes": 204
     },
     {
       "name": "iop_s2_0056fc",
@@ -166,6 +278,34 @@
       "bytes": 2424
     },
     {
+      "name": "iop_w2a_006118",
+      "src": "iop/iopsound/iop_w2a_006118.c",
+      "text_start": "0x006118",
+      "text_end": "0x00617c",
+      "bytes": 100
+    },
+    {
+      "name": "iop_w2a_00617c",
+      "src": "iop/iopsound/iop_w2a_00617c.c",
+      "text_start": "0x00617c",
+      "text_end": "0x006530",
+      "bytes": 948
+    },
+    {
+      "name": "iop_w2a_006530",
+      "src": "iop/iopsound/iop_w2a_006530.c",
+      "text_start": "0x006530",
+      "text_end": "0x006954",
+      "bytes": 1060
+    },
+    {
+      "name": "iop_w2b_006954",
+      "src": "iop/iopsound/iop_w2b_006954.c",
+      "text_start": "0x006954",
+      "text_end": "0x006cbc",
+      "bytes": 872
+    },
+    {
       "name": "iop_s2_006cc0",
       "src": "iop/iopsound/iop_s2_006cc0.c",
       "text_start": "0x006cc0",
@@ -180,11 +320,25 @@
       "bytes": 656
     },
     {
+      "name": "iop_w2b_007c30",
+      "src": "iop/iopsound/iop_w2b_007c30.c",
+      "text_start": "0x007c30",
+      "text_end": "0x007d38",
+      "bytes": 264
+    },
+    {
       "name": "iop_s2_007d38",
       "src": "iop/iopsound/iop_s2_007d38.c",
       "text_start": "0x007d38",
       "text_end": "0x007eec",
       "bytes": 436
+    },
+    {
+      "name": "iop_w2b_007eec",
+      "src": "iop/iopsound/iop_w2b_007eec.c",
+      "text_start": "0x007eec",
+      "text_end": "0x007ff8",
+      "bytes": 268
     },
     {
       "name": "iop_s2_007ff8",
@@ -194,6 +348,27 @@
       "bytes": 276
     },
     {
+      "name": "iop_w2b_00810c",
+      "src": "iop/iopsound/iop_w2b_00810c.c",
+      "text_start": "0x00810c",
+      "text_end": "0x008214",
+      "bytes": 264
+    },
+    {
+      "name": "iop_w2b_0086f8",
+      "src": "iop/iopsound/iop_w2b_0086f8.c",
+      "text_start": "0x0086f8",
+      "text_end": "0x008824",
+      "bytes": 300
+    },
+    {
+      "name": "iop_w2b_008d48",
+      "src": "iop/iopsound/iop_w2b_008d48.c",
+      "text_start": "0x008d48",
+      "text_end": "0x008e60",
+      "bytes": 280
+    },
+    {
       "name": "iop_s3_008e60",
       "src": "iop/iopsound/iop_s3_008e60.c",
       "text_start": "0x008e60",
@@ -201,11 +376,25 @@
       "bytes": 744
     },
     {
+      "name": "iop_w2b_009148",
+      "src": "iop/iopsound/iop_w2b_009148.c",
+      "text_start": "0x009148",
+      "text_end": "0x0091e4",
+      "bytes": 156
+    },
+    {
       "name": "iop_s3_0091e4",
       "src": "iop/iopsound/iop_s3_0091e4.c",
       "text_start": "0x0091e4",
       "text_end": "0x009298",
       "bytes": 180
+    },
+    {
+      "name": "iop_w2b_009298",
+      "src": "iop/iopsound/iop_w2b_009298.c",
+      "text_start": "0x009298",
+      "text_end": "0x009324",
+      "bytes": 140
     },
     {
       "name": "iop_s3_009330",
@@ -222,6 +411,13 @@
       "bytes": 2544
     },
     {
+      "name": "iop_w2b_009d50",
+      "src": "iop/iopsound/iop_w2b_009d50.c",
+      "text_start": "0x009d50",
+      "text_end": "0x009edc",
+      "bytes": 396
+    },
+    {
       "name": "iop_s3_009edc",
       "src": "iop/iopsound/iop_s3_009edc.c",
       "text_start": "0x009edc",
@@ -229,11 +425,25 @@
       "bytes": 804
     },
     {
+      "name": "iop_w2b_00a200",
+      "src": "iop/iopsound/iop_w2b_00a200.c",
+      "text_start": "0x00a200",
+      "text_end": "0x00a4b8",
+      "bytes": 696
+    },
+    {
       "name": "iop_s3_00a680",
       "src": "iop/iopsound/iop_s3_00a680.c",
       "text_start": "0x00a680",
       "text_end": "0x00a7a0",
       "bytes": 288
+    },
+    {
+      "name": "iop_w2b_00a7a0",
+      "src": "iop/iopsound/iop_w2b_00a7a0.c",
+      "text_start": "0x00a7a0",
+      "text_end": "0x00aaa8",
+      "bytes": 776
     },
     {
       "name": "iop_s3_00b160",
@@ -250,11 +460,25 @@
       "bytes": 324
     },
     {
+      "name": "iop_w2c_00b5ec",
+      "src": "iop/iopsound/iop_w2c_00b5ec.c",
+      "text_start": "0x00b5ec",
+      "text_end": "0x00b7c8",
+      "bytes": 476
+    },
+    {
       "name": "iop_s3_00b7c8",
       "src": "iop/iopsound/iop_s3_00b7c8.c",
       "text_start": "0x00b7c8",
       "text_end": "0x00b8d4",
       "bytes": 268
+    },
+    {
+      "name": "iop_w2c_00b8d4",
+      "src": "iop/iopsound/iop_w2c_00b8d4.c",
+      "text_start": "0x00b8d4",
+      "text_end": "0x00b9c4",
+      "bytes": 240
     },
     {
       "name": "iop_s3_00b9c4",
@@ -264,11 +488,25 @@
       "bytes": 88
     },
     {
+      "name": "iop_w2c_00ba1c",
+      "src": "iop/iopsound/iop_w2c_00ba1c.c",
+      "text_start": "0x00ba1c",
+      "text_end": "0x00bb10",
+      "bytes": 244
+    },
+    {
       "name": "iop_s3_00bb10",
       "src": "iop/iopsound/iop_s3_00bb10.c",
       "text_start": "0x00bb10",
       "text_end": "0x00c348",
       "bytes": 2104
+    },
+    {
+      "name": "iop_w2c_00c348",
+      "src": "iop/iopsound/iop_w2c_00c348.c",
+      "text_start": "0x00c348",
+      "text_end": "0x00c43c",
+      "bytes": 244
     },
     {
       "name": "iop_s3_00c7a4",
@@ -320,6 +558,20 @@
       "bytes": 732
     },
     {
+      "name": "iop_w2c_00e0a4",
+      "src": "iop/iopsound/iop_w2c_00e0a4.c",
+      "text_start": "0x00e0a4",
+      "text_end": "0x00e260",
+      "bytes": 444
+    },
+    {
+      "name": "iop_w2c_00e260",
+      "src": "iop/iopsound/iop_w2c_00e260.c",
+      "text_start": "0x00e260",
+      "text_end": "0x00e308",
+      "bytes": 168
+    },
+    {
       "name": "iop_s4_00e308",
       "src": "iop/iopsound/iop_s4_00e308.c",
       "text_start": "0x00e308",
@@ -334,11 +586,32 @@
       "bytes": 440
     },
     {
+      "name": "iop_w2c_00e54c",
+      "src": "iop/iopsound/iop_w2c_00e54c.c",
+      "text_start": "0x00e54c",
+      "text_end": "0x00e858",
+      "bytes": 780
+    },
+    {
       "name": "iop_s4_00e858",
       "src": "iop/iopsound/iop_s4_00e858.c",
       "text_start": "0x00e858",
       "text_end": "0x00e9a0",
       "bytes": 328
+    },
+    {
+      "name": "iop_w2c_00e9a0",
+      "src": "iop/iopsound/iop_w2c_00e9a0.c",
+      "text_start": "0x00e9a0",
+      "text_end": "0x00eb80",
+      "bytes": 480
+    },
+    {
+      "name": "iop_w2c_00eb80",
+      "src": "iop/iopsound/iop_w2c_00eb80.c",
+      "text_start": "0x00eb80",
+      "text_end": "0x00ee2c",
+      "bytes": 684
     },
     {
       "name": "iop_s4_00ee2c",
@@ -348,11 +621,25 @@
       "bytes": 52
     },
     {
+      "name": "iop_w2c_00ee60",
+      "src": "iop/iopsound/iop_w2c_00ee60.c",
+      "text_start": "0x00ee60",
+      "text_end": "0x00efa8",
+      "bytes": 328
+    },
+    {
       "name": "iop_s4_00f038",
       "src": "iop/iopsound/iop_s4_00f038.c",
       "text_start": "0x00f038",
       "text_end": "0x00f188",
       "bytes": 336
+    },
+    {
+      "name": "iop_w2c_00f2a0",
+      "src": "iop/iopsound/iop_w2c_00f2a0.c",
+      "text_start": "0x00f2a0",
+      "text_end": "0x00f34c",
+      "bytes": 172
     },
     {
       "name": "iop_s4_00f34c",
@@ -381,6 +668,13 @@
       "text_start": "0x00fa24",
       "text_end": "0x00fbd0",
       "bytes": 428
+    },
+    {
+      "name": "iop_w2c_00fc2c",
+      "src": "iop/iopsound/iop_w2c_00fc2c.c",
+      "text_start": "0x00fc2c",
+      "text_end": "0x00fd60",
+      "bytes": 308
     },
     {
       "name": "iop_s4_00fd60",
@@ -418,6 +712,13 @@
       "bytes": 56
     },
     {
+      "name": "iop_w2d_00ffcc",
+      "src": "iop/iopsound/iop_w2d_00ffcc.c",
+      "text_start": "0x00ffcc",
+      "text_end": "0x010028",
+      "bytes": 92
+    },
+    {
       "name": "iop_s4_010028",
       "src": "iop/iopsound/iop_s4_010028.c",
       "text_start": "0x010028",
@@ -446,11 +747,25 @@
       "bytes": 292
     },
     {
+      "name": "iop_w2d_0108f0",
+      "src": "iop/iopsound/iop_w2d_0108f0.c",
+      "text_start": "0x0108f0",
+      "text_end": "0x01097c",
+      "bytes": 140
+    },
+    {
       "name": "iop_s4_010a58",
       "src": "iop/iopsound/iop_s4_010a58.c",
       "text_start": "0x010a58",
       "text_end": "0x010af4",
       "bytes": 156
+    },
+    {
+      "name": "iop_w2d_010af4",
+      "src": "iop/iopsound/iop_w2d_010af4.c",
+      "text_start": "0x010af4",
+      "text_end": "0x010e94",
+      "bytes": 928
     },
     {
       "name": "iop_s4_010e94",
@@ -467,6 +782,13 @@
       "bytes": 200
     },
     {
+      "name": "iop_w2d_0110ac",
+      "src": "iop/iopsound/iop_w2d_0110ac.c",
+      "text_start": "0x0110ac",
+      "text_end": "0x0110f4",
+      "bytes": 72
+    },
+    {
       "name": "iop_s4_011128",
       "src": "iop/iopsound/iop_s4_011128.c",
       "text_start": "0x011128",
@@ -479,6 +801,20 @@
       "text_start": "0x0111f4",
       "text_end": "0x011594",
       "bytes": 928
+    },
+    {
+      "name": "iop_w2d_011594",
+      "src": "iop/iopsound/iop_w2d_011594.c",
+      "text_start": "0x011594",
+      "text_end": "0x0117d4",
+      "bytes": 576
+    },
+    {
+      "name": "iop_w2d_0117d4",
+      "src": "iop/iopsound/iop_w2d_0117d4.c",
+      "text_start": "0x0117d4",
+      "text_end": "0x011a40",
+      "bytes": 620
     },
     {
       "name": "iop_s5_011a40",
@@ -509,6 +845,13 @@
       "bytes": 464
     },
     {
+      "name": "iop_w2d_012a08",
+      "src": "iop/iopsound/iop_w2d_012a08.c",
+      "text_start": "0x012a08",
+      "text_end": "0x012a7c",
+      "bytes": 116
+    },
+    {
       "name": "iop_s5_012b14",
       "src": "iop/iopsound/iop_s5_012b14.c",
       "text_start": "0x012b14",
@@ -521,6 +864,13 @@
       "text_start": "0x012fb8",
       "text_end": "0x013900",
       "bytes": 2376
+    },
+    {
+      "name": "iop_w2d_013900",
+      "src": "iop/iopsound/iop_w2d_013900.c",
+      "text_start": "0x013900",
+      "text_end": "0x013b80",
+      "bytes": 640
     },
     {
       "name": "iop_s5_013b80",
@@ -558,6 +908,13 @@
       "bytes": 532
     },
     {
+      "name": "iop_w2d_014cc8",
+      "src": "iop/iopsound/iop_w2d_014cc8.c",
+      "text_start": "0x014cc8",
+      "text_end": "0x014e90",
+      "bytes": 456
+    },
+    {
       "name": "iop_s5_014e90",
       "src": "iop/iopsound/iop_s5_014e90.c",
       "text_start": "0x014e90",
@@ -565,11 +922,25 @@
       "bytes": 1724
     },
     {
+      "name": "iop_w2d_01554c",
+      "src": "iop/iopsound/iop_w2d_01554c.c",
+      "text_start": "0x01554c",
+      "text_end": "0x0157c8",
+      "bytes": 636
+    },
+    {
       "name": "iop_s5_0157c8",
       "src": "iop/iopsound/iop_s5_0157c8.c",
       "text_start": "0x0157c8",
       "text_end": "0x015b20",
       "bytes": 856
+    },
+    {
+      "name": "iop_w2d_015b20",
+      "src": "iop/iopsound/iop_w2d_015b20.c",
+      "text_start": "0x015b20",
+      "text_end": "0x015c94",
+      "bytes": 372
     },
     {
       "name": "iop_015c94",
