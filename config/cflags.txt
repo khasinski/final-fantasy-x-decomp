@@ -30,7 +30,7 @@ game/menu/tk/tk_232C88 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/main/sg_11A538 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/op/opus_294CD8 -Btools/cc/ee-as-delay/ -Wa,-mips4
 game/yi/yi_171EF0 -Btools/cc/ee-as-delay/ -Wa,-mips4
-game/chr/tex_anim_old -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/chr/tex_anim_old -Btools/cc/ee-as-delay/
 game/chr/chr_10EA50 -Btools/cc/ee-as-delay/ -Wa,-mips4
 
 # This assembly-origin unit uses 4-byte function alignment.
@@ -53,8 +53,9 @@ game/chr/tex_anim -fno-strict-aliasing
 game/menu/to/to_203FC0 -Btools/cc/ee-as-delay/ -Wa,-mips4
 
 game/menu/to/to_20C040 -fno-strict-aliasing
-# Assemble compiler-emitted float conversions in branch delay slots (func_0017DF98, func_0017F790).
+# Assemble compiler-emitted float conversions in branch delay slots (func_0017DF98, func_0017F790, func_00188450).
 game/yi/yiimage_17DC98 -Btools/cc/ee-as-delay/ -Wa,-mips4
+game/yi/yi_187260 -Btools/cc/ee-as-delay/
 # Units compiled with -Wa,-G4 for .lit4 float literals.
 game/chr/chr -Wa,-G4
 game/chr/ch_110158 -Wa,-G4

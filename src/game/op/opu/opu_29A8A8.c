@@ -59,7 +59,365 @@ void opu_test_data_read(void)
     }
 }
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_29A8A8", opu_debug_check);
+void func_206A6B0(void);
+void func_2069D88(void);
+void op_oef2_tex_clut_ovl_clear(u32 mask);
+void func_002B22F8(s32, s32);
+int func_0029B560(void);
+Chr *opd_target_handle_by_index();
+void opd_camera_change(int a);
+double func_002E9290(double a);
+double func_002ED038(float a);
+double func_002E8278(double a);
+double func_002E7B28(double a);
+extern u32 D_00551CBC;
+extern float D_0054B7D0;
+extern float D_0054B7D4;
+extern s32 D_0054B7D8;
+extern R6Vec3 D_0054B780;
+extern R6Vec3 D_0054B790;
+
+typedef struct {
+    u8 b0;
+    s8 b1;
+    u8 pad2[4];
+    s16 h6;
+    u16 h8;
+    u16 hA;
+    u8 bC;
+    u8 padD;
+    s8 bE;
+    u8 padF;
+    s8 b10;
+    u8 pad11[4];
+    s8 b15;
+    u8 pad16[2];
+    s32 w18;
+    u8 pad1C[0x18];
+    s32 w34;
+    u8 pad38[6];
+    s8 b3E;
+    s8 b3F;
+    s32 w40;
+    u8 pad44;
+    s8 b45;
+} OpDbg;
+#define DBG (*(OpDbg *)&D_00764990)
+
+void opu_debug_check(void)
+{
+    u8 *hw = (u8 *)&D_2008250;
+    u32 *pad;
+    s32 flag;
+    s32 reload;
+    s32 mode;
+    R6Obj *obj0;
+    R6Obj *obj1;
+    u32 p2;
+    u32 p3;
+    s32 i;
+    s16 speed;
+    s32 pause_and;
+
+    if (DBG.b10 == 0) {
+        return;
+    }
+
+    flag = 0;
+    pad = &D_00551CBC;
+    if ((pad[0] & 0x8) && (pad[2] & 0x2) && *(s8 *)(hw + 0x8) != 0) {
+        if (DBG.b3F != 0) {
+            DBG.b3F = 0;
+            func_00124690(1);
+        } else {
+            DBG.b3F = 1;
+            func_00124690(0);
+        }
+    }
+
+    if (DBG.b3F == 0) {
+        return;
+    }
+
+    if (pad[0] & 0x20 && pad[2] & 0x40) {
+        func_206A6B0();
+        goto tail;
+    }
+
+    mode = 0;
+    reload = 0;
+    if (*(u16 *)(hw + 0x40) & 0x10) {
+        mode = 1;
+    }
+    obj0 = D_0054D5E8[0];
+    obj1 = D_0054D5E8[1];
+    if (obj0 == 0) {
+        return;
+    }
+
+    if (!(pad[0] & 0x30)) {
+        if (pad[0] & 0x800) {
+            if (pad[2] & 0x100) {
+                obj0->vt50->f50(0);
+                if (obj1 != 0) {
+                    obj1->vt50->f50(0);
+                }
+                ((void (*)(int))opu_test_data_read)(mode);
+                if (*(s8 *)(hw + 0x4) != 0) {
+                    reload = 1;
+                }
+                goto do_reload;
+            }
+        } else if (pad[2] & 0x100) {
+            reload = 1;
+do_reload:
+            func_206C380();
+            flag = 1;
+            ((void (*)(R6Obj *))func_0029B808)(obj0);
+            func_2069D88();
+            op_oef2_tex_clut_ovl_clear(0xFFFFFFFFU);
+            if (*(u16 *)(hw + 0x40) & 0x10) {
+                func_002B22F8(0x3400, 0x800);
+            }
+            DBG.b0 = 0;
+            DBG.b1 = 0;
+            DBG.hA = 0;
+            DBG.w40 = 0;
+            {
+                u8 *cs = (u8 *)owu_chr_status;
+                for (i = 0; i < 0xF0; i++, cs += 0x20) {
+                    cs[0x14] = 0xFF;
+                    cs[0x15] = 0xFF;
+                }
+            }
+            {
+                int h0 = *(int *)&D_00703E20;
+                opu_et_init();
+                obj0 = D_0054D5E8[0];
+                *(void **)((u8 *)obj0 + 0x50) = D_003737A0;
+                op_et_battle_init(h0);
+                func_00297578(*(int *)((u8 *)&D_00703E20 + 8));
+            }
+            if (!(*(u16 *)(hw + 0x40) & 0xFE) && (*(u16 *)(hw + 0x40) & 0x1) && reload != 0) {
+                ((void (*)(int, int, int, int))opu_et_unit)(*(int *)&D_00703E20, 0, *(int *)(hw + 0xB0), -2);
+            }
+            if ((*(u16 *)(hw + 0x40) & 0x20) && reload != 0 && *(int *)(hw + 0xBC) != 0) {
+                ((void (*)(int, int, int, int))opu_et_unit)(*(int *)(hw + 0x98), 0, *(int *)(hw + 0xBC), -3);
+            }
+            if (*(u16 *)(hw + 0x40) & 0x2) {
+                op_et_monster_init(0, -1);
+                if (reload != 0 && *(int *)(hw + 0xB4) != 0) {
+                    ((void (*)(int, int, int, int))opu_et_unit)(*(int *)(hw + 0x88), 0, *(int *)(hw + 0xB4), -3);
+                }
+            }
+            if (*(u16 *)(hw + 0x40) & 0x4) {
+                op_et_weapon_init(*(int *)(hw + 0x90), 0);
+                if (reload != 0 && *(int *)(hw + 0xB8) != 0) {
+                    ((void (*)(int, int, int, int))opu_et_unit)(*(int *)(hw + 0x90), 0, *(int *)(hw + 0xB8), -3);
+                }
+            }
+            if (obj1 != 0) {
+                int (**vt)(int) = (int (**)(int))obj1->vt50;
+                void (**vt2)(int) = (void (**)(int))(vt + 16);
+                s8 saved = DBG.b15;
+                DBG.b15 = 0;
+                vt2[3](0);
+                vt[0](DBG.w34);
+                ((int (*)(int))vt2[7])(0);
+                DBG.b15 = saved;
+            }
+            goto tail;
+        }
+
+        if (obj1 != 0) {
+            obj0 = obj1;
+        }
+        if (pad[2] & 0x800) {
+            flag = 1;
+            DBG.b0 = ~DBG.b0;
+        }
+        if ((s8)DBG.b0 == 0) {
+            DBG.b1 = 0;
+            p3 = pad[3];
+        } else {
+            p3 = pad[3];
+            DBG.b1 = -1;
+            if (p3 & 0x80) {
+                DBG.b1 = 0;
+            }
+        }
+        {
+            s16 idx = DBG.h6;
+            if (p3 & 0x1) {
+                idx--;
+                if (idx < 0) {
+                    idx = *(u16 *)((u8 *)obj0 + 0x38) - 1;
+                }
+            }
+            if (p3 & 0x2) {
+                idx++;
+                if (idx >= *(u16 *)((u8 *)obj0 + 0x38)) {
+                    idx = 0;
+                }
+            }
+            DBG.h6 = idx;
+        }
+    }
+
+    if (obj1 != 0) {
+        obj0 = obj1;
+    }
+    if (pad[0] & 0x10) {
+        p2 = pad[2];
+        if (p2 & 0x80) {
+            DBG.bC = ~DBG.bC;
+        }
+        if (p2 & 0x20) {
+            DBG.h8 = (DBG.h8 + 1) & 1;
+        }
+        if (p2 & 0x40) {
+            DBG.bE = ~(u8)DBG.bE;
+            opd_camera_change(DBG.bE);
+        }
+    }
+
+    {
+        s16 bank = (s16)DBG.h8;
+        s16 idx = DBG.h6;
+        s16 *tbl = *(s16 **)((u8 *)obj0 + (bank << 2) + 0x10);
+        s16 slot = tbl[idx];
+        if (slot >= 0) {
+            u8 *sub = *(u8 **)((u8 *)obj0 + 0x20) + (slot << 8);
+            if (pad[0] & 0x20) {
+                p3 = pad[3];
+                if (p3 & 0x8000) *(float *)(sub + 0x40) -= 8.0f;
+                if (p3 & 0x2000) *(float *)(sub + 0x40) += 8.0f;
+                if (p3 & 0x1000) *(float *)(sub + 0x44) -= 8.0f;
+                if (p3 & 0x4000) *(float *)(sub + 0x44) += 8.0f;
+                if (p3 & 0x0004) *(float *)(sub + 0x48) -= 8.0f;
+                if (p3 & 0x0008) *(float *)(sub + 0x48) += 8.0f;
+                if (p3 & 0x0001) *(float *)(sub + 0x4C) -= 8.0f;
+                if (p3 & 0x0002) *(float *)(sub + 0x4C) += 8.0f;
+            }
+            if (pad[0] & 0x10) {
+                if (pad[3] & 0x8000) *(float *)(sub + 0x30) -= 16.0f;
+                if (pad[3] & 0x2000) *(float *)(sub + 0x30) += 16.0f;
+                if (pad[3] & 0x1000) *(float *)(sub + 0x34) -= 16.0f;
+                if (pad[3] & 0x4000) *(float *)(sub + 0x34) += 16.0f;
+                if (pad[3] & 0x0004) *(float *)(sub + 0x38) -= 16.0f;
+                if (pad[3] & 0x0008) *(float *)(sub + 0x38) += 16.0f;
+                if (pad[3] & 0x0001) *(float *)(sub + 0x3C) -= 16.0f;
+                if (pad[3] & 0x0002) *(float *)(sub + 0x3C) += 16.0f;
+            }
+        }
+    }
+
+    if (DBG.w18 != 0) {
+        if (!(pad[0] & 0x10)) {
+            if (!(pad[0] & 0x20)) {
+                float step = 1.0f;
+                s32 astep = 0x10;
+                float angle;
+
+                if (pad[0] & 0x40) {
+                    step = 8.0f;
+                    astep = 0x80;
+                }
+                if (pad[0] & 0x80) {
+                    if (pad[0] & 0x8000) D_0054B7C0.x -= step;
+                    if (pad[0] & 0x2000) D_0054B7C0.x += step;
+                    if (pad[0] & 0x1000) D_0054B7C0.y -= step;
+                    if (pad[0] & 0x4000) D_0054B7C0.y += step;
+                    if (pad[0] & 0x0004) D_0054B7C0.z -= step;
+                    if (pad[0] & 0x0008) D_0054B7C0.z += step;
+                } else {
+                    if (pad[0] & 0x8000) D_0054B7D0 -= step;
+                    if (pad[0] & 0x2000) D_0054B7D0 += step;
+                    if (pad[0] & 0x1000) D_0054B7D4 -= step;
+                    if (pad[0] & 0x4000) D_0054B7D4 += step;
+                    if (pad[0] & 0x0004) D_0054B7D8 -= astep;
+                    if (pad[0] & 0x0008) D_0054B7D8 += astep;
+                }
+                if (pad[0] & 0x80) {
+                    if (pad[3] & 0x2) {
+                        DBG.b3E += 1;
+                        goto do_tgt;
+                    }
+                    if (pad[3] & 0x1) {
+                        float dx, dz;
+                        DBG.b3E += 1;
+do_tgt:
+                        i = func_0029B560();
+                        if (DBG.b3E < 0) {
+                            DBG.b3E = i - 1;
+                        }
+                        if (DBG.b3E >= i) {
+                            DBG.b3E = 0;
+                        }
+                        i = (s32)opd_target_handle_by_index(DBG.b3E);
+                        if (i != 0) {
+                            float pos[4];
+                            Ch_OptposGet(i, 0, (int)pos);
+                            func_002B5978(&D_0054B7C0.x, pos, 1.0f);
+                            DBG.b45 = ((u16 (*)(int))func_0029B680)(DBG.b3E);
+                        }
+                        angle = D_0054B7C0.y;
+                        angle -= D_0054B780.y;
+                        {
+                            float bx = D_0054B780.x;
+                            dx = D_0054B7C0.x;
+                            dx -= bx;
+                        }
+                        dz = D_0054B7C0.z - D_0054B780.z;
+                        angle = angle * angle;
+                        dx = dx * dx;
+                        {
+                            float t = dx + angle;
+                            angle = t;
+                        }
+                        angle += dz * dz;
+                        (void)func_002ED038(angle);
+                        dx = (float)func_002E9290((double)angle);
+                        if (dx >= (float)*(s16 *)(hw + 0x44)) {
+                            dx = (float)*(s16 *)(hw + 0x44);
+                        }
+                        D_0054B7D0 = dx;
+                    }
+                }
+                angle = 3.141592f;
+                angle = (float)D_0054B7D8 * angle;
+                angle /= 2048.0f;
+                D_0054B780.z = (float)(func_002E8278((double)angle) * (double)D_0054B7D0 + (double)D_0054B7C0.z);
+                D_0054B780.y = D_0054B7D4;
+                D_0054B780.x = (float)(func_002E7B28((double)angle) * (double)D_0054B7D0 + (double)D_0054B7C0.x);
+                D_0054B790.x = D_0054B7C0.x - D_0054B780.x;
+                D_0054B790.y = D_0054B7C0.y - D_0054B780.y;
+                D_0054B790.z = D_0054B7C0.z - D_0054B780.z;
+                MsCameraSetRect(DBG.w18, 1, (void *)&D_0054B780);
+                MsCameraSetRect(DBG.w18, 0, (void *)&D_0054B7C0);
+            }
+        }
+    }
+
+tail:
+    pause_and = (s8)(DBG.b0 & (u8)DBG.b1);
+    if (pause_and == 0) {
+        DBG.hA += 1;
+        DBG.w40 += 1;
+    }
+    speed = 0x100;
+    if (pause_and != 0) {
+        speed = 0;
+    }
+    if ((s8)DBG.b0 != 0 || flag != 0) {
+        for (i = 0; i < 0xF0; i++) {
+            if (owu_chr_hd[i] != 0) {
+                Ch_SetMotionSpeed(owu_chr_hd[i], speed);
+            }
+        }
+    }
+}
+#undef DBG
 
 int func_0029B560(void) {
     int ofs = MsBattleGetStatus() ? 0 : 0x20;
