@@ -98,5 +98,16 @@
       "func_01B07EE0": "0x01B07EE0",
       "func_01B07FE0": "0x01B07FE0"
     }
+  },
+  {
+    "src": "ovl_09335_5b40.c",
+    "containers": [9335],
+    "text_start": "0x01B05B40",
+    "text_end": "0x01B05E50",
+    "discovered_code_bytes": 784,
+    "functions": 1,
+    "syms": {
+      "func_01B05E50": "0x01B05E50"
+    }
   }
 ]
