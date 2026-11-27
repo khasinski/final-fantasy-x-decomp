@@ -155,5 +155,24 @@
     "cflags": [
       "-O2"
     ]
+  },
+  {
+    "src": "ovl_09228_0800.c",
+    "containers": [
+      9228
+    ],
+    "text_start": "0x01B00800",
+    "text_end": "0x01B008CC",
+    "functions": 1,
+    "discovered_code_bytes": 204,
+    "syms": {
+      "D_01B01944": "0x01B01944",
+      "D_01B01948": "0x01B01948",
+      "D_01B0194C": "0x01B0194C",
+      "D_01B01950": "0x01B01950"
+    },
+    "cflags": [
+      "-O2"
+    ]
   }
 ]

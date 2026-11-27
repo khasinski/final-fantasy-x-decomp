@@ -116,5 +116,18 @@
       "D_01B02640": "0x01B02640",
       "func_01B08F38": "0x01B08F38"
     }
+  },
+  {
+    "src": "ovl_09645_81a0.c",
+    "containers": [
+      9645
+    ],
+    "text_start": "0x01B081A0",
+    "text_end": "0x01B08208",
+    "discovered_code_bytes": 104,
+    "functions": 1,
+    "syms": {
+      "D_01B05CB0": "0x01B05CB0"
+    }
   }
 ]

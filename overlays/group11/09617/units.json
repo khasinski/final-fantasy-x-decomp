@@ -36,5 +36,14 @@
       "func_01B0AA58": "0x01B0AA58",
       "func_01B05808": "0x01B05808"
     }
+  },
+  {
+    "src": "ovl_09617_4698.c",
+    "containers": [9617],
+    "text_start": "0x01B04698",
+    "text_end": "0x01B046B8",
+    "discovered_code_bytes": 32,
+    "functions": 1,
+    "syms": {}
   }
 ]

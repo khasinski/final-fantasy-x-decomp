@@ -2661,5 +2661,30 @@
       "-g",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09473_08b8.c",
+    "containers": [
+      9473
+    ],
+    "text_start": "0x01B008B8",
+    "text_end": "0x01B00A18",
+    "rodata_start": "0x01B01660",
+    "functions": 1,
+    "discovered_code_bytes": 352,
+    "syms": {
+      "D_01B006A4": "0x01B006A4",
+      "D_01B006AC": "0x01B006AC",
+      "D_01B006B0": "0x01B006B0",
+      "D_01B00760": "0x01B00760",
+      "litodp": "0x002EC1E8",
+      "dpcmp": "0x002EC198"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]

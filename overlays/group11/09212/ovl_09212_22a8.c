@@ -1,0 +1,58 @@
+#include "common.h"
+
+extern u8 *D_01B0A8E8;
+
+void func_00118098(int a0, int a1);
+void func_01B09B68(void *a0, int a1);
+void func_01B0A2F8(void *a0, int a1, int a2);
+
+void func_01B022A8(void)
+{
+    u8 *s0;
+    u8 *a2;
+
+    func_00118098(0, 0x10000);
+    func_00118098(1, 0x20000);
+    s0 = D_01B0A8E8;
+    a2 = s0 + 0xB00;
+    a2[0x80] = 0xFF;
+    a2[0x81] = 0xFF;
+    a2[0x82] = 0xFF;
+    a2[0x83] = 0;
+    a2[0x84] = 0xFF;
+    a2[0x85] = 0xFF;
+    a2[0x86] = 0xFF;
+    a2[0x87] = 0x80;
+    a2[0x98] = 0x48;
+    *(int *)(a2 + 0x88) = 0x5A;
+    a2[0x99] = 0;
+    func_01B09B68(a2, 0x14);
+    a2 = s0 + 0xBA0;
+    a2[0x80] = 0xFF;
+    a2[0x81] = 0xFF;
+    a2[0x82] = 0xFF;
+    a2[0x83] = 0x80;
+    a2[0x84] = 0xFF;
+    a2[0x85] = 0xFF;
+    a2[0x86] = 0xFF;
+    a2[0x87] = 0;
+    a2[0x98] = 0x48;
+    *(int *)(a2 + 0x88) = 0x6E;
+    a2[0x99] = 0;
+    func_01B09B68(a2, 0x28);
+    {
+        u8 *p = s0 + 0xD80;
+        p[0xF0] = 0x80;
+        p[0xF1] = 0x80;
+        p[0xF2] = 0x80;
+        p[0xF3] = 0x50;
+        *(s16 *)(p + 0x124) = 2;
+        *(int *)(p + 0x120) = 0x80;
+        *(float *)(p + 0xF8) = 0.01f;
+        *(float *)(p + 0xFC) = 0.04f;
+        *(float *)(p + 0x100) = 0.02f;
+        *(int *)(p + 0x11C) = 0;
+        *(int *)(p + 0x110) = 0;
+        func_01B0A2F8(p, 0x6E, 0x80);
+    }
+}

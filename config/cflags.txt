@@ -63,7 +63,8 @@ game/main/sg_106440 -Wa,-G4
 game/main/sg_1194E0 -Wa,-G4
 game/main/sg_11E2C8 -Wa,-G4
 game/main/sg_1201B0 -Wa,-G4
-game/yi/yi_18B680 -Btools/cc/ee-as-delay/
-game/menu/menu_201760 -Btools/cc/ee-as-delay/
-game/atel/atel_12F740 -Btools/cc/ee-as-delay/
-game/menu/to/to_218A78 -Btools/cc/ee-as-delay/
+# Period EE assembler with R5900 no-mtc1-nop + INSN_SYNC delay-slot fix (keeps c.lt.s/bc1* nop).
+game/yi/yi_18B680 -Btools/cc/ee-as-delay-r5900/
+game/menu/menu_201760 -Btools/cc/ee-as-delay-r5900/
+game/atel/atel_12F740 -Btools/cc/ee-as-delay-r5900/
+game/menu/to/to_218A78 -Btools/cc/ee-as-delay-r5900/

@@ -26,5 +26,35 @@
       "func_01B06498": "0x01B06498",
       "func_01B0EB28": "0x01B0EB28"
     }
+  },
+  {
+    "src": "ovl_09537_57d8.c",
+    "containers": [
+      9537
+    ],
+    "text_start": "0x01B057D8",
+    "text_end": "0x01B05C58",
+    "functions": 1,
+    "discovered_code_bytes": 1152,
+    "syms": {
+      "g_378": "0x01B00378",
+      "g_38c": "0x01B0038C",
+      "g_510": "0x01B00510",
+      "g_540": "0x01B00540",
+      "g_768": "0x01B00768",
+      "g_788": "0x01B00788",
+      "g_fe70": "0x01B0FE70",
+      "g_fe9c": "0x01B0FE9C",
+      "func_01B0A7E8": "0x01B0A7E8",
+      "func_01B0A838": "0x01B0A838",
+      "func_01B0A930": "0x01B0A930",
+      "func_01B0B970": "0x01B0B970",
+      "func_01B0B9C0": "0x01B0B9C0",
+      "func_01B0BA68": "0x01B0BA68",
+      "func_01B0D2B0": "0x01B0D2B0",
+      "func_01B0D3B8": "0x01B0D3B8",
+      "func_01B0DAD0": "0x01B0DAD0",
+      "func_01B0EB28": "0x01B0EB28"
+    }
   }
 ]

@@ -16,10 +16,7 @@ with tarfile.open(archive) as tar:
 source=source/'gnu-ee-binutils-gcc'
 p=source/'gas/config/tc-mips.c';text=p.read_text()
 assert text.count('prev_pinfo && INSN_SYNC')==1
-text=text.replace('prev_pinfo && INSN_SYNC','prev_pinfo & INSN_SYNC')
-assert text.count('if (nops > 0 && ! mips_opts.noreorder)')==1
-text=text.replace('if (nops > 0 && ! mips_opts.noreorder)','if (nops > 0 && ! mips_opts.noreorder && mips_cpu != 5900)')
-p.write_text(text)
+p.write_text(text.replace('prev_pinfo && INSN_SYNC','prev_pinfo & INSN_SYNC'))
 build=work/'build';build.mkdir(exist_ok=True)
 env=dict(os.environ,CC='gcc -m32 -fcommon')
 subprocess.run([str(source/'configure'),'--host=i686-pc-linux-gnu','--target=mips64r5900-scei-elf','--disable-nls'],cwd=build,env=env,check=True)

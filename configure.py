@@ -141,6 +141,8 @@ for c in sorted(glob.glob("src/**/*.c", recursive=True)):
         deps += glob.glob(f"{folder}/**/*.s", recursive=True)
     if "-Btools/cc/ee-as-delay/" in EXTRA.get(stem, ""):
         deps.append("tools/cc/ee-as-delay/as")
+    if "-Btools/cc/ee-as-delay-r5900/" in EXTRA.get(stem, ""):
+        deps.append("tools/cc/ee-as-delay-r5900/as")
     n.build(o, "cc", c, implicit=deps + ["config/cflags.txt", "tools/ccwrap.py"] + (["config/c_rodata.json"] if C_RODATA else []), variables={"extra": EXTRA.get(stem, "")}); objs.append(o)
 VU1_SRCS = ["vu/vu1_prog1.vsm", "vu/vu1_prog2.vsm"]
 HAS_VU1_SRC = all(os.path.exists(p) for p in VU1_SRCS)

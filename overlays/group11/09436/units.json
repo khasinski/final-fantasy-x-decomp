@@ -1,0 +1,101 @@
+[
+  {
+    "src": "ovl_09436_1150.c",
+    "containers": [9436],
+    "text_start": "0x01B01150",
+    "text_end": "0x01B0115C",
+    "discovered_code_bytes": 12,
+    "functions": 1,
+    "syms": {
+      "func_01B03E98": "0x01B03E98"
+    }
+  },
+  {
+    "src": "ovl_09436_18c8.c",
+    "containers": [9436],
+    "text_start": "0x01B018C8",
+    "text_end": "0x01B01994",
+    "discovered_code_bytes": 204,
+    "functions": 1,
+    "syms": {
+      "func_01B02AA8": "0x01B02AA8"
+    }
+  },
+  {
+    "src": "ovl_09436_1c48.c",
+    "containers": [9436],
+    "text_start": "0x01B01C48",
+    "text_end": "0x01B01C9C",
+    "discovered_code_bytes": 84,
+    "functions": 1,
+    "syms": {
+      "D_01B09358": "0x01B09358",
+      "func_01B08BF8": "0x01B08BF8"
+    }
+  },
+  {
+    "src": "ovl_09436_0ec8.c",
+    "containers": [9436],
+    "text_start": "0x01B00EC8",
+    "text_end": "0x01B00FC4",
+    "discovered_code_bytes": 252,
+    "functions": 1,
+    "syms": {
+      "D_01B00040": "0x01B00040",
+      "D_01B007A0": "0x01B007A0",
+      "D_01B00FC8": "0x01B00FC8",
+      "D_01B01078": "0x01B01078",
+      "D_01B09290": "0x01B09290",
+      "D_01B092D0": "0x01B092D0",
+      "D_01B092D4": "0x01B092D4",
+      "D_01B092D8": "0x01B092D8",
+      "D_01B09358": "0x01B09358",
+      "D_01B0935C": "0x01B0935C",
+      "D_01B10360": "0x01B10360",
+      "D_01BD9FC0": "0x01BD9FC0",
+      "func_01B010E0": "0x01B010E0",
+      "func_01B04A58": "0x01B04A58",
+      "func_01B051E8": "0x01B051E8",
+      "func_01B053B0": "0x01B053B0",
+      "func_01B05470": "0x01B05470",
+      "func_01B08AD8": "0x01B08AD8"
+    }
+  },
+  {
+    "src": "ovl_09436_0fc8.c",
+    "containers": [9436],
+    "text_start": "0x01B01078",
+    "text_end": "0x01B01150",
+    "discovered_code_bytes": 212,
+    "functions": 2,
+    "syms": {
+      "D_01B09288": "0x01B09288",
+      "D_01B09290": "0x01B09290",
+      "D_01B092D4": "0x01B092D4",
+      "D_01B0934C": "0x01B0934C",
+      "D_01B09358": "0x01B09358",
+      "func_01B029D8": "0x01B029D8",
+      "func_01B03F38": "0x01B03F38",
+      "func_01B05628": "0x01B05628"
+    }
+  },
+  {
+    "src": "ovl_09436_15a0.c",
+    "containers": [9436],
+    "text_start": "0x01B015A0",
+    "text_end": "0x01B0179C",
+    "discovered_code_bytes": 508,
+    "functions": 3,
+    "syms": {
+      "D_01B00898": "0x01B00898",
+      "D_01B09290": "0x01B09290",
+      "D_01B09338": "0x01B09338",
+      "D_01B09358": "0x01B09358",
+      "func_01B02A70": "0x01B02A70",
+      "func_01B03E98": "0x01B03E98",
+      "func_01B04418": "0x01B04418",
+      "func_01B04610": "0x01B04610",
+      "func_01B05548": "0x01B05548"
+    }
+  }
+]

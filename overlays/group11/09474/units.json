@@ -71,5 +71,170 @@
     },
     "text_end": "0x01B02F04",
     "text_start": "0x01B02E50"
+  },
+  {
+    "src": "ovl_09474_1ec0.c",
+    "containers": [9474],
+    "text_start": "0x01B01EC0",
+    "text_end": "0x01B01F24",
+    "discovered_code_bytes": 100,
+    "functions": 1,
+    "syms": {
+      "D_01B0A2F0": "0x01B0A2F0",
+      "D_01B0A2F8": "0x01B0A2F8",
+      "D_01B0A33C": "0x01B0A33C",
+      "D_01B0A480": "0x01B0A480",
+      "func_01B061B0": "0x01B061B0"
+    }
+  },
+  {
+    "src": "ovl_09474_20f0.c",
+    "containers": [9474],
+    "text_start": "0x01B020F0",
+    "text_end": "0x01B02160",
+    "discovered_code_bytes": 112,
+    "functions": 1,
+    "syms": {
+      "D_01B0A480": "0x01B0A480",
+      "func_01B07B08": "0x01B07B08",
+      "func_01B07E38": "0x01B07E38"
+    }
+  },
+  {
+    "src": "ovl_09474_2220.c",
+    "containers": [9474],
+    "text_start": "0x01B02220",
+    "text_end": "0x01B0227C",
+    "discovered_code_bytes": 92,
+    "functions": 2,
+    "syms": {
+      "D_01B00EA8": "0x01B00EA8",
+      "func_01B044E8": "0x01B044E8",
+      "func_01B04D48": "0x01B04D48",
+      "func_01B04DB8": "0x01B04DB8"
+    }
+  },
+  {
+    "src": "ovl_09474_22d8.c",
+    "containers": [9474],
+    "text_start": "0x01B022D8",
+    "text_end": "0x01B02310",
+    "discovered_code_bytes": 56,
+    "functions": 1,
+    "syms": {
+      "func_01B03630": "0x01B03630"
+    }
+  },
+  {
+    "src": "ovl_09474_2f08.c",
+    "containers": [9474],
+    "text_start": "0x01B02F08",
+    "text_end": "0x01B03094",
+    "discovered_code_bytes": 392,
+    "functions": 3,
+    "syms": {
+      "D_01B0A2F8": "0x01B0A2F8",
+      "D_01B0A480": "0x01B0A480",
+      "func_01B05D70": "0x01B05D70",
+      "func_01B05DF0": "0x01B05DF0",
+      "func_01B05F38": "0x01B05F38",
+      "func_01B060D0": "0x01B060D0",
+      "func_01B0A260": "0x01B0A260"
+    }
+  },
+  {
+    "src": "ovl_09474_31e8.c",
+    "containers": [9474],
+    "text_start": "0x01B031E8",
+    "text_end": "0x01B032B0",
+    "discovered_code_bytes": 196,
+    "functions": 2,
+    "syms": {
+      "D_01B0A480": "0x01B0A480",
+      "func_01B035F8": "0x01B035F8",
+      "func_01B06F08": "0x01B06F08"
+    }
+  },
+  {
+    "src": "ovl_09474_11b0.c",
+    "containers": [9474],
+    "text_start": "0x01B011B0",
+    "text_end": "0x01B01278",
+    "discovered_code_bytes": 200,
+    "functions": 1,
+    "syms": {
+      "D_01B0A2F0": "0x01B0A2F0",
+      "D_01B0A2F4": "0x01B0A2F4",
+      "D_01B0FA30": "0x01B0FA30",
+      "D_01BDDF90": "0x01BDDF90",
+      "func_01B033F0": "0x01B033F0",
+      "func_01B04E28": "0x01B04E28",
+      "func_01B05558": "0x01B05558",
+      "func_01B056F0": "0x01B056F0",
+      "func_01B05700": "0x01B05700",
+      "func_01B05C40": "0x01B05C40",
+      "func_01B066C0": "0x01B066C0"
+    }
+  },
+  {
+    "src": "ovl_09474_1f28.c",
+    "containers": [9474],
+    "text_start": "0x01B01F28",
+    "text_end": "0x01B01F94",
+    "discovered_code_bytes": 108,
+    "functions": 1,
+    "syms": {
+      "D_01B0A488": "0x01B0A488",
+      "func_01B035F8": "0x01B035F8",
+      "func_01B05140": "0x01B05140"
+    }
+  },
+  {
+    "src": "ovl_09474_2160.c",
+    "containers": [9474],
+    "text_start": "0x01B02160",
+    "text_end": "0x01B0221C",
+    "discovered_code_bytes": 188,
+    "functions": 1,
+    "syms": {
+      "D_01B0A2F8": "0x01B0A2F8",
+      "D_01B0A400": "0x01B0A400",
+      "D_01B0A420": "0x01B0A420",
+      "func_01B035F8": "0x01B035F8",
+      "func_01B04478": "0x01B04478",
+      "func_01B04670": "0x01B04670",
+      "func_01B04A20": "0x01B04A20",
+      "func_01B04DF8": "0x01B04DF8",
+      "func_01B054F0": "0x01B054F0",
+      "func_01B065A0": "0x01B065A0",
+      "func_01B07C48": "0x01B07C48"
+    }
+  },
+  {
+    "src": "ovl_09474_2280.c",
+    "containers": [9474],
+    "text_start": "0x01B02280",
+    "text_end": "0x01B022D8",
+    "discovered_code_bytes": 88,
+    "functions": 1,
+    "syms": {
+      "D_01B0A480": "0x01B0A480",
+      "func_01B09A40": "0x01B09A40"
+    }
+  },
+  {
+    "src": "ovl_09474_2708.c",
+    "containers": [9474],
+    "text_start": "0x01B02708",
+    "text_end": "0x01B027D8",
+    "discovered_code_bytes": 208,
+    "functions": 1,
+    "syms": {
+      "D_01B0A2F8": "0x01B0A2F8",
+      "D_01B0A480": "0x01B0A480",
+      "func_01B022D8": "0x01B022D8",
+      "func_01B060D0": "0x01B060D0",
+      "func_01B06F08": "0x01B06F08"
+    }
   }
 ]

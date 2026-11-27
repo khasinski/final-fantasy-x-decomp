@@ -45,5 +45,84 @@
     },
     "text_end": "0x01B046C0",
     "text_start": "0x01B04538"
+  },
+  {
+    "src": "ovl_09418_3420.c",
+    "containers": [9418],
+    "text_start": "0x01B03420",
+    "text_end": "0x01B034E0",
+    "discovered_code_bytes": 188,
+    "functions": 3,
+    "syms": {
+      "D_01B0F4B0": "0x01B0F4B0"
+    }
+  },
+  {
+    "src": "ovl_09418_35e8.c",
+    "containers": [9418],
+    "text_start": "0x01B035E8",
+    "text_end": "0x01B03668",
+    "discovered_code_bytes": 128,
+    "functions": 1,
+    "syms": {
+      "func_01B03480": "0x01B03480",
+      "func_01B034C0": "0x01B034C0",
+      "func_01B034E0": "0x01B034E0"
+    }
+  },
+  {
+    "src": "ovl_09418_3680.c",
+    "containers": [9418],
+    "text_start": "0x01B03680",
+    "text_end": "0x01B03C54",
+    "discovered_code_bytes": 1488,
+    "functions": 5,
+    "syms": {
+      "D_01B00050": "0x01B00050",
+      "D_01B00054": "0x01B00054",
+      "D_01B00056": "0x01B00056",
+      "D_01B0005C": "0x01B0005C",
+      "D_01B0E468": "0x01B0E468",
+      "D_01B0E490": "0x01B0E490",
+      "D_01B0E4B0": "0x01B0E4B0",
+      "D_01B0F4C0": "0x01B0F4C0",
+      "func_01B02F08": "0x01B02F08",
+      "func_01B03480": "0x01B03480",
+      "func_01B034C0": "0x01B034C0",
+      "func_01B034E0": "0x01B034E0",
+      "func_01B03668": "0x01B03668"
+    }
+  },
+  {
+    "src": "ovl_09418_4790.c",
+    "containers": [9418],
+    "text_start": "0x01B04790",
+    "text_end": "0x01B04998",
+    "discovered_code_bytes": 520,
+    "functions": 1,
+    "syms": {
+      "D_01B00044": "0x01B00044",
+      "D_01B00048": "0x01B00048",
+      "D_01B0004C": "0x01B0004C",
+      "D_01B0F4D0": "0x01B0F4D0",
+      "D_006A3924": "0x006A3924",
+      "D_01B00B40": "0x01B00B40",
+      "D_01B00B54": "0x01B00B54",
+      "D_01B00930": "0x01B00930",
+      "D_01B00B58": "0x01B00B58",
+      "D_01B00B78": "0x01B00B78",
+      "D_01B005C8": "0x01B005C8",
+      "D_01B005CC": "0x01B005CC",
+      "D_01B005D0": "0x01B005D0",
+      "D_01B005D4": "0x01B005D4",
+      "D_01B0F4C0": "0x01B0F4C0",
+      "D_01B00780": "0x01B00780",
+      "func_01B02E58": "0x01B02E58",
+      "func_01B0D4A0": "0x01B0D4A0",
+      "func_01B0A738": "0x01B0A738",
+      "func_01B04F60": "0x01B04F60",
+      "func_01B02F08": "0x01B02F08",
+      "func_01B03830": "0x01B03830"
+    }
   }
 ]
