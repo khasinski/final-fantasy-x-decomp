@@ -24,8 +24,10 @@ For overlays, see the [overlay guide](../overlays/README.md).
 
 To verify the IOP sound driver (`IopSoundDriver v2.20`, R3000A MIPS-I), download
 `iop-gcc2.8.1` from [decompme/compilers](https://github.com/decompme/compilers/releases)
-and unpack it into `tools/cc/iop-gcc2.8.1/`. See [iop/README.md](../iop/README.md)
-and run `python3 iop/verify_iopsound.py`.
+and unpack it into `tools/cc/iop-gcc2.8.1/`. Assembly uses the period GNU `binutils 2.9.1`
+MIPS R3000A assembler in [`tools/cc/iop-as-2.9/`](../tools/cc/iop-as-2.9/README.md)
+(reproducible from official `binutils-2.9.1.tar.gz` via `tools/cc/iop-as-2.9/build.py`).
+See [iop/README.md](../iop/README.md) and run `python3 iop/verify_iopsound.py`.
 
 ## Checking a change
 

@@ -2,9 +2,9 @@
 """IOPSOUND.IRX scanner, disassembler, and byte-exact build verifier.
 
 Compiles decompiled C units with the period IOP compiler
-(tools/cc/iop-gcc2.8.1/bin/iop-gcc -O2 -G0) + mipsel-linux-gnu-as (-march=r3000)
-+ mipsel-linux-gnu-ld and verifies 100% byte-for-byte .text match against
-baserom/IOPSOUND.IRX.
+(tools/cc/iop-gcc2.8.1/bin/iop-gcc -O2 -G0) + period GNU binutils 2.9.1
+assembler (tools/cc/iop-as-2.9/as -EL -mcpu=r3000 -G0) + mipsel-linux-gnu-ld
+and verifies 100% byte-for-byte .text match against baserom/IOPSOUND.IRX.
 
 Can be run on the host (scan/disasm run natively in Python 3; compile/verify
 automatically invokes Docker `ffx-decomp`) or directly inside Docker.
@@ -34,6 +34,7 @@ PROGRESS_JSON = ROOT / "docs" / "iopsound-progress.json"
 
 IOP_GCC = "tools/cc/iop-gcc2.8.1/bin/iop-gcc"
 IOP_GCC_B = "tools/cc/iop-gcc2.8.1/lib/gcc-lib/mipsel-scei-elfl/2.8.1/"
+IOP_AS = "tools/cc/iop-as-2.9/as"
 
 R_MIPS_32 = 2
 R_MIPS_26 = 4
@@ -517,6 +518,7 @@ def _compile_and_link_unit(
     unit: dict,
     out_dir: Path,
     sym_table: dict[str, int],
+    rodata_range: tuple[int, int] = (0, 0),
 ) -> tuple[bytes, bytes | None]:
     src = Path(unit["src"])
     stem = src.stem
@@ -543,107 +545,36 @@ def _compile_and_link_unit(
         ],
         check=True,
     )
-    # Period Sony iop-as (binutils 2.9) shims for modern mipsel-linux-gnu-as:
-    # 1. Always: `move rd, rs` -> `addu rd, rs, $0`.
-    # 2. Per-unit `no_split_macro`: prevent modern gas from splitting `sw/sh/sb/la reg, sym`
-    #    across a following jump/branch delay slot.
-    # 3. Per-unit `load_delay_nop`: preserve R3000A load-delay `nop` between a load into `$r`
-    #    and a `sw/sh/sb $r, sym` macro (which expands to `lui $at; sw $r, lo($at)`).
-    asm_text = asm_s.read_text()
-    asm_text = re.sub(
-        r"^(\s+)move(\s+\$[0-9a-zA-Z]+,\s*\$[0-9a-zA-Z]+)\b",
-        r"\1addu\2,$0",
-        asm_text,
-        flags=re.MULTILINE,
-    )
-    if (
-        unit.get("no_split_macro")
-        or unit.get("no_split_store_only")
-        or unit.get("no_split_bss_macro")
-        or unit.get("no_split_syms")
-        or unit.get("load_delay_nop")
-    ):
-        _sym_store_re = re.compile(
-            r"^\s+(?:sw|sh|sb)\s+(\$[0-9a-zA-Z]+),\s*([A-Za-z_.$][A-Za-z0-9_.$+-]*)(?:\(\$[0-9a-zA-Z]+\))?\s*$"
-        )
-        _sym_macro_re = re.compile(
-            r"^\s+(sw|sh|sb|la)\s+\$[0-9a-zA-Z]+,\s*([A-Za-z_.$][A-Za-z0-9_.$+-]*)(?:\(\$[0-9a-zA-Z]+\))?\s*$"
-        )
-        _load_re = re.compile(
-            r"^\s+(?:lw|lh|lb|lhu|lbu)\s+(\$[0-9a-zA-Z]+),"
-        )
-        _branch_re = re.compile(
-            r"^\s+(?:jal|j|jr|b|beq|bne|beqz|bnez|bgez|bgtz|blez|bltz)\b"
-        )
-        no_split = bool(unit.get("no_split_macro"))
-        no_split_store = bool(unit.get("no_split_store_only"))
-        no_split_bss = bool(unit.get("no_split_bss_macro"))
-        no_split_syms = set(unit.get("no_split_syms", []))
-        ld_nop = bool(unit.get("load_delay_nop"))
-        out_lines: list[str] = []
-        noreorder = False
-        prev_was_sym_macro = False
-        prev_load_reg: str | None = None
-        for line in asm_text.splitlines(keepends=True):
-            s = line.strip()
-            if s.startswith(".set"):
-                parts = s.split()
-                if len(parts) >= 2:
-                    if parts[1] == "noreorder":
-                        noreorder = True
-                    elif parts[1] == "reorder":
-                        noreorder = False
-                out_lines.append(line)
-                prev_was_sym_macro = False
-                prev_load_reg = None
-                continue
-            if not s or s.startswith("#") or s.startswith(".") or s.endswith(":"):
-                out_lines.append(line)
-                if s.endswith(":"):
-                    prev_was_sym_macro = False
-                    prev_load_reg = None
-                continue
-            if not noreorder and ld_nop and prev_load_reg is not None:
-                ms = _sym_store_re.match(line)
-                if ms and ms.group(1) == prev_load_reg:
-                    out_lines.append("\tnop\n")
-            if not noreorder and prev_was_sym_macro and _branch_re.match(line):
-                out_lines.append("\t.set\tnoreorder\n\t.set\tnomacro\n")
-                out_lines.append(line)
-                out_lines.append("\tnop\n\t.set\tmacro\n\t.set\treorder\n")
-                prev_was_sym_macro = False
-                prev_load_reg = None
-                continue
-            out_lines.append(line)
-            prev_was_sym_macro = False
-            if not noreorder:
-                mm = _sym_macro_re.match(line)
-                if mm:
-                    op, sym = mm.group(1), mm.group(2).split("+")[0].split("-")[0]
-                    if no_split:
-                        prev_was_sym_macro = True
-                    elif no_split_store and op in ("sw", "sh", "sb"):
-                        prev_was_sym_macro = True
-                    elif sym in no_split_syms:
-                        prev_was_sym_macro = True
-                    elif no_split_bss:
-                        mhex = re.fullmatch(r"D_([0-9A-Fa-f]{6})", sym)
-                        if mhex and int(mhex.group(1), 16) >= 0x0192F0:
-                            prev_was_sym_macro = True
-            ml = _load_re.match(line)
-            prev_load_reg = ml.group(1) if (not noreorder and ml) else None
-        asm_text = "".join(out_lines)
-    asm_s.write_text(asm_text)
+    as_flags = ["-EL", "-mcpu=r3000", "-G0"]
+    if any(f in cflags for f in ("-O", "-O1", "-O2")):
+        as_flags.append("-O2")
+    elif "-O3" in cflags:
+        as_flags.append("-O3")
+
+    # In period binutils 2.9.1 (tc-mips.c nopic_need_relax), symbols defined in the same
+    # translation unit (.rodata literals and TU-local .data) are known not to be GP-relative
+    # and do not emit a relaxation variant frag. Because isolated single-function units
+    # declare those symbols `extern`, pass a tiny precursor `.extern sym, 1` file alongside
+    # the untouched iop-gcc `.s` output (zero `.s` post-processing).
+    ro_lo, ro_hi = rodata_range
+    local_syms = set(unit.get("local_syms", []))
+    if ro_hi > ro_lo:
+        for m in re.finditer(r"\bD_([0-9A-Fa-f]{6})\b", asm_s.read_text()):
+            if ro_lo <= int(m.group(1), 16) < ro_hi:
+                local_syms.add(m.group(0))
+
+    as_inputs = [str(asm_s)]
+    if local_syms:
+        defs_s = out_dir / f"{stem}.defs.s"
+        defs_s.write_text("".join(f"\t.extern\t{s}, 1\n" for s in sorted(local_syms)))
+        as_flags.append("-W")
+        as_inputs.insert(0, str(defs_s))
 
     subprocess.run(
         [
-            "mipsel-linux-gnu-as",
-            "-EL",
-            "-march=r3000",
-            "-mabi=32",
-            "-G0",
-            "--no-pad-sections",
-            str(asm_s),
+            IOP_AS,
+            *as_flags,
+            *as_inputs,
             "-o",
             str(obj),
         ],
@@ -835,6 +766,7 @@ def main(argv: list[str] | None = None) -> int:
         return subprocess.run(cmd).returncode
 
     irx = IrxImage()
+    rodata_range = (irx.rodata_vma, irx.rodata_vma + len(irx.rodata))
     funcs = load_funcs_tsv()
     sym_table = {f["name"]: f["addr"] for f in funcs}
     sym_by_addr = {f["addr"]: f["name"] for f in funcs}
@@ -854,7 +786,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         unit = matches[0]
         ts, te = unit["text_start"], unit["text_end"]
-        built_text, _ = _compile_and_link_unit(unit, out_dir, sym_table)
+        built_text, _ = _compile_and_link_unit(unit, out_dir, sym_table, rodata_range)
         orig_text = irx.text[ts:te]
         _print_side_by_side_diff(orig_text, built_text, ts, sym_by_addr)
         return 0 if built_text == orig_text else 1
@@ -874,7 +806,7 @@ def main(argv: list[str] | None = None) -> int:
         name = unit.get("name", Path(unit["src"]).stem)
         ts, te = unit["text_start"], unit["text_end"]
         rs = unit.get("rodata_start")
-        built_text, built_rodata = _compile_and_link_unit(unit, out_dir, sym_table)
+        built_text, built_rodata = _compile_and_link_unit(unit, out_dir, sym_table, rodata_range)
         orig_text = irx.text[ts:te]
 
         # GCC 2.8.1 MIPS may pad trailing 4 bytes for 8-byte section alignment if unit ends at 4 mod 8

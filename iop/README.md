@@ -18,7 +18,7 @@
 
 ## Compiler Toolchain
 
-Units are compiled with the period Sony PS2 IOP GCC 2.8.1 compiler (`tools/cc/iop-gcc2.8.1/bin/iop-gcc -O2 -G0`), assembled with `mipsel-linux-gnu-as -EL -march=r3000 -mabi=32 -G0`, and linked with `mipsel-linux-gnu-ld -EL` inside the `ffx-decomp` Docker container.
+Units are compiled with the period Sony PS2 IOP GCC 2.8.1 compiler (`tools/cc/iop-gcc2.8.1/bin/iop-gcc -O2 -G0`), assembled with the unmodified period GNU `binutils 2.9.1` MIPS R3000A assembler ([`tools/cc/iop-as-2.9/as`](../tools/cc/iop-as-2.9/README.md) `-EL -mcpu=r3000 -G0`, zero `.s` post-processing), and linked with `mipsel-linux-gnu-ld -EL` inside the `ffx-decomp` Docker container.
 
 ## Usage (`iop/verify_iopsound.py`)
 
