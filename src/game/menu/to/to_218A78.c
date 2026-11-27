@@ -1377,7 +1377,13 @@ void TOBtlDrawWakkaLimitWindow(void)
 void func_0021BDC0(void) {
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/to/to_218A78", func_0021BDC8);
+void func_0021BDC8(R4Wk *o)
+{
+    R4Rgb3 t = D_00571140;
+
+    o->h3C -= func_00208060();
+    o->f78 = func_0021BDC0;
+}
 
 void func_0021BE28(R4Wk *o)
 {

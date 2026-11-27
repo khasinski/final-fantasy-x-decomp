@@ -30,7 +30,30 @@ void *func_00201760(void *list, int idx, int x, int y, u32 col)
     return func_001FBBB0(q, x + 0xAA, y + 0xE);
 }
 
-INCLUDE_ASM("build/ee_asm/game/menu/menu_201760", func_002018D8);
+void func_002018D8(int idx, int x, int y)
+{
+    GIF_CUR()->ul64[0] = 0x90AB400000008001UL;
+    GIF_CUR()->ul64[1] = 0x43431EEEEUL;
+    GIF_NEXT();
+    GIF_CUR()->ul64[0] = 0x8000000044UL;
+    GIF_CUR()->ul64[1] = 0x42;
+    GIF_NEXT();
+    GIF_CUR()->ul64[0] = 0x3000F;
+    GIF_CUR()->ul64[1] = 0x47;
+    GIF_NEXT();
+    GIF_CUR()->ul64[0] = 0x2005D985E5323F00UL;
+    GIF_CUR()->ul64[1] = 6;
+    GIF_NEXT();
+    GIF_CUR()->ul64[0] = 0x0705D985E5423F00UL;
+    GIF_CUR()->ul64[1] = 6;
+    GIF_NEXT();
+    locNameTmpSetLanguage(0x80, 0x80, 0x80, 0x80);
+    func_001FB550((idx / 9) * 0xAA, (idx % 9) * 0xE);
+    func_001FB678(x, y);
+    func_001FB550((idx / 9) * 0xAA + 0xAA, (idx % 9) * 0xE + 0xE);
+    func_001FB678(x + 0xAA, y + 0xE);
+    func_001EFA30();
+}
 
 void *func_00201A68(void *list, int a, int x, int y)
 {

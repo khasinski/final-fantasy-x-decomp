@@ -112,9 +112,130 @@ INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018BA08);
 
 INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018BC00);
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018BD98);
+void func_0018BD98(void *dst_p, void *src_p, int n)
+{
+    float *dst = (float *)dst_p;
+    u32 *src = (u32 *)src_p;
+    int i;
 
-INCLUDE_ASM("build/ee_asm/game/yi/yi_18B680", func_0018C008);
+    for (i = 0; i < n; i++, dst += 4) {
+        float r = (float)(*src & 0xFF);
+        float g = (float)((*src >> 8) & 0xFF);
+        float b = (float)((*src >> 16) & 0xFF);
+        float min;
+        float max;
+        float l;
+        float s;
+        float h;
+        float rc;
+        float gc;
+        float bc;
+
+        r /= 255.0f;
+        g /= 255.0f;
+        b /= 255.0f;
+
+        if (r < g && r < b) {
+            min = r;
+        } else if (g < b) {
+            min = g;
+        } else {
+            min = b;
+        }
+        if (r > g && r > b) {
+            max = r;
+        } else if (g > b) {
+            max = g;
+        } else {
+            max = b;
+        }
+        l = (max + min) * 0.5f;
+        if (max == min) {
+            s = 0.0f;
+            h = -1.0f;
+        } else {
+            s = (max - min) / (max + min);
+        }
+        rc = (max - r) / (max - min);
+        gc = (max - g) / (max - min);
+        bc = (max - b) / (max - min);
+        if (r == max) {
+            h = bc - gc;
+        }
+        if (g == max) {
+            h = (rc + 2.0f) - bc;
+        }
+        if (b == max) {
+            h = (gc + 4.0f) - rc;
+        }
+        h *= 60.0f;
+        if (h < 0.0f) {
+            h += 360.0f;
+        }
+        dst[0] = h;
+        dst[1] = s;
+        dst[2] = l;
+        dst[3] = (float)(*src >> 24);
+        src++;
+    }
+}
+
+void func_0018C008(void *dst_p, void *src_p, int n)
+{
+    float *dst = (float *)dst_p;
+    u32 *src = (u32 *)src_p;
+    int i;
+
+    for (i = 0; i < n; i++, src++, dst += 4) {
+        float r = (float)(*src & 0xFF);
+        float g = (float)((*src >> 8) & 0xFF);
+        float b = (float)((*src >> 16) & 0xFF);
+        float max;
+        float min;
+        float delta;
+        float h;
+        float s;
+
+        r /= 255.0f;
+        g /= 255.0f;
+        b /= 255.0f;
+
+        if (r < g && r < b) {
+            min = r;
+        } else if (g < b) {
+            min = g;
+        } else {
+            min = b;
+        }
+        if (r > g && r > b) {
+            max = r;
+        } else if (g > b) {
+            max = g;
+        } else {
+            max = b;
+        }
+        delta = max - min;
+        if (max == 0.0f) {
+            return;
+        }
+        s = delta / max;
+        if (r == max) {
+            h = (g - b) / delta;
+        } else if (g == max) {
+            h = (b - r) / delta + 2.0f;
+        } else {
+            h = (r - g) / delta + 4.0f;
+        }
+        h *= 60.0f;
+        if (h < 0.0f) {
+            h += 360.0f;
+        }
+        dst[0] = h;
+        dst[1] = s;
+        dst[2] = max;
+        dst[3] = (float)(*src >> 24);
+    }
+}
 
 void func_0018C248(void *dst_p, void *src_p, int n)
 {

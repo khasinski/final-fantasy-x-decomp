@@ -1,5 +1,6 @@
 /* tu_060 0x12f740-0x135510: low; unk_12F740 (config/tu_map.tsv) */
 #define func_00133BB8 _hdr_func_00133BB8
+#define func_0012FE90 _hdr_func_0012FE90
 #include "common.h"
 #include "ffx/q0.h"
 #include "ffx/r0.h"
@@ -8,6 +9,7 @@
 #include "ffx/q1.h"
 #include "ffx/s0.h"
 #undef func_00133BB8
+#undef func_0012FE90
 
 int func_0012F740(Actor *a, void *op, ScriptCtx *ctx) {
     int on = AtelPopStackInteger(a, ctx) != 0;
@@ -234,7 +236,27 @@ s32 func_0012FE70(void)
     return func_00138520();
 }
 
-INCLUDE_ASM("build/ee_asm/game/atel/atel_12F740", func_0012FE90);
+float func_0012FE90(Actor *a, void *op, ScriptCtx *ctx)
+{
+    int y;
+    int x;
+    int r;
+    float ang;
+
+    y = AtelPopStackInteger(a, ctx);
+    x = AtelPopStackInteger(a, ctx);
+    r = AtelPopStackInteger(a, ctx);
+    y -= 0x80;
+    x -= 0x80;
+    if (x * x + y * y < r * r) {
+        return 0.0f;
+    }
+    ang = ((float (*)(float, float))func_002D4410)((float)y, (float)x);
+    if (ang == 0.0f) {
+        ang = 0.000001f;
+    }
+    return ang;
+}
 
 int func_0012FF58(Actor *a, void *op, ScriptCtx *ctx)
 {
