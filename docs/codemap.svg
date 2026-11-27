@@ -31,14 +31,14 @@
 <rect x="370" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="370" y="84" width="322" height="4" rx="2" fill="#06b6d4"/>
 <text x="386" y="110" class="kpi-lbl">584 EE Overlays</text>
-<text x="386" y="142" class="kpi-val" style="fill:#06b6d4">96.58%</text>
-<text x="386" y="162" class="kpi-sub">decompilable C (81.66% raw)</text>
+<text x="386" y="142" class="kpi-val" style="fill:#06b6d4">97.09%</text>
+<text x="386" y="162" class="kpi-sub">decompilable C (82.11% raw)</text>
 <text x="386" y="178" class="tiny muted">334 / 584 full containers (57.2%)</text>
 <rect x="708" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="708" y="84" width="322" height="4" rx="2" fill="#38bdf8"/>
 <text x="724" y="110" class="kpi-lbl">Combined Known EE</text>
-<text x="724" y="142" class="kpi-val" style="fill:#38bdf8">~96.11%</text>
-<text x="724" y="162" class="kpi-sub">decompilable C (~81.28% raw)</text>
+<text x="724" y="142" class="kpi-val" style="fill:#38bdf8">~96.57%</text>
+<text x="724" y="162" class="kpi-sub">decompilable C (~81.68% raw)</text>
 <text x="724" y="178" class="tiny muted">15.59 MB matched / 19.41 MB total EE</text>
 <rect x="1046" y="84" width="322" height="104" rx="8" fill="#161b22" stroke="#30363d"/>
 <rect x="1046" y="84" width="322" height="4" rx="2" fill="#22c55e"/>
@@ -6909,89 +6909,89 @@
 <rect x="1297" y="1361" width="21" height="21" rx="3" fill="#10b981" opacity="0.92"><title>file09753 | PARTIAL | 100.0% decomp | matched 22,688B / open 17,384B (policy 17,384B)</title></rect>
 <rect x="1322" y="1361" width="21" height="21" rx="3" fill="#10b981" opacity="0.92"><title>file09754 | PARTIAL | 100.0% decomp | matched 22,672B / open 17,384B (policy 17,384B)</title></rect>
 <rect x="722" y="1386" width="21" height="21" rx="3" fill="#10b981" opacity="0.92"><title>file09756 | PARTIAL | 100.0% decomp | matched 22,688B / open 17,384B (policy 17,384B)</title></rect>
-<rect x="747" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09470 | PARTIAL | 98.5% decomp | matched 49,508B / open 3,068B (policy 2,332B)</title></rect>
-<rect x="772" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09418 | PARTIAL | 97.7% decomp | matched 43,916B / open 2,632B (policy 1,584B)</title></rect>
-<rect x="797" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09341 | PARTIAL | 96.4% decomp | matched 44,560B / open 5,584B (policy 3,904B)</title></rect>
-<rect x="822" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09217 | PARTIAL | 96.2% decomp | matched 48,224B / open 1,912B (policy 0B)</title></rect>
-<rect x="847" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09316 | PARTIAL | 95.5% decomp | matched 46,040B / open 2,512B (policy 332B)</title></rect>
-<rect x="872" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09222 | PARTIAL | 95.4% decomp | matched 52,692B / open 3,008B (policy 472B)</title></rect>
-<rect x="897" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09464 | PARTIAL | 95.3% decomp | matched 52,776B / open 3,068B (policy 472B)</title></rect>
-<rect x="922" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09246 | PARTIAL | 95.3% decomp | matched 40,508B / open 2,340B (policy 332B)</title></rect>
-<rect x="947" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09251 | PARTIAL | 95.3% decomp | matched 53,668B / open 2,676B (policy 0B)</title></rect>
-<rect x="972" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09494 | PARTIAL | 95.2% decomp | matched 34,428B / open 2,864B (policy 1,112B)</title></rect>
-<rect x="997" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09488 | PARTIAL | 95.0% decomp | matched 15,224B / open 800B (policy 0B)</title></rect>
-<rect x="1022" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09306 | PARTIAL | 94.7% decomp | matched 53,720B / open 3,352B (policy 332B)</title></rect>
-<rect x="1047" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09247 | PARTIAL | 94.4% decomp | matched 45,924B / open 7,668B (policy 4,968B)</title></rect>
-<rect x="1072" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09361 | PARTIAL | 94.3% decomp | matched 43,736B / open 3,000B (policy 332B)</title></rect>
-<rect x="1097" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09197 | PARTIAL | 93.5% decomp | matched 39,404B / open 7,236B (policy 4,512B)</title></rect>
-<rect x="1122" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09307 | PARTIAL | 93.3% decomp | matched 52,380B / open 4,408B (policy 636B)</title></rect>
-<rect x="1147" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09317 | PARTIAL | 92.0% decomp | matched 42,664B / open 6,588B (policy 2,864B)</title></rect>
-<rect x="1172" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09474 | PARTIAL | 91.6% decomp | matched 31,912B / open 4,640B (policy 1,716B)</title></rect>
-<rect x="1197" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09245 | PARTIAL | 91.5% decomp | matched 42,872B / open 4,304B (policy 332B)</title></rect>
-<rect x="1222" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09612 | PARTIAL | 91.5% decomp | matched 31,336B / open 3,460B (policy 532B)</title></rect>
-<rect x="1247" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09115 | PARTIAL | 91.4% decomp | matched 51,408B / open 7,208B (policy 2,392B)</title></rect>
-<rect x="1272" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09230 | PARTIAL | 91.4% decomp | matched 51,100B / open 6,016B (policy 1,200B)</title></rect>
-<rect x="1297" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09706 | PARTIAL | 91.3% decomp | matched 3,232B / open 308B (policy 0B)</title></rect>
-<rect x="1322" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09650 | PARTIAL | 91.0% decomp | matched 29,668B / open 8,324B (policy 5,396B)</title></rect>
-<rect x="722" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09689 | PARTIAL | 90.9% decomp | matched 42,072B / open 4,616B (policy 388B)</title></rect>
-<rect x="747" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09617 | PARTIAL | 90.9% decomp | matched 48,032B / open 5,616B (policy 788B)</title></rect>
-<rect x="772" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09713 | PARTIAL | 90.8% decomp | matched 12,932B / open 1,608B (policy 292B)</title></rect>
-<rect x="797" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09557 | PARTIAL | 90.5% decomp | matched 50,852B / open 5,396B (policy 64B)</title></rect>
-<rect x="822" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09475 | PARTIAL | 90.4% decomp | matched 29,148B / open 8,592B (policy 5,508B)</title></rect>
-<rect x="847" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09574 | PARTIAL | 90.3% decomp | matched 5,640B / open 2,532B (policy 1,928B)</title></rect>
-<rect x="872" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09310 | PARTIAL | 90.1% decomp | matched 20,768B / open 4,668B (policy 2,388B)</title></rect>
-<rect x="897" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09228 | PARTIAL | 90.0% decomp | matched 3,464B / open 1,784B (policy 1,400B)</title></rect>
-<rect x="922" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09558 | PARTIAL | 89.9% decomp | matched 48,632B / open 5,488B (policy 0B)</title></rect>
-<rect x="947" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09223 | PARTIAL | 89.7% decomp | matched 32,692B / open 3,912B (policy 156B)</title></rect>
-<rect x="972" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09487 | PARTIAL | 89.7% decomp | matched 8,832B / open 1,332B (policy 316B)</title></rect>
-<rect x="997" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09645 | PARTIAL | 89.6% decomp | matched 52,712B / open 8,040B (policy 1,940B)</title></rect>
-<rect x="1022" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09432 | PARTIAL | 89.6% decomp | matched 42,616B / open 5,324B (policy 388B)</title></rect>
-<rect x="1047" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09656 | PARTIAL | 89.4% decomp | matched 31,096B / open 7,668B (policy 3,964B)</title></rect>
-<rect x="1072" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09473 | PARTIAL | 89.3% decomp | matched 3,116B / open 372B (policy 0B)</title></rect>
-<rect x="1097" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09577 | PARTIAL | 88.9% decomp | matched 57,272B / open 18,280B (policy 11,148B)</title></rect>
-<rect x="1122" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09044 | PARTIAL | 88.6% decomp | matched 18,764B / open 19,824B (policy 17,400B)</title></rect>
-<rect x="1147" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09348 | PARTIAL | 88.5% decomp | matched 31,224B / open 4,604B (policy 532B)</title></rect>
-<rect x="1172" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09730 | PARTIAL | 88.4% decomp | matched 7,740B / open 1,016B (policy 0B)</title></rect>
-<rect x="1197" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09441 | PARTIAL | 88.2% decomp | matched 28,564B / open 5,692B (policy 1,876B)</title></rect>
-<rect x="1222" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09086 | PARTIAL | 88.0% decomp | matched 55,280B / open 15,580B (policy 8,056B)</title></rect>
-<rect x="1247" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09196 | PARTIAL | 87.8% decomp | matched 58,936B / open 19,384B (policy 11,184B)</title></rect>
-<rect x="1272" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09621 | PARTIAL | 87.7% decomp | matched 50,260B / open 25,160B (policy 18,104B)</title></rect>
-<rect x="1297" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09436 | PARTIAL | 87.6% decomp | matched 28,348B / open 5,468B (policy 1,452B)</title></rect>
-<rect x="1322" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09556 | PARTIAL | 87.5% decomp | matched 47,664B / open 9,408B (policy 2,572B)</title></rect>
-<rect x="722" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09641 | PARTIAL | 87.4% decomp | matched 50,548B / open 9,524B (policy 2,224B)</title></rect>
-<rect x="747" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09629 | PARTIAL | 87.0% decomp | matched 40,328B / open 7,464B (policy 1,448B)</title></rect>
-<rect x="772" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09575 | PARTIAL | 86.7% decomp | matched 5,408B / open 2,760B (policy 1,928B)</title></rect>
-<rect x="797" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09630 | PARTIAL | 86.5% decomp | matched 30,836B / open 13,820B (policy 9,016B)</title></rect>
-<rect x="822" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09693 | PARTIAL | 85.1% decomp | matched 45,004B / open 8,268B (policy 388B)</title></rect>
-<rect x="847" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09607 | PARTIAL | 85.0% decomp | matched 32,992B / open 9,796B (policy 3,968B)</title></rect>
-<rect x="872" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09622 | PARTIAL | 84.8% decomp | matched 47,204B / open 8,848B (policy 388B)</title></rect>
-<rect x="897" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09657 | PARTIAL | 80.8% decomp | matched 53,292B / open 16,228B (policy 3,572B)</title></rect>
-<rect x="922" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09206 | PARTIAL | 80.5% decomp | matched 29,808B / open 16,244B (policy 9,016B)</title></rect>
-<rect x="947" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09437 | PARTIAL | 80.1% decomp | matched 28,708B / open 9,300B (policy 2,148B)</title></rect>
-<rect x="972" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09653 | PARTIAL | 80.0% decomp | matched 53,292B / open 16,532B (policy 3,200B)</title></rect>
-<rect x="997" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09647 | PARTIAL | 79.6% decomp | matched 52,072B / open 22,952B (policy 9,636B)</title></rect>
-<rect x="1022" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09649 | PARTIAL | 79.6% decomp | matched 29,528B / open 12,100B (policy 4,528B)</title></rect>
-<rect x="1047" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09194 | PARTIAL | 78.7% decomp | matched 52,624B / open 23,868B (policy 9,624B)</title></rect>
-<rect x="1072" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09351 | PARTIAL | 78.4% decomp | matched 35,520B / open 13,364B (policy 3,576B)</title></rect>
-<rect x="1097" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09209 | PARTIAL | 78.1% decomp | matched 29,400B / open 13,660B (policy 5,396B)</title></rect>
-<rect x="1122" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09199 | PARTIAL | 77.4% decomp | matched 53,676B / open 18,776B (policy 3,144B)</title></rect>
-<rect x="1147" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09208 | PARTIAL | 76.2% decomp | matched 53,288B / open 20,172B (policy 3,572B)</title></rect>
-<rect x="1172" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09431 | PARTIAL | 75.9% decomp | matched 56,956B / open 24,552B (policy 6,440B)</title></rect>
-<rect x="1197" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09614 | PARTIAL | 75.0% decomp | matched 52,404B / open 21,604B (policy 4,144B)</title></rect>
-<rect x="1222" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09563 | PARTIAL | 74.1% decomp | matched 14,092B / open 5,600B (policy 676B)</title></rect>
-<rect x="1247" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09114 | PARTIAL | 72.6% decomp | matched 54,316B / open 25,016B (policy 4,476B)</title></rect>
-<rect x="1272" y="1436" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09654 | PARTIAL | 68.2% decomp | matched 30,616B / open 20,960B (policy 6,704B)</title></rect>
-<rect x="1297" y="1436" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09478 | PARTIAL | 65.0% decomp | matched 30,276B / open 30,360B (policy 14,044B)</title></rect>
-<rect x="1322" y="1436" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09711 | PARTIAL | 60.2% decomp | matched 11,928B / open 25,976B (policy 18,096B)</title></rect>
-<rect x="722" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09712 | PARTIAL | 60.0% decomp | matched 11,928B / open 25,680B (policy 17,720B)</title></rect>
-<rect x="747" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09559 | PARTIAL | 58.3% decomp | matched 11,928B / open 27,116B (policy 18,592B)</title></rect>
-<rect x="772" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09655 | PARTIAL | 58.1% decomp | matched 11,928B / open 26,820B (policy 18,216B)</title></rect>
-<rect x="797" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09229 | PARTIAL | 34.9% decomp | matched 1,256B / open 3,828B (policy 1,484B)</title></rect>
-<rect x="822" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09232 | PARTIAL | 28.9% decomp | matched 3,036B / open 9,040B (policy 1,588B)</title></rect>
-<rect x="847" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09142 | PARTIAL | 27.9% decomp | matched 3,360B / open 10,624B (policy 1,928B)</title></rect>
-<rect x="872" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09734 | PARTIAL | 20.9% decomp | matched 2,108B / open 9,488B (policy 1,512B)</title></rect>
-<rect x="897" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09395 | PARTIAL | 19.1% decomp | matched 3,028B / open 14,752B (policy 1,928B)</title></rect>
-<rect x="922" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09064 | PARTIAL | 2.2% decomp | matched 236B / open 15,252B (policy 4,536B)</title></rect>
+<rect x="747" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09712 | PARTIAL | 98.8% decomp | matched 19,640B / open 17,880B (policy 17,720B)</title></rect>
+<rect x="772" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09711 | PARTIAL | 98.7% decomp | matched 19,560B / open 18,256B (policy 18,096B)</title></rect>
+<rect x="797" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09470 | PARTIAL | 98.5% decomp | matched 49,508B / open 3,068B (policy 2,332B)</title></rect>
+<rect x="822" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09418 | PARTIAL | 97.7% decomp | matched 43,916B / open 2,632B (policy 1,584B)</title></rect>
+<rect x="847" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09341 | PARTIAL | 96.4% decomp | matched 44,560B / open 5,584B (policy 3,904B)</title></rect>
+<rect x="872" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09217 | PARTIAL | 96.2% decomp | matched 48,224B / open 1,912B (policy 0B)</title></rect>
+<rect x="897" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09316 | PARTIAL | 95.5% decomp | matched 46,040B / open 2,512B (policy 332B)</title></rect>
+<rect x="922" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09222 | PARTIAL | 95.4% decomp | matched 52,692B / open 3,008B (policy 472B)</title></rect>
+<rect x="947" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09464 | PARTIAL | 95.3% decomp | matched 52,776B / open 3,068B (policy 472B)</title></rect>
+<rect x="972" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09246 | PARTIAL | 95.3% decomp | matched 40,508B / open 2,340B (policy 332B)</title></rect>
+<rect x="997" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09251 | PARTIAL | 95.3% decomp | matched 53,668B / open 2,676B (policy 0B)</title></rect>
+<rect x="1022" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09494 | PARTIAL | 95.2% decomp | matched 34,428B / open 2,864B (policy 1,112B)</title></rect>
+<rect x="1047" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09488 | PARTIAL | 95.0% decomp | matched 15,224B / open 800B (policy 0B)</title></rect>
+<rect x="1072" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09306 | PARTIAL | 94.7% decomp | matched 53,720B / open 3,352B (policy 332B)</title></rect>
+<rect x="1097" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09247 | PARTIAL | 94.4% decomp | matched 45,924B / open 7,668B (policy 4,968B)</title></rect>
+<rect x="1122" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09361 | PARTIAL | 94.3% decomp | matched 43,736B / open 3,000B (policy 332B)</title></rect>
+<rect x="1147" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09197 | PARTIAL | 93.5% decomp | matched 39,404B / open 7,236B (policy 4,512B)</title></rect>
+<rect x="1172" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09307 | PARTIAL | 93.3% decomp | matched 52,380B / open 4,408B (policy 636B)</title></rect>
+<rect x="1197" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09317 | PARTIAL | 92.0% decomp | matched 42,664B / open 6,588B (policy 2,864B)</title></rect>
+<rect x="1222" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09474 | PARTIAL | 91.6% decomp | matched 31,912B / open 4,640B (policy 1,716B)</title></rect>
+<rect x="1247" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09245 | PARTIAL | 91.5% decomp | matched 42,872B / open 4,304B (policy 332B)</title></rect>
+<rect x="1272" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09612 | PARTIAL | 91.5% decomp | matched 31,336B / open 3,460B (policy 532B)</title></rect>
+<rect x="1297" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09115 | PARTIAL | 91.4% decomp | matched 51,408B / open 7,208B (policy 2,392B)</title></rect>
+<rect x="1322" y="1386" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09230 | PARTIAL | 91.4% decomp | matched 51,100B / open 6,016B (policy 1,200B)</title></rect>
+<rect x="722" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09706 | PARTIAL | 91.3% decomp | matched 3,232B / open 308B (policy 0B)</title></rect>
+<rect x="747" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09559 | PARTIAL | 91.2% decomp | matched 18,648B / open 20,396B (policy 18,592B)</title></rect>
+<rect x="772" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09650 | PARTIAL | 91.0% decomp | matched 29,668B / open 8,324B (policy 5,396B)</title></rect>
+<rect x="797" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09577 | PARTIAL | 91.0% decomp | matched 58,584B / open 16,968B (policy 11,148B)</title></rect>
+<rect x="822" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09689 | PARTIAL | 90.9% decomp | matched 42,072B / open 4,616B (policy 388B)</title></rect>
+<rect x="847" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09617 | PARTIAL | 90.9% decomp | matched 48,032B / open 5,616B (policy 788B)</title></rect>
+<rect x="872" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09655 | PARTIAL | 90.8% decomp | matched 18,648B / open 20,100B (policy 18,216B)</title></rect>
+<rect x="897" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09713 | PARTIAL | 90.8% decomp | matched 12,932B / open 1,608B (policy 292B)</title></rect>
+<rect x="922" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09557 | PARTIAL | 90.5% decomp | matched 50,852B / open 5,396B (policy 64B)</title></rect>
+<rect x="947" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09475 | PARTIAL | 90.4% decomp | matched 29,148B / open 8,592B (policy 5,508B)</title></rect>
+<rect x="972" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09574 | PARTIAL | 90.3% decomp | matched 5,640B / open 2,532B (policy 1,928B)</title></rect>
+<rect x="997" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09086 | PARTIAL | 90.3% decomp | matched 56,688B / open 14,172B (policy 8,056B)</title></rect>
+<rect x="1022" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09310 | PARTIAL | 90.1% decomp | matched 20,768B / open 4,668B (policy 2,388B)</title></rect>
+<rect x="1047" y="1411" width="21" height="21" rx="3" fill="#06b6d4" opacity="0.92"><title>file09228 | PARTIAL | 90.0% decomp | matched 3,464B / open 1,784B (policy 1,400B)</title></rect>
+<rect x="1072" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09558 | PARTIAL | 89.9% decomp | matched 48,632B / open 5,488B (policy 0B)</title></rect>
+<rect x="1097" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09223 | PARTIAL | 89.7% decomp | matched 32,692B / open 3,912B (policy 156B)</title></rect>
+<rect x="1122" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09487 | PARTIAL | 89.7% decomp | matched 8,832B / open 1,332B (policy 316B)</title></rect>
+<rect x="1147" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09645 | PARTIAL | 89.6% decomp | matched 52,712B / open 8,040B (policy 1,940B)</title></rect>
+<rect x="1172" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09432 | PARTIAL | 89.6% decomp | matched 42,616B / open 5,324B (policy 388B)</title></rect>
+<rect x="1197" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09656 | PARTIAL | 89.4% decomp | matched 31,096B / open 7,668B (policy 3,964B)</title></rect>
+<rect x="1222" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09473 | PARTIAL | 89.3% decomp | matched 3,116B / open 372B (policy 0B)</title></rect>
+<rect x="1247" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09196 | PARTIAL | 89.1% decomp | matched 59,796B / open 18,524B (policy 11,184B)</title></rect>
+<rect x="1272" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09621 | PARTIAL | 89.0% decomp | matched 51,000B / open 24,420B (policy 18,104B)</title></rect>
+<rect x="1297" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09641 | PARTIAL | 88.8% decomp | matched 51,356B / open 8,716B (policy 2,224B)</title></rect>
+<rect x="1322" y="1411" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09044 | PARTIAL | 88.6% decomp | matched 18,764B / open 19,824B (policy 17,400B)</title></rect>
+<rect x="722" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09622 | PARTIAL | 88.5% decomp | matched 49,264B / open 6,788B (policy 388B)</title></rect>
+<rect x="747" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09348 | PARTIAL | 88.5% decomp | matched 31,224B / open 4,604B (policy 532B)</title></rect>
+<rect x="772" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09730 | PARTIAL | 88.4% decomp | matched 7,740B / open 1,016B (policy 0B)</title></rect>
+<rect x="797" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09441 | PARTIAL | 88.2% decomp | matched 28,564B / open 5,692B (policy 1,876B)</title></rect>
+<rect x="822" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09436 | PARTIAL | 87.6% decomp | matched 28,348B / open 5,468B (policy 1,452B)</title></rect>
+<rect x="847" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09556 | PARTIAL | 87.5% decomp | matched 47,664B / open 9,408B (policy 2,572B)</title></rect>
+<rect x="872" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09693 | PARTIAL | 87.4% decomp | matched 46,232B / open 7,040B (policy 388B)</title></rect>
+<rect x="897" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09629 | PARTIAL | 87.0% decomp | matched 40,328B / open 7,464B (policy 1,448B)</title></rect>
+<rect x="922" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09575 | PARTIAL | 86.7% decomp | matched 5,408B / open 2,760B (policy 1,928B)</title></rect>
+<rect x="947" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09630 | PARTIAL | 86.5% decomp | matched 30,836B / open 13,820B (policy 9,016B)</title></rect>
+<rect x="972" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09607 | PARTIAL | 85.0% decomp | matched 32,992B / open 9,796B (policy 3,968B)</title></rect>
+<rect x="997" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09206 | PARTIAL | 84.0% decomp | matched 31,096B / open 14,956B (policy 9,016B)</title></rect>
+<rect x="1022" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09437 | PARTIAL | 83.9% decomp | matched 30,084B / open 7,924B (policy 2,148B)</title></rect>
+<rect x="1047" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09653 | PARTIAL | 83.4% decomp | matched 55,532B / open 14,292B (policy 3,200B)</title></rect>
+<rect x="1072" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09209 | PARTIAL | 82.7% decomp | matched 31,132B / open 11,928B (policy 5,396B)</title></rect>
+<rect x="1097" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09649 | PARTIAL | 82.2% decomp | matched 30,504B / open 11,124B (policy 4,528B)</title></rect>
+<rect x="1122" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09351 | PARTIAL | 81.9% decomp | matched 37,088B / open 11,796B (policy 3,576B)</title></rect>
+<rect x="1147" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09657 | PARTIAL | 81.8% decomp | matched 53,960B / open 15,560B (policy 3,572B)</title></rect>
+<rect x="1172" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09199 | PARTIAL | 81.1% decomp | matched 56,228B / open 16,224B (policy 3,144B)</title></rect>
+<rect x="1197" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09647 | PARTIAL | 80.5% decomp | matched 52,624B / open 22,400B (policy 9,636B)</title></rect>
+<rect x="1222" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09208 | PARTIAL | 79.8% decomp | matched 55,764B / open 17,696B (policy 3,572B)</title></rect>
+<rect x="1247" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09194 | PARTIAL | 79.5% decomp | matched 53,176B / open 23,316B (policy 9,624B)</title></rect>
+<rect x="1272" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09614 | PARTIAL | 78.2% decomp | matched 54,652B / open 19,356B (policy 4,144B)</title></rect>
+<rect x="1297" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09431 | PARTIAL | 77.0% decomp | matched 57,776B / open 23,732B (policy 6,440B)</title></rect>
+<rect x="1322" y="1436" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09114 | PARTIAL | 76.2% decomp | matched 57,016B / open 22,316B (policy 4,476B)</title></rect>
+<rect x="722" y="1461" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09654 | PARTIAL | 75.0% decomp | matched 33,632B / open 17,944B (policy 6,704B)</title></rect>
+<rect x="747" y="1461" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09563 | PARTIAL | 74.1% decomp | matched 14,092B / open 5,600B (policy 676B)</title></rect>
+<rect x="772" y="1461" width="21" height="21" rx="3" fill="#f59e0b" opacity="0.92"><title>file09478 | PARTIAL | 70.3% decomp | matched 32,744B / open 27,892B (policy 14,044B)</title></rect>
+<rect x="797" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09142 | PARTIAL | 60.7% decomp | matched 8,128B / open 5,856B (policy 600B)</title></rect>
+<rect x="822" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09232 | PARTIAL | 48.9% decomp | matched 5,132B / open 6,944B (policy 1,588B)</title></rect>
+<rect x="847" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09395 | PARTIAL | 41.2% decomp | matched 7,084B / open 10,696B (policy 600B)</title></rect>
+<rect x="872" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09734 | PARTIAL | 36.5% decomp | matched 3,676B / open 7,920B (policy 1,512B)</title></rect>
+<rect x="897" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09229 | PARTIAL | 34.9% decomp | matched 1,256B / open 3,828B (policy 1,484B)</title></rect>
+<rect x="922" y="1461" width="21" height="21" rx="3" fill="#ef4444" opacity="0.92"><title>file09064 | PARTIAL | 19.0% decomp | matched 2,180B / open 13,308B (policy 4,004B)</title></rect>
 <rect x="32" y="1504" width="1336" height="330" rx="8" fill="#161b22" stroke="#30363d"/>
 <text x="48" y="1532" class="h2">4. Whole-Game Inventoried Code Scope (Unique Code Bytes, Deduplicated)</text>
 <text x="48" y="1550" class="small muted">Proportional view of all known executable code across EE, deduplicated battle-effect overlays, IOP IRX modules, and VU1 microcode.</text>
@@ -7003,9 +7003,9 @@
 <text x="1022.0" y="1594" class="small mono muted">2,022.6 KB — EE Resident Executable</text>
 <text x="238" y="1642" text-anchor="end" class="small" style="font-weight:600">EE Overlays (distinct)</text>
 <rect x="250" y="1626" width="578.60" height="24" rx="3" fill="#0b0f14"/>
-<rect x="250" y="1626" width="298.86" height="24" fill="#22c55e"/>
-<rect x="548.86" y="1626" width="155.70" height="24" fill="#ef4444"/>
-<rect x="704.56" y="1626" width="124.04" height="24" fill="#475569"/>
+<rect x="250" y="1626" width="313.49" height="24" fill="#22c55e"/>
+<rect x="563.49" y="1626" width="141.56" height="24" fill="#ef4444"/>
+<rect x="705.05" y="1626" width="123.55" height="24" fill="#475569"/>
 <text x="840.6028042798099" y="1642" class="small mono muted">1,539.8 KB — 4,220 unique functions across 584 containers</text>
 <text x="238" y="1690" text-anchor="end" class="small" style="font-weight:600">IOP Game (IOPSOUND.IRX)</text>
 <rect x="250" y="1674" width="33.11" height="24" rx="3" fill="#0b0f14"/>

@@ -1,0 +1,509 @@
+[
+  {
+    "src": "ovl_09654_01b0b638.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B0B638",
+    "text_end": "0x01B0B668",
+    "discovered_code_bytes": 48,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B0DE08",
+        "text_end": "0x01B0DE38",
+        "syms": {}
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B0B638",
+        "text_end": "0x01B0B668",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b04bd0.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B04BD0",
+    "text_end": "0x01B04BE0",
+    "discovered_code_bytes": 16,
+    "functions": 1,
+    "syms": {
+      "g_fn_6aa0": "0x01B06AA0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B06B60",
+        "text_end": "0x01B06B70",
+        "syms": {
+          "g_fn_6aa0": "0x01B09270"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B04BD0",
+        "text_end": "0x01B04BE0",
+        "syms": {
+          "g_fn_6aa0": "0x01B06AA0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b04be0.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B04BE0",
+    "text_end": "0x01B04EAC",
+    "discovered_code_bytes": 704,
+    "functions": 6,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_d9d8": "0x01B0D9D8",
+      "g_tbl_0770": "0x01B00770",
+      "g_fn_6aa0": "0x01B06AA0",
+      "g_fn_8be0": "0x01B08BE0",
+      "g_fn_43c0": "0x01B043C0",
+      "g_fn_4398": "0x01B04398",
+      "g_fn_8b60": "0x01B08B60",
+      "g_fn_8d28": "0x01B08D28",
+      "g_fn_d4a8": "0x01B0D4A8",
+      "g_fn_8ec0": "0x01B08EC0",
+      "g_fn_6a40": "0x01B06A40",
+      "g_fn_69f0": "0x01B069F0",
+      "g_fn_63e8": "0x01B063E8",
+      "g_fn_4bd0": "0x01B04BD0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B073B0",
+        "text_end": "0x01B0767C",
+        "syms": {
+          "g_state_db20": "0x01B102F0",
+          "g_sym_d9d8": "0x01B101A8",
+          "g_tbl_0770": "0x01B00770",
+          "g_fn_6aa0": "0x01B09270",
+          "g_fn_8be0": "0x01B0B3B0",
+          "g_fn_43c0": "0x01B06178",
+          "g_fn_4398": "0x01B06150",
+          "g_fn_8b60": "0x01B0B330",
+          "g_fn_8d28": "0x01B0B4F8",
+          "g_fn_d4a8": "0x01B0FC78",
+          "g_fn_8ec0": "0x01B0B690",
+          "g_fn_6a40": "0x01B09210",
+          "g_fn_69f0": "0x01B091C0",
+          "g_fn_63e8": "0x01B08BB8",
+          "g_fn_4bd0": "0x01B06B60"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B04BE0",
+        "text_end": "0x01B04EAC",
+        "syms": {
+          "g_state_db20": "0x01B0DB20",
+          "g_sym_d9d8": "0x01B0D9D8",
+          "g_tbl_0770": "0x01B00770",
+          "g_fn_6aa0": "0x01B06AA0",
+          "g_fn_8be0": "0x01B08BE0",
+          "g_fn_43c0": "0x01B043C0",
+          "g_fn_4398": "0x01B04398",
+          "g_fn_8b60": "0x01B08B60",
+          "g_fn_8d28": "0x01B08D28",
+          "g_fn_d4a8": "0x01B0D4A8",
+          "g_fn_8ec0": "0x01B08EC0",
+          "g_fn_6a40": "0x01B06A40",
+          "g_fn_69f0": "0x01B069F0",
+          "g_fn_63e8": "0x01B063E8",
+          "g_fn_4bd0": "0x01B04BD0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b04eb0.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B04EB0",
+    "text_end": "0x01B04F60",
+    "discovered_code_bytes": 176,
+    "functions": 1,
+    "syms": {
+      "g_fn_7c70": "0x01B07C70",
+      "g_fn_4a18": "0x01B04A18"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B07680",
+        "text_end": "0x01B07730",
+        "syms": {
+          "g_fn_7c70": "0x01B0A440",
+          "g_fn_4a18": "0x01B067D0"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B04EB0",
+        "text_end": "0x01B04F60",
+        "syms": {
+          "g_fn_7c70": "0x01B07C70",
+          "g_fn_4a18": "0x01B04A18"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b05028.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B05028",
+    "text_end": "0x01B0510C",
+    "discovered_code_bytes": 228,
+    "functions": 1,
+    "syms": {
+      "g_fn_7c70": "0x01B07C70",
+      "g_fn_4a18": "0x01B04A18"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B077F8",
+        "text_end": "0x01B078DC",
+        "syms": {
+          "g_fn_7c70": "0x01B0A440",
+          "g_fn_4a18": "0x01B067D0"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B05028",
+        "text_end": "0x01B0510C",
+        "syms": {
+          "g_fn_7c70": "0x01B07C70",
+          "g_fn_4a18": "0x01B04A18"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b05e68.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B05E68",
+    "text_end": "0x01B06054",
+    "discovered_code_bytes": 492,
+    "functions": 3,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_d9d8": "0x01B0D9D8",
+      "g_fn_4a18": "0x01B04A18",
+      "g_fn_8ec0": "0x01B08EC0",
+      "g_fn_4b40": "0x01B04B40",
+      "g_fn_cad0": "0x01B0CAD0",
+      "g_fn_cc88": "0x01B0CC88"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B08638",
+        "text_end": "0x01B08824",
+        "syms": {
+          "g_state_db20": "0x01B102F0",
+          "g_sym_d9d8": "0x01B101A8",
+          "g_fn_4a18": "0x01B067D0",
+          "g_fn_8ec0": "0x01B0B690",
+          "g_fn_4b40": "0x01B06908",
+          "g_fn_cad0": "0x01B0F2A0",
+          "g_fn_cc88": "0x01B0F458"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B05E68",
+        "text_end": "0x01B06054",
+        "syms": {
+          "g_state_db20": "0x01B0DB20",
+          "g_sym_d9d8": "0x01B0D9D8",
+          "g_fn_4a18": "0x01B04A18",
+          "g_fn_8ec0": "0x01B08EC0",
+          "g_fn_4b40": "0x01B04B40",
+          "g_fn_cad0": "0x01B0CAD0",
+          "g_fn_cc88": "0x01B0CC88"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b06100.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B06100",
+    "text_end": "0x01B061DC",
+    "discovered_code_bytes": 216,
+    "functions": 2,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_vec_08e0": "0x01B008E0",
+      "g_fn_b188": "0x01B0B188"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B088D0",
+        "text_end": "0x01B089AC",
+        "syms": {
+          "g_state_db20": "0x01B102F0",
+          "g_vec_08e0": "0x01B00AF0",
+          "g_fn_b188": "0x01B0D958"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B06100",
+        "text_end": "0x01B061DC",
+        "syms": {
+          "g_state_db20": "0x01B0DB20",
+          "g_vec_08e0": "0x01B008E0",
+          "g_fn_b188": "0x01B0B188"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b04250.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B04250",
+    "text_end": "0x01B042C0",
+    "discovered_code_bytes": 112,
+    "functions": 1,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_fn_ae58": "0x01B0AE58",
+      "g_fn_b188": "0x01B0B188"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B05F80",
+        "text_end": "0x01B05FF0",
+        "syms": {
+          "g_state_db20": "0x01B102F0",
+          "g_fn_ae58": "0x01B0D628",
+          "g_fn_b188": "0x01B0D958"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B04250",
+        "text_end": "0x01B042C0",
+        "syms": {
+          "g_state_db20": "0x01B0DB20",
+          "g_fn_ae58": "0x01B0AE58",
+          "g_fn_b188": "0x01B0B188"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b04b40.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B04B40",
+    "text_end": "0x01B04BCC",
+    "discovered_code_bytes": 140,
+    "functions": 1,
+    "syms": {
+      "g_fn_7c70": "0x01B07C70"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B06908",
+        "text_end": "0x01B06994",
+        "syms": {
+          "g_fn_7c70": "0x01B0A440"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B04B40",
+        "text_end": "0x01B04BCC",
+        "syms": {
+          "g_fn_7c70": "0x01B07C70"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b05110.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B05110",
+    "text_end": "0x01B05238",
+    "discovered_code_bytes": 296,
+    "functions": 1,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_d9d8": "0x01B0D9D8",
+      "g_fn_4a18": "0x01B04A18",
+      "g_fn_8ec0": "0x01B08EC0",
+      "g_fn_5028": "0x01B05028",
+      "g_fn_cad0": "0x01B0CAD0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B078E0",
+        "text_end": "0x01B07A08",
+        "syms": {
+          "g_state_db20": "0x01B102F0",
+          "g_sym_d9d8": "0x01B101A8",
+          "g_fn_4a18": "0x01B067D0",
+          "g_fn_8ec0": "0x01B0B690",
+          "g_fn_5028": "0x01B077F8",
+          "g_fn_cad0": "0x01B0F2A0"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B05110",
+        "text_end": "0x01B05238",
+        "syms": {
+          "g_state_db20": "0x01B0DB20",
+          "g_sym_d9d8": "0x01B0D9D8",
+          "g_fn_4a18": "0x01B04A18",
+          "g_fn_8ec0": "0x01B08EC0",
+          "g_fn_5028": "0x01B05028",
+          "g_fn_cad0": "0x01B0CAD0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b05940.c",
+    "containers": [
+      9478,
+      9654
+    ],
+    "text_start": "0x01B05940",
+    "text_end": "0x01B05968",
+    "discovered_code_bytes": 40,
+    "functions": 1,
+    "syms": {
+      "g_fn_getchr": "0x01B06350"
+    },
+    "container_layouts": [
+      {
+        "cid": 9478,
+        "text_start": "0x01B08110",
+        "text_end": "0x01B08138",
+        "syms": {
+          "g_fn_getchr": "0x01B08B20"
+        }
+      },
+      {
+        "cid": 9654,
+        "text_start": "0x01B05940",
+        "text_end": "0x01B05968",
+        "syms": {
+          "g_fn_getchr": "0x01B06350"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09654_01b06058.c",
+    "containers": [
+      9654
+    ],
+    "text_start": "0x01B06058",
+    "text_end": "0x01B060FC",
+    "discovered_code_bytes": 160,
+    "functions": 2,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_dae0": "0x01B0DAE0",
+      "g_fn_8be0": "0x01B08BE0",
+      "g_fn_7810": "0x01B07810",
+      "g_fn_82e0": "0x01B082E0",
+      "g_fn_7268": "0x01B07268",
+      "g_fn_73a8": "0x01B073A8",
+      "g_fn_7460": "0x01B07460",
+      "g_fn_af98": "0x01B0AF98"
+    }
+  },
+  {
+    "src": "ovl_09654_01b040f8.c",
+    "containers": [
+      9654
+    ],
+    "text_start": "0x01B040F8",
+    "text_end": "0x01B0415C",
+    "discovered_code_bytes": 100,
+    "functions": 1,
+    "syms": {
+      "g_sym_d9d8": "0x01B0D9D8",
+      "g_sym_da1c": "0x01B0DA1C",
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_d9d0": "0x01B0D9D0",
+      "g_fn_8fa0": "0x01B08FA0"
+    }
+  },
+  {
+    "src": "ovl_09654_01b04398.c",
+    "containers": [
+      9654
+    ],
+    "text_start": "0x01B04398",
+    "text_end": "0x01B043C0",
+    "discovered_code_bytes": 40,
+    "functions": 1,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09654_01b04a48.c",
+    "containers": [
+      9654
+    ],
+    "text_start": "0x01B04A48",
+    "text_end": "0x01B04B40",
+    "discovered_code_bytes": 248,
+    "functions": 2,
+    "syms": {
+      "g_state_db20": "0x01B0DB20",
+      "g_sym_0aa8": "0x01B00AA8",
+      "g_fn_7ba8": "0x01B07BA8",
+      "g_fn_7810": "0x01B07810",
+      "g_fn_7d90": "0x01B07D90",
+      "g_fn_72d8": "0x01B072D8",
+      "g_fn_cc88": "0x01B0CC88"
+    }
+  }
+]

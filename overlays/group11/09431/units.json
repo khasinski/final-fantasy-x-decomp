@@ -44,5 +44,21 @@
       "D_01B2E0A8": "0x01B2E0A8",
       "D_01B00640": "0x01B00640"
     }
+  },
+  {
+    "src": "ovl_09431_01b1a2d0.c",
+    "containers": [
+      9431
+    ],
+    "text_start": "0x01B1A2D0",
+    "text_end": "0x01B1A33C",
+    "discovered_code_bytes": 108,
+    "functions": 1,
+    "syms": {
+      "g_fn_cb1": "0x01B1A198",
+      "g_fn_cb2": "0x01B2CC48",
+      "g_sym_0a80": "0x01B00AF0",
+      "g_fn_cb3": "0x01B2D050"
+    }
   }
 ]

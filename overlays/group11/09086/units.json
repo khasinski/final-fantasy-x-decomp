@@ -1312,5 +1312,36 @@
     "cflags": [
       "-O0"
     ]
+  },
+  {
+    "src": "ovl_09086_7df8.c",
+    "containers": [
+      9086
+    ],
+    "text_start": "0x01B07DF8",
+    "text_end": "0x01B07E68",
+    "functions": 1,
+    "discovered_code_bytes": 112,
+    "syms": {
+      "D_01B00B00": "0x01B00B00",
+      "func_01B06C38": "0x01B06C38",
+      "func_01B15F98": "0x01B15F98",
+      "func_01B163A0": "0x01B163A0"
+    }
+  },
+  {
+    "src": "ovl_09086_82e0.c",
+    "containers": [
+      9086
+    ],
+    "text_start": "0x01B082E0",
+    "text_end": "0x01B08338",
+    "functions": 1,
+    "discovered_code_bytes": 88,
+    "syms": {
+      "D_01B02440": "0x01B02440",
+      "func_01B0B330": "0x01B0B330",
+      "func_01B0BBE8": "0x01B0BBE8"
+    }
   }
 ]

@@ -74,5 +74,108 @@
       "func_01B16EA0": "0x01B16EA0",
       "D_01B00B80": "0x01B00B80"
     }
+  },
+  {
+    "src": "ovl_09621_b260.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0B260",
+    "text_end": "0x01B0B280",
+    "functions": 1,
+    "discovered_code_bytes": 32,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_be20.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0BE20",
+    "text_end": "0x01B0BE34",
+    "functions": 1,
+    "discovered_code_bytes": 20,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_be38.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0BE38",
+    "text_end": "0x01B0BE4C",
+    "functions": 1,
+    "discovered_code_bytes": 20,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_c020.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0C020",
+    "text_end": "0x01B0C070",
+    "functions": 1,
+    "discovered_code_bytes": 80,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_bd80.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0BD80",
+    "text_end": "0x01B0BDBC",
+    "functions": 2,
+    "discovered_code_bytes": 56,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_b758.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0B758",
+    "text_end": "0x01B0B840",
+    "functions": 2,
+    "discovered_code_bytes": 232,
+    "syms": {
+      "D_01B02310": "0x01B05130"
+    }
+  },
+  {
+    "src": "ovl_09621_c228.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0C228",
+    "text_end": "0x01B0C270",
+    "functions": 1,
+    "discovered_code_bytes": 72,
+    "syms": {}
+  },
+  {
+    "src": "ovl_09621_b220.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0B220",
+    "text_end": "0x01B0B25C",
+    "functions": 1,
+    "discovered_code_bytes": 60,
+    "syms": {
+      "func_01B0B1A0": "0x01B0B1A0"
+    }
+  },
+  {
+    "src": "ovl_09621_b840.c",
+    "containers": [
+      9621
+    ],
+    "text_start": "0x01B0B840",
+    "text_end": "0x01B0B860",
+    "functions": 1,
+    "discovered_code_bytes": 32,
+    "syms": {}
   }
 ]

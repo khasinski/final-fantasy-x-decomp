@@ -1866,6 +1866,12 @@
         "text_start": "0x01B0F568",
         "text_end": "0x01B0F5E8",
         "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F938",
+        "text_end": "0x01B0F9B8",
+        "syms": {}
       }
     ]
   },
@@ -2471,6 +2477,616 @@
         "syms": {
           "D_004F4610": "0x004F4610",
           "func_01B118E0": "0x01B0E940"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b10ce8.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9614,
+      9653
+    ],
+    "text_start": "0x01B10CE8",
+    "text_end": "0x01B10D24",
+    "discovered_code_bytes": 56,
+    "functions": 2,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B10CE8",
+        "text_end": "0x01B10D24",
+        "syms": {}
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0EA28",
+        "text_end": "0x01B0EA64",
+        "syms": {}
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B10C40",
+        "text_end": "0x01B10C7C",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B10510",
+        "text_end": "0x01B1054C",
+        "syms": {}
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0DFF0",
+        "text_end": "0x01B0E02C",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b10d88.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9614,
+      9653
+    ],
+    "text_start": "0x01B10D88",
+    "text_end": "0x01B10D9C",
+    "discovered_code_bytes": 20,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B10D88",
+        "text_end": "0x01B10D9C",
+        "syms": {}
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0EAE0",
+        "text_end": "0x01B0EAF4",
+        "syms": {}
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B10CF8",
+        "text_end": "0x01B10D0C",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B105B0",
+        "text_end": "0x01B105C4",
+        "syms": {}
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0E0A8",
+        "text_end": "0x01B0E0BC",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b10da0.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9614,
+      9653
+    ],
+    "text_start": "0x01B10DA0",
+    "text_end": "0x01B10DB4",
+    "discovered_code_bytes": 20,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B10DA0",
+        "text_end": "0x01B10DB4",
+        "syms": {}
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0EAC8",
+        "text_end": "0x01B0EADC",
+        "syms": {}
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B10CE0",
+        "text_end": "0x01B10CF4",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B105C8",
+        "text_end": "0x01B105DC",
+        "syms": {}
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0E090",
+        "text_end": "0x01B0E0A4",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b110d8.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9614,
+      9653
+    ],
+    "text_start": "0x01B110D8",
+    "text_end": "0x01B11278",
+    "discovered_code_bytes": 416,
+    "functions": 3,
+    "syms": {
+      "g_vtable_1168": "0x01B0ADE0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B110D8",
+        "text_end": "0x01B11278",
+        "syms": {
+          "g_vtable_1168": "0x01B0ADE0"
+        }
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0EE68",
+        "text_end": "0x01B0F008",
+        "syms": {
+          "g_vtable_1168": "0x01B09F10"
+        }
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B11080",
+        "text_end": "0x01B11220",
+        "syms": {
+          "g_vtable_1168": "0x01B0BD40"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B10900",
+        "text_end": "0x01B10AA0",
+        "syms": {
+          "g_vtable_1168": "0x01B0ADE0"
+        }
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0E430",
+        "text_end": "0x01B0E5D0",
+        "syms": {
+          "g_vtable_1168": "0x01B09F20"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b119d8.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9431,
+      9653
+    ],
+    "text_start": "0x01B119D8",
+    "text_end": "0x01B11A98",
+    "discovered_code_bytes": 192,
+    "functions": 1,
+    "syms": {
+      "g_vtable_19d8": "0x01B0AE00"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B119D8",
+        "text_end": "0x01B11A98",
+        "syms": {
+          "g_vtable_19d8": "0x01B0AE00"
+        }
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0F7F8",
+        "text_end": "0x01B0F8B8",
+        "syms": {
+          "g_vtable_19d8": "0x01B09F30"
+        }
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B11A10",
+        "text_end": "0x01B11AD0",
+        "syms": {
+          "g_vtable_19d8": "0x01B0BD60"
+        }
+      },
+      {
+        "cid": 9431,
+        "text_start": "0x01B20EC8",
+        "text_end": "0x01B20F88",
+        "syms": {
+          "g_vtable_19d8": "0x01B19A80"
+        }
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0EDC0",
+        "text_end": "0x01B0EE80",
+        "syms": {
+          "g_vtable_19d8": "0x01B09F40"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b11ce0.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9431,
+      9653
+    ],
+    "text_start": "0x01B11CE0",
+    "text_end": "0x01B11D50",
+    "discovered_code_bytes": 112,
+    "functions": 1,
+    "syms": {
+      "g_vtable_1ce0": "0x01B0AE20"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B11CE0",
+        "text_end": "0x01B11D50",
+        "syms": {
+          "g_vtable_1ce0": "0x01B0AE20"
+        }
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0FB08",
+        "text_end": "0x01B0FB78",
+        "syms": {
+          "g_vtable_1ce0": "0x01B09F50"
+        }
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B11D20",
+        "text_end": "0x01B11D90",
+        "syms": {
+          "g_vtable_1ce0": "0x01B0BD80"
+        }
+      },
+      {
+        "cid": 9431,
+        "text_start": "0x01B20BC8",
+        "text_end": "0x01B20C38",
+        "syms": {
+          "g_vtable_1ce0": "0x01B19A60"
+        }
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0F0D0",
+        "text_end": "0x01B0F140",
+        "syms": {
+          "g_vtable_1ce0": "0x01B09F60"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b121d0.c",
+    "containers": [
+      9114,
+      9199,
+      9208,
+      9614,
+      9653
+    ],
+    "text_start": "0x01B121D0",
+    "text_end": "0x01B12258",
+    "discovered_code_bytes": 136,
+    "functions": 1,
+    "syms": {
+      "g_vtable_21d0": "0x01B0AE60"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B121D0",
+        "text_end": "0x01B12258",
+        "syms": {
+          "g_vtable_21d0": "0x01B0AE60"
+        }
+      },
+      {
+        "cid": 9199,
+        "text_start": "0x01B0FD50",
+        "text_end": "0x01B0FDD8",
+        "syms": {
+          "g_vtable_21d0": "0x01B09F70"
+        }
+      },
+      {
+        "cid": 9208,
+        "text_start": "0x01B11F68",
+        "text_end": "0x01B11FF0",
+        "syms": {
+          "g_vtable_21d0": "0x01B0BDA0"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B111D8",
+        "text_end": "0x01B11260",
+        "syms": {
+          "g_vtable_21d0": "0x01B0AE00"
+        }
+      },
+      {
+        "cid": 9653,
+        "text_start": "0x01B0F318",
+        "text_end": "0x01B0F3A0",
+        "syms": {
+          "g_vtable_21d0": "0x01B09F80"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b0f9c8.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0F9C8",
+    "text_end": "0x01B0FA48",
+    "discovered_code_bytes": 128,
+    "functions": 1,
+    "syms": {
+      "g_vt_f9c8": "0x01B0AD60"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0F9C8",
+        "text_end": "0x01B0FA48",
+        "syms": {
+          "g_vt_f9c8": "0x01B0AD60"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F1F0",
+        "text_end": "0x01B0F270",
+        "syms": {
+          "g_vt_f9c8": "0x01B0AD60"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b0fb80.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0FB80",
+    "text_end": "0x01B0FC0C",
+    "discovered_code_bytes": 140,
+    "functions": 1,
+    "syms": {
+      "g_vt_fb80": "0x01B0AD80"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0FB80",
+        "text_end": "0x01B0FC0C",
+        "syms": {
+          "g_vt_fb80": "0x01B0AD80"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F3A8",
+        "text_end": "0x01B0F434",
+        "syms": {
+          "g_vt_fb80": "0x01B0AD80"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b0fc10.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0FC10",
+    "text_end": "0x01B0FD40",
+    "discovered_code_bytes": 304,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0FC10",
+        "text_end": "0x01B0FD40",
+        "syms": {}
+      },
+      {
+        "cid": 9114,
+        "text_start": "0x01B0FFE0",
+        "text_end": "0x01B10110",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F438",
+        "text_end": "0x01B0F568",
+        "syms": {}
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F808",
+        "text_end": "0x01B0F938",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b10838.c",
+    "containers": [
+      9114
+    ],
+    "text_start": "0x01B10838",
+    "text_end": "0x01B108A0",
+    "discovered_code_bytes": 104,
+    "functions": 1,
+    "syms": {
+      "g_vt_0838": "0x01B0ADC0"
+    }
+  },
+  {
+    "src": "ovl_09114_01b11f08.c",
+    "containers": [
+      9114
+    ],
+    "text_start": "0x01B11F08",
+    "text_end": "0x01B11FB8",
+    "discovered_code_bytes": 172,
+    "functions": 2,
+    "syms": {
+      "g_vt_1f08": "0x01B0AE40"
+    }
+  },
+  {
+    "src": "ovl_09114_01b0d1f8.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0D1F8",
+    "text_end": "0x01B0D258",
+    "discovered_code_bytes": 96,
+    "functions": 1,
+    "syms": {
+      "g_sym_b778": "0x01B0B778",
+      "g_sym_0f40": "0x01B00F40",
+      "g_fn_d740": "0x01B1D740",
+      "g_fn_db48": "0x01B1DB48"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0D1F8",
+        "text_end": "0x01B0D258",
+        "syms": {
+          "g_sym_b778": "0x01B0B778",
+          "g_sym_0f40": "0x01B00F40",
+          "g_fn_d740": "0x01B1D740",
+          "g_fn_db48": "0x01B1DB48"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0D1E8",
+        "text_end": "0x01B0D248",
+        "syms": {
+          "g_sym_b778": "0x01B0B6F8",
+          "g_sym_0f40": "0x01B00F40",
+          "g_fn_d740": "0x01B1C1B8",
+          "g_fn_db48": "0x01B1C5C0"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b0f810.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0F810",
+    "text_end": "0x01B0F928",
+    "discovered_code_bytes": 280,
+    "functions": 3,
+    "syms": {
+      "g_vt_f810": "0x01B0AD40"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0F810",
+        "text_end": "0x01B0F928",
+        "syms": {
+          "g_vt_f810": "0x01B0AD40"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F038",
+        "text_end": "0x01B0F150",
+        "syms": {
+          "g_vt_f810": "0x01B0AD40"
+        }
+      }
+    ]
+  },
+  {
+    "src": "ovl_09114_01b0fef8.c",
+    "containers": [
+      9114,
+      9614
+    ],
+    "text_start": "0x01B0FEF8",
+    "text_end": "0x01B0FFDC",
+    "discovered_code_bytes": 228,
+    "functions": 1,
+    "syms": {
+      "g_vt_fef8": "0x01B0ADA0"
+    },
+    "container_layouts": [
+      {
+        "cid": 9114,
+        "text_start": "0x01B0FEF8",
+        "text_end": "0x01B0FFDC",
+        "syms": {
+          "g_vt_fef8": "0x01B0ADA0"
+        }
+      },
+      {
+        "cid": 9614,
+        "text_start": "0x01B0F720",
+        "text_end": "0x01B0F804",
+        "syms": {
+          "g_vt_fef8": "0x01B0ADA0"
         }
       }
     ]
