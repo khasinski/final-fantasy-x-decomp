@@ -206,5 +206,16 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09622_01b0d0c0.c",
+    "containers": [
+      9622
+    ],
+    "text_start": "0x01B0D0C0",
+    "text_end": "0x01B0D0D4",
+    "discovered_code_bytes": 20,
+    "functions": 1,
+    "syms": {}
   }
 ]

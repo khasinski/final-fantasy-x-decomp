@@ -1343,5 +1343,21 @@
       "func_01B0B330": "0x01B0B330",
       "func_01B0BBE8": "0x01B0BBE8"
     }
+  },
+  {
+    "src": "ovl_09086_a180.c",
+    "containers": [
+      9086
+    ],
+    "text_start": "0x01B0A180",
+    "text_end": "0x01B0A324",
+    "discovered_code_bytes": 420,
+    "functions": 1,
+    "syms": {
+      "D_01B057B0": "0x01B057B0",
+      "func_01B11310": "0x01B11310",
+      "func_01B0F5A0": "0x01B0F5A0",
+      "func_01B0A740": "0x01B0A740"
+    }
   }
 ]

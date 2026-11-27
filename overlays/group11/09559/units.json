@@ -2234,13 +2234,13 @@
       {
         "cid": 9711,
         "text_start": "0x01B04760",
-        "text_end": "0x01B047B4",
+        "text_end": "0x01B047B8",
         "syms": {}
       },
       {
         "cid": 9712,
         "text_start": "0x01B04760",
-        "text_end": "0x01B047B4",
+        "text_end": "0x01B047B8",
         "syms": {}
       }
     ]
@@ -3230,5 +3230,17 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09559_47b8.c",
+    "containers": [
+      9559,
+      9655
+    ],
+    "text_start": "0x01B047B8",
+    "text_end": "0x01B048A4",
+    "functions": 1,
+    "discovered_code_bytes": 236,
+    "syms": {}
   }
 ]

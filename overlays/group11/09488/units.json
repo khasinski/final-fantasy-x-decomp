@@ -1,0 +1,42 @@
+[
+  {
+    "src": "ovl_09488_0a00.c",
+    "containers": [
+      9488
+    ],
+    "text_start": "0x01B00A00",
+    "text_end": "0x01B00D20",
+    "functions": 1,
+    "discovered_code_bytes": 800,
+    "syms": {
+      "g_ovl_buf": "0x01BA04C0",
+      "g_ovl_res": "0x01B0C830",
+      "g_ovl_dat_0040": "0x01B00040",
+      "g_ovl_dat_0590": "0x01B00590",
+      "g_ovl_dat_05a8": "0x01B005A8",
+      "g_ovl_dat_05b8": "0x01B005B8",
+      "g_ovl_dat_0608": "0x01B00608",
+      "g_ovl_dat_4050": "0x01B04050",
+      "g_ovl_4808": "0x01B04808",
+      "g_ovl_4830": "0x01B04830",
+      "g_ovl_mgr": "0x01B048B0",
+      "g_ovl_48f0": "0x01B048F0",
+      "g_ovl_ptr_5bf0": "0x01B05BF0",
+      "g_ovl_ptr_5bf4": "0x01B05BF4",
+      "fn_ovl_0d20": "0x01B00D20",
+      "fn_ovl_0f20": "0x01B00F20",
+      "fn_ovl_1048": "0x01B01048",
+      "fn_ovl_1170": "0x01B01170",
+      "fn_ovl_15e8": "0x01B015E8",
+      "fn_ovl_2560": "0x01B02560",
+      "fn_ovl_2b58": "0x01B02B58",
+      "fn_ovl_2fa0": "0x01B02FA0",
+      "fn_ovl_3218": "0x01B03218",
+      "fn_ovl_3730": "0x01B03730",
+      "fn_ovl_38f8": "0x01B038F8",
+      "fn_ovl_39b8": "0x01B039B8",
+      "fn_ovl_3a90": "0x01B03A90",
+      "fn_ovl_45c0": "0x01B045C0"
+    }
+  }
+]

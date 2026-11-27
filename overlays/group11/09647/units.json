@@ -176,5 +176,51 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09647_01b05310.c",
+    "containers": [
+      9647
+    ],
+    "text_start": "0x01B05310",
+    "text_end": "0x01B054A0",
+    "discovered_code_bytes": 400,
+    "functions": 1,
+    "syms": {
+      "g_flag_0040": "0x01B00040",
+      "g_mode_11e0": "0x01B011E0",
+      "g_vec_0fe0": "0x01B00FE0",
+      "g_vec_0fd0": "0x01B00FD0",
+      "g_vec_11d0": "0x01B011D0",
+      "g_fn_a930": "0x01B0A220",
+      "g_fn_a1a8": "0x01B09A98",
+      "g_fn_6770": "0x01B16060"
+    }
+  },
+  {
+    "src": "ovl_09647_01b062b8.c",
+    "containers": [
+      9647
+    ],
+    "text_start": "0x01B062B8",
+    "text_end": "0x01B063B4",
+    "discovered_code_bytes": 252,
+    "functions": 1,
+    "syms": {
+      "g_sym_1538": "0x01B01538",
+      "g_sym_57a0": "0x01B057A0",
+      "g_sym_0a48": "0x01B00A48",
+      "g_sym_1550": "0x01B01550",
+      "g_sym_0ab8": "0x01B00AB8",
+      "g_sym_1220": "0x01B01220",
+      "g_sym_0ad8": "0x01B00AD8",
+      "g_word_1574": "0x01B01574",
+      "g_word_157c": "0x01B0157C",
+      "g_fn_15fb8": "0x01B15FB8",
+      "g_fn_163c0": "0x01B163C0",
+      "g_fn_072f0": "0x01B072F0",
+      "g_fn_0ef80": "0x01B0EF80",
+      "g_fn_0f0b0": "0x01B0F0B0"
+    }
   }
 ]

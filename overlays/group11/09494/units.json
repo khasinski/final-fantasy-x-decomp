@@ -218,5 +218,97 @@
       "func_01B06578": "0x01B06578",
       "func_01B097B8": "0x01B097B8"
     }
+  },
+  {
+    "src": "ovl_09494_1ae0.c",
+    "containers": [
+      9494
+    ],
+    "text_start": "0x01B01AE0",
+    "text_end": "0x01B01C14",
+    "functions": 1,
+    "discovered_code_bytes": 308,
+    "syms": {
+      "D_01B00040": "0x01B00040",
+      "D_01B007C8": "0x01B007C8",
+      "D_01B0A228": "0x01B0A228",
+      "D_01B0A268": "0x01B0A268",
+      "D_01B0A26C": "0x01B0A26C",
+      "D_01B0A270": "0x01B0A270",
+      "D_01B0A310": "0x01B0A310",
+      "D_01B0A314": "0x01B0A314",
+      "D_01B0A318": "0x01B0A318",
+      "D_01B12090": "0x01B12090",
+      "D_01BF7380": "0x01BF7380",
+      "func_01B01C18": "0x01B01C18",
+      "func_01B01D00": "0x01B01D00",
+      "func_01B01D80": "0x01B01D80",
+      "func_01B05618": "0x01B05618",
+      "func_01B05DA8": "0x01B05DA8",
+      "func_01B05F70": "0x01B05F70",
+      "func_01B06030": "0x01B06030",
+      "func_01B09698": "0x01B09698",
+      "func_01B09BA8": "0x01B09BA8",
+      "func_01B0A140": "0x01B0A140"
+    }
+  },
+  {
+    "src": "ovl_09494_21b0.c",
+    "containers": [
+      9494
+    ],
+    "text_start": "0x01B021B0",
+    "text_end": "0x01B02320",
+    "functions": 1,
+    "discovered_code_bytes": 368,
+    "syms": {
+      "D_01B0A310": "0x01B0A310",
+      "D_01B0A228": "0x01B0A228",
+      "D_01B066A8": "0x01B066A8",
+      "D_01B00748": "0x01B00748",
+      "func_01B037E8": "0x01B037E8",
+      "func_01B06108": "0x01B06108"
+    }
+  },
+  {
+    "src": "ovl_09494_2d40.c",
+    "containers": [
+      9494
+    ],
+    "text_start": "0x01B02D40",
+    "text_end": "0x01B02FD4",
+    "functions": 1,
+    "discovered_code_bytes": 660,
+    "syms": {
+      "D_01B0A310": "0x01B0A310",
+      "D_01B0A228": "0x01B0A228",
+      "func_01B06108": "0x01B06108",
+      "func_01B06698": "0x01B06698",
+      "func_01B074D0": "0x01B074D0",
+      "func_01B09C40": "0x01B09C40",
+      "func_01B0A190": "0x01B0A190"
+    }
+  },
+  {
+    "src": "ovl_09494_2ba0.c",
+    "containers": [
+      9494
+    ],
+    "text_start": "0x01B02BA0",
+    "text_end": "0x01B02D40",
+    "functions": 1,
+    "discovered_code_bytes": 416,
+    "syms": {
+      "D_01B0A310": "0x01B0A310",
+      "D_01B0A228": "0x01B0A228",
+      "func_01B02B80": "0x01B02B80",
+      "func_01B037E8": "0x01B037E8",
+      "func_01B04A58": "0x01B04A58",
+      "func_01B04FD8": "0x01B04FD8",
+      "func_01B06108": "0x01B06108",
+      "func_01B06578": "0x01B06578",
+      "func_01B06E38": "0x01B06E38",
+      "func_01B06F40": "0x01B06F40"
+    }
   }
 ]

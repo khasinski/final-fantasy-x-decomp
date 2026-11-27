@@ -863,5 +863,27 @@
       "-g",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09142_18d0.c",
+    "containers": [
+      9142
+    ],
+    "text_start": "0x01B018D0",
+    "text_end": "0x01B01A40",
+    "discovered_code_bytes": 368,
+    "functions": 1,
+    "syms": {
+      "D_01B00AB4": "0x01B00AB4",
+      "D_01B00B80": "0x01B00B80",
+      "D_01B00C48": "0x01B00C48",
+      "D_01B00D58": "0x01B00D58"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-g",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]
