@@ -236,5 +236,85 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09208_01b0fbb8.c",
+    "containers": [
+      9208
+    ],
+    "text_start": "0x01B0FBB8",
+    "text_end": "0x01B0FCB0",
+    "discovered_code_bytes": 248,
+    "functions": 1,
+    "syms": {
+      "D_01B00044": "0x01B00044",
+      "D_01B1E340": "0x01B1E340",
+      "D_006A3924": "0x006A3924",
+      "D_01B00CEC": "0x01B00CEC",
+      "D_01B00AB0": "0x01B00AB0",
+      "D_01B00CD8": "0x01B00CD8",
+      "D_01B00CF0": "0x01B00CF0",
+      "D_01B00D30": "0x01B00D30",
+      "D_01B00CD0": "0x01B00CD0",
+      "D_01B00900": "0x01B00900",
+      "func_01B0C3A8": "0x01B0C3A8",
+      "func_01B19038": "0x01B19038",
+      "func_01B1D3E0": "0x01B1D3E0",
+      "func_01B12F80": "0x01B12F80",
+      "func_001CDDD8": "0x001CDDD8"
+    }
+  },
+  {
+    "src": "ovl_09208_01b108e0.c",
+    "containers": [
+      9208,
+      9657
+    ],
+    "text_start": "0x01B108E0",
+    "text_end": "0x01B10BB4",
+    "discovered_code_bytes": 724,
+    "functions": 2,
+    "syms": {
+      "g_sym_0904": "0x01B00904",
+      "fn_002dd0b0": "0x002DD0B0",
+      "fn_01b13bb0": "0x01B13BB0",
+      "fn_001b63b8": "0x001B63B8",
+      "fn_001b53c0": "0x001B53C0",
+      "fn_001b73c8": "0x001B73C8",
+      "fn_01b13cc8": "0x01B13CC8",
+      "fn_001c5e90": "0x001C5E90"
+    },
+    "container_layouts": [
+      {
+        "cid": 9208,
+        "text_start": "0x01B108E0",
+        "text_end": "0x01B10BB4",
+        "syms": {
+          "g_sym_0904": "0x01B00904",
+          "fn_002dd0b0": "0x002DD0B0",
+          "fn_01b13bb0": "0x01B13BB0",
+          "fn_001b63b8": "0x001B63B8",
+          "fn_001b53c0": "0x001B53C0",
+          "fn_001b73c8": "0x001B73C8",
+          "fn_01b13cc8": "0x01B13CC8",
+          "fn_001c5e90": "0x001C5E90"
+        }
+      },
+      {
+        "cid": 9657,
+        "text_start": "0x01B0D998",
+        "text_end": "0x01B0DC6C",
+        "syms": {
+          "g_sym_0904": "0x01B00908",
+          "fn_002dd0b0": "0x002DD0B0",
+          "fn_01b13bb0": "0x01B10C68",
+          "fn_001b63b8": "0x001B63B8",
+          "fn_001b53c0": "0x001B53C0",
+          "fn_001b73c8": "0x001B73C8",
+          "fn_01b13cc8": "0x01B10D80",
+          "fn_001c5e90": "0x001C5E90"
+        }
+      }
+    ]
   }
 ]

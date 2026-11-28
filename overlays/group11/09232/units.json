@@ -527,5 +527,85 @@
       "-g",
       "-Btools/cc/ee-as-delay/"
     ]
+  },
+  {
+    "src": "ovl_09232_01b023c8.c",
+    "containers": [
+      9232
+    ],
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ],
+    "text_start": "0x01B023C8",
+    "text_end": "0x01B02488",
+    "discovered_code_bytes": 192,
+    "functions": 1,
+    "syms": {
+      "D_01B007DC": "0x01B007DC",
+      "D_01B00808": "0x01B00808",
+      "D_01B007E4": "0x01B007E4",
+      "D_01B00AB8": "0x01B00AB8",
+      "D_01B007F0": "0x01B007F0",
+      "D_01B009C0": "0x01B009C0",
+      "func_01B02B00": "0x01B02B00",
+      "func_01B023C8": "0x01B023C8"
+    }
+  },
+  {
+    "src": "ovl_09232_01b00ca8.c",
+    "containers": [
+      9232
+    ],
+    "text_start": "0x01B00CA8",
+    "text_end": "0x01B00E34",
+    "discovered_code_bytes": 396,
+    "functions": 1,
+    "syms": {
+      "D_01B007B8": "0x01B007B8",
+      "D_01B007E8": "0x01B007E8",
+      "D_01B007F4": "0x01B007F4",
+      "D_01B00A00": "0x01B00A00",
+      "D_01B00BD8": "0x01B00BD8",
+      "D_01B00BDC": "0x01B00BDC",
+      "D_01B00BE0": "0x01B00BE0",
+      "D_01B00BE4": "0x01B00BE4",
+      "func_01B00CA8": "0x01B00CA8"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
+  },
+  {
+    "src": "ovl_09232_01b01d98.c",
+    "containers": [
+      9232
+    ],
+    "text_start": "0x01B01D98",
+    "text_end": "0x01B01E44",
+    "discovered_code_bytes": 172,
+    "functions": 1,
+    "syms": {
+      "D_01B006A8": "0x01B006A8",
+      "D_01B00798": "0x01B00798",
+      "D_01B009F0": "0x01B009F0",
+      "D_01B00A00": "0x01B00A00",
+      "D_01B00A50": "0x01B00A50",
+      "D_01B00A80": "0x01B00A80",
+      "D_01B00AB4": "0x01B00AB4",
+      "D_01B00BC8": "0x01B00BC8",
+      "func_01B01228": "0x01B01228",
+      "func_01B03780": "0x01B03780",
+      "func_01B03A38": "0x01B03A38",
+      "func_01B01D98": "0x01B01D98"
+    },
+    "cc": "tools/cc/ee-gcc2.96/bin/ee-gcc",
+    "cflags": [
+      "-O2",
+      "-Btools/cc/ee-as-delay/"
+    ]
   }
 ]

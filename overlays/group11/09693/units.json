@@ -171,5 +171,89 @@
       "func_01B0D7B8": "0x01B0D7F0",
       "func_01B17580": "0x01B16D00"
     }
+  },
+  {
+    "src": "ovl_09693_bd88.c",
+    "containers": [
+      9693
+    ],
+    "text_start": "0x01B0BD88",
+    "text_end": "0x01B0BF68",
+    "rodata_start": "0x01B18170",
+    "functions": 1,
+    "discovered_code_bytes": 480,
+    "syms": {
+      "func_01B0CEC8": "0x01B0CEC8",
+      "func_01B0E858": "0x01B0E858",
+      "func_01B16D00": "0x01B16D00"
+    }
+  },
+  {
+    "src": "ovl_09693_b0c8.c",
+    "containers": [
+      9693
+    ],
+    "text_start": "0x01B0B0C8",
+    "text_end": "0x01B0B42C",
+    "rodata_start": "0x01B18040",
+    "discovered_code_bytes": 868,
+    "functions": 1,
+    "syms": {
+      "D_01B004E0": "0x01B004E0",
+      "D_01B00720": "0x01B00720",
+      "D_01B00978": "0x01B00978",
+      "D_01B00998": "0x01B00998",
+      "D_01B181A0": "0x01B181A0",
+      "D_01B181CC": "0x01B181CC",
+      "func_01B11D68": "0x01B11D68",
+      "func_01B13B48": "0x01B13B48",
+      "func_01B15CA8": "0x01B15CA8",
+      "func_01B16D00": "0x01B16D00"
+    }
+  },
+  {
+    "src": "ovl_09693_b608.c",
+    "containers": [
+      9693
+    ],
+    "text_start": "0x01B0B608",
+    "text_end": "0x01B0B768",
+    "discovered_code_bytes": 352,
+    "functions": 1,
+    "syms": {
+      "D_01B00720": "0x01B00720",
+      "D_01B00750": "0x01B00750",
+      "D_01B00960": "0x01B00960",
+      "D_01B00998": "0x01B00998",
+      "D_01B181A0": "0x01B181A0",
+      "D_01B181CC": "0x01B181CC",
+      "func_01B0B4C8": "0x01B0B4C8",
+      "func_01B0DA50": "0x01B0DA50",
+      "func_01B11D68": "0x01B11D68",
+      "func_01B13B48": "0x01B13B48",
+      "func_01B15CA8": "0x01B15CA8",
+      "func_01B16C58": "0x01B16C58",
+      "func_01B17060": "0x01B17060"
+    }
+  },
+  {
+    "src": "ovl_09693_bf68.c",
+    "containers": [
+      9693
+    ],
+    "text_start": "0x01B0BF68",
+    "text_end": "0x01B0C098",
+    "discovered_code_bytes": 304,
+    "functions": 1,
+    "syms": {
+      "D_01B004D8": "0x01B004D8",
+      "D_01B00960": "0x01B00960",
+      "D_01B00998": "0x01B00998",
+      "func_01B0BD88": "0x01B0BD88",
+      "func_01B0CF18": "0x01B0CF18",
+      "func_01B0D110": "0x01B0D110",
+      "func_01B16C58": "0x01B16C58",
+      "func_01B17060": "0x01B17060"
+    }
   }
 ]

@@ -164,5 +164,57 @@
         }
       }
     ]
+  },
+  {
+    "src": "ovl_09306_3088.c",
+    "containers": [
+      9306,
+      9307
+    ],
+    "text_start": "0x01B03088",
+    "text_end": "0x01B03194",
+    "discovered_code_bytes": 268,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9306,
+        "text_start": "0x01B03088",
+        "text_end": "0x01B03194",
+        "syms": {}
+      },
+      {
+        "cid": 9307,
+        "text_start": "0x01B03A88",
+        "text_end": "0x01B03B94",
+        "syms": {}
+      }
+    ]
+  },
+  {
+    "src": "ovl_09306_2e20.c",
+    "containers": [
+      9306,
+      9307
+    ],
+    "text_start": "0x01B02E20",
+    "text_end": "0x01B02F6C",
+    "discovered_code_bytes": 332,
+    "functions": 1,
+    "syms": {},
+    "container_layouts": [
+      {
+        "cid": 9306,
+        "text_start": "0x01B02E20",
+        "text_end": "0x01B02F6C",
+        "syms": {}
+      },
+      {
+        "cid": 9307,
+        "text_start": "0x01B03CF0",
+        "text_end": "0x01B03E3C",
+        "syms": {}
+      }
+    ]
   }
 ]

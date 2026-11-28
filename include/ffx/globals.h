@@ -272,7 +272,7 @@ extern s32 D_0057F610;
 extern s16 D_0057F620;
 extern s16 D_0057F624;
 extern s16 D_0057F628;
-extern s16 D_0057F62C;
+extern s16 Ch_EffectTexAttr;
 extern float D_0057F640;
 extern s8 D_0057F644;
 extern float D_0057F648;

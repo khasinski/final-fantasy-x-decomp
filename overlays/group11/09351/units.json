@@ -699,5 +699,19 @@
       "g_st_e828": "0x01B0E828",
       "g_sym_2860": "0x01B02860"
     }
+  },
+  {
+    "src": "ovl_09351_01b0ad60.c",
+    "containers": [
+      9351
+    ],
+    "text_start": "0x01B0AD60",
+    "text_end": "0x01B0AD68",
+    "discovered_code_bytes": 8,
+    "functions": 1,
+    "syms": {
+      "func_01B09A30": "0x01B0A6C8",
+      "func_01B0A0C8": "0x01B0A0C8"
+    }
   }
 ]

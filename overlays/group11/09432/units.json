@@ -21,7 +21,9 @@
   },
   {
     "src": "ovl_09432_42e8.c",
-    "containers": [9432],
+    "containers": [
+      9432
+    ],
     "text_start": "0x01B042E8",
     "text_end": "0x01B04350",
     "discovered_code_bytes": 104,
@@ -31,6 +33,25 @@
       "func_01B03FF8": "0x01B03FF8",
       "func_01B0E668": "0x01B0E668",
       "func_01B0EA70": "0x01B0EA70"
+    }
+  },
+  {
+    "src": "ovl_09432_01b04350.c",
+    "containers": [
+      9432
+    ],
+    "text_start": "0x01B04350",
+    "text_end": "0x01B04428",
+    "discovered_code_bytes": 216,
+    "functions": 1,
+    "syms": {
+      "func_01B09D88": "0x01B09D88",
+      "func_01B09E80": "0x01B09E80",
+      "func_01B0B5A8": "0x01B0B5A8",
+      "func_01B0B650": "0x01B0B650",
+      "func_01B0E6E8": "0x01B0E6E8",
+      "func_01B0E710": "0x01B0E710",
+      "func_01B04350": "0x01B04350"
     }
   }
 ]

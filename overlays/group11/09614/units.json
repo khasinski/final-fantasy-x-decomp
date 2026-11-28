@@ -49,5 +49,18 @@
       "g_word_0b84": "0x01B00B84",
       "g_word_1b1d5ec": "0x01B1D5EC"
     }
+  },
+  {
+    "src": "ovl_09614_01b10060.c",
+    "containers": [
+      9614
+    ],
+    "text_start": "0x01B10060",
+    "text_end": "0x01B100C8",
+    "discovered_code_bytes": 104,
+    "functions": 1,
+    "syms": {
+      "D_01B0ADC0": "0x01B0ADC0"
+    }
   }
 ]

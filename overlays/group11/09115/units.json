@@ -76,5 +76,19 @@
     "functions": 1,
     "discovered_code_bytes": 128,
     "syms": {}
+  },
+  {
+    "src": "ovl_09115_01b07fb0.c",
+    "containers": [
+      9115
+    ],
+    "text_start": "0x01B07FB0",
+    "text_end": "0x01B08024",
+    "discovered_code_bytes": 116,
+    "functions": 1,
+    "syms": {
+      "D_01B05008": "0x01B05008",
+      "func_01B07FB0": "0x01B07FB0"
+    }
   }
 ]

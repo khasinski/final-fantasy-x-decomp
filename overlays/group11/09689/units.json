@@ -67,5 +67,23 @@
     },
     "text_end": "0x01B08A1C",
     "text_start": "0x01B088D8"
+  },
+  {
+    "containers": [
+      9689
+    ],
+    "discovered_code_bytes": 216,
+    "functions": 1,
+    "src": "ovl_09689_8488.c",
+    "syms": {
+      "func_01B0D6B8": "0x01B0D6B8",
+      "func_01B0D7B0": "0x01B0D7B0",
+      "func_01B0E840": "0x01B0E840",
+      "func_01B0E8E8": "0x01B0E8E8",
+      "func_01B11980": "0x01B11980",
+      "func_01B119A8": "0x01B119A8"
+    },
+    "text_end": "0x01B08560",
+    "text_start": "0x01B08488"
   }
 ]

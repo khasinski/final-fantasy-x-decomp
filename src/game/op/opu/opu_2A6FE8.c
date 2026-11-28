@@ -425,7 +425,196 @@ void func_002A8460(EntList *l, int n, int c, int d)
 
 INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", op_2point_shadow);
 
-INCLUDE_ASM("build/ee_asm/game/op/opu/opu_2A6FE8", func_002A88F8);
+void op_unit_m(void *m);
+void func_002B58B0(void *dst, void *mat, void *src);
+void func_002B2AD8(void *pkt, s32 qwc, s32 pri, s32 flag);
+extern float D_004F3FD0[4][4];
+extern float D_004F4010[4][4];
+extern s32 D_006F2E60[];
+
+typedef struct {
+    u64 q0;
+    u64 q8;
+    u64 q10;
+    u64 q18;
+    s16 h20;
+    s16 h22;
+    u32 w24;
+    u64 q28;
+    u64 q30;
+    u64 q38;
+} Shadow2PHdr;
+
+typedef struct {
+    u32 rgba0[4];
+    u32 xyz0[4];
+    u32 rgba1[4];
+    u32 xyz1[4];
+} Shadow2PPair;
+
+typedef struct {
+    s16 h0;
+    s16 h2;
+    s16 h4;
+    s16 h6;
+    s16 h8;
+    s16 hA;
+    u32 wC;
+    u32 w10;
+    u32 w14;
+    void *p18;
+    void *p1C;
+} ShadowEntList;
+
+u8 *func_002A88F8(ShadowEntList *l, s32 prog, u8 *pkt_arg, u32 col0, u32 col1, s16 alpha_mode)
+{
+    float mat[4][4];
+    u8 *pkt = pkt_arg;
+    s32 i;
+    s32 r, g, a;
+    s32 dr, dg, db, da;
+    s32 b;
+    s32 total;
+    s32 off;
+    s32 count;
+    s32 idx;
+    register s32 prev_ok __asm__("$20");
+    u8 *cur;
+
+    if (l->h8 == 0) {
+        return pkt;
+    }
+    total = l->h4 * l->h6;
+    r = (col1 & 0xFF) << 16;
+    g = (col1 & 0xFF00) << 8;
+    b = col1 & 0xFF0000;
+    a = (col1 & 0xFF000000) >> 8;
+
+    {
+        s32 nr = r - (s32)((col0 & 0xFF) << 16);
+        s32 ng = g - (s32)((col0 & 0xFF00) << 8);
+        s32 nb = b - (s32)(col0 & 0xFF0000);
+        s32 na = a - (s32)((col0 & 0xFF000000) >> 8);
+        dr = nr / total;
+        dg = ng / total;
+        db = nb / total;
+        da = na / total;
+    }
+
+    off = (total * prog) / 256;
+    if (off <= -total || off >= total) {
+        return pkt;
+    }
+    if (off < 0) {
+        count = l->h8 + off;
+        if (count < 2) {
+            return pkt;
+        }
+        idx = l->hA - off;
+    } else {
+        count = l->h8 - off;
+        if (count < 2) {
+            return pkt;
+        }
+        idx = l->hA;
+    }
+
+    {
+        Shadow2PHdr *hdr;
+        u64 tag = (s64)((count * 2) | 0x8000) | 0x2026400000000000ULL;
+        cur = pkt;
+        hdr = (Shadow2PHdr *)cur;
+        hdr->q10 = 0x1000000000000001ULL;
+        hdr->q18 = 0xE;
+        hdr->h20 = alpha_mode;
+        *(s16 *)((u8 *)hdr + 0x34) = alpha_mode >> 8;
+        hdr->q28 = 0x42;
+        hdr->q30 = tag;
+        hdr->q38 = 0x41;
+    }
+    op_unit_m(mat);
+    cur += 0x40;
+    func_002DCE38(mat, D_004F3FD0, mat);
+    func_002DCE38(mat, D_004F4010, mat);
+
+    prev_ok = 0;
+    {
+        register s32 h4 __asm__("$3") = l->h4;
+        register s32 h6 __asm__("$2") = l->h6;
+        register s32 total2 __asm__("$22") = h4 * h6;
+        for (i = 0; i < count; i++, cur += 0x40, idx++) {
+            Shadow2PPair *pair = (Shadow2PPair *)cur;
+            u8 *vsrc = (u8 *)l->p1C + (idx % total2) * 0x20;
+        u32 *xyz;
+
+        pair->rgba0[0] = 0;
+        pair->rgba0[1] = 0;
+        pair->rgba0[2] = 0;
+        pair->rgba0[3] = 0;
+
+        pair->rgba1[0] = r >> 16;
+        pair->rgba1[1] = g >> 16;
+        pair->rgba1[2] = b >> 16;
+        pair->rgba1[3] = a >> 16;
+
+        r -= dr;
+        g -= dg;
+        b -= db;
+        a -= da;
+
+        xyz = pair->xyz0;
+        func_002B58B0(xyz, mat, vsrc);
+        {
+            register u32 *p0 __asm__("$4") = xyz;
+            __asm__("" : "+r"(p0));
+            if ((s32)p0[3] >= 2) {
+                u32 x = pair->xyz0[0];
+                u32 y = p0[1];
+                if ((u32)(x - 0x5000) <= 0x6000 && (u32)(y - 0x5000) <= 0x6000) {
+                    if (prev_ok != 0) {
+                        p0[3] = 0;
+                    } else {
+                        p0[3] = 0x8000;
+                    }
+                    prev_ok = 1;
+                } else {
+                    prev_ok = 0;
+                    xyz[3] = 0x8000;
+                }
+            } else {
+                prev_ok = 0;
+                xyz[3] = 0x8000;
+            }
+        }
+
+        xyz = pair->xyz1;
+        func_002B58B0(xyz, mat, vsrc + 0x10);
+        if ((s32)xyz[3] >= 2) {
+            u32 x = xyz[0];
+            u32 y = xyz[1];
+            if ((u32)(x - 0x5000) <= 0x6000 && (u32)(y - 0x5000) <= 0x6000) {
+                if (prev_ok != 0) {
+                    xyz[3] = 0;
+                } else {
+                    xyz[3] = 0x8000;
+                }
+                prev_ok = 1;
+            } else {
+                prev_ok = 0;
+                xyz[3] = 0x8000;
+            }
+        } else {
+            prev_ok = 0;
+            xyz[3] = 0x8000;
+        }
+    }
+    }
+
+    func_002B2AD8(pkt, (cur - pkt) / 16, 0x3FF, 0);
+    D_006F2E60[0] += count;
+    D_006F2E60[3] += count;
+    return cur;
+}
 
 extern void op_oef2_se_on(void *, int, int);
 extern void op_oef2_sound_cue_multi(int, int, int, int);
